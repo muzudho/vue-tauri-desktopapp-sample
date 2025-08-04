@@ -41,7 +41,13 @@ pnpm tauri dev
 
 👆 時間がかかります。  
 
-## トラブルシューティング
+## トラブルシューティング１
+
+📁 `node_modules` フォルダーを削除して、 `pnpm install` コマンドを打ち直す。  
+
+## トラブルシューティング２
+
+（パワーシェルではなく、）コマンドプロンプトで以下を打鍵します。  
 
 ビルドのキャッシュクリア：  
 
@@ -56,3 +62,8 @@ rmdir /s target
 
 pnpm tauri dev
 ```
+
+## トラブルシューティング３
+
+Visual Studio Code を使っていたら、[Ctrl] + [Shift] + [P]。  
+`rust-analyzer: Reload-workspace` を選択して、リロード。  
