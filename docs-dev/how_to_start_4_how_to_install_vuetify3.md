@@ -2,7 +2,7 @@
 
 Vue を直接使ってフロントエンドをコーディングするだけでなく、 Vuetify3 越しにフロントエンドをコーディングしていくことにします。  
 
-カレントディレクトリーの例： 📁 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\tauri-vue-sample`  
+カレントディレクトリーの例： 📁 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample`  
 
 ```shell
 pnpm add vuetify

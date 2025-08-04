@@ -16,10 +16,10 @@ pnpm create tauri-app
 ```
 
 プロジェクト名（Project name）を何にするか尋ねられます。  
-入力例： `tauri-vue-sample`  
+入力例： `vue-tauri-desktopapp-sample`  
 
 識別子（Identifier）を何にするか尋ねられます。特にこだわりがなければそのままエンターキーを押下します。  
-入力例： `com.tauri-vue-sample.app`  
+入力例： `com.vue-tauri-desktopapp-sample.app`  
 
 フロントエンドのプログラム言語（language to use for your frontend）を何にするか尋ねられます。  
 入力例： `TypeScript / JavaScript`  
@@ -37,7 +37,7 @@ UIフレーバー（UI flavor）を何にするか尋ねられます。
 
 ```plaintext
 Template created! To get started run:
-  cd tauri-vue-sample
+  cd vue-tauri-desktopapp-sample
   pnpm install
   pnpm tauri android init
 

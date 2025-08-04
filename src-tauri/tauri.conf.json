@@ -1,8 +1,8 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
-  "productName": "tauri-vue-sample",
+  "productName": "vue-tauri-desktopapp-sample",
   "version": "0.1.0",
-  "identifier": "com.tauri-vue-sample.app",
+  "identifier": "com.vue-tauri-desktopapp-sample.app",
   "build": {
     "beforeDevCommand": "pnpm dev",
     "devUrl": "http://localhost:1420",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "tauri-vue-sample",
+        "title": "vue-tauri-desktopapp-sample",
         "width": 800,
         "height": 600
       }

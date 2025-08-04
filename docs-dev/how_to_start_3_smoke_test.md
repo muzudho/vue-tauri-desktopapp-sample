@@ -1,6 +1,6 @@
 # 始め方３：　とりあえず動かしてみる
 
-カレントディレクトリーの例： 📁 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\tauri-vue-sample`  
+カレントディレクトリーの例： 📁 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample`  
 
 ```shell
 pnpm install
