@@ -2,6 +2,16 @@
     <!-- FIXME: Vue3 から Vuetify3 にタグを単純に書き換えると、レイアウトが崩れてしまった。  -->
     <v-app>
         <v-main>
+
+            <!-- ナビゲーション -->
+            <nav>
+                <router-link to="/">ホーム</router-link> |
+                <router-link to="/about">About</router-link>
+            </nav>
+
+            <!-- このビューにコンポーネントがレンダリングされる。 -->
+            <router-view />
+
             <v-container class="container">
 
                 <h1>Welcome to Tauri + Vue</h1>
