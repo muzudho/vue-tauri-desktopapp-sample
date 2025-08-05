@@ -269,16 +269,20 @@ pub fn run() {
 
 ```json
 {
-  "permissions": [
-    "core:default",
-    "shell:allow-open",
-    "dialog:allow-open",
-    "fs:allow-read-text-file",  // 🌟追加
-  ]
+    "permissions": [
+        "fs:default",
+        {
+            "identifier": "fs:scope",
+            "allow": [{ "path": "$HOME" }, { "path": "$HOME/**" }]
+        }
+    ]
 }
 ```
 
+👆 フォービドゥンと出てくるエラーを防ぐ。  
+
 📄 `/src-tauri/tauri.conf.json` ファイルに以下（抜粋）を追加。  
+これは要らないか？  
 
 ```json
 {

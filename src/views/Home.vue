@@ -6,11 +6,6 @@
 </template>
 
 <!--
-<script lang="ts">
-    import { defineComponent } from 'vue';
-
-    export default defineComponent({    // Vue 3 の TypeScript 対応コンポーネント定義に必須。
-       name: 'Home',
-    });
+<script setup lang="ts">
 </script>
 -->
