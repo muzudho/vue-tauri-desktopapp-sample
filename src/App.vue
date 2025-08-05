@@ -13,51 +13,11 @@
             <!-- このビューにコンポーネントがレンダリングされる。 -->
             <router-view />
 
-            <v-container class="container">
-
-                <h1>Welcome to Tauri + Vue</h1>
-
-                <v-container class="row">
-                    <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
-                    <v-btn icon href="https://vitejs.dev" target="_blank">
-                        <v-img src="/vite.svg" class="logo vite" alt="Vite logo" />
-                    </v-btn>
-                    <v-btn icon href="https://tauri.app" target="_blank">
-                        <v-img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-                    </v-btn>
-                    <v-btn icon href="https://vuejs.org/" target="_blank">
-                        <v-img :src="AssetsVueLogoSvg" class="logo vue" alt="Vue logo" />
-                    </v-btn>
-                </v-container>
-
-                <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-                <v-form class="row" @submit.prevent="greet">
-                    <v-text-field id="greet-input" v-model="name" placeholder="Enter a name..."></v-text-field>
-                    <v-btn type="submit" class="button">Greet</v-btn>
-                </v-form>
-
-                <p>{{ greetMsg }}</p>
-
-            </v-container>
         </v-main>
     </v-app>
 </template>
 
 <script setup lang="ts">
-    import { ref } from "vue";
-    import { invoke } from "@tauri-apps/api/core";
-
-    // 画像パス
-    import AssetsVueLogoSvg from './assets/vue.svg';
-
-    const greetMsg = ref("");
-    const name = ref("");
-
-    async function greet() {
-        // Learn more about Tauri commands at https://tauri.app/develop/calling-rust/
-        greetMsg.value = await invoke("greet", { name: name.value });
-    }
 </script>
 
 <style scoped>

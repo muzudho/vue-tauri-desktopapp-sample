@@ -2,7 +2,6 @@
     <v-container class="container">
 
         <h1>Welcome to Tauri + Vue</h1>
-        <router-link to="/about">About ページへ</router-link>
 
         <v-container class="row">
             <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
@@ -25,19 +24,10 @@
         </v-form>
 
         <p>{{ greetMsg }}</p>
+        <router-link to="/">ホームに戻る</router-link>
 
     </v-container>
 </template>
-
-<!--
-<script lang="ts">
-    import { defineComponent } from 'vue';
-
-    export default defineComponent({    // Vue 3 の TypeScript 対応コンポーネント定義に必須。
-       name: 'WelcomeToTauriAndVue',
-    });
-</script>
--->
 
 <script setup lang="ts">
     import { ref } from 'vue';
