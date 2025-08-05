@@ -2,7 +2,14 @@
 
 ## トラブルシューティング１
 
-📁 `node_modules` フォルダーを削除して、 `pnpm install` コマンドを打ち直す。  
+📁 `/node_modules` フォルダーを削除。  
+📄 `/pnpm-lock.yaml`  ファイルを削除。
+
+以下のコマンドを打鍵。  
+
+```shell
+pnpm install
+```
 
 ## トラブルシューティング２
 

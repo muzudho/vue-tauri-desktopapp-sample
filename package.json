@@ -10,13 +10,14 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@tauri-apps/api": "^2.7.0",
+    "@tauri-apps/plugin-fs": "~2",
     "@tauri-apps/plugin-opener": "^2.4.0",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1",
     "vuetify": "^3.9.3"
   },
   "devDependencies": {
+    "@tauri-apps/api": "^2.7.0",
     "@tauri-apps/cli": "^2.7.1",
     "@vitejs/plugin-vue": "^5.2.4",
     "typescript": "~5.6.3",

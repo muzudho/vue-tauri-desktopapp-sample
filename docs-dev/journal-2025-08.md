@@ -174,3 +174,67 @@ export default defineComponent({
     });
 </script>
 ```
+
+### onMountedの練習、ファイル読込の練習
+
+```shell
+pnpm add @tauri-apps/api
+
+# 開発依存関係
+#pnpm add -D @tauri-apps/api
+
+pnpm list @tauri-apps/api
+        Legend: production dependency, optional only, dev only
+
+        vue-tauri-desktopapp-sample@0.1.0 C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample (PRIVATE)
+
+        devDependencies:
+        @tauri-apps/api 2.7.0
+
+# キャッシュクリア
+pnpm store prune
+
+# 再インストール
+pnpm install
+```
+
+#### バージョン確認
+
+```shell
+pnpm tauri --version
+        > vue-tauri-desktopapp-sample@0.1.0 tauri C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample
+        > tauri "--version"
+
+        tauri-cli 2.7.1
+```
+
+#### ファイルシステムのインストール
+
+📄 `/src-tauri/capabilities/default.json` ファイルを確認：  
+
+確認する箇所：  
+
+```json
+{
+    "permissions": [
+        "fs:default"
+    ]
+}
+```
+
+👆 `fs:default` がすでに記述されていると、 `pnpm tauri add fs` コマンドで失敗するので、  
+`fs:default` は消しておく。  
+
+📄 [file-system](https://v2.tauri.app/plugin/file-system/)  
+
+```ts
+    // これは Tauri 2 で動かない
+    //import { readTextFile, BaseDirectory } from '@tauri-apps/api/fs';
+
+    // Tauri 2
+    import { readTextFile, BaseDirectory } from '@tauri-apps/plugin-fs';
+```
+
+```shell
+pnpm tauri add fs
+```

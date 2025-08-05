@@ -5,6 +5,7 @@
     </div>
 </template>
 
+<!--
 <script lang="ts">
     import { defineComponent } from 'vue';
 
@@ -12,3 +13,4 @@
        name: 'Home',
     });
 </script>
+-->
