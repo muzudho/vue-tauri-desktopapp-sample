@@ -19,7 +19,8 @@
 
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
-    import { BaseDirectory, readTextFile } from '@tauri-apps/plugin-fs';
+    import { readTextFile } from '@tauri-apps/plugin-fs';
+    // { BaseDirectory }
     // // import * as path from '@tauri-apps/api/path';
     // import { resourceDir } from '@tauri-apps/api/path';
     // import { resolveResource } from '@tauri-apps/api/path';
