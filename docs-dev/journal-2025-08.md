@@ -238,3 +238,52 @@ pnpm tauri --version
 ```shell
 pnpm tauri add fs
 ```
+
+
+#### テキストファイルの読み込み方
+
+📖 [Tauri 2.0でローカルファイルを読み込んでみる(plugin-fs)](https://zenn.dev/playree/articles/04242346d343e6)  
+
+```shell
+pnpm add @tauri-apps/plugin-fs
+
+# Rust側
+# cd src-tauri
+# cargo add tauri-plugin-fs
+```
+
+📄 `/src-tauri/src/lib.rs` 抜粋:  
+
+```rs
+pub fn run() {
+    tauri::Builder::default()
+        .plugin(tauri_plugin_fs::init())    // 🌟追加
+        .plugin(tauri_plugin_opener::init())
+        .invoke_handler(tauri::generate_handler![greet])
+        .run(tauri::generate_context!())
+        .expect("error while running tauri application");
+}
+```
+
+📄 `/src-tauri/capabilities/default.json`:  
+
+```json
+{
+  "permissions": [
+    "core:default",
+    "shell:allow-open",
+    "dialog:allow-open",
+    "fs:allow-read-text-file",  // 🌟追加
+  ]
+}
+```
+
+📄 `/src-tauri/tauri.conf.json` ファイルに以下（抜粋）を追加。  
+
+```json
+{
+    "bundle": {
+        "resources": ["../public/*"]
+    },
+}
+```
