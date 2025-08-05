@@ -10,9 +10,9 @@ import router from './router';  // ルーター
 
 // Vuetifyインスタンスを作成
 const vuetify = createVuetify({
-  components,
-  directives,
-  theme: { defaultTheme: 'light' }, // テーマ設定（任意）
+    components,
+    directives,
+    theme: { defaultTheme: 'light' }, // テーマ設定（任意）
 });
 
 createApp(App)
