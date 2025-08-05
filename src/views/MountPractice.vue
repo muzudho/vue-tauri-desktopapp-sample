@@ -27,6 +27,10 @@
 
     // ファイルの内容を保持する reactive 変数
     const filePathVM = ref("C:\\Users\\muzud\\OneDrive\\ドキュメント\\temp\\temp.csv");
+    // TODO 🌟 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\public\sample.txt` を示す方法が分からない。開発中のプロジェクトルートを指したい。
+    // TODO 🌟 あるいは `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug` ディレクトリー下にファイルを丸ごとコピーされるか？
+    // TODO 🌟 同梱するとファイルが重くなるか？ 外部に置いておく方がいい？ ローカルＰＣか、クラウド上か。
+
     // const resourceDirVM = ref<string>('読み込み中...');
     // const testPath = ref<string>('読み込み中...');
     // const testPath2 = ref<string>('読み込み中...');
