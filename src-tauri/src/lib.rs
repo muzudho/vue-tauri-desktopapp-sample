@@ -8,8 +8,7 @@ fn greet(name: &str) -> String {
 }
 
 #[tauri::command]
-#[allow(non_snake_case)]
-fn readStartConfig() -> Result<Value, String> {
+fn read_start_config() -> Result<Value, String> {
     // 📄 `.exe` と同じディレクトリの 📄 `start-config.json` のパスを取得
     let exe_path = std::env::current_exe().map_err(|e| e.to_string())?;
     let config_path = exe_path
@@ -31,7 +30,7 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .invoke_handler(tauri::generate_handler![
             greet,
-            readStartConfig,
+            read_start_config,
         ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");

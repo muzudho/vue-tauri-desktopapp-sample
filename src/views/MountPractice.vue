@@ -219,7 +219,7 @@
             videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
 
             // Rust言語（バックグラウンド相当）の関数を呼び出し
-            startConfigContent.value = await invoke('readStartConfig');
+            startConfigContent.value = await invoke('read_start_config');
 
             // // ファイルの読み込み処理を追加
             // fileContent2.value = await readTextFile("sample.txt", { baseDir: BaseDirectory.AppConfig })
