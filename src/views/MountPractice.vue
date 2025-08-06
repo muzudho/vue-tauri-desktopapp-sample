@@ -129,7 +129,6 @@
         <p>fileContent2: {{ fileContent2 }}</p>
         -->
         <p>testPathStr: {{ testPathStr }}</p>
-        <p>executablePathContentVM: {{ executablePathContentVM }}</p>
         <p>fileContent: {{ fileContent }}</p>
         <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
 
@@ -138,9 +137,12 @@
 </template>
 
 <script setup lang="ts">
+    //import { invoke } from '@tauri-apps/api/tauri';
+    import { invoke } from "@tauri-apps/api/core";
+
     import { onMounted, ref } from 'vue';
-    import { BaseDirectory, readTextFile } from '@tauri-apps/plugin-fs';
-    // {  }
+    import { readTextFile } from '@tauri-apps/plugin-fs';
+    // { BaseDirectory, }
     import * as path from '@tauri-apps/api/path';
     // import { resourceDir } from '@tauri-apps/api/path';
     // import { resolveResource } from '@tauri-apps/api/path';
@@ -184,9 +186,8 @@
     // const testPath3 = ref<string>('読み込み中...');
     const fileContent = ref<string>('読み込み中...');
     //const fileContent2 = ref<string>('読み込み中...');
+    const configContent = ref<string>('読み込み中...');
     const errorMessage = ref<string>('');
-
-    const executablePathContentVM = ref('読み込み中...');
 
     // コンポーネントがマウントされたときに実行
     onMounted(async () => {
@@ -216,8 +217,8 @@
             templateDirStr.value = await path.templateDir();            // 22   `C:\Users\muzud\AppData\Roaming\Microsoft\Windows\Templates`
             videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
 
-
-            executablePathContentVM.value = await readTextFile("start-config.json", { baseDir:BaseDirectory.Executable });
+            // Rustのread_configコマンドを呼び出し
+            configContent.value = await invoke('readConfig');
 
             // // ファイルの読み込み処理を追加
             // fileContent2.value = await readTextFile("sample.txt", { baseDir: BaseDirectory.AppConfig })
@@ -260,6 +261,7 @@
             //     );
 
             fileContent.value = contentStr; // ファイル内容をセット
+                  
         } catch (error) {
             errorMessage.value = `エラーだぜ: ${error}`; // エラーハンドリング
         }
