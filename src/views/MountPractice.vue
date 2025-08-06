@@ -186,12 +186,8 @@
     // TODO 🌟 あるいは `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug` ディレクトリー下にファイルを丸ごとコピーされるか？
     // TODO 🌟 同梱するとファイルが重くなるか？ 外部に置いておく方がいい？ ローカルＰＣか、クラウド上か。
 
-    // const resourceDirVM = ref<string>('読み込み中...');
     const testPathStr = ref<string>('読み込み中...');
-    // const testPath2 = ref<string>('読み込み中...');
-    // const testPath3 = ref<string>('読み込み中...');
     const fileContent = ref<string>('読み込み中...');
-    //const fileContent2 = ref<string>('読み込み中...');
     const errorMessage = ref<string>('');
 
     // コンポーネントがマウントされたときに実行
@@ -222,7 +218,7 @@
             templateDirStr.value = await path.templateDir();            // 22   `C:\Users\muzud\AppData\Roaming\Microsoft\Windows\Templates`
             videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
 
-            // Rustのread_configコマンドを呼び出し
+            // Rust言語（バックグラウンド相当）の関数を呼び出し
             startConfigContent.value = await invoke('readStartConfig');
 
             // // ファイルの読み込み処理を追加
@@ -232,8 +228,6 @@
             // testPath3.value = resourceDirVM.value + "/../../../src/assets"
 
             // Tauri の API で src/assets/sample.txt を読み込む
-            //const testPathStr = await path.homeDir();  // PCのユーザー・ホーム
-            //const testPathStr = await path.resourceDir();  // `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug`
             //const testPathStr = await resolveResource('assets/sample.txt');  // C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug\assets\image.png
             
             // // debug フォルダーの下に assets フォルダーが無い
@@ -248,18 +242,6 @@
 
             // const contentStr = await readTextFile(
             //         "public/sample.txt",
-            //         //"/public/sample.txt"
-            //         //"C:/Users/muzud/OneDrive/ドキュメント/temp/sample.txt"
-            //         //"/public/sample.txt"
-            //         // C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src\assets\sample.txt
-            //         //"C:\\Users\\muzud\\OneDrive\\ドキュメント\\GitHub\\vue-tauri-desktopapp-sample\\src\\assets\\sample.txt"
-            //         //"http://asset.localhost/C:/Users/muzud/OneDrive/ドキュメント/GitHub/vue-tauri-desktopapp-sample/src-tauri/target/debug/assets/sample.txt"
-            //         //"http://asset.localhost/C%3A%5CUsers%5Cmuzud%5COneDrive%5C%E3%83%89%E3%82%AD%E3%83%A5%E3%83%A1%E3%83%B3%E3%83%88%5CGitHub%5Cvue-tauri-desktopapp-sample%5Csrc-tauri%5Ctarget%5Cdebug%5Cassets%5Csample.txt"
-            //         // // ローカルPCの場合
-            //         // // C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src\assets\sample.txt
-            //         // //await path.join(testPath.value, 'assets/sample.txt'),
-            //         // testPathStr
-
             //         {
             //             baseDir: BaseDirectory.Home,
             //         }
@@ -271,10 +253,4 @@
             errorMessage.value = `エラーだぜ: ${error}`; // エラーハンドリング
         }
     });
-
-    // async function getHomePath() {
-    //     return await path.homeDir();
-    // }
-
-    //const homePath = await getHomePath();
 </script>
