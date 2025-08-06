@@ -23,10 +23,12 @@ Windows なら、📁 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tau
 {
     "bundle": {
         "resources": {
-            "../public/*" : "resources/"
+            "../public/*" : "resources/",
+            "../public_exe/*" : ""
         }
     }
 }
 ```
 
 👆 📁 `/public` フォルダーの内容を、 📁 `/src-tauri/target/release/resources` フォルダー下にコピーしてくれる。  
+📁 `/public_exe` フォルダーの内容を、 📁 `/src-tauri/target/release` フォルダー下にコピーしてくれる。  

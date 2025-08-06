@@ -120,6 +120,10 @@
             <v-col>{{ videoDirStr }}</v-col>
         </v-row>
 
+        <h2>設定ファイルの内容:</h2>
+
+        <p>{{ startConfigContent }}</p>
+
         <h2>ファイルの内容:</h2>
 
         <!--
@@ -173,6 +177,8 @@
     const templateDirStr = ref<string>('22 読み込み中...');          // 22
     const videoDirStr = ref<string>('23 読み込み中...');             // 23
 
+    // 設定ファイルを読み込む練習
+    const startConfigContent = ref<string>('読み込み中...')
 
     // ファイルの内容を保持する reactive 変数
     const filePathVM = ref("C:\\Users\\muzud\\OneDrive\\ドキュメント\\temp\\temp.csv");
@@ -186,7 +192,6 @@
     // const testPath3 = ref<string>('読み込み中...');
     const fileContent = ref<string>('読み込み中...');
     //const fileContent2 = ref<string>('読み込み中...');
-    const configContent = ref<string>('読み込み中...');
     const errorMessage = ref<string>('');
 
     // コンポーネントがマウントされたときに実行
@@ -218,7 +223,7 @@
             videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
 
             // Rustのread_configコマンドを呼び出し
-            configContent.value = await invoke('readConfig');
+            startConfigContent.value = await invoke('readStartConfig');
 
             // // ファイルの読み込み処理を追加
             // fileContent2.value = await readTextFile("sample.txt", { baseDir: BaseDirectory.AppConfig })
