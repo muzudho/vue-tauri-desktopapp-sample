@@ -14,3 +14,19 @@ Windows なら、📁 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tau
 インストーラーも作ってくれている。  
 出力例： 📄 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\release\bundle\msi\vue-tauri-desktopapp-sample_0.1.0_x64_en-US.msi`  
 これを配布しても OK。
+
+## バンドルの設定方法
+
+📄 `/src-tauri/tauri.conf.json` 抜粋：  
+
+```json
+{
+    "bundle": {
+        "resources": {
+            "../public/*" : "resources/"
+        }
+    }
+}
+```
+
+👆 📁 `/public` フォルダーの内容を、 📁 `/src-tauri/target/release/resources` フォルダー下にコピーしてくれる。  

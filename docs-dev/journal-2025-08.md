@@ -315,3 +315,17 @@ pub fn run() {
 * こうすると、.exeと同じディレクトリにconfig.jsonが配置されるぜ。
 
 TODO: ファイルは Rust で読み込んだ方がいいか？  フロントエンド側でファイルを読み込むには制限があるらしい。  
+
+📖 [resources](https://tauri.app/develop/resources/#_top)  
+
+📄 `/src-tauri/tauri.conf.json` 抜粋：  
+
+```json
+{
+    "bundle": {
+        "resources": {
+            "../public/*" : "resources/"
+        }
+    }
+}
+```
