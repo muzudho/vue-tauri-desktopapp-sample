@@ -291,3 +291,27 @@ pub fn run() {
     },
 }
 ```
+
+## [2025-08-06_Wed]
+
+`.exe` ファイルと同じディレクトリーに `.json` ファイルを置いて、それを読み取る方法。  
+
+📄 `/src-tauri/tauri.conf.json`を以下のように修正：  
+
+```json
+{
+    "bundle": {
+        "active": true,
+        "targets": "all",
+        "resources": [
+            "public/config.json"  // ビルド時にconfig.jsonをコピー
+        ]
+    }
+}
+```
+
+* "resources"にpublic/config.jsonを指定することで、ビルド時にconfig.jsonが 📁 `/src-tauri/target/release/` にコピーされる。
+    * FIXME: 🌟 📁 `/dist` 直下にはコピーされているが、 📁 `/src-tauri/target/release/` の方にはコピーされていない。
+* こうすると、.exeと同じディレクトリにconfig.jsonが配置されるぜ。
+
+TODO: ファイルは Rust で読み込んだ方がいいか？  フロントエンド側でファイルを読み込むには制限があるらしい。  

@@ -2,6 +2,13 @@
     <div>
         <h1>onMounted を使う練習だぜ！</h1>
 
+        <h2>基本的なファイルパス一覧：</h2>
+
+        <p>appCacheDirStr: {{ appCacheDirStr }}</p>
+        <p>appConfigDirStr: {{ appConfigDirStr }}</p>
+        <p>executableDirStr: {{ executableDirStr }}</p>
+        <p>homeDirStr: {{ homeDirStr }}</p>
+
         <h2>ファイルの内容:</h2>
 
         <!--
@@ -10,6 +17,8 @@
         <p>testPath2: {{ testPath2 }}</p>
         <p>fileContent2: {{ fileContent2 }}</p>
         -->
+        <p>testPathStr: {{ testPathStr }}</p>
+        <p>executablePathContentVM: {{ executablePathContentVM }}</p>
         <p>fileContent: {{ fileContent }}</p>
         <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
 
@@ -19,12 +28,18 @@
 
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
-    import { readTextFile } from '@tauri-apps/plugin-fs';
-    // { BaseDirectory }
-    // // import * as path from '@tauri-apps/api/path';
+    import { BaseDirectory, readTextFile } from '@tauri-apps/plugin-fs';
+    // {  }
+    import * as path from '@tauri-apps/api/path';
     // import { resourceDir } from '@tauri-apps/api/path';
     // import { resolveResource } from '@tauri-apps/api/path';
     // import { convertFileSrc } from '@tauri-apps/api/core';
+
+    // ディレクトリー・パス
+    const appCacheDirStr = ref<string>('読み込み中...');
+    const appConfigDirStr = ref<string>('読み込み中...');
+    const executableDirStr = ref<string>('読み込み中...');
+    const homeDirStr = ref<string>('読み込み中...');
 
     // ファイルの内容を保持する reactive 変数
     const filePathVM = ref("C:\\Users\\muzud\\OneDrive\\ドキュメント\\temp\\temp.csv");
@@ -33,16 +48,26 @@
     // TODO 🌟 同梱するとファイルが重くなるか？ 外部に置いておく方がいい？ ローカルＰＣか、クラウド上か。
 
     // const resourceDirVM = ref<string>('読み込み中...');
-    // const testPath = ref<string>('読み込み中...');
+    const testPathStr = ref<string>('読み込み中...');
     // const testPath2 = ref<string>('読み込み中...');
     // const testPath3 = ref<string>('読み込み中...');
     const fileContent = ref<string>('読み込み中...');
     //const fileContent2 = ref<string>('読み込み中...');
     const errorMessage = ref<string>('');
 
+    const executablePathContentVM = ref('読み込み中...');
+
     // コンポーネントがマウントされたときに実行
     onMounted(async () => {
         try {
+            // ファイルパス一覧：
+            appCacheDirStr.value = await path.appCacheDir(); // 読み込み中で止まってしまう？
+            appConfigDirStr.value = await path.appConfigDir(); // 読み込み中で止まってしまう？
+            //executableDirStr.value = await path.executableDir(); // 読み込み中で止まってしまう？
+            homeDirStr.value = await path.homeDir();  // PCのユーザー・ホーム
+
+            executablePathContentVM.value = await readTextFile("start-config.json", { baseDir:BaseDirectory.Executable });
+
             // // ファイルの読み込み処理を追加
             // fileContent2.value = await readTextFile("sample.txt", { baseDir: BaseDirectory.AppConfig })
 
