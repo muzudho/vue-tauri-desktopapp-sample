@@ -122,7 +122,7 @@
 
         <h2>設定ファイルの内容:</h2>
 
-        <p>{{ startConfigContent }}</p>
+        <p>{{ startConfig }}</p>
 
         <h2>ファイルの内容:</h2>
 
@@ -178,7 +178,7 @@
     const videoDirStr = ref<string>('23 読み込み中...');             // 23
 
     // 設定ファイルを読み込む練習
-    const startConfigContent = ref<string>('読み込み中...')
+    const startConfig = ref<string>('読み込み中...')
 
     // ファイルの内容を保持する reactive 変数
     const filePathVM = ref("C:\\Users\\muzud\\OneDrive\\ドキュメント\\temp\\temp.csv");
@@ -189,6 +189,10 @@
     const testPathStr = ref<string>('読み込み中...');
     const fileContent = ref<string>('読み込み中...');
     const errorMessage = ref<string>('');
+
+    // ##############
+    // # 起動時処理 #
+    // ##############
 
     // コンポーネントがマウントされたときに実行
     onMounted(async () => {
@@ -219,7 +223,7 @@
             videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
 
             // Rust言語（バックグラウンド相当）の関数を呼び出し
-            startConfigContent.value = await invoke('read_start_config');
+            startConfig.value = await invoke('read_start_config');
 
             // // ファイルの読み込み処理を追加
             // fileContent2.value = await readTextFile("sample.txt", { baseDir: BaseDirectory.AppConfig })
