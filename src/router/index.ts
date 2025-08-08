@@ -2,14 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
+        name: 'BasePaths',
+        path: '/making/desktop/base-paths',
+        component: () => import('../views/making/desktop/BasePaths.vue'),
+    },
+
+    {
         name: 'Making',
         path: '/making',
         component: () => import('../views/making/index.vue'),
-    },
-    {
-        name: 'BasePaths',
-        path: '/making/base-paths',
-        component: () => import('../views/making/BasePaths.vue'),
     },
     {
         name: 'MountPractice',
