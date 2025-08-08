@@ -1,6 +1,10 @@
 # 没コード TypeScript
 
 ```ts
+    // import { resourceDir } from '@tauri-apps/api/path';
+    // import { resolveResource } from '@tauri-apps/api/path';
+    // import { convertFileSrc } from '@tauri-apps/api/core';
+
             // // ファイルの読み込み処理を追加
             // fileContent2.value = await readTextFile("sample.txt", { baseDir: BaseDirectory.AppConfig })
 

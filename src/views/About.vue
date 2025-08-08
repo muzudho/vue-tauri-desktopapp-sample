@@ -4,8 +4,3 @@
         <router-link to="/">ホームに戻る</router-link>
     </div>
 </template>
-
-<!--
-<script setup lang="ts">
-</script>
--->

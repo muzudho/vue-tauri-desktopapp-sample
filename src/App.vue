@@ -1,5 +1,4 @@
 <template>
-    <!-- FIXME: Vue3 から Vuetify3 にタグを単純に書き換えると、レイアウトが崩れてしまった。  -->
     <v-app>
         <v-main>
 
@@ -10,7 +9,6 @@
                 <router-link to="/base-paths">BasePaths</router-link> |
                 <router-link to="/loading-bundle-file">LoadingBundleFile</router-link> |
                 <router-link to="/loading-json-file">LoadingJsonFile</router-link> |
-                <router-link to="/mount-practice">MountPractice</router-link> |
                 <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link>
             </nav>
 
