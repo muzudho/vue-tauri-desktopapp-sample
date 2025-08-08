@@ -6,7 +6,7 @@
         <ul>
             <li>📖 <router-link to="/making/page-layout">説明を始める前に、説明ページのレイアウトを決めておこうぜ！</router-link></li>
             <li>📖 <router-link to="/making/mount-practice">onMounted を使う練習だぜ！</router-link></li>
-            <li>📖 <router-link to="/making/base-paths">基本的なファイルパス一覧だぜ！</router-link></li>
+            <li>📖 <router-link to="/making/base-paths">基本的なファイルパス一覧だぜ！（デスクトップアプリ用）</router-link></li>
         </ul>
     </section>
 </template>
