@@ -7,10 +7,11 @@
             <nav>
                 <router-link to="/">ホーム</router-link> |
                 <router-link to="/about">About</router-link> |
-                <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link> |
+                <router-link to="/base-paths">BasePaths</router-link> |
+                <router-link to="/loading-bundle-file">LoadingBundleFile</router-link> |
                 <router-link to="/loading-json-file">LoadingJsonFile</router-link> |
                 <router-link to="/mount-practice">MountPractice</router-link> |
-                <router-link to="/loading-bundle-file">LoadingBundleFile</router-link>
+                <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link>
             </nav>
 
             <!-- このビューにコンポーネントがレンダリングされる。 -->

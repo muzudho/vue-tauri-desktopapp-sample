@@ -13,6 +13,11 @@ const routes = [
         component: About,
     },
     {
+        path: '/base-paths',
+        name: 'BasePaths',
+        component: () => import('../views/BasePaths.vue'),
+    },
+    {
         path: '/',          // URL
         name: 'Home',
         component: Home,    // importしたビュー
