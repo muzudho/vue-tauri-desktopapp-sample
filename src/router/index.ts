@@ -7,6 +7,11 @@ const routes = [
         component: () => import('../views/making/index.vue'),
     },
     {
+        name: 'BasePaths',
+        path: '/making/base-paths',
+        component: () => import('../views/making/BasePaths.vue'),
+    },
+    {
         name: 'MountPractice',
         path: '/making/mount-practice',
         component: () => import('../views/making/MountPractice.vue'),
@@ -21,11 +26,6 @@ const routes = [
         name: 'About',
         path: '/about',     // URL
         component: () => import('../views/About.vue'),  // importした Vue ファイル
-    },
-    {
-        name: 'BasePaths',
-        path: '/base-paths',
-        component: () => import('../views/BasePaths.vue'),
     },
     {
         name: 'Home',

@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <h1>基本的なファイルパス一覧だぜ（＾▽＾）！</h1>
-
+    <h2>## 基本的なファイルパス一覧だぜ！</h2>
+    <section class="sec-2">
         <v-row>
             <v-col cols="1">1</v-col>
             <v-col cols="3">appCacheDirStr</v-col>
@@ -117,13 +116,11 @@
             <v-col cols="3">videoDirStr</v-col>
             <v-col>{{ videoDirStr }}</v-col>
         </v-row>
+    </section>
 
-        <hr/>
-
-        <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-
-        <router-link to="/">ホームに戻る</router-link>
-    </div>
+    <hr/>
+    <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
 
 <script setup lang="ts">
