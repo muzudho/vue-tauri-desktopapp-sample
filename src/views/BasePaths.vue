@@ -193,7 +193,7 @@
             pictureDirStr.value = await path.pictureDir();              // 17   `C:\Users\muzud\OneDrive\画像`
             publicDirStr.value = await path.publicDir();                // 18   `C:\Users\Public`
             resourceDirStr.value = await path.resourceDir();            // 19   `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug`
-            // runtimeDirStr.value = await path.runtimeDir();           // 20   FIXME: 読み込み中で止まってしまう？
+            runtimeDirStr.value = await fetchDirPathAsync(path.runtimeDir);   // 20   FIXME: 読み込み中で止まってしまう？
             tempDirStr.value = await path.tempDir();                    // 21   `C:\Users\muzud\AppData\Local\Temp\`
             templateDirStr.value = await path.templateDir();            // 22   `C:\Users\muzud\AppData\Roaming\Microsoft\Windows\Templates`
             videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
@@ -202,4 +202,32 @@
             errorMessage.value = `エラーだぜ: ${error}`; // エラーハンドリング
         }
     });
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    // コールバック関数の型を定義
+    type GetPathAsync = () => Promise<string>;
+
+    /**
+     * タイムアウトしたときは、# で始まる文字列を返す。
+     * @param getPath 
+     */
+    async function fetchDirPathAsync(getPathAsync: GetPathAsync): Promise<string> {
+        try {
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('#Timed out fetching runtimeDir')), 3000);
+            });
+            return await Promise.race([getPathAsync(), timeoutPromise]) as string;
+
+        } catch (error) {
+            // 型ガードでError型かチェック
+            if (error instanceof Error) {
+                return `#${error.message}`;
+            }
+            // 予期しないエラーのフォールバック
+            return "#Unknown error occurred";
+        }
+    }
 </script>
