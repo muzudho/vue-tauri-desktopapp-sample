@@ -1,22 +1,30 @@
 <template>
     <v-app>
         <v-main>
+            <NuxtLayout>
 
-            <!-- ナビゲーション -->
-            <nav>
-                <router-link to="/">ホーム</router-link> |
-                <router-link to="/about">About</router-link> |
-                <router-link to="/base-paths">BasePaths</router-link> |
-                <router-link to="/loading-bundle-file">LoadingBundleFile</router-link> |
-                <router-link to="/loading-json-file">LoadingJsonFile</router-link> |
-                <router-link to="/mount-practice">MountPractice</router-link> |
-                <router-link to="/page-layout">PageLayout</router-link> |
-                <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link>
-            </nav>
+                <!-- ナビゲーション -->
+                <nav>
+                    <!--
+                        pages/ フォルダー下のページのファイル名は、
+                        Nuxt 公式では kebab-case、
+                            📖 https://nuxt.com/docs/3.x/guide/directory-structure/pages
+                        Tauri では PascalCase が習慣的に使われています。異なるので注意。
+                    -->
+                    <router-link to="/">ホーム</router-link> |
+                    <router-link to="/about">About</router-link> |
+                    <router-link to="/base-paths">BasePaths</router-link> |
+                    <router-link to="/loading-bundle-file">LoadingBundleFile</router-link> |
+                    <router-link to="/loading-json-file">LoadingJsonFile</router-link> |
+                    <router-link to="/mount-practice">MountPractice</router-link> |
+                    <router-link to="/page-layout">PageLayout</router-link> |
+                    <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link>
+                </nav>
 
-            <!-- このビューにコンポーネントがレンダリングされる。 -->
-            <router-view />
+                <!-- このビューにコンポーネントがレンダリングされる。 -->
+                <router-view />
 
+            </NuxtLayout>
         </v-main>
     </v-app>
 </template>
