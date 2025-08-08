@@ -171,52 +171,53 @@
     onMounted(async () => {
         try {
             // ファイルパス一覧：
-            appCacheDirStr.value = await path.appCacheDir();            // 1    `C:\Users\muzud\AppData\Local\com.vue-tauri-desktopapp-sample.app`
-            appConfigDirStr.value = await path.appConfigDir();          // 2    `C:\Users\muzud\AppData\Roaming\com.vue-tauri-desktopapp-sample.app`
-            appDataDirStr.value = await path.appDataDir();              // 3    `C:\Users\muzud\AppData\Roaming\com.vue-tauri-desktopapp-sample.app`
-            appLocalDataDirStr.value = await path.appLocalDataDir();    // 4    `C:\Users\muzud\AppData\Local\com.vue-tauri-desktopapp-sample.app`
-            appLogDirStr.value = await path.appLogDir();                // 5    `C:\Users\muzud\AppData\Local\com.vue-tauri-desktopapp-sample.app\logs`
-            audioDirStr.value = await path.audioDir();                  // 6    `C:\Users\muzud\Music`
-            cacheDirStr.value = await path.cacheDir();                  // 7    `C:\Users\muzud\AppData\Local`
-            configDirStr.value = await path.configDir();                // 8    `C:\Users\muzud\AppData\Roaming`
-            dataDirStr.value = await path.dataDir();                    // 9    `C:\Users\muzud\AppData\Roaming`
-            desktopDirStr.value = await path.desktopDir();              // 10   `C:\Users\muzud\OneDrive\デスクトップ`
-            documentDirStr.value = await path.documentDir();            // 11   `C:\Users\muzud\OneDrive\ドキュメント`
-            downloadDirStr.value = await path.downloadDir();            // 12   `C:\Users\muzud\Downloads`
-
-            try {
-                executableDirStr.value = await path.executableDir();      // 13   FIXME: 読み込み中で止まってしまう？
-            } catch (error) {
-                // 予期しないエラーのフォールバック
-                executableDirStr.value = `#ERROR: ${error}`;
-            }
-
-            try {
-                fontDirStr.value = await path.fontDir();                  // 14   FIXME: 読み込み中で止まってしまう？
-            } catch (error) {
-                // 予期しないエラーのフォールバック
-                fontDirStr.value = `#ERROR: ${error}`;
-            }
-
-            homeDirStr.value = await path.homeDir();                    // 15   `C:\Users\muzud`   PCのユーザー・ホーム
-            localDataDirStr.value = await path.localDataDir();          // 16   `C:\Users\muzud\AppData\Local`
-            pictureDirStr.value = await path.pictureDir();              // 17   `C:\Users\muzud\OneDrive\画像`
-            publicDirStr.value = await path.publicDir();                // 18   `C:\Users\Public`
-            resourceDirStr.value = await path.resourceDir();            // 19   `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug`
-
-            try {
-                runtimeDirStr.value = await path.runtimeDir();   // 20   FIXME: 読み込み中で止まってしまう？
-            } catch (error) {
-                // 予期しないエラーのフォールバック
-                runtimeDirStr.value = `#ERROR: ${error}`;
-            }
-
-            tempDirStr.value = await path.tempDir();                    // 21   `C:\Users\muzud\AppData\Local\Temp\`
-            templateDirStr.value = await path.templateDir();            // 22   `C:\Users\muzud\AppData\Roaming\Microsoft\Windows\Templates`
-            videoDirStr.value = await path.videoDir();                  // 23   `C:\Users\muzud\Videos`
+            appCacheDirStr.value = await fetchDirPathAsync(path.appCacheDir);   // 1    `C:\Users\muzud\AppData\Local\com.vue-tauri-desktopapp-sample.app`
+            appConfigDirStr.value = await fetchDirPathAsync(path.appConfigDir); // 2    `C:\Users\muzud\AppData\Roaming\com.vue-tauri-desktopapp-sample.app`
+            appDataDirStr.value = await fetchDirPathAsync(path.appDataDir);     // 3    `C:\Users\muzud\AppData\Roaming\com.vue-tauri-desktopapp-sample.app`
+            appLocalDataDirStr.value = await fetchDirPathAsync(path.appLocalDataDir);    // 4    `C:\Users\muzud\AppData\Local\com.vue-tauri-desktopapp-sample.app`
+            appLogDirStr.value = await fetchDirPathAsync(path.appLogDir);       // 5    `C:\Users\muzud\AppData\Local\com.vue-tauri-desktopapp-sample.app\logs`
+            audioDirStr.value = await fetchDirPathAsync(path.audioDir);         // 6    `C:\Users\muzud\Music`
+            cacheDirStr.value = await fetchDirPathAsync(path.cacheDir);         // 7    `C:\Users\muzud\AppData\Local`
+            configDirStr.value = await fetchDirPathAsync(path.configDir);       // 8    `C:\Users\muzud\AppData\Roaming`
+            dataDirStr.value = await fetchDirPathAsync(path.dataDir);           // 9    `C:\Users\muzud\AppData\Roaming`
+            desktopDirStr.value = await fetchDirPathAsync(path.desktopDir);     // 10   `C:\Users\muzud\OneDrive\デスクトップ`
+            documentDirStr.value = await fetchDirPathAsync(path.documentDir);   // 11   `C:\Users\muzud\OneDrive\ドキュメント`
+            downloadDirStr.value = await fetchDirPathAsync(path.downloadDir);   // 12   `C:\Users\muzud\Downloads`
+            executableDirStr.value = await fetchDirPathAsync(path.executableDir);   // 13   FIXME: 読み込み中で止まってしまう？
+            fontDirStr.value = await fetchDirPathAsync(path.fontDir);           // 14   FIXME: 読み込み中で止まってしまう？
+            homeDirStr.value = await fetchDirPathAsync(path.homeDir);           // 15   `C:\Users\muzud`   PCのユーザー・ホーム
+            localDataDirStr.value = await fetchDirPathAsync(path.localDataDir); // 16   `C:\Users\muzud\AppData\Local`
+            pictureDirStr.value = await fetchDirPathAsync(path.pictureDir);     // 17   `C:\Users\muzud\OneDrive\画像`
+            publicDirStr.value = await fetchDirPathAsync(path.publicDir);       // 18   `C:\Users\Public`
+            resourceDirStr.value = await fetchDirPathAsync(path.resourceDir);   // 19   `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug`
+            runtimeDirStr.value = await fetchDirPathAsync(path.runtimeDir);     // 20   FIXME: 読み込み中で止まってしまう？
+            tempDirStr.value = await fetchDirPathAsync(path.tempDir);           // 21   `C:\Users\muzud\AppData\Local\Temp\`
+            templateDirStr.value = await fetchDirPathAsync(path.templateDir);   // 22   `C:\Users\muzud\AppData\Roaming\Microsoft\Windows\Templates`
+            videoDirStr.value = await fetchDirPathAsync(path.videoDir);         // 23   `C:\Users\muzud\Videos`
                   
         } catch (error) {
             errorMessage.value = `エラーだぜ: ${error}`; // エラーハンドリング
         }
     });
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    // コールバック関数の型を定義
+    type GetPathAsync = () => Promise<string>;
+
+    /**
+     * タイムアウトしたときは、# で始まる文字列を返す。
+     * @param getPath 
+     */
+    async function fetchDirPathAsync(getPathAsync: GetPathAsync): Promise<string> {
+        try {
+            return await getPathAsync();                  // 14   FIXME: 読み込み中で止まってしまう？
+        } catch (error) {
+            // 予期しないエラーのフォールバック
+            return `#ERROR: ${error}`;
+        }
+    }
+
 </script>
