@@ -96,6 +96,30 @@
             padding-top: 6px;
             padding-bottom: 2px;
         }
+
+        section.sec-1 {
+            padding-left: 24px;
+        }
+
+        section.sec-2 {
+            padding-left: 44px;
+        }
+
+        section.sec-3 {
+            padding-left: 64px;
+        }
+
+        section.sec-4 {
+            padding-left: 84px;
+        }
+
+        section.sec-5 {
+            padding-left: 104px;
+        }
+
+        section.sec-6 {
+            padding-left: 124px;
+        }
     }
 
     /* パソコン向けスタイル (画面幅が769px以上) */
@@ -148,6 +172,30 @@
             padding-left: 4px;
             padding-top: 6px;
             padding-bottom: 2px;
+        }
+
+        section.sec-1 {
+            padding-left: 64px;
+        }
+
+        section.sec-2 {
+            padding-left: 124px;
+        }
+
+        section.sec-3 {
+            padding-left: 184px;
+        }
+
+        section.sec-4 {
+            padding-left: 244px;
+        }
+
+        section.sec-5 {
+            padding-left: 304px;
+        }
+
+        section.sec-6 {
+            padding-left: 364px;
         }
     }
 
