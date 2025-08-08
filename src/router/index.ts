@@ -2,24 +2,25 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
 import About from '../views/About.vue';
 import WelcomeToTauriAndView from '../views/WelcomeToTauriAndVue.vue';
+import LoadingBundleFile from '../views/LoadingBundleFile.vue';
 import LoadingJsonFile from '../views/LoadingJsonFile.vue';
 import MountPractice from '../views/MountPractice.vue';
 
 const routes = [
-    {
-        path: '/',          // URL
-        name: 'Home',
-        component: Home,    // importしたビュー
-    },
     {
         path: '/about',
         name: 'About',
         component: About,
     },
     {
-        path: '/welcome-to-tauri-and-view',
-        name: 'WelcomeToTauriAndView',
-        component: WelcomeToTauriAndView,
+        path: '/',          // URL
+        name: 'Home',
+        component: Home,    // importしたビュー
+    },
+    {
+        path: '/loading-bundle-file',
+        name: 'LoadingBundleFile',
+        component: LoadingBundleFile,
     },
     {
         path: '/loading-json-file',
@@ -30,6 +31,11 @@ const routes = [
         path: '/mount-practice',
         name: 'MountPractice',
         component: MountPractice,
+    },
+    {
+        path: '/welcome-to-tauri-and-view',
+        name: 'WelcomeToTauriAndView',
+        component: WelcomeToTauriAndView,
     },
 ] as const;
 

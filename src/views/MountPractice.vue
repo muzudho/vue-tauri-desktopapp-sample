@@ -141,6 +141,11 @@
 </template>
 
 <script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
     //import { invoke } from '@tauri-apps/api/tauri';
     import { invoke } from "@tauri-apps/api/core";
 
@@ -151,6 +156,10 @@
     // import { resourceDir } from '@tauri-apps/api/path';
     // import { resolveResource } from '@tauri-apps/api/path';
     // import { convertFileSrc } from '@tauri-apps/api/core';
+
+    // ##############
+    // # 共有データ #
+    // ##############
 
     // ディレクトリー・パス
     const appCacheDirStr = ref<string>('1 読み込み中...');           // 1
