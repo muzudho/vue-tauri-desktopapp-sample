@@ -8,6 +8,15 @@
                 srcWidth="32"
                 srcHeight="64"
                 tilemapUrl="/img/tilemap_sample.png" /><br/>
+        <!--
+        NOTE: Tauri では上の書き方でいけるが、Nuxt では下の書き方にしないとエラーが出るようだ。
+        <Tile
+                :srcLeft="64"
+                :srcTop="32"
+                :srcWidth="32"
+                :srcHeight="64"
+                :tilemapUrl="'/img/tilemap_sample.png'" /><br/>
+        -->
         ：ここまで。<br/>
         <br/>
         元画像のタイルマップを表示：<br/>
