@@ -38,6 +38,11 @@ const routes = [
         component: MountPractice,
     },
     {
+        path: '/page-layout',
+        name: 'PageLayout',
+        component: () => import('../views/PageLayout.vue'),
+    },
+    {
         path: '/welcome-to-tauri-and-view',
         name: 'WelcomeToTauriAndView',
         component: WelcomeToTauriAndView,

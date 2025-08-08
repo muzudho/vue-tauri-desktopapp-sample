@@ -9,6 +9,8 @@
                 <router-link to="/base-paths">BasePaths</router-link> |
                 <router-link to="/loading-bundle-file">LoadingBundleFile</router-link> |
                 <router-link to="/loading-json-file">LoadingJsonFile</router-link> |
+                <router-link to="/mount-practice">MountPractice</router-link> |
+                <router-link to="/page-layout">PageLayout</router-link> |
                 <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link>
             </nav>
 
@@ -33,6 +35,128 @@
 </style>
 
 <style>
+    h1 {
+        background-color: #101010;
+        color: #F0F0F0;
+        font-size: xx-large;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        text-align: left !important;
+    }
+
+    /* スマホ向けスタイル (画面幅が768px以下) */
+    @media screen and (max-width: 768px) {
+        h2 {
+            background-color: #101010;
+            color: #F0F0F0;
+            font-size: x-large;
+            margin-left: 20px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h3 {
+            background-color: #181818;
+            color: #F0F0F0;
+            font-size: x-large;
+            margin-left: 40px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h4 {
+            background-color: #202020;
+            color: #F0F0F0;
+            font-size: large;
+            margin-left: 60px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h5 {
+            background-color: #282828;
+            color: #F0F0F0;
+            font-size: large;
+            margin-left: 80px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h6 {
+            background-color: #303030;
+            color: #F0F0F0;
+            font-size: medium;
+            margin-left: 100px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+    }
+
+    /* パソコン向けスタイル (画面幅が769px以上) */
+    @media screen and (min-width: 769px) {
+        h2 {
+            background-color: #101010;
+            color: #F0F0F0;
+            font-size: x-large;
+            margin-left: 60px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h3 {
+            background-color: #181818;
+            color: #F0F0F0;
+            font-size: x-large;
+            margin-left: 120px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h4{
+            background-color: #202020;
+            color: #F0F0F0;
+            font-size: large;
+            margin-left: 180px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h5 {
+            background-color: #282828;
+            color: #F0F0F0;
+            font-size: large;
+            margin-left: 240px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        h6 {
+            background-color: #303030;
+            color: #F0F0F0;
+            font-size: medium;
+            margin-left: 300px;
+            padding-left: 4px;
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+    }
+
+
+    p.p2 {
+        color: #111111;
+        margin-left: 90px;
+    }
+
     :root {
         font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
         font-size: 16px;
