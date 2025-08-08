@@ -32,6 +32,11 @@ const routes = [
         path: '/making/page-layout',
         component: () => import('../views/making/PageLayout.vue'),
     },
+    {
+        name: 'SpriteTile',
+        path: '/making/sprite-tile',
+        component: () => import('../views/making/SpriteTile.vue'),
+    },
 
     {
         name: 'About',
