@@ -1,9 +1,12 @@
 <template>
-    <div>
-        <h1>バンドルファイルの読込</h1>
+    <h2>## バンドルファイルの読込だぜ！（デスクトップアプリ用）</h2>
+    <section class="sec-2">
+
         <p>{{ startConfigJsonStr }}</p>
-        <router-link to="/">ホームに戻る</router-link>
-    </div>
+
+    </section>
+    <hr/>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
 
 <script setup lang="ts">

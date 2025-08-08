@@ -6,6 +6,11 @@ const routes = [
         path: '/making/desktop/base-paths',
         component: () => import('../views/making/desktop/BasePaths.vue'),
     },
+    {
+        name: 'LoadingBundleFile',
+        path: '/making/desktop/loading-bundle-file',
+        component: () => import('../views/making/desktop/LoadingBundleFile.vue'),
+    },
 
     {
         name: 'Making',
@@ -32,11 +37,6 @@ const routes = [
         name: 'Home',
         path: '/',          
         component: () => import('../views/Home.vue'),
-    },
-    {
-        name: 'LoadingBundleFile',
-        path: '/loading-bundle-file',
-        component: () => import('../views/LoadingBundleFile.vue'),
     },
     {
         name: 'LoadingJsonFile',
