@@ -24,4 +24,33 @@
     // TODO 🌟 `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\public\sample.txt` を示す方法が分からない。開発中のプロジェクトルートを指したい。
     // TODO 🌟 あるいは `C:\Users\muzud\OneDrive\ドキュメント\GitHub\vue-tauri-desktopapp-sample\src-tauri\target\debug` ディレクトリー下にファイルを丸ごとコピーされるか？
     // TODO 🌟 同梱するとファイルが重くなるか？ 外部に置いておく方がいい？ ローカルＰＣか、クラウド上か。
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    // コールバック関数の型を定義
+    type GetPathAsync = () => Promise<string>;
+
+    /**
+     * タイムアウトしたときは、# で始まる文字列を返す。
+     * @param getPath 
+     */
+    async function fetchDirPathAsync(getPathAsync: GetPathAsync): Promise<string> {
+        try {
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('#Timed out fetching runtimeDir')), 3000);
+            });
+            return await Promise.race([getPathAsync(), timeoutPromise]) as string;
+
+        } catch (error) {
+            // 型ガードでError型かチェック
+            if (error instanceof Error) {
+                return `#${error.message}`;
+            }
+            // 予期しないエラーのフォールバック
+            return `#Unknown error occurred. error:${error}`;
+        }
+    }
+
 ```
