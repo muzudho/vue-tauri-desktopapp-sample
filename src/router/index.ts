@@ -18,6 +18,11 @@ const routes = [
         component: () => import('../views/making/index.vue'),
     },
     {
+        name: 'LoadingJsonFile',
+        path: '/making/loading-json-file',
+        component: () => import('../views/making/LoadingJsonFile.vue'),
+    },
+    {
         name: 'MountPractice',
         path: '/making/mount-practice',
         component: () => import('../views/making/MountPractice.vue'),
@@ -37,11 +42,6 @@ const routes = [
         name: 'Home',
         path: '/',          
         component: () => import('../views/Home.vue'),
-    },
-    {
-        name: 'LoadingJsonFile',
-        path: '/loading-json-file',
-        component: () => import('../views/LoadingJsonFile.vue'),
     },
     {
         name: 'WelcomeToTauriAndView',

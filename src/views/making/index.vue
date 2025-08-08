@@ -8,6 +8,7 @@
             <li>📖 <router-link to="/making/mount-practice">onMounted を使う練習だぜ！</router-link></li>
             <li>📖 <router-link to="/making/desktop/base-paths">基本的なファイルパス一覧だぜ！（デスクトップアプリ用）</router-link></li>
             <li>📖 <router-link to="/making/desktop/loading-bundle-file">バンドルファイルの読込だぜ！（デスクトップアプリ用）</router-link></li>
+            <li>📖 <router-link to="/making/loading-json-file">JSONファイルの読込だぜ！</router-link></li>
         </ul>
     </section>
 </template>

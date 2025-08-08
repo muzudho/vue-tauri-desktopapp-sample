@@ -1,9 +1,10 @@
 <template>
-    <div>
-        <h1>JSONファイルの読込</h1>
+    <h2>## JSONファイルの読込だぜ！</h2>
+    <section class="sec-2">
         <p>{{ jsonStr }}</p>
-        <router-link to="/">ホームに戻る</router-link>
-    </div>
+    </section>
+    <hr/>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
 
 <script setup lang="ts">
@@ -26,7 +27,7 @@
 
     onMounted(async () => {
         try {
-            const response = await fetch("/sample.json");   // Tauriでは、publicフォルダに置いたファイルにアクセスできる。
+            const response = await fetch("/sample.json");   // publicフォルダに置いたファイルにアクセスできる。
             if (!response.ok) throw new Error("Failed to fetch JSON");
             const data: any = await response.json();
 
