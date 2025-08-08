@@ -1,15 +1,32 @@
 <template>
-    <div>
-        <h1>onMounted を使う練習だぜ！</h1>
+    <h2>onMounted を使う練習だぜ！</h2>
 
+    <section class="sec-2">
         <p>{{ textVM }}</p>
 
-        <hr/>
+        <pre>
+            &lt;script setup lang="ts"&gt;
+                import { onMounted, ref } from 'vue';
 
-        <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+                const textVM = ref&lt;string&gt;('読み込み中...');
+                const errorMessage = ref&lt;string&gt;('');
 
-        <router-link to="/">ホームに戻る</router-link>
-    </div>
+                onMounted(async () =&gt; {
+                    try {
+                        textVM.value = "起動時に処理を行えるぜ（＾▽＾）！";
+                            
+                    } catch (error) {
+                        errorMessage.value = `エラーだぜ: ${error}`; // エラーハンドリング
+                    }
+                });
+            &lt;/script&gt;
+        </pre>
+
+    </section>
+
+    <hr/>
+    <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
 
 <script setup lang="ts">

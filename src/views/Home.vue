@@ -1,12 +1,8 @@
 <template>
-    <v-container>
-        <h1>ホームだぜ！</h1>
-    </v-container>
-    <v-container>
+    <h2>## ホームだぜ！</h2>
+    <section class="sec-2">
         📖 <router-link to="/mount-practice">起動（マウント）時に処理を行う方法</router-link><br/>
-    </v-container>
-    <v-container>
-        <hr/>
-        <router-link to="/about">About ページへ</router-link>
-    </v-container>
+    </section>
+    <hr/>
+    <router-link to="/about">About ページへ</router-link>
 </template>

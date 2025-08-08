@@ -21,6 +21,8 @@
                     <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link>
                 </nav>
 
+                <h1># Tauri デスクトップアプリのサンプルだぜ！</h1>
+
                 <!-- このビューにコンポーネントがレンダリングされる。 -->
                 <router-view />
 
