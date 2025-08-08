@@ -329,3 +329,25 @@ TODO: ファイルは Rust で読み込んだ方がいいか？  フロントエ
     }
 }
 ```
+
+
+## [2025-08-08_Fri]
+
+📄 `vite.config.ts` 抜粋:  
+
+```ts
+export default defineConfig(async () => ({
+    plugins: [vue()],
+    resolve: {
+        alias: {
+            // [2025-07-29_Tue] import 文で、.vue ファイルへのパスに @ エイリアスを使えるようにするための設定。
+            // 設定前： import Tile from '../components/Tile.vue';  // @のエイリアスが使えない
+            // 設定後： import Tile from '@/components/Tile.vue';   // @のエイリアスが使える
+            '@': '/src',  // ここで@をルート・ディレクトリにマッピング
+        },
+    },
+
+    // 略
+}));
+
+```
