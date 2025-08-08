@@ -35,175 +35,8 @@
 </style>
 
 <style>
-    h1 {
-        background-color: #101010;
-        color: #F0F0F0;
-        font-size: xx-large;
-        padding-left: 4px;
-        padding-top: 6px;
-        padding-bottom: 2px;
-        text-align: left !important;
-    }
 
-    /* スマホ向けスタイル (画面幅が768px以下) */
-    @media screen and (max-width: 768px) {
-        h2 {
-            background-color: #101010;
-            color: #F0F0F0;
-            font-size: x-large;
-            margin-left: 20px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h3 {
-            background-color: #181818;
-            color: #F0F0F0;
-            font-size: x-large;
-            margin-left: 40px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h4 {
-            background-color: #202020;
-            color: #F0F0F0;
-            font-size: large;
-            margin-left: 60px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h5 {
-            background-color: #282828;
-            color: #F0F0F0;
-            font-size: large;
-            margin-left: 80px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h6 {
-            background-color: #303030;
-            color: #F0F0F0;
-            font-size: medium;
-            margin-left: 100px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        section.sec-1 {
-            padding-left: 24px;
-        }
-
-        section.sec-2 {
-            padding-left: 44px;
-        }
-
-        section.sec-3 {
-            padding-left: 64px;
-        }
-
-        section.sec-4 {
-            padding-left: 84px;
-        }
-
-        section.sec-5 {
-            padding-left: 104px;
-        }
-
-        section.sec-6 {
-            padding-left: 124px;
-        }
-    }
-
-    /* パソコン向けスタイル (画面幅が769px以上) */
-    @media screen and (min-width: 769px) {
-        h2 {
-            background-color: #101010;
-            color: #F0F0F0;
-            font-size: x-large;
-            margin-left: 60px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h3 {
-            background-color: #181818;
-            color: #F0F0F0;
-            font-size: x-large;
-            margin-left: 120px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h4{
-            background-color: #202020;
-            color: #F0F0F0;
-            font-size: large;
-            margin-left: 180px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h5 {
-            background-color: #282828;
-            color: #F0F0F0;
-            font-size: large;
-            margin-left: 240px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        h6 {
-            background-color: #303030;
-            color: #F0F0F0;
-            font-size: medium;
-            margin-left: 300px;
-            padding-left: 4px;
-            padding-top: 6px;
-            padding-bottom: 2px;
-        }
-
-        section.sec-1 {
-            padding-left: 64px;
-        }
-
-        section.sec-2 {
-            padding-left: 124px;
-        }
-
-        section.sec-3 {
-            padding-left: 184px;
-        }
-
-        section.sec-4 {
-            padding-left: 244px;
-        }
-
-        section.sec-5 {
-            padding-left: 304px;
-        }
-
-        section.sec-6 {
-            padding-left: 364px;
-        }
-    }
-
-
-    p.p2 {
-        color: #111111;
-        margin-left: 90px;
-    }
+    @import '../styles/warabenture.css';
 
     :root {
         font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -219,6 +52,14 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         -webkit-text-size-adjust: 100%;
+    }
+
+    /* スマホ向けスタイル (画面幅が768px以下) */
+    @media screen and (max-width: 768px) {
+    }
+
+    /* パソコン向けスタイル (画面幅が769px以上) */
+    @media screen and (min-width: 769px) {
     }
 
     .container {
