@@ -1,51 +1,45 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import Home from '../views/Home.vue';
-import About from '../views/About.vue';
-import WelcomeToTauriAndView from '../views/WelcomeToTauriAndVue.vue';
-import LoadingBundleFile from '../views/LoadingBundleFile.vue';
-import LoadingJsonFile from '../views/LoadingJsonFile.vue';
-import MountPractice from '../views/MountPractice.vue';
 
 const routes = [
     {
-        path: '/about',
         name: 'About',
-        component: About,
+        path: '/about',     // URL
+        component: () => import('../views/About.vue'),  // importした Vue ファイル
     },
     {
-        path: '/base-paths',
         name: 'BasePaths',
+        path: '/base-paths',
         component: () => import('../views/BasePaths.vue'),
     },
     {
-        path: '/',          // URL
         name: 'Home',
-        component: Home,    // importしたビュー
+        path: '/',          
+        component: () => import('../views/Home.vue'),
     },
     {
-        path: '/loading-bundle-file',
         name: 'LoadingBundleFile',
-        component: LoadingBundleFile,
+        path: '/loading-bundle-file',
+        component: () => import('../views/LoadingBundleFile.vue'),
     },
     {
-        path: '/loading-json-file',
         name: 'LoadingJsonFile',
-        component: LoadingJsonFile,
+        path: '/loading-json-file',
+        component: () => import('../views/LoadingJsonFile.vue'),
     },
     {
-        path: '/mount-practice',
         name: 'MountPractice',
-        component: MountPractice,
+        path: '/mount-practice',
+        component: () => import('../views/MountPractice.vue'),
     },
     {
-        path: '/page-layout',
         name: 'PageLayout',
+        path: '/page-layout',
         component: () => import('../views/PageLayout.vue'),
     },
     {
-        path: '/welcome-to-tauri-and-view',
         name: 'WelcomeToTauriAndView',
-        component: WelcomeToTauriAndView,
+        path: '/welcome-to-tauri-and-view',
+        component: () => import('../views/WelcomeToTauriAndVue.vue'),
     },
 ] as const;
 
