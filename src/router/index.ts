@@ -2,6 +2,17 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
+        name: 'Making',
+        path: '/making',
+        component: () => import('../views/making/index.vue'),
+    },
+    {
+        name: 'PageLayout',
+        path: '/making/page-layout',
+        component: () => import('../views/making/PageLayout.vue'),
+    },
+
+    {
         name: 'About',
         path: '/about',     // URL
         component: () => import('../views/About.vue'),  // importした Vue ファイル
@@ -30,11 +41,6 @@ const routes = [
         name: 'MountPractice',
         path: '/mount-practice',
         component: () => import('../views/MountPractice.vue'),
-    },
-    {
-        name: 'PageLayout',
-        path: '/page-layout',
-        component: () => import('../views/PageLayout.vue'),
     },
     {
         name: 'WelcomeToTauriAndView',

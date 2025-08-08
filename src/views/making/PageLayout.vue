@@ -40,5 +40,7 @@
             １．１．１．１．１．１号の本文だぜ（＾▽＾）！
         </section>
 
-</v-container>
+    </v-container>
+    <hr/>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
