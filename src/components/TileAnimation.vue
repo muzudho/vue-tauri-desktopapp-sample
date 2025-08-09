@@ -45,7 +45,7 @@
     }));
 
     const flameIndex = computed(() => {
-        return props.time / props.slow % props.frameNum;
+        return Math.floor(props.time / props.slow) % props.frameNum;
     });
 
 
