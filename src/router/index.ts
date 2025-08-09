@@ -13,6 +13,11 @@ const routes = [
     },
 
     {
+        name: 'FrameTest',
+        path: '/making/frame-test',
+        component: () => import('../views/making/FrameTest.vue'),
+    },
+    {
         name: 'Making',
         path: '/making',
         component: () => import('../views/making/index.vue'),
