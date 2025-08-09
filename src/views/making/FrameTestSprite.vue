@@ -4,11 +4,69 @@
         ここに切り抜いたタイルを表示：<br/>
         <TileAnimation
                 :frames="[
-                    {top:   0, left:   0, width: 32, height: 32 },
-                    {top:   0, left:  32, width: 32, height: 32 },
+                    {top:   0, left:    0, width: 32, height: 32 },     // 0フレーム目
+                    {top:   0, left:   32, width: 32, height: 32 },
+                    {top:   0, left:   64, width: 32, height: 32 },
+                    {top:   0, left:   96, width: 32, height: 32 },
+                    {top:   0, left:  128, width: 32, height: 32 },
+                    {top:   0, left:  160, width: 32, height: 32 },
+                    {top:   0, left:  192, width: 32, height: 32 },
+                    {top:   0, left:  224, width: 32, height: 32 },
+                    {top:   0, left:  256, width: 32, height: 32 },
+                    {top:   0, left:  288, width: 32, height: 32 },
+                    {top:  32, left:    0, width: 32, height: 32 },     // 10フレーム目
+                    {top:  32, left:   32, width: 32, height: 32 },
+                    {top:  32, left:   64, width: 32, height: 32 },
+                    {top:  32, left:   96, width: 32, height: 32 },
+                    {top:  32, left:  128, width: 32, height: 32 },
+                    {top:  32, left:  160, width: 32, height: 32 },
+                    {top:  32, left:  192, width: 32, height: 32 },
+                    {top:  32, left:  224, width: 32, height: 32 },
+                    {top:  32, left:  256, width: 32, height: 32 },
+                    {top:  32, left:  288, width: 32, height: 32 },
+                    {top:  64, left:    0, width: 32, height: 32 },     // 20フレーム目
+                    {top:  64, left:   32, width: 32, height: 32 },
+                    {top:  64, left:   64, width: 32, height: 32 },
+                    {top:  64, left:   96, width: 32, height: 32 },
+                    {top:  64, left:  128, width: 32, height: 32 },
+                    {top:  64, left:  160, width: 32, height: 32 },
+                    {top:  64, left:  192, width: 32, height: 32 },
+                    {top:  64, left:  224, width: 32, height: 32 },
+                    {top:  64, left:  256, width: 32, height: 32 },
+                    {top:  64, left:  288, width: 32, height: 32 },
+                    {top:  96, left:    0, width: 32, height: 32 },     // 30フレーム目
+                    {top:  96, left:   32, width: 32, height: 32 },
+                    {top:  96, left:   64, width: 32, height: 32 },
+                    {top:  96, left:   96, width: 32, height: 32 },
+                    {top:  96, left:  128, width: 32, height: 32 },
+                    {top:  96, left:  160, width: 32, height: 32 },
+                    {top:  96, left:  192, width: 32, height: 32 },
+                    {top:  96, left:  224, width: 32, height: 32 },
+                    {top:  96, left:  256, width: 32, height: 32 },
+                    {top:  96, left:  288, width: 32, height: 32 },
+                    {top: 128, left:    0, width: 32, height: 32 },     // 40フレーム目
+                    {top: 128, left:   32, width: 32, height: 32 },
+                    {top: 128, left:   64, width: 32, height: 32 },
+                    {top: 128, left:   96, width: 32, height: 32 },
+                    {top: 128, left:  128, width: 32, height: 32 },
+                    {top: 128, left:  160, width: 32, height: 32 },
+                    {top: 128, left:  192, width: 32, height: 32 },
+                    {top: 128, left:  224, width: 32, height: 32 },
+                    {top: 128, left:  256, width: 32, height: 32 },
+                    {top: 128, left:  288, width: 32, height: 32 },
+                    {top: 160, left:    0, width: 32, height: 32 },     // 50フレーム目
+                    {top: 160, left:   32, width: 32, height: 32 },
+                    {top: 160, left:   64, width: 32, height: 32 },
+                    {top: 160, left:   96, width: 32, height: 32 },
+                    {top: 160, left:  128, width: 32, height: 32 },
+                    {top: 160, left:  160, width: 32, height: 32 },
+                    {top: 160, left:  192, width: 32, height: 32 },
+                    {top: 160, left:  224, width: 32, height: 32 },
+                    {top: 160, left:  256, width: 32, height: 32 },
+                    {top: 160, left:  288, width: 32, height: 32 },
                 ]"
                 tilemapUrl="/img/timer_square.png"
-                :frameIndex="count % 2"
+                :frameIndex="count % 60"
                 style="zoom:4; image-rendering: pixelated;" /><br/>
         <!--
             NOTE: Tauri では left="64" のように数字を渡せるが、 Nuxt では :left="64" のように書かないと数字で渡せないようだ。
