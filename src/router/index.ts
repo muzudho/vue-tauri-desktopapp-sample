@@ -18,6 +18,11 @@ const routes = [
         component: () => import('../views/making/FrameTest.vue'),
     },
     {
+        name: 'FrameTestSprite',
+        path: '/making/frame-test-sprite',
+        component: () => import('../views/making/FrameTestSprite.vue'),
+    },
+    {
         name: 'Making',
         path: '/making',
         component: () => import('../views/making/index.vue'),

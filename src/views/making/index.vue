@@ -11,6 +11,7 @@
             <li>📖 <router-link to="/making/loading-json-file">JSONファイルの読込だぜ！</router-link></li>
             <li>📖 <router-link to="/making/sprite-tile">スプライトの練習、まずタイルを切り抜くぜ！</router-link></li>
             <li>📖 <router-link to="/making/frame-test">カウントアップのテストだぜ！</router-link></li>
+            <li>📖 <router-link to="/making/frame-test-sprite">カウントアップのアニメーションのテストだぜ！</router-link></li>
         </ul>
     </section>
 </template>
