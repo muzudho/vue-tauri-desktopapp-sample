@@ -66,7 +66,9 @@
                     {top: 160, left:  288, width: 32, height: 32 },
                 ]"
                 tilemapUrl="/img/timer_square.png"
-                :frameIndex="count % 60"
+                :frameNum="60"
+                :slow="slow"
+                :time="count"
                 style="zoom:4; image-rendering: pixelated;" /><br/>
         <!--
             NOTE: Tauri では left="64" のように数字を渡せるが、 Nuxt では :left="64" のように書かないと数字で渡せないようだ。
@@ -77,6 +79,17 @@
         <v-btn @click="startTimer">スタート</v-btn>
         <v-btn @click="stopTimer">ストップ</v-btn>
         <v-btn @click="resetTimer">リセット</v-btn>
+
+        <div class="text-caption">
+            Slow
+        </div>
+        <v-slider
+                v-model="slow"
+                min="1"
+                max="10"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
         <br/>
         元画像のタイルマップを表示：<br/>
         <v-img src="/img/timer_square.png" style="width:320px; height:192px; zoom: 4; image-rendering: pixelated;"/>
@@ -106,6 +119,7 @@
 
     const count = ref<number>(0);   // カウントの初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
+    const slow = ref<number>(1);   // スローモーションの倍率
 
     onMounted(() => {
         // コンポーネントがマウントされたときの処理

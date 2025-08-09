@@ -22,7 +22,9 @@
     interface Props {
         frames: Rectangle[];
         tilemapUrl: string; // タイルマップ画像のURL
-        frameIndex: number; // 使用するフレームのインデックス
+        frameNum: number; // 総フレーム数
+        slow: number; // スローモーションの倍率
+        time: number; // 現在の時間（フレーム）
     }
     const props = defineProps<Props>();
 
@@ -35,12 +37,17 @@
     // ++++++++++++++++++++++++++++++++++++
 
     const tileStyle = computed(() => ({
-        width: `${props.frames[props.frameIndex].width}px`,
-        height: `${props.frames[props.frameIndex].height}px`,
+        width: `${props.frames[flameIndex.value].width}px`,
+        height: `${props.frames[flameIndex.value].height}px`,
         backgroundImage: `url('${props.tilemapUrl}')`,
-        backgroundPosition: `${-props.frames[props.frameIndex].left}px ${-props.frames[props.frameIndex].top}px`,
+        backgroundPosition: `${-props.frames[flameIndex.value].left}px ${-props.frames[flameIndex.value].top}px`,
         backgroundRepeat: 'no-repeat',
     }));
+
+    const flameIndex = computed(() => {
+        return props.time / props.slow % props.frameNum;
+    });
+
 
 </script>
 
