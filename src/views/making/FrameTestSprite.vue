@@ -2,33 +2,16 @@
     <h2>## カウントアップのアニメーションのテストだぜ！</h2>
     <section class="sec-2">
         ここに切り抜いたタイルを表示：<br/>
-        <!--
-        <Tile
-                srcLeft="0"
-                srcTop="0"
-                srcWidth="32"
-                srcHeight="32"
-                tilemapUrl="/img/timer_square.png"
-                style="zoom:4; image-rendering: pixelated;" /><br/>
-        -->
         <TileAnimation
-                :frames="[{
-                    left: 0,
-                    top: 0,
-                    width: 32,
-                    height: 32
-                }]"
+                :frames="[
+                    {top:   0, left:   0, width: 32, height: 32 },
+                    {top:   0, left:  32, width: 32, height: 32 },
+                ]"
                 tilemapUrl="/img/timer_square.png"
-                frameIndex="0"
+                :frameIndex="count % 2"
                 style="zoom:4; image-rendering: pixelated;" /><br/>
         <!--
-        NOTE: Tauri では上の書き方でいけるが、Nuxt では下の書き方にしないとエラーが出るようだ。
-        <Tile
-                :srcLeft="64"
-                :srcTop="32"
-                :srcWidth="32"
-                :srcHeight="64"
-                :tilemapUrl="'/img/timer_square.png'" /><br/>
+            NOTE: Tauri では left="64" のように数字を渡せるが、 Nuxt では :left="64" のように書かないと数字で渡せないようだ。
         -->
         ：ここまで。<br/>
         <br/>

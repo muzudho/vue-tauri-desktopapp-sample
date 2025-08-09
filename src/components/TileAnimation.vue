@@ -16,13 +16,6 @@
 
     import Rectangle from '../interfaces/Rectangle';
 
-    // interface Rectangle {
-    //     left: number;
-    //     top: number;
-    //     width: number;
-    //     height: number;
-    // }
-
     // ####################################
     // # このコンポーネントが受け取る引数 #
     // ####################################
