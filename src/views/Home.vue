@@ -1,4 +1,8 @@
 <template>
+    <section class="sec-1">
+        先頭ページだぜ（＾▽＾）！<br/>
+    </section>
+
     <h2>ホームの章だぜ！</h2>
     <section class="sec-2">
         デスクトップ・アプリケーションのホームページだぜ（＾▽＾）！<br/>

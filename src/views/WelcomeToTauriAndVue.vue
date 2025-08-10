@@ -1,4 +1,6 @@
 <template>
+    <the-header/>
+
     <h2>Welcome to Tauri + Vue の章だぜ！</h2>
 
     <v-container class="row">
@@ -26,8 +28,23 @@
 </template>
 
 <script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
     import { ref } from 'vue';
     import { invoke } from "@tauri-apps/api/core";
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheHeader from './TheHeader.vue';
+
+    // ##############
+    // # 共有データ #
+    // ##############
 
     // 画像パス
     import AssetsVueLogoSvg from '../assets/vue.svg';

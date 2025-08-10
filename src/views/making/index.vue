@@ -1,4 +1,6 @@
 <template>
+    <the-parent-header/>
+
     <h2>メイキングの章だぜ！</h2>
     <section class="sec-2">
         アプリケーション製作の練習だぜ（＾▽＾）！<br/>
@@ -15,3 +17,17 @@
         </ul>
     </section>
 </template>
+
+<script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheParentHeader from '../TheHeader.vue';
+
+</script>

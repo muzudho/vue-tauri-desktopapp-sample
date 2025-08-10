@@ -1,4 +1,6 @@
 <template>
+    <the-header/>
+
     <h2>About の章だぜ！</h2>
     <section class="sec-2">
         <p>制作者：むずでょ</p>
@@ -7,3 +9,17 @@
     <hr/>
     <router-link to="/">ホームに戻る</router-link>
 </template>
+
+<script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheHeader from './TheHeader.vue';
+
+</script>
