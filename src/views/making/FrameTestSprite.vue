@@ -110,7 +110,6 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    //import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
 
     // ##############

@@ -14,6 +14,7 @@
     // * インターフェース *
     // ********************
 
+    // NOTE: Tauri では interface をインポートできる。（Tauri 以外では type を付ける）
     import Rectangle from '../interfaces/Rectangle';
 
     // ####################################
