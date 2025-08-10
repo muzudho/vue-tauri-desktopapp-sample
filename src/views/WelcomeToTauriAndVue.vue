@@ -1,32 +1,28 @@
 <template>
-    <v-container class="container">
+    <h2>Welcome to Tauri + Vue の章だぜ！</h2>
 
-        <h1>Welcome to Tauri + Vue</h1>
-
-        <v-container class="row">
-            <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
-            <v-btn icon href="https://vitejs.dev" target="_blank">
-                <v-img src="/vite.svg" class="logo vite" alt="Vite logo" />
-            </v-btn>
-            <v-btn icon href="https://tauri.app" target="_blank">
-                <v-img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
-            </v-btn>
-            <v-btn icon href="https://vuejs.org/" target="_blank">
-                <v-img :src="AssetsVueLogoSvg" class="logo vue" alt="Vue logo" />
-            </v-btn>
-        </v-container>
-
-        <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
-
-        <v-form class="row" @submit.prevent="greet">
-            <v-text-field id="greet-input" v-model="name" placeholder="Enter a name..."></v-text-field>
-            <v-btn type="submit" class="button">Greet</v-btn>
-        </v-form>
-
-        <p>{{ greetMsg }}</p>
-        <router-link to="/">ホームに戻る</router-link>
-
+    <v-container class="row">
+        <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
+        <v-btn icon href="https://vitejs.dev" target="_blank">
+            <v-img src="/vite.svg" class="logo vite" alt="Vite logo" />
+        </v-btn>
+        <v-btn icon href="https://tauri.app" target="_blank">
+            <v-img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
+        </v-btn>
+        <v-btn icon href="https://vuejs.org/" target="_blank">
+            <v-img :src="AssetsVueLogoSvg" class="logo vue" alt="Vue logo" />
+        </v-btn>
     </v-container>
+
+    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+
+    <v-form class="row" @submit.prevent="greet">
+        <v-text-field id="greet-input" v-model="name" placeholder="Enter a name..."></v-text-field>
+        <v-btn type="submit" class="button">Greet</v-btn>
+    </v-form>
+
+    <p>{{ greetMsg }}</p>
+    <router-link to="/">ホームに戻る</router-link>
 </template>
 
 <script setup lang="ts">
