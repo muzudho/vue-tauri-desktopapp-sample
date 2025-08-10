@@ -28,10 +28,10 @@
 
     // SPA用のルートパス
     const routes = [
-        "/",                        // ブログのURL
-        "/making",                  // メイキングのURL
-        "/team-mirai-supporter",    // ボランティアのURL
-        "/wara-city/map"            // ゲームのURL
+        "/",                            // ホームのURL
+        "/making",                      // メイキングのURL
+        "/about",                       // アバウトのURL
+        "/welcome-to-tauri-and-view"    // Tauri のウェルカムページ
     ];
 
     // ############
@@ -54,7 +54,7 @@
         new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['ブログ', 'メインキング', 'ボランティア', 'ゲーム'],
+                labels: ['ホーム', 'メイキング', 'アバウト', 'Tauriウェルカムページ'],
                 datasets: [{
                     data: [40, 40, 15, 5],
                     backgroundColor: [
