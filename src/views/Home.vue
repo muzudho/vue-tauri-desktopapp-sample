@@ -28,10 +28,10 @@
 
     // SPA用のルートパス
     const routes = [
-        "/",                      // ブログのURL
-        "/mainking",              // メインキングのURL
-        "/team-mirai-supporter",  // ボランティアのURL
-        "/wara-city/map"          // ゲームのURL
+        "/",                        // ブログのURL
+        "/making",                  // メイキングのURL
+        "/team-mirai-supporter",    // ボランティアのURL
+        "/wara-city/map"            // ゲームのURL
     ];
 
     // ############
@@ -43,7 +43,7 @@
     });
 
     function initChart() {
-        const baseUrl = window.location.origin;
+        //const baseUrl = window.location.origin;
         //alert(`baseUrl=${baseUrl}`);
         const ctx : HTMLCanvasElement = document.getElementById('pieChart') as HTMLCanvasElement;
 
@@ -86,8 +86,11 @@
                 onClick: (_e, elements) => {
                     if (elements.length > 0) {
                         const index = elements[0].index;
+                        console.log(`index=${index}\nroutes.length=${routes.length}\nroutes[0]=${routes[0]}\nroutes[1]=${routes[1]}\nroutes[2]=${routes[2]}\nroutes[3]=${routes[3]}`);
                         // Vue Routerでページ遷移
-                        router.push(routes[index]);
+                        const path = routes[index];
+                        console.log(`path=${path}`);
+                        router.push(path);
                     }
                 }
             }

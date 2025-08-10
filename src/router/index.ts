@@ -20,7 +20,7 @@ const routes = [
     {
         name: 'Making',
         path: '/making',
-        component: () => import('../views/making/index.vue'),
+        component: () => import('@/views/making/index.vue'),
     },
     {
         name: 'JsonFileLoading',
