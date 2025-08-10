@@ -17,7 +17,7 @@
                     <router-link to="/making">メイキング</router-link>
                 </nav>
 
-                <h1># Tauri デスクトップアプリのサンプルだぜ！</h1>
+                <h1>Tauri デスクトップアプリのサンプルだぜ！</h1>
 
                 <!-- このビューにコンポーネントがレンダリングされる。 -->
                 <router-view />

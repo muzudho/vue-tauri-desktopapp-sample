@@ -1,5 +1,5 @@
 <template>
-    <h2>## バンドルファイルの読込だぜ！（デスクトップアプリ用）</h2>
+    <h2> バンドルファイルの読込だぜ！（デスクトップアプリ用）</h2>
     <section class="sec-2">
 
         <p>{{ startConfigJsonStr }}</p>
