@@ -95,7 +95,8 @@
         <v-img src="/img/timer_square.png" style="width:320px; height:192px; zoom: 4; image-rendering: pixelated;"/>
         ：ここまで。
     </section>
-
+    <hr/>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
 
 <script setup lang="ts">

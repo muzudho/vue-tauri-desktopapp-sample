@@ -6,7 +6,8 @@
         <v-btn @click="stopTimer">ストップ</v-btn>
         <v-btn @click="resetTimer">リセット</v-btn>
     </section>
-
+    <hr/>
+    <router-link to="/making">メイキングに戻る</router-link>
 </template>
 
 <script setup lang="ts">
