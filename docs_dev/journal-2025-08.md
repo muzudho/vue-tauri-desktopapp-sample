@@ -360,3 +360,9 @@ export default defineConfig(async () => ({
 ```shell
 pnpm add chart.js
 ```
+
+シングル・ページ・アプリケーション用のルーターである vue-router もほしい：  
+
+```shell
+pnpm add vue-router@4
+```

@@ -18,10 +18,21 @@
 
     import { onMounted } from 'vue';
     import { Chart } from 'chart.js/auto';
+    import { useRouter } from 'vue-router';
 
     // ##############
     // # 共有データ #
     // ##############
+
+    const router = useRouter();
+
+    // SPA用のルートパス
+    const routes = [
+        "/",                      // ブログのURL
+        "/mainking",              // メインキングのURL
+        "/team-mirai-supporter",  // ボランティアのURL
+        "/wara-city/map"          // ゲームのURL
+    ];
 
     // ############
     // # 開始処理 #
@@ -32,13 +43,15 @@
     });
 
     function initChart() {
+        const baseUrl = window.location.origin;
+        //alert(`baseUrl=${baseUrl}`);
         const ctx : HTMLCanvasElement = document.getElementById('pieChart') as HTMLCanvasElement;
 
         if (ctx == null){
             return;
         }
 
-        const chart = new Chart(ctx, {
+        new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: ['ブログ', 'メインキング', 'ボランティア', 'ゲーム'],
@@ -70,16 +83,11 @@
                         text: 'ホームページ内容の割合'
                     }
                 },
-                onClick: (e, elements) => {
+                onClick: (_e, elements) => {
                     if (elements.length > 0) {
                         const index = elements[0].index;
-                        const urls = [
-                            'https://example.com/blog',      // ブログのURL
-                            'https://example.com/mainking',  // メインキングのURL
-                            'https://example.com/volunteer', // ボランティアのURL
-                            'https://example.com/game'       // ゲームのURL
-                        ];
-                        window.location.href = urls[index];
+                        // Vue Routerでページ遷移
+                        router.push(routes[index]);
                     }
                 }
             }
@@ -87,7 +95,7 @@
     }
 
     /*
-    function beforeUnmount() {
+    beforeUnmount() {
         if (chart) {
             chart.destroy();
         }

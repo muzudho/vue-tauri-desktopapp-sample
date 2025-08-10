@@ -8,6 +8,6 @@ import router from './router';  // ルーター
 
 
 createApp(App)
-    .use(pluginsVuetify)   // VueアプリにVuetifyを登録
-    .use(router)    // Vueアプリにルーターを登録
+    .use(pluginsVuetify)    // VueアプリにVuetifyを登録
+    .use(router)            // Vueアプリにルーターを登録
     .mount("#app");
