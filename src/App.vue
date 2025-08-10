@@ -12,7 +12,7 @@
                         Tauri では PascalCase が習慣的に使われています。異なるので注意。
                     -->
                     <router-link to="/">ホーム</router-link> |
-                    <router-link to="/about">About</router-link> |
+                    <router-link to="/about">このサイトについて</router-link> |
                     <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link> |
                     <router-link to="/making">メイキング</router-link>
                 </nav>
