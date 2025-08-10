@@ -65,7 +65,7 @@
                     {top: 160, left:  256, width: 32, height: 32 },
                     {top: 160, left:  288, width: 32, height: 32 },
                 ]"
-                tilemapUrl="/img/timer_square.png"
+                tilemapUrl="/img/making/timer_square.png"
                 :frameNum="60"
                 :slow="slow"
                 :time="count"
@@ -92,7 +92,7 @@
                 thumbLabel="always" />
         <br/>
         元画像のタイルマップを表示：<br/>
-        <v-img src="/img/timer_square.png" style="width:320px; height:192px; zoom: 4; image-rendering: pixelated;"/>
+        <v-img src="/img/making/timer_square.png" style="width:320px; height:192px; zoom: 4; image-rendering: pixelated;"/>
         ：ここまで。
     </section>
     <hr/>
