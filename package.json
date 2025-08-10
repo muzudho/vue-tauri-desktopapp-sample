@@ -12,6 +12,7 @@
   "dependencies": {
     "@tauri-apps/plugin-fs": "~2",
     "@tauri-apps/plugin-opener": "^2.4.0",
+    "chart.js": "^4.5.0",
     "vue": "^3.5.18",
     "vue-router": "^4.5.1",
     "vuetify": "^3.9.3"

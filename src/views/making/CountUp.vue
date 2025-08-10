@@ -18,7 +18,7 @@
     // # インポート #
     // ##############
 
-    import { onMounted, ref } from 'vue';
+    import { ref } from 'vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -32,10 +32,6 @@
 
     const count = ref<number>(0);   // カウントの初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
-
-    onMounted(() => {
-        // コンポーネントがマウントされたときの処理
-    });
 
     // ####################
     // # イベントハンドラ #

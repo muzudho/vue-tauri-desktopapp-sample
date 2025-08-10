@@ -351,3 +351,12 @@ export default defineConfig(async () => ({
 }));
 
 ```
+
+
+## [2025-08-10_Sun]
+
+円グラフを作りたいので、chart.js をインストールする：  
+
+```shell
+pnpm add chart.js
+```
