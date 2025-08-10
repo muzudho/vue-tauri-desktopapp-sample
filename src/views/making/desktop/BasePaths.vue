@@ -1,6 +1,8 @@
 <template>
-    <h2> 基本的なファイルパス一覧だぜ！（デスクトップアプリ用）</h2>
-    <section class="sec-2">
+    <the-header/>
+
+    <h3> 基本的なファイルパス一覧だぜ！（デスクトップアプリ用）</h3>
+    <section class="sec-3">
         <v-row>
             <v-col cols="1">1</v-col>
             <v-col cols="3">appCacheDirStr</v-col>
@@ -120,7 +122,7 @@
 
     <hr/>
     <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-    <router-link to="/making">メイキングに戻る</router-link>
+    <router-link to="/making">メイキングの先頭に戻る</router-link>
 </template>
 
 <script setup lang="ts">
@@ -131,6 +133,12 @@
 
     import { onMounted, ref } from 'vue';
     import * as path from '@tauri-apps/api/path';
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheHeader from '../TheHeader.vue';
 
     // ##############
     // # 共有データ #

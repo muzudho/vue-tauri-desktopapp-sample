@@ -1,12 +1,14 @@
 <template>
-    <h2> バンドルファイルの読込だぜ！（デスクトップアプリ用）</h2>
-    <section class="sec-2">
+    <the-header/>
+
+    <h3> バンドルファイルの読込だぜ！（デスクトップアプリ用）</h3>
+    <section class="sec-3">
 
         <p>{{ startConfigJsonStr }}</p>
 
     </section>
     <hr/>
-    <router-link to="/making">メイキングに戻る</router-link>
+    <router-link to="/making">メイキングの先頭に戻る</router-link>
 </template>
 
 <script setup lang="ts">
@@ -17,6 +19,12 @@
 
     import { onMounted, ref } from 'vue';
     import { invoke } from "@tauri-apps/api/core";
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheHeader from '../TheHeader.vue';
 
     // ##############
     // # 共有データ #

@@ -1,6 +1,8 @@
 <template>
-    <h2>スプライトの練習、まずタイルを切り抜くぜ！</h2>
-    <section class="sec-2">
+    <the-header/>
+
+    <h3>スプライトの練習、まずタイルを切り抜くぜ！</h3>
+    <section class="sec-3">
         ここに切り抜いたタイルを表示：<br/>
         <Tile
                 srcLeft="64"
@@ -24,7 +26,7 @@
         ：ここまで。
     </section>
     <hr/>
-    <router-link to="/making">メイキングに戻る</router-link>
+    <router-link to="/making">メイキングの先頭に戻る</router-link>
 </template>
 
 <script setup lang="ts">
@@ -38,5 +40,6 @@
     // ++++++++++++++++++
 
     import Tile from '@/components/Tile.vue';
+    import TheHeader from './TheHeader.vue';
 
 </script>

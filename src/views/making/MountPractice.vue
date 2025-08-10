@@ -1,6 +1,8 @@
 <template>
-    <h2>onMounted を使う練習だぜ！</h2>
-    <section class="sec-2">
+    <the-header/>
+
+    <h3>onMounted を使う練習だぜ！</h3>
+    <section class="sec-3">
         <p>{{ textVM }}</p>
 
         <pre>
@@ -25,7 +27,7 @@
 
     <hr/>
     <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-    <router-link to="/making">メイキングに戻る</router-link>
+    <router-link to="/making">メイキングの先頭に戻る</router-link>
 </template>
 
 <script setup lang="ts">
@@ -35,6 +37,12 @@
     // ##############
 
     import { onMounted, ref } from 'vue';
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheHeader from './TheHeader.vue';
 
     // ##############
     // # 共有データ #
