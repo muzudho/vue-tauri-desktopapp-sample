@@ -7,20 +7,15 @@ const routes = [
         component: () => import('../views/making/desktop/BasePaths.vue'),
     },
     {
-        name: 'LoadingBundleFile',
-        path: '/making/desktop/loading-bundle-file',
-        component: () => import('../views/making/desktop/LoadingBundleFile.vue'),
+        name: 'BundleFileLoading',
+        path: '/making/desktop/bundle-file-loading',
+        component: () => import('../views/making/desktop/BundleFileLoading.vue'),
     },
 
     {
-        name: 'FrameTest',
-        path: '/making/frame-test',
-        component: () => import('../views/making/FrameTest.vue'),
-    },
-    {
-        name: 'FrameTestSprite',
-        path: '/making/frame-test-sprite',
-        component: () => import('../views/making/FrameTestSprite.vue'),
+        name: 'CountUp',
+        path: '/making/count-up',
+        component: () => import('../views/making/CountUp.vue'),
     },
     {
         name: 'Making',
@@ -28,9 +23,9 @@ const routes = [
         component: () => import('../views/making/index.vue'),
     },
     {
-        name: 'LoadingJsonFile',
-        path: '/making/loading-json-file',
-        component: () => import('../views/making/LoadingJsonFile.vue'),
+        name: 'JsonFileLoading',
+        path: '/making/json-file-loading',
+        component: () => import('../views/making/JsonFileLoading.vue'),
     },
     {
         name: 'MountPractice',
@@ -43,9 +38,14 @@ const routes = [
         component: () => import('../views/making/PageLayout.vue'),
     },
     {
-        name: 'SpriteTile',
-        path: '/making/sprite-tile',
-        component: () => import('../views/making/SpriteTile.vue'),
+        name: 'TileCountUp',
+        path: '/making/tile-count-up',
+        component: () => import('../views/making/TileCountUp.vue'),
+    },
+    {
+        name: 'TileCrop',
+        path: '/making/tile-crop',
+        component: () => import('../views/making/TileCrop.vue'),
     },
 
     {

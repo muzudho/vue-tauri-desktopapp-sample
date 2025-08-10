@@ -6,12 +6,12 @@
         <ul>
             <li>📖 <router-link to="/making/page-layout">説明を始める前に、説明ページのレイアウトを決めておこうぜ！</router-link></li>
             <li>📖 <router-link to="/making/mount-practice">onMounted を使う練習だぜ！</router-link></li>
-            <li>📖 <router-link to="/making/desktop/base-paths">基本的なファイルパス一覧だぜ！（デスクトップアプリ用）</router-link></li>
-            <li>📖 <router-link to="/making/desktop/loading-bundle-file">バンドルファイルの読込だぜ！（デスクトップアプリ用）</router-link></li>
-            <li>📖 <router-link to="/making/loading-json-file">JSONファイルの読込だぜ！</router-link></li>
-            <li>📖 <router-link to="/making/sprite-tile">スプライトの練習、まずタイルを切り抜くぜ！</router-link></li>
-            <li>📖 <router-link to="/making/frame-test">カウントアップのテストだぜ！</router-link></li>
-            <li>📖 <router-link to="/making/frame-test-sprite">カウントアップのアニメーションのテストだぜ！</router-link></li>
+            <li>📖 <router-link to="/making/desktop/base-paths">デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</router-link></li>
+            <li>📖 <router-link to="/making/desktop/bundle-file-loading">デスクトップアプリにて　＞　バンドルファイルの読込だぜ！</router-link></li>
+            <li>📖 <router-link to="/making/json-file-loading">JSONファイルの読込だぜ！</router-link></li>
+            <li>📖 <router-link to="/making/tile-crop">タイル　＞　を画像から切り抜くぜ！</router-link></li>
+            <li>📖 <router-link to="/making/count-up">カウントアップするぜ！</router-link></li>
+            <li>📖 <router-link to="/making/tile-count-up">タイル　＞　でカウントアップのアニメーションするぜ！</router-link></li>
         </ul>
     </section>
 </template>

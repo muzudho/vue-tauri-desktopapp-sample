@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3>カウントアップのテストだぜ！</h3>
+    <h3>カウントアップするぜ！</h3>
     <section class="sec-3">
         <p>カウント: {{ count }}</p>
         <v-btn @click="startTimer">スタート</v-btn>

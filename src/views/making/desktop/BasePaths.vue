@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3> 基本的なファイルパス一覧だぜ！（デスクトップアプリ用）</h3>
+    <h3>デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</h3>
     <section class="sec-3">
         <v-row>
             <v-col cols="1">1</v-col>

@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3> バンドルファイルの読込だぜ！（デスクトップアプリ用）</h3>
+    <h3>デスクトップアプリにて　＞　バンドルファイルの読込だぜ！</h3>
     <section class="sec-3">
 
         <p>{{ startConfigJsonStr }}</p>
