@@ -4,18 +4,18 @@ const routes = [
     {
         name: 'BasePaths',
         path: '/making/desktop/base-paths',
-        component: () => import('../pages/making/desktop/BasePaths.vue'),
+        component: () => import('../pages/making/desktop/base-paths.vue'),
     },
     {
         name: 'BundleFileLoading',
         path: '/making/desktop/bundle-file-loading',
-        component: () => import('../pages/making/desktop/BundleFileLoading.vue'),
+        component: () => import('../pages/making/desktop/bundle-file-loading.vue'),
     },
 
     {
         name: 'CountUp',
         path: '/making/count-up',
-        component: () => import('../pages/making/CountUp.vue'),
+        component: () => import('../pages/making/count-up.vue'),
     },
     {
         name: 'Making',
@@ -25,27 +25,27 @@ const routes = [
     {
         name: 'JsonFileLoading',
         path: '/making/json-file-loading',
-        component: () => import('../pages/making/JsonFileLoading.vue'),
+        component: () => import('../pages/making/json-file-loading.vue'),
     },
     {
         name: 'MountPractice',
         path: '/making/mount-practice',
-        component: () => import('../pages/making/MountPractice.vue'),
+        component: () => import('../pages/making/mount-practice.vue'),
     },
     {
         name: 'PageLayout',
         path: '/making/page-layout',
-        component: () => import('../pages/making/PageLayout.vue'),
+        component: () => import('../pages/making/page-layout.vue'),
     },
     {
         name: 'TileCountUp',
         path: '/making/tile-count-up',
-        component: () => import('../pages/making/TileCountUp.vue'),
+        component: () => import('../pages/making/tile-count-up.vue'),
     },
     {
         name: 'TileCrop',
         path: '/making/tile-crop',
-        component: () => import('../pages/making/TileCrop.vue'),
+        component: () => import('../pages/making/tile-crop.vue'),
     },
 
     {
@@ -59,9 +59,9 @@ const routes = [
         component: () => import('../pages/home.vue'),
     },
     {
-        name: 'WelcomeToTauriAndView',
-        path: '/welcome-to-tauri-and-view',
-        component: () => import('../pages/WelcomeToTauriAndVue.vue'),
+        name: 'WelcomeToTauriAndVue',
+        path: '/welcome-to-tauri-and-vue',
+        component: () => import('../pages/welcome-to-tauri-and-vue.vue'),
     },
 ] as const;
 

@@ -35,7 +35,7 @@
         "/",                            // ホームのURL
         "/making",                      // メイキングのURL
         "/about",                       // ［このサイトについて］のURL
-        "/welcome-to-tauri-and-view"    // Tauri のウェルカムページ
+        "/welcome-to-tauri-and-vue"    // Tauri のウェルカムページ
     ];
 
     // ############

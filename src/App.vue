@@ -13,7 +13,7 @@
                     -->
                     <router-link to="/">ホーム</router-link> |
                     <router-link to="/about">このサイトについて</router-link> |
-                    <router-link to="/welcome-to-tauri-and-view">WelcomeToTauriAndView</router-link> |
+                    <router-link to="/welcome-to-tauri-and-vue">WelcomeToTauriAndVue</router-link> |
                     <router-link to="/making">メイキング</router-link>
                 </nav>
 
