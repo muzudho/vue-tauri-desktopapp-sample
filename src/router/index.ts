@@ -51,12 +51,12 @@ const routes = [
     {
         name: 'About',
         path: '/about',     // URL
-        component: () => import('../pages/About.vue'),  // importした Vue ファイル
+        component: () => import('../pages/about.vue'),  // importした Vue ファイル
     },
     {
         name: 'Home',
         path: '/',          
-        component: () => import('../pages/Home.vue'),
+        component: () => import('../pages/home.vue'),
     },
     {
         name: 'WelcomeToTauriAndView',

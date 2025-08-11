@@ -25,7 +25,7 @@ importers:
         version: 4.5.1(vue@3.5.18(typescript@5.6.3))
       vuetify:
         specifier: ^3.9.3
-        version: 3.9.3(typescript@5.6.3)(vue@3.5.18(typescript@5.6.3))
+        version: 3.9.4(typescript@5.6.3)(vue@3.5.18(typescript@5.6.3))
     devDependencies:
       '@tauri-apps/api':
         specifier: ^2.7.0
@@ -626,8 +626,8 @@ packages:
       typescript:
         optional: true
 
-  vuetify@3.9.3:
-    resolution: {integrity: sha512-0eruHdmRoAMBo/08RLDkTdtdu1vfkx+/PurUIDW2tz/k2GCp51e7KwgCn4uVyzH88KRgf2PKiz5UI5f93Xn05w==}
+  vuetify@3.9.4:
+    resolution: {integrity: sha512-OUdXVoThHUydJHyFsUHGxKxZ333hXKquRNn2ycqouO08ehi3005QE9tLPkwcBii4sAYZg7mADMRp7JbcNiNrTQ==}
     engines: {node: ^12.20 || >=14.13}
     peerDependencies:
       typescript: '>=4.7'
@@ -1100,7 +1100,7 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
-  vuetify@3.9.3(typescript@5.6.3)(vue@3.5.18(typescript@5.6.3)):
+  vuetify@3.9.4(typescript@5.6.3)(vue@3.5.18(typescript@5.6.3)):
     dependencies:
       vue: 3.5.18(typescript@5.6.3)
     optionalDependencies:

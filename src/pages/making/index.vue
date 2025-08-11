@@ -28,6 +28,6 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheParentHeader from '../TheHeader.vue';
+    import TheParentHeader from '../the-header.vue';
 
 </script>

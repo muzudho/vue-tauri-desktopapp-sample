@@ -24,7 +24,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheHeader from '../TheHeader.vue';
+    import TheHeader from '../the-header.vue';
 
     // ##############
     // # 共有データ #

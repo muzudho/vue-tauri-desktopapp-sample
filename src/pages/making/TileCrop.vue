@@ -40,6 +40,6 @@
     // ++++++++++++++++++
 
     import Tile from '@/components/Tile.vue';
-    import TheHeader from './TheHeader.vue';
+    import TheHeader from './the-header.vue';
 
 </script>
