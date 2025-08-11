@@ -2,6 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
     {
+        name: 'Blog',
+        path: '/blog',
+        component: () => import('@/pages/blog/index.vue'),
+    },
+
+    {
         name: 'BasePaths',
         path: '/making/desktop/base-paths',
         component: () => import('../pages/making/desktop/base-paths.vue'),

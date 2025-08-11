@@ -6,6 +6,9 @@
                 <!-- ナビゲーション -->
                 <nav>
                     <!--
+                        🌟 ルーティングは自動ではありません。
+                        src/router/index.vue の中身を記述してください。
+
                         pages/ フォルダー下のページのファイル名は、
                         Nuxt 公式では kebab-case、
                             📖 https://nuxt.com/docs/3.x/guide/directory-structure/pages
@@ -13,6 +16,7 @@
                     -->
                     <router-link to="/">ホーム</router-link> |
                     <router-link to="/about">このサイトについて</router-link> |
+                    <router-link to="/blog">ブログ</router-link> |
                     <router-link to="/welcome-to-tauri-and-vue">WelcomeToTauriAndVue</router-link> |
                     <router-link to="/making">メイキング</router-link>
                 </nav>
