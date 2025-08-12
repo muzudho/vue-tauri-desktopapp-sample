@@ -28,14 +28,16 @@
     // # 共有データ #
     // ##############
 
-    const x = ref<number>(0);  // スプライトのX座標
-    const y = ref<number>(0);  // スプライトのY座標
+    const p1Left = ref<number>(0);  // スプライトのX座標
+    const p1Top = ref<number>(0);  // スプライトのY座標
     const speed = ref<number>(2);   // 移動速度
-    const keys = <Record<string, boolean>>{ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
+
+    // プレイヤー１の入力
+    const p1Input = <Record<string, boolean>>{ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
 
     const walkGraphicStyle = computed(() => ({
-        top: `${y.value}px`,
-        left: `${x.value}px`,
+        top: `${p1Top.value}px`,
+        left: `${p1Left.value}px`,
     }));
 
     // ##########
@@ -47,13 +49,13 @@
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
-            if (keys.hasOwnProperty(e.key)) {
-                keys[e.key] = true;
+            if (p1Input.hasOwnProperty(e.key)) {
+                p1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
-            if (keys.hasOwnProperty(e.key)) {
-                keys[e.key] = false;
+            if (p1Input.hasOwnProperty(e.key)) {
+                p1Input[e.key] = false;
             }
         });
 
@@ -64,20 +66,20 @@
         function startGameLoop() : void {
             const update = () => {
                 // 移動処理
-                if (keys.ArrowUp) {
-                    y.value -= speed.value;
+                if (p1Input.ArrowUp) {
+                    p1Top.value -= speed.value;
                 }
 
-                if (keys.ArrowDown) {
-                    y.value += speed.value;
+                if (p1Input.ArrowDown) {
+                    p1Top.value += speed.value;
                 }
 
-                if (keys.ArrowLeft) {
-                    x.value -= speed.value;
+                if (p1Input.ArrowLeft) {
+                    p1Left.value -= speed.value;
                 }
 
-                if (keys.ArrowRight) {
-                    x.value += speed.value;
+                if (p1Input.ArrowRight) {
+                    p1Left.value += speed.value;
                 }
 
                 // 次のフレーム
