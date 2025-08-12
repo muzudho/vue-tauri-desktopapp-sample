@@ -24,6 +24,11 @@ const routes = [
         component: () => import('../pages/making/count-up.vue'),
     },
     {
+        name: 'Cursor',
+        path: '/making/cursor',
+        component: () => import('../pages/making/cursor.vue'),
+    },
+    {
         name: 'Making',
         path: '/making',
         component: () => import('@/pages/making/index.vue'),
@@ -42,11 +47,6 @@ const routes = [
         name: 'PageLayout',
         path: '/making/page-layout',
         component: () => import('../pages/making/page-layout.vue'),
-    },
-    {
-        name: 'Sprite',
-        path: '/making/sprite',
-        component: () => import('../pages/making/sprite.vue'),
     },
     {
         name: 'TileCountUpRpgWalk',
