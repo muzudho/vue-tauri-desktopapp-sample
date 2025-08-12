@@ -4,18 +4,18 @@
     <h3>矢印キーで移動しようぜ！</h3>
     <section class="sec-3">
         <!-- キャンバスは画面みたいなもの。 -->
+        <p>矢印キーで移動！</p>
+        <img
+            src="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png"
+            :style="walkGraphicStyle"
+            style="position: relative;"></img><br/>
         <canvas
             id="myCanvas"
             ref="myCanvas"
             width="400"
             height="400"
             ></canvas>
-        <img
-            src="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png"
-            :style="myCanvasStyle"
-            style="position: absolute;"></img>
         
-        <p>矢印キーで移動！</p>
     </section>
 </template>
 
@@ -40,14 +40,14 @@
     // https://developer.mozilla.org/ja/docs/Web/API/HTMLCanvasElement
     const myCanvas = ref<HTMLCanvasElement | null>(null); // Canvas要素を参照
 
-    const x = ref<number>(50);  // スプライトのX座標
-    const y = ref<number>(50);  // スプライトのY座標
+    const x = ref<number>(0);  // スプライトのX座標
+    const y = ref<number>(0);  // スプライトのY座標
     const speed = ref<number>(2);   // 移動速度
     const keys = <Record<string, boolean>>{ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
 
     const sprite = new Image();
 
-    const myCanvasStyle = computed(() => ({
+    const walkGraphicStyle = computed(() => ({
         top: `${y.value}px`,
         left: `${x.value}px`,
         /*
@@ -115,11 +115,11 @@
                 x.value = Math.max(0, Math.min(x.value, myCanvas.value?.width ?? 1 - 32));
                 y.value = Math.max(0, Math.min(y.value, myCanvas.value?.height ?? 1 - 32));
 
-                // 描画
-                if (ctx != null){
-                    ctx.clearRect(0, 0, myCanvas.value?.width ?? 1, myCanvas.value?.height ?? 1);
-                    ctx.drawImage(sprite, x.value, y.value);
-                }
+                // // 描画
+                // if (ctx != null){
+                //     ctx.clearRect(0, 0, myCanvas.value?.width ?? 1, myCanvas.value?.height ?? 1);
+                //     ctx.drawImage(sprite, x.value, y.value);
+                // }
 
                 // 次のフレーム
                 requestAnimationFrame(update);
