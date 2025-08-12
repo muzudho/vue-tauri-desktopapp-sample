@@ -98,8 +98,11 @@
         ]
     };
     const p1Frames = ref(sourceFrames["down"]);
-    const p1Motion = ref("");
     const p1MotionRemainingFrame = ref(0);  // TODO 入力キーごとに用意したい。
+    const p1Motion = ref<Record<string, number>>({  // 入力
+        xAxis: 0,   // 負なら左、正なら右
+        yAxis: 0,   // 負なら上、正なら下
+    });
 
 
     // ##########
@@ -132,50 +135,52 @@
                 p1MotionRemainingFrame.value -= 1;
 
                 if (p1MotionRemainingFrame.value==0) {
-                    p1Motion.value = "";    // クリアー
+                    p1Motion.value["xAxis"] = 0;    // クリアー
+                    p1Motion.value["yAxis"] = 0;
                 }
                 
                 // 入力をモーションに変換
-                if(p1Motion.value==""){
+                if (p1Motion.value["xAxis"]==0) {   // X軸の入力が無い
+                    if (p1Input.ArrowLeft) {
+                        p1Motion.value["xAxis"] = -1; // 左
+                        p1MotionRemainingFrame.value = 16;
+                    }
+                    if (p1Input.ArrowRight) {
+                        p1Motion.value["xAxis"] = 1;  // 右
+                        p1MotionRemainingFrame.value = 16;
+                    }
+                }
+
+                if(p1Motion.value["yAxis"]==0) {   // Y軸の入力が無い
                     if (p1Input.ArrowUp) {
                         // TODO 移動が完了するまで、キー入力を無視したい。
-                        p1Motion.value = "up";
+                        p1Motion.value["yAxis"] = -1;
                         p1MotionRemainingFrame.value = 16; // フレーム数を設定
                     }
 
-                    if (p1Input.ArrowRight) {
-                        p1Motion.value = "right";
-                        p1MotionRemainingFrame.value = 16;
-                    }
-
                     if (p1Input.ArrowDown) {
-                        p1Motion.value = "down";
-                        p1MotionRemainingFrame.value = 16;
-                    }
-
-                    if (p1Input.ArrowLeft) {
-                        p1Motion.value = "left";
+                        p1Motion.value["yAxis"] = 1;
                         p1MotionRemainingFrame.value = 16;
                     }
                 }
 
                 // 移動処理
-                if (p1Motion.value=="up") {
+                if (p1Motion.value["yAxis"]==-1) {  // 上
                     p1Top.value -= p1Speed.value;
                     p1Frames.value = sourceFrames["up"]
                 }
 
-                if (p1Motion.value=="right") {
+                if (p1Motion.value["xAxis"]==1) {   // 右
                     p1Left.value += p1Speed.value;
                     p1Frames.value = sourceFrames["right"]
                 }
 
-                if (p1Motion.value=="down") {
+                if (p1Motion.value["yAxis"]==1) {   // 下
                     p1Top.value += p1Speed.value;
                     p1Frames.value = sourceFrames["down"]
                 }
 
-                if (p1Motion.value=="left") {
+                if (p1Motion.value["xAxis"]==-1) {  // 左
                     p1Left.value -= p1Speed.value;
                     p1Frames.value = sourceFrames["left"]
                 }
