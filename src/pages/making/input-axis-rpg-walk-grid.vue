@@ -98,6 +98,7 @@
         ]
     };
     const p1Frames = ref(sourceFrames["down"]);
+    const p1Motion = ref("");
 
 
     // ##########
@@ -127,26 +128,43 @@
 
         function startGameLoop() : void {
             const update = () => {
-                // 移動処理
+                // 入力をモーションに変換
                 if (p1Input.ArrowUp) {
                     // TODO 移動が完了するまで、キー入力を無視したい。
+                    p1Motion.value = "up";
+                }
+
+                if (p1Input.ArrowRight) {
+                    p1Motion.value = "right";
+                }
+
+                if (p1Input.ArrowDown) {
+                    p1Motion.value = "down";
+                }
+
+                if (p1Input.ArrowLeft) {
+                    p1Motion.value = "left";
+                }
+
+                // 移動処理
+                if (p1Motion.value=="up") {
                     p1Top.value -= p1Speed.value;
                     p1Frames.value = sourceFrames["up"]
                 }
 
-                if (p1Input.ArrowRight) {
+                if (p1Motion.value=="right") {
                     p1Left.value += p1Speed.value;
-                    p1Frames.value = sourceFrames["right"];
+                    p1Frames.value = sourceFrames["right"]
                 }
 
-                if (p1Input.ArrowDown) {
+                if (p1Motion.value=="down") {
                     p1Top.value += p1Speed.value;
-                    p1Frames.value = sourceFrames["down"];
+                    p1Frames.value = sourceFrames["down"]
                 }
 
-                if (p1Input.ArrowLeft) {
+                if (p1Motion.value=="left") {
                     p1Left.value -= p1Speed.value;
-                    p1Frames.value = sourceFrames["left"];
+                    p1Frames.value = sourceFrames["left"]
                 }
 
                 // 次のフレーム
