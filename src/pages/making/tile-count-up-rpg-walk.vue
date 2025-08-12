@@ -49,14 +49,14 @@
         </div>
         <v-slider
                 v-model="slow"
-                min="1"
-                max="10"
-                step="1"
+                min="2"
+                max="32"
+                step="2"
                 showTicks="always"
                 thumbLabel="always" />
         <br/>
         元画像のタイルマップを表示：<br/>
-        <v-img src="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png" style="width:320px; height:192px; zoom: 4; image-rendering: pixelated;"/>
+        <v-img src="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png" style="width:64px; height:128px; zoom: 4; image-rendering: pixelated;"/>
         ：ここまで。
     </section>
     <hr/>
@@ -84,7 +84,7 @@
 
     const count = ref<number>(0);   // カウントの初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
-    const slow = ref<number>(1);   // スローモーションの倍率
+    const slow = ref<number>(8);   // スローモーションの倍率の初期値
 
     onMounted(() => {
         // コンポーネントがマウントされたときの処理

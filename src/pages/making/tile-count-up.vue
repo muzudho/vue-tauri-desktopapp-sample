@@ -121,7 +121,7 @@
 
     const count = ref<number>(0);   // カウントの初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
-    const slow = ref<number>(1);   // スローモーションの倍率
+    const slow = ref<number>(1);   // スローモーションの倍率の初期値
 
     onMounted(() => {
         // コンポーネントがマウントされたときの処理
