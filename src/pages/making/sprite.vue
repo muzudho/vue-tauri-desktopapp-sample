@@ -33,18 +33,9 @@
     const speed = ref<number>(2);   // 移動速度
     const keys = <Record<string, boolean>>{ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
 
-    const sprite = new Image();
-
     const walkGraphicStyle = computed(() => ({
         top: `${y.value}px`,
         left: `${x.value}px`,
-        /*
-        width: `${props.srcWidth}px`,
-        height: `${props.srcHeight}px`,
-        backgroundImage: `url('${props.tilemapUrl}')`,
-        backgroundPosition: `${-props.srcLeft}px ${-props.srcTop}px`,
-        backgroundRepeat: 'no-repeat',
-        */
     }));
 
     // ##########
@@ -52,11 +43,7 @@
     // ##########
 
     onMounted(() => {
-        // スプライト画像の読み込み
-        sprite.src = "/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png";
-        sprite.onload = () => {
-            startGameLoop();
-        };
+        startGameLoop();
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
