@@ -29,6 +29,11 @@ const routes = [
         component: () => import('../pages/making/input-axis.vue'),
     },
     {
+        name: 'InputAxisRpgWalkGrid',
+        path: '/making/input-axis-rpg-walk-grid',
+        component: () => import('../pages/making/input-axis-rpg-walk-grid.vue'),
+    },
+    {
         name: 'InputAxisRpgWalk',
         path: '/making/input-axis-rpg-walk',
         component: () => import('../pages/making/input-axis-rpg-walk.vue'),
