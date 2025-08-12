@@ -44,6 +44,11 @@ const routes = [
         component: () => import('../pages/making/page-layout.vue'),
     },
     {
+        name: 'TileCountUpRpgWalk',
+        path: '/making/tile-count-up-rpg-walk',
+        component: () => import('../pages/making/tile-count-up-rpg-walk.vue'),
+    },
+    {
         name: 'TileCountUp',
         path: '/making/tile-count-up',
         component: () => import('../pages/making/tile-count-up.vue'),
