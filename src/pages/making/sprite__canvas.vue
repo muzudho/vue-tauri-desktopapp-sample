@@ -3,18 +3,7 @@
 
     <h3>矢印キーで移動しようぜ！</h3>
     <section class="sec-3">
-        <!-- キャンバスは画面みたいなもの。 -->
-        <canvas
-            id="myCanvas"
-            ref="myCanvas"
-            width="400"
-            height="400"
-            ></canvas>
-        <img
-            src="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png"
-            :style="myCanvasStyle"
-            style="position: absolute;"></img>
-        
+        <canvas id="myCanvas" ref="myCanvas" width="400" height="400"></canvas>
         <p>矢印キーで移動！</p>
     </section>
 </template>
@@ -25,7 +14,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref } from 'vue';
+    import { onMounted, ref } from 'vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -46,18 +35,6 @@
     const keys = <Record<string, boolean>>{ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
 
     const sprite = new Image();
-
-    const myCanvasStyle = computed(() => ({
-        top: `${y.value}px`,
-        left: `${x.value}px`,
-        /*
-        width: `${props.srcWidth}px`,
-        height: `${props.srcHeight}px`,
-        backgroundImage: `url('${props.tilemapUrl}')`,
-        backgroundPosition: `${-props.srcLeft}px ${-props.srcTop}px`,
-        backgroundRepeat: 'no-repeat',
-        */
-    }));
 
     // ##########
     // # 開始時 #
