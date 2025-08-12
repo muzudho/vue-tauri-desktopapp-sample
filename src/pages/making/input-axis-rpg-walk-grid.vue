@@ -99,6 +99,7 @@
     };
     const p1Frames = ref(sourceFrames["down"]);
     const p1Motion = ref("");
+    const p1MotionRemainingFrame = ref(0);  // TODO 入力キーごとに用意したい。
 
 
     // ##########
@@ -128,22 +129,34 @@
 
         function startGameLoop() : void {
             const update = () => {
+                p1MotionRemainingFrame.value -= 1;
+
+                if (p1MotionRemainingFrame.value==0) {
+                    p1Motion.value = "";    // クリアー
+                }
+                
                 // 入力をモーションに変換
-                if (p1Input.ArrowUp) {
-                    // TODO 移動が完了するまで、キー入力を無視したい。
-                    p1Motion.value = "up";
-                }
+                if(p1Motion.value==""){
+                    if (p1Input.ArrowUp) {
+                        // TODO 移動が完了するまで、キー入力を無視したい。
+                        p1Motion.value = "up";
+                        p1MotionRemainingFrame.value = 16; // フレーム数を設定
+                    }
 
-                if (p1Input.ArrowRight) {
-                    p1Motion.value = "right";
-                }
+                    if (p1Input.ArrowRight) {
+                        p1Motion.value = "right";
+                        p1MotionRemainingFrame.value = 16;
+                    }
 
-                if (p1Input.ArrowDown) {
-                    p1Motion.value = "down";
-                }
+                    if (p1Input.ArrowDown) {
+                        p1Motion.value = "down";
+                        p1MotionRemainingFrame.value = 16;
+                    }
 
-                if (p1Input.ArrowLeft) {
-                    p1Motion.value = "left";
+                    if (p1Input.ArrowLeft) {
+                        p1Motion.value = "left";
+                        p1MotionRemainingFrame.value = 16;
+                    }
                 }
 
                 // 移動処理
