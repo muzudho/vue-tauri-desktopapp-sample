@@ -4,9 +4,11 @@
     <h3>矢印キーで移動しようぜ！</h3>
     <section class="sec-3">
         <p>矢印キーで移動！</p>
+
+        <!-- プレイヤー１（点線の枠） -->
         <div
             class="cursor"
-            :style="walkGraphicStyle"></div>
+            :style="p1Style"></div>
     </section>
 </template>
 
@@ -28,14 +30,14 @@
     // # 共有データ #
     // ##############
 
-    const p1Left = ref<number>(0);  // スプライトのX座標
-    const p1Top = ref<number>(0);  // スプライトのY座標
-    const speed = ref<number>(2);   // 移動速度
-
-    // プレイヤー１の入力
-    const p1Input = <Record<string, boolean>>{ ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false };
-
-    const walkGraphicStyle = computed(() => ({
+    // プレイヤー１（点線の枠）
+    const p1Left = ref<number>(0);      // スプライトのX座標
+    const p1Top = ref<number>(0);       // スプライトのY座標
+    const p1Speed = ref<number>(2);     // 移動速度
+    const p1Input = <Record<string, boolean>>{  // 入力
+        ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
+    };
+    const p1Style = computed(() => ({
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
     }));
@@ -67,19 +69,19 @@
             const update = () => {
                 // 移動処理
                 if (p1Input.ArrowUp) {
-                    p1Top.value -= speed.value;
+                    p1Top.value -= p1Speed.value;
                 }
 
                 if (p1Input.ArrowDown) {
-                    p1Top.value += speed.value;
+                    p1Top.value += p1Speed.value;
                 }
 
                 if (p1Input.ArrowLeft) {
-                    p1Left.value -= speed.value;
+                    p1Left.value -= p1Speed.value;
                 }
 
                 if (p1Input.ArrowRight) {
-                    p1Left.value += speed.value;
+                    p1Left.value += p1Speed.value;
                 }
 
                 // 次のフレーム
