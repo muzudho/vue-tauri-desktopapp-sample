@@ -1,7 +1,9 @@
 <template>
+    <the-parent-header/>
+
     <h2>メイキングの章だぜ！</h2>
     <section class="sec-2">
-        <v-btn @click="goToMaking">下の節を閉じる</v-btn>
+        <v-btn @click="goToMaking" v-tooltip="'下の節を閉じる'">❌</v-btn>
         <!--
             <router-link to="/making">戻る</router-link>
         -->
@@ -9,7 +11,18 @@
 </template>
 
 <script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
     import { useRouter } from 'vue-router';
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheParentHeader from '../the-header.vue';
 
     const router = useRouter();
 
