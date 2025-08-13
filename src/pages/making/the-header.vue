@@ -24,6 +24,10 @@
 
     import TheParentHeader from '../the-header.vue';
 
+
+    // ############
+    // # ルーチン #
+    // ############
     const router = useRouter();
 
     function goToMaking() : void {
