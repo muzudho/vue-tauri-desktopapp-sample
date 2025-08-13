@@ -7,9 +7,12 @@
 
         <div style="position:relative; left: 0; top: 0;">
             
-            <!-- グリッド -->
+            <!--
+                グリッド
+                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
+            -->
             <div v-for="i in 9" :key="i"
-                :style="getCellStyle(i)"></div>
+                :style="getCellStyle(i - 1)"></div>
 
             <!-- プレイヤー１ -->
             <TileAnimation
@@ -114,8 +117,8 @@
     const getCellStyle = computed(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、セルの top 位置。
-            const homeLeft = ((i - 1) % tableColumns) * cellWidth;
-            const homeTop = Math.floor((i - 1) / tableRows) * cellHeight;
+            const homeLeft = (i % tableColumns) * cellWidth;
+            const homeTop = Math.floor(i / tableRows) * cellHeight;
 
             return {
                 position: 'absolute',
