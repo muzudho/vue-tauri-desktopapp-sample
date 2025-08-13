@@ -9,7 +9,7 @@
             
             <!-- グリッド -->
             <div v-for="i in 9" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / 3) * 32}px; left: ${((i - 1) % 3) * 32}px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;`"></div>
+                :style="getCellStyle(i)"></div>
 
             <!-- プレイヤー１ -->
             <TileAnimation
@@ -61,6 +61,17 @@
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
     }));
+    const getCellStyle = computed(() => {
+        return (i:number)=>({
+            position: 'absolute',
+            top: `${Math.floor((i - 1) / 3) * 32}px`,
+            left: `${((i - 1) % 3) * 32}px`,
+            width: "32px",
+            height: "32px",
+            zoom: 4,
+            border: "solid 1px lightgray",
+        });
+    });
 
     const count = ref<number>(0);   // カウントの初期値
     const slow = ref<number>(8);   // スローモーションの倍率の初期値
