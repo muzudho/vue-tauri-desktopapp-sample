@@ -11,7 +11,7 @@
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in 9" :key="i"
+            <div v-for="i in tableArea" :key="i"
                 :style="getCellStyle(i - 1)"></div>
 
             <!-- プレイヤー１ -->
@@ -24,7 +24,6 @@
                 :style="p1Style"
                 style="zoom:4; image-rendering: pixelated;" /><br/>
         </div>
-
 
     </section>
 </template>
@@ -110,6 +109,7 @@
 
     const tableColumns = 3;
     const tableRows = 3;
+    const tableArea = tableColumns * tableRows; // 盤のセル数
 
     // ボードの表示位置
     const boardTop = ref<number>(0);
