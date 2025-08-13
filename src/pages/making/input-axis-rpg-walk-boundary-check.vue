@@ -62,6 +62,7 @@
     const slow = ref<number>(8);   // スローモーションの倍率の初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
 
+    // キャラクターの向きと、歩行タイルの指定
     const cellWidth = 32;
     const cellHeight = 32;
     const sourceFrames = {
@@ -90,6 +91,7 @@
             {top:  3 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
         ]
     };
+
     const p1Frames = ref(sourceFrames["down"]);
     const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
     const moLeft = -1;  // モーション（motion）定数。左に移動する
