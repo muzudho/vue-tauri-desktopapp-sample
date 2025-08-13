@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　原始的スクロール</h3>
+    <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　循環的スクロール</h3>
     <section class="sec-3">
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
@@ -119,10 +119,14 @@
             const homeTop = Math.floor((i - 1) / 3) * 32;
             const homeLeft = ((i - 1) % 3) * 32;
 
+            // TODO: 盤の左端列を、右端列へ移動させる。
+            const boardTopLoop = (boardTop.value + 3 * cellHeight) % (3 * cellHeight);
+            const boardLeftLoop = (boardLeft.value + 3 * cellWidth) % (3 * cellWidth);
+
             return {
                 position: 'absolute',
-                top: `${homeTop + boardTop.value}px`,
-                left: `${homeLeft + boardLeft.value}px`,
+                top: `${homeTop + boardTopLoop}px`,
+                left: `${homeLeft + boardLeftLoop}px`,
                 width: "32px",
                 height: "32px",
                 zoom: 4,
