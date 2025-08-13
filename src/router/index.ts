@@ -29,14 +29,19 @@ const routes = [
         component: () => import('../pages/making/input-axis.vue'),
     },
     {
+        name: 'InputAxisRpgWalkBoundaryCheck',
+        path: '/making/input-axis-rpg-walk-boundary-check',
+        component: () => import('../pages/making/input-axis-rpg-walk-boundary-check.vue'),
+    },
+    {
         name: 'InputAxisRpgWalkGrid',
         path: '/making/input-axis-rpg-walk-grid',
         component: () => import('../pages/making/input-axis-rpg-walk-grid.vue'),
     },
     {
-        name: 'InputAxisRpgWalkBoundaryCheck',
-        path: '/making/input-axis-rpg-walk-boundary-check',
-        component: () => import('../pages/making/input-axis-rpg-walk-boundary-check.vue'),
+        name: 'InputAxisRpgWalkScroll',
+        path: '/making/input-axis-rpg-walk-scroll',
+        component: () => import('../pages/making/input-axis-rpg-walk-scroll.vue'),
     },
     {
         name: 'InputAxisRpgWalk',
