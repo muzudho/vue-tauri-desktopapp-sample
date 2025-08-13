@@ -112,23 +112,23 @@
             const update = () => {
                 // 移動処理
                 if (p1Input.ArrowUp) {
-                    p1Top.value -= p1Speed.value;
                     p1Frames.value = sourceFrames["up"]
+                    p1Top.value -= p1Speed.value;
                 }
 
                 if (p1Input.ArrowRight) {
-                    p1Left.value += p1Speed.value;
                     p1Frames.value = sourceFrames["right"];
+                    p1Left.value += p1Speed.value;
                 }
 
                 if (p1Input.ArrowDown) {
-                    p1Top.value += p1Speed.value;
                     p1Frames.value = sourceFrames["down"];
+                    p1Top.value += p1Speed.value;
                 }
 
                 if (p1Input.ArrowLeft) {
-                    p1Left.value -= p1Speed.value;
                     p1Frames.value = sourceFrames["left"];
+                    p1Left.value -= p1Speed.value;
                 }
 
                 // 次のフレーム
