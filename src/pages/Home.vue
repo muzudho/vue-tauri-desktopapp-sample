@@ -88,7 +88,7 @@
             options: {
                 responsive: true,
                 plugins: {
-                    legend: {
+                    legend: {   // 凡例
                         position: 'top',
                     },
                     title: {
