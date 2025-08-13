@@ -120,8 +120,8 @@
             const homeLeft = ((i - 1) % 3) * 32;
 
             // TODO: 盤の左端列を、右端列へ移動させる。
-            const boardTopLoop = (boardTop.value + 3 * cellHeight) % (3 * cellHeight);
-            const boardLeftLoop = (boardLeft.value + 3 * cellWidth) % (3 * cellWidth);
+            const boardTopLoop = (homeTop + boardTop.value) % (tableRows * cellHeight) - homeTop;
+            const boardLeftLoop = (homeLeft + boardLeft.value) % (tableColumns * cellWidth) - homeLeft;
 
             return {
                 position: 'absolute',

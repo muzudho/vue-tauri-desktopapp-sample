@@ -105,11 +105,6 @@
         yAxis: 0,   // 負なら上、正なら下
     });
 
-    const tableColumns = 3;
-    const tableRows = 3;
-    const lastColumnIndex = tableColumns - 1;
-    const lastRowIndex = tableRows - 1;
-
     // ボードの表示位置
     const boardTop = ref<number>(0);
     const boardLeft = ref<number>(0);
