@@ -21,9 +21,10 @@
     // # インポート #
     // ##############
 
-    import { onMounted } from 'vue';
+    import { onMounted, onUnmounted } from 'vue';
     import { Chart } from 'chart.js/auto';
     import { useRouter } from 'vue-router';
+
 
     // ##############
     // # 共有データ #
@@ -39,12 +40,19 @@
         "/welcome-to-tauri-and-vue"    // Tauri のウェルカムページ
     ];
 
+    let chart: Chart | null = null;
+
+
     // ############
     // # 開始処理 #
     // ############
 
     onMounted(() => {
         initChart();
+    });
+
+    onUnmounted(() => {
+        destroyChart(); // チャートの破棄処理
     });
 
     function initChart() {
@@ -56,7 +64,7 @@
             return;
         }
 
-        new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: ['ホーム', 'メイキング', 'このサイトについて', 'Tauriウェルカムページ'],
@@ -102,13 +110,11 @@
         });
     }
 
-    /*
-    beforeUnmount() {
+    function destroyChart() : void {
         if (chart) {
             chart.destroy();
         }
     }
-    */
 
 </script>
 
