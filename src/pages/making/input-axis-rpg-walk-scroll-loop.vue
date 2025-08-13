@@ -5,8 +5,8 @@
     <section class="sec-3">
         <p>👇キーボードの上下左右キーを押してくれだぜ！</p>
 
-        <div style="position:relative; left: 0; top: 0; width:768px; height:768px;">
-            
+        <div :style="boardContainerStyle">
+
             <!--
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
@@ -156,6 +156,18 @@
         };
     });
 
+    // ボードを含んでいる領域のスタイル
+    const boardContainerStyle = computed(()=>{
+        const zoom = 4;
+        
+        return {
+            position: 'relative',
+            left: '0',
+            top: '0',
+            width: `${zoom * (tableColumns + 1) * cellWidth}px`,
+            height: `${zoom * (tableRows + 1) * cellHeight}px`,
+        };
+    });
 
     // ##########
     // # 開始時 #
