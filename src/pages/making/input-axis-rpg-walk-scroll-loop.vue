@@ -3,9 +3,9 @@
 
     <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　循環的スクロール</h3>
     <section class="sec-3">
-        <p>キーボードの上下左右キーを押してくれだぜ！</p>
+        <p>👇キーボードの上下左右キーを押してくれだぜ！</p>
 
-        <div style="position:relative; left: 0; top: 0;">
+        <div style="position:relative; left: 0; top: 0; width:768px; height:768px;">
             
             <!--
                 グリッド
@@ -23,7 +23,12 @@
                 class="cursor"
                 :style="p1Style"
                 style="zoom:4; image-rendering: pixelated;" /><br/>
+            
+            <!-- 半透明のマスク -->
+            <div style="position:absolute; left:0; top:0; width:192px; height:192px; border:solid 32px rgba(0,0,0,0.5); border-width: 32px; border-bottom-width: 64px; border-right-width:64px; zoom:4;"></div>
         </div>
+
+        <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>
 
 
     </section>
