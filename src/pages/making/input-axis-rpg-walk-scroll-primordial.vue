@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　スクロール</h3>
+    <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　原始的スクロール</h3>
     <section class="sec-3">
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
@@ -61,17 +61,6 @@
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
     }));
-    const getCellStyle = computed(() => {
-        return (i:number)=>({
-            position: 'absolute',
-            top: `${Math.floor((i - 1) / 3) * 32}px`,
-            left: `${((i - 1) % 3) * 32}px`,
-            width: "32px",
-            height: "32px",
-            zoom: 4,
-            border: "solid 1px lightgray",
-        });
-    });
 
     const count = ref<number>(0);   // カウントの初期値
     const slow = ref<number>(8);   // スローモーションの倍率の初期値
@@ -120,6 +109,22 @@
     const tableRows = 3;
     const lastColumnIndex = tableColumns - 1;
     const lastRowIndex = tableRows - 1;
+
+    // ボードの表示位置
+    const boardTop = ref<number>(0);
+    const boardLeft = ref<number>(0);
+    const getCellStyle = computed(() => {
+        return (i:number)=>({
+            position: 'absolute',
+            top: `${Math.floor((i - 1) / 3) * 32 + boardTop.value}px`,
+            left: `${((i - 1) % 3) * 32 + boardLeft.value}px`,
+            width: "32px",
+            height: "32px",
+            zoom: 4,
+            border: "solid 1px lightgray",
+        });
+    });
+
 
     // ##########
     // # 開始時 #
@@ -184,13 +189,15 @@
                     p1Frames.value = sourceFrames["right"]
 
                     if (p1Left.value < lastColumnIndex * cellWidth) {    // 境界チェック
-                        p1Left.value += p1Speed.value;
+                        //p1Left.value += p1Speed.value;
+                        boardLeft.value -= p1Speed.value;
                     }
                 } else if (p1Motion.value["xAxis"]==-1) {  // 左
                     p1Frames.value = sourceFrames["left"]
 
                     if (0 < p1Left.value) {    // 境界チェック
-                        p1Left.value -= p1Speed.value;
+                        //p1Left.value -= p1Speed.value;
+                        boardLeft.value += p1Speed.value;
                     }
                 }
 
@@ -198,13 +205,15 @@
                     p1Frames.value = sourceFrames["up"]
 
                     if (0 < p1Top.value) {    // 境界チェック
-                        p1Top.value -= p1Speed.value;
+                        //p1Top.value -= p1Speed.value;
+                        boardTop.value += p1Speed.value;
                     }
                 } else if (p1Motion.value["yAxis"]==1) {   // 下
                     p1Frames.value = sourceFrames["down"]
 
                     if (p1Top.value < lastRowIndex * cellHeight) {    // 境界チェック
-                        p1Top.value += p1Speed.value;
+                        //p1Top.value += p1Speed.value;
+                        boardTop.value -= p1Speed.value;
                     }
                 }
 
