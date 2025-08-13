@@ -105,14 +105,17 @@
         yAxis: 0,   // 負なら上、正なら下
     });
 
+    const tableColumns = 3;
+    const tableRows = 3;
+
     // ボードの表示位置
     const boardTop = ref<number>(0);
     const boardLeft = ref<number>(0);
     const getCellStyle = computed(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、セルの top 位置。
-            const homeTop = Math.floor((i - 1) / 3) * 32;
-            const homeLeft = ((i - 1) % 3) * 32;
+            const homeLeft = ((i - 1) % tableColumns) * cellWidth;
+            const homeTop = Math.floor((i - 1) / tableRows) * cellHeight;
 
             return {
                 position: 'absolute',

@@ -107,8 +107,16 @@
 
     const tableColumns = 3;
     const tableRows = 3;
-    const lastColumnIndex = tableColumns - 1;
-    const lastRowIndex = tableRows - 1;
+
+    /**
+     * ユークリッド剰余
+     * 
+     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
+     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
+     */
+    function euclideanMod(a: number, b: number): number {
+        return ((a % b) + b) % b;
+    }    
 
     // ボードの表示位置
     const boardTop = ref<number>(0);
@@ -116,12 +124,15 @@
     const getCellStyle = computed(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、セルの top 位置。
-            const homeTop = Math.floor((i - 1) / 3) * 32;
-            const homeLeft = ((i - 1) % 3) * 32;
+            const homeLeft = ((i - 1) % tableColumns) * cellWidth;
+            const homeTop = Math.floor((i - 1) / tableRows) * cellHeight;
+            const boardWidth = (tableColumns * cellWidth);
+            const boardHeight = (tableRows * cellHeight);
 
-            // TODO: 盤の左端列を、右端列へ移動させる。
-            const boardTopLoop = (homeTop + boardTop.value) % (tableRows * cellHeight) - homeTop;
-            const boardLeftLoop = (homeLeft + boardLeft.value) % (tableColumns * cellWidth) - homeLeft;
+            // NOTE: 循環するだけなら、［剰余］を使えばいける。
+            // 盤の左端列を、右端列へ移動させる。
+            const boardLeftLoop = euclideanMod(homeLeft + boardLeft.value + boardWidth, boardWidth) - homeLeft;
+            const boardTopLoop = euclideanMod(homeTop + boardTop.value + boardHeight, boardHeight) - homeTop;
 
             return {
                 position: 'absolute',
