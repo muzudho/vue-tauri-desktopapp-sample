@@ -55,6 +55,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import Tile from '@/components/Tile.vue'; // Tauri だと明示的にインポートを指定する必要がある。
     import TileAnimation from '@/components/TileAnimation.vue'; // Tauri だと明示的にインポートを指定する必要がある。
     import TheHeader from './the-header.vue';
 
@@ -159,8 +160,7 @@
                 width: "32px",
                 height: "32px",
                 zoom: 4,
-                border: "solid 1px lightgray",
-                textAlign: "center",
+                imagePixelated: true,
             };
         };
     });
