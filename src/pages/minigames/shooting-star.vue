@@ -47,11 +47,12 @@
     const cellHeight = 32;
 
     // プレイヤー１（点線の枠）
-    const p1Left = ref<number>(0);      // スプライトのX座標
-    const p1Top = ref<number>(0);       // スプライトのY座標
-    const p1ColNum = ref<number>(3);    // スプライトの列数
-    const p1RowNum = ref<number>(2);     // スプライトの行数
-    const p1Speed = ref<number>(2);     // 移動速度
+    const p1Left = ref<number>(6 * cellWidth);      // スプライトのX座標
+    const p1Top = ref<number>(4* cellHeight);       // スプライトのY座標
+    const p1ColNum = ref<number>(4);    // スプライトの列数
+    const p1RowNum = ref<number>(3);     // スプライトの行数
+    //const p1Speed = ref<number>(2);     // 移動速度
+    const p1Speed = ref<number>(4);     // 移動速度
     const p1Input = <Record<string, boolean>>{  // 入力
         ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
     };
@@ -75,15 +76,12 @@
 
     // タイマー
     const count = ref<number>(0);   // カウントの初期値
-    const slow = ref<number>(8);   // スローモーションの倍率の初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
 
     // 盤データ
     const tableColumns = 16;
     const tableRows = 12;
     const tableArea = tableColumns * tableRows; // 盤のセル数
-    const lastColumnIndex = tableColumns - 1;
-    const lastRowIndex = tableRows - 1;
 
     // ##########
     // # 開始時 #
@@ -139,7 +137,7 @@
                     }
 
                     if (p1Motion.value["xAxis"]!=0 || p1Motion.value["yAxis"]!=0) {
-                        p1MotionWait.value = 16;    // フレーム数を設定
+                        p1MotionWait.value = 8;    // フレーム数を設定
                     }
                 }
 
