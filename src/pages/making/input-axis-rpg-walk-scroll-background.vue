@@ -8,11 +8,17 @@
         <div :style="boardContainerStyle">
 
             <!--
-                グリッド
+                TODO: 背景タイル
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in tableArea" :key="i"
-                :style="getCellStyle(i - 1)">{{ i - 1 }}</div>
+            <Tile
+                v-for="i in tableArea" :key="i"
+                :style="getCellStyle(i - 1)"
+                srcLeft="0"
+                srcTop="0"
+                srcWidth="32"
+                srcHeight="32"
+                tilemapUrl="/img/making/tilemap_floor.png" />
 
             <!-- プレイヤー１ -->
             <TileAnimation
@@ -173,6 +179,7 @@
     });
 
     // 床のタイルマップ
+    const floorTilemapTileNum = 4;
     const floorTileMapCoordination = computed(() => {   // 座標
         const tileMap = [];
         for (let i = 0; i < tableRows; i++) {
@@ -186,8 +193,8 @@
     });
 
     // マップデータ
-    const mapColumns = 10;
-    const mapRows = 10;
+    const mapColumns = tableColumns;  // TODO: 10ぐらいにしたい
+    const mapRows = tableRows;  // TODO: 10ぐらいにしたい
 
     // ランダムなマップデータを生成
     const mapData = computed(() => {
@@ -195,7 +202,7 @@
         for (let i = 0; i < mapRows; i++) {
             const row = [];
             for (let j = 0; j < mapColumns; j++) {
-                row.push(Math.floor(Math.random() * 4));  // 0から3のランダムな整数を配置
+                row.push(Math.floor(Math.random() * floorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
             }
             data.push(row);
         }
