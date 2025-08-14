@@ -58,6 +58,23 @@
         left: `${p1Left.value}px`,
     }));
 
+    // モーション
+    const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
+    const moLeft = -1;  // モーション（motion）定数。左に移動する
+    const moRight = 1;
+    const moUp = -1;
+    const moDown = 1;
+    const p1Motion = ref<Record<string, number>>({  // 入力
+        xAxis: 0,   // 負なら左、正なら右
+        yAxis: 0,   // 負なら上、正なら下
+    });
+
+    // タイマー
+    const count = ref<number>(0);   // カウントの初期値
+    const slow = ref<number>(8);   // スローモーションの倍率の初期値
+    const timerId = ref<number | null>(null);   // タイマーのIDを保持
+
+    // 盤データ
     const tableColumns = 16;
     const tableRows = 12;
     const tableArea = tableColumns * tableRows; // 盤のセル数
@@ -68,6 +85,7 @@
 
     onMounted(() => {
         startGameLoop();
+        startTimer();
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
@@ -81,27 +99,56 @@
             }
         });
 
+
         // ################
         // # サブルーチン #
         // ################
 
         function startGameLoop() : void {
             const update = () => {
+                // モーション・タイマー
+                p1MotionWait.value -= 1;
+
+                if (p1MotionWait.value==0) {
+                    p1Motion.value["xAxis"] = 0;    // クリアー
+                    p1Motion.value["yAxis"] = 0;
+                }
+                
+                // 入力（上下左右への移動）をモーションに変換
+                if (p1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+                    if (p1Input.ArrowLeft) {
+                        p1Motion.value["xAxis"] = moLeft; // 左
+                    }
+
+                    if (p1Input.ArrowRight) {
+                        p1Motion.value["xAxis"] = moRight;  // 右
+                    }
+
+                    if (p1Input.ArrowUp) {
+                        p1Motion.value["yAxis"] = moUp;   // 上
+                    }
+
+                    if (p1Input.ArrowDown) {
+                        p1Motion.value["yAxis"] = moDown;   // 下
+                    }
+
+                    if (p1Motion.value["xAxis"]!=0 || p1Motion.value["yAxis"]!=0) {
+                        p1MotionWait.value = 16;    // フレーム数を設定
+                    }
+                }
+
                 // 移動処理
-                if (p1Input.ArrowUp) {
-                    p1Top.value -= p1Speed.value;
-                }
-
-                if (p1Input.ArrowDown) {
-                    p1Top.value += p1Speed.value;
-                }
-
-                if (p1Input.ArrowLeft) {
+                // 斜め方向の場合、上下を優先する。
+                if (p1Motion.value["xAxis"]==1) {   // 右
+                    p1Left.value += p1Speed.value;
+                } else if (p1Motion.value["xAxis"]==-1) {  // 左
                     p1Left.value -= p1Speed.value;
                 }
 
-                if (p1Input.ArrowRight) {
-                    p1Left.value += p1Speed.value;
+                if (p1Motion.value["yAxis"]==-1) {  // 上
+                    p1Top.value -= p1Speed.value;
+                } else if (p1Motion.value["yAxis"]==1) {   // 下
+                    p1Top.value += p1Speed.value;
                 }
 
                 // 次のフレーム
@@ -113,6 +160,22 @@
         }
 
     });
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    function startTimer() : void {
+        // 既にタイマーが動いてたら何もしない
+        if (timerId.value) return;
+
+        // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
+        const tick = () => {
+            count.value += 1;
+            timerId.value = requestAnimationFrame(tick);
+        };
+        timerId.value = requestAnimationFrame(tick);
+    }
 
 </script>
 

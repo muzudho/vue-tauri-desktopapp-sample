@@ -79,6 +79,7 @@
         left: `${p1Left.value}px`,
     }));
 
+    // モーション
     const count = ref<number>(0);   // カウントの初期値
     const slow = ref<number>(8);   // スローモーションの倍率の初期値
     const timerId = ref<number | null>(null);   // タイマーのIDを保持
@@ -112,6 +113,8 @@
     };
 
     const p1Frames = ref(sourceFrames["down"]);
+
+    // モーション
     const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
     const moLeft = -1;  // モーション（motion）定数。左に移動する
     const moRight = 1;
@@ -122,6 +125,7 @@
         yAxis: 0,   // 負なら上、正なら下
     });
 
+    // 盤データ
     const tableColumns = 3;
     const tableRows = 3;
     const tableArea = tableColumns * tableRows; // 盤のセル数
@@ -154,6 +158,7 @@
 
         function startGameLoop() : void {
             const update = () => {
+                // モーション・タイマー
                 p1MotionWait.value -= 1;
 
                 if (p1MotionWait.value==0) {

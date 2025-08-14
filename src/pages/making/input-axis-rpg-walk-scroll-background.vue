@@ -126,6 +126,8 @@
     };
 
     const p1Frames = ref(sourceFrames["down"]);
+
+    // モーション
     const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
     const moLeft = -1;  // モーション（motion）定数。左に移動する
     const moRight = 1;
@@ -136,6 +138,7 @@
         yAxis: 0,   // 負なら上、正なら下
     });
 
+    // 盤データ
     const tableColumns = 5;
     const tableRows = 5;
     const tableArea = tableColumns * tableRows; // 盤のセル数
