@@ -14,7 +14,7 @@
             <Tile
                 v-for="i in tableArea" :key="i"
                 :style="getCellStyle(i - 1)"
-                srcLeft="0"
+                :srcLeft="getFloorLeftByCell(i - 1)"
                 srcTop="0"
                 srcWidth="32"
                 srcHeight="32"
@@ -182,12 +182,10 @@
     const floorTilemapTileNum = 4;
     const floorTileMapCoordination = computed(() => {   // 座標
         const tileMap = [];
-        for (let i = 0; i < tableRows; i++) {
-            const row = [];
-            for (let j = 0; j < tableColumns; j++) {
-                row.push({ top: i * cellHeight, left: j * cellWidth, width: cellWidth, height: cellHeight });
-            }
-            tileMap.push(row);
+        for (let i = 0; i < tableArea; i++) {
+            const cols = i % tableColumns;
+            const rows = Math.floor(i / tableColumns);
+            tileMap.push({ top: rows * cellHeight, left: cols * cellWidth, width: cellWidth, height: cellHeight });
         }
         return tileMap;
     });
@@ -195,18 +193,22 @@
     // マップデータ
     const mapColumns = tableColumns;  // TODO: 10ぐらいにしたい
     const mapRows = tableRows;  // TODO: 10ぐらいにしたい
+    const mapArea = mapColumns * mapRows;
 
     // ランダムなマップデータを生成
     const mapData = computed(() => {
         const data = [];
-        for (let i = 0; i < mapRows; i++) {
-            const row = [];
-            for (let j = 0; j < mapColumns; j++) {
-                row.push(Math.floor(Math.random() * floorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
-            }
-            data.push(row);
+        for (let i = 0; i < mapArea; i++) {
+            data.push(Math.floor(Math.random() * floorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
         }
         return data;
+    });
+    
+    const getFloorLeftByCell = computed(() => {
+        return (cellIndex: number) => {
+            const tileIndex = mapData.value[cellIndex];
+            return floorTileMapCoordination.value[tileIndex]["left"];
+        };
     });
 
     // ##########
