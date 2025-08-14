@@ -49,6 +49,8 @@
     // プレイヤー１（点線の枠）
     const p1Left = ref<number>(0);      // スプライトのX座標
     const p1Top = ref<number>(0);       // スプライトのY座標
+    const p1ColNum = ref<number>(3);    // スプライトの列数
+    const p1RowNum = ref<number>(2);     // スプライトの行数
     const p1Speed = ref<number>(2);     // 移動速度
     const p1Input = <Record<string, boolean>>{  // 入力
         ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
@@ -56,6 +58,8 @@
     const p1Style = computed(() => ({
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
+        width: `${p1ColNum.value * cellWidth}px`,
+        height: `${p1RowNum.value * cellHeight}px`,
     }));
 
     // モーション
@@ -142,7 +146,7 @@
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
                 if (p1Motion.value["xAxis"]==1) {   // 右
-                    if (p1Left.value < lastColumnIndex * cellWidth) {    // 境界チェック
+                    if (p1Left.value < (tableColumns - p1ColNum.value) * cellWidth) {    // 境界チェック
                         p1Left.value += p1Speed.value;
                     }
                 } else if (p1Motion.value["xAxis"]==-1) {  // 左
@@ -156,7 +160,7 @@
                         p1Top.value -= p1Speed.value;
                     }
                 } else if (p1Motion.value["yAxis"]==1) {   // 下
-                    if (p1Top.value < lastRowIndex * cellHeight) {    // 境界チェック
+                    if (p1Top.value < (tableRows - p1RowNum.value) * cellHeight) {    // 境界チェック
                         p1Top.value += p1Speed.value;
                     }
                 }
@@ -191,6 +195,6 @@
 
 <style scoped>
     div.cursor {
-        position: relative; width:128px; height:96px; border:dashed 4px #f0f0f0;
+        position: relative; border:dashed 4px #f0f0f0;
     }
 </style>
