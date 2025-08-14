@@ -3,9 +3,8 @@
 
     <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　背景的スクロール</h3>
     <section class="sec-3">
-        <p>👇キーボードの上下左右キーを押してくれだぜ！</p>
-
-        <div :style="boardContainerStyle">
+        <p>👇キーボードの上下左右キーを押してくれだぜ（＾▽＾）！</p>
+        <div :style="boardMaskContainerStyle">
 
             <!--
                 TODO: 背景タイル
@@ -35,11 +34,25 @@
         </div>
 
         <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>
-        <p>数字は背景ではなく、セルに付いている番号だぜ（＾▽＾）！</p>
+        <br/>
 
-        元画像のタイルマップを表示：<br/>
+        <p>👇タイルのインデックスだぜ（＾▽＾）：</p>
+        <div :style="boardContainerStyle">
+            <!--
+                グリッド
+                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
+            -->
+            <div v-for="i in tableArea" :key="i"
+                :style="getCellStyle(i - 1)"
+                style="border:dashed 1px gray;">{{ getTileIndexByCell(i - 1) }}</div>
+        </div>
+        <p>：ここまで。</p>
+        <br/>
+
+        <p>元画像のタイルマップを表示：</p>
         <v-img src="/img/making/tilemap_floor.png" style="width:128px; height:128px; zoom: 4; image-rendering: pixelated; border:dashed gray 4px;"/>
-        ：ここまで。
+        <p>：ここまで。</p>
+
     </section>
 </template>
 
@@ -165,8 +178,8 @@
         };
     });
 
-    // ボードを含んでいる領域のスタイル
-    const boardContainerStyle = computed(()=>{
+    // ボードとマスクを含んでいる領域のスタイル
+    const boardMaskContainerStyle = computed(()=>{
         const zoom = 4;
         
         return {
@@ -175,6 +188,19 @@
             top: '0',
             width: `${zoom * (tableColumns + 1) * cellWidth}px`,
             height: `${zoom * (tableRows + 1) * cellHeight}px`,
+        };
+    });
+
+    // ボードだけを含んでいる領域のスタイル
+    const boardContainerStyle = computed(()=>{
+        const zoom = 4;
+        
+        return {
+            position: 'relative',
+            left: '0',
+            top: '0',
+            width: `${zoom * tableColumns * cellWidth}px`,
+            height: `${zoom * tableRows * cellHeight}px`,
         };
     });
 
@@ -202,6 +228,12 @@
             data.push(Math.floor(Math.random() * floorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
         }
         return data;
+    });
+
+    const getTileIndexByCell = computed(() => {
+        return (cellIndex: number) => {
+            return mapData.value[cellIndex];
+        };
     });
     
     const getFloorLeftByCell = computed(() => {
