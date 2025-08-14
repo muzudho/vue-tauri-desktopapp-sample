@@ -108,6 +108,7 @@
         yAxis: 0,   // 負なら上、正なら下
     });
 
+    // 盤データ
     const tableColumns = 3;
     const tableRows = 3;
     const lastColumnIndex = tableColumns - 1;

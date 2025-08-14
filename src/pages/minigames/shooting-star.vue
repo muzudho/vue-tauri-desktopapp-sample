@@ -78,6 +78,8 @@
     const tableColumns = 16;
     const tableRows = 12;
     const tableArea = tableColumns * tableRows; // 盤のセル数
+    const lastColumnIndex = tableColumns - 1;
+    const lastRowIndex = tableRows - 1;
 
     // ##########
     // # 開始時 #
@@ -140,15 +142,23 @@
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
                 if (p1Motion.value["xAxis"]==1) {   // 右
-                    p1Left.value += p1Speed.value;
+                    if (p1Left.value < lastColumnIndex * cellWidth) {    // 境界チェック
+                        p1Left.value += p1Speed.value;
+                    }
                 } else if (p1Motion.value["xAxis"]==-1) {  // 左
-                    p1Left.value -= p1Speed.value;
+                    if (0 < p1Left.value) {    // 境界チェック
+                        p1Left.value -= p1Speed.value;
+                    }
                 }
 
                 if (p1Motion.value["yAxis"]==-1) {  // 上
-                    p1Top.value -= p1Speed.value;
+                    if (0 < p1Top.value) {    // 境界チェック
+                        p1Top.value -= p1Speed.value;
+                    }
                 } else if (p1Motion.value["yAxis"]==1) {   // 下
-                    p1Top.value += p1Speed.value;
+                    if (p1Top.value < lastRowIndex * cellHeight) {    // 境界チェック
+                        p1Top.value += p1Speed.value;
+                    }
                 }
 
                 // 次のフレーム
