@@ -95,6 +95,17 @@ const routes = [
     },
 
     {
+        name: 'MiniGames',
+        path: '/minigames',     // URL
+        component: () => import('../pages/minigames/index.vue'),  // importした Vue ファイル
+    },
+    {
+        name: 'ShootingStar',
+        path: '/minigames/shooting-star',     // URL
+        component: () => import('../pages/minigames/shooting-star.vue'),  // importした Vue ファイル
+    },
+
+    {
         name: 'About',
         path: '/about',     // URL
         component: () => import('../pages/about.vue'),  // importした Vue ファイル

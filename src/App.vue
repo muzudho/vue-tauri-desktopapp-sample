@@ -18,7 +18,8 @@
                     <router-link to="/about">このサイトについて</router-link> |
                     <router-link to="/blog">ブログ</router-link> |
                     <router-link to="/welcome-to-tauri-and-vue">WelcomeToTauriAndVue</router-link> |
-                    <router-link to="/making">メイキング</router-link>
+                    <router-link to="/making">メイキング</router-link> |
+                    <router-link to="/minigames">ミニゲーム</router-link>
                 </nav>
 
                 <h1>Tauri デスクトップアプリのサンプルだぜ！</h1>

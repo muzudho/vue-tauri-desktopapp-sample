@@ -11,8 +11,8 @@
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in 9" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / 3) * 32}px; left: ${((i - 1) % 3) * 32}px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;`"></div>
+            <div v-for="i in tableArea" :key="i"
+                :style="`position:absolute; top: ${Math.floor((i - 1) / tableColumns) * cellHeight}px; left: ${((i - 1) % tableColumns) * cellWidth}px; width:${cellWidth}px; height:${cellHeight}px; zoom: 4; border: solid 1px lightgray;`"></div>
             <!--
                 👆 上記のコードは、以下のコードと同じ。
                 <div style="position:absolute; top: 0px; left: 0px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
@@ -121,6 +121,10 @@
         xAxis: 0,   // 負なら左、正なら右
         yAxis: 0,   // 負なら上、正なら下
     });
+
+    const tableColumns = 3;
+    const tableRows = 3;
+    const tableArea = tableColumns * tableRows; // 盤のセル数
 
 
     // ##########
