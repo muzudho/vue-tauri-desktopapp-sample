@@ -6,15 +6,21 @@
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
         <!-- ゲーム画面領域（宇宙） -->
-        <div style="position:relative; left: 0; top: 0; width:512px; height:386px; background-color: #303030;">
+        <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
+            <!--
+                グリッド
+                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
+            -->
+            <div v-for="i in tableArea" :key="i"
+                :style="`position:absolute; top: ${Math.floor((i - 1) / tableColumns) * cellHeight}px; left: ${((i - 1) % tableColumns) * cellWidth}px; width:${cellWidth}px; height:${cellHeight}px; border: solid 1px gray;`"></div>
+
+            <!-- プレイヤー１（点線の枠） -->
+            <div
+                class="cursor"
+                :style="p1Style"></div>
             
         </div>
 
-        <!-- プレイヤー１（点線の枠） -->
-        <div
-            class="cursor"
-            :style="p1Style"
-            style="zoom: 4;"></div>
     </section>
 </template>
 
@@ -36,6 +42,10 @@
     // # 共有データ #
     // ##############
 
+    // 盤データ
+    const cellWidth = 32;
+    const cellHeight = 32;
+
     // プレイヤー１（点線の枠）
     const p1Left = ref<number>(0);      // スプライトのX座標
     const p1Top = ref<number>(0);       // スプライトのY座標
@@ -47,6 +57,10 @@
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
     }));
+
+    const tableColumns = 16;
+    const tableRows = 12;
+    const tableArea = tableColumns * tableRows; // 盤のセル数
 
     // ##########
     // # 開始時 #
@@ -104,6 +118,6 @@
 
 <style scoped>
     div.cursor {
-        position: relative; border:dashed 4px green; width:32px; height:32px;
+        position: relative; width:128px; height:96px; border:dashed 4px #f0f0f0;
     }
 </style>
