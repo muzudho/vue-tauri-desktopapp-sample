@@ -9,8 +9,8 @@
         <br/>
         元のJSONファイルは、<a target="_blank" :href="jsonFilePath">public/{{jsonFilePath}}</a> に置いてあるぜ！<br/>
     </section>
-    <hr/>
-    <router-link to="/making">メイキングの先頭に戻る</router-link>
+
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -25,7 +25,9 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+
 
     // ##############
     // # 共有データ #
@@ -33,6 +35,7 @@
 
     const jsonFilePath = "/sample.json";
     const jsonStr = ref("読み込み中...");
+
 
     // ##############
     // # 起動時処理 #

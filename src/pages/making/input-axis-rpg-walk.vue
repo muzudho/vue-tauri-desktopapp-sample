@@ -16,6 +16,8 @@
             style="zoom:4; image-rendering: pixelated;" /><br/>
 
     </section>
+
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -31,6 +33,7 @@
     // ++++++++++++++++++
 
     import TileAnimation from '@/components/TileAnimation.vue'; // Tauri だと明示的にインポートを指定する必要がある。
+    import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
 

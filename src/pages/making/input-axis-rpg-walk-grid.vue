@@ -2,7 +2,7 @@
     <the-header/>
 
     <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　グリッド吸着</h3>
-    <section class="sec-3">
+    <section class="sec-3" style="height: 432px;">
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
         <div style="position:relative; left: 0; top: 0;">
@@ -39,8 +39,9 @@
                 style="zoom:4; image-rendering: pixelated;" /><br/>
         </div>
 
-
     </section>
+
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -56,6 +57,7 @@
     // ++++++++++++++++++
 
     import TileAnimation from '@/components/TileAnimation.vue'; // Tauri だと明示的にインポートを指定する必要がある。
+    import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
 

@@ -43,10 +43,9 @@
             <br/>
             これより下は日本語に無いから、住所を参考にすると、［目］、［盤］、［号」などが考えられるか（＾▽＾）？<br/>
         </section>
-
     </v-container>
-    <hr/>
-    <router-link to="/making">メイキングの先頭に戻る</router-link>
+
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -59,6 +58,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
 </script>
