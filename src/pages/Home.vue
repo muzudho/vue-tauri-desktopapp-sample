@@ -12,7 +12,7 @@
     </section>
 
     <h3>ホームページ内容の割合</h3>
-    <canvas id="pieChart"></canvas>
+    <canvas id="pieChart" class="pieChartStyle"></canvas>
 
     <br/>
     <section class="sec-1">
@@ -133,7 +133,7 @@
 </script>
 
 <style scoped>
-    canvas {
+    canvas.pieChartStyle {
         max-width: 400px;
         margin: 0 auto;
     }

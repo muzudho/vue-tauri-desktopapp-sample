@@ -1,9 +1,7 @@
 <template>
-    <the-parent-header/>
-
-    <h2>ミニゲームの章だぜ！</h2>
+    <br/>
     <section class="sec-2">
-        <v-btn @click="goToMinigames" v-tooltip="'下の節を閉じる'">❌</v-btn>
+        <v-btn @click="goToMinigames" v-tooltip="'上の節を閉じる'">❌</v-btn>
     </section>
 </template>
 
@@ -14,12 +12,6 @@
     // ##############
 
     import { useRouter } from 'vue-router';
-
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
-
-    import TheGrandParentHeader from '../../the-header.vue';
 
 
     // ############

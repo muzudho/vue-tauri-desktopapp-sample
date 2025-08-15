@@ -25,6 +25,8 @@
         </div>
 
     </section>
+
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -39,7 +41,9 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+
 
     // ##############
     // # 共有データ #
@@ -85,6 +89,7 @@
     const tableColumns = 16;
     const tableRows = 12;
     const tableArea = tableColumns * tableRows; // 盤のセル数
+
 
     // ##########
     // # 開始時 #
@@ -175,6 +180,7 @@
         }
 
     });
+
 
     // ################
     // # サブルーチン #
