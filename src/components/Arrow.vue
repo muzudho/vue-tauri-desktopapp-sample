@@ -1,7 +1,8 @@
 <template>
     <div
-        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
+        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border:`"
         style="position: absolute;">
+        <!--  dashed 1px ${props.color}; -->
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -116,9 +117,9 @@
     const arrowHeadBottomHeight = arrowHeadBottom - endY;
     const arrowHeadLeftWidth = endX - arrowHeadLeft;    // 矢尻が終点より左にどれだけはみ出ているか。
 
-    // 矢尻の部分の幅と高さを計算
-    const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth;
-    const arrowHeadHeight = arrowHeadTopHeight + arrowHeadBottomHeight;
+    // // 矢尻の部分の幅と高さを計算
+    // const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth;
+    // const arrowHeadHeight = arrowHeadTopHeight + arrowHeadBottomHeight;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const boldLeft = Math.max(arrowHeadLeftWidth, props.strokeWidth / 2);
