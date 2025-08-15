@@ -9,10 +9,18 @@
             初期スキル
         </div>
         <Arrow
-            :x1="20"
-            :y1="20"
+            :x1="0"
+            :y1="0"
             :x2="150"
             :y2="100"
+            :stroke-width="8"
+            color="blue"/>
+
+        <Arrow
+            :x1="0"
+            :y1="100"
+            :x2="150"
+            :y2="200"
             :stroke-width="8"
             color="blue"/>
     </section>

@@ -1,5 +1,5 @@
 <template>
-    <div :style="`left: ${props.x1}px; top: ${props.y1}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; background-color: red;">
+    <div :style="`left: ${props.x1}px; top: ${props.y1}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -42,17 +42,26 @@
     // # このコンポーネントの画面 #
     // ############################
 
+    const canvasMargin = Math.floor(props.strokeWidth / 2);
+
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const svgWidth = computed(() => {
-        return Math.max(props.x1, props.x2) + 50;
+        const left = Math.min(props.x1, props.x2);
+        const right = Math.max(props.x1, props.x2);
+        return (right - left) + 2 * canvasMargin;
     });
 
     const svgHeight = computed(() => {
-        return Math.max(props.y1, props.y2) + 50;
+        const top = Math.min(props.y1, props.y2);
+        const bottom = Math.max(props.y1, props.y2);
+        return (bottom - top) + 2 * canvasMargin;
     });
 
     function generateArrowPath() : string {
         const { x1, y1, x2, y2 } = props;
+
+        const left = Math.min(x1, x2);
+        const top = Math.min(y1, y2);
 
         // 矢印の長さを計算
         //const length = Math.sqrt((x2 - x1) ** 2 + (y2 - y1) ** 2);
@@ -75,9 +84,9 @@
 
         // SVGパスを生成
         return `
-            M${x1},${y1} L${x2},${y2}
-            M${x2},${y2} L${arrowPoint1.x},${arrowPoint1.y}
-            M${x2},${y2} L${arrowPoint2.x},${arrowPoint2.y}
+            M${canvasMargin + x1 - left},${canvasMargin + y1 - top} L${canvasMargin + x2 - left},${canvasMargin + y2 - top}
+            M${canvasMargin + x2 - left},${canvasMargin + y2 - top} L${canvasMargin + arrowPoint1.x - left},${canvasMargin + arrowPoint1.y - top}
+            M${canvasMargin + x2 - left},${canvasMargin + y2 - top} L${canvasMargin + arrowPoint2.x - left},${canvasMargin + arrowPoint2.y - top}
         `;
     }
 
