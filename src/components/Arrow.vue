@@ -92,14 +92,16 @@
     const arrowHeadBottomWidth = arrowHeadBottom - endY;
 
     // 矢尻の部分の幅と高さを計算
-    const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth + props.strokeWidth;
-    const arrowHeadHeight = arrowHeadTopWidth + arrowHeadBottomWidth + props.strokeWidth;
+    const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth;
+    const arrowHeadHeight = arrowHeadTopWidth + arrowHeadBottomWidth;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const boldWidth = Math.max(arrowHeadWidth, props.strokeWidth);
     const boldHeight = Math.max(arrowHeadHeight, props.strokeWidth);
     const svgWidth = Math.abs(width) + boldWidth;
     const svgHeight = Math.abs(height) + boldHeight;
+    const svgCenterX = svgWidth / 2;
+    const svgCenterY = svgHeight / 2;
 
 
     // ############################
@@ -108,10 +110,15 @@
 
     function generateArrowPath() : string {
 
-        const pAx = arrowHeadWidth / 2 + startX - left;
-        const pAy = arrowHeadHeight / 2 + startY - top;
-        const pBx = arrowHeadWidth / 2 + endX - left;
-        const pBy = arrowHeadHeight / 2 + endY - top;
+        const startXInCanvas = startX - left;
+        const startYInCanvas = startY - top;
+        const endXInCanvs = endX - left;
+        const endYInCanvas = endY - top;
+
+        const pAx = arrowHeadWidth / 2 + startXInCanvas;
+        const pAy = arrowHeadHeight / 2 + startYInCanvas;
+        const pBx = arrowHeadWidth / 2 + endXInCanvs;
+        const pBy = arrowHeadHeight / 2 + endYInCanvas;
         const pCx = arrowHeadWidth / 2 + arrowHeadC.x - left;
         const pCy = arrowHeadHeight / 2 + arrowHeadC.y - top;
         const pDx = arrowHeadWidth / 2 + arrowHeadD.x - left;
