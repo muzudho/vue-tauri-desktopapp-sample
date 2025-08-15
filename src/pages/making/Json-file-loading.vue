@@ -3,7 +3,11 @@
 
     <h3>JSONファイルの読込だぜ！</h3>
     <section class="sec-3">
-        <p>{{ jsonStr }}</p>
+        <p>ここに読み込んだJSONデータを表示：</p>
+        <pre>{{ jsonStr }}</pre>
+        <p>：ここまで。</p>
+        <br/>
+        元のJSONファイルは、<a target="_blank" :href="jsonFilePath">public/{{jsonFilePath}}</a> に置いてあるぜ！<br/>
     </section>
     <hr/>
     <router-link to="/making">メイキングの先頭に戻る</router-link>
@@ -27,6 +31,7 @@
     // # 共有データ #
     // ##############
 
+    const jsonFilePath = "/sample.json";
     const jsonStr = ref("読み込み中...");
 
     // ##############
@@ -35,7 +40,7 @@
 
     onMounted(async () => {
         try {
-            const response = await fetch("/sample.json");   // publicフォルダに置いたファイルにアクセスできる。
+            const response = await fetch(jsonFilePath);   // publicフォルダに置いたファイルにアクセスできる。
             if (!response.ok) throw new Error("Failed to fetch JSON");
             const data: any = await response.json();
 
