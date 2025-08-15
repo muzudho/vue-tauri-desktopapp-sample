@@ -79,6 +79,11 @@ const routes = [
         component: () => import('../pages/making/page-layout.vue'),
     },
     {
+        name: 'SpriteRoutine',
+        path: '/making/sprite-routine',
+        component: () => import('../pages/making/sprite-routine.vue'),
+    },
+    {
         name: 'TileCountUpRpgWalk',
         path: '/making/tile-count-up-rpg-walk',
         component: () => import('../pages/making/tile-count-up-rpg-walk.vue'),
