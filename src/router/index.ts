@@ -89,6 +89,11 @@ const routes = [
         component: () => import('../pages/making/sprite-routine.vue'),
     },
     {
+        name: 'SvgArrow',
+        path: '/making/svg-arrow',
+        component: () => import('../pages/making/svg-arrow.vue'),
+    },
+    {
         name: 'TileCountUpRpgWalk',
         path: '/making/tile-count-up-rpg-walk',
         component: () => import('../pages/making/tile-count-up-rpg-walk.vue'),

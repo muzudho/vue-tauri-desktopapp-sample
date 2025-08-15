@@ -1,20 +1,13 @@
 <template>
     <the-header/>
 
-    <h3>説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！</h3>
+    <h3>矢印を描こうぜ！</h3>
     <section
         class="sec-3"
         :style="`height: ${8 * cellHeight}px;`"
         style="position: relative;">
         <div style="position: absolute;">
             凡例だぜ（＾▽＾）！
-
-            <div
-                class="rectangle d-flex align-center justify-center"
-                :style="`left: ${0 * cellWidth}px; top: ${1 * cellHeight}px; width: ${8 * cellWidth}px; height: ${2 * cellHeight}px;`"
-                style="position:absolute; border:solid 4px slateblue;">
-                初期スキル
-            </div>
 
             <div
                 :style="`

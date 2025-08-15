@@ -1,6 +1,6 @@
 <template>
     <div
-        :style="`left: ${left}px; top: ${top}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
+        :style="`left: ${qLeft}px; top: ${qTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
         style="position: absolute;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
@@ -155,6 +155,8 @@
     //         ／
     //        C
     //
+    const qLeft = left - boldLeft;
+    const qTop = top - boldTop;
     const qAx = pAx + boldLeft;
     const qAy = pAy + boldTop;
     const qBx = pBx + boldLeft;
