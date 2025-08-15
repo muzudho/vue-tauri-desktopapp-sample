@@ -9,18 +9,18 @@
         <div style="position: absolute;">
             凡例だぜ（＾▽＾）！
 
-            <div
-                :style="`
-                    position: absolute;
-                    left: ${9.5 * cellWidth}px;
-                    top: ${5 * cellHeight}px;
-                    width: ${1 * cellWidth}px;
-                    height: ${5 * cellHeight}px;
-                    border: solid 4px black;
-                `"
-            >
+            <br/>
+            <v-checkbox
+                v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]"
+                :key="index"
+                v-model="hitboxCheckboxes"
+                :value="`${index}`"
+                :label="`矢印${index}の当たり判定`"
+                ></v-checkbox>
 
-            </div>
+            <div
+                v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]" :key="index"
+                :style="hitboxStyles[index]">{{ index }}</div>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -30,7 +30,6 @@
                 :stroke-width="8"
                 color="#ff0000"/>
 
-            <!--
             <Arrow
                 :startX="10 * cellWidth"
                 :startY="10 * cellHeight"
@@ -150,7 +149,6 @@
                 :height="-5 * cellHeight"
                 :stroke-width="8"
                 color="#ff0080"/>
-            -->
 
         </div>
     </section>
@@ -163,6 +161,8 @@
     // ##############
     // # インポート #
     // ##############
+
+    import { ref, watch } from 'vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -177,7 +177,33 @@
     // # 共有データ #
     // ##############
 
+    // 盤データ
     const cellWidth = 32;
     const cellHeight = 32;
+
+    // 当たり判定
+    const hitboxCheckboxes = ref<string[]>([]);
+    const hitboxStyles = ref<string[]>(["", "", "", "", "", "", "", "", "", "", "", "", ""]);
+    watch(hitboxCheckboxes, (newValue:string[]) => {
+        console.log(`newValue: ${newValue}`);
+
+        for (let i = 0; i < 12; i++) {
+            if (newValue.includes(`${i}`)) {
+                hitboxStyles.value[i] = `
+                    visibility: visible;
+                    position: relative;
+                    left: ${9.5 * cellWidth}px;
+                    top: ${5 * cellHeight}px;
+                    width: ${1 * cellWidth}px;
+                    height: ${5 * cellHeight}px;
+                    border: solid 4px black;
+                    background-color: blue;
+                `;
+            } else {
+                hitboxStyles.value[i] = "position: relative; background-color:red; width:120px; height:30px;";
+                //hitboxStyles.value[i] = "visibility: hidden;";
+            }
+        }
+    });
 
 </script>

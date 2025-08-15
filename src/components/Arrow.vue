@@ -1,6 +1,6 @@
 <template>
     <div
-        :style="`left: ${qLeft}px; top: ${qTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
+        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
         style="position: absolute;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
@@ -106,29 +106,31 @@
         y: endY - arrowHeadSizeD.height,
     };
 
-    const arrowHeadLeft = Math.min(arrowHeadC.x, arrowHeadD.x);
-    const arrowHeadRight = Math.max(arrowHeadC.x, arrowHeadD.x);
     const arrowHeadTop = Math.min(arrowHeadC.y, arrowHeadD.y);
+    const arrowHeadRight = Math.max(arrowHeadC.x, arrowHeadD.x);
     const arrowHeadBottom = Math.max(arrowHeadC.y, arrowHeadD.y);
+    const arrowHeadLeft = Math.min(arrowHeadC.x, arrowHeadD.x);
 
-    const arrowHeadLeftWidth = endX - arrowHeadLeft;    // 矢尻が終点より左にどれだけはみ出ているか。
+    const arrowHeadTopHeight = endY - arrowHeadTop;
     const arrowHeadRightWidth = arrowHeadRight - endX;
-    const arrowHeadTopWidth = endY - arrowHeadTop;
-    const arrowHeadBottomWidth = arrowHeadBottom - endY;
+    const arrowHeadBottomHeight = arrowHeadBottom - endY;
+    const arrowHeadLeftWidth = endX - arrowHeadLeft;    // 矢尻が終点より左にどれだけはみ出ているか。
 
     // 矢尻の部分の幅と高さを計算
     const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth;
-    const arrowHeadHeight = arrowHeadTopWidth + arrowHeadBottomWidth;
+    const arrowHeadHeight = arrowHeadTopHeight + arrowHeadBottomHeight;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const boldLeft = Math.max(arrowHeadLeftWidth, props.strokeWidth / 2);
     const boldRight = Math.max(arrowHeadRightWidth, props.strokeWidth / 2);
-    const boldTop = Math.max(arrowHeadTopWidth, props.strokeWidth / 2);
-    const boldBottom = Math.max(arrowHeadBottomWidth, props.strokeWidth);
+    const boldTop = Math.max(arrowHeadTopHeight, props.strokeWidth / 2);
+    const boldBottom = Math.max(arrowHeadBottomHeight, props.strokeWidth / 2);
+
+    // SVG キャンバス
+    const svgLeft = left - boldLeft;
+    const svgTop = top - boldTop;
     const svgWidth = Math.abs(width) + boldLeft + boldRight;
     const svgHeight = Math.abs(height) + boldTop + boldBottom;
-    const centerXInSvg = svgWidth / 2;
-    const centerYInSvg = svgHeight / 2;
 
     // キャンバスを考えない位置
     //
@@ -155,8 +157,6 @@
     //         ／
     //        C
     //
-    const qLeft = left - boldLeft;
-    const qTop = top - boldTop;
     const qAx = pAx + boldLeft;
     const qAy = pAy + boldTop;
     const qBx = pBx + boldLeft;
