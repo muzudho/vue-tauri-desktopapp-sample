@@ -142,6 +142,10 @@
     const pAy = startY - top;
     const pBx = endX - left;
     const pBy = endY - top;
+    const pCx = arrowHeadC.x - left;
+    const pCy = arrowHeadC.y - top;
+    const pDx = arrowHeadD.x - left;
+    const pDy = arrowHeadD.y - top;
 
     // キャンバスの中での始点の位置
     //
@@ -163,10 +167,10 @@
 
     function generateArrowPath() : string {
 
-        const pCx = arrowHeadWidth / 2 + arrowHeadC.x - left;
-        const pCy = arrowHeadHeight / 2 + arrowHeadC.y - top;
-        const pDx = arrowHeadWidth / 2 + arrowHeadD.x - left;
-        const pDy = arrowHeadHeight / 2 + arrowHeadD.y - top;
+        const qCx = pCx + arrowHeadWidth / 2;
+        const qCy = pCy + arrowHeadHeight / 2;
+        const qDx = pDx + arrowHeadWidth / 2;
+        const qDy = pDy + arrowHeadHeight / 2;
 
         // SVGパスを生成
         //
@@ -178,8 +182,8 @@
         //
         return `
             M${qAx},${qAy} L${qBx},${qBy}
-            M${qBx},${qBy} L${pCx},${pCy}
-            M${qBx},${qBy} L${pDx},${pDy}
+            M${qBx},${qBy} L${qCx},${qCy}
+            M${qBx},${qBy} L${qDx},${qDy}
         `;
     }
 
