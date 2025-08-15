@@ -16,12 +16,13 @@
                 v-model="hitboxCheckboxes"
                 :value="`${index}`"
                 :label="`矢印${index}の当たり判定`"
-                ></v-checkbox>
+                density="compact"
+                style="display: inline-block; color: blue;"></v-checkbox>
 
             <div
                 v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]" :key="index"
                 :style="hitboxPositions[index] + ' ' +  hitboxStyles[index]"
-                style="position: absolute; border: solid 4px black; z-index: 10;">{{ index }}</div>
+                style="position: absolute; border: solid 4px lightgray;">{{ index }}</div>
 
             <Arrow
                 :startX="10 * cellWidth"
