@@ -12,25 +12,25 @@
             <div
                 class="rectangle d-flex align-center justify-center"
                 :style="`left: ${0 * cellWidth}px; top: ${1 * cellHeight}px; width: ${8 * cellWidth}px; height: ${2 * cellHeight}px;`"
-                style="position:absolute; border:solid 4px brown;">
+                style="position:absolute; border:solid 4px slateblue;">
                 初期スキル
             </div>
 
             <Arrow
-                :x1="0"
-                :y1="2 * cellHeight"
-                :x2="150"
-                :y2="100"
+                :x1="4 * cellWidth"
+                :y1="3 * cellHeight"
+                :width="150"
+                :height="100"
                 :stroke-width="8"
-                color="blue"/>
+                color="slateblue"/>
 
             <Arrow
-                :x1="0"
-                :y1="100"
-                :x2="150"
-                :y2="200"
+                :x1="4 * cellWidth"
+                :y1="3 * cellHeight"
+                :width="10"
+                :height="100"
                 :stroke-width="8"
-                color="blue"/>
+                color="slateblue"/>
         </div>
     </section>
 

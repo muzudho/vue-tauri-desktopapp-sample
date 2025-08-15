@@ -22,8 +22,8 @@
     interface Props {
         x1: number;             // 始点のX座標
         y1: number;             // 始点のY座標
-        width: number;          // X方向の長さ
-        height: number;         // Y方向の長さ
+        x2: number;             // 終点のX座標
+        y2: number;             // 終点のY座標
         strokeWidth: number;    // 線の太さ
         color: string;          // 線の色
     }
@@ -31,8 +31,8 @@
     const props = withDefaults(defineProps<Props>(), {
         x1: 0,              // 始点のX座標
         y1: 0,              // 始点のY座標
-        width: 32,         // 終点のX座標
-        height: 32,        // 終点のY座標
+        x2: 128,            // 終点のX座標
+        y2: 128,            // 終点のY座標
         strokeWidth: 4,     // 線の太さ
         color: 'black',     // 線の色
     });
@@ -46,21 +46,19 @@
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const svgWidth = computed(() => {
-        const left = Math.min(props.x1, props.x1 + props.width);
-        const right = Math.max(props.x1, props.x1 + props.width);
+        const left = Math.min(props.x1, props.x2);
+        const right = Math.max(props.x1, props.x2);
         return (right - left) + 2 * canvasMargin;
     });
 
     const svgHeight = computed(() => {
-        const top = Math.min(props.y1, props.y1 + props.height);
-        const bottom = Math.max(props.y1, props.y1 + props.height);
+        const top = Math.min(props.y1, props.y2);
+        const bottom = Math.max(props.y1, props.y2);
         return (bottom - top) + 2 * canvasMargin;
     });
 
     function generateArrowPath() : string {
-        const { x1, y1, width, height } = props;
-        const x2 = x1 + width;
-        const y2 = y1 + height;
+        const { x1, y1, x2, y2 } = props;
 
         const left = Math.min(x1, x2);
         const top = Math.min(y1, y2);
