@@ -107,17 +107,37 @@
         arrowHeadWidth.value = headMaxX - headMinX + props.strokeWidth;
         arrowHeadHeight.value = headMaxY - headMinY + props.strokeWidth;
 
-        const relX1 = startX - left;
-        const relY1 = startY - top;
-        const relX2 = endX - left;
-        const relY2 = endY - top;
+        const pAx = arrowHeadWidth.value / 2 + startX - left;
+        const pAy = arrowHeadHeight.value / 2 + startY - top;
+        const pBx = arrowHeadWidth.value / 2 + endX - left;
+        const pBy = arrowHeadHeight.value / 2 + endY - top;
+        const pCx = arrowHeadWidth.value / 2 + arrowPoint1.x - left;
+        const pCy = arrowHeadHeight.value / 2 + arrowPoint1.y - top;
+        const pDx = arrowHeadWidth.value / 2 + arrowPoint2.x - left;
+        const pDy = arrowHeadHeight.value / 2 + arrowPoint2.y - top;
 
         // SVGパスを生成
+        //
+        //        D
+        //         ＼
+        //  A--------B
+        //         ／
+        //        C
+        //
         return `
-            M${arrowHeadWidth.value / 2 + relX1},${arrowHeadHeight.value / 2 + relY1} L${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2}
-            M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
-            M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
+            M${pAx},${pAy} L${pBx},${pBy}
+            M${pBx},${pBy} L${pCx},${pCy}
+            M${pBx},${pBy} L${pDx},${pDy}
         `;
+
+        /*
+        // SVGパスを生成
+        return `
+            M${arrowHeadWidth.value / 2 + relX1},${arrowHeadHeight.value / 2 + relY1} L${arrowHeadWidth.value / 2 + pBx},${arrowHeadHeight.value / 2 + pBy}
+            M${arrowHeadWidth.value / 2 + pBx},${arrowHeadHeight.value / 2 + pBy} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
+            M${arrowHeadWidth.value / 2 + pBx},${arrowHeadHeight.value / 2 + pBy} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
+        `;
+         */
     }
 
 </script>
