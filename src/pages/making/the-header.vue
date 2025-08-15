@@ -1,12 +1,9 @@
 <template>
-    <the-parent-header/>
+    <the-grand-parent-header/>
 
     <h2>メイキングの章だぜ！</h2>
     <section class="sec-2">
         <v-btn @click="goToMaking" v-tooltip="'下の節を閉じる'">❌</v-btn>
-        <!--
-            <router-link to="/making">戻る</router-link>
-        -->
     </section>
 </template>
 
@@ -22,7 +19,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheParentHeader from '../the-header.vue';
+    import TheGrandParentHeader from '../../the-header.vue';
 
 
     // ############

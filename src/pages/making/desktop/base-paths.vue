@@ -1,5 +1,5 @@
 <template>
-    <the-header/>
+    <the-parent-header/>
 
     <h3>デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</h3>
     <section class="sec-3">
@@ -138,7 +138,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheHeader from '../the-header.vue';
+    import TheParentHeader from '../the-header.vue';
 
     // ##############
     // # 共有データ #
