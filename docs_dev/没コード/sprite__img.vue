@@ -6,7 +6,7 @@
         <!-- キャンバスは画面みたいなもの。 -->
         <p>矢印キーで移動！</p>
         <img
-            src="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png"
+            src="/img/making/202508__warabenture__15--1612-kifuwarabe-o1o0.png"
             :style="walkGraphicStyle"
             style="position: relative;"></img><br/>
         <canvas
@@ -71,7 +71,7 @@
         // const ctx : CanvasRenderingContext2D | null = myCanvas.value.getContext('2d');
 
         // スプライト画像の読み込み
-        sprite.src = "/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png";
+        sprite.src = "/img/making/202508__warabenture__15--1612-kifuwarabe-o1o0.png";
         sprite.onload = () => {
             startGameLoop();
         };
