@@ -1,5 +1,7 @@
 <template>
-    <div :style="`left: ${left}px; top: ${top}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
+    <div
+        :style="`left: ${left}px; top: ${top}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
+        style="position: absolute;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -48,8 +50,10 @@
     const endX = startX + width;
     const endY = startY + height;
 
-    const left = Math.min(startX, endX);
     const top = Math.min(startY, endY);
+    const right = Math.max(startX, endX);
+    const bottom = Math.max(startY, endY);
+    const left = Math.min(startX, endX);
 
     // 矢印の長さを計算
     //const length = Math.sqrt(width ** 2 + height ** 2);
@@ -87,40 +91,31 @@
     const arrowHeadTopWidth = endY - arrowHeadTop;
     const arrowHeadBottomWidth = arrowHeadBottom - endY;
 
-    // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
-    const svgWidth = computed(() => {
-        const left = Math.min(props.startX, endX);
-        const right = Math.max(props.startX, endX);
-        return (right - left) + arrowHeadWidth.value;
-    });
+    // 矢尻の部分の幅と高さを計算
+    const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth + props.strokeWidth;
+    const arrowHeadHeight = arrowHeadTopWidth + arrowHeadBottomWidth + props.strokeWidth;
 
-    const svgHeight = computed(() => {
-        const top = Math.min(props.startY, endY);
-        const bottom = Math.max(props.startY, endY);
-        return (bottom - top) + arrowHeadHeight.value;
-    });
+    // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
+    const boldWidth = Math.max(arrowHeadWidth, props.strokeWidth);
+    const boldHeight = Math.max(arrowHeadHeight, props.strokeWidth);
+    const svgWidth = Math.abs(width) + boldWidth;
+    const svgHeight = Math.abs(height) + boldHeight;
 
 
     // ############################
     // # このコンポーネントの画面 #
     // ############################
 
-    const arrowHeadWidth = ref(0);
-    const arrowHeadHeight = ref(0);
-
     function generateArrowPath() : string {
 
-        arrowHeadWidth.value = arrowHeadRight - arrowHeadLeft + props.strokeWidth;
-        arrowHeadHeight.value = arrowHeadBottom - arrowHeadTop + props.strokeWidth;
-
-        const pAx = arrowHeadWidth.value / 2 + startX - left;
-        const pAy = arrowHeadHeight.value / 2 + startY - top;
-        const pBx = arrowHeadWidth.value / 2 + endX - left;
-        const pBy = arrowHeadHeight.value / 2 + endY - top;
-        const pCx = arrowHeadWidth.value / 2 + arrowHeadC.x - left;
-        const pCy = arrowHeadHeight.value / 2 + arrowHeadC.y - top;
-        const pDx = arrowHeadWidth.value / 2 + arrowHeadD.x - left;
-        const pDy = arrowHeadHeight.value / 2 + arrowHeadD.y - top;
+        const pAx = arrowHeadWidth / 2 + startX - left;
+        const pAy = arrowHeadHeight / 2 + startY - top;
+        const pBx = arrowHeadWidth / 2 + endX - left;
+        const pBy = arrowHeadHeight / 2 + endY - top;
+        const pCx = arrowHeadWidth / 2 + arrowHeadC.x - left;
+        const pCy = arrowHeadHeight / 2 + arrowHeadC.y - top;
+        const pDx = arrowHeadWidth / 2 + arrowHeadD.x - left;
+        const pDy = arrowHeadHeight / 2 + arrowHeadD.y - top;
 
         // SVGパスを生成
         //
