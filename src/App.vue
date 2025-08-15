@@ -33,6 +33,18 @@
 </template>
 
 <script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
+    // ++++++++++++++++++
+    // + コンポーネント +
+    // ++++++++++++++++++
+
+    import TheHeader from './the-header.vue';
+    import TheFooter from './the-footer.vue';
+
 </script>
 
 <style scoped>

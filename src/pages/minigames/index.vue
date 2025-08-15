@@ -1,5 +1,5 @@
 <template>
-    <the-parent-header/>
+    <the-grand-parent-header/>
 
     <h2>ミニゲームの章だぜ！</h2>
     <section class="sec-2">
@@ -10,6 +10,8 @@
             <li>📖 <router-link to="/minigames/shooting-star">一瞬流れる星に狙いを付けろだぜ！</router-link></li>
         </ul>
     </section>
+
+    <the-grand-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +24,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheParentHeader from '../the-header.vue';
+    import TheGrandParentFooter from '../../the-footer.vue';
+    import TheGrandParentHeader from '../../the-header.vue';
 
 </script>

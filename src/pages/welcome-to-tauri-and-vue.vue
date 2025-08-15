@@ -1,5 +1,5 @@
 <template>
-    <the-header/>
+    <the-parent-header/>
 
     <h2>Welcome to Tauri + Vue の章だぜ！</h2>
 
@@ -24,7 +24,8 @@
     </v-form>
 
     <p>{{ greetMsg }}</p>
-    <router-link to="/">ホームに戻る</router-link>
+
+    <the-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -40,7 +41,9 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheHeader from './the-header.vue';
+    import TheParentHeader from '../the-header.vue';
+    import TheParentFooter from '../the-footer.vue';
+
 
     // ##############
     // # 共有データ #

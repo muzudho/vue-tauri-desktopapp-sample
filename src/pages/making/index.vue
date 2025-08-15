@@ -1,5 +1,5 @@
 <template>
-    <the-parent-header/>
+    <the-grand-parent-header/>
 
     <h2>メイキングの章だぜ！</h2>
     <section class="sec-2">
@@ -30,6 +30,8 @@
             <li>📖 <router-link to="/making/input-axis-rpg-walk-scroll-background">上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　背景的スクロール</router-link></li>
         </ul>
     </section>
+
+    <the-grand-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +44,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheParentHeader from '../the-header.vue';
+    import TheGrandParentFooter from '../../the-footer.vue';
+    import TheGrandParentHeader from '../../the-header.vue';
 
 </script>

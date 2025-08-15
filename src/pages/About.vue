@@ -1,5 +1,5 @@
 <template>
-    <the-header/>
+    <the-parent-header/>
 
     <h2>このサイトについて</h2>
     <section class="sec-2">
@@ -8,8 +8,8 @@
         <p>開発のメインとして使っているのは Vue 3 と、 Vuetify 3 だぜ（＾▽＾）</p>
         <p>なるべく Tauri 3 と Nuxt 3 の機能は、必要になるまで使わないようにしているぜ（＾～＾）</p>
     </section>
-    <hr/>
-    <router-link to="/">ホームに戻る</router-link>
+
+    <the-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -22,6 +22,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheHeader from './the-header.vue';
+    import TheParentHeader from '../the-header.vue';
+    import TheParentFooter from '../the-footer.vue';
 
 </script>
