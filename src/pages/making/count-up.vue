@@ -65,4 +65,5 @@
         count.value = 0;
         stopTimer();
     }    
+
 </script>
