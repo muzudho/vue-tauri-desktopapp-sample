@@ -153,8 +153,8 @@
     //
     const qAx = pAx + boldLeft;
     const qAy = pAy + boldTop;
-    const qBx = pBx + arrowHeadWidth / 2;
-    const qBy = pBy + arrowHeadHeight / 2;
+    const qBx = pBx + boldLeft;
+    const qBy = pBy + boldTop;
 
 
     // ############################
