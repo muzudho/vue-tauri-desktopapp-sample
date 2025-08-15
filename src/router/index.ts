@@ -74,6 +74,11 @@ const routes = [
         component: () => import('../pages/making/mount-practice.vue'),
     },
     {
+        name: 'SkillTreeLayout',
+        path: '/making/skill-tree-layout',
+        component: () => import('../pages/making/skill-tree-layout.vue'),
+    },
+    {
         name: 'PageLayout',
         path: '/making/page-layout',
         component: () => import('../pages/making/page-layout.vue'),
