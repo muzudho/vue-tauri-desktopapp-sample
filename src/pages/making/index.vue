@@ -7,8 +7,8 @@
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
 
         <ul>
-            <li>📖 <router-link to="/making/page-layout" :style="getLinkStyle('/making/page-layout', actualLink)">説明を始める前に、説明ページのレイアウトを決めておこうぜ！</router-link></li>
-            <li>📖 <router-link to="/making/mount-practice">onMounted を使う練習だぜ！</router-link></li>
+            <li>📖 <router-link to="/making/page-layout" :style="getLinkStyle('/making/page-layout')">説明を始める前に、説明ページのレイアウトを決めておこうぜ！</router-link></li>
+            <li>📖 <router-link to="/making/mount-practice" :style="getLinkStyle('/making/mount-practice')">onMounted を使う練習だぜ！</router-link></li>
             <li>📖 <router-link to="/making/desktop/base-paths">デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</router-link></li>
             <li>📖 <router-link to="/making/desktop/bundle-file-loading">デスクトップアプリにて　＞　バンドルファイルの読込だぜ！</router-link></li>
             <li>📖 <router-link to="/making/json-file-loading">JSONファイルの読込だぜ！</router-link></li>
@@ -41,6 +41,7 @@
     // ##############
 
     import { computed, ref } from 'vue';
+    import { useRouter } from 'vue-router';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -50,11 +51,12 @@
     import TheGrandParentHeader from '../../the-header.vue';
 
 
-    // ################
-    // # サブルーチン #
-    // ################
+    // ##############
+    // # 共有データ #
+    // ##############
 
-    const actualLink = ref("/making/page-layout")
+    const router = useRouter();
+
 
     // ################
     // # サブルーチン #
@@ -62,8 +64,9 @@
 
     const getLinkStyle = computed(
         () => {
-            return (expected:string, actual:string)=> {
-                if (expected === actual) {
+            return (expected:string)=> {
+                //alert(`前のページ: ${router.options.history.state.back}, 期待されるページ: ${expected}`);
+                if (expected === router.options.history.state.back) {   // 前のページのパスと比較
                     return {
                         backgroundColor: `lightgreen`,
                     };
@@ -73,6 +76,4 @@
             };
         }
     );
-
-
 </script>
