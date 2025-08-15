@@ -19,16 +19,40 @@
             <Arrow
                 :x1="4 * cellWidth"
                 :y1="3 * cellHeight"
-                :width="150"
-                :height="100"
+                :width="4 * cellWidth"
+                :height="4 * cellHeight"
                 :stroke-width="8"
                 color="slateblue"/>
 
             <Arrow
                 :x1="4 * cellWidth"
                 :y1="3 * cellHeight"
-                :width="10"
-                :height="100"
+                :width="3 * cellWidth"
+                :height="4 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :x1="4 * cellWidth"
+                :y1="3 * cellHeight"
+                :width="2 * cellWidth"
+                :height="4 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :x1="4 * cellWidth"
+                :y1="3 * cellHeight"
+                :width="1 * cellWidth"
+                :height="4 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :x1="4 * cellWidth"
+                :y1="3 * cellHeight"
+                :width="0 * cellWidth"
+                :height="4 * cellHeight"
                 :stroke-width="8"
                 color="slateblue"/>
         </div>

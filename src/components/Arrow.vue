@@ -11,8 +11,8 @@
     // ##############
     // # インポート #
     // ##############
-    
-    import { computed } from 'vue';
+
+    import { computed, ref } from 'vue';
 
 
     // ####################################
@@ -42,19 +42,22 @@
     // # このコンポーネントの画面 #
     // ############################
 
+    const arrowHeadWidth = ref(0);
+    const arrowHeadHeight = ref(0);
+
     const canvasMargin = Math.floor(props.strokeWidth / 2);
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const svgWidth = computed(() => {
         const left = Math.min(props.x1, props.x1 + props.width);
         const right = Math.max(props.x1, props.x1 + props.width);
-        return (right - left) + 2 * canvasMargin;
+        return (right - left) + arrowHeadWidth.value;
     });
 
     const svgHeight = computed(() => {
         const top = Math.min(props.y1, props.y1 + props.height);
         const bottom = Math.max(props.y1, props.y1 + props.height);
-        return (bottom - top) + 2 * canvasMargin;
+        return (bottom - top) + arrowHeadHeight.value;
     });
 
     function generateArrowPath() : string {
@@ -83,6 +86,13 @@
             x: x2 - arrowSize * Math.cos(angle + Math.PI / 6),
             y: y2 - arrowSize * Math.sin(angle + Math.PI / 6),
         };
+
+        const headMinX = Math.min(arrowPoint1.x, arrowPoint2.x);
+        const headMaxX = Math.max(arrowPoint1.x, arrowPoint2.x);
+        const headMinY = Math.min(arrowPoint1.y, arrowPoint2.y);
+        const headMaxY = Math.max(arrowPoint1.y, arrowPoint2.y);
+        arrowHeadWidth.value = headMaxX - headMinX;
+        arrowHeadHeight.value = headMaxY - headMinY;
 
         // SVGパスを生成
         return `
