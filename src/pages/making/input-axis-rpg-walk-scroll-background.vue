@@ -15,8 +15,8 @@
                 :style="getCellStyle(i - 1)"
                 :srcLeft="getFloorLeftByCell(i - 1)"
                 srcTop="0"
-                srcWidth="32"
-                srcHeight="32"
+                :srcWidth="cellWidth"
+                :srcHeight="cellHeight"
                 tilemapUrl="/img/making/tilemap_floor.png" />
 
             <!-- プレイヤー１ -->
@@ -27,10 +27,10 @@
                 :time="count"
                 class="cursor"
                 :style="p1Style"
-                style="zoom:4; image-rendering: pixelated;" /><br/>
+                style="image-rendering: pixelated;" /><br/>
             
             <!-- 半透明のマスク -->
-            <div style="position:absolute; left:0; top:0; width:192px; height:192px; border:solid 32px rgba(0,0,0,0.5); border-width: 32px; border-bottom-width: 64px; border-right-width:64px; zoom:4;"></div>
+            <div :style="`position:absolute; left:0; top:0; width:${tableColumnsWithMask * cellWidth}px; height:${tableRowsWithMask * cellHeight}px; border-top: solid ${cellHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * cellWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * cellHeight}px rgba(0,0,0,0.5); border-left: solid ${cellWidth}px rgba(0,0,0,0.5); zoom:${zoom};`"></div>
         </div>
 
         <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>
@@ -50,7 +50,9 @@
         <br/>
 
         <p>元画像のタイルマップを表示：</p>
-        <v-img src="/img/making/tilemap_floor.png" style="width:128px; height:128px; zoom: 4; image-rendering: pixelated; border:dashed gray 4px;"/>
+        <v-img
+            src="/img/making/tilemap_floor.png"
+            :style="`width:128px; height:128px; zoom: ${zoom}; image-rendering: pixelated; border:dashed gray 4px;`"/>
         <p>：ここまで。</p>
 
     </section>
@@ -80,6 +82,9 @@
     // # 共有データ #
     // ##############
 
+    // 表示データ
+    const zoom = 4;
+
     // 盤データ
     const cellWidth = 32;
     const cellHeight = 32;
@@ -94,6 +99,7 @@
     const p1Style = computed(() => ({
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
+        zoom: zoom,
     }));
 
     const count = ref<number>(0);   // カウントの初期値
@@ -145,6 +151,8 @@
     const tableColumns = 5;
     const tableRows = 5;
     const tableArea = tableColumns * tableRows; // 盤のセル数
+    const tableColumnsWithMask = tableColumns + 1
+    const tableRowsWithMask = tableRows + 1
 
     /**
      * ユークリッド剰余
@@ -176,9 +184,9 @@
                 position: 'absolute',
                 top: `${homeTop + boardTopLoop}px`,
                 left: `${homeLeft + boardLeftLoop}px`,
-                width: "32px",
-                height: "32px",
-                zoom: 4,
+                width: `${cellWidth}px`,
+                height: `${cellHeight}px`,
+                zoom: zoom,
                 imagePixelated: true,
             };
         };
@@ -186,14 +194,12 @@
 
     // ボードとマスクを含んでいる領域のスタイル
     const boardMaskContainerStyle = computed(()=>{
-        const zoom = 4;
-        
         return {
             position: 'relative',
-            left: '0',
-            top: '0',
-            width: `${zoom * (tableColumns + 1) * cellWidth}px`,
-            height: `${zoom * (tableRows + 1) * cellHeight}px`,
+            left: 0,
+            top: 0,
+            width: `${zoom * tableColumnsWithMask * cellWidth}px`,
+            height: `${zoom * tableRowsWithMask * cellHeight}px`,
         };
     });
 
@@ -203,8 +209,8 @@
         
         return {
             position: 'relative',
-            left: '0',
-            top: '0',
+            left: 0,
+            top: 0,
             width: `${zoom * tableColumns * cellWidth}px`,
             height: `${zoom * tableRows * cellHeight}px`,
         };
