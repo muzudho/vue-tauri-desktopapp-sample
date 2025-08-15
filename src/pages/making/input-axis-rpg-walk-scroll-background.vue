@@ -30,7 +30,9 @@
                 style="image-rendering: pixelated;" /><br/>
             
             <!-- 半透明のマスク -->
-            <div :style="`position:absolute; left:0; top:0; width:${tableColumnsWithMask * cellWidth}px; height:${tableRowsWithMask * cellHeight}px; border-top: solid ${cellHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * cellWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * cellHeight}px rgba(0,0,0,0.5); border-left: solid ${cellWidth}px rgba(0,0,0,0.5); zoom:${zoom};`"></div>
+            <div
+                :style="`width:${tableColumnsWithMask * cellWidth}px; height:${tableRowsWithMask * cellHeight}px; border-top: solid ${cellHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * cellWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * cellHeight}px rgba(0,0,0,0.5); border-left: solid ${cellWidth}px rgba(0,0,0,0.5); zoom:${zoom};`"
+                style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
         </div>
 
         <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>
@@ -52,7 +54,8 @@
         <p>元画像のタイルマップを表示：</p>
         <v-img
             src="/img/making/tilemap_floor.png"
-            :style="`width:128px; height:128px; zoom: ${zoom}; image-rendering: pixelated; border:dashed gray 4px;`"/>
+            :style="`zoom: ${zoom};`"
+            style="width:128px; height:128px; image-rendering: pixelated; border:dashed gray 4px;"/>
         <p>：ここまで。</p>
 
     </section>
