@@ -2,10 +2,10 @@
     <the-header/>
 
     <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　グリッド吸着</h3>
-    <section class="sec-3" style="height: 432px;">
+    <section class="sec-3">
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
-        <div style="position:relative; left: 0; top: 0;">
+        <div :style="`position:relative; left: 0; top: 0; height: ${zoom * tableRows * cellHeight}px;`">
             
             <!--
                 グリッド
@@ -36,7 +36,7 @@
                 :time="count"
                 class="cursor"
                 :style="p1Style"
-                style="zoom:4; image-rendering: pixelated;" /><br/>
+                style="image-rendering: pixelated;" /><br/>
         </div>
 
     </section>
@@ -65,6 +65,9 @@
     // # 共有データ #
     // ##############
 
+    // 表示データ
+    const zoom = 4;
+
     // 盤データ
     const cellWidth = 32;
     const cellHeight = 32;
@@ -79,6 +82,7 @@
     const p1Style = computed(() => ({
         top: `${p1Top.value}px`,
         left: `${p1Left.value}px`,
+        zoom: `${zoom}`,
     }));
 
     // モーション
