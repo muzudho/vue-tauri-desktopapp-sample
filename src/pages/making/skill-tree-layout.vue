@@ -16,6 +16,19 @@
                 初期スキル
             </div>
 
+            <div
+                :style="`
+                    position: absolute;
+                    left: ${1 * cellWidth}px;
+                    top: ${5 * cellHeight}px;
+                    width: ${1 * cellWidth}px;
+                    height: ${5 * cellHeight}px;
+                    border: solid 1px black;
+                `"
+            >
+
+            </div>
+
             <Arrow
                 :startX="10 * cellWidth"
                 :startY="10 * cellHeight"
