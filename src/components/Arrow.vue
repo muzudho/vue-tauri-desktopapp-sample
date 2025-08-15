@@ -45,12 +45,12 @@
     function getTop() : number {
         return Math.min(props.startY, props.startY + props.height);
     }
-    function getRight() : number {
-        return Math.max(props.startX, props.startX + props.width);
-    }
-    function getBottom() : number {
-        return Math.max(props.startY, props.startY + props.height);
-    }
+    // function getRight() : number {
+    //     return Math.max(props.startX, props.startX + props.width);
+    // }
+    // function getBottom() : number {
+    //     return Math.max(props.startY, props.startY + props.height);
+    // }
     function getLeft() : number {
         return Math.min(props.startX, props.startX + props.width);
     }
@@ -113,21 +113,11 @@
         const relY2 = endY - top;
 
         // SVGパスを生成
-        //*
         return `
             M${arrowHeadWidth.value / 2 + relX1},${arrowHeadHeight.value / 2 + relY1} L${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2}
             M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
             M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
         `;
-        // */
-        /*
-        // SVGパスを生成
-        return `
-            M${startX},${startY} L${endX},${endY}
-            M${endX},${endY} L${arrowPoint1.x},${arrowPoint1.y}
-            M${endX},${endY} L${arrowPoint2.x},${arrowPoint2.y}
-        `;
-        */
     }
 
 </script>

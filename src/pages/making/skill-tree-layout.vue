@@ -22,7 +22,7 @@
                 :width="0 * cellWidth"
                 :height="-5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ff0000"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -30,7 +30,7 @@
                 :width="2.5 * cellWidth"
                 :height="-5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ff4000"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -38,7 +38,7 @@
                 :width="5 * cellWidth"
                 :height="-5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ff8000"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -46,7 +46,7 @@
                 :width="5 * cellWidth"
                 :height="-2.5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ffc000"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -54,7 +54,7 @@
                 :width="5 * cellWidth"
                 :height="0 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ffff00"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -62,7 +62,7 @@
                 :width="5 * cellWidth"
                 :height="2.5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#c0ff00"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -70,7 +70,7 @@
                 :width="5 * cellWidth"
                 :height="5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#80ff00"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -78,7 +78,7 @@
                 :width="2.5 * cellWidth"
                 :height="5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#40ff00"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -86,7 +86,7 @@
                 :width="0 * cellWidth"
                 :height="5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#00ff00"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -94,7 +94,7 @@
                 :width="-2.5 * cellWidth"
                 :height="5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#00ff80"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -102,7 +102,7 @@
                 :width="-5 * cellWidth"
                 :height="5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#00ffff"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -110,7 +110,7 @@
                 :width="-5 * cellWidth"
                 :height="2.5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#0080ff"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -118,7 +118,7 @@
                 :width="-5 * cellWidth"
                 :height="0 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#0000ff"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -126,7 +126,7 @@
                 :width="-5 * cellWidth"
                 :height="-2.5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#8000ff"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -134,7 +134,7 @@
                 :width="-5 * cellWidth"
                 :height="-5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ff00ff"/>
 
             <Arrow
                 :startX="10 * cellWidth"
@@ -142,7 +142,7 @@
                 :width="-2.5 * cellWidth"
                 :height="-5 * cellHeight"
                 :stroke-width="8"
-                color="slateblue"/>
+                color="#ff0080"/>
 
         </div>
     </section>
