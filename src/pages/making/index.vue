@@ -40,9 +40,6 @@
     // # インポート #
     // ##############
 
-    import { computed, ref } from 'vue';
-    import { useRouter } from 'vue-router';
-
     // ++++++++++++++++++
     // + コンポーネント +
     // ++++++++++++++++++
@@ -57,30 +54,4 @@
 
     import { getLinkHighlight } from '../../composables/link-highlight';
 
-
-    // ##############
-    // # 共有データ #
-    // ##############
-
-    //const router = useRouter();
-
-
-    // // ################
-    // // # サブルーチン #
-    // // ################
-
-    // const getLinkStyle = computed(
-    //     () => {
-    //         return (expected:string)=> {
-    //             //alert(`前のページ: ${router.options.history.state.back}, 期待されるページ: ${expected}`);
-    //             if (expected === router.options.history.state.back) {   // 前のページのパスと比較
-    //                 return {
-    //                     backgroundColor: `lightgreen`,
-    //                 };
-    //             }
-    //             return {
-    //             };
-    //         };
-    //     }
-    // );
 </script>

@@ -7,7 +7,7 @@
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
 
         <ul>
-            <li>📖 <router-link to="/minigames/shooting-star">一瞬流れる星に狙いを付けろだぜ！</router-link></li>
+            <li>📖 <router-link to="/minigames/shooting-star" :style="getLinkHighlight('/minigames/shooting-star')">一瞬流れる星に狙いを付けろだぜ！</router-link></li>
         </ul>
     </section>
 
@@ -26,5 +26,12 @@
 
     import TheGrandParentFooter from '../../the-footer.vue';
     import TheGrandParentHeader from '../../the-header.vue';
+
+
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
+
+    import { getLinkHighlight } from '../../composables/link-highlight';
 
 </script>
