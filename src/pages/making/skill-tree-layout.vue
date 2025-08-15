@@ -17,44 +17,133 @@
             </div>
 
             <Arrow
-                :x1="4 * cellWidth"
-                :y1="3 * cellHeight"
-                :width="4 * cellWidth"
-                :height="4 * cellHeight"
-                :stroke-width="8"
-                color="slateblue"/>
-
-            <Arrow
-                :x1="4 * cellWidth"
-                :y1="3 * cellHeight"
-                :width="3 * cellWidth"
-                :height="4 * cellHeight"
-                :stroke-width="8"
-                color="slateblue"/>
-
-            <Arrow
-                :x1="4 * cellWidth"
-                :y1="3 * cellHeight"
-                :width="2 * cellWidth"
-                :height="4 * cellHeight"
-                :stroke-width="8"
-                color="slateblue"/>
-
-            <Arrow
-                :x1="4 * cellWidth"
-                :y1="3 * cellHeight"
-                :width="1 * cellWidth"
-                :height="4 * cellHeight"
-                :stroke-width="8"
-                color="slateblue"/>
-
-            <Arrow
-                :x1="4 * cellWidth"
-                :y1="3 * cellHeight"
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
                 :width="0 * cellWidth"
-                :height="4 * cellHeight"
+                :height="-5 * cellHeight"
                 :stroke-width="8"
                 color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="2.5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="5 * cellWidth"
+                :height="-2.5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="5 * cellWidth"
+                :height="0 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="5 * cellWidth"
+                :height="2.5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="2.5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="0 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-2.5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-5 * cellWidth"
+                :height="2.5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-5 * cellWidth"
+                :height="0 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-5 * cellWidth"
+                :height="-2.5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
+            <Arrow
+                :startX="10 * cellWidth"
+                :startY="10 * cellHeight"
+                :width="-2.5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="slateblue"/>
+
         </div>
     </section>
 

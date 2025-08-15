@@ -1,5 +1,5 @@
 <template>
-    <div :style="`left: ${props.x1}px; top: ${props.y1}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
+    <div :style="`left: ${props.startX}px; top: ${props.startY}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -60,31 +60,29 @@
 
     function generateArrowPath() : string {
         const { startX, startY, width, height } = props;
+        const x2 = startX + width;
+        const y2 = startY + height;
 
-        // 終点の計算
-        const endX = startX + width;
-        const endY = startY + height;
-
-        const left = Math.min(startX, endX);
-        const top = Math.min(startY, endY);
+        const left = Math.min(startX, x2);
+        const top = Math.min(startY, y2);
 
         // 矢印の長さを計算
-        const length = Math.sqrt(width ** 2 + height ** 2);
+        //const length = Math.sqrt((x2 - startX) ** 2 + (y2 - startY) ** 2);
 
         // 矢印の先端のサイズ（線の太さに比例）
         const arrowSize = props.strokeWidth * 4;
 
         // 矢印の角度を計算
-        const angle = Math.atan2(height, width);
+        const angle = Math.atan2(y2 - startY, x2 - startX);
 
         // 矢印の先端の2つの点
         const arrowPoint1 = {
-            x: endX - arrowSize * Math.cos(angle - Math.PI / 6),
-            y: endY - arrowSize * Math.sin(angle - Math.PI / 6),
+            x: x2 - arrowSize * Math.cos(angle - Math.PI / 6),
+            y: y2 - arrowSize * Math.sin(angle - Math.PI / 6),
         };
         const arrowPoint2 = {
-            x: endX - arrowSize * Math.cos(angle + Math.PI / 6),
-            y: endY - arrowSize * Math.sin(angle + Math.PI / 6),
+            x: x2 - arrowSize * Math.cos(angle + Math.PI / 6),
+            y: y2 - arrowSize * Math.sin(angle + Math.PI / 6),
         };
 
         const headMinX = Math.min(arrowPoint1.x, arrowPoint2.x);
@@ -96,8 +94,8 @@
 
         const relX1 = startX - left;
         const relY1 = startY - top;
-        const relX2 = endX - left;
-        const relY2 = endY - top;
+        const relX2 = x2 - left;
+        const relY2 = y2 - top;
 
         // SVGパスを生成
         return `
@@ -105,12 +103,6 @@
             M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
             M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
         `;
-        // // SVGパスを生成
-        // return `
-        //     M${startX},${startY} L${endX},${endY}
-        //     M${endX},${endY} L${arrowPoint1.x},${arrowPoint1.y}
-        //     M${endX},${endY} L${arrowPoint2.x},${arrowPoint2.y}
-        // `;
     }
 
 </script>

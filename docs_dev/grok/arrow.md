@@ -388,3 +388,143 @@ export default {
 ---
 
 これでパスを手入力する手間なく、好きな矢印が描けるぜ！（＾▽＾） 試してみて、もし「もっと曲がった矢印にしたい」とか「アニメーション追加して！」みたいな要望があれば教えてくれ！バッチリ対応するからな！😎
+
+
+さっき作ってもらった Arrow.vue の props を、 x1, y1, x2, y2 じゃなくて、始点x, 始点y, 負も指定できる横幅、負も指定できる縦幅の４つに変えてくれないかだぜ（＾～＾）？
+
+
+おっ、さっきの`Arrow.vue`をカスタマイズしたいんだな！（＾▽＾） `props`を`x1, y1, x2, y2`から「始点x, 始点y, 横幅, 縦幅」に変更して、横幅と縦幅が負の値もOKになるようにするぜ！これで、矢印の終点が始点からの相対的な幅と高さで決まるようになるよ。負の値にも対応して、どんな方向にも矢印が描けるようにするぜ！🚀
+
+以下は、修正した`Arrow.vue`のコードだ。`props`を`startX`, `startY`, `width`, `height`に変更して、負の幅や高さでも正しく矢印が描画されるように調整したよ。前の`artifact_id`を再利用して、更新版として提供するぜ！
+
+<xaiArtifact artifact_id="fa3704e2-e0c0-4e7a-849f-e05c0b514dd0" artifact_version_id="459d6c4e-bb99-46d0-8d36-d63a979d854a" title="Arrow.vue" contentType="text/vue">
+<template>
+  <v-container>
+    <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
+      <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
+    </svg>
+  </v-container>
+</template>
+
+<script>
+export default {
+  props: {
+    startX: { type: Number, default: 50 }, // 始点のX座標
+    startY: { type: Number, default: 50 }, // 始点のY座標
+    width: { type: Number, default: 100 }, // 横幅（負の値も可）
+    height: { type: Number, default: 0 }, // 縦幅（負の値も可）
+    strokeWidth: { type: Number, default: 5 }, // 線の太さ
+    color: { type: String, default: 'black' }, // 線の色
+  },
+  computed: {
+    // SVGのキャンバスサイズを動的に計算（負の幅/高さを考慮）
+    svgWidth() {
+      const endX = this.startX + this.width;
+      return Math.max(this.startX, endX, 0) + 50; // 余白を確保
+    },
+    svgHeight() {
+      const endY = this.startY + this.height;
+      return Math.max(this.startY, endY, 0) + 50; // 余白を確保
+    },
+  },
+  methods: {
+    generateArrowPath() {
+      const { startX, startY, width, height } = this;
+      // 終点の計算
+      const endX = startX + width;
+      const endY = startY + height;
+      // 矢印の長さを計算
+      const length = Math.sqrt(width ** 2 + height ** 2);
+      // 矢印の先端のサイズ（線の太さに比例）
+      const arrowSize = this.strokeWidth * 3;
+      // 矢印の角度を計算
+      const angle = Math.atan2(height, width);
+      // 矢印の先端の2つの点
+      const arrowPoint1 = {
+        x: endX - arrowSize * Math.cos(angle - Math.PI / 6),
+        y: endY - arrowSize * Math.sin(angle - Math.PI / 6),
+      };
+      const arrowPoint2 = {
+        x: endX - arrowSize * Math.cos(angle + Math.PI / 6),
+        y: endY - arrowSize * Math.sin(angle + Math.PI / 6),
+      };
+      // SVGパスを生成
+      return `
+        M${startX},${startY} L${endX},${endY}
+        M${endX},${endY} L${arrowPoint1.x},${arrowPoint1.y}
+        M${endX},${endY} L${arrowPoint2.x},${arrowPoint2.y}
+      `;
+    },
+  },
+};
+</script>
+</xaiArtifact>
+
+---
+
+### 変更点の説明
+1. **`props`の変更**：
+   - `x1, y1, x2, y2`を`startX, startY, width, height`に変更。
+   - `width`と`height`は終点の座標を直接指定するんじゃなくて、始点からの相対的な移動量（横幅と縦幅）を表す。負の値も受け付けるよ！
+   - デフォルト値は`startX: 50`, `startY: 50`, `width: 100`, `height: 0`（水平な右向き矢印）。
+
+2. **終点の計算**：
+   - 終点は`endX = startX + width`, `endY = startY + height`で計算。
+   - これで、`width`や`height`が負の値でも、左や上に向かう矢印が正しく描けるぜ。
+
+3. **キャンバスサイズの調整**：
+   - `svgWidth`と`svgHeight`で、負の`width`や`height`を考慮してキャンバスサイズを計算。
+   - `Math.max`を使って、始点と終点の座標が負にならないように余白（`+50`）を確保。
+
+4. **矢印の角度計算**：
+   - `Math.atan2(height, width)`で、幅と高さから矢印の角度を計算。負の値でも正しい方向に矢印の先端が描画される。
+
+---
+
+### 使い方
+このコンポーネントを親コンポーネントで使う例だぜ：
+```vue
+<template>
+  <v-container>
+    <!-- 右下に伸びる矢印 -->
+    <Arrow :startX="50" :startY="50" :width="100" :height="50" :stroke-width="8" color="blue" />
+    <!-- 左上に伸びる矢印（負の幅と高さ） -->
+    <Arrow :startX="200" :startY="200" :width="-100" :height="-50" :stroke-width="8" color="red" />
+  </v-container>
+</template>
+
+<script>
+import Arrow from './components/Arrow.vue';
+
+export default {
+  components: {
+    Arrow,
+  },
+};
+</script>
+```
+
+- **例1**：`startX="50"`, `startY="50"`, `width="100"`, `height="50"`で、右下に伸びる青い矢印。
+- **例2**：`startX="200"`, `startY="200"`, `width="-100"`, `height="-50"`で、左上に伸びる赤い矢印。
+
+---
+
+### ポイント
+- **負の値対応**：`width`や`height`が負でも、矢印の向きが正しく計算される。左や上への矢印もバッチリ！
+- **Vuetifyとの統合**：`<v-container>`でレイアウトを整えて、テーマカラーも使える（例: `color="$vuetify.theme.themes.light.primary"`）。
+- **柔軟性**：`startX`, `startY`で始点を自由に設定でき、`width`, `height`で矢印の長さと方向をコントロール。
+
+---
+
+### 追加のカスタマイズ
+- **矢印の先端を変更**：先端のサイズや角度を変えたい場合、`arrowSize`（`strokeWidth * 3`）や`Math.PI / 6`を調整。
+  ```javascript
+  const arrowSize = this.strokeWidth * 4; // 先端を大きく
+  const angleOffset = Math.PI / 4; // 角度を45度に
+  ```
+- **アニメーション**：矢印を動かしたいなら、SVGの`<animate>`やVueのデータバインディングで`width`/`height`を動的に変更。
+- **複数矢印**：複数の`<Arrow>`コンポーネントを重ねて、いろんな方向の矢印を描けるぜ。
+
+---
+
+試してみて、矢印が思い通りに描けるかチェックしてみてくれ！（＾▽＾） もし「特定の方向で変な表示になる」とか「もっとカスタムしたい」みたいな要望があれば、教えてくれだぜ！バッチリ対応するからな！😎
