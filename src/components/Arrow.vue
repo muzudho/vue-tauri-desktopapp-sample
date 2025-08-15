@@ -1,5 +1,5 @@
 <template>
-    <div :style="`left: ${props.x1}px; top: ${props.y1}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
+    <div :style="`left: ${getLeft()}px; top: ${getTop()}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -42,6 +42,19 @@
     // # このコンポーネントの画面 #
     // ############################
 
+    function getTop() : number {
+        return Math.min(props.startY, props.startY + props.height);
+    }
+    function getRight() : number {
+        return Math.max(props.startX, props.startX + props.width);
+    }
+    function getBottom() : number {
+        return Math.max(props.startY, props.startY + props.height);
+    }
+    function getLeft() : number {
+        return Math.min(props.startX, props.startX + props.width);
+    }
+
     const arrowHeadWidth = ref(0);
     const arrowHeadHeight = ref(0);
 
@@ -69,7 +82,7 @@
         const top = Math.min(startY, endY);
 
         // 矢印の長さを計算
-        const length = Math.sqrt(width ** 2 + height ** 2);
+        //const length = Math.sqrt(width ** 2 + height ** 2);
 
         // 矢印の先端のサイズ（線の太さに比例）
         const arrowSize = props.strokeWidth * 4;
@@ -100,17 +113,21 @@
         const relY2 = endY - top;
 
         // SVGパスを生成
+        //*
         return `
             M${arrowHeadWidth.value / 2 + relX1},${arrowHeadHeight.value / 2 + relY1} L${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2}
             M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
             M${arrowHeadWidth.value / 2 + relX2},${arrowHeadHeight.value / 2 + relY2} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
         `;
-        // // SVGパスを生成
-        // return `
-        //     M${startX},${startY} L${endX},${endY}
-        //     M${endX},${endY} L${arrowPoint1.x},${arrowPoint1.y}
-        //     M${endX},${endY} L${arrowPoint2.x},${arrowPoint2.y}
-        // `;
+        // */
+        /*
+        // SVGパスを生成
+        return `
+            M${startX},${startY} L${endX},${endY}
+            M${endX},${endY} L${arrowPoint1.x},${arrowPoint1.y}
+            M${endX},${endY} L${arrowPoint2.x},${arrowPoint2.y}
+        `;
+        */
     }
 
 </script>
