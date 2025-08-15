@@ -1,11 +1,11 @@
 import { useRouter } from 'vue-router';
 
 /**
- * スタイルを返します。
+ * 前のリンクのハイライトスタイルを取得します。
  * @param expected 
- * @returns 
+ * @returns スタイルを返します。
  */
-export function getLinkHighlight(expected:string) {
+export function getPreviousLinkHighlight(expected:string) {
     const router = useRouter();
 
     if (expected === router.options.history.state.back) {   // 前のページのパスと比較
