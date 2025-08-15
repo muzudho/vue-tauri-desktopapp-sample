@@ -14,7 +14,12 @@
             <li>📖 <router-link to="/making/json-file-loading">JSONファイルの読込だぜ！</router-link></li>
             <li>📖 <router-link to="/making/tile-crop">タイル　＞　を画像から切り抜くぜ！</router-link></li>
             <li>📖 <router-link to="/making/count-up">カウントアップするぜ！</router-link></li>
-            <li>📖 <router-link to="/making/tile-count-up">タイル　＞　でカウントアップのアニメーションするぜ！</router-link></li>
+            <li>タイル　＞　でカウントアップのアニメーションするぜ！
+                <ul>
+                    <li>📖 <router-link to="/making/tile-count-up-naive">ソースコードが初級者向け版</router-link></li>
+                    <li>📖 <router-link to="/making/tile-count-up">ソースコードが上級者向け版</router-link></li>
+                </ul>
+            </li>
             <li>📖 <router-link to="/making/tile-count-up-rpg-walk">タイル　＞　でカウントアップのアニメーションするぜ！　＞　ＲＰＧの歩行グラフィック</router-link></li>
             <li>📖 <router-link to="/making/input-axis">上下左右に移動しようぜ！</router-link></li>
             <li>📖 <router-link to="/making/input-axis-rpg-walk">上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック</router-link></li>

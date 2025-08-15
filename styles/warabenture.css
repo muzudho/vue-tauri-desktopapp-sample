@@ -8,6 +8,67 @@ h1 {
     text-align: left !important;
 }
 
+/* ヘッダーの先頭に # のアイコンを付ける */
+h1::before {
+    content: "";            /* 指定しないと、画像も表示されない */
+    display:inline-block;
+    width: 64px;            /* 切り抜く画像のサイズ */
+    height: 48px;
+    zoom:0.5;               /* なんか２倍角なので、目視確認で合わせる。 font-size: xx-large; だから？ */
+    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+    background-position: -160px 0;
+}
+
+h2::before {
+    content: "";
+    display:inline-block;
+    width: 96px;
+    height: 48px;
+    zoom:0.4;               /* なんか拡大されてるので、目視確認で合わせる。 font-size: x-large; だから？ */
+    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+    background-position: -128px 0;
+}
+
+h3::before {
+    content: "";
+    display:inline-block;
+    width: 128px;
+    height: 48px;
+    zoom:0.4;
+    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+    background-position: -96px 0;
+}
+
+h4::before {
+    content: "";
+    display:inline-block;
+    width: 160px;
+    height: 48px;
+    zoom:0.3;       /* なんか拡大されてるので、目視確認で合わせる。 font-size: large; だから？ */
+    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+    background-position: -64px 0;
+}
+
+h5::before {
+    content: "";
+    display:inline-block;
+    width: 192px;
+    height: 48px;
+    zoom:0.3;       /* なんか拡大されてるので、目視確認で合わせる。 font-size: large; だから？ */
+    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+    background-position: -32px 0;
+}
+
+h6::before {
+    content: "";
+    display:inline-block;
+    width: 224px;
+    height: 48px;
+    zoom:0.25;       /* なんか拡大されてるので、目視確認で合わせる。 font-size: medium; だから？ */
+    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+    background-position: 0px 0;
+}
+
 /* スマホ向けスタイル (画面幅が768px以下) */
 @media screen and (max-width: 768px) {
     h2 {
@@ -118,6 +179,21 @@ h1 {
         max-width: 300px;
         max-height: 300px;
         object-fit: contain;
+    }
+
+    /* 親リスト */
+    ul {
+        list-style-type: disc; /* リストのマーカー（点など）を設定 */
+    }
+    /* 子リスト */
+    ul ul {
+        padding-left: 10px; /* インデントを増やす */
+        list-style-type: circle; /* 異なるマーカーでネスト感を出す */
+    }
+    /* さらに深い子リスト */
+    ul ul ul {
+        padding-left: 20px; /* さらにインデント */
+        list-style-type: square;
     }
 }
 
@@ -232,65 +308,19 @@ h1 {
         max-height: 1024px;
         object-fit: contain;
     }
-}
 
-/* ヘッダーの先頭に # のアイコンを付ける */
-h1::before {
-    content: "";            /* 指定しないと、画像も表示されない */
-    display:inline-block;
-    width: 64px;            /* 切り抜く画像のサイズ */
-    height: 48px;
-    zoom:0.5;               /* なんか２倍角なので、目視確認で合わせる。 font-size: xx-large; だから？ */
-    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
-    background-position: -160px 0;
-}
-
-h2::before {
-    content: "";
-    display:inline-block;
-    width: 96px;
-    height: 48px;
-    zoom:0.4;               /* なんか拡大されてるので、目視確認で合わせる。 font-size: x-large; だから？ */
-    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
-    background-position: -128px 0;
-}
-
-h3::before {
-    content: "";
-    display:inline-block;
-    width: 128px;
-    height: 48px;
-    zoom:0.4;
-    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
-    background-position: -96px 0;
-}
-
-h4::before {
-    content: "";
-    display:inline-block;
-    width: 160px;
-    height: 48px;
-    zoom:0.3;       /* なんか拡大されてるので、目視確認で合わせる。 font-size: large; だから？ */
-    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
-    background-position: -64px 0;
-}
-
-h5::before {
-    content: "";
-    display:inline-block;
-    width: 192px;
-    height: 48px;
-    zoom:0.3;       /* なんか拡大されてるので、目視確認で合わせる。 font-size: large; だから？ */
-    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
-    background-position: -32px 0;
-}
-
-h6::before {
-    content: "";
-    display:inline-block;
-    width: 224px;
-    height: 48px;
-    zoom:0.25;       /* なんか拡大されてるので、目視確認で合わせる。 font-size: medium; だから？ */
-    background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
-    background-position: 0px 0;
+    /* 親リスト */
+    ul {
+        list-style-type: disc; /* リストのマーカー（点など）を設定 */
+    }
+    /* 子リスト */
+    ul ul {
+        padding-left: 40px; /* インデントを増やす */
+        list-style-type: circle; /* 異なるマーカーでネスト感を出す */
+    }
+    /* さらに深い子リスト */
+    ul ul ul {
+        padding-left: 80px; /* さらにインデント */
+        list-style-type: square;
+    }
 }
