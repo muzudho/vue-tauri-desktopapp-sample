@@ -4,20 +4,13 @@
     <h3>矢印を描こうぜ！</h3>
     <section
         class="sec-3"
-        :style="`height: ${8 * cellHeight}px;`"
-        style="position: relative;">
-        <div style="position: absolute;">
-            凡例だぜ（＾▽＾）！
+        :style="`height: ${20 * cellHeight}px;`"
+        style="position: relative; left:0; top:0; background-color: skyblue;;">
+        Grok にコードを書いてもらいながら矢印を作ってみたけど、線に太さがあってはみ出てしまうぜ、難し～（＾▽＾）！
 
-            <br/>
-            <v-checkbox
-                v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]"
-                :key="index"
-                v-model="hitboxCheckboxes"
-                :value="`${index}`"
-                :label="`矢印${index}の当たり判定`"
-                density="compact"
-                style="display: inline-block; color: blue;"></v-checkbox>
+        <div
+            :style="`width: ${10 * cellWidth}px; height: ${10 * cellHeight}px;`"
+            style="position: absolute; left:0; right:0; border: dashed 4px lightgray; background-color: pink;">
 
             <div
                 v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]" :key="index"
@@ -153,6 +146,15 @@
                 color="#ff0080"/>
 
         </div>
+        <br/>
+        <v-checkbox
+            v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]"
+            :key="index"
+            v-model="hitboxCheckboxes"
+            :value="`${index}`"
+            :label="`矢印${index}の当たり判定`"
+            density="compact"
+            style="display: inline-block; color: blue;"></v-checkbox>
     </section>
 
     <the-footer/>

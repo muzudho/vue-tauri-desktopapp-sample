@@ -122,27 +122,27 @@ h6::before {
     }
 
     section.sec-1 {
-        padding-left: 24px;
+        margin-left: 24px;
     }
 
     section.sec-2 {
-        padding-left: 44px;
+        margin-left: 44px;
     }
 
     section.sec-3 {
-        padding-left: 64px;
+        margin-left: 64px;
     }
 
     section.sec-4 {
-        padding-left: 84px;
+        margin-left: 84px;
     }
 
     section.sec-5 {
-        padding-left: 104px;
+        margin-left: 104px;
     }
 
     section.sec-6 {
-        padding-left: 124px;
+        margin-left: 124px;
     }
 
     .sec-1 img {
@@ -250,27 +250,27 @@ h6::before {
     }
 
     section.sec-1 {
-        padding-left: 64px;
+        margin-left: 64px;
     }
 
     section.sec-2 {
-        padding-left: 124px;
+        margin-left: 124px;
     }
 
     section.sec-3 {
-        padding-left: 184px;
+        margin-left: 184px;
     }
 
     section.sec-4 {
-        padding-left: 244px;
+        margin-left: 244px;
     }
 
     section.sec-5 {
-        padding-left: 304px;
+        margin-left: 304px;
     }
 
     section.sec-6 {
-        padding-left: 364px;
+        margin-left: 364px;
     }
 
     .sec-1 img {
