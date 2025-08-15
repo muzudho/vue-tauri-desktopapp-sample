@@ -46,6 +46,37 @@
 
     const { startX, startY, width, height } = props;
 
+    // ++++++++
+    // + 矢尻 +
+    // ++++++++
+    //
+    //        D
+    //         ＼
+    //  A--------B
+    //         ／
+    //        C
+    //
+
+    // 矢じり（アローヘッド）の長さ（線の太さに比例）
+    const arrowHeadSize = props.strokeWidth * 4;
+
+    // 矢印の角度を計算
+    const angle = Math.atan2(height, width);
+
+    // 矢尻の２つの羽の横幅、縦幅
+    const arrowHeadSizeC = {
+        width: arrowHeadSize * Math.cos(angle - Math.PI / 6),
+        height: arrowHeadSize * Math.sin(angle - Math.PI / 6),
+    }
+    const arrowHeadSizeD = {
+        width: arrowHeadSize * Math.cos(angle + Math.PI / 6),
+        height: arrowHeadSize * Math.sin(angle + Math.PI / 6),
+    };
+
+    // ++++++++++
+    // + その他 +
+    // ++++++++++
+
     // 終点の計算
     const endX = startX + width;
     const endY = startY + height;
@@ -58,12 +89,6 @@
     // 矢印の長さを計算
     //const length = Math.sqrt(width ** 2 + height ** 2);
 
-    // 矢じり（アローヘッド）の長さ（線の太さに比例）
-    const arrowHeadSize = props.strokeWidth * 4;
-
-    // 矢印の角度を計算
-    const angle = Math.atan2(height, width);
-
     // 矢印の先端の2つの点
     //
     //        D
@@ -73,12 +98,12 @@
     //        C
     //
     const arrowHeadC = {
-        x: endX - arrowHeadSize * Math.cos(angle - Math.PI / 6),
-        y: endY - arrowHeadSize * Math.sin(angle - Math.PI / 6),
+        x: endX - arrowHeadSizeC.width,
+        y: endY - arrowHeadSizeC.height,
     };
     const arrowHeadD = {
-        x: endX - arrowHeadSize * Math.cos(angle + Math.PI / 6),
-        y: endY - arrowHeadSize * Math.sin(angle + Math.PI / 6),
+        x: endX - arrowHeadSizeD.width,
+        y: endY - arrowHeadSizeD.height,
     };
 
     const arrowHeadLeft = Math.min(arrowHeadC.x, arrowHeadD.x);
