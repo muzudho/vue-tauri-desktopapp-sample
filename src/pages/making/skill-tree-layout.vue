@@ -2,16 +2,23 @@
     <the-header/>
 
     <h3>説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！</h3>
-    <section class="sec-3" style="position: relative;">
-        <div style="position: absolute; height: 256px;">
+    <section
+        class="sec-3"
+        :style="`height: ${8 * cellHeight}px;`"
+        style="position: relative;">
+        <div style="position: absolute;">
             凡例だぜ（＾▽＾）！
 
-            <div class="rectangle d-flex align-center justify-center" style="position:absolute; border:solid 4px brown; width:256px; height:64px;">
+            <div
+                class="rectangle d-flex align-center justify-center"
+                :style="`left: ${0 * cellWidth}px; top: ${1 * cellHeight}px; width: ${8 * cellWidth}px; height: ${2 * cellHeight}px;`"
+                style="position:absolute; border:solid 4px brown;">
                 初期スキル
             </div>
+
             <Arrow
                 :x1="0"
-                :y1="64"
+                :y1="2 * cellHeight"
                 :x2="150"
                 :y2="100"
                 :stroke-width="8"
@@ -43,5 +50,13 @@
     import Arrow from '../../components/Arrow.vue'; // Tauri だと明示的にインポートを指定する必要がある。
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+
+
+    // ##############
+    // # 共有データ #
+    // ##############
+
+    const cellWidth = 32;
+    const cellHeight = 32;
 
 </script>
