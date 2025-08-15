@@ -159,6 +159,10 @@
     const qAy = pAy + boldTop;
     const qBx = pBx + boldLeft;
     const qBy = pBy + boldTop;
+    const qCx = pCx + boldLeft;
+    const qCy = pCy + boldTop;
+    const qDx = pDx + boldLeft;
+    const qDy = pDy + boldTop;
 
 
     // ############################
@@ -166,11 +170,6 @@
     // ############################
 
     function generateArrowPath() : string {
-
-        const qCx = pCx + arrowHeadWidth / 2;
-        const qCy = pCy + arrowHeadHeight / 2;
-        const qDx = pDx + arrowHeadWidth / 2;
-        const qDy = pDy + arrowHeadHeight / 2;
 
         // SVGパスを生成
         //
