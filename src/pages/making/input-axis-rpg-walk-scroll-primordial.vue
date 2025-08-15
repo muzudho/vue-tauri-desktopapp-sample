@@ -131,8 +131,8 @@
                 position: 'absolute',
                 top: `${homeTop + boardTop.value}px`,
                 left: `${homeLeft + boardLeft.value}px`,
-                width: "32px",
-                height: "32px",
+                width: `${cellWidth}px`,
+                height: `${cellHeight}px`,
                 zoom: 4,
                 border: "solid 1px lightgray",
             };
