@@ -45,8 +45,6 @@
     const arrowHeadWidth = ref(0);
     const arrowHeadHeight = ref(0);
 
-    const canvasMargin = Math.floor(props.strokeWidth / 2);
-
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const svgWidth = computed(() => {
         const left = Math.min(props.x1, props.x1 + props.width);
@@ -91,14 +89,14 @@
         const headMaxX = Math.max(arrowPoint1.x, arrowPoint2.x);
         const headMinY = Math.min(arrowPoint1.y, arrowPoint2.y);
         const headMaxY = Math.max(arrowPoint1.y, arrowPoint2.y);
-        arrowHeadWidth.value = headMaxX - headMinX;
-        arrowHeadHeight.value = headMaxY - headMinY;
+        arrowHeadWidth.value = headMaxX - headMinX + props.strokeWidth;
+        arrowHeadHeight.value = headMaxY - headMinY + props.strokeWidth;
 
         // SVGパスを生成
         return `
-            M${canvasMargin + x1 - left},${canvasMargin + y1 - top} L${canvasMargin + x2 - left},${canvasMargin + y2 - top}
-            M${canvasMargin + x2 - left},${canvasMargin + y2 - top} L${canvasMargin + arrowPoint1.x - left},${canvasMargin + arrowPoint1.y - top}
-            M${canvasMargin + x2 - left},${canvasMargin + y2 - top} L${canvasMargin + arrowPoint2.x - left},${canvasMargin + arrowPoint2.y - top}
+            M${arrowHeadWidth.value / 2 + x1 - left},${arrowHeadHeight.value / 2 + y1 - top} L${arrowHeadWidth.value / 2 + x2 - left},${arrowHeadHeight.value / 2 + y2 - top}
+            M${arrowHeadWidth.value / 2 + x2 - left},${arrowHeadHeight.value / 2 + y2 - top} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
+            M${arrowHeadWidth.value / 2 + x2 - left},${arrowHeadHeight.value / 2 + y2 - top} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
         `;
     }
 
