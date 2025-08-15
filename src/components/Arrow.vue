@@ -1,5 +1,5 @@
 <template>
-    <div :style="`left: ${getLeft()}px; top: ${getTop()}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
+    <div :style="`left: ${left}px; top: ${top}px; width: ${svgWidth}px; height: ${svgHeight}px;`" style="position: absolute; border: dashed 1px gray;">
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -38,83 +38,89 @@
     });
 
 
-    // ############################
-    // # このコンポーネントの画面 #
-    // ############################
+    // ##############
+    // # 共通データ #
+    // ##############
 
-    function getTop() : number {
-        return Math.min(props.startY, props.startY + props.height);
-    }
-    // function getRight() : number {
-    //     return Math.max(props.startX, props.startX + props.width);
-    // }
-    // function getBottom() : number {
-    //     return Math.max(props.startY, props.startY + props.height);
-    // }
-    function getLeft() : number {
-        return Math.min(props.startX, props.startX + props.width);
-    }
+    const { startX, startY, width, height } = props;
 
-    const arrowHeadWidth = ref(0);
-    const arrowHeadHeight = ref(0);
+    // 終点の計算
+    const endX = startX + width;
+    const endY = startY + height;
+
+    const left = Math.min(startX, endX);
+    const top = Math.min(startY, endY);
+
+    // 矢印の長さを計算
+    //const length = Math.sqrt(width ** 2 + height ** 2);
+
+    // 矢じり（アローヘッド）の長さ（線の太さに比例）
+    const arrowHeadSize = props.strokeWidth * 4;
+
+    // 矢印の角度を計算
+    const angle = Math.atan2(height, width);
+
+    // 矢印の先端の2つの点
+    //
+    //        D
+    //         ＼
+    //  A--------B
+    //         ／
+    //        C
+    //
+    const arrowHeadC = {
+        x: endX - arrowHeadSize * Math.cos(angle - Math.PI / 6),
+        y: endY - arrowHeadSize * Math.sin(angle - Math.PI / 6),
+    };
+    const arrowHeadD = {
+        x: endX - arrowHeadSize * Math.cos(angle + Math.PI / 6),
+        y: endY - arrowHeadSize * Math.sin(angle + Math.PI / 6),
+    };
+
+    const arrowHeadLeft = Math.min(arrowHeadC.x, arrowHeadD.x);
+    const arrowHeadRight = Math.max(arrowHeadC.x, arrowHeadD.x);
+    const arrowHeadTop = Math.min(arrowHeadC.y, arrowHeadD.y);
+    const arrowHeadBottom = Math.max(arrowHeadC.y, arrowHeadD.y);
+
+    const arrowHeadLeftWidth = endX - arrowHeadLeft;    // 矢尻が終点より左にどれだけはみ出ているか。
+    const arrowHeadRightWidth = arrowHeadRight - endX;
+    const arrowHeadTopWidth = endY - arrowHeadTop;
+    const arrowHeadBottomWidth = arrowHeadBottom - endY;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const svgWidth = computed(() => {
-        const left = Math.min(props.startX, props.startX + props.width);
-        const right = Math.max(props.startX, props.startX + props.width);
+        const left = Math.min(props.startX, endX);
+        const right = Math.max(props.startX, endX);
         return (right - left) + arrowHeadWidth.value;
     });
 
     const svgHeight = computed(() => {
-        const top = Math.min(props.startY, props.startY + props.height);
-        const bottom = Math.max(props.startY, props.startY + props.height);
+        const top = Math.min(props.startY, endY);
+        const bottom = Math.max(props.startY, endY);
         return (bottom - top) + arrowHeadHeight.value;
     });
 
+
+    // ############################
+    // # このコンポーネントの画面 #
+    // ############################
+
+    const arrowHeadWidth = ref(0);
+    const arrowHeadHeight = ref(0);
+
     function generateArrowPath() : string {
-        const { startX, startY, width, height } = props;
 
-        // 終点の計算
-        const endX = startX + width;
-        const endY = startY + height;
-
-        const left = Math.min(startX, endX);
-        const top = Math.min(startY, endY);
-
-        // 矢印の長さを計算
-        //const length = Math.sqrt(width ** 2 + height ** 2);
-
-        // 矢印の先端のサイズ（線の太さに比例）
-        const arrowSize = props.strokeWidth * 4;
-
-        // 矢印の角度を計算
-        const angle = Math.atan2(height, width);
-
-        // 矢印の先端の2つの点
-        const arrowPoint1 = {
-            x: endX - arrowSize * Math.cos(angle - Math.PI / 6),
-            y: endY - arrowSize * Math.sin(angle - Math.PI / 6),
-        };
-        const arrowPoint2 = {
-            x: endX - arrowSize * Math.cos(angle + Math.PI / 6),
-            y: endY - arrowSize * Math.sin(angle + Math.PI / 6),
-        };
-
-        const headMinX = Math.min(arrowPoint1.x, arrowPoint2.x);
-        const headMaxX = Math.max(arrowPoint1.x, arrowPoint2.x);
-        const headMinY = Math.min(arrowPoint1.y, arrowPoint2.y);
-        const headMaxY = Math.max(arrowPoint1.y, arrowPoint2.y);
-        arrowHeadWidth.value = headMaxX - headMinX + props.strokeWidth;
-        arrowHeadHeight.value = headMaxY - headMinY + props.strokeWidth;
+        arrowHeadWidth.value = arrowHeadRight - arrowHeadLeft + props.strokeWidth;
+        arrowHeadHeight.value = arrowHeadBottom - arrowHeadTop + props.strokeWidth;
 
         const pAx = arrowHeadWidth.value / 2 + startX - left;
         const pAy = arrowHeadHeight.value / 2 + startY - top;
         const pBx = arrowHeadWidth.value / 2 + endX - left;
         const pBy = arrowHeadHeight.value / 2 + endY - top;
-        const pCx = arrowHeadWidth.value / 2 + arrowPoint1.x - left;
-        const pCy = arrowHeadHeight.value / 2 + arrowPoint1.y - top;
-        const pDx = arrowHeadWidth.value / 2 + arrowPoint2.x - left;
-        const pDy = arrowHeadHeight.value / 2 + arrowPoint2.y - top;
+        const pCx = arrowHeadWidth.value / 2 + arrowHeadC.x - left;
+        const pCy = arrowHeadHeight.value / 2 + arrowHeadC.y - top;
+        const pDx = arrowHeadWidth.value / 2 + arrowHeadD.x - left;
+        const pDy = arrowHeadHeight.value / 2 + arrowHeadD.y - top;
 
         // SVGパスを生成
         //
@@ -129,15 +135,6 @@
             M${pBx},${pBy} L${pCx},${pCy}
             M${pBx},${pBy} L${pDx},${pDy}
         `;
-
-        /*
-        // SVGパスを生成
-        return `
-            M${arrowHeadWidth.value / 2 + relX1},${arrowHeadHeight.value / 2 + relY1} L${arrowHeadWidth.value / 2 + pBx},${arrowHeadHeight.value / 2 + pBy}
-            M${arrowHeadWidth.value / 2 + pBx},${arrowHeadHeight.value / 2 + pBy} L${arrowHeadWidth.value / 2 + arrowPoint1.x - left},${arrowHeadHeight.value / 2 + arrowPoint1.y - top}
-            M${arrowHeadWidth.value / 2 + pBx},${arrowHeadHeight.value / 2 + pBy} L${arrowHeadWidth.value / 2 + arrowPoint2.x - left},${arrowHeadHeight.value / 2 + arrowPoint2.y - top}
-        `;
-         */
     }
 
 </script>
