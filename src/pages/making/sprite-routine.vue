@@ -69,7 +69,7 @@
     const o1Speed = ref<number>(2);     // 移動速度
     const o1Style = computed(() => ({
         top: `${o1Top.value}px`,
-        left: `${o1Left.value + (count.value * o1Speed.value) % 100}px`,
+        left: `${o1Left.value + (count.value * o1Speed.value) % 256}px`,
     }));
 
 
