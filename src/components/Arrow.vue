@@ -121,12 +121,40 @@
     const arrowHeadHeight = arrowHeadTopWidth + arrowHeadBottomWidth;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
-    const boldWidth = Math.max(arrowHeadWidth, props.strokeWidth);
-    const boldHeight = Math.max(arrowHeadHeight, props.strokeWidth);
-    const svgWidth = Math.abs(width) + boldWidth;
-    const svgHeight = Math.abs(height) + boldHeight;
-    const svgCenterX = svgWidth / 2;
-    const svgCenterY = svgHeight / 2;
+    const boldLeft = Math.max(arrowHeadLeftWidth, props.strokeWidth / 2);
+    const boldRight = Math.max(arrowHeadRightWidth, props.strokeWidth / 2);
+    const boldTop = Math.max(arrowHeadTopWidth, props.strokeWidth / 2);
+    const boldBottom = Math.max(arrowHeadBottomWidth, props.strokeWidth);
+    const svgWidth = Math.abs(width) + boldLeft + boldRight;
+    const svgHeight = Math.abs(height) + boldTop + boldBottom;
+    const centerXInSvg = svgWidth / 2;
+    const centerYInSvg = svgHeight / 2;
+
+    // キャンバスを考えない位置
+    //
+    //        D
+    //         ＼
+    //  A--------B
+    //         ／
+    //        C
+    //
+    const pAx = startX - left;
+    const pAy = startY - top;
+    const pBx = endX - left;
+    const pBy = endY - top;
+
+    // キャンバスの中での始点の位置
+    //
+    //        D
+    //         ＼
+    //  A--------B
+    //         ／
+    //        C
+    //
+    const qAx = pAx + boldLeft;
+    const qAy = pAy + boldTop;
+    const qBx = pBx + arrowHeadWidth / 2;
+    const qBy = pBy + arrowHeadHeight / 2;
 
 
     // ############################
@@ -135,15 +163,6 @@
 
     function generateArrowPath() : string {
 
-        const startXInCanvas = startX - left;
-        const startYInCanvas = startY - top;
-        const endXInCanvs = endX - left;
-        const endYInCanvas = endY - top;
-
-        const pAx = arrowHeadWidth / 2 + startXInCanvas;
-        const pAy = arrowHeadHeight / 2 + startYInCanvas;
-        const pBx = arrowHeadWidth / 2 + endXInCanvs;
-        const pBy = arrowHeadHeight / 2 + endYInCanvas;
         const pCx = arrowHeadWidth / 2 + arrowHeadC.x - left;
         const pCy = arrowHeadHeight / 2 + arrowHeadC.y - top;
         const pDx = arrowHeadWidth / 2 + arrowHeadD.x - left;
@@ -158,9 +177,9 @@
         //        C
         //
         return `
-            M${pAx},${pAy} L${pBx},${pBy}
-            M${pBx},${pBy} L${pCx},${pCy}
-            M${pBx},${pBy} L${pDx},${pDy}
+            M${qAx},${qAy} L${qBx},${qBy}
+            M${qBx},${qBy} L${pCx},${pCy}
+            M${qBx},${qBy} L${pDx},${pDy}
         `;
     }
 
