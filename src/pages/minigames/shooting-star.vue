@@ -22,29 +22,21 @@
                 ［ゲームスタート］ボタンを押すと、ゲームが始まるぜ。<br/>
                 60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、エンターキーを押してくれだぜ。<br/>
             </p>
-        </div>
+        </div><br/>
         <br/>
 
         <!-- ボタンを並べる -->
-        <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
-        <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
+        <div>
+            <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
+            <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
+            スコア： {{ misc.score }}　残り時間: {{ Math.floor((misc.maxCount - count) / seconds) }} . {{ (misc.maxCount - count) % seconds }}
+        </div>
 
-        <br/>
         <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch-dev
             ref="stopwatch1"
             v-on:countUp="(countNum) => { count = countNum; }"
             style="display: none;" />
-        <br/>
-        <br/>
-        <p>残り時間: {{ Math.floor((misc.maxCount - count) / seconds) }} . {{ (misc.maxCount - count) % seconds }}</p>
-        <p>リロード・タイム: {{ finder1.reloadTime }}</p>
-        <br/>
-
-        <p>スコア： {{ misc.score }}</p>
-        <br/>
-
-        <p></p>
 
         <!-- ゲーム画面領域（宇宙） -->
         <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
@@ -83,11 +75,15 @@
                 
         </div>
 
-        <br/>
-        <p>元画像のタイルマップを表示：</p>
-        <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/><br/>
-        <v-img src="/img/making/202508__warabenture__16--2357-8counts-red.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
-        ：ここまで。
+        <!-- デバッグ用 -->
+        <!--
+            <p>リロード・タイム: {{ finder1.reloadTime }}</p>
+            <br/>
+            <p>元画像のタイルマップを表示：</p>
+            <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/><br/>
+            <v-img src="/img/making/202508__warabenture__16--2357-8counts-red.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
+            ：ここまで。
+        -->
     </section>
 
     <the-footer/>
@@ -176,6 +172,11 @@
         // ゲーム開始から3秒後、星非表示
         if (newCount == 3 * seconds) {
             star1.visibility = 'hidden';
+        }
+
+        if (newCount >= misc.maxCount) {
+            // ゲーム停止
+            stopwatch1.value?.stopTimer();  // タイマーをストップ
         }
     });
 
@@ -323,9 +324,7 @@
                 if (finder1.motionWait<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                     if (finder1.input.Enter) {
-                        // 撮影
-                        stopwatch1.value?.stopTimer();  // タイマーをストップ
-                        cameraShot();
+                        cameraShot();   // 撮影
                     }
 
                     if (finder1.input.ArrowLeft) {
