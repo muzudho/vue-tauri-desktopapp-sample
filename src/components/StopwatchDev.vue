@@ -71,4 +71,15 @@
         stopTimer();
     }    
 
+
+    // ################
+    // # エクスポーズ #
+    // ################
+
+    defineExpose({
+        startTimer,
+        stopTimer,
+        resetTimer,
+    });
+
 </script>

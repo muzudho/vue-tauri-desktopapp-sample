@@ -8,6 +8,7 @@
         <br/>
         テスト：<br/>
         <stopwatch-dev
+            ref="stopwatch1"
             v-on:countUp="(countNum) => { count = countNum; }"
         /><br/>
         ：テスト<br/>
@@ -86,6 +87,8 @@
     // + カウンター +
     // ++++++++++++++
 
+    const stopwatch1 = ref<InstanceType<typeof StopwatchDev> | null>(null); // StopwatchDevのインスタンス
+
     const count = ref<number>(0);   // カウントの初期値
     watch(count, (newCount) => {
         // カウントが変わったら、何か処理をしたい。
@@ -134,7 +137,8 @@
         rowNum: 3,              // スプライトの行数
         speed: 4,               // 移動速度
         input: <Record<string, boolean>>{  // 入力
-            ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
+            // アルファベット順
+            ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
         },
         motionWait: 0,          // 入力キーごとに用意したい
         motion: ref<Record<string, number>>({  // 入力
@@ -192,8 +196,16 @@
                     player1.motion["yAxis"] = 0;
                 }
                 
-                // 入力（上下左右への移動）をモーションに変換
+                // ++++++++++++++++++++++++++++++
+                // + キー入力をモーションに変換 +
+                // ++++++++++++++++++++++++++++++
                 if (player1.motionWait<=0) {   // ウェイトが無ければ、入力を受け付ける。
+
+                    if (player1.input.Enter) {
+                        // タイマーをストップ
+                        stopwatch1.value?.stopTimer();
+                    }
+
                     if (player1.input.ArrowLeft) {
                         player1.motion["xAxis"] = moLeft; // 左
                     }
