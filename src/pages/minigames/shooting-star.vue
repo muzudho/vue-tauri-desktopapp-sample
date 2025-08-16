@@ -37,10 +37,10 @@
                 :style="starStyle"
                 style="position:absolute;" /><br/>
 
-            <!-- プレイヤー１（点線の枠） -->
+            <!-- カメラのファインダー（点線の枠） -->
             <div
-                class="cursor"
-                :style="p1Style"
+                class="finder"
+                :style="finderStyle"
                 style="position:absolute;" ></div>
             
         </div>
@@ -76,8 +76,16 @@
     // # 効果音 #
     // ##########
 
-    let shutterSound: HTMLAudioElement;     // カメラで撮影したときの効果音
+    let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
+    let sfxMiss: HTMLAudioElement;              // ミス音
 
+    /**
+     * 効果音をロードする（jsfxrで作った効果音）
+     */
+    function loadSfx() : void {
+        sfxCameraShutter = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
+        sfxMiss = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
+    }
 
     // ##############
     // # 共有データ #
@@ -133,11 +141,11 @@
         toRight: 0,   // 右へ移動するなら正の数、左に移動するなら負の数
     });
 
-    // ++++++++++++++++++++++++++++
-    // + プレイヤー１（点線の枠） +
-    // ++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++
+    // + カメラのファインダー（点線の枠） +
+    // ++++++++++++++++++++++++++++++++++++
 
-    const player1 = reactive({
+    const finder1 = reactive({
         left: 6 * cellWidth,    // スプライトのX座標
         top: 4 * cellHeight,    // スプライトのY座標
         colNum: 4,              // スプライトの列数
@@ -176,18 +184,17 @@
         startGameLoop();
         //startTimer();
 
-        // 効果音ロード
-        shutterSound = new Audio('/wav/202508__sfx__16--2117.wav'); // jsfxrで作った効果音
+        loadSfx();
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
-            if (player1.input.hasOwnProperty(e.key)) {
-                player1.input[e.key] = true;
+            if (finder1.input.hasOwnProperty(e.key)) {
+                finder1.input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
-            if (player1.input.hasOwnProperty(e.key)) {
-                player1.input[e.key] = false;
+            if (finder1.input.hasOwnProperty(e.key)) {
+                finder1.input[e.key] = false;
             }
         });
 
@@ -199,64 +206,64 @@
         function startGameLoop() : void {
             const update = () => {
                 // モーション・タイマー
-                player1.motionWait -= 1;
+                finder1.motionWait -= 1;
 
-                if (player1.motionWait==0) {
-                    player1.motion["xAxis"] = 0;    // クリアー
-                    player1.motion["yAxis"] = 0;
+                if (finder1.motionWait==0) {
+                    finder1.motion["xAxis"] = 0;    // クリアー
+                    finder1.motion["yAxis"] = 0;
                 }
                 
                 // ++++++++++++++++++++++++++++++
                 // + キー入力をモーションに変換 +
                 // ++++++++++++++++++++++++++++++
-                if (player1.motionWait<=0) {   // ウェイトが無ければ、入力を受け付ける。
+                if (finder1.motionWait<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
-                    if (player1.input.Enter) {
-                        // タイマーをストップ
-                        shutterSound.play();
-                        stopwatch1.value?.stopTimer();
+                    if (finder1.input.Enter) {
+                        // 撮影
+                        stopwatch1.value?.stopTimer();  // タイマーをストップ
+                        cameraShot();
                     }
 
-                    if (player1.input.ArrowLeft) {
-                        player1.motion["xAxis"] = moLeft; // 左
+                    if (finder1.input.ArrowLeft) {
+                        finder1.motion["xAxis"] = moLeft; // 左
                     }
 
-                    if (player1.input.ArrowRight) {
-                        player1.motion["xAxis"] = moRight;  // 右
+                    if (finder1.input.ArrowRight) {
+                        finder1.motion["xAxis"] = moRight;  // 右
                     }
 
-                    if (player1.input.ArrowUp) {
-                        player1.motion["yAxis"] = moUp;   // 上
+                    if (finder1.input.ArrowUp) {
+                        finder1.motion["yAxis"] = moUp;   // 上
                     }
 
-                    if (player1.input.ArrowDown) {
-                        player1.motion["yAxis"] = moDown;   // 下
+                    if (finder1.input.ArrowDown) {
+                        finder1.motion["yAxis"] = moDown;   // 下
                     }
 
-                    if (player1.motion["xAxis"]!=0 || player1.motion["yAxis"]!=0) {
-                        player1.motionWait = 8;    // フレーム数を設定
+                    if (finder1.motion["xAxis"]!=0 || finder1.motion["yAxis"]!=0) {
+                        finder1.motionWait = 8;    // フレーム数を設定
                     }
                 }
 
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
-                if (player1.motion["xAxis"]==1) {   // 右
-                    if (player1.left < (board.cols - player1.colNum) * cellWidth) {    // 境界チェック
-                        player1.left += player1.speed;
+                if (finder1.motion["xAxis"]==1) {   // 右
+                    if (finder1.left < (board.cols - finder1.colNum) * cellWidth) {    // 境界チェック
+                        finder1.left += finder1.speed;
                     }
-                } else if (player1.motion["xAxis"]==-1) {  // 左
-                    if (0 < player1.left) {    // 境界チェック
-                        player1.left -= player1.speed;
+                } else if (finder1.motion["xAxis"]==-1) {  // 左
+                    if (0 < finder1.left) {    // 境界チェック
+                        finder1.left -= finder1.speed;
                     }
                 }
 
-                if (player1.motion["yAxis"]==-1) {  // 上
-                    if (0 < player1.top) {    // 境界チェック
-                        player1.top -= player1.speed;
+                if (finder1.motion["yAxis"]==-1) {  // 上
+                    if (0 < finder1.top) {    // 境界チェック
+                        finder1.top -= finder1.speed;
                     }
-                } else if (player1.motion["yAxis"]==1) {   // 下
-                    if (player1.top < (board.rows - player1.rowNum) * cellHeight) {    // 境界チェック
-                        player1.top += player1.speed;
+                } else if (finder1.motion["yAxis"]==1) {   // 下
+                    if (finder1.top < (board.rows - finder1.rowNum) * cellHeight) {    // 境界チェック
+                        finder1.top += finder1.speed;
                     }
                 }
 
@@ -271,6 +278,35 @@
     });
 
 
+    // ################
+    // # サブルーチン #
+    // ################
+
+    /**
+     * カメラショット処理
+     */
+    function cameraShot() : void {
+        // ファインダーの枠内の星の数を数えます。
+
+        // ファインダーの位置とサイズ
+        const finderLeftCols = finder1.left / cellWidth;
+        const finderTopCols = finder1.top / cellHeight;
+        const finderRightEndCols = finderLeftCols + finder1.colNum;
+        const finderBottomEndCols = finderTopCols + finder1.rowNum;
+
+        // ファインダーの枠内に星を含むか？
+        if (
+            finderLeftCols <= star1.cols && star1.cols <= finderRightEndCols &&
+            finderTopCols <= star1.rows && star1.rows <= finderBottomEndCols) {
+            // 星を含む
+            sfxCameraShutter.play();
+
+        // 星を含まない
+        } else {
+            sfxMiss.play();
+        }
+    }
+
     // ############
     // # スタイル #
     // ############
@@ -282,17 +318,17 @@
         width: `${cellWidth}px`,
         height: `${cellHeight}px`,
     }));
-    const p1Style = computed(() => ({
-        top: `${player1.top}px`,
-        left: `${player1.left}px`,
-        width: `${player1.colNum * cellWidth}px`,
-        height: `${player1.rowNum * cellHeight}px`,
+    const finderStyle = computed(() => ({
+        top: `${finder1.top}px`,
+        left: `${finder1.left}px`,
+        width: `${finder1.colNum * cellWidth}px`,
+        height: `${finder1.rowNum * cellHeight}px`,
     }));
 
 </script>
 
 <style scoped>
-    div.cursor {
+    div.finder {
         position: relative; border:dashed 4px #f0f0f0;
     }
 </style>
