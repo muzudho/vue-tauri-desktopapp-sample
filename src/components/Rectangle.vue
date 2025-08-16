@@ -20,8 +20,8 @@
     // ####################################
 
     interface Props {
-        startX: number;             // 始点のX座標
-        startY: number;             // 始点のY座標
+        left: number;             // 始点のX座標
+        top: number;              // 始点のY座標
         width: number;          // X方向の長さ
         height: number;         // Y方向の長さ
         strokeWidth: number;    // 線の太さ
@@ -29,8 +29,8 @@
     }
     // デフォルト値を設定
     const props = withDefaults(defineProps<Props>(), {
-        startX: 0,              // 始点のX座標
-        startY: 0,              // 始点のY座標
+        left: 0,              // 始点のX座標
+        top: 0,              // 始点のY座標
         width: 32,         // 終点のX座標
         height: 32,        // 終点のY座標
         strokeWidth: 4,     // 線の太さ
@@ -42,19 +42,7 @@
     // # 共通データ #
     // ##############
 
-    const { startX, startY, width, height } = props;
-
-    // 終点の計算
-    const endX = startX + width;
-    const endY = startY + height;
-
-    const top = Math.min(startY, endY);
-    // const right = Math.max(startX, endX);
-    // const bottom = Math.max(startY, endY);
-    const left = Math.min(startX, endX);
-
-    // 直線の長さを計算
-    //const length = Math.sqrt(width ** 2 + height ** 2);
+    const { left, top, width, height } = props;
 
     // （キャンバスの余白や線の太さを考えない）数学的な頂点の位置
     //
@@ -63,14 +51,14 @@
     //  |        |
     //  D--------C
     //
-    const pAx = startX          - left;
-    const pAy = startY          - top;
-    const pBx = startX + width  - left;
-    const pBy = startY          - top;
-    const pCx = startX + width  - left;
-    const pCy = startY + height - top;
-    const pDx = startX          - left;
-    const pDy = startY + height - top;
+    const pAx = 0;
+    const pAy = 0;
+    const pBx = 0 + width;
+    const pBy = 0;
+    const pCx = 0 + width;
+    const pCy = 0 + height;
+    const pDx = 0;
+    const pDy = 0 + height;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const boldLeft = props.strokeWidth / 2;

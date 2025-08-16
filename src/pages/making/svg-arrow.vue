@@ -170,8 +170,8 @@
     <section
         class="sec-4"
         style="position: relative; left:0; top:0;">
-        線には太さがあって、角が飛び出てしまうぜ（＾▽＾）<br/>
-        中心がちょっとずれたり、右側と下側はちょっと食み出るけど、調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
+        角は丸く処理していないし、回転もできないぜ（＾▽＾）<br/>
+        調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
 
         <div
             :style="`width: ${10 * cellWidth}px; height: ${10 * cellHeight}px;`"
@@ -179,12 +179,21 @@
 
             <!-- 0 -->
             <Rectangle
-                :startX="startX * cellWidth"
-                :startY="startY * cellHeight"
-                :width="0 * cellWidth"
-                :height="-5 * cellHeight"
+                :left="startX * cellWidth"
+                :top="(startY + 1) * cellHeight"
+                :width="4 * cellWidth"
+                :height="3 * cellHeight"
                 :stroke-width="8"
-                color="#ff0000"/>
+                color="#ff3300"/>
+
+            <!-- 0 -->
+            <Rectangle
+                :left="(startX - 3) * cellWidth"
+                :top="(startY - 4) * cellHeight"
+                :width="3 * cellWidth"
+                :height="4 * cellHeight"
+                :stroke-width="8"
+                color="#00ff33"/>
         </div>
         <br/>
     </section>
