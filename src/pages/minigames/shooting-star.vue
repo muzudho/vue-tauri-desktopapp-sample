@@ -7,7 +7,7 @@
         <!-- ゲームの操作方法 -->
         <v-btn @click="misc.isShowingManual = !misc.isShowingManual">{{ misc.isShowingManual ? 'ゲームの遊び方・操作方法を閉じる' : 'ゲームの遊び方・操作方法を表示' }}</v-btn>
         <div v-if="misc.isShowingManual">
-            <p>このゲームは、星を撮影する、という見立てのゲームだぜ。</p>
+            <p>このゲームは、星を撮影する、という状況を見立てたゲームだぜ。</p>
             <br/>
             <p>操作で使うコントローラーは以下のものだぜ。</p>
             <ul>
@@ -20,15 +20,18 @@
                 下に黒い画面が見えるように、ウィンドウを広げてくれだぜ。<br/>
                 この黒い画面は宇宙な。<br/>
                 ［ゲームスタート］ボタンを押すと、ゲームが始まるぜ。<br/>
-                60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、エンターキーを押してくれだぜ。<br/>
+                たまに星が流れてくる。<br/>
+                60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、エンターキーを押してくれだぜ。これで 100点 だぜ。<br/>
+                <br/>
+                飽きたら終わりだぜ。<br/>
             </p>
         </div><br/>
         <br/>
 
         <!-- ボタンを並べる -->
         <div>
-            <v-btn @click="startGame($event)">{{ misc.startButtonText }}</v-btn>
-            <v-btn @click="pauseGame($event)">{{ misc.pauseButtonText }}</v-btn>
+            <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
+            <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
 
             <!-- フォーカスを外すためのダミー・ボタンです -->
             <v-btn id="dammyButton">何もしないボタン</v-btn>
@@ -486,7 +489,13 @@
         //startTimer();
 
         // キーボードイベント
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // 上下キーの場合
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
             if (finder1.input.hasOwnProperty(e.key)) {
                 finder1.input[e.key] = true;
             }
@@ -597,10 +606,8 @@
         star1.visibility = 'hidden';
     }
 
-    function startGame(event: Event) : void {
-        //(event.target as HTMLElement).blur();   // フォーカスを外す
-        //document.body.focus();  // 何もないところにフォーカスを当てる
-        document.getElementById("dammyButton")?.focus();
+    function startGame() : void {
+        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(misc.isPlaying) {
             // ゲームを終了させます
@@ -614,10 +621,8 @@
         misc.isPlaying = !misc.isPlaying;
     }
 
-    function pauseGame(event: Event) : void {
-        //(event.target as HTMLElement).blur();   // フォーカスを外す
-        //document.body.focus();  // 何もないところにフォーカスを当てる
-        document.getElementById("dammyButton")?.focus();
+    function pauseGame() : void {
+        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(misc.isPause) {
             stopwatch1.value?.startTimer();  // タイマーをスタート
@@ -638,7 +643,6 @@
         if (finder1.reloadTime > 0) {
             // リロード中
             if (!isSfxBuzzerPlaying.value) {
-                isSfxBuzzerPlaying.value = true;
                 // ブザー音が停止中なら鳴らす
                 sfxBuzzer.play();
             }
@@ -663,7 +667,6 @@
         // 星を含まない
         } else {
             if (!isSfxMissPlaying.value) {
-                isSfxMissPlaying.value = true;
                 // ミス音が停止中なら鳴らす
                 sfxMiss.play();
             }
@@ -675,7 +678,6 @@
 
     function niceShot() : void {
         if (!isSfxCameraShutterPlaying.value) {
-            isSfxCameraShutterPlaying.value = true;
             // カメラのシャッター音が停止中なら鳴らす
             sfxCameraShutter.play();
         }
