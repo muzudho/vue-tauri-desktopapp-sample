@@ -390,6 +390,7 @@
         left: `${finder1.left}px`,
         width: `${finder1.colNum * board.cellWidth}px`,
         height: `${finder1.rowNum * board.cellHeight}px`,
+        border: `dashed 4px ${finder1.reloadTime > 0 ? '#ff0000' : '#f0f0f0'}`, // リロード中は赤い枠
     }));
     const reloadPieStyle = computed(() => ({
         visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
