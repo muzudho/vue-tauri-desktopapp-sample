@@ -25,6 +25,14 @@
             <div v-for="i in tableArea" :key="i"
                 :style="`position:absolute; top: ${Math.floor((i - 1) / tableColumns) * cellHeight}px; left: ${((i - 1) % tableColumns) * cellWidth}px; width:${cellWidth}px; height:${cellHeight}px; border: solid 1px gray;`"></div>
 
+            <!-- 星 -->
+            <Tile
+                    :srcLeft="0"
+                    :srcTop="0"
+                    :srcWidth="32"
+                    :srcHeight="32"
+                    tilemapUrl="/img/making/sprite-objects-001.png" /><br/>
+
             <!-- プレイヤー１（点線の枠） -->
             <div
                 class="cursor"
@@ -32,16 +40,8 @@
             
         </div>
 
-        ここに切り抜いたタイルを表示：<br/>
-        <Tile
-                :srcLeft="0"
-                :srcTop="0"
-                :srcWidth="32"
-                :srcHeight="32"
-                tilemapUrl="/img/making/sprite-objects-001.png" /><br/>
-        ：ここまで。<br/>
-
-        元画像のタイルマップを表示：<br/>
+        <br/>
+        <p>元画像のタイルマップを表示：</p>
         <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/>
         ：ここまで。
     </section>
