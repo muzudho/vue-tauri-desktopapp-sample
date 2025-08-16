@@ -5,35 +5,35 @@
     <section class="sec-3">
         ここに切り抜いたタイルを表示：<br/>
         <TileAnimation
-                :frames="[
-                    // 上向き
-                    {top:   0, left:    0, width: 32, height: 32 },
-                    {top:   0, left:   32, width: 32, height: 32 },
-                    {top:   0, left:    0, width: 32, height: 32 },
-                    {top:   0, left:   32, width: 32, height: 32 },
+            :frames="[
+                // 上向き
+                {top:   0, left:    0, width: 32, height: 32 },
+                {top:   0, left:   32, width: 32, height: 32 },
+                {top:   0, left:    0, width: 32, height: 32 },
+                {top:   0, left:   32, width: 32, height: 32 },
 
-                    // 右向き
-                    {top:  32, left:    0, width: 32, height: 32 },
-                    {top:  32, left:   32, width: 32, height: 32 },
-                    {top:  32, left:    0, width: 32, height: 32 },
-                    {top:  32, left:   32, width: 32, height: 32 },
+                // 右向き
+                {top:  32, left:    0, width: 32, height: 32 },
+                {top:  32, left:   32, width: 32, height: 32 },
+                {top:  32, left:    0, width: 32, height: 32 },
+                {top:  32, left:   32, width: 32, height: 32 },
 
-                    // 下向き
-                    {top:  64, left:    0, width: 32, height: 32 },
-                    {top:  64, left:   32, width: 32, height: 32 },
-                    {top:  64, left:    0, width: 32, height: 32 },
-                    {top:  64, left:   32, width: 32, height: 32 },
+                // 下向き
+                {top:  64, left:    0, width: 32, height: 32 },
+                {top:  64, left:   32, width: 32, height: 32 },
+                {top:  64, left:    0, width: 32, height: 32 },
+                {top:  64, left:   32, width: 32, height: 32 },
 
-                    // 左向き
-                    {top:  96, left:    0, width: 32, height: 32 },
-                    {top:  96, left:   32, width: 32, height: 32 },
-                    {top:  96, left:    0, width: 32, height: 32 },
-                    {top:  96, left:   32, width: 32, height: 32 },
-                ]"
-                tilemapUrl="/img/making/202508__warabenture__15--1612-kifuwarabe-o1o0.png"
-                :slow="slow"
-                :time="count"
-                style="zoom:4; image-rendering: pixelated;" /><br/>
+                // 左向き
+                {top:  96, left:    0, width: 32, height: 32 },
+                {top:  96, left:   32, width: 32, height: 32 },
+                {top:  96, left:    0, width: 32, height: 32 },
+                {top:  96, left:   32, width: 32, height: 32 },
+            ]"
+            tilemapUrl="/img/making/202508__warabenture__12--2149-kifuwarabe-o1o0.png"
+            :slow="slow"
+            :time="count"
+            style="zoom:4; image-rendering: pixelated;" /><br/>
         <!--
             NOTE: Tauri では left="64" のように数字を渡せるが、 Nuxt では :left="64" のように書かないと数字で渡せないようだ。
         -->
@@ -95,8 +95,8 @@
     // ##############
 
     const count = ref<number>(0);   // カウントの初期値
-    const timerId = ref<number | null>(null);   // タイマーのIDを保持
     const slow = ref<number>(8);   // スローモーションの倍率の初期値
+    const timerId = ref<number | null>(null);   // タイマーのIDを保持
 
 
     // ####################

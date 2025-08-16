@@ -11,13 +11,7 @@
                 srcHeight="64"
                 tilemapUrl="/img/making/tilemap_sample.png" /><br/>
         <!--
-        NOTE: Tauri では上の書き方でいけるが、Nuxt では下の書き方にしないとエラーが出るようだ。
-        <Tile
-                :srcLeft="64"
-                :srcTop="32"
-                :srcWidth="32"
-                :srcHeight="64"
-                :tilemapUrl="'/img/making/tilemap_sample.png'" /><br/>
+        	NOTE: 👆 Tauri なら srcLeft="64" と書けるが、 Nuxt では :srcLeft="64" と書かないとエラーが出るようだ。
         -->
         ：ここまで。<br/>
         <br/>
@@ -49,8 +43,8 @@
     //
 
     import SourceLink from '../../components/SourceLink.vue';
-    import Tile from '../../components/Tile.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+    import Tile from '../../components/Tile.vue';
 
 </script>

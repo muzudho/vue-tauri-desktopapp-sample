@@ -7,7 +7,7 @@
         <pre>{{ jsonStr }}</pre>
         <p>：ここまで。</p>
         <br/>
-        元のJSONファイルは、<a target="_blank" :href="jsonFilePath">public/{{jsonFilePath}}</a> に置いてあるぜ！<br/>
+        元のJSONファイルは、<a target="_blank" :href="jsonFilePath">public{{jsonFilePath}}</a> に置いてあるぜ！<br/>
     </section>
 
     <br/>
