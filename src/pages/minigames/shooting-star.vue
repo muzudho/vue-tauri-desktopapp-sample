@@ -3,9 +3,17 @@
 
     <h3>シューティング・スター</h3>
     <section class="sec-3">
+
+        <p>カウント: {{ count }}</p>
+        <v-btn @click="startTimer">スタート</v-btn>
+        <v-btn @click="stopTimer">ストップ</v-btn>
+        <v-btn @click="resetTimer">リセット</v-btn><br/>
+        <br/>
+
         <p>TODO: ここにゲームスタートボタンを置きたい。</p>
         <p>TODO: ここにスコアを表示したい。</p>
         <p>TODO: ここにタイマーを表示したい。</p>
+
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
         <!-- ゲーム画面領域（宇宙） -->
@@ -24,6 +32,18 @@
             
         </div>
 
+        ここに切り抜いたタイルを表示：<br/>
+        <Tile
+                :srcLeft="0"
+                :srcTop="0"
+                :srcWidth="32"
+                :srcHeight="32"
+                tilemapUrl="/img/making/sprite-objects-001.png" /><br/>
+        ：ここまで。<br/>
+
+        元画像のタイルマップを表示：<br/>
+        <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/>
+        ：ここまで。
     </section>
 
     <the-footer/>
@@ -43,6 +63,7 @@
 
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+    import Tile from '../../components/Tile.vue';
 
 
     // ##############
@@ -97,7 +118,7 @@
 
     onMounted(() => {
         startGameLoop();
-        startTimer();
+        //startTimer();
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
@@ -197,6 +218,20 @@
         };
         timerId.value = requestAnimationFrame(tick);
     }
+
+    function stopTimer() : void {
+        // タイマーを停止
+        if (timerId.value) {
+            cancelAnimationFrame(timerId.value);
+            timerId.value = null;
+        }
+    }
+
+    function resetTimer() : void {
+        // カウントをリセットしてタイマーも停止
+        count.value = 0;
+        stopTimer();
+    }    
 
 </script>
 

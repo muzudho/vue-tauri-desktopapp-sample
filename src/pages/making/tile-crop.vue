@@ -5,18 +5,20 @@
     <section class="sec-3">
         ここに切り抜いたタイルを表示：<br/>
         <Tile
-                srcLeft="64"
-                srcTop="32"
-                srcWidth="32"
-                srcHeight="64"
-                tilemapUrl="/img/making/tilemap_sample.png" /><br/>
+                :srcLeft="0"
+                :srcTop="0"
+                :srcWidth="32"
+                :srcHeight="32"
+                tilemapUrl="/img/making/tilemap_objects_001.png" /><br/>
         <!--
         	NOTE: 👆 Tauri なら srcLeft="64" と書けるが、 Nuxt では :srcLeft="64" と書かないとエラーが出るようだ。
+            数値を直接書くと、 Nuxt では文字列として解釈されてしまう。
         -->
         ：ここまで。<br/>
         <br/>
+
         元画像のタイルマップを表示：<br/>
-        <v-img src="/img/making/tilemap_sample.png" style="width:128px; height:128px;"/>
+        <v-img src="/img/making/tilemap_sample.png" style="width:128px; height:128px; border: dashed 4px gray;"/>
         ：ここまで。
     </section>
     
