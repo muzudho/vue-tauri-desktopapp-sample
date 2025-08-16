@@ -1,6 +1,6 @@
 <template>
     <div
-        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border: dashed 1px ${props.color};`"
+        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px;`"
         style="position: absolute;">
         <!--  border: dashed 1px ${props.color}; -->
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">

@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3>矢印を描こうぜ！</h3>
+    <h3>グラフを描こうぜ！</h3>
     <section
         class="sec-3">
         画面上に矢印を描いてみようぜ（＾▽＾）！<br/>
@@ -198,7 +198,7 @@
         <br/>
     </section>
 
-    <h4>次に、矢印を描こうぜ（＾▽＾）！</h4>
+    <h4>矢印を描こうぜ（＾▽＾）！</h4>
     <section
         class="sec-4"
         style="position: relative; left:0; top:0;">
@@ -361,7 +361,7 @@
         </div>
         <br/>
 
-        <p>👇 下のラジオボタンをクリックすると、枠が出るぜ（＾▽＾）！</p>
+        <p>👇 下のラジオボタンをクリックすると、だいたいの位置に枠が出るぜ（＾▽＾）！</p>
         <!-- Tauri ではラジオボタンが描画されない？ opacity が 0 になってる？ -->
         
         <v-checkbox
@@ -369,10 +369,66 @@
             :key="index"
             v-model="hitboxCheckboxes"
             :value="`${index}`"
-            :label="`矢印${index}のだいたいの位置表示`"
+            :label="`矢印${index}の位置表示`"
             density="compact"
             :style="checkboxStyles[index]"
             style="position:relative; left:0px; top:0px; display: inline-block;"></v-checkbox>
+    </section>
+
+    <h4>じゃあ、グラフを描くぜ（＾▽＾）！</h4>
+    <section
+        class="sec-4"
+        style="position: relative; left:0; top:0;">
+        直線、矩形、矢印を引けるようになったから、簡単なグラフが描けるな（＾▽＾）！<br/>
+        タグ打つの結構大変だけど……（＾～＾）<br/>
+        調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
+
+        <div
+            :style="`width: ${10 * cellWidth}px; height: ${10 * cellHeight}px;`"
+            style="position: relative; left:0; top:0; border: dashed 4px lightgray;">
+
+            <!-- 始まり箱 -->
+            <Rectangle
+                :left="1 * cellWidth"
+                :top="1 * cellHeight"
+                :width="4 * cellWidth"
+                :height="3 * cellHeight"
+                :stroke-width="8"
+                color="#3333ff"
+                class="d-flex align-center justify-center">
+                はじまり
+            </rectangle>
+
+            <!-- 直線 -->
+            <Line
+                :startX="3 * cellWidth"
+                :startY="4 * cellHeight"
+                :width="0 * cellWidth"
+                :height="3 * cellHeight"
+                :stroke-width="8"
+                color="#8000ff"/>
+
+            <Arrow
+                :startX="3 * cellWidth"
+                :startY="7 * cellHeight"
+                :width="3 * cellWidth"
+                :height="0 * cellHeight"
+                :stroke-width="8"
+                color="#ff00ff"/>
+
+            <!-- 終わり箱 -->
+            <Rectangle
+                :left="6 * cellWidth"
+                :top="5 * cellHeight"
+                :width="3 * cellWidth"
+                :height="4 * cellHeight"
+                :stroke-width="8"
+                color="#cc0066"
+                class="d-flex align-center justify-center">
+                おわり
+            </Rectangle>
+        </div>
+        <br/>
     </section>
 
     <the-footer/>

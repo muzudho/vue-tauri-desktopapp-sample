@@ -3,9 +3,18 @@
         :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px;`"
         style="position: absolute;">
         <!--  border: dashed 1px ${props.color}; -->
-        <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
+
+        <!-- 図形描画 -->
+        <svg
+                :width="svgWidth"
+                :height="svgHeight"
+                :viewBox="`0 0 ${svgWidth} ${svgHeight}`"
+                style="position: absolute; left: 0; top: 0;">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
+
+        <!-- 子要素 -->
+        <slot></slot>
     </div>
 </template>
 
