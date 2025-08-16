@@ -23,8 +23,8 @@
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in tableArea" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / tableColumns) * cellHeight}px; left: ${((i - 1) % tableColumns) * cellWidth}px; width:${cellWidth}px; height:${cellHeight}px; border: solid 1px gray;`"></div>
+            <div v-for="i in boardArea" :key="i"
+                :style="`position:absolute; top: ${Math.floor((i - 1) / board.cols) * cellHeight}px; left: ${((i - 1) % board.cols) * cellWidth}px; width:${cellWidth}px; height:${cellHeight}px; border: solid 1px gray;`"></div>
 
             <!-- 星 -->
             <Tile
@@ -150,9 +150,11 @@
     const moDown = 1;
 
     // 盤データ
-    const tableColumns = 16;
-    const tableRows = 12;
-    const tableArea = tableColumns * tableRows; // 盤のセル数
+    const board = reactive({
+        cols: 16,
+        rows: 12,
+    });
+    const boardArea = board.cols * board.rows; // 盤のセル数
 
 
     // ##########
@@ -216,7 +218,7 @@
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
                 if (player1.motion["xAxis"]==1) {   // 右
-                    if (player1.left < (tableColumns - player1.colNum) * cellWidth) {    // 境界チェック
+                    if (player1.left < (board.cols - player1.colNum) * cellWidth) {    // 境界チェック
                         player1.left += player1.speed;
                     }
                 } else if (player1.motion["xAxis"]==-1) {  // 左
@@ -230,7 +232,7 @@
                         player1.top -= player1.speed;
                     }
                 } else if (player1.motion["yAxis"]==1) {   // 下
-                    if (player1.top < (tableRows - player1.rowNum) * cellHeight) {    // 境界チェック
+                    if (player1.top < (board.rows - player1.rowNum) * cellHeight) {    // 境界チェック
                         player1.top += player1.speed;
                     }
                 }
