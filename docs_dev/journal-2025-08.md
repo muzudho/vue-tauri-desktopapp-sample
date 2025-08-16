@@ -366,3 +366,11 @@ pnpm add chart.js
 ```shell
 pnpm add vue-router@4
 ```
+
+
+## [2025-08-16_Sat]
+
+効果音を作れるソフトを探し中。 jsfxr とか良さそう？  
+
+📖 [jsfxr](https://sfxr.me/)  
+

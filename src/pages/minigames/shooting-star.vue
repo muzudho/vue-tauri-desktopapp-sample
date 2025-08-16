@@ -72,6 +72,13 @@
     import Tile from '../../components/Tile.vue';
 
 
+    // ##########
+    // # 効果音 #
+    // ##########
+
+    let shutterSound: HTMLAudioElement;     // カメラで撮影したときの効果音
+
+
     // ##############
     // # 共有データ #
     // ##############
@@ -169,6 +176,9 @@
         startGameLoop();
         //startTimer();
 
+        // 効果音ロード
+        shutterSound = new Audio('/wav/202508__sfx__16--2117.wav'); // jsfxrで作った効果音
+
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
             if (player1.input.hasOwnProperty(e.key)) {
@@ -203,6 +213,7 @@
 
                     if (player1.input.Enter) {
                         // タイマーをストップ
+                        shutterSound.play();
                         stopwatch1.value?.stopTimer();
                     }
 
