@@ -115,6 +115,9 @@
     let sfxBuzzer: HTMLAudioElement;            // ブザー音
     let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
     let sfxMiss: HTMLAudioElement;              // ミス音
+    const isSfxBuzzerPlaying = ref(false);       // ブザー音の再生状態
+    const isSfxCameraShutterPlaying = ref(false); // カメラのシャッター音の再生状態
+    const isSfxMissPlaying = ref(false);         // ミス音の再生状態
 
     /**
      * 効果音をロードする（jsfxrで作った効果音）
@@ -122,10 +125,21 @@
     function loadSfx() : void {
         sfxBuzzer = new Audio('/wav/202508__sfx__16--2212-buzzer.wav'); // ブザー音
         sfxBuzzer.volume = volume;
+        sfxBuzzer.addEventListener('play', () => { isSfxBuzzerPlaying.value = true })
+        sfxBuzzer.addEventListener('pause', () => { isSfxBuzzerPlaying.value = false })
+        sfxBuzzer.addEventListener('ended', () => { isSfxBuzzerPlaying.value = false })
+
         sfxCameraShutter = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
         sfxCameraShutter.volume = volume;
+        sfxCameraShutter.addEventListener('play', () => { isSfxCameraShutterPlaying.value = true })
+        sfxCameraShutter.addEventListener('pause', () => { isSfxCameraShutterPlaying.value = false })
+        sfxCameraShutter.addEventListener('ended', () => { isSfxCameraShutterPlaying.value = false })
+
         sfxMiss = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
         sfxMiss.volume = volume;
+        sfxMiss.addEventListener('play', () => { isSfxMissPlaying.value = true })
+        sfxMiss.addEventListener('pause', () => { isSfxMissPlaying.value = false })
+        sfxMiss.addEventListener('ended', () => { isSfxMissPlaying.value = false })
     }
 
     // ##############
@@ -433,8 +447,10 @@
 
         if (finder1.reloadTime > 0) {
             // リロード中
-            sfxBuzzer.play();
-            return;
+            if (!isSfxBuzzerPlaying.value) {
+                // ブザー音が停止中なら鳴らす
+                sfxBuzzer.play();
+            }
         }
 
         // ファインダーの位置とサイズ
@@ -452,7 +468,10 @@
 
         // 星を含まない
         } else {
-            sfxMiss.play();
+            if (!isSfxMissPlaying.value) {
+                // ミス音が停止中なら鳴らす
+                sfxMiss.play();
+            }
         }
 
         finder1.reloadTime = reloadTimeWeight;  // リロード時間を設定
@@ -460,7 +479,11 @@
 
 
     function niceShot() : void {
-        sfxCameraShutter.play();
+        if (!isSfxCameraShutterPlaying.value) {
+            // カメラのシャッター音が停止中なら鳴らす
+            sfxCameraShutter.play();
+        }
+
         misc.score += 100;
     }
 
