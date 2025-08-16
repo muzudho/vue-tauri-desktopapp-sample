@@ -5,7 +5,7 @@
     <section class="sec-3">
 
         <!-- ボタンを並べる -->
-        <v-btn @click="startGame()">ゲームスタート</v-btn>
+        <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
         <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
 
         <br/>
@@ -243,8 +243,10 @@
 
     const misc = reactive({
         score: 0,
-        gameIsPause: false,
-        pauseButtonText: "一時停止",
+        isPlaying: false,
+        isPause: false,
+        startButtonText: "読込中...",
+        pauseButtonText: "読込中...",
     });
 
     // ##########
@@ -252,10 +254,10 @@
     // ##########
 
     onMounted(() => {
+        loadSfx();
+        initGame();
         startGameLoop();
         //startTimer();
-
-        loadSfx();
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
@@ -358,12 +360,33 @@
     // # サブルーチン #
     // ################
 
+    function initGame() : void {
+        stopwatch1.value?.resetTimer();  // タイマーをリセット
+
+        misc.score = 0;
+        misc.isPlaying = false;
+        misc.startButtonText = "ゲームスタート"; // ボタンのテキストを更新
+        misc.isPause = false;
+        misc.pauseButtonText = "一時停止"; // ボタンのテキストを更新
+
+        star1.visibility = 'hidden';
+    }
+
     function startGame() : void {
+        if(misc.isPlaying) {
+            // ゲームを終了させます
+            initGame();
+            return;
+        }
+
         stopwatch1.value?.startTimer();  // タイマーをスタート
+
+        misc.startButtonText = "ゲーム終了"; // ボタンのテキストを更新
+        misc.isPlaying = !misc.isPlaying;
     }
 
     function pauseGame() : void {
-        if(misc.gameIsPause) {
+        if(misc.isPause) {
             stopwatch1.value?.startTimer();  // タイマーをスタート
             misc.pauseButtonText = "一時停止"; // ボタンのテキストを更新
         } else {
@@ -371,7 +394,7 @@
             misc.pauseButtonText = "再開"; // ボタンのテキストを更新
         }
 
-        misc.gameIsPause = !misc.gameIsPause;
+        misc.isPause = !misc.isPause;
     }
 
     /**
