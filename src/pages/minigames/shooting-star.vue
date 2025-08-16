@@ -125,10 +125,10 @@
     // ##########
 
     const volume = 0.3; // 音量
-    let sfxBuzzer: HTMLAudioElement;            // ブザー音
+    let sfxDenied: HTMLAudioElement;            // 拒否音
     let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
     let sfxMiss: HTMLAudioElement;              // ミス音
-    const isSfxBuzzerPlaying = ref<boolean>(false);       // ブザー音の再生状態
+    const isSfxDeniedPlaying = ref<boolean>(false);       // ブザー音の再生状態
     const isSfxCameraShutterPlaying = ref<boolean>(false); // カメラのシャッター音の再生状態
     const isSfxMissPlaying = ref<boolean>(false);         // ミス音の再生状態
 
@@ -136,11 +136,11 @@
      * 効果音をロードする（jsfxrで作った効果音）
      */
     function loadSfx() : void {
-        sfxBuzzer = new Audio('/wav/202508__sfx__17--0200-cancel.wav'); // ブザー音
-        sfxBuzzer.volume = volume;
-        sfxBuzzer.addEventListener('play', () => { isSfxBuzzerPlaying.value = true })
-        sfxBuzzer.addEventListener('pause', () => { isSfxBuzzerPlaying.value = false })
-        sfxBuzzer.addEventListener('ended', () => { isSfxBuzzerPlaying.value = false })
+        sfxDenied = new Audio('/wav/202508__sfx__17--0200-denied.wav'); // 拒否音
+        sfxDenied.volume = volume;
+        sfxDenied.addEventListener('play', () => { isSfxDeniedPlaying.value = true })
+        sfxDenied.addEventListener('pause', () => { isSfxDeniedPlaying.value = false })
+        sfxDenied.addEventListener('ended', () => { isSfxDeniedPlaying.value = false })
 
         sfxCameraShutter = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
         sfxCameraShutter.volume = volume;
@@ -642,9 +642,9 @@
 
         if (finder1.reloadTime > 0) {
             // リロード中
-            if (!isSfxBuzzerPlaying.value) {
+            if (!isSfxDeniedPlaying.value) {
                 // ブザー音が停止中なら鳴らす
-                sfxBuzzer.play();
+                sfxDenied.play();
             }
 
             // リロード中は何も起こりません。
