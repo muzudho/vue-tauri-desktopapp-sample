@@ -58,7 +58,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref, watch } from 'vue';
+    import { computed, onMounted, reactive, ref, watch } from 'vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -95,14 +95,14 @@
 
         // ゲーム開始から1秒後、星表示
         if (newCount == 1 * minutes) {
-            o1Cols.value = 5;
-            o1Rows.value = 3;
-            o1Visibility.value = 'visible';
+            star1.cols = 5;
+            star1.rows = 3;
+            star1.visibility = 'visible';
         }
 
         // ゲーム開始から3秒後、星非表示
         if (newCount == 3 * minutes) {
-            o1Visibility.value = 'hidden';
+            star1.visibility = 'hidden';
         }
     });
 
@@ -111,11 +111,11 @@
     // + オブジェクト１：　星 +
     // ++++++++++++++++++++++++
 
-    const o1Cols = ref<number>(0);
-    const o1Rows = ref<number>(0);
-    const o1Left = ref<number>(0);
-    const o1Top = ref<number>(0);
-    const o1Visibility = ref<string>('hidden'); // 可視状態
+    const star1 = reactive({
+        cols: 0,
+        rows: 0,
+        visibility: 'hidden' as 'hidden' | 'visible',
+    });
 
     // モーション設計
     const o1Motion = ref<Record<string, number>>({
@@ -126,15 +126,16 @@
     // + プレイヤー１（点線の枠） +
     // ++++++++++++++++++++++++++++
 
-    const p1Left = ref<number>(6 * cellWidth);      // スプライトのX座標
-    const p1Top = ref<number>(4* cellHeight);       // スプライトのY座標
-    const p1ColNum = ref<number>(4);    // スプライトの列数
-    const p1RowNum = ref<number>(3);     // スプライトの行数
-    //const p1Speed = ref<number>(2);     // 移動速度
-    const p1Speed = ref<number>(4);     // 移動速度
-    const p1Input = <Record<string, boolean>>{  // 入力
-        ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
-    };
+    const player1 = reactive({
+        left: 6 * cellWidth,    // スプライトのX座標
+        top: 4 * cellHeight,    // スプライトのY座標
+        colNum: 4,              // スプライトの列数
+        rowNum: 3,              // スプライトの行数
+        speed: 4,               // 移動速度
+        input: <Record<string, boolean>>{  // 入力
+            ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
+        }
+    });
 
     // モーション
     const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
@@ -163,13 +164,13 @@
 
         // キーボードイベント
         window.addEventListener('keydown', (e) => {
-            if (p1Input.hasOwnProperty(e.key)) {
-                p1Input[e.key] = true;
+            if (player1.input.hasOwnProperty(e.key)) {
+                player1.input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
-            if (p1Input.hasOwnProperty(e.key)) {
-                p1Input[e.key] = false;
+            if (player1.input.hasOwnProperty(e.key)) {
+                player1.input[e.key] = false;
             }
         });
 
@@ -190,19 +191,19 @@
                 
                 // 入力（上下左右への移動）をモーションに変換
                 if (p1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
-                    if (p1Input.ArrowLeft) {
+                    if (player1.input.ArrowLeft) {
                         p1Motion.value["xAxis"] = moLeft; // 左
                     }
 
-                    if (p1Input.ArrowRight) {
+                    if (player1.input.ArrowRight) {
                         p1Motion.value["xAxis"] = moRight;  // 右
                     }
 
-                    if (p1Input.ArrowUp) {
+                    if (player1.input.ArrowUp) {
                         p1Motion.value["yAxis"] = moUp;   // 上
                     }
 
-                    if (p1Input.ArrowDown) {
+                    if (player1.input.ArrowDown) {
                         p1Motion.value["yAxis"] = moDown;   // 下
                     }
 
@@ -214,22 +215,22 @@
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
                 if (p1Motion.value["xAxis"]==1) {   // 右
-                    if (p1Left.value < (tableColumns - p1ColNum.value) * cellWidth) {    // 境界チェック
-                        p1Left.value += p1Speed.value;
+                    if (player1.left < (tableColumns - player1.colNum) * cellWidth) {    // 境界チェック
+                        player1.left += player1.speed;
                     }
                 } else if (p1Motion.value["xAxis"]==-1) {  // 左
-                    if (0 < p1Left.value) {    // 境界チェック
-                        p1Left.value -= p1Speed.value;
+                    if (0 < player1.left) {    // 境界チェック
+                        player1.left -= player1.speed;
                     }
                 }
 
                 if (p1Motion.value["yAxis"]==-1) {  // 上
-                    if (0 < p1Top.value) {    // 境界チェック
-                        p1Top.value -= p1Speed.value;
+                    if (0 < player1.top) {    // 境界チェック
+                        player1.top -= player1.speed;
                     }
                 } else if (p1Motion.value["yAxis"]==1) {   // 下
-                    if (p1Top.value < (tableRows - p1RowNum.value) * cellHeight) {    // 境界チェック
-                        p1Top.value += p1Speed.value;
+                    if (player1.top < (tableRows - player1.rowNum) * cellHeight) {    // 境界チェック
+                        player1.top += player1.speed;
                     }
                 }
 
@@ -249,17 +250,17 @@
     // ############
 
     const starStyle = computed(() => ({
-        visibility: o1Visibility.value,
-        top: `${o1Rows.value * cellHeight}px`,
-        left: `${o1Cols.value * cellWidth + Math.floor(count.value / 20) * cellWidth}px`,
+        visibility: star1.visibility,
+        top: `${star1.rows * cellHeight}px`,
+        left: `${star1.cols * cellWidth + Math.floor(count.value / 20) * cellWidth}px`,
         width: `${cellWidth}px`,
         height: `${cellHeight}px`,
     }));
     const p1Style = computed(() => ({
-        top: `${p1Top.value}px`,
-        left: `${p1Left.value}px`,
-        width: `${p1ColNum.value * cellWidth}px`,
-        height: `${p1RowNum.value * cellHeight}px`,
+        top: `${player1.top}px`,
+        left: `${player1.left}px`,
+        width: `${player1.colNum * cellWidth}px`,
+        height: `${player1.rowNum * cellHeight}px`,
     }));
 
 </script>
