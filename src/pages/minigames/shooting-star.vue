@@ -4,6 +4,27 @@
     <h3>シューティング・スター</h3>
     <section class="sec-3">
 
+        <!-- ゲームの操作方法 -->
+        <v-btn @click="misc.isShowingManual = !misc.isShowingManual">{{ misc.isShowingManual ? 'ゲームの遊び方・操作方法を閉じる' : 'ゲームの遊び方・操作方法を表示' }}</v-btn>
+        <div v-if="misc.isShowingManual">
+            <p>このゲームは、星を撮影する、という見立てのゲームだぜ。</p>
+            <br/>
+            <p>操作で使うコントローラーは以下のものだぜ。</p>
+            <ul>
+                <li>マウスの左クリック: ボタンを押すのに使う</li>
+                <li>キーボードの上下左右キー: カメラのファインダー（点線の長方形だ）を上下左右に移動</li>
+                <li>キーボードのエンターキー: 撮影</li>
+            </ul>
+            <br/>
+            <p>
+                下に黒い画面が見えるように、ウィンドウを広げてくれだぜ。<br/>
+                この黒い画面は宇宙な。<br/>
+                ［ゲームスタート］ボタンを押すと、ゲームが始まるぜ。<br/>
+                60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、エンターキーを押してくれだぜ。<br/>
+            </p>
+        </div>
+        <br/>
+
         <!-- ボタンを並べる -->
         <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
         <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
@@ -23,7 +44,7 @@
         <p>スコア： {{ misc.score }}</p>
         <br/>
 
-        <p>キーボードの上下左右キーを押してくれだぜ！</p>
+        <p></p>
 
         <!-- ゲーム画面領域（宇宙） -->
         <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
@@ -248,6 +269,7 @@
         score: 0,
         isPlaying: false,
         isPause: false,
+        isShowingManual: false,
         startButtonText: "読込中...",
         pauseButtonText: "読込中...",
         maxCount: 60 * seconds,     // ゲーム時間は１分。
