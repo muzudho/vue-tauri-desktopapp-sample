@@ -43,8 +43,8 @@
 
             <!-- リロードのカウントダウン（パイみたいなやつ） -->
             <Tile
-                :srcLeft="0"
-                :srcTop="0"
+                :srcLeft="reloadTimerTileLeft"
+                :srcTop="reloadTimerTileTop"
                 :srcWidth="board.cellWidth"
                 :srcHeight="board.cellHeight"
                 tilemapUrl="/img/making/202508__warabenture__16--2315-8counts.png"
@@ -199,6 +199,37 @@
     const moUp = -1;
     const moDown = 1;
 
+    // ++++++++++++++++++++++
+    // + リロード・タイマー +
+    // ++++++++++++++++++++++
+
+    const reloadTimerFrames = <Record<number, {top: number, left: number}>>{
+        0: {top: 0 * board.cellHeight, left: 0 * board.cellWidth},
+        1: {top: 0 * board.cellHeight, left: 1 * board.cellWidth},
+        2: {top: 0 * board.cellHeight, left: 2 * board.cellWidth},
+        3: {top: 0 * board.cellHeight, left: 3 * board.cellWidth},
+        4: {top: 1 * board.cellHeight, left: 0 * board.cellWidth},
+        5: {top: 1 * board.cellHeight, left: 1 * board.cellWidth},
+        6: {top: 1 * board.cellHeight, left: 2 * board.cellWidth},
+        7: {top: 1 * board.cellHeight, left: 3 * board.cellWidth},
+    };
+    const reloadTimeWeight = 3 * seconds;
+    const reloadTimerIndex = computed<number>(()=>{
+        // タイル１枚当たりの時間（フレーム）
+        const frameNum = Object.keys(reloadTimerFrames).length;
+        const unitTime = reloadTimeWeight / frameNum;
+        let index = Math.floor(finder1.reloadTime / unitTime);
+        if (index >= frameNum) {
+            index = frameNum - 1;
+        }
+        return (frameNum - 1) - index;    // カウントダウン
+    });
+    const reloadTimerTileLeft = computed<number>(()=>{
+        return reloadTimerFrames[reloadTimerIndex.value].left;
+    });
+    const reloadTimerTileTop = computed<number>(()=>{
+        return reloadTimerFrames[reloadTimerIndex.value].top;
+    });
 
     // ##########
     // # 開始時 #
@@ -340,7 +371,7 @@
             sfxMiss.play();
         }
 
-        finder1.reloadTime = 3 * seconds;  // リロード時間を設定
+        finder1.reloadTime = reloadTimeWeight;  // リロード時間を設定
     }
 
     // ############
