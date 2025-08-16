@@ -5,14 +5,15 @@
     <section class="sec-3">
 
         <p>カウント: {{ count }}</p>
-        <v-btn @click="startTimer">スタート</v-btn>
-        <v-btn @click="stopTimer">ストップ</v-btn>
-        <v-btn @click="resetTimer">リセット</v-btn><br/>
+        <br/>
+        テスト：<br/>
+        <stopwatch-dev
+            v-on:countUp="(countNum) => { count = countNum; }"
+        /><br/>
+        ：テスト<br/>
         <br/>
 
-        <p>TODO: ここにゲームスタートボタンを置きたい。</p>
         <p>TODO: ここにスコアを表示したい。</p>
-        <p>TODO: ここにタイマーを表示したい。</p>
 
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
@@ -27,11 +28,11 @@
 
             <!-- 星 -->
             <Tile
-                    :srcLeft="0"
-                    :srcTop="0"
-                    :srcWidth="32"
-                    :srcHeight="32"
-                    tilemapUrl="/img/making/sprite-objects-001.png" /><br/>
+                :srcLeft="0"
+                :srcTop="0"
+                :srcWidth="32"
+                :srcHeight="32"
+                tilemapUrl="/img/making/sprite-objects-001.png" /><br/>
 
             <!-- プレイヤー１（点線の枠） -->
             <div
@@ -61,6 +62,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import StopwatchDev from '../../components/StopwatchDev.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
     import Tile from '../../components/Tile.vue';
@@ -104,7 +106,7 @@
 
     // タイマー
     const count = ref<number>(0);   // カウントの初期値
-    const timerId = ref<number | null>(null);   // タイマーのIDを保持
+    //const timerId = ref<number | null>(null);   // タイマーのIDを保持
 
     // 盤データ
     const tableColumns = 16;
@@ -207,31 +209,31 @@
     // # サブルーチン #
     // ################
 
-    function startTimer() : void {
-        // 既にタイマーが動いてたら何もしない
-        if (timerId.value) return;
+    // function startTimer() : void {
+    //     // 既にタイマーが動いてたら何もしない
+    //     if (timerId.value) return;
 
-        // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
-        const tick = () => {
-            count.value += 1;
-            timerId.value = requestAnimationFrame(tick);
-        };
-        timerId.value = requestAnimationFrame(tick);
-    }
+    //     // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
+    //     const tick = () => {
+    //         count.value += 1;
+    //         timerId.value = requestAnimationFrame(tick);
+    //     };
+    //     timerId.value = requestAnimationFrame(tick);
+    // }
 
-    function stopTimer() : void {
-        // タイマーを停止
-        if (timerId.value) {
-            cancelAnimationFrame(timerId.value);
-            timerId.value = null;
-        }
-    }
+    // function stopTimer() : void {
+    //     // タイマーを停止
+    //     if (timerId.value) {
+    //         cancelAnimationFrame(timerId.value);
+    //         timerId.value = null;
+    //     }
+    // }
 
-    function resetTimer() : void {
-        // カウントをリセットしてタイマーも停止
-        count.value = 0;
-        stopTimer();
-    }    
+    // function resetTimer() : void {
+    //     // カウントをリセットしてタイマーも停止
+    //     count.value = 0;
+    //     stopTimer();
+    // }    
 
 </script>
 

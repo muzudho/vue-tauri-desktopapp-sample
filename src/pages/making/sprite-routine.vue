@@ -15,13 +15,13 @@
         <p>ここに切り抜いたタイルを表示：</p>
         <div :style="`height: ${cellHeight}px`" style="position:relative;">
             <Tile
-                    :srcLeft="0"
-                    :srcTop="0"
-                    :srcWidth="cellWidth"
-                    :srcHeight="cellHeight"
-                    :tilemapUrl="'/img/making/sprite-objects-001.png'"
-                    style="position:absolute;"
-                    :style="o1Style" />
+                :srcLeft="0"
+                :srcTop="0"
+                :srcWidth="cellWidth"
+                :srcHeight="cellHeight"
+                :tilemapUrl="'/img/making/sprite-objects-001.png'"
+                style="position:absolute;"
+                :style="o1Style" />
         </div>
         ：ここまで。<br/>
         <br/>
