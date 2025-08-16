@@ -46,12 +46,13 @@
 
     const router = useRouter();
 
-    // SPA用のルートパス
+    // 円グラフのための、SPA用のルートパス
     const routes = [
         "/",                            // ホームのURL
         "/making",                      // メイキングのURL
+        "/minigames",                   // ミニゲーム
         "/about",                       // ［このサイトについて］のURL
-        "/welcome-to-tauri-and-vue"    // Tauri のウェルカムページ
+        "/welcome-to-tauri-and-vue",    // Tauri のウェルカムページ
     ];
 
     let chart: Chart | null = null;
@@ -81,18 +82,20 @@
         chart = new Chart(ctx, {
             type: 'pie',
             data: {
-                labels: ['ホーム', 'メイキング', 'このサイトについて', 'Tauriウェルカムページ'],
+                labels: ['ホーム', 'メイキング', 'ミニゲーム', 'このサイトについて', 'Tauriウェルカムページ'],
                 datasets: [{
-                    data: [40, 40, 15, 5],
+                    data: [40, 30, 10, 15, 5],
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.8)',
                         'rgba(54, 162, 235, 0.8)',
+                        'rgba(180, 80, 206, 0.8)',
                         'rgba(255, 206, 86, 0.8)',
                         'rgba(75, 192, 192, 0.8)'
                     ],
                     borderColor: [
                         'rgba(255, 99, 132, 1)',
                         'rgba(54, 162, 235, 1)',
+                        'rgba(180, 80, 206, 1)',
                         'rgba(255, 206, 86, 1)',
                         'rgba(75, 192, 192, 1)'
                     ],
@@ -113,10 +116,8 @@
                 onClick: (_e, elements) => {
                     if (elements.length > 0) {
                         const index = elements[0].index;
-                        //console.log(`index=${index}\nroutes.length=${routes.length}\nroutes[0]=${routes[0]}\nroutes[1]=${routes[1]}\nroutes[2]=${routes[2]}\nroutes[3]=${routes[3]}`);
                         // Vue Routerでページ遷移
                         const path = routes[index];
-                        //console.log(`path=${path}`);
                         router.push(path);
                     }
                 }
