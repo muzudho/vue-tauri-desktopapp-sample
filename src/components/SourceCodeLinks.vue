@@ -12,29 +12,13 @@
 <script setup lang="ts">
 
     // ##############
-    // # インポート #
-    // ##############
-
-    import { defineProps, withDefaults } from 'vue';
-
-    // ####################################
-    // # このコンポーネントが受け取る引数 #
-    // ####################################
-
-    interface Props {
-        pagePath: string;
-    }
-
-    const props = withDefaults(defineProps<Props>(), {
-        pagePath: "/",
-    });
-
-    // ##############
     // # 共通データ #
     // ##############
+    
+    const pagePath = window.location.pathname;
 
-    const desktopappPath = `https://github.com/muzudho/vue-tauri-desktopapp-sample/blob/main/src/pages${props.pagePath}`;
-    const webappPath = `https://github.com/muzudho/vue-nuxt-webapp-sample/blob/main/src/pages${props.pagePath}`;
-    const warabenturePath = `https://github.com/muzudho/Warabenture-2025/blob/main/src/pages${props.pagePath}`;
+    const desktopappPath = `https://github.com/muzudho/vue-tauri-desktopapp-sample/blob/main/src/pages${pagePath}.vue`;
+    const webappPath = `https://github.com/muzudho/vue-nuxt-webapp-sample/blob/main/src/pages${pagePath}.vue`;
+    const warabenturePath = `https://github.com/muzudho/Warabenture-2025/blob/main/src/pages${pagePath}.vue`;
 
 </script>

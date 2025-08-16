@@ -5,15 +5,7 @@
     <section class="sec-3">
         
         <p>凡例だぜ（＾▽＾）！</p>
-        <p>
-            ソースコードはこちら（＾▽＾）！
-            <ul>
-                <li>📖 <a target="_blank" href="https://github.com/muzudho/vue-tauri-desktopapp-sample/blob/main/src/pages/making/page-layout.vue">デスクトップアプリ版のソースコード</a></li>
-                <li>📖 <a target="_blank" href="https://github.com/muzudho/vue-nuxt-webapp-sample/blob/main/src/pages/making/page-layout.vue">ウェブアプリ版のソースコード</a></li>
-                <li>📖 <a target="_blank" href="https://github.com/muzudho/Warabenture-2025/blob/main/src/pages/making/page-layout.vue">このワラベンチャーのソースコード</a></li>
-            </ul>
-        </p>
-        <source-code-links :page-path="`/making/page-layout.vue`" />
+        <source-code-links />
 
         <v-container style="border:dashed 4px gray;">
             <h1>ワラベンチャー</h1>
