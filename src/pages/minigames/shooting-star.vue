@@ -32,7 +32,9 @@
                 :srcTop="0"
                 :srcWidth="32"
                 :srcHeight="32"
-                tilemapUrl="/img/making/sprite-objects-001.png" /><br/>
+                tilemapUrl="/img/making/sprite-objects-001.png"
+                :style="starStyle"
+                style="position:absolute;" /><br/>
 
             <!-- プレイヤー１（点線の枠） -->
             <div
@@ -86,12 +88,6 @@
     const p1Input = <Record<string, boolean>>{  // 入力
         ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
     };
-    const p1Style = computed(() => ({
-        top: `${p1Top.value}px`,
-        left: `${p1Left.value}px`,
-        width: `${p1ColNum.value * cellWidth}px`,
-        height: `${p1RowNum.value * cellHeight}px`,
-    }));
 
     // モーション
     const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
@@ -205,35 +201,22 @@
     });
 
 
-    // ################
-    // # サブルーチン #
-    // ################
+    // ############
+    // # スタイル #
+    // ############
 
-    // function startTimer() : void {
-    //     // 既にタイマーが動いてたら何もしない
-    //     if (timerId.value) return;
-
-    //     // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
-    //     const tick = () => {
-    //         count.value += 1;
-    //         timerId.value = requestAnimationFrame(tick);
-    //     };
-    //     timerId.value = requestAnimationFrame(tick);
-    // }
-
-    // function stopTimer() : void {
-    //     // タイマーを停止
-    //     if (timerId.value) {
-    //         cancelAnimationFrame(timerId.value);
-    //         timerId.value = null;
-    //     }
-    // }
-
-    // function resetTimer() : void {
-    //     // カウントをリセットしてタイマーも停止
-    //     count.value = 0;
-    //     stopTimer();
-    // }    
+    const starStyle = computed(() => ({
+        top: `0px`,
+        left: `${count.value % 256}px`,
+        width: `${cellWidth}px`,
+        height: `${cellHeight}px`,
+    }));
+    const p1Style = computed(() => ({
+        top: `${p1Top.value}px`,
+        left: `${p1Left.value}px`,
+        width: `${p1ColNum.value * cellWidth}px`,
+        height: `${p1RowNum.value * cellHeight}px`,
+    }));
 
 </script>
 
