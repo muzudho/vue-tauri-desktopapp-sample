@@ -198,6 +198,44 @@
         <br/>
     </section>
 
+    <h4>楕円も引こうぜ（＾▽＾）！</h4>
+    <section
+        class="sec-4"
+        style="position: relative; left:0; top:0;">
+        角は丸く処理していないし、回転もできないぜ（＾▽＾）<br/>
+        調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
+
+        <div
+            :style="`width: ${10 * cellWidth}px; height: ${10 * cellHeight}px;`"
+            style="position: relative; left:0; top:0; border: dashed 4px lightgray;">
+
+            <!-- 0 -->
+            <Ellipse
+                :left="startX * cellWidth"
+                :top="(startY + 1) * cellHeight"
+                :width="4 * cellWidth"
+                :height="3 * cellHeight"
+                :stroke-width="8"
+                color="#ff3300"
+                class="d-flex align-center justify-center">
+                １番
+            </Ellipse>
+
+            <!-- 0 -->
+            <Ellipse
+                :left="(startX - 3) * cellWidth"
+                :top="(startY - 4) * cellHeight"
+                :width="3 * cellWidth"
+                :height="4 * cellHeight"
+                :stroke-width="8"
+                color="#00ff33"
+                class="d-flex align-center justify-center">
+                ２番
+            </Ellipse>
+        </div>
+        <br/>
+    </section>
+
     <h4>矢印を描こうぜ（＾▽＾）！</h4>
     <section
         class="sec-4"
@@ -388,7 +426,7 @@
             style="position: relative; left:0; top:0; border: dashed 4px lightgray;">
 
             <!-- 始まり箱 -->
-            <Rectangle
+            <Ellipse
                 :left="1 * cellWidth"
                 :top="1 * cellHeight"
                 :width="4 * cellWidth"
@@ -397,7 +435,7 @@
                 color="#3333ff"
                 class="d-flex align-center justify-center">
                 はじまり
-            </rectangle>
+            </Ellipse>
 
             <!-- 直線 -->
             <Line
@@ -447,6 +485,7 @@
     // ++++++++++++++++++
 
     import Arrow from '../../components/Arrow.vue'; // Tauri だと明示的にインポートを指定する必要がある。
+    import Ellipse from '../../components/Ellipse.vue';
     import Line from '../../components/Line.vue';
     import Rectangle from '../../components/Rectangle.vue';
     import TheFooter from './the-footer.vue';
