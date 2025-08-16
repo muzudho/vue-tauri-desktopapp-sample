@@ -76,6 +76,7 @@
     // # 効果音 #
     // ##########
 
+    const volume = 0.5; // 音量
     let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
     let sfxMiss: HTMLAudioElement;              // ミス音
 
@@ -84,7 +85,9 @@
      */
     function loadSfx() : void {
         sfxCameraShutter = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
+        sfxCameraShutter.volume = volume;
         sfxMiss = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
+        sfxMiss.volume = volume;
     }
 
     // ##############
@@ -114,8 +117,8 @@
 
         // ゲーム開始から1秒後、星表示
         if (newCount == 1 * minutes) {
-            star1.cols = 5;
-            star1.rows = 3;
+            star1.startCols = 5;
+            star1.startRows = 3;
             star1.visibility = 'visible';
         }
 
@@ -131,15 +134,21 @@
     // ++++++++++++++++++++++++
 
     const star1 = reactive({
-        cols: 0,
-        rows: 0,
+        startCols : 0,  // 出現位置
+        startRows : 0,
         visibility: 'hidden' as 'hidden' | 'visible',
     });
-
-    // モーション設計
-    const o1Motion = ref<Record<string, number>>({
-        toRight: 0,   // 右へ移動するなら正の数、左に移動するなら負の数
+    const star1Cols = computed(()=>{
+        return star1.startCols + Math.floor(count.value / 20);
     });
+    const star1Rows = computed(()=>{
+        return star1.startRows;
+    });
+
+    // // モーション設計
+    // const o1Motion = ref<Record<string, number>>({
+    //     toRight: 0,   // 右へ移動するなら正の数、左に移動するなら負の数
+    // });
 
     // ++++++++++++++++++++++++++++++++++++
     // + カメラのファインダー（点線の枠） +
@@ -296,8 +305,8 @@
 
         // ファインダーの枠内に星を含むか？
         if (
-            finderLeftCols <= star1.cols && star1.cols <= finderRightEndCols &&
-            finderTopCols <= star1.rows && star1.rows <= finderBottomEndCols) {
+            finderLeftCols <= star1Cols.value && star1Cols.value <= finderRightEndCols &&
+            finderTopCols <= star1Rows.value && star1Rows.value <= finderBottomEndCols) {
             // 星を含む
             sfxCameraShutter.play();
 
@@ -313,8 +322,8 @@
 
     const starStyle = computed(() => ({
         visibility: star1.visibility,
-        top: `${star1.rows * cellHeight}px`,
-        left: `${star1.cols * cellWidth + Math.floor(count.value / 20) * cellWidth}px`,
+        top: `${star1Rows.value * cellHeight}px`,
+        left: `${star1Cols.value * cellWidth}px`,
         width: `${cellWidth}px`,
         height: `${cellHeight}px`,
     }));
