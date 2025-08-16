@@ -3,7 +3,17 @@
 
     <h3>説明を始める前に、説明ページのレイアウトを決めておこうぜ！</h3>
     <section class="sec-3">
-        凡例だぜ（＾▽＾）！
+        
+        <p>凡例だぜ（＾▽＾）！</p>
+        <p>
+            ソースコードはこちら（＾▽＾）！
+            <ul>
+                <li>📖 <a target="_blank" href="https://github.com/muzudho/vue-tauri-desktopapp-sample/blob/main/src/pages/making/page-layout.vue">デスクトップアプリ版のソースコード</a></li>
+                <li>📖 <a target="_blank" href="https://github.com/muzudho/vue-nuxt-webapp-sample/blob/main/src/pages/making/page-layout.vue">ウェブアプリ版のソースコード</a></li>
+                <li>📖 <a target="_blank" href="https://github.com/muzudho/Warabenture-2025/blob/main/src/pages/making/page-layout.vue">このワラベンチャーのソースコード</a></li>
+            </ul>
+        </p>
+        <source-code-links :page-path="`/making/page-layout.vue`" />
 
         <v-container style="border:dashed 4px gray;">
             <h1>ワラベンチャー</h1>
@@ -58,6 +68,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import SourceCodeLinks from '../../components/SourceCodeLinks.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
