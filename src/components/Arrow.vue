@@ -1,8 +1,8 @@
 <template>
     <div
-        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border:`"
+        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px;`"
         style="position: absolute;">
-        <!--  dashed 1px ${props.color}; -->
+        <!--  border: dashed 1px ${props.color}; -->
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -104,6 +104,23 @@
         y: endY - arrowHeadSizeD.height,
     };
 
+    // （キャンバスの余白や線の太さを考えない）数学的な頂点の位置
+    //
+    //        D
+    //         ＼
+    //  A--------B
+    //         ／
+    //        C
+    //
+    const pAx = startX - left;
+    const pAy = startY - top;
+    const pBx = endX - left;
+    const pBy = endY - top;
+    const pCx = arrowHeadC.x - left;
+    const pCy = arrowHeadC.y - top;
+    const pDx = arrowHeadD.x - left;
+    const pDy = arrowHeadD.y - top;
+
     const arrowHeadTop = Math.min(arrowHeadC.y, arrowHeadD.y);
     const arrowHeadRight = Math.max(arrowHeadC.x, arrowHeadD.x);
     const arrowHeadBottom = Math.max(arrowHeadC.y, arrowHeadD.y);
@@ -130,30 +147,21 @@
     const svgWidth = Math.abs(width) + boldLeft + boldRight;
     const svgHeight = Math.abs(height) + boldTop + boldBottom;
 
-    // キャンバスを考えない位置
+    // （キャンバスの余白や、線の太さを考慮した中での）点の位置
     //
-    //        D
-    //         ＼
-    //  A--------B
-    //         ／
-    //        C
-    //
-    const pAx = startX - left;
-    const pAy = startY - top;
-    const pBx = endX - left;
-    const pBy = endY - top;
-    const pCx = arrowHeadC.x - left;
-    const pCy = arrowHeadC.y - top;
-    const pDx = arrowHeadD.x - left;
-    const pDy = arrowHeadD.y - top;
-
-    // キャンバスの中での始点の位置
-    //
-    //        D
-    //         ＼
-    //  A--------B
-    //         ／
-    //        C
+    // +-------------------+
+    // |                   |
+    // |          D        |
+    // |         ---       |
+    // |         ＼ ＼     |
+    // |  +--------+  ＼   |
+    // |  A             B  |
+    // |  +--------+   ／  |
+    // |         ／ ／     |
+    // |         ---       |
+    // |          C        |
+    // |                   |
+    // +-------------------+
     //
     const qAx = pAx + boldLeft;
     const qAy = pAy + boldTop;

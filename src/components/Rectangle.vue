@@ -2,7 +2,7 @@
     <div
         :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px;`"
         style="position: absolute;">
-        <!-- border: dashed 1px ${props.color}; -->
+        <!--  border: dashed 1px ${props.color}; -->
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -59,11 +59,18 @@
     // （キャンバスの余白や線の太さを考えない）数学的な頂点の位置
     //
     //  A--------B
+    //  |        |
+    //  |        |
+    //  D--------C
     //
-    const pAx = startX - left;
-    const pAy = startY - top;
-    const pBx = endX - left;
-    const pBy = endY - top;
+    const pAx = startX          - left;
+    const pAy = startY          - top;
+    const pBx = startX + width  - left;
+    const pBy = startY          - top;
+    const pCx = startX + width  - left;
+    const pCy = startY + height - top;
+    const pDx = startX          - left;
+    const pDy = startY + height - top;
 
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const boldLeft = props.strokeWidth / 2;
@@ -79,18 +86,25 @@
 
     // （キャンバスの余白や、線の太さを考慮した中での）点の位置
     //
-    // +-------------------+
-    // |                   |
-    // |  +-------------+  |
-    // |  A             B  |
-    // |  +-------------+  |
-    // |                   |
-    // +-------------------+
+    // +----------------+
+    // |                |
+    // |   A--------B   |
+    // |   | +----+ |   |
+    // |   | |    | |   |
+    // |   | |    | |   |
+    // |   | +----+ |   |
+    // |   D--------C   |
+    // |                |
+    // +----------------+
     //
     const qAx = pAx + boldLeft;
     const qAy = pAy + boldTop;
     const qBx = pBx + boldLeft;
     const qBy = pBy + boldTop;
+    const qCx = pCx + boldLeft;
+    const qCy = pCy + boldTop;
+    const qDx = pDx + boldLeft;
+    const qDy = pDy + boldTop;
 
 
     // ############################
@@ -102,9 +116,15 @@
         // SVGパスを生成
         //
         //  A--------B
+        //  |        |
+        //  |        |
+        //  D--------C
         //
         return `
             M${qAx},${qAy} L${qBx},${qBy}
+            M${qBx},${qBy} L${qCx},${qCy}
+            M${qCx},${qCy} L${qDx},${qDy}
+            M${qDx},${qDy} L${qAx},${qAy}
         `;
     }
 

@@ -166,6 +166,29 @@
         <br/>
     </section>
 
+    <h4>矩形も引こうぜ（＾▽＾）！</h4>
+    <section
+        class="sec-4"
+        style="position: relative; left:0; top:0;">
+        線には太さがあって、角が飛び出てしまうぜ（＾▽＾）<br/>
+        中心がちょっとずれたり、右側と下側はちょっと食み出るけど、調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
+
+        <div
+            :style="`width: ${10 * cellWidth}px; height: ${10 * cellHeight}px;`"
+            style="position: relative; left:0; top:0; border: dashed 4px lightgray;">
+
+            <!-- 0 -->
+            <Rectangle
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="0 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="#ff0000"/>
+        </div>
+        <br/>
+    </section>
+
     <h4>次に、矢印を描こうぜ（＾▽＾）！</h4>
     <section
         class="sec-4"
@@ -359,7 +382,8 @@
     // ++++++++++++++++++
 
     import Arrow from '../../components/Arrow.vue'; // Tauri だと明示的にインポートを指定する必要がある。
-    import Line from '../../components/Line.vue'; // Tauri だと明示的にインポートを指定する必要がある。
+    import Line from '../../components/Line.vue';
+    import Rectangle from '../../components/Rectangle.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 

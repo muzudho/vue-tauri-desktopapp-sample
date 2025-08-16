@@ -1,8 +1,8 @@
 <template>
     <div
-        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px; border:`"
+        :style="`left: ${svgLeft}px; top: ${svgTop}px; width: ${svgWidth}px; height: ${svgHeight}px;`"
         style="position: absolute;">
-        <!--  dashed 1px ${props.color}; -->
+        <!--  border: dashed 1px ${props.color}; -->
         <svg :width="svgWidth" :height="svgHeight" :viewBox="`0 0 ${svgWidth} ${svgHeight}`">
             <path :d="generateArrowPath()" :stroke="color" :stroke-width="strokeWidth" fill="none"/>
         </svg>
@@ -118,6 +118,23 @@
     // const arrowHeadWidth = arrowHeadLeftWidth + arrowHeadRightWidth;
     // const arrowHeadHeight = arrowHeadTopHeight + arrowHeadBottomHeight;
 
+    // （キャンバスの余白や線の太さを考えない）数学的な頂点の位置
+    //
+    //        D
+    //         ＼
+    //  A--------B
+    //         ／
+    //        C
+    //
+    const pAx = startX - left.value;
+    const pAy = startY - top.value;
+    const pBx = endX.value - left.value;
+    const pBy = endY.value - top.value;
+    const pCx = arrowHeadC.value.x - left.value;
+    const pCy = arrowHeadC.value.y - top.value;
+    const pDx = arrowHeadD.value.x - left.value;
+    const pDy = arrowHeadD.value.y - top.value;
+
     // SVGのキャンバスサイズを動的に計算（線の太さがあるので、余白を確保）
     const boldLeft = computed(()=>{
         const arrowHeadLeft = Math.min(arrowHeadC.value.x, arrowHeadD.value.x);
@@ -154,30 +171,21 @@
         return Math.abs(height) + boldTop.value + boldBottom.value;
     });
 
-    // キャンバスを考えない位置
+    // （キャンバスの余白や、線の太さを考慮した中での）点の位置
     //
-    //        D
-    //         ＼
-    //  A--------B
-    //         ／
-    //        C
-    //
-    const pAx = startX - left.value;
-    const pAy = startY - top.value;
-    const pBx = endX.value - left.value;
-    const pBy = endY.value - top.value;
-    const pCx = arrowHeadC.value.x - left.value;
-    const pCy = arrowHeadC.value.y - top.value;
-    const pDx = arrowHeadD.value.x - left.value;
-    const pDy = arrowHeadD.value.y - top.value;
-
-    // キャンバスの中での始点の位置
-    //
-    //        D
-    //         ＼
-    //  A--------B
-    //         ／
-    //        C
+    // +-------------------+
+    // |                   |
+    // |          D        |
+    // |         ---       |
+    // |         ＼ ＼     |
+    // |  +--------+  ＼   |
+    // |  A             B  |
+    // |  +--------+   ／  |
+    // |         ／ ／     |
+    // |         ---       |
+    // |          C        |
+    // |                   |
+    // +-------------------+
     //
     const qAx = pAx + boldLeft.value;
     const qAy = pAy + boldTop.value;
