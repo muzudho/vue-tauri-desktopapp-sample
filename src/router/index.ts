@@ -24,6 +24,11 @@ const routes = [
         component: () => import('../pages/making/count-up.vue'),
     },
     {
+        name: 'InputKey',
+        path: '/making/input-key',
+        component: () => import('../pages/making/input-key.vue'),
+    },
+    {
         name: 'InputAxis',
         path: '/making/input-axis',
         component: () => import('../pages/making/input-axis.vue'),
