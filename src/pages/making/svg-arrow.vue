@@ -3,8 +3,172 @@
 
     <h3>矢印を描こうぜ！</h3>
     <section
-        class="sec-3"
-        :style="`height: ${20 * cellHeight}px;`"
+        class="sec-3">
+        画面上に矢印を描いてみようぜ（＾▽＾）！<br/>
+        <br/>
+    </section>
+
+    <h4>まず、直線を引こうぜ（＾▽＾）！</h4>
+    <section
+        class="sec-4"
+        style="position: relative; left:0; top:0;">
+        線には太さがあって、角が飛び出てしまうぜ（＾▽＾）<br/>
+        中心がちょっとずれたり、右側と下側はちょっと食み出るけど、調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
+
+        <div
+            :style="`width: ${10 * cellWidth}px; height: ${10 * cellHeight}px;`"
+            style="position: relative; left:0; top:0; border: dashed 4px lightgray;">
+
+            <!-- 0 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="0 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="#ff0000"/>
+
+            <!-- 1 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="2.5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="#ff4000"/>
+
+            <!-- 2 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="#ff8000"/>
+
+            <!-- 3 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="5 * cellWidth"
+                :height="-2.5 * cellHeight"
+                :stroke-width="8"
+                color="#ffc000"/>
+
+            <!-- 4 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="5 * cellWidth"
+                :height="0 * cellHeight"
+                :stroke-width="8"
+                color="#ffff00"/>
+
+            <!-- 5 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="5 * cellWidth"
+                :height="2.5 * cellHeight"
+                :stroke-width="8"
+                color="#c0ff00"/>
+
+            <!-- 6 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="#80ff00"/>
+
+            <!-- 7 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="2.5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="#40ff00"/>
+
+            <!-- 8 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="0 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="#00ff00"/>
+
+            <!-- 9 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-2.5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="#00ff80"/>
+
+            <!-- 10 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-5 * cellWidth"
+                :height="5 * cellHeight"
+                :stroke-width="8"
+                color="#00ffff"/>
+
+            <!-- 11 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-5 * cellWidth"
+                :height="2.5 * cellHeight"
+                :stroke-width="8"
+                color="#0080ff"/>
+
+            <!-- 12 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-5 * cellWidth"
+                :height="0 * cellHeight"
+                :stroke-width="8"
+                color="#0000ff"/>
+
+            <!-- 13 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-5 * cellWidth"
+                :height="-2.5 * cellHeight"
+                :stroke-width="8"
+                color="#8000ff"/>
+
+            <!-- 14 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="#ff00ff"/>
+
+            <!-- 15 -->
+            <Line
+                :startX="startX * cellWidth"
+                :startY="startY * cellHeight"
+                :width="-2.5 * cellWidth"
+                :height="-5 * cellHeight"
+                :stroke-width="8"
+                color="#ff0080"/>
+        </div>
+        <br/>
+    </section>
+
+    <h4>次に、矢印を描こうぜ（＾▽＾）！</h4>
+    <section
+        class="sec-4"
         style="position: relative; left:0; top:0;">
         Grok にコードを書いてもらいながら矢印を作ってみたけど、線に太さがあってはみ出てしまうぜ、難し～（＾▽＾）！<br/>
         <br/>
@@ -164,6 +328,9 @@
 
         </div>
         <br/>
+
+        <p>👇 下のラジオボタンをクリックすると、枠が出るぜ（＾▽＾）！</p>
+        <!-- Tauri ではラジオボタンが描画されない？ opacity が 0 になってる？ -->
         
         <v-checkbox
             v-for="index in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]"
@@ -192,6 +359,7 @@
     // ++++++++++++++++++
 
     import Arrow from '../../components/Arrow.vue'; // Tauri だと明示的にインポートを指定する必要がある。
+    import Line from '../../components/Line.vue'; // Tauri だと明示的にインポートを指定する必要がある。
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
