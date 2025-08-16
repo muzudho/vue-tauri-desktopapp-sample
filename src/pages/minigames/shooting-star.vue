@@ -29,7 +29,14 @@
         <div>
             <v-btn @click="startGame($event)">{{ misc.startButtonText }}</v-btn>
             <v-btn @click="pauseGame($event)">{{ misc.pauseButtonText }}</v-btn>
-            スコア： {{ misc.score }}　残り時間: {{ Math.floor((misc.maxCount - count) / seconds) }} . {{ (misc.maxCount - count) % seconds }}
+
+            <!-- フォーカスを外すためのダミー・ボタンです -->
+            <v-btn id="dammyButton">何もしないボタン</v-btn>
+            <br/>
+
+            <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
+            スコア： {{ misc.score }}　　残り時間: {{ Math.floor((misc.maxCount - count) / seconds) }} . {{ (misc.maxCount - count) % seconds }}
+            </p>
         </div>
 
         <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
@@ -76,10 +83,10 @@
         </div>
 
         <!-- デバッグ用 -->
-        <p>スケジュール・ステップ: {{ misc.scheduleStep }}</p>
-        <p>星　行： {{ star1Rows }}</p>
-        <p>星　列： {{ star1Cols }}</p>
         <!--
+            <p>スケジュール・ステップ: {{ misc.scheduleStep }}</p>
+            <p>星　行： {{ star1Rows }}</p>
+            <p>星　列： {{ star1Cols }}</p>
             <p>リロード・タイム: {{ finder1.reloadTime }}</p>
             <br/>
             <p>元画像のタイルマップを表示：</p>
@@ -591,7 +598,9 @@
     }
 
     function startGame(event: Event) : void {
-        (event.target as HTMLElement).blur();   // フォーカスを外す
+        //(event.target as HTMLElement).blur();   // フォーカスを外す
+        //document.body.focus();  // 何もないところにフォーカスを当てる
+        document.getElementById("dammyButton")?.focus();
 
         if(misc.isPlaying) {
             // ゲームを終了させます
@@ -606,7 +615,9 @@
     }
 
     function pauseGame(event: Event) : void {
-        (event.target as HTMLElement).blur();   // フォーカスを外す
+        //(event.target as HTMLElement).blur();   // フォーカスを外す
+        //document.body.focus();  // 何もないところにフォーカスを当てる
+        document.getElementById("dammyButton")?.focus();
 
         if(misc.isPause) {
             stopwatch1.value?.startTimer();  // タイマーをスタート
@@ -627,6 +638,7 @@
         if (finder1.reloadTime > 0) {
             // リロード中
             if (!isSfxBuzzerPlaying.value) {
+                isSfxBuzzerPlaying.value = true;
                 // ブザー音が停止中なら鳴らす
                 sfxBuzzer.play();
             }
@@ -648,6 +660,7 @@
         // 星を含まない
         } else {
             if (!isSfxMissPlaying.value) {
+                isSfxMissPlaying.value = true;
                 // ミス音が停止中なら鳴らす
                 sfxMiss.play();
             }
@@ -659,6 +672,7 @@
 
     function niceShot() : void {
         if (!isSfxCameraShutterPlaying.value) {
+            isSfxCameraShutterPlaying.value = true;
             // カメラのシャッター音が停止中なら鳴らす
             sfxCameraShutter.play();
         }
