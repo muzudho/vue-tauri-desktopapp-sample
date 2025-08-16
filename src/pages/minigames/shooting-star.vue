@@ -4,6 +4,11 @@
     <h3>シューティング・スター</h3>
     <section class="sec-3">
 
+        <!-- ボタンを並べる -->
+        <v-btn @click="startGame()">ゲームスタート</v-btn>
+        <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
+
+        <br/>
         <stopwatch-dev
             ref="stopwatch1"
             v-on:countUp="(countNum) => { count = countNum; }"
@@ -106,14 +111,6 @@
     // ##############
     // # 共有データ #
     // ##############
-
-    // ++++++++++
-    // + その他 +
-    // ++++++++++
-
-    const misc = reactive({
-        score: 0,
-    });
 
     // ++++++
     // + 盤 +
@@ -240,6 +237,16 @@
         return reloadTimerFrames[reloadTimerIndex.value].top;
     });
 
+    // ++++++++++
+    // + その他 +
+    // ++++++++++
+
+    const misc = reactive({
+        score: 0,
+        gameIsPause: false,
+        pauseButtonText: "一時停止",
+    });
+
     // ##########
     // # 開始時 #
     // ##########
@@ -351,6 +358,22 @@
     // # サブルーチン #
     // ################
 
+    function startGame() : void {
+        stopwatch1.value?.startTimer();  // タイマーをスタート
+    }
+
+    function pauseGame() : void {
+        if(misc.gameIsPause) {
+            stopwatch1.value?.startTimer();  // タイマーをスタート
+            misc.pauseButtonText = "一時停止"; // ボタンのテキストを更新
+        } else {
+            stopwatch1.value?.stopTimer();  // タイマーをストップ
+            misc.pauseButtonText = "再開"; // ボタンのテキストを更新
+        }
+
+        misc.gameIsPause = !misc.gameIsPause;
+    }
+
     /**
      * カメラショット処理
      */
@@ -383,7 +406,7 @@
         finder1.reloadTime = reloadTimeWeight;  // リロード時間を設定
     }
 
-    
+
     function niceShot() : void {
         sfxCameraShutter.play();
         misc.score += 100;
