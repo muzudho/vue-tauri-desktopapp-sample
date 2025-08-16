@@ -193,7 +193,7 @@
             case 1:
                 // ゲーム開始から3秒後、星非表示
                 if (newCount >= 3 * seconds) {
-                    //star1.visibility = 'hidden';
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -202,21 +202,21 @@
                 if (newCount >= 4 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 9;
-                    star1.startRows = 4;
+                    star1.startRows = 9;
                     star1.visibility = 'visible';
                     misc.scheduleStep += 1;
                 }
                 break;
             case 3:
-                // ゲーム開始から8秒後、星非表示
-                if (newCount >= 8 * seconds) {
-                    //star1.visibility = 'hidden';
+                // ゲーム開始から6秒後、星非表示
+                if (newCount >= 6 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
             case 4:
-                // ゲーム開始から11秒後、星表示
-                if (newCount >= 11 * seconds) {
+                // ゲーム開始から8秒後、星表示
+                if (newCount >= 8 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 0;
                     star1.startRows = 8;
@@ -225,9 +225,9 @@
                 }
                 break;
             case 5:
-                // ゲーム開始から12秒後、星非表示
-                if (newCount >= 12 * seconds) {
-                    //star1.visibility = 'hidden';
+                // ゲーム開始から10秒後、星非表示
+                if (newCount >= 10 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -242,9 +242,9 @@
                 }
                 break;
             case 7:
-                // ゲーム開始から16秒後、星非表示
-                if (newCount >= 16 * seconds) {
-                    //star1.visibility = 'hidden';
+                // ゲーム開始から15秒後、星非表示
+                if (newCount >= 15 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -259,9 +259,9 @@
                 }
                 break;
             case 9:
-                // ゲーム開始から23秒後、星非表示
-                if (newCount >= 23 * seconds) {
-                    //star1.visibility = 'hidden';
+                // ゲーム開始から21秒後、星非表示
+                if (newCount >= 21 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -270,15 +270,15 @@
                 if (newCount >= 27 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 6;
-                    star1.startRows = 2;
+                    star1.startRows = 11;
                     star1.visibility = 'visible';
                     misc.scheduleStep += 1;
                 }
                 break;
             case 11:
-                // ゲーム開始から30秒後、星非表示
-                if (newCount >= 30 * seconds) {
-                    //star1.visibility = 'hidden';
+                // ゲーム開始から29秒後、星非表示
+                if (newCount >= 29 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -287,7 +287,7 @@
                 if (newCount >= 33 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 4;
-                    star1.startRows = 1;
+                    star1.startRows = 6;
                     star1.visibility = 'visible';
                     misc.scheduleStep += 1;
                 }
@@ -295,7 +295,7 @@
             case 13:
                 // ゲーム開始から36秒後、星非表示
                 if (newCount >= 36 * seconds) {
-                    //star1.visibility = 'hidden';
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -310,9 +310,9 @@
                 }
                 break;
             case 15:
-                // ゲーム開始から42秒後、星非表示
-                if (newCount >= 42 * seconds) {
-                    //star1.visibility = 'hidden';
+                // ゲーム開始から41秒後、星非表示
+                if (newCount >= 41 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -321,7 +321,7 @@
                 if (newCount >= 45 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 6;
-                    star1.startRows = 1;
+                    star1.startRows = 7;
                     star1.visibility = 'visible';
                     misc.scheduleStep += 1;
                 }
@@ -329,7 +329,7 @@
             case 17:
                 // ゲーム開始から48秒後、星非表示
                 if (newCount >= 48 * seconds) {
-                    //star1.visibility = 'hidden';
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -338,7 +338,7 @@
                 if (newCount >= 51 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 7;
-                    star1.startRows = 1;
+                    star1.startRows = 3;
                     star1.visibility = 'visible';
                     misc.scheduleStep += 1;
                 }
@@ -346,7 +346,7 @@
             case 19:
                 // ゲーム開始から54秒後、星非表示
                 if (newCount >= 54 * seconds) {
-                    //star1.visibility = 'hidden';
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
@@ -355,15 +355,15 @@
                 if (newCount >= 57 * seconds) {
                     star1.startCount = newCount;
                     star1.startCols = 8;
-                    star1.startRows = 1;
+                    star1.startRows = 9;
                     star1.visibility = 'visible';
                     misc.scheduleStep += 1;
                 }
                 break;
             case 21:
                 // ゲーム開始から60秒後、星非表示
-                if (newCount >= 60 * seconds) {
-                    //star1.visibility = 'hidden';
+                if (newCount >= 59 * seconds) {
+                    star1.visibility = 'hidden';
                     misc.scheduleStep += 1;
                 }
                 break;
