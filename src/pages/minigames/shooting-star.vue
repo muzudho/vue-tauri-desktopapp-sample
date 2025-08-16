@@ -133,7 +133,7 @@
      * 効果音をロードする（jsfxrで作った効果音）
      */
     function loadSfx() : void {
-        sfxBuzzer = new Audio('/wav/202508__sfx__16--2212-buzzer.wav'); // ブザー音
+        sfxBuzzer = new Audio('/wav/202508__sfx__17--0200-cancel.wav'); // ブザー音
         sfxBuzzer.volume = volume;
         sfxBuzzer.addEventListener('play', () => { isSfxBuzzerPlaying.value = true })
         sfxBuzzer.addEventListener('pause', () => { isSfxBuzzerPlaying.value = false })
@@ -642,6 +642,9 @@
                 // ブザー音が停止中なら鳴らす
                 sfxBuzzer.play();
             }
+
+            // リロード中は何も起こりません。
+            return;
         }
 
         // ファインダーの位置とサイズ
