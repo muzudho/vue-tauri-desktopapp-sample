@@ -120,9 +120,13 @@
         </v-row>
     </section>
 
-    <hr/>
-    <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
-    <router-link to="/making">メイキングの先頭に戻る</router-link>
+    <br/>
+    <h3>ソースコード</h3>
+    <section class="sec-3">
+        <source-link/>
+    </section>
+
+    <the-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -137,8 +141,13 @@
     // ++++++++++++++++++
     // + コンポーネント +
     // ++++++++++++++++++
+    //
+    // Tauri だと明示的にインポートを指定する必要がある。
+    //
 
+    import SourceLink from '../../../components/SourceLink.vue';
     import TheParentHeader from '../the-header.vue';
+    import TheParentFooter from '../the-footer.vue';
 
     // ##############
     // # 共有データ #
