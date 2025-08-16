@@ -4,14 +4,12 @@
     <h3>シューティング・スター</h3>
     <section class="sec-3">
 
-        <p>カウント: {{ count }}</p>
-        <br/>
-        テスト：<br/>
         <stopwatch-dev
             ref="stopwatch1"
             v-on:countUp="(countNum) => { count = countNum; }"
         /><br/>
-        ：テスト<br/>
+        <br/>
+        <p>リロード・タイム: {{ finder1.reloadTime }}</p>
         <br/>
 
         <p>TODO: ここにスコアを表示したい。</p>
@@ -25,14 +23,14 @@
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in boardArea" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / board.cols) * cellHeight}px; left: ${((i - 1) % board.cols) * cellWidth}px; width:${cellWidth}px; height:${cellHeight}px; border: solid 1px gray;`"></div>
+                :style="`position:absolute; top: ${Math.floor((i - 1) / board.cols) * board.cellHeight}px; left: ${((i - 1) % board.cols) * board.cellWidth}px; width:${board.cellWidth}px; height:${board.cellHeight}px; border: solid 1px gray;`"></div>
 
             <!-- 星 -->
             <Tile
                 :srcLeft="0"
                 :srcTop="0"
-                :srcWidth="32"
-                :srcHeight="32"
+                :srcWidth="board.cellWidth"
+                :srcHeight="board.cellHeight"
                 tilemapUrl="/img/making/sprite-objects-001.png"
                 :style="starStyle"
                 style="position:absolute;" /><br/>
@@ -42,12 +40,23 @@
                 class="finder"
                 :style="finderStyle"
                 style="position:absolute;" ></div>
-            
+
+            <!-- リロードのカウントダウン（パイみたいなやつ） -->
+            <Tile
+                :srcLeft="0"
+                :srcTop="0"
+                :srcWidth="board.cellWidth"
+                :srcHeight="board.cellHeight"
+                tilemapUrl="/img/making/202508__warabenture__16--2315-8counts.png"
+                :style="reloadPieStyle"
+                style="position:absolute;" /><br/>
+                
         </div>
 
         <br/>
         <p>元画像のタイルマップを表示：</p>
-        <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/>
+        <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/><br/>
+        <v-img src="/img/making/202508__warabenture__16--2315-8counts.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
         ：ここまで。
     </section>
 
@@ -76,7 +85,7 @@
     // # 効果音 #
     // ##########
 
-    const volume = 0.5; // 音量
+    const volume = 0.3; // 音量
     let sfxBuzzer: HTMLAudioElement;            // ブザー音
     let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
     let sfxMiss: HTMLAudioElement;              // ミス音
@@ -97,9 +106,18 @@
     // # 共有データ #
     // ##############
 
+    // ++++++
+    // + 盤 +
+    // ++++++
+
     // 盤データ
-    const cellWidth = 32;
-    const cellHeight = 32;
+    const board = reactive({
+        cellWidth: 32,
+        cellHeight: 32,
+        cols: 16,
+        rows: 12,
+    });
+    const boardArea = board.cols * board.rows; // 盤のセル数
 
     // 時データ
     const seconds = 60; // 1秒は60フレーム
@@ -158,8 +176,8 @@
     // ++++++++++++++++++++++++++++++++++++
 
     const finder1 = reactive({
-        left: 6 * cellWidth,    // スプライトのX座標
-        top: 4 * cellHeight,    // スプライトのY座標
+        left: 6 * board.cellWidth,    // スプライトのX座標
+        top: 4 * board.cellHeight,    // スプライトのY座標
         colNum: 4,              // スプライトの列数
         rowNum: 3,              // スプライトの行数
         speed: 4,               // 移動速度
@@ -180,13 +198,6 @@
     const moRight = 1;
     const moUp = -1;
     const moDown = 1;
-
-    // 盤データ
-    const board = reactive({
-        cols: 16,
-        rows: 12,
-    });
-    const boardArea = board.cols * board.rows; // 盤のセル数
 
 
     // ##########
@@ -266,7 +277,7 @@
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
                 if (finder1.motion["xAxis"]==1) {   // 右
-                    if (finder1.left < (board.cols - finder1.colNum) * cellWidth) {    // 境界チェック
+                    if (finder1.left < (board.cols - finder1.colNum) * board.cellWidth) {    // 境界チェック
                         finder1.left += finder1.speed;
                     }
                 } else if (finder1.motion["xAxis"]==-1) {  // 左
@@ -280,7 +291,7 @@
                         finder1.top -= finder1.speed;
                     }
                 } else if (finder1.motion["yAxis"]==1) {   // 下
-                    if (finder1.top < (board.rows - finder1.rowNum) * cellHeight) {    // 境界チェック
+                    if (finder1.top < (board.rows - finder1.rowNum) * board.cellHeight) {    // 境界チェック
                         finder1.top += finder1.speed;
                     }
                 }
@@ -312,8 +323,8 @@
         }
 
         // ファインダーの位置とサイズ
-        const finderLeftCols = finder1.left / cellWidth;
-        const finderTopCols = finder1.top / cellHeight;
+        const finderLeftCols = finder1.left / board.cellWidth;
+        const finderTopCols = finder1.top / board.cellHeight;
         const finderRightEndCols = finderLeftCols + finder1.colNum;
         const finderBottomEndCols = finderTopCols + finder1.rowNum;
 
@@ -338,16 +349,21 @@
 
     const starStyle = computed(() => ({
         visibility: star1.visibility,
-        top: `${star1Rows.value * cellHeight}px`,
-        left: `${star1Cols.value * cellWidth}px`,
-        width: `${cellWidth}px`,
-        height: `${cellHeight}px`,
+        top: `${star1Rows.value * board.cellHeight}px`,
+        left: `${star1Cols.value * board.cellWidth}px`,
+        width: `${board.cellWidth}px`,
+        height: `${board.cellHeight}px`,
     }));
     const finderStyle = computed(() => ({
         top: `${finder1.top}px`,
         left: `${finder1.left}px`,
-        width: `${finder1.colNum * cellWidth}px`,
-        height: `${finder1.rowNum * cellHeight}px`,
+        width: `${finder1.colNum * board.cellWidth}px`,
+        height: `${finder1.rowNum * board.cellHeight}px`,
+    }));
+    const reloadPieStyle = computed(() => ({
+        visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
+        top: `${finder1.top + finder1.rowNum * board.cellHeight / 2 - board.cellHeight / 2}px`,
+        left: `${finder1.left + finder1.colNum * board.cellWidth / 2 - board.cellWidth / 2}px`,
     }));
 
 </script>
