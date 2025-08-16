@@ -27,8 +27,8 @@
 
         <!-- ボタンを並べる -->
         <div>
-            <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
-            <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
+            <v-btn @click="startGame($event)">{{ misc.startButtonText }}</v-btn>
+            <v-btn @click="pauseGame($event)">{{ misc.pauseButtonText }}</v-btn>
             スコア： {{ misc.score }}　残り時間: {{ Math.floor((misc.maxCount - count) / seconds) }} . {{ (misc.maxCount - count) % seconds }}
         </div>
 
@@ -397,7 +397,9 @@
         star1.visibility = 'hidden';
     }
 
-    function startGame() : void {
+    function startGame(event: Event) : void {
+        (event.target as HTMLElement).blur();   // フォーカスを外す
+
         if(misc.isPlaying) {
             // ゲームを終了させます
             initGame();
@@ -410,7 +412,9 @@
         misc.isPlaying = !misc.isPlaying;
     }
 
-    function pauseGame() : void {
+    function pauseGame(event: Event) : void {
+        (event.target as HTMLElement).blur();   // フォーカスを外す
+
         if(misc.isPause) {
             stopwatch1.value?.startTimer();  // タイマーをスタート
             misc.pauseButtonText = "一時停止"; // ボタンのテキストを更新
