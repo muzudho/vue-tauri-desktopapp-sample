@@ -58,7 +58,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -78,7 +78,54 @@
     const cellWidth = 32;
     const cellHeight = 32;
 
-    // プレイヤー１（点線の枠）
+    // 時データ
+    const minutes = 60; // 1分は60秒
+
+    // ++++++++++++++
+    // + カウンター +
+    // ++++++++++++++
+
+    const count = ref<number>(0);   // カウントの初期値
+    watch(count, (newCount) => {
+        // カウントが変わったら、何か処理をしたい。
+
+        // ++++++++++++++++
+        // + スケジュール +
+        // ++++++++++++++++
+
+        // ゲーム開始から1秒後、星表示
+        if (newCount == 1 * minutes) {
+            o1Cols.value = 5;
+            o1Rows.value = 3;
+            o1Visibility.value = 'visible';
+        }
+
+        // ゲーム開始から3秒後、星非表示
+        if (newCount == 3 * minutes) {
+            o1Visibility.value = 'hidden';
+        }
+    });
+
+
+    // ++++++++++++++++++++++++
+    // + オブジェクト１：　星 +
+    // ++++++++++++++++++++++++
+
+    const o1Cols = ref<number>(0);
+    const o1Rows = ref<number>(0);
+    const o1Left = ref<number>(0);
+    const o1Top = ref<number>(0);
+    const o1Visibility = ref<string>('hidden'); // 可視状態
+
+    // モーション設計
+    const o1Motion = ref<Record<string, number>>({
+        toRight: 0,   // 右へ移動するなら正の数、左に移動するなら負の数
+    });
+
+    // ++++++++++++++++++++++++++++
+    // + プレイヤー１（点線の枠） +
+    // ++++++++++++++++++++++++++++
+
     const p1Left = ref<number>(6 * cellWidth);      // スプライトのX座標
     const p1Top = ref<number>(4* cellHeight);       // スプライトのY座標
     const p1ColNum = ref<number>(4);    // スプライトの列数
@@ -99,10 +146,6 @@
         xAxis: 0,   // 負なら左、正なら右
         yAxis: 0,   // 負なら上、正なら下
     });
-
-    // タイマー
-    const count = ref<number>(0);   // カウントの初期値
-    //const timerId = ref<number | null>(null);   // タイマーのIDを保持
 
     // 盤データ
     const tableColumns = 16;
@@ -206,8 +249,9 @@
     // ############
 
     const starStyle = computed(() => ({
-        top: `0px`,
-        left: `${count.value % 256}px`,
+        visibility: o1Visibility.value,
+        top: `${o1Rows.value * cellHeight}px`,
+        left: `${o1Cols.value * cellWidth + Math.floor(count.value / 20) * cellWidth}px`,
         width: `${cellWidth}px`,
         height: `${cellHeight}px`,
     }));
