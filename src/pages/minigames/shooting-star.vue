@@ -47,7 +47,7 @@
                 :srcTop="reloadTimerTileTop"
                 :srcWidth="board.cellWidth"
                 :srcHeight="board.cellHeight"
-                tilemapUrl="/img/making/202508__warabenture__16--2315-8counts.png"
+                tilemapUrl="/img/making/202508__warabenture__16--2357-8counts-red.png"
                 :style="reloadPieStyle"
                 style="position:absolute;" /><br/>
                 
@@ -56,7 +56,7 @@
         <br/>
         <p>元画像のタイルマップを表示：</p>
         <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/><br/>
-        <v-img src="/img/making/202508__warabenture__16--2315-8counts.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
+        <v-img src="/img/making/202508__warabenture__16--2357-8counts-red.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
         ：ここまで。
     </section>
 
@@ -390,7 +390,7 @@
         left: `${finder1.left}px`,
         width: `${finder1.colNum * board.cellWidth}px`,
         height: `${finder1.rowNum * board.cellHeight}px`,
-        border: `dashed 4px ${finder1.reloadTime > 0 ? '#ff0000' : '#f0f0f0'}`, // リロード中は赤い枠
+        border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
     }));
     const reloadPieStyle = computed(() => ({
         visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
