@@ -77,6 +77,7 @@
     // ##########
 
     const volume = 0.5; // 音量
+    let sfxBuzzer: HTMLAudioElement;            // ブザー音
     let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
     let sfxMiss: HTMLAudioElement;              // ミス音
 
@@ -84,6 +85,8 @@
      * 効果音をロードする（jsfxrで作った効果音）
      */
     function loadSfx() : void {
+        sfxBuzzer = new Audio('/wav/202508__sfx__16--2212-buzzer.wav'); // ブザー音
+        sfxBuzzer.volume = volume;
         sfxCameraShutter = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
         sfxCameraShutter.volume = volume;
         sfxMiss = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
@@ -99,7 +102,7 @@
     const cellHeight = 32;
 
     // 時データ
-    const minutes = 60; // 1分は60秒
+    const seconds = 60; // 1秒は60フレーム
 
     // ++++++++++++++
     // + カウンター +
@@ -116,14 +119,14 @@
         // ++++++++++++++++
 
         // ゲーム開始から1秒後、星表示
-        if (newCount == 1 * minutes) {
+        if (newCount == 1 * seconds) {
             star1.startCols = 5;
             star1.startRows = 3;
             star1.visibility = 'visible';
         }
 
         // ゲーム開始から3秒後、星非表示
-        if (newCount == 3 * minutes) {
+        if (newCount == 3 * seconds) {
             star1.visibility = 'hidden';
         }
     });
@@ -169,6 +172,7 @@
             xAxis: 0,   // 負なら左、正なら右
             yAxis: 0,   // 負なら上、正なら下
         }),
+        reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
 
     // モーション
@@ -216,6 +220,11 @@
             const update = () => {
                 // モーション・タイマー
                 finder1.motionWait -= 1;
+
+                if (finder1.reloadTime > 0) {
+                    // リロード中
+                    finder1.reloadTime -= 1;
+                }
 
                 if (finder1.motionWait==0) {
                     finder1.motion["xAxis"] = 0;    // クリアー
@@ -295,7 +304,12 @@
      * カメラショット処理
      */
     function cameraShot() : void {
-        // ファインダーの枠内の星の数を数えます。
+
+        if (finder1.reloadTime > 0) {
+            // リロード中
+            sfxBuzzer.play();
+            return;
+        }
 
         // ファインダーの位置とサイズ
         const finderLeftCols = finder1.left / cellWidth;
@@ -314,6 +328,8 @@
         } else {
             sfxMiss.play();
         }
+
+        finder1.reloadTime = 3 * seconds;  // リロード時間を設定
     }
 
     // ############
