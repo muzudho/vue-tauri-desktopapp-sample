@@ -12,7 +12,8 @@
         <p>リロード・タイム: {{ finder1.reloadTime }}</p>
         <br/>
 
-        <p>TODO: ここにスコアを表示したい。</p>
+        <p>スコア： {{ misc.score }}</p>
+        <br/>
 
         <p>キーボードの上下左右キーを押してくれだぜ！</p>
 
@@ -105,6 +106,14 @@
     // ##############
     // # 共有データ #
     // ##############
+
+    // ++++++++++
+    // + その他 +
+    // ++++++++++
+
+    const misc = reactive({
+        score: 0,
+    });
 
     // ++++++
     // + 盤 +
@@ -363,8 +372,8 @@
         if (
             finderLeftCols <= star1Cols.value && star1Cols.value <= finderRightEndCols &&
             finderTopCols <= star1Rows.value && star1Rows.value <= finderBottomEndCols) {
-            // 星を含む
-            sfxCameraShutter.play();
+            // 星を含んだ。
+            niceShot();
 
         // 星を含まない
         } else {
@@ -373,6 +382,13 @@
 
         finder1.reloadTime = reloadTimeWeight;  // リロード時間を設定
     }
+
+    
+    function niceShot() : void {
+        sfxCameraShutter.play();
+        misc.score += 100;
+    }
+
 
     // ############
     // # スタイル #
