@@ -1,4 +1,5 @@
 <template>
+    <!-- /pages/making/count-up.vue のコンポーネント化 -->
     <div style="display: inline-block;">
         <p>カウント: {{ count }}</p>
         <v-btn @click="startTimer">スタート</v-btn>
