@@ -15,9 +15,6 @@
     // # インポート #
     // ##############
 
-    import { computed, ref } from 'vue';
-
-
     // ####################################
     // # このコンポーネントが受け取る引数 #
     // ####################################
@@ -83,8 +80,8 @@
     const endY = startY + height;
 
     const top = Math.min(startY, endY);
-    const right = Math.max(startX, endX);
-    const bottom = Math.max(startY, endY);
+    // const right = Math.max(startX, endX);
+    // const bottom = Math.max(startY, endY);
     const left = Math.min(startX, endX);
 
     // 矢印の長さを計算
