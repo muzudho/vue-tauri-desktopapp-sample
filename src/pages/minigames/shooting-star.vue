@@ -9,11 +9,14 @@
         <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
 
         <br/>
+        <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch-dev
             ref="stopwatch1"
             v-on:countUp="(countNum) => { count = countNum; }"
-        /><br/>
+            style="display: none;" />
         <br/>
+        <br/>
+        <p>残り時間: {{ Math.floor((misc.maxCount - count) / seconds) }} . {{ (misc.maxCount - count) % seconds }}</p>
         <p>リロード・タイム: {{ finder1.reloadTime }}</p>
         <br/>
 
@@ -247,6 +250,7 @@
         isPause: false,
         startButtonText: "読込中...",
         pauseButtonText: "読込中...",
+        maxCount: 60 * seconds,     // ゲーム時間は１分。
     });
 
     // ##########
