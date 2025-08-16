@@ -39,7 +39,8 @@
             <!-- プレイヤー１（点線の枠） -->
             <div
                 class="cursor"
-                :style="p1Style"></div>
+                :style="p1Style"
+                style="position:absolute;" ></div>
             
         </div>
 
@@ -134,19 +135,19 @@
         speed: 4,               // 移動速度
         input: <Record<string, boolean>>{  // 入力
             ArrowUp: false, ArrowDown: false, ArrowLeft: false, ArrowRight: false
-        }
+        },
+        motionWait: 0,          // 入力キーごとに用意したい
+        motion: ref<Record<string, number>>({  // 入力
+            xAxis: 0,   // 負なら左、正なら右
+            yAxis: 0,   // 負なら上、正なら下
+        }),
     });
 
     // モーション
-    const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
     const moLeft = -1;  // モーション（motion）定数。左に移動する
     const moRight = 1;
     const moUp = -1;
     const moDown = 1;
-    const p1Motion = ref<Record<string, number>>({  // 入力
-        xAxis: 0,   // 負なら左、正なら右
-        yAxis: 0,   // 負なら上、正なら下
-    });
 
     // 盤データ
     const tableColumns = 16;
@@ -182,53 +183,53 @@
         function startGameLoop() : void {
             const update = () => {
                 // モーション・タイマー
-                p1MotionWait.value -= 1;
+                player1.motionWait -= 1;
 
-                if (p1MotionWait.value==0) {
-                    p1Motion.value["xAxis"] = 0;    // クリアー
-                    p1Motion.value["yAxis"] = 0;
+                if (player1.motionWait==0) {
+                    player1.motion["xAxis"] = 0;    // クリアー
+                    player1.motion["yAxis"] = 0;
                 }
                 
                 // 入力（上下左右への移動）をモーションに変換
-                if (p1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+                if (player1.motionWait<=0) {   // ウェイトが無ければ、入力を受け付ける。
                     if (player1.input.ArrowLeft) {
-                        p1Motion.value["xAxis"] = moLeft; // 左
+                        player1.motion["xAxis"] = moLeft; // 左
                     }
 
                     if (player1.input.ArrowRight) {
-                        p1Motion.value["xAxis"] = moRight;  // 右
+                        player1.motion["xAxis"] = moRight;  // 右
                     }
 
                     if (player1.input.ArrowUp) {
-                        p1Motion.value["yAxis"] = moUp;   // 上
+                        player1.motion["yAxis"] = moUp;   // 上
                     }
 
                     if (player1.input.ArrowDown) {
-                        p1Motion.value["yAxis"] = moDown;   // 下
+                        player1.motion["yAxis"] = moDown;   // 下
                     }
 
-                    if (p1Motion.value["xAxis"]!=0 || p1Motion.value["yAxis"]!=0) {
-                        p1MotionWait.value = 8;    // フレーム数を設定
+                    if (player1.motion["xAxis"]!=0 || player1.motion["yAxis"]!=0) {
+                        player1.motionWait = 8;    // フレーム数を設定
                     }
                 }
 
                 // 移動処理
                 // 斜め方向の場合、上下を優先する。
-                if (p1Motion.value["xAxis"]==1) {   // 右
+                if (player1.motion["xAxis"]==1) {   // 右
                     if (player1.left < (tableColumns - player1.colNum) * cellWidth) {    // 境界チェック
                         player1.left += player1.speed;
                     }
-                } else if (p1Motion.value["xAxis"]==-1) {  // 左
+                } else if (player1.motion["xAxis"]==-1) {  // 左
                     if (0 < player1.left) {    // 境界チェック
                         player1.left -= player1.speed;
                     }
                 }
 
-                if (p1Motion.value["yAxis"]==-1) {  // 上
+                if (player1.motion["yAxis"]==-1) {  // 上
                     if (0 < player1.top) {    // 境界チェック
                         player1.top -= player1.speed;
                     }
-                } else if (p1Motion.value["yAxis"]==1) {   // 下
+                } else if (player1.motion["yAxis"]==1) {   // 下
                     if (player1.top < (tableRows - player1.rowNum) * cellHeight) {    // 境界チェック
                         player1.top += player1.speed;
                     }
