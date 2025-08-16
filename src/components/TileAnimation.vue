@@ -14,7 +14,8 @@
     // * インターフェース *
     // ********************
 
-    // NOTE: Tauri では interface をインポートできる。（Tauri 以外では type を付ける）
+    // NOTE: Tauri なら interface をインポートできる。（Tauri 以外では type を付ける）
+    // NOTE: Nuxt なら interface は無いので、import する時は type を付ける
     import Rectangle from '../interfaces/Rectangle';
 
     // ####################################
