@@ -55,14 +55,14 @@
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / board1.cols) * board1.cellHeight}px; left: ${((i - 1) % board1.cols) * board1.cellWidth}px; width:${board1.cellWidth}px; height:${board1.cellHeight}px; border: solid 1px gray;`"></div>
+                :style="`position:absolute; top: ${Math.floor((i - 1) / board1Cols) * board1CellHeight}px; left: ${((i - 1) % board1Cols) * board1CellWidth}px; width:${board1CellWidth}px; height:${board1CellHeight}px; border: solid 1px gray;`"></div>
 
             <!-- 星 -->
             <Tile
                 :srcLeft="0"
                 :srcTop="0"
-                :srcWidth="board1.cellWidth"
-                :srcHeight="board1.cellHeight"
+                :srcWidth="board1CellWidth"
+                :srcHeight="board1CellHeight"
                 tilemapUrl="/img/making/sprite-objects-001.png"
                 :style="starStyle"
                 style="position:absolute;" /><br/>
@@ -77,8 +77,8 @@
             <Tile
                 :srcLeft="reloadPie1TileLeft"
                 :srcTop="reloadPie1TileTop"
-                :srcWidth="board1.cellWidth"
-                :srcHeight="board1.cellHeight"
+                :srcWidth="board1CellWidth"
+                :srcHeight="board1CellHeight"
                 tilemapUrl="/img/making/202508__warabenture__16--2357-8counts-red.png"
                 :style="reloadPieStyle"
                 style="position:absolute;" /><br/>
@@ -223,187 +223,187 @@
             case 0:
                 // ゲーム開始から1秒後、星表示
                 if (newCount >= 1 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 5;
-                    star1.startRows = 3;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 5;
+                    star1StartRows.value = 3;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;                    
                 }
                 break;
             case 1:
                 // ゲーム開始から3秒後、星非表示
                 if (newCount >= 3 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 2:
                 // ゲーム開始から4秒後、星表示
                 if (newCount >= 4 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 9;
-                    star1.startRows = 9;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 9;
+                    star1StartRows.value = 9;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 3:
                 // ゲーム開始から6秒後、星非表示
                 if (newCount >= 6 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 4:
                 // ゲーム開始から8秒後、星表示
                 if (newCount >= 8 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 0;
-                    star1.startRows = 8;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 0;
+                    star1StartRows.value = 8;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 5:
                 // ゲーム開始から10秒後、星非表示
                 if (newCount >= 10 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 6:
                 // ゲーム開始から14秒後、星表示
                 if (newCount >= 14 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 12;
-                    star1.startRows = 5;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 12;
+                    star1StartRows.value = 5;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 7:
                 // ゲーム開始から15秒後、星非表示
                 if (newCount >= 15 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 8:
                 // ゲーム開始から19秒後、星表示
                 if (newCount >= 19 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 3;
-                    star1.startRows = 3;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 3;
+                    star1StartRows.value = 3;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 9:
                 // ゲーム開始から21秒後、星非表示
                 if (newCount >= 21 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 10:
                 // ゲーム開始から27秒後、星表示
                 if (newCount >= 27 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 6;
-                    star1.startRows = 11;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 6;
+                    star1StartRows.value = 11;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 11:
                 // ゲーム開始から29秒後、星非表示
                 if (newCount >= 29 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 12:
                 // ゲーム開始から33秒後、星表示
                 if (newCount >= 33 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 4;
-                    star1.startRows = 6;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 4;
+                    star1StartRows.value = 6;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 13:
                 // ゲーム開始から36秒後、星非表示
                 if (newCount >= 36 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 14:
                 // ゲーム開始から39秒後、星表示
                 if (newCount >= 39 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 5;
-                    star1.startRows = 0;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 5;
+                    star1StartRows.value = 0;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 15:
                 // ゲーム開始から41秒後、星非表示
                 if (newCount >= 41 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 16:
                 // ゲーム開始から45秒後、星表示
                 if (newCount >= 45 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 6;
-                    star1.startRows = 7;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 6;
+                    star1StartRows.value = 7;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 17:
                 // ゲーム開始から48秒後、星非表示
                 if (newCount >= 48 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 18:
                 // ゲーム開始から51秒後、星表示
                 if (newCount >= 51 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 7;
-                    star1.startRows = 3;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 7;
+                    star1StartRows.value = 3;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 19:
                 // ゲーム開始から54秒後、星非表示
                 if (newCount >= 54 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 20:
                 // ゲーム開始から57秒後、星表示
                 if (newCount >= 57 * commonSeconds) {
-                    star1.startCount = newCount;
-                    star1.startCols = 8;
-                    star1.startRows = 9;
-                    star1.visibility = 'visible';
+                    star1StartTime.value = newCount;
+                    star1StartCols.value = 8;
+                    star1StartRows.value = 9;
+                    star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
                 break;
             case 21:
                 // ゲーム開始から60秒後、星非表示
                 if (newCount >= 59 * commonSeconds) {
-                    star1.visibility = 'hidden';
+                    star1Visibility.value = 'hidden';
                     appGameScheduleStep.value += 1;
                 }
                 break;
@@ -419,38 +419,35 @@
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
 
-    const board1 = reactive({
-        cellWidth: 32,
-        cellHeight: 32,
-        cols: 16,
-        rows: 12,
-    });
-    const board1Area = computed(()=>{   // 盤のセル数
-        return board1.cols * board1.rows;
+    const board1CellWidth = ref<number>(32);    // セルの横幅（ピクセル）
+    const board1CellHeight = ref<number>(32);   // セルの縦幅（ピクセル）
+    const board1Cols = ref<number>(16);         // 盤が横に何セルか
+    const board1Rows = ref<number>(12);         // 盤が縦に何セルか
+    const board1Area = computed(()=>{           // 盤のセル数
+        return board1Cols.value * board1Rows.value;
     });
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　星 +
     // ++++++++++++++++++++++++
 
-    const star1 = reactive({
-        startCols : 0,  // 出現位置
-        startRows : 0,
-        startCount : 0,
-        visibility: 'hidden' as 'hidden' | 'visible',
-    });
+    const star1StartCols = ref<number>(0);      // 盤が横に何セルか
+    const star1StartRows = ref<number>(0);      // 星の出現位置。盤の上から何セルか
+    const star1StartTime = ref<number>(0);      // 星の出現count時間
+    const star1Visibility = ref<'hidden' | 'visible'>('hidden');    // 星の表示／非表示
+
     const star1Cols = computed(()=>{
-        return star1.startCols + Math.floor((stopwatch1Count.value - star1.startCount) / 20);
+        return star1StartCols.value + Math.floor((stopwatch1Count.value - star1StartTime.value) / 20);
     });
     const star1Rows = computed(()=>{
-        return star1.startRows;
+        return star1StartRows.value;
     });
     const starStyle = computed(() => ({
-        visibility: star1.visibility,
-        top: `${star1Rows.value * board1.cellHeight}px`,
-        left: `${star1Cols.value * board1.cellWidth}px`,
-        width: `${board1.cellWidth}px`,
-        height: `${board1.cellHeight}px`,
+        visibility: star1Visibility.value,
+        top: `${star1Rows.value * board1CellHeight.value}px`,
+        left: `${star1Cols.value * board1CellWidth.value}px`,
+        width: `${board1CellWidth.value}px`,
+        height: `${board1CellHeight.value}px`,
     }));
 
     // ++++++++++++++++++++++++++++++++++++++++++
@@ -461,8 +458,8 @@
     //
 
     const finder1 = reactive({
-        left: 6 * board1.cellWidth,    // スプライトのX座標
-        top: 4 * board1.cellHeight,    // スプライトのY座標
+        left: 6 * board1CellWidth.value,    // スプライトのX座標
+        top: 4 * board1CellHeight.value,    // スプライトのY座標
         colNum: 4,              // スプライトの列数
         rowNum: 3,              // スプライトの行数
         speed: 4,               // 移動速度
@@ -480,8 +477,8 @@
     const finderStyle = computed(() => ({
         top: `${finder1.top}px`,
         left: `${finder1.left}px`,
-        width: `${finder1.colNum * board1.cellWidth}px`,
-        height: `${finder1.rowNum * board1.cellHeight}px`,
+        width: `${finder1.colNum * board1CellWidth.value}px`,
+        height: `${finder1.rowNum * board1CellHeight.value}px`,
         border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
     }));
 
@@ -493,14 +490,14 @@
     //
 
     const reloadPie1Frames = <Record<number, {top: number, left: number}>>{
-        0: {top: 0 * board1.cellHeight, left: 0 * board1.cellWidth},
-        1: {top: 0 * board1.cellHeight, left: 1 * board1.cellWidth},
-        2: {top: 0 * board1.cellHeight, left: 2 * board1.cellWidth},
-        3: {top: 0 * board1.cellHeight, left: 3 * board1.cellWidth},
-        4: {top: 1 * board1.cellHeight, left: 0 * board1.cellWidth},
-        5: {top: 1 * board1.cellHeight, left: 1 * board1.cellWidth},
-        6: {top: 1 * board1.cellHeight, left: 2 * board1.cellWidth},
-        7: {top: 1 * board1.cellHeight, left: 3 * board1.cellWidth},
+        0: {top: 0 * board1CellHeight.value, left: 0 * board1CellWidth.value},
+        1: {top: 0 * board1CellHeight.value, left: 1 * board1CellWidth.value},
+        2: {top: 0 * board1CellHeight.value, left: 2 * board1CellWidth.value},
+        3: {top: 0 * board1CellHeight.value, left: 3 * board1CellWidth.value},
+        4: {top: 1 * board1CellHeight.value, left: 0 * board1CellWidth.value},
+        5: {top: 1 * board1CellHeight.value, left: 1 * board1CellWidth.value},
+        6: {top: 1 * board1CellHeight.value, left: 2 * board1CellWidth.value},
+        7: {top: 1 * board1CellHeight.value, left: 3 * board1CellWidth.value},
     };
     const reloadPie1Weight = 3 * commonSeconds;
     const reloadPie1Index = computed<number>(()=>{
@@ -521,8 +518,8 @@
     });
     const reloadPieStyle = computed(() => ({
         visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
-        top: `${finder1.top + finder1.rowNum * board1.cellHeight / 2 - board1.cellHeight / 2}px`,
-        left: `${finder1.left + finder1.colNum * board1.cellWidth / 2 - board1.cellWidth / 2}px`,
+        top: `${finder1.top + finder1.rowNum * board1CellHeight.value / 2 - board1CellHeight.value / 2}px`,
+        left: `${finder1.left + finder1.colNum * board1CellWidth.value / 2 - board1CellWidth.value / 2}px`,
     }));
 
 
@@ -612,7 +609,7 @@
         appGamePauseButtonText.value = "一時停止"; // ボタンのテキストを更新
         appGameScheduleStep.value = 0;
 
-        star1.visibility = 'hidden';
+        star1Visibility.value = 'hidden';
     }
 
 
@@ -667,7 +664,7 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (finder1.motion["xAxis"]==1) {   // 右
-                if (finder1.left < (board1.cols - finder1.colNum) * board1.cellWidth) {    // 境界チェック
+                if (finder1.left < (board1Cols.value - finder1.colNum) * board1CellWidth.value) {    // 境界チェック
                     finder1.left += finder1.speed;
                 }
             } else if (finder1.motion["xAxis"]==-1) {  // 左
@@ -681,7 +678,7 @@
                     finder1.top -= finder1.speed;
                 }
             } else if (finder1.motion["yAxis"]==1) {   // 下
-                if (finder1.top < (board1.rows - finder1.rowNum) * board1.cellHeight) {    // 境界チェック
+                if (finder1.top < (board1Rows.value - finder1.rowNum) * board1CellHeight.value) {    // 境界チェック
                     finder1.top += finder1.speed;
                 }
             }
@@ -712,8 +709,8 @@
         }
 
         // ファインダーの位置とサイズ
-        const finderLeftCols = finder1.left / board1.cellWidth;
-        const finderTopCols = finder1.top / board1.cellHeight;
+        const finderLeftCols = finder1.left / board1CellWidth.value;
+        const finderTopCols = finder1.top / board1CellHeight.value;
         const finderRightEndCols = finderLeftCols + finder1.colNum;
         const finderBottomEndCols = finderTopCols + finder1.rowNum;
 

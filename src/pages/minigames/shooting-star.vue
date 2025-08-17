@@ -284,7 +284,7 @@
             case 0:
                 // ゲーム開始から1秒後、星表示
                 if (newCount >= 1 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 5;
                     star1.startRows = 3;
                     star1.visibility = 'visible';
@@ -301,7 +301,7 @@
             case 2:
                 // ゲーム開始から4秒後、星表示
                 if (newCount >= 4 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 9;
                     star1.startRows = 9;
                     star1.visibility = 'visible';
@@ -318,7 +318,7 @@
             case 4:
                 // ゲーム開始から8秒後、星表示
                 if (newCount >= 8 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 0;
                     star1.startRows = 8;
                     star1.visibility = 'visible';
@@ -335,7 +335,7 @@
             case 6:
                 // ゲーム開始から14秒後、星表示
                 if (newCount >= 14 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 12;
                     star1.startRows = 5;
                     star1.visibility = 'visible';
@@ -352,7 +352,7 @@
             case 8:
                 // ゲーム開始から19秒後、星表示
                 if (newCount >= 19 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 3;
                     star1.startRows = 3;
                     star1.visibility = 'visible';
@@ -369,7 +369,7 @@
             case 10:
                 // ゲーム開始から27秒後、星表示
                 if (newCount >= 27 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 6;
                     star1.startRows = 11;
                     star1.visibility = 'visible';
@@ -386,7 +386,7 @@
             case 12:
                 // ゲーム開始から33秒後、星表示
                 if (newCount >= 33 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 4;
                     star1.startRows = 6;
                     star1.visibility = 'visible';
@@ -403,7 +403,7 @@
             case 14:
                 // ゲーム開始から39秒後、星表示
                 if (newCount >= 39 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 5;
                     star1.startRows = 0;
                     star1.visibility = 'visible';
@@ -420,7 +420,7 @@
             case 16:
                 // ゲーム開始から45秒後、星表示
                 if (newCount >= 45 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 6;
                     star1.startRows = 7;
                     star1.visibility = 'visible';
@@ -437,7 +437,7 @@
             case 18:
                 // ゲーム開始から51秒後、星表示
                 if (newCount >= 51 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 7;
                     star1.startRows = 3;
                     star1.visibility = 'visible';
@@ -454,7 +454,7 @@
             case 20:
                 // ゲーム開始から57秒後、星表示
                 if (newCount >= 57 * common.seconds) {
-                    star1.startCount = newCount;
+                    star1.startTime = newCount;
                     star1.startCols = 8;
                     star1.startRows = 9;
                     star1.visibility = 'visible';
@@ -481,10 +481,10 @@
     // ++++++++++++++++++++++++
 
     const board1 = reactive({
-        cellWidth: 32,
-        cellHeight: 32,
-        cols: 16,
-        rows: 12,
+        cellWidth: 32,          // セルの横幅（ピクセル）
+        cellHeight: 32,         // セルの縦幅（ピクセル）
+        cols: 16,               // 盤が横に何セルか
+        rows: 12,               // 盤が縦に何セルか
     });
     const board1Area = computed(()=>{   // 盤のセル数
         return board1.cols * board1.rows;
@@ -495,13 +495,13 @@
     // ++++++++++++++++++++++++
 
     const star1 = reactive({
-        startCols : 0,  // 出現位置
-        startRows : 0,
-        startCount : 0,
-        visibility: 'hidden' as 'hidden' | 'visible',
+        startCols : 0,          // 星の出現位置。盤の左から何セルか
+        startRows : 0,          // 星の出現位置。盤の上から何セルか
+        startTime : 0,          // 星の出現count時間
+        visibility: 'hidden' as 'hidden' | 'visible',   // 星の表示／非表示
     });
     const star1Cols = computed(()=>{
-        return star1.startCols + Math.floor((stopwatch1.count - star1.startCount) / 20);
+        return star1.startCols + Math.floor((stopwatch1.count - star1.startTime) / 20);
     });
     const star1Rows = computed(()=>{
         return star1.startRows;
