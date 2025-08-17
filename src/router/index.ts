@@ -129,6 +129,11 @@ const routes = [
         path: '/minigames/shooting-star',     // URL
         component: () => import('../pages/minigames/shooting-star.vue'),  // importした Vue ファイル
     },
+    {
+        name: 'ShootingStarNaive',
+        path: '/minigames/shooting-star-naive',     // URL
+        component: () => import('../pages/minigames/shooting-star-naive.vue'),  // importした Vue ファイル
+    },
 
     {
         name: 'About',

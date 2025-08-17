@@ -75,8 +75,8 @@
 
             <!-- リロードのカウントダウン（パイみたいなやつ） -->
             <Tile
-                :srcLeft="reloadPy1TileLeft"
-                :srcTop="reloadPy1TileTop"
+                :srcLeft="reloadPie1TileLeft"
+                :srcTop="reloadPie1TileTop"
                 :srcWidth="board1.cellWidth"
                 :srcHeight="board1.cellHeight"
                 tilemapUrl="/img/making/202508__warabenture__16--2357-8counts-red.png"
@@ -486,8 +486,8 @@
         cols: 16,
         rows: 12,
     });
-    const board1Area = computed(()=>{
-        return board1.cols * board1.rows; // 盤のセル数
+    const board1Area = computed(()=>{   // 盤のセル数
+        return board1.cols * board1.rows;
     });
 
     // ++++++++++++++++++++++++
@@ -553,7 +553,7 @@
     // 写真を撮った時にカメラのファインダーの中心で回ってるやつ。
     //
 
-    const reloadPy1 = reactive<{
+    const reloadPie1 = reactive<{
         frames: Record<number, {top: number, left: number}>,
         weight: number,
     }>({
@@ -569,21 +569,21 @@
         },
         weight: 3 * common.seconds,
     });
-    const reloadPy1Index = computed<number>(()=>{
+    const reloadPie1Index = computed<number>(()=>{
         // タイル１枚当たりの時間（フレーム）
-        const frameNum = Object.keys(reloadPy1.frames).length;
-        const unitTime = reloadPy1.weight / frameNum;
+        const frameNum = Object.keys(reloadPie1.frames).length;
+        const unitTime = reloadPie1.weight / frameNum;
         let index = Math.floor(finder1.reloadTime / unitTime);
         if (index >= frameNum) {
             index = frameNum - 1;
         }
         return (frameNum - 1) - index;    // カウントダウン
     });
-    const reloadPy1TileLeft = computed<number>(()=>{
-        return reloadPy1.frames[reloadPy1Index.value].left;
+    const reloadPie1TileLeft = computed<number>(()=>{
+        return reloadPie1.frames[reloadPie1Index.value].left;
     });
-    const reloadPy1TileTop = computed<number>(()=>{
-        return reloadPy1.frames[reloadPy1Index.value].top;
+    const reloadPie1TileTop = computed<number>(()=>{
+        return reloadPie1.frames[reloadPie1Index.value].top;
     });
     const reloadPieStyle = computed(() => ({
         visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
@@ -798,7 +798,7 @@
             }
         }
 
-        finder1.reloadTime = reloadPy1.weight;  // リロード時間を設定
+        finder1.reloadTime = reloadPie1.weight;  // リロード時間を設定
     }
 
 
