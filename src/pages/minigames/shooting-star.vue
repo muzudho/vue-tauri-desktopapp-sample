@@ -44,7 +44,7 @@
 
         <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch-dev
-            ref="stopwatch1"
+            ref="stopwatch1Compo"
             v-on:countUp="(countNum) => { count = countNum; }"
             style="display: none;" />
 
@@ -128,9 +128,13 @@
     import TheHeader from './the-header.vue';
 
 
-    // ##########
-    // # 効果音 #
-    // ##########
+    // ##############
+    // # 共有データ #
+    // ##############
+
+    // ++++++++++
+    // + 効果音 +
+    // ++++++++++
 
     const sfxConfig = reactive<{
         volume: number,                    // 音量
@@ -188,9 +192,11 @@
         sfx.miss.audio.addEventListener('ended', () => { sfx.miss.isPlaying = false })
     }
 
-    // ##############
-    // # 共有データ #
-    // ##############
+    // ++++++++++++++++++++++++
+    // + コンポーネントの参照 +
+    // ++++++++++++++++++++++++
+
+    const stopwatch1Compo = ref<InstanceType<typeof StopwatchDev> | null>(null); // StopwatchDevのインスタンス
 
     // ++++++++
     // + 空間 +
@@ -209,10 +215,7 @@
     // + 時間 +
     // ++++++++
 
-    // 時データ
     const seconds = 60; // 1秒は60フレーム
-
-    const stopwatch1 = ref<InstanceType<typeof StopwatchDev> | null>(null); // StopwatchDevのインスタンス
 
     const count = ref<number>(0);   // カウントの初期値
     watch(count, (newCount) => {
@@ -414,14 +417,30 @@
 
         if (newCount >= misc.maxCount) {
             // ゲーム停止
-            stopwatch1.value?.stopTimer();  // タイマーをストップ
+            stopwatch1Compo.value?.stopTimer();  // タイマーをストップ
         }
     });
 
 
-    // ++++++++++++++++++++++++
-    // + オブジェクト１：　星 +
-    // ++++++++++++++++++++++++
+    // ++++++++++++++++++
+    // + スプライト全般 +
+    // ++++++++++++++++++
+
+    const spriteMotion = reactive<{
+        left: number,  // モーション（motion）定数。カメラのファインダーが左に移動する
+        right: number,
+        up : number,
+        down: number,
+    }>({
+        left: -1,  // モーション（motion）定数。カメラのファインダーが左に移動する
+        right: 1,
+        up: -1,
+        down: 1,
+    });
+
+    // ++++++
+    // + 星 +
+    // ++++++
 
     const star1 = reactive({
         startCols : 0,  // 出現位置
@@ -458,37 +477,30 @@
         reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
 
-    const spriteMotion = reactive<{
-        left: number,  // モーション（motion）定数。カメラのファインダーが左に移動する
-        right: number,
-        up : number,
-        down: number,
-    }>({
-        left: -1,  // モーション（motion）定数。カメラのファインダーが左に移動する
-        right: 1,
-        up: -1,
-        down: 1,
-    });
-
     // ++++++++++++++++++++++
     // + リロード・タイマー +
     // ++++++++++++++++++++++
 
-    const reloadTimerFrames = <Record<number, {top: number, left: number}>>{
-        0: {top: 0 * board.cellHeight, left: 0 * board.cellWidth},
-        1: {top: 0 * board.cellHeight, left: 1 * board.cellWidth},
-        2: {top: 0 * board.cellHeight, left: 2 * board.cellWidth},
-        3: {top: 0 * board.cellHeight, left: 3 * board.cellWidth},
-        4: {top: 1 * board.cellHeight, left: 0 * board.cellWidth},
-        5: {top: 1 * board.cellHeight, left: 1 * board.cellWidth},
-        6: {top: 1 * board.cellHeight, left: 2 * board.cellWidth},
-        7: {top: 1 * board.cellHeight, left: 3 * board.cellWidth},
-    };
-    const reloadTimeWeight = 3 * seconds;
+    const reloadTimer = reactive<{
+        frames: Record<number, {top: number, left: number}>,
+        weight: number,
+    }>({
+        frames: {
+            0: {top: 0 * board.cellHeight, left: 0 * board.cellWidth},
+            1: {top: 0 * board.cellHeight, left: 1 * board.cellWidth},
+            2: {top: 0 * board.cellHeight, left: 2 * board.cellWidth},
+            3: {top: 0 * board.cellHeight, left: 3 * board.cellWidth},
+            4: {top: 1 * board.cellHeight, left: 0 * board.cellWidth},
+            5: {top: 1 * board.cellHeight, left: 1 * board.cellWidth},
+            6: {top: 1 * board.cellHeight, left: 2 * board.cellWidth},
+            7: {top: 1 * board.cellHeight, left: 3 * board.cellWidth},
+        },
+        weight: 3 * seconds,
+    });
     const reloadTimerIndex = computed<number>(()=>{
         // タイル１枚当たりの時間（フレーム）
-        const frameNum = Object.keys(reloadTimerFrames).length;
-        const unitTime = reloadTimeWeight / frameNum;
+        const frameNum = Object.keys(reloadTimer.frames).length;
+        const unitTime = reloadTimer.weight / frameNum;
         let index = Math.floor(finder1.reloadTime / unitTime);
         if (index >= frameNum) {
             index = frameNum - 1;
@@ -496,10 +508,10 @@
         return (frameNum - 1) - index;    // カウントダウン
     });
     const reloadTimerTileLeft = computed<number>(()=>{
-        return reloadTimerFrames[reloadTimerIndex.value].left;
+        return reloadTimer.frames[reloadTimerIndex.value].left;
     });
     const reloadTimerTileTop = computed<number>(()=>{
-        return reloadTimerFrames[reloadTimerIndex.value].top;
+        return reloadTimer.frames[reloadTimerIndex.value].top;
     });
 
     // ++++++++++
@@ -508,9 +520,9 @@
 
     const misc = reactive({
         score: 0,
-        isPlaying: false,
-        isPause: false,
-        isShowingManual: false,
+        isPlaying: false,           // ゲーム中
+        isPause: false,             // ゲームは停止中
+        isShowingManual: false,     // 説明書を表示中
         startButtonText: "読込中...",
         pauseButtonText: "読込中...",
         maxCount: 60 * seconds,     // ゲーム時間は１分。
@@ -525,9 +537,8 @@
         loadSfx();
         initGame();
         startGameLoop();
-        //startTimer();
 
-        // キーボードイベント
+        // キーボード操作の設定
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             // 上下キーの場合
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
@@ -633,7 +644,7 @@
     // ################
 
     function initGame() : void {
-        stopwatch1.value?.resetTimer();  // タイマーをリセット
+        stopwatch1Compo.value?.resetTimer();  // タイマーをリセット
 
         misc.score = 0;
         misc.isPlaying = false;
@@ -645,6 +656,7 @@
         star1.visibility = 'hidden';
     }
 
+    
     function startGame() : void {
         document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
@@ -654,25 +666,27 @@
             return;
         }
 
-        stopwatch1.value?.startTimer();  // タイマーをスタート
+        stopwatch1Compo.value?.startTimer();  // タイマーをスタート
 
         misc.startButtonText = "ゲーム終了"; // ボタンのテキストを更新
         misc.isPlaying = !misc.isPlaying;
     }
 
+
     function pauseGame() : void {
         document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(misc.isPause) {
-            stopwatch1.value?.startTimer();  // タイマーをスタート
+            stopwatch1Compo.value?.startTimer();  // タイマーをスタート
             misc.pauseButtonText = "一時停止"; // ボタンのテキストを更新
         } else {
-            stopwatch1.value?.stopTimer();  // タイマーをストップ
+            stopwatch1Compo.value?.stopTimer();  // タイマーをストップ
             misc.pauseButtonText = "再開"; // ボタンのテキストを更新
         }
 
         misc.isPause = !misc.isPause;
     }
+
 
     /**
      * カメラショット処理
@@ -711,7 +725,7 @@
             }
         }
 
-        finder1.reloadTime = reloadTimeWeight;  // リロード時間を設定
+        finder1.reloadTime = reloadTimer.weight;  // リロード時間を設定
     }
 
 
