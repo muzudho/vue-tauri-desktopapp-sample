@@ -75,8 +75,8 @@
 
             <!-- リロードのカウントダウン（パイみたいなやつ） -->
             <Tile
-                :srcLeft="reloadTimerTileLeft"
-                :srcTop="reloadTimerTileTop"
+                :srcLeft="reloadPy1TileLeft"
+                :srcTop="reloadPy1TileTop"
                 :srcWidth="board.cellWidth"
                 :srcHeight="board.cellHeight"
                 tilemapUrl="/img/making/202508__warabenture__16--2357-8counts-red.png"
@@ -454,6 +454,13 @@
     const star1Rows = computed(()=>{
         return star1.startRows;
     });
+    const starStyle = computed(() => ({
+        visibility: star1.visibility,
+        top: `${star1Rows.value * board.cellHeight}px`,
+        left: `${star1Cols.value * board.cellWidth}px`,
+        width: `${board.cellWidth}px`,
+        height: `${board.cellHeight}px`,
+    }));
 
     // ++++++++++++++++++++++++++++++++++++
     // + カメラのファインダー（点線の枠） +
@@ -476,12 +483,22 @@
         }),
         reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
+    const finderStyle = computed(() => ({
+        top: `${finder1.top}px`,
+        left: `${finder1.left}px`,
+        width: `${finder1.colNum * board.cellWidth}px`,
+        height: `${finder1.rowNum * board.cellHeight}px`,
+        border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
+    }));
 
-    // ++++++++++++++++++++++
-    // + リロード・タイマー +
-    // ++++++++++++++++++++++
+    // ++++++++++++++++++
+    // + リロード・パイ +
+    // ++++++++++++++++++
+    //
+    // 写真を撮った時にカメラのファインダーの中心で回ってるやつ。
+    //
 
-    const reloadTimer = reactive<{
+    const reloadPy1 = reactive<{
         frames: Record<number, {top: number, left: number}>,
         weight: number,
     }>({
@@ -497,22 +514,27 @@
         },
         weight: 3 * seconds,
     });
-    const reloadTimerIndex = computed<number>(()=>{
+    const reloadPy1Index = computed<number>(()=>{
         // タイル１枚当たりの時間（フレーム）
-        const frameNum = Object.keys(reloadTimer.frames).length;
-        const unitTime = reloadTimer.weight / frameNum;
+        const frameNum = Object.keys(reloadPy1.frames).length;
+        const unitTime = reloadPy1.weight / frameNum;
         let index = Math.floor(finder1.reloadTime / unitTime);
         if (index >= frameNum) {
             index = frameNum - 1;
         }
         return (frameNum - 1) - index;    // カウントダウン
     });
-    const reloadTimerTileLeft = computed<number>(()=>{
-        return reloadTimer.frames[reloadTimerIndex.value].left;
+    const reloadPy1TileLeft = computed<number>(()=>{
+        return reloadPy1.frames[reloadPy1Index.value].left;
     });
-    const reloadTimerTileTop = computed<number>(()=>{
-        return reloadTimer.frames[reloadTimerIndex.value].top;
+    const reloadPy1TileTop = computed<number>(()=>{
+        return reloadPy1.frames[reloadPy1Index.value].top;
     });
+    const reloadPieStyle = computed(() => ({
+        visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
+        top: `${finder1.top + finder1.rowNum * board.cellHeight / 2 - board.cellHeight / 2}px`,
+        left: `${finder1.left + finder1.colNum * board.cellWidth / 2 - board.cellWidth / 2}px`,
+    }));
 
     // ++++++++++
     // + その他 +
@@ -656,7 +678,7 @@
         star1.visibility = 'hidden';
     }
 
-    
+
     function startGame() : void {
         document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
@@ -725,7 +747,7 @@
             }
         }
 
-        finder1.reloadTime = reloadTimer.weight;  // リロード時間を設定
+        finder1.reloadTime = reloadPy1.weight;  // リロード時間を設定
     }
 
 
@@ -737,31 +759,6 @@
 
         misc.score += 100;
     }
-
-
-    // ############
-    // # スタイル #
-    // ############
-
-    const starStyle = computed(() => ({
-        visibility: star1.visibility,
-        top: `${star1Rows.value * board.cellHeight}px`,
-        left: `${star1Cols.value * board.cellWidth}px`,
-        width: `${board.cellWidth}px`,
-        height: `${board.cellHeight}px`,
-    }));
-    const finderStyle = computed(() => ({
-        top: `${finder1.top}px`,
-        left: `${finder1.left}px`,
-        width: `${finder1.colNum * board.cellWidth}px`,
-        height: `${finder1.rowNum * board.cellHeight}px`,
-        border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
-    }));
-    const reloadPieStyle = computed(() => ({
-        visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
-        top: `${finder1.top + finder1.rowNum * board.cellHeight / 2 - board.cellHeight / 2}px`,
-        left: `${finder1.left + finder1.colNum * board.cellWidth / 2 - board.cellWidth / 2}px`,
-    }));
 
 </script>
 
