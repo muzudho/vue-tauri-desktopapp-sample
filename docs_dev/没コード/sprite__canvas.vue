@@ -48,7 +48,7 @@
         const ctx : CanvasRenderingContext2D | null = myCanvas.value.getContext('2d');
 
         // スプライト画像の読み込み
-        sprite.src = "/img/making/202508__warabenture__15--1612-kifuwarabe-o1o0.png";
+        sprite.src = "/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png";
         sprite.onload = () => {
             startGameLoop();
         };

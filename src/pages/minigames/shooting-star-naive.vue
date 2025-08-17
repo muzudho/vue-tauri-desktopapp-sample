@@ -79,7 +79,7 @@
                 :srcTop="reloadPie1TileTop"
                 :srcWidth="board1CellWidth"
                 :srcHeight="board1CellHeight"
-                tilemapUrl="/img/making/202508__warabenture__16--2357-8counts-red.png"
+                tilemapUrl="/img/making/202508__warabenture__16-2357-8counts-red.png"
                 :style="reloadPieStyle"
                 style="position:absolute;" /><br/>
                 
@@ -94,7 +94,7 @@
             <br/>
             <p>元画像のタイルマップを表示：</p>
             <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/><br/>
-            <v-img src="/img/making/202508__warabenture__16--2357-8counts-red.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
+            <v-img src="/img/making/202508__warabenture__16-2357-8counts-red.png" style="width:128px; height:64px; border: dashed 4px gray;"/><br/>
             ：ここまで。
         -->
     </section>
@@ -189,13 +189,13 @@
         sfxDeniedAudio.addEventListener('pause', () => { sfxDeniedIsPlaying.value = false })
         sfxDeniedAudio.addEventListener('ended', () => { sfxDeniedIsPlaying.value = false })
 
-        sfxCameraShutterAudio = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
+        sfxCameraShutterAudio = new Audio('/wav/202508__sfx__16-2117-cameraShutter.wav'); // カメラのシャッター音
         sfxCameraShutterAudio.volume = sfxConfigVolume;
         sfxCameraShutterAudio.addEventListener('play', () => { sfxCameraShutterIsPlaying.value = true })
         sfxCameraShutterAudio.addEventListener('pause', () => { sfxCameraShutterIsPlaying.value = false })
         sfxCameraShutterAudio.addEventListener('ended', () => { sfxCameraShutterIsPlaying.value = false })
 
-        sfxMissAudio = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
+        sfxMissAudio = new Audio('/wav/202508__sfx__16-2146-miss.wav'); // ミス音
         sfxMissAudio.volume = sfxConfigVolume;
         sfxMissAudio.addEventListener('play', () => { sfxMissIsPlaying.value = true })
         sfxMissAudio.addEventListener('pause', () => { sfxMissIsPlaying.value = false })
