@@ -38,14 +38,14 @@
             <br/>
 
             <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
-            スコア： {{ app.game.score }}　　残り時間: {{ Math.floor((app.game.maxCount - count) / common.seconds) }} . {{ (app.game.maxCount - count) % common.seconds }}
+            スコア： {{ app.game.score }}　　残り時間: {{ Math.floor((app.game.maxCount - stopwatch1.count) / common.seconds) }} . {{ (app.game.maxCount - stopwatch1.count) % common.seconds }}
             </p>
         </div>
 
         <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch-dev
-            ref="stopwatch1Compo"
-            v-on:countUp="(countNum) => { count = countNum; }"
+            ref="stopwatch1CompoRef"
+            v-on:countUp="(countNum) => { stopwatch1.count = countNum; }"
             style="display: none;" />
 
         <!-- ゲーム画面領域（宇宙） -->
@@ -54,15 +54,15 @@
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in boardArea" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / board.cols) * board.cellHeight}px; left: ${((i - 1) % board.cols) * board.cellWidth}px; width:${board.cellWidth}px; height:${board.cellHeight}px; border: solid 1px gray;`"></div>
+            <div v-for="i in board1Area" :key="i"
+                :style="`position:absolute; top: ${Math.floor((i - 1) / board1.cols) * board1.cellHeight}px; left: ${((i - 1) % board1.cols) * board1.cellWidth}px; width:${board1.cellWidth}px; height:${board1.cellHeight}px; border: solid 1px gray;`"></div>
 
             <!-- 星 -->
             <Tile
                 :srcLeft="0"
                 :srcTop="0"
-                :srcWidth="board.cellWidth"
-                :srcHeight="board.cellHeight"
+                :srcWidth="board1.cellWidth"
+                :srcHeight="board1.cellHeight"
                 tilemapUrl="/img/making/sprite-objects-001.png"
                 :style="starStyle"
                 style="position:absolute;" /><br/>
@@ -77,8 +77,8 @@
             <Tile
                 :srcLeft="reloadPy1TileLeft"
                 :srcTop="reloadPy1TileTop"
-                :srcWidth="board.cellWidth"
-                :srcHeight="board.cellHeight"
+                :srcWidth="board1.cellWidth"
+                :srcHeight="board1.cellHeight"
                 tilemapUrl="/img/making/202508__warabenture__16--2357-8counts-red.png"
                 :style="reloadPieStyle"
                 style="position:absolute;" /><br/>
@@ -114,7 +114,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, reactive, ref, watch } from 'vue';
+    import { computed, onMounted, reactive, Ref, ref, watch } from 'vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -263,9 +263,15 @@
     // + コンポーネント　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++++
 
-    const stopwatch1Compo = ref<InstanceType<typeof StopwatchDev> | null>(null);    // <stopwatch-dev> のインスタンス
-    const count = ref<number>(0);   // カウントの初期値
-    watch(count, (newCount) => {
+    const stopwatch1CompoRef = ref<InstanceType<typeof StopwatchDev> | null>(null);     // <stopwatch-dev> のインスタンス
+    const stopwatch1 = reactive<{
+        compo: Ref<InstanceType<typeof StopwatchDev> | null>,
+        count: number,                                          // カウント
+    }>({
+        compo: stopwatch1CompoRef,
+        count: 0,
+    });
+    watch(()=>stopwatch1.count, (newCount) => {
         // カウントが変わったら、何か処理をしたい。
 
         // ----------------------------------------------------------
@@ -464,7 +470,7 @@
 
         if (newCount >= app.game.maxCount) {
             // ゲーム停止
-            stopwatch1Compo.value?.stopTimer();  // タイマーをストップ
+            stopwatch1.compo?.stopTimer();  // タイマーをストップ
         }
     });
 
@@ -472,15 +478,14 @@
     // + コンポーネント　＞　盤 +
     // ++++++++++++++++++++++++++
 
-    // 盤データ
-    const board = reactive({
+    const board1 = reactive({
         cellWidth: 32,
         cellHeight: 32,
         cols: 16,
         rows: 12,
     });
-    const boardArea = computed(()=>{
-        return board.cols * board.rows; // 盤のセル数
+    const board1Area = computed(()=>{
+        return board1.cols * board1.rows; // 盤のセル数
     });
 
     // ++++++++++++++++++++++++++
@@ -494,17 +499,17 @@
         visibility: 'hidden' as 'hidden' | 'visible',
     });
     const star1Cols = computed(()=>{
-        return star1.startCols + Math.floor((count.value - star1.startCount) / 20);
+        return star1.startCols + Math.floor((stopwatch1.count - star1.startCount) / 20);
     });
     const star1Rows = computed(()=>{
         return star1.startRows;
     });
     const starStyle = computed(() => ({
         visibility: star1.visibility,
-        top: `${star1Rows.value * board.cellHeight}px`,
-        left: `${star1Cols.value * board.cellWidth}px`,
-        width: `${board.cellWidth}px`,
-        height: `${board.cellHeight}px`,
+        top: `${star1Rows.value * board1.cellHeight}px`,
+        left: `${star1Cols.value * board1.cellWidth}px`,
+        width: `${board1.cellWidth}px`,
+        height: `${board1.cellHeight}px`,
     }));
 
     // ++++++++++++++++++++++++++++++++++++++++++++
@@ -515,8 +520,8 @@
     //
 
     const finder1 = reactive({
-        left: 6 * board.cellWidth,    // スプライトのX座標
-        top: 4 * board.cellHeight,    // スプライトのY座標
+        left: 6 * board1.cellWidth,    // スプライトのX座標
+        top: 4 * board1.cellHeight,    // スプライトのY座標
         colNum: 4,              // スプライトの列数
         rowNum: 3,              // スプライトの行数
         speed: 4,               // 移動速度
@@ -534,8 +539,8 @@
     const finderStyle = computed(() => ({
         top: `${finder1.top}px`,
         left: `${finder1.left}px`,
-        width: `${finder1.colNum * board.cellWidth}px`,
-        height: `${finder1.rowNum * board.cellHeight}px`,
+        width: `${finder1.colNum * board1.cellWidth}px`,
+        height: `${finder1.rowNum * board1.cellHeight}px`,
         border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
     }));
 
@@ -551,14 +556,14 @@
         weight: number,
     }>({
         frames: {
-            0: {top: 0 * board.cellHeight, left: 0 * board.cellWidth},
-            1: {top: 0 * board.cellHeight, left: 1 * board.cellWidth},
-            2: {top: 0 * board.cellHeight, left: 2 * board.cellWidth},
-            3: {top: 0 * board.cellHeight, left: 3 * board.cellWidth},
-            4: {top: 1 * board.cellHeight, left: 0 * board.cellWidth},
-            5: {top: 1 * board.cellHeight, left: 1 * board.cellWidth},
-            6: {top: 1 * board.cellHeight, left: 2 * board.cellWidth},
-            7: {top: 1 * board.cellHeight, left: 3 * board.cellWidth},
+            0: {top: 0 * board1.cellHeight, left: 0 * board1.cellWidth},
+            1: {top: 0 * board1.cellHeight, left: 1 * board1.cellWidth},
+            2: {top: 0 * board1.cellHeight, left: 2 * board1.cellWidth},
+            3: {top: 0 * board1.cellHeight, left: 3 * board1.cellWidth},
+            4: {top: 1 * board1.cellHeight, left: 0 * board1.cellWidth},
+            5: {top: 1 * board1.cellHeight, left: 1 * board1.cellWidth},
+            6: {top: 1 * board1.cellHeight, left: 2 * board1.cellWidth},
+            7: {top: 1 * board1.cellHeight, left: 3 * board1.cellWidth},
         },
         weight: 3 * common.seconds,
     });
@@ -580,8 +585,8 @@
     });
     const reloadPieStyle = computed(() => ({
         visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
-        top: `${finder1.top + finder1.rowNum * board.cellHeight / 2 - board.cellHeight / 2}px`,
-        left: `${finder1.left + finder1.colNum * board.cellWidth / 2 - board.cellWidth / 2}px`,
+        top: `${finder1.top + finder1.rowNum * board1.cellHeight / 2 - board1.cellHeight / 2}px`,
+        left: `${finder1.left + finder1.colNum * board1.cellWidth / 2 - board1.cellWidth / 2}px`,
     }));
 
     
@@ -669,7 +674,7 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (finder1.motion["xAxis"]==1) {   // 右
-                if (finder1.left < (board.cols - finder1.colNum) * board.cellWidth) {    // 境界チェック
+                if (finder1.left < (board1.cols - finder1.colNum) * board1.cellWidth) {    // 境界チェック
                     finder1.left += finder1.speed;
                 }
             } else if (finder1.motion["xAxis"]==-1) {  // 左
@@ -683,7 +688,7 @@
                     finder1.top -= finder1.speed;
                 }
             } else if (finder1.motion["yAxis"]==1) {   // 下
-                if (finder1.top < (board.rows - finder1.rowNum) * board.cellHeight) {    // 境界チェック
+                if (finder1.top < (board1.rows - finder1.rowNum) * board1.cellHeight) {    // 境界チェック
                     finder1.top += finder1.speed;
                 }
             }
@@ -698,7 +703,7 @@
 
 
     function gameInit() : void {
-        stopwatch1Compo.value?.resetTimer();  // タイマーをリセット
+        stopwatch1.compo?.resetTimer();  // タイマーをリセット
 
         app.game.score = 0;
         app.game.isPlaying = false;
@@ -720,7 +725,7 @@
             return;
         }
 
-        stopwatch1Compo.value?.startTimer();  // タイマーをスタート
+        stopwatch1.compo?.startTimer();  // タイマーをスタート
 
         app.game.startButtonText = "ゲーム終了"; // ボタンのテキストを更新
         app.game.isPlaying = !app.game.isPlaying;
@@ -731,10 +736,10 @@
         document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(app.game.isPause) {
-            stopwatch1Compo.value?.startTimer();  // タイマーをスタート
+            stopwatch1.compo?.startTimer();  // タイマーをスタート
             app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
         } else {
-            stopwatch1Compo.value?.stopTimer();  // タイマーをストップ
+            stopwatch1.compo?.stopTimer();  // タイマーをストップ
             app.game.pauseButtonText = "再開"; // ボタンのテキストを更新
         }
 
@@ -759,8 +764,8 @@
         }
 
         // ファインダーの位置とサイズ
-        const finderLeftCols = finder1.left / board.cellWidth;
-        const finderTopCols = finder1.top / board.cellHeight;
+        const finderLeftCols = finder1.left / board1.cellWidth;
+        const finderTopCols = finder1.top / board1.cellHeight;
         const finderRightEndCols = finderLeftCols + finder1.colNum;
         const finderBottomEndCols = finderTopCols + finder1.rowNum;
 
