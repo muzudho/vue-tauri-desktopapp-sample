@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3>シューティング・スター</h3>
+    <h3>シューティング・スター（初級者向けのソースコード）</h3>
     <section class="sec-3">
 
         <!-- ゲームの操作方法 -->
@@ -30,8 +30,8 @@
 
         <!-- ボタンを並べる -->
         <div>
-            <v-btn @click="startGame()">{{ misc.startButtonText }}</v-btn>
-            <v-btn @click="pauseGame()">{{ misc.pauseButtonText }}</v-btn>
+            <v-btn @click="onGameStartOrEndButtonPushed()">{{ misc.startButtonText }}</v-btn>
+            <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ misc.pauseButtonText }}</v-btn>
 
             <!-- フォーカスを外すためのダミー・ボタンです -->
             <v-btn id="dammyButton">何もしないボタン</v-btn>
@@ -98,6 +98,12 @@
             ：ここまで。
         -->
     </section>
+    
+    <br/>
+    <h3>ソースコード</h3>
+    <section class="sec-3">
+        <source-link/>
+    </section>
 
     <the-footer/>
 </template>
@@ -110,15 +116,30 @@
 
     import { computed, onMounted, reactive, ref, watch } from 'vue';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
+    // from の階層が上の順、アルファベット順
+    import SourceLink from '../../components/SourceLink.vue';
     import StopwatchDev from '../../components/StopwatchDev.vue';
+    import Tile from '../../components/Tile.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
-    import Tile from '../../components/Tile.vue';
 
+
+    // ##########
+    // # コモン #
+    // ##########
+    //
+    // よく使う設定をまとめたもの。特に不変のもの。
+    //
+
+    const seconds = 60; // 1秒は60フレーム
+    const spriteMotionLeft = -1;  // モーション（motion）定数。カメラのファインダーが左に移動する
+    const spriteMotionRight = 1;
+    const spriteMotionUp = -1;
+    const spriteMotionDown = 1;
 
     // ##########
     // # 効果音 #
@@ -171,9 +192,6 @@
         rows: 12,
     });
     const boardArea = board.cols * board.rows; // 盤のセル数
-
-    // 時データ
-    const seconds = 60; // 1秒は60フレーム
 
     // ++++++++++++++
     // + カウンター +
@@ -425,12 +443,6 @@
         reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
 
-    // モーション
-    const moLeft = -1;  // モーション（motion）定数。左に移動する
-    const moRight = 1;
-    const moUp = -1;
-    const moDown = 1;
-
     // ++++++++++++++++++++++
     // + リロード・タイマー +
     // ++++++++++++++++++++++
@@ -536,19 +548,19 @@
                     }
 
                     if (finder1.input.ArrowLeft) {
-                        finder1.motion["xAxis"] = moLeft; // 左
+                        finder1.motion["xAxis"] = spriteMotionLeft; // 左
                     }
 
                     if (finder1.input.ArrowRight) {
-                        finder1.motion["xAxis"] = moRight;  // 右
+                        finder1.motion["xAxis"] = spriteMotionRight;  // 右
                     }
 
                     if (finder1.input.ArrowUp) {
-                        finder1.motion["yAxis"] = moUp;   // 上
+                        finder1.motion["yAxis"] = spriteMotionUp;   // 上
                     }
 
                     if (finder1.input.ArrowDown) {
-                        finder1.motion["yAxis"] = moDown;   // 下
+                        finder1.motion["yAxis"] = spriteMotionDown;   // 下
                     }
 
                     if (finder1.motion["xAxis"]!=0 || finder1.motion["yAxis"]!=0) {
@@ -606,7 +618,7 @@
         star1.visibility = 'hidden';
     }
 
-    function startGame() : void {
+    function onGameStartOrEndButtonPushed() : void {
         document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(misc.isPlaying) {
@@ -621,7 +633,7 @@
         misc.isPlaying = !misc.isPlaying;
     }
 
-    function pauseGame() : void {
+    function onGamePauseOrRestartButtonPushed() : void {
         document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(misc.isPause) {
