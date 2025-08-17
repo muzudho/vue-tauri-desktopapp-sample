@@ -116,9 +116,9 @@
 
     import { computed, onMounted, reactive, ref, watch } from 'vue';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
     // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
@@ -128,13 +128,13 @@
     import TheHeader from './the-header.vue';
 
 
-    // ##############
-    // # 共有データ #
-    // ##############
+    // ################
+    // # 読込リソース #
+    // ################
 
-    // ++++++++++
-    // + 効果音 +
-    // ++++++++++
+    // ++++++++++++++++++++++++++++
+    // + 読込リソース　＞　効果音 +
+    // ++++++++++++++++++++++++++++
 
     const sfxConfig = reactive<{
         volume: number,                    // 音量
@@ -172,7 +172,7 @@
     /**
      * 効果音をロードする（jsfxrで作った効果音）
      */
-    function loadSfx() : void {
+    function sfxLoad() : void {
         sfx.denied.audio = new Audio('/wav/202508__sfx__17--0200-denied.wav'); // 拒否音
         sfx.denied.audio.volume = sfxConfig.volume;
         sfx.denied.audio.addEventListener('play', () => { sfx.denied.isPlaying = true })
@@ -191,6 +191,10 @@
         sfx.miss.audio.addEventListener('pause', () => { sfx.miss.isPlaying = false })
         sfx.miss.audio.addEventListener('ended', () => { sfx.miss.isPlaying = false })
     }
+
+    // ##############
+    // # 共有データ #
+    // ##############
 
     // ++++++++++++++++++++++++
     // + コンポーネントの参照 +
@@ -556,7 +560,7 @@
     // ##########
 
     onMounted(() => {
-        loadSfx();
+        sfxLoad();
         initGame();
         startGameLoop();
 
