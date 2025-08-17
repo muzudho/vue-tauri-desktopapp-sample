@@ -522,16 +522,16 @@
     //
 
     const finder1 = reactive({
-        left: 6 * board1.cellWidth,    // スプライトのX座標
-        top: 4 * board1.cellHeight,    // スプライトのY座標
-        colNum: 4,              // スプライトの列数
-        rowNum: 3,              // スプライトの行数
-        speed: 4,               // 移動速度
-        input: <Record<string, boolean>>{  // 入力
+        left: 6 * board1.cellWidth,         // スプライトのX座標
+        top: 4 * board1.cellHeight,         // スプライトのY座標
+        colNum: 4,                          // スプライトの列数
+        rowNum: 3,                          // スプライトの行数
+        speed: 4,                           // 移動速度
+        input: <Record<string, boolean>>{   // 入力
             // アルファベット順
             ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
         },
-        motionWait: 0,          // 入力キーごとに用意したい
+        motionWait: 0,                      // TODO: 入力キーごとにウェイトを用意したい
         motion: ref<Record<string, number>>({  // 入力
             xAxis: 0,   // 負なら左、正なら右
             yAxis: 0,   // 負なら上、正なら下

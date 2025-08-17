@@ -90,7 +90,7 @@
             <p>スケジュール・ステップ: {{ appGameScheduleStep.value }}</p>
             <p>星　行： {{ star1Rows }}</p>
             <p>星　列： {{ star1Cols }}</p>
-            <p>リロード・タイム: {{ finder1.reloadTime }}</p>
+            <p>リロード・タイム: {{ finder1ReloadTime.value }}</p>
             <br/>
             <p>元画像のタイルマップを表示：</p>
             <v-img src="/img/making/sprite-objects-001.png" style="width:128px; height:128px; border: dashed 4px gray;"/><br/>
@@ -116,7 +116,10 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, reactive, ref, watch } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
+    //
+    // ［初級者向けのソースコード］では、 reactive は使いません。
+    //
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -457,29 +460,27 @@
     // 点線の枠
     //
 
-    const finder1 = reactive({
-        left: 6 * board1CellWidth.value,    // スプライトのX座標
-        top: 4 * board1CellHeight.value,    // スプライトのY座標
-        colNum: 4,              // スプライトの列数
-        rowNum: 3,              // スプライトの行数
-        speed: 4,               // 移動速度
-        input: <Record<string, boolean>>{  // 入力
-            // アルファベット順
-            ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
-        },
-        motionWait: 0,          // 入力キーごとに用意したい
-        motion: ref<Record<string, number>>({  // 入力
-            xAxis: 0,   // 負なら左、正なら右
-            yAxis: 0,   // 負なら上、正なら下
-        }),
-        reloadTime: 0,  // 0 になるまで、入力を受け付けない
+    const finder1Left = ref<number>(6 * board1CellWidth.value);     // スプライトのX座標
+    const finder1Top = ref<number>(4 * board1CellHeight.value);     // スプライトのY座標
+    const finder1ColNum = ref<number>(4);                           // スプライトの列数
+    const finder1RowNum = ref<number>(3);                           // スプライトの行数
+    const finder1Speed = ref<number>(4);                            // 移動速度
+    const finder1Input = ref<Record<string, boolean>>({             // 入力
+        // アルファベット順
+        ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
     });
+    const finder1MotionWait = ref<number>(0);                       // TODO: 入力キーごとにウェイトを用意したい
+    const finder1Motion = ref<Record<string, number>>({             // 入力
+        xAxis: 0,   // 負なら左、正なら右
+        yAxis: 0,   // 負なら上、正なら下
+    });
+    const finder1ReloadTime = ref<number>(0);                       // 0 になるまで、入力を受け付けない
     const finderStyle = computed(() => ({
-        top: `${finder1.top}px`,
-        left: `${finder1.left}px`,
-        width: `${finder1.colNum * board1CellWidth.value}px`,
-        height: `${finder1.rowNum * board1CellHeight.value}px`,
-        border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
+        top: `${finder1Top.value}px`,
+        left: `${finder1Left.value}px`,
+        width: `${finder1ColNum.value * board1CellWidth.value}px`,
+        height: `${finder1RowNum.value * board1CellHeight.value}px`,
+        border: `dashed 4px ${finder1ReloadTime.value > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
     }));
 
     // ++++++++++++++++++++++++++++++++++++
@@ -504,7 +505,7 @@
         // タイル１枚当たりの時間（フレーム）
         const frameNum = Object.keys(reloadPie1Frames).length;
         const unitTime = reloadPie1Weight / frameNum;
-        let index = Math.floor(finder1.reloadTime / unitTime);
+        let index = Math.floor(finder1ReloadTime.value / unitTime);
         if (index >= frameNum) {
             index = frameNum - 1;
         }
@@ -517,9 +518,9 @@
         return reloadPie1Frames[reloadPie1Index.value].top;
     });
     const reloadPieStyle = computed(() => ({
-        visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
-        top: `${finder1.top + finder1.rowNum * board1CellHeight.value / 2 - board1CellHeight.value / 2}px`,
-        left: `${finder1.left + finder1.colNum * board1CellWidth.value / 2 - board1CellWidth.value / 2}px`,
+        visibility: finder1ReloadTime.value > 0 ? 'visible' : 'hidden',
+        top: `${finder1Top.value + finder1RowNum.value * board1CellHeight.value / 2 - board1CellHeight.value / 2}px`,
+        left: `${finder1Left.value + finder1ColNum.value * board1CellWidth.value / 2 - board1CellWidth.value / 2}px`,
     }));
 
 
@@ -543,13 +544,13 @@
                 e.preventDefault();
             }
 
-            if (finder1.input.hasOwnProperty(e.key)) {
-                finder1.input[e.key] = true;
+            if (finder1Input.value.hasOwnProperty(e.key)) {
+                finder1Input.value[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
-            if (finder1.input.hasOwnProperty(e.key)) {
-                finder1.input[e.key] = false;
+            if (finder1Input.value.hasOwnProperty(e.key)) {
+                finder1Input.value[e.key] = false;
             }
         });
     });
@@ -619,67 +620,67 @@
     function gameLoopStart() : void {
         const update = () => {
             // モーション・タイマー
-            finder1.motionWait -= 1;
+            finder1MotionWait.value -= 1;
 
-            if (finder1.reloadTime > 0) {
+            if (finder1ReloadTime.value > 0) {
                 // リロード中
-                finder1.reloadTime -= 1;
+                finder1ReloadTime.value -= 1;
             }
 
-            if (finder1.motionWait==0) {
-                finder1.motion["xAxis"] = 0;    // クリアー
-                finder1.motion["yAxis"] = 0;
+            if (finder1MotionWait.value==0) {
+                finder1Motion.value["xAxis"] = 0;    // クリアー
+                finder1Motion.value["yAxis"] = 0;
             }
             
             // ++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
-            if (finder1.motionWait<=0) {   // ウェイトが無ければ、入力を受け付ける。
+            if (finder1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
-                if (finder1.input.Enter) {
+                if (finder1Input.value.Enter) {
                     cameraShot();   // 撮影
                 }
 
-                if (finder1.input.ArrowLeft) {
-                    finder1.motion["xAxis"] = commonSpriteMotionLeft; // 左
+                if (finder1Input.value.ArrowLeft) {
+                    finder1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
                 }
 
-                if (finder1.input.ArrowRight) {
-                    finder1.motion["xAxis"] = commonSpriteMotionRight;  // 右
+                if (finder1Input.value.ArrowRight) {
+                    finder1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
                 }
 
-                if (finder1.input.ArrowUp) {
-                    finder1.motion["yAxis"] = commonSpriteMotionUp;   // 上
+                if (finder1Input.value.ArrowUp) {
+                    finder1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
                 }
 
-                if (finder1.input.ArrowDown) {
-                    finder1.motion["yAxis"] = commonSpriteMotionDown;   // 下
+                if (finder1Input.value.ArrowDown) {
+                    finder1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
                 }
 
-                if (finder1.motion["xAxis"]!=0 || finder1.motion["yAxis"]!=0) {
-                    finder1.motionWait = 8;    // フレーム数を設定
+                if (finder1Motion.value["xAxis"]!=0 || finder1Motion.value["yAxis"]!=0) {
+                    finder1MotionWait.value = 8;    // フレーム数を設定
                 }
             }
 
             // 移動処理
             // 斜め方向の場合、上下を優先する。
-            if (finder1.motion["xAxis"]==1) {   // 右
-                if (finder1.left < (board1Cols.value - finder1.colNum) * board1CellWidth.value) {    // 境界チェック
-                    finder1.left += finder1.speed;
+            if (finder1Motion.value["xAxis"]==1) {   // 右
+                if (finder1Left.value < (board1Cols.value - finder1ColNum.value) * board1CellWidth.value) {    // 境界チェック
+                    finder1Left.value += finder1Speed.value;
                 }
-            } else if (finder1.motion["xAxis"]==-1) {  // 左
-                if (0 < finder1.left) {    // 境界チェック
-                    finder1.left -= finder1.speed;
+            } else if (finder1Motion.value["xAxis"]==-1) {  // 左
+                if (0 < finder1Left.value) {    // 境界チェック
+                    finder1Left.value -= finder1Speed.value;
                 }
             }
 
-            if (finder1.motion["yAxis"]==-1) {  // 上
-                if (0 < finder1.top) {    // 境界チェック
-                    finder1.top -= finder1.speed;
+            if (finder1Motion.value["yAxis"]==-1) {  // 上
+                if (0 < finder1Top.value) {    // 境界チェック
+                    finder1Top.value -= finder1Speed.value;
                 }
-            } else if (finder1.motion["yAxis"]==1) {   // 下
-                if (finder1.top < (board1Rows.value - finder1.rowNum) * board1CellHeight.value) {    // 境界チェック
-                    finder1.top += finder1.speed;
+            } else if (finder1Motion.value["yAxis"]==1) {   // 下
+                if (finder1Top.value < (board1Rows.value - finder1RowNum.value) * board1CellHeight.value) {    // 境界チェック
+                    finder1Top.value += finder1Speed.value;
                 }
             }
 
@@ -697,7 +698,7 @@
      */
     function cameraShot() : void {
 
-        if (finder1.reloadTime > 0) {
+        if (finder1ReloadTime.value > 0) {
             // リロード中
             if (!sfxDeniedIsPlaying.value) {
                 // ブザー音が停止中なら鳴らす
@@ -709,10 +710,10 @@
         }
 
         // ファインダーの位置とサイズ
-        const finderLeftCols = finder1.left / board1CellWidth.value;
-        const finderTopCols = finder1.top / board1CellHeight.value;
-        const finderRightEndCols = finderLeftCols + finder1.colNum;
-        const finderBottomEndCols = finderTopCols + finder1.rowNum;
+        const finderLeftCols = finder1Left.value / board1CellWidth.value;
+        const finderTopCols = finder1Top.value / board1CellHeight.value;
+        const finderRightEndCols = finderLeftCols + finder1ColNum.value;
+        const finderBottomEndCols = finderTopCols + finder1RowNum.value;
 
         // ファインダーの枠内に星を含むか？
         if (
@@ -729,7 +730,7 @@
             }
         }
 
-        finder1.reloadTime = reloadPie1Weight;  // リロード時間を設定
+        finder1ReloadTime.value = reloadPie1Weight;  // リロード時間を設定
     }
 
 
