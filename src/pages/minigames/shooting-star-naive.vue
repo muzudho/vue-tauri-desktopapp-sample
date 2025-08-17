@@ -443,13 +443,15 @@
     const star1Rows = computed(()=>{
         return star1StartRows.value;
     });
-    const starStyle = computed(() => ({
-        visibility: star1Visibility.value,
-        top: `${star1Rows.value * board1CellHeight.value}px`,
-        left: `${star1Cols.value * board1CellWidth.value}px`,
-        width: `${board1CellWidth.value}px`,
-        height: `${board1CellHeight.value}px`,
-    }));
+    const starStyle = computed(() => {
+        return {
+            visibility: star1Visibility.value,
+            top: `${star1Rows.value * board1CellHeight.value}px`,
+            left: `${star1Cols.value * board1CellWidth.value}px`,
+            width: `${board1CellWidth.value}px`,
+            height: `${board1CellHeight.value}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　カメラのファインダー +
@@ -473,13 +475,15 @@
         yAxis: 0,   // 負なら上、正なら下
     });
     const finder1ReloadTime = ref<number>(0);                       // 0 になるまで、入力を受け付けない
-    const finderStyle = computed(() => ({
-        top: `${finder1Top.value}px`,
-        left: `${finder1Left.value}px`,
-        width: `${finder1ColNum.value * board1CellWidth.value}px`,
-        height: `${finder1RowNum.value * board1CellHeight.value}px`,
-        border: `dashed 4px ${finder1ReloadTime.value > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
-    }));
+    const finderStyle = computed(() => {
+        return {
+            top: `${finder1Top.value}px`,
+            left: `${finder1Left.value}px`,
+            width: `${finder1ColNum.value * board1CellWidth.value}px`,
+            height: `${finder1RowNum.value * board1CellHeight.value}px`,
+            border: `dashed 4px ${finder1ReloadTime.value > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　リロード・パイ +
@@ -488,7 +492,9 @@
     // 写真を撮った時にカメラのファインダーの中心で回ってるやつ。
     //
 
-    const reloadPie1Frames = <Record<number, {top: number, left: number}>>{
+    const reloadPie1Frames = <
+        Record<number, {top: number, left: number}>
+    >{
         0: {top: 0 * board1CellHeight.value, left: 0 * board1CellWidth.value},
         1: {top: 0 * board1CellHeight.value, left: 1 * board1CellWidth.value},
         2: {top: 0 * board1CellHeight.value, left: 2 * board1CellWidth.value},
@@ -515,11 +521,13 @@
     const reloadPie1TileTop = computed<number>(()=>{
         return reloadPie1Frames[reloadPie1Index.value].top;
     });
-    const reloadPieStyle = computed(() => ({
-        visibility: finder1ReloadTime.value > 0 ? 'visible' : 'hidden',
-        top: `${finder1Top.value + finder1RowNum.value * board1CellHeight.value / 2 - board1CellHeight.value / 2}px`,
-        left: `${finder1Left.value + finder1ColNum.value * board1CellWidth.value / 2 - board1CellWidth.value / 2}px`,
-    }));
+    const reloadPieStyle = computed(() => {
+        return {
+            visibility: finder1ReloadTime.value > 0 ? 'visible' : 'hidden',
+            top: `${finder1Top.value + finder1RowNum.value * board1CellHeight.value / 2 - board1CellHeight.value / 2}px`,
+            left: `${finder1Left.value + finder1ColNum.value * board1CellWidth.value / 2 - board1CellWidth.value / 2}px`,
+        };
+    });
 
 
     // ##########

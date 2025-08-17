@@ -502,13 +502,15 @@
     const star1Rows = computed(()=>{
         return star1.startRows;
     });
-    const starStyle = computed(() => ({
-        visibility: star1.visibility,
-        top: `${star1Rows.value * board1.cellHeight}px`,
-        left: `${star1Cols.value * board1.cellWidth}px`,
-        width: `${board1.cellWidth}px`,
-        height: `${board1.cellHeight}px`,
-    }));
+    const starStyle = computed(() => {
+        return {
+            visibility: star1.visibility,
+            top: `${star1Rows.value * board1.cellHeight}px`,
+            left: `${star1Cols.value * board1.cellWidth}px`,
+            width: `${board1.cellWidth}px`,
+            height: `${board1.cellHeight}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　カメラのファインダー +
@@ -534,13 +536,15 @@
         }),
         reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
-    const finderStyle = computed(() => ({
-        top: `${finder1.top}px`,
-        left: `${finder1.left}px`,
-        width: `${finder1.colNum * board1.cellWidth}px`,
-        height: `${finder1.rowNum * board1.cellHeight}px`,
-        border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
-    }));
+    const finderStyle = computed(() => {
+        return {
+            top: `${finder1.top}px`,
+            left: `${finder1.left}px`,
+            width: `${finder1.colNum * board1.cellWidth}px`,
+            height: `${finder1.rowNum * board1.cellHeight}px`,
+            border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　リロード・パイ +
@@ -581,11 +585,13 @@
     const reloadPie1TileTop = computed<number>(()=>{
         return reloadPie1.frames[reloadPie1Index.value].top;
     });
-    const reloadPieStyle = computed(() => ({
-        visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
-        top: `${finder1.top + finder1.rowNum * board1.cellHeight / 2 - board1.cellHeight / 2}px`,
-        left: `${finder1.left + finder1.colNum * board1.cellWidth / 2 - board1.cellWidth / 2}px`,
-    }));
+    const reloadPieStyle = computed(() => {
+        return {
+            visibility: finder1.reloadTime > 0 ? 'visible' : 'hidden',
+            top: `${finder1.top + finder1.rowNum * board1.cellHeight / 2 - board1.cellHeight / 2}px`,
+            left: `${finder1.left + finder1.colNum * board1.cellWidth / 2 - board1.cellWidth / 2}px`,
+        };
+    });
 
     
     // ##########
