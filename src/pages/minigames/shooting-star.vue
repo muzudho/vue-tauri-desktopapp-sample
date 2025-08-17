@@ -30,8 +30,8 @@
 
         <!-- ボタンを並べる -->
         <div>
-            <v-btn @click="onGameStartOrEndButtonPushed()">{{ app.game.startButtonText }}</v-btn>
-            <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ app.game.pauseButtonText }}</v-btn>
+            <v-btn @click="onGameStartOrEndButtonPushed()">{{ app.game.isPlaying ? "ゲーム終了" : "ゲームスタート" }}</v-btn>
+            <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ app.game.isPause ? "再開" : "一時停止" }}</v-btn>
 
             <!-- フォーカスを外すためのダミー・ボタンです -->
             <v-btn id="dammyButton">何もしないボタン</v-btn>
@@ -171,8 +171,6 @@
             score: number,              // 得点
             isPlaying: boolean,         // ゲーム中
             isPause: boolean,           // ゲームは一時停止中
-            startButtonText: string,    // ［ゲームスタート］または［ゲーム終了］ボタンのラベル
-            pauseButtonText: string,    // ［一時停止］または［再開］ボタンのラベル
             maxCount: number,           // ゲーム時間は１分
             scheduleStep: number,       // 星の出現スケジュール
         },
@@ -184,8 +182,6 @@
             score: 0,
             isPlaying: false,
             isPause: false,
-            startButtonText: "読込中...",
-            pauseButtonText: "読込中...",
             maxCount: 60 * common.seconds,
             scheduleStep: 0,
         },
@@ -642,7 +638,6 @@
 
         stopwatch1.compo?.startTimer();  // タイマーをスタート
 
-        app.game.startButtonText = "ゲーム終了"; // ボタンのテキストを更新
         app.game.isPlaying = !app.game.isPlaying;
     }
 
@@ -655,10 +650,8 @@
 
         if(app.game.isPause) {
             stopwatch1.compo?.startTimer();  // タイマーをスタート
-            app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
         } else {
             stopwatch1.compo?.stopTimer();  // タイマーをストップ
-            app.game.pauseButtonText = "再開"; // ボタンのテキストを更新
         }
 
         app.game.isPause = !app.game.isPause;
@@ -673,9 +666,7 @@
 
         app.game.score = 0;
         app.game.isPlaying = false;
-        app.game.startButtonText = "ゲームスタート"; // ボタンのテキストを更新
         app.game.isPause = false;
-        app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
         app.game.scheduleStep = 0;
 
         star1.visibility = 'hidden';

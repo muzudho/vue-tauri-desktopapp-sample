@@ -30,8 +30,8 @@
 
         <!-- ボタンを並べる -->
         <div>
-            <v-btn @click="onGameStartOrEndButtonPushed()">{{ appGameStartButtonText }}</v-btn>
-            <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ appGamePauseButtonText }}</v-btn>
+            <v-btn @click="onGameStartOrEndButtonPushed()">{{ appGameIsPlaying ? "ゲーム終了" : "ゲームスタート" }}</v-btn>
+            <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ appGameIsPause ? "再開" : "一時停止" }}</v-btn>
 
             <!-- フォーカスを外すためのダミー・ボタンです -->
             <v-btn id="dammyButton">何もしないボタン</v-btn>
@@ -158,8 +158,6 @@
     const appGameScore = ref<number>(0);                // 得点
     const appGameIsPlaying = ref<boolean>(false);       // ゲーム中
     const appGameIsPause = ref<boolean>(false);         // ゲームは一時停止中
-    const appGameStartButtonText = ref<string>("読込中...");    // ［ゲームスタート］または［ゲーム終了］ボタンのラベル
-    const appGamePauseButtonText = ref<string>("読込中...");    // ［一時停止］または［再開］ボタンのラベル
     const appGameMaxCount = computed(()=>60 * commonSeconds);   // ゲーム時間は１分
     const appGameScheduleStep = ref<number>(0);         // 星の出現スケジュール
 
@@ -574,7 +572,6 @@
 
         stopwatch1CompoRef.value?.startTimer();  // タイマーをスタート
 
-        appGameStartButtonText.value = "ゲーム終了"; // ボタンのテキストを更新
         appGameIsPlaying.value = !appGameIsPlaying.value;
     }
 
@@ -587,10 +584,8 @@
 
         if(appGameIsPause.value) {
             stopwatch1CompoRef.value?.startTimer();  // タイマーをスタート
-            appGamePauseButtonText.value = "一時停止"; // ボタンのテキストを更新
         } else {
             stopwatch1CompoRef.value?.stopTimer();  // タイマーをストップ
-            appGamePauseButtonText.value = "再開"; // ボタンのテキストを更新
         }
 
         appGameIsPause.value = !appGameIsPause.value;
@@ -605,9 +600,7 @@
 
         appGameScore.value = 0;
         appGameIsPlaying.value = false;
-        appGameStartButtonText.value = "ゲームスタート"; // ボタンのテキストを更新
         appGameIsPause.value = false;
-        appGamePauseButtonText.value = "一時停止"; // ボタンのテキストを更新
         appGameScheduleStep.value = 0;
 
         star1Visibility.value = 'hidden';
