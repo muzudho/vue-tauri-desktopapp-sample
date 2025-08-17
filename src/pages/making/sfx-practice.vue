@@ -95,6 +95,7 @@
         sfxLoad();
     });
 
+    
     onUnmounted(()=>{
         // 効果音のメモリ解放を真面目に行う場合
         if (sfxDeniedAudio) {
@@ -103,11 +104,15 @@
             sfxDeniedAudio.load(); // バッファクリア
             // イベントリスナー解除（必要なら）
             // sfxDeniedAudio.removeEventListener('ended', handler);
+        }
 
+        if (sfxCameraShutterAudio) {
             sfxCameraShutterAudio.pause();
             sfxCameraShutterAudio.src = '';
             sfxCameraShutterAudio.load(); // バッファクリア
+        }
 
+        if (sfxMissAudio) {
             sfxMissAudio.pause();
             sfxMissAudio.src = '';
             sfxMissAudio.load(); // バッファクリア
