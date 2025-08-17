@@ -183,7 +183,7 @@
      * 効果音をロードする（jsfxrで作った効果音）
      */
     function sfxLoad() : void {
-        sfxDeniedAudio = new Audio('/wav/202508__sfx__17--0200-denied.wav'); // 拒否音
+        sfxDeniedAudio = new Audio('/wav/202508__sfx__17-0200-denied.wav'); // 拒否音
         sfxDeniedAudio.volume = sfxConfigVolume;
         sfxDeniedAudio.addEventListener('play', () => { sfxDeniedIsPlaying.value = true })
         sfxDeniedAudio.addEventListener('pause', () => { sfxDeniedIsPlaying.value = false })

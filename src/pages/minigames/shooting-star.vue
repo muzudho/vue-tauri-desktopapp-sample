@@ -233,7 +233,7 @@
      * 効果音をロードする（jsfxrで作った効果音）
      */
     function sfxLoad() : void {
-        sfx.denied.audio = new Audio('/wav/202508__sfx__17--0200-denied.wav'); // 拒否音
+        sfx.denied.audio = new Audio('/wav/202508__sfx__17-0200-denied.wav'); // 拒否音
         sfx.denied.audio.volume = sfxConfig.volume;
         sfx.denied.audio.addEventListener('play', () => { sfx.denied.isPlaying = true })
         sfx.denied.audio.addEventListener('pause', () => { sfx.denied.isPlaying = false })
