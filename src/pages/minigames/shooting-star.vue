@@ -116,7 +116,8 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, reactive, Ref, ref, watch } from 'vue';
+    import { computed, onMounted, reactive, ref, watch } from 'vue';
+    import type { Ref } from 'vue'
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
