@@ -110,6 +110,8 @@
 
 <script setup lang="ts">
 
+    console.log("シューティングスター　（上級者向けソースコード版）")
+
     // ##############
     // # インポート #
     // ##############
@@ -166,13 +168,13 @@
             isShowing: boolean,         // 説明書を表示中
         },
         game : {                        // ゲーム
-            score: number,
+            score: number,              // 得点
             isPlaying: boolean,         // ゲーム中
-            isPause: boolean,           // ゲームは停止中
-            startButtonText: string,
-            pauseButtonText: string,
-            maxCount: number,           // ゲーム時間は１分。
-            scheduleStep: number,
+            isPause: boolean,           // ゲームは一時停止中
+            startButtonText: string,    // ［ゲームスタート］または［ゲーム終了］ボタンのラベル
+            pauseButtonText: string,    // ［一時停止］または［再開］ボタンのラベル
+            maxCount: number,           // ゲーム時間は１分
+            scheduleStep: number,       // 星の出現スケジュール
         },
     }>({
         manual : {
