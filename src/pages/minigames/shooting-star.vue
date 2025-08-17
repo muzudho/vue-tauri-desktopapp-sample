@@ -30,8 +30,8 @@
 
         <!-- ボタンを並べる -->
         <div>
-            <v-btn @click="gameStart()">{{ app.game.startButtonText }}</v-btn>
-            <v-btn @click="gamePause()">{{ app.game.pauseButtonText }}</v-btn>
+            <v-btn @click="onGameStartOrEndButtonPushed()">{{ app.game.startButtonText }}</v-btn>
+            <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ app.game.pauseButtonText }}</v-btn>
 
             <!-- フォーカスを外すためのダミー・ボタンです -->
             <v-btn id="dammyButton">何もしないボタン</v-btn>
@@ -255,13 +255,13 @@
     }
 
 
-    // ##################
-    // # コンポーネント #
-    // ##################
+    // ################
+    // # オブジェクト #
+    // ################
 
-    // ++++++++++++++++++++++++++++++++++++++++
-    // + コンポーネント　＞　ストップウォッチ +
-    // ++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ストップウォッチ +
+    // ++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1CompoRef = ref<InstanceType<typeof StopwatchDev> | null>(null);     // <stopwatch-dev> のインスタンス
     const stopwatch1 = reactive<{
@@ -274,9 +274,9 @@
     watch(()=>stopwatch1.count, (newCount) => {
         // カウントが変わったら、何か処理をしたい。
 
-        // ----------------------------------------------------------
-        // - コンポーネント　＞　ストップウォッチ　＞　スケジュール -
-        // ----------------------------------------------------------
+        // --------------------------------------------------------
+        // - オブジェクト　＞　ストップウォッチ　＞　スケジュール -
+        // --------------------------------------------------------
 
         switch (app.game.scheduleStep) {
             case 0:
@@ -474,9 +474,9 @@
         }
     });
 
-    // ++++++++++++++++++++++++++
-    // + コンポーネント　＞　盤 +
-    // ++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++
+    // + オブジェクト　＞　盤 +
+    // ++++++++++++++++++++++++
 
     const board1 = reactive({
         cellWidth: 32,
@@ -488,9 +488,9 @@
         return board1.cols * board1.rows; // 盤のセル数
     });
 
-    // ++++++++++++++++++++++++++
-    // + コンポーネント　＞　星 +
-    // ++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++
+    // + オブジェクト　＞　星 +
+    // ++++++++++++++++++++++++
 
     const star1 = reactive({
         startCols : 0,  // 出現位置
@@ -512,9 +512,9 @@
         height: `${board1.cellHeight}px`,
     }));
 
-    // ++++++++++++++++++++++++++++++++++++++++++++
-    // + コンポーネント　＞　カメラのファインダー +
-    // ++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　カメラのファインダー +
+    // ++++++++++++++++++++++++++++++++++++++++++
     //
     // 点線の枠
     //
@@ -544,9 +544,9 @@
         border: `dashed 4px ${finder1.reloadTime > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
     }));
 
-    // ++++++++++++++++++++++++++++++++++++++
-    // + コンポーネント　＞　リロード・パイ +
-    // ++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　リロード・パイ +
+    // ++++++++++++++++++++++++++++++++++++
     //
     // 写真を撮った時にカメラのファインダーの中心で回ってるやつ。
     //
@@ -626,6 +626,63 @@
     // # サブルーチン #
     // ################
 
+    /**
+     * ［ゲームスタート］または［ゲーム終了］ボタン押下時。（状態により切り替わります）
+     */
+    function onGameStartOrEndButtonPushed() : void {
+        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+
+        if(app.game.isPlaying) {    // ［ゲーム終了］ボタン
+            // ゲームを終了させます
+            gameInit();
+            return;
+        }
+
+        stopwatch1.compo?.startTimer();  // タイマーをスタート
+
+        app.game.startButtonText = "ゲーム終了"; // ボタンのテキストを更新
+        app.game.isPlaying = !app.game.isPlaying;
+    }
+
+
+    /**
+     * ［一時停止］または［再開］ボタン押下時。（状態により切り替わります）
+     */
+    function onGamePauseOrRestartButtonPushed() : void {
+        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+
+        if(app.game.isPause) {
+            stopwatch1.compo?.startTimer();  // タイマーをスタート
+            app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
+        } else {
+            stopwatch1.compo?.stopTimer();  // タイマーをストップ
+            app.game.pauseButtonText = "再開"; // ボタンのテキストを更新
+        }
+
+        app.game.isPause = !app.game.isPause;
+    }
+
+
+    /**
+     * ゲームの初期化
+     */
+    function gameInit() : void {
+        stopwatch1.compo?.resetTimer();  // タイマーをリセット
+
+        app.game.score = 0;
+        app.game.isPlaying = false;
+        app.game.startButtonText = "ゲームスタート"; // ボタンのテキストを更新
+        app.game.isPause = false;
+        app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
+        app.game.scheduleStep = 0;
+
+        star1.visibility = 'hidden';
+    }
+
+
+    /**
+     * ゲームのメインループ開始
+     */
     function gameLoopStart() : void {
         const update = () => {
             // モーション・タイマー
@@ -702,51 +759,6 @@
     }
 
 
-    function gameInit() : void {
-        stopwatch1.compo?.resetTimer();  // タイマーをリセット
-
-        app.game.score = 0;
-        app.game.isPlaying = false;
-        app.game.startButtonText = "ゲームスタート"; // ボタンのテキストを更新
-        app.game.isPause = false;
-        app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
-        app.game.scheduleStep = 0;
-
-        star1.visibility = 'hidden';
-    }
-
-
-    function gameStart() : void {
-        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
-
-        if(app.game.isPlaying) {
-            // ゲームを終了させます
-            gameInit();
-            return;
-        }
-
-        stopwatch1.compo?.startTimer();  // タイマーをスタート
-
-        app.game.startButtonText = "ゲーム終了"; // ボタンのテキストを更新
-        app.game.isPlaying = !app.game.isPlaying;
-    }
-
-
-    function gamePause() : void {
-        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
-
-        if(app.game.isPause) {
-            stopwatch1.compo?.startTimer();  // タイマーをスタート
-            app.game.pauseButtonText = "一時停止"; // ボタンのテキストを更新
-        } else {
-            stopwatch1.compo?.stopTimer();  // タイマーをストップ
-            app.game.pauseButtonText = "再開"; // ボタンのテキストを更新
-        }
-
-        app.game.isPause = !app.game.isPause;
-    }
-
-
     /**
      * カメラショット処理
      */
@@ -788,6 +800,9 @@
     }
 
 
+    /**
+     * カメラのファインダーの中に星を収めて撮ったとき。
+     */
     function niceShot() : void {
         if (!sfx.cameraShutter.isPlaying) {
             // カメラのシャッター音が停止中なら鳴らす
