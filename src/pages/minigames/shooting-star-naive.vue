@@ -98,12 +98,6 @@
             ：ここまで。
         -->
     </section>
-    
-    <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
-        <source-link/>
-    </section>
 
     <the-footer/>
 </template>
@@ -120,81 +114,54 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    // from の階層が上の順、アルファベット順
-    import SourceLink from '../../components/SourceLink.vue';
     import StopwatchDev from '../../components/StopwatchDev.vue';
-    import Tile from '../../components/Tile.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+    import Tile from '../../components/Tile.vue';
 
 
     // ##########
     // # 効果音 #
     // ##########
 
-    const sfxConfig = reactive<{
-        volume: number,                    // 音量
-    }>({
-        volume: 0.3,
-    });
-    const sfx = reactive<{
-        denied: {                           // 拒否音
-            audio: HTMLAudioElement | null, // オーディオ・オブジェクト
-            isPlaying: boolean,             // 再生状態
-        },
-        cameraShutter: {                    // カメラで撮影したときの効果音
-            audio: HTMLAudioElement | null,
-            isPlaying: boolean,
-        },
-        miss: {                             // ミス音
-            audio: HTMLAudioElement | null,
-            isPlaying: boolean,
-        },
-    }>({
-        denied: {
-            audio: null,
-            isPlaying: false,
-        },
-        cameraShutter: {
-            audio: null,
-            isPlaying: false,
-        },
-        miss: {
-            audio: null,
-            isPlaying: false,
-        },
-    });
+    const volume = 0.3; // 音量
+    let sfxDenied: HTMLAudioElement;            // 拒否音
+    let sfxCameraShutter: HTMLAudioElement;     // カメラで撮影したときの効果音
+    let sfxMiss: HTMLAudioElement;              // ミス音
+    const isSfxDeniedPlaying = ref<boolean>(false);       // ブザー音の再生状態
+    const isSfxCameraShutterPlaying = ref<boolean>(false); // カメラのシャッター音の再生状態
+    const isSfxMissPlaying = ref<boolean>(false);         // ミス音の再生状態
 
     /**
      * 効果音をロードする（jsfxrで作った効果音）
      */
     function loadSfx() : void {
-        sfx.denied.audio = new Audio('/wav/202508__sfx__17--0200-denied.wav'); // 拒否音
-        sfx.denied.audio.volume = sfxConfig.volume;
-        sfx.denied.audio.addEventListener('play', () => { sfx.denied.isPlaying = true })
-        sfx.denied.audio.addEventListener('pause', () => { sfx.denied.isPlaying = false })
-        sfx.denied.audio.addEventListener('ended', () => { sfx.denied.isPlaying = false })
+        sfxDenied = new Audio('/wav/202508__sfx__17--0200-denied.wav'); // 拒否音
+        sfxDenied.volume = volume;
+        sfxDenied.addEventListener('play', () => { isSfxDeniedPlaying.value = true })
+        sfxDenied.addEventListener('pause', () => { isSfxDeniedPlaying.value = false })
+        sfxDenied.addEventListener('ended', () => { isSfxDeniedPlaying.value = false })
 
-        sfx.cameraShutter.audio = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
-        sfx.cameraShutter.audio.volume = sfxConfig.volume;
-        sfx.cameraShutter.audio.addEventListener('play', () => { sfx.cameraShutter.isPlaying = true })
-        sfx.cameraShutter.audio.addEventListener('pause', () => { sfx.cameraShutter.isPlaying = false })
-        sfx.cameraShutter.audio.addEventListener('ended', () => { sfx.cameraShutter.isPlaying = false })
+        sfxCameraShutter = new Audio('/wav/202508__sfx__16--2117-cameraShutter.wav'); // カメラのシャッター音
+        sfxCameraShutter.volume = volume;
+        sfxCameraShutter.addEventListener('play', () => { isSfxCameraShutterPlaying.value = true })
+        sfxCameraShutter.addEventListener('pause', () => { isSfxCameraShutterPlaying.value = false })
+        sfxCameraShutter.addEventListener('ended', () => { isSfxCameraShutterPlaying.value = false })
 
-        sfx.miss.audio = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
-        sfx.miss.audio.volume = sfxConfig.volume;
-        sfx.miss.audio.addEventListener('play', () => { sfx.miss.isPlaying = true })
-        sfx.miss.audio.addEventListener('pause', () => { sfx.miss.isPlaying = false })
-        sfx.miss.audio.addEventListener('ended', () => { sfx.miss.isPlaying = false })
+        sfxMiss = new Audio('/wav/202508__sfx__16--2146-miss.wav'); // ミス音
+        sfxMiss.volume = volume;
+        sfxMiss.addEventListener('play', () => { isSfxMissPlaying.value = true })
+        sfxMiss.addEventListener('pause', () => { isSfxMissPlaying.value = false })
+        sfxMiss.addEventListener('ended', () => { isSfxMissPlaying.value = false })
     }
 
     // ##############
     // # 共有データ #
     // ##############
 
-    // ++++++++
-    // + 空間 +
-    // ++++++++
+    // ++++++
+    // + 盤 +
+    // ++++++
 
     // 盤データ
     const board = reactive({
@@ -205,12 +172,12 @@
     });
     const boardArea = board.cols * board.rows; // 盤のセル数
 
-    // ++++++++
-    // + 時間 +
-    // ++++++++
-
     // 時データ
     const seconds = 60; // 1秒は60フレーム
+
+    // ++++++++++++++
+    // + カウンター +
+    // ++++++++++++++
 
     const stopwatch1 = ref<InstanceType<typeof StopwatchDev> | null>(null); // StopwatchDevのインスタンス
 
@@ -458,17 +425,11 @@
         reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
 
-    const spriteMotion = reactive<{
-        left: number,  // モーション（motion）定数。カメラのファインダーが左に移動する
-        right: number,
-        up : number,
-        down: number,
-    }>({
-        left: -1,  // モーション（motion）定数。カメラのファインダーが左に移動する
-        right: 1,
-        up: -1,
-        down: 1,
-    });
+    // モーション
+    const moLeft = -1;  // モーション（motion）定数。左に移動する
+    const moRight = 1;
+    const moUp = -1;
+    const moDown = 1;
 
     // ++++++++++++++++++++++
     // + リロード・タイマー +
@@ -575,19 +536,19 @@
                     }
 
                     if (finder1.input.ArrowLeft) {
-                        finder1.motion["xAxis"] = spriteMotion.left; // 左
+                        finder1.motion["xAxis"] = moLeft; // 左
                     }
 
                     if (finder1.input.ArrowRight) {
-                        finder1.motion["xAxis"] = spriteMotion.right;  // 右
+                        finder1.motion["xAxis"] = moRight;  // 右
                     }
 
                     if (finder1.input.ArrowUp) {
-                        finder1.motion["yAxis"] = spriteMotion.up;   // 上
+                        finder1.motion["yAxis"] = moUp;   // 上
                     }
 
                     if (finder1.input.ArrowDown) {
-                        finder1.motion["yAxis"] = spriteMotion.down;   // 下
+                        finder1.motion["yAxis"] = moDown;   // 下
                     }
 
                     if (finder1.motion["xAxis"]!=0 || finder1.motion["yAxis"]!=0) {
@@ -681,9 +642,9 @@
 
         if (finder1.reloadTime > 0) {
             // リロード中
-            if (!sfx.denied.isPlaying) {
+            if (!isSfxDeniedPlaying.value) {
                 // ブザー音が停止中なら鳴らす
-                sfx.denied.audio?.play();
+                sfxDenied.play();
             }
 
             // リロード中は何も起こりません。
@@ -705,9 +666,9 @@
 
         // 星を含まない
         } else {
-            if (!sfx.miss.isPlaying) {
+            if (!isSfxMissPlaying.value) {
                 // ミス音が停止中なら鳴らす
-                sfx.miss.audio?.play();
+                sfxMiss.play();
             }
         }
 
@@ -716,9 +677,9 @@
 
 
     function niceShot() : void {
-        if (!sfx.cameraShutter.isPlaying) {
+        if (!isSfxCameraShutterPlaying.value) {
             // カメラのシャッター音が停止中なら鳴らす
-            sfx.cameraShutter.audio?.play();
+            sfxCameraShutter.play();
         }
 
         misc.score += 100;
