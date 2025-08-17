@@ -89,6 +89,11 @@ const routes = [
         component: () => import('../pages/making/page-layout.vue'),
     },
     {
+        name: 'SfxPractice',
+        path: '/making/sfx-practice',
+        component: () => import('../pages/making/sfx-practice.vue'),
+    },
+    {
         name: 'SpriteRoutine',
         path: '/making/sprite-routine',
         component: () => import('../pages/making/sprite-routine.vue'),

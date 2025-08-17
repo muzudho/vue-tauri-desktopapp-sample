@@ -17,6 +17,7 @@
             <li>📖 <router-link to="/making/tile-crop" :style="getPreviousLinkHighlight('/making/tile-crop')">タイル　＞　を画像から切り抜くぜ！</router-link></li>
             <li>📖 <router-link to="/making/count-up" :style="getPreviousLinkHighlight('/making/count-up')">カウントアップするぜ！</router-link></li>
             <li>📖 <router-link to="/making/input-key" :style="getPreviousLinkHighlight('/making/input-key')">キーボードのキー入力を受け取ろうぜ！</router-link></li>
+            <li>📖 <router-link to="/making/sfx-practice" :style="getPreviousLinkHighlight('/making/sfx-practice')">効果音を鳴らそうぜ！</router-link></li>
             <li>タイル　＞　でカウントアップのアニメーションするぜ！
                 <ul>
                     <li>📖 <router-link to="/making/tile-count-up-naive" :style="getPreviousLinkHighlight('/making/tile-count-up-naive')">ソースコードが初級者向け版</router-link></li>
