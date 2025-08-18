@@ -142,6 +142,17 @@
     ]);
     const getFaceNumber = computed(() => {
         return (i:number)=>{
+            let j = i;  // 初期位置から移動していないとき、 i のまま。
+
+            // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            let file = i % board1Files;
+            const rank = Math.floor(i / board1Ranks);
+
+            file = euclideanMod(file + 1, board1Files);
+
+            j = rank * board1Files + file;
+
+            /*
             // プレイヤーが初期位置にいる場合の、マス位置。
             const homeFile = i % board1Files;
             const homeRank = Math.floor(i / board1Ranks);
@@ -153,6 +164,8 @@
             const board1IndexInLoop = Math.floor(board1RankInLoop / board1Ranks) + board1FileInLoop % board1Files;
 
             return  boardContents1Data.value[board1IndexInLoop];
+            */
+            return  boardContents1Data.value[j];
         };
     });    
 
