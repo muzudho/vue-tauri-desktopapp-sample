@@ -42,9 +42,9 @@
             </p>
         </div>
 
-        <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
-        <stopwatch-dev
-            ref="stopwatch1CompoRef"
+        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
+        <stopwatch
+            ref="stopwatch1Ref"
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
@@ -127,7 +127,7 @@
 
     // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
-    import StopwatchDev from '../../components/StopwatchDev.vue';
+    import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
@@ -217,7 +217,7 @@
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
-    const stopwatch1CompoRef = ref<InstanceType<typeof StopwatchDev> | null>(null); // StopwatchDevのインスタンス
+    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
     watch(stopwatch1Count, (newCount) => {
         // カウントが変わったら、何か処理をしたい。
@@ -418,7 +418,7 @@
 
         if (newCount >= appGameMaxCount.value) {
             // ゲーム停止
-            stopwatch1CompoRef.value?.stopTimer();  // タイマーをストップ
+            stopwatch1Ref.value?.timerStop();  // タイマーをストップ
         }
     });
 
@@ -608,7 +608,7 @@
             return;
         }
 
-        stopwatch1CompoRef.value?.startTimer();  // タイマーをスタート
+        stopwatch1Ref.value?.timerStart();  // タイマーをスタート
 
         appGameIsPlaying.value = !appGameIsPlaying.value;
     }
@@ -621,9 +621,9 @@
         focusRemove();  // フォーカスを外す
 
         if(appGameIsPause.value) {
-            stopwatch1CompoRef.value?.startTimer();  // タイマーをスタート
+            stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         } else {
-            stopwatch1CompoRef.value?.stopTimer();  // タイマーをストップ
+            stopwatch1Ref.value?.timerStop();  // タイマーをストップ
         }
 
         appGameIsPause.value = !appGameIsPause.value;
@@ -634,7 +634,7 @@
      * ゲームの初期化
      */
     function gameInit() : void {
-        stopwatch1CompoRef.value?.resetTimer();  // タイマーをリセット
+        stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
         appGameScore.value = 0;
         appGameIsPlaying.value = false;

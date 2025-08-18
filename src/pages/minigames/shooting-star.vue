@@ -42,9 +42,9 @@
             </p>
         </div>
 
-        <!-- デバッグに使いたいときは、 display: none; を消してください。 -->
-        <stopwatch-dev
-            ref="stopwatch1CompoRef"
+        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
+        <stopwatch
+            ref="stopwatch1Ref"
             v-on:countUp="(countNum) => { stopwatch1.count = countNum; }"
             style="display: none;" />
 
@@ -126,7 +126,7 @@
 
     // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
-    import StopwatchDev from '../../components/StopwatchDev.vue';
+    import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
@@ -269,12 +269,12 @@
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
-    const stopwatch1CompoRef = ref<InstanceType<typeof StopwatchDev> | null>(null);     // <stopwatch-dev> のインスタンス
+    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);     // <stopwatch-dev> のインスタンス
     const stopwatch1 = reactive<{
-        compo: Ref<InstanceType<typeof StopwatchDev> | null>,
+        compo: Ref<InstanceType<typeof Stopwatch> | null>,
         count: number,                                          // カウント
     }>({
-        compo: stopwatch1CompoRef,
+        compo: stopwatch1Ref,
         count: 0,
     });
     watch(()=>stopwatch1.count, (newCount) => {
@@ -476,7 +476,7 @@
 
         if (newCount >= app.game.maxCount) {
             // ゲーム停止
-            stopwatch1.compo?.stopTimer();  // タイマーをストップ
+            stopwatch1.compo?.timerStop();  // タイマーをストップ
         }
     });
 
@@ -674,7 +674,7 @@
             return;
         }
 
-        stopwatch1.compo?.startTimer();  // タイマーをスタート
+        stopwatch1.compo?.timerStart();  // タイマーをスタート
 
         app.game.isPlaying = !app.game.isPlaying;
     }
@@ -687,9 +687,9 @@
         focusRemove();  // フォーカスを外す
 
         if(app.game.isPause) {
-            stopwatch1.compo?.startTimer();  // タイマーをスタート
+            stopwatch1.compo?.timerStart();  // タイマーをスタート
         } else {
-            stopwatch1.compo?.stopTimer();  // タイマーをストップ
+            stopwatch1.compo?.timerStop();  // タイマーをストップ
         }
 
         app.game.isPause = !app.game.isPause;
@@ -700,7 +700,7 @@
      * ゲームの初期化
      */
     function gameInit() : void {
-        stopwatch1.compo?.resetTimer();  // タイマーをリセット
+        stopwatch1.compo?.timerReset();  // タイマーをリセット
 
         app.game.score = 0;
         app.game.isPlaying = false;
