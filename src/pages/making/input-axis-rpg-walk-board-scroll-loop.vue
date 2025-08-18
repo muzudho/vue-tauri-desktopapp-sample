@@ -291,7 +291,7 @@
                 }
             }
 
-            // 移動処理
+            // 移動を処理
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["toRight"]==1) {   // 右
                 board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
