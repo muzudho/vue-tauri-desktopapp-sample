@@ -358,19 +358,10 @@
                 let playerWillToLeft = false;
 
                 // 移動
-                if (player1Input.ArrowUp) {   // 上
-                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
-                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;
-                }
-
+                // 斜め方向の場合、左右を上下で上書きする。（右、左）→（上、下）の順。
                 if (player1Input.ArrowRight) {  // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
                     player1Motion.value["toRight"] = commonSpriteMotionToRight;
-                }
-
-                if (player1Input.ArrowDown) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
-                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                 }
 
                 if (player1Input.ArrowLeft) { // 左
@@ -378,13 +369,22 @@
                     player1Motion.value["toRight"] = commonSpriteMotionToLeft;
                 }
 
+                if (player1Input.ArrowUp) {   // 上
+                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
+                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                }
+
+                if (player1Input.ArrowDown) {   // 下
+                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
+                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                }
+
                 if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
 
                 // 移動処理Ｂ
-                // 斜め方向の場合、上下を優先する。
-                if (player1Motion.value["toRight"]==1) {   // 右
+                if (player1Motion.value["toRight"]==commonSpriteMotionToRight) {   // 右
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1FileHome) {
@@ -447,7 +447,7 @@
                         }
                     }
 
-                } else if (player1Motion.value["toRight"]==-1) {  // 左
+                } else if (player1Motion.value["toRight"]==commonSpriteMotionToLeft) {  // 左
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1FileHome) {
                         playerWillToLeft = true;
@@ -504,7 +504,7 @@
                     }
                 }
 
-                if (player1Motion.value["toBottom"]==-1) {  // 上
+                if (player1Motion.value["toBottom"]==commonSpriteMotionToTop) {  // 上
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1RankHome) {
@@ -558,7 +558,7 @@
                         }
                     }
 
-                } else if (player1Motion.value["toBottom"]==1) {   // 下
+                } else if (player1Motion.value["toBottom"]==commonSpriteMotionToBottom) {   // 下
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1RankHome) {
