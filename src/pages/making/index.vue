@@ -27,7 +27,7 @@
             <li>📖 <router-link to="/making/tile-count-up-rpg-walk" :style="getPreviousLinkHighlight('/making/tile-count-up-rpg-walk')">タイル　＞　でカウントアップのアニメーションするぜ！　＞　ＲＰＧの歩行グラフィック</router-link></li>
             <li>📖 <router-link to="/making/input-axis" :style="getPreviousLinkHighlight('/making/input-axis')">上下左右に移動しようぜ！</router-link></li>
 
-            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-shift-primordial-boundary-lock" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-shift-primordial-boundary-lock')">上下左右に移動しようぜ！　テスト</router-link></li>
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-shift-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-shift-boundary')">上下左右に移動しようぜ！　テスト</router-link></li>
             
 
             <li>📖 <router-link to="/making/sprite-routine" :style="getPreviousLinkHighlight('/making/sprite-routine')">スプライト　＞　ルーチン</router-link></li>

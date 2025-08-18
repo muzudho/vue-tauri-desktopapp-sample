@@ -39,9 +39,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-boundary-check.vue'),
     },
     {
-        name: 'InputAxisRpgWalkFaceShiftPrimordialBoundaryLock',
-        path: '/making/input-axis-rpg-walk-face-shift-primordial-boundary-lock',
-        component: () => import('../pages/making/input-axis-rpg-walk-face-shift-primordial-boundary-lock.vue'),
+        name: 'InputAxisRpgWalkFaceShiftBoundary',
+        path: '/making/input-axis-rpg-walk-face-shift-boundary',
+        component: () => import('../pages/making/input-axis-rpg-walk-face-shift-boundary.vue'),
     },
     {
         name: 'InputAxisRpgWalkGrid',
