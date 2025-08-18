@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト、盤コンテンツ可変サイズ</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -8,6 +8,24 @@
             <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
         </ul>
         <br/>
+
+        <!-- スライダー -->
+        <v-slider
+            label="列数"
+            v-model="boardContents1FileNum"
+            :min="boardContents1FileMin"
+            max="10"
+            step="1"
+            showTicks="always"
+            thumbLabel="always" />
+        <v-slider
+            label="行数"
+            v-model="boardContents1RankNum"
+            :min="boardContents1RankMin"
+            max="10"
+            step="1"
+            showTicks="always"
+            thumbLabel="always" />
 
         <div :style="board1Style">
 
@@ -34,7 +52,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト、盤コンテンツ可変サイズ　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -134,8 +152,10 @@
     // 盤上に表示されるもの。
     //
 
-    const boardContents1FileNum = board1Files;       // 列数
-    const boardContents1RankNum = board1Ranks;       // 行数
+    const boardContents1FileMin = 5;
+    const boardContents1RankMin = 5;
+    const boardContents1FileNum = ref<number>(boardContents1FileMin);       // 列数
+    const boardContents1RankNum = ref<number>(boardContents1RankMin);       // 行数
 
     /**
      * 変換
@@ -144,18 +164,18 @@
      */
     function squareToFileRank(sq: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = sq % boardContents1FileNum;
-        const rank = Math.floor(sq / boardContents1RankNum);
+        const file = sq % boardContents1FileNum.value;
+        const rank = Math.floor(sq / boardContents1RankNum.value);
 
         return [file, rank];
     }
 
     function fileRankToSquare(file: number, rank: number) : number {
-        return rank * boardContents1FileNum + file;
+        return rank * boardContents1FileNum.value + file;
     }
 
     const boardContents1OriginFile = ref<number>(0);
-    const boardContents1OriginRank = ref<number>(0);   // 0 番目のコンテンツの位置。
+    const boardContents1OriginRank = ref<number>(0);    // 0 番目のコンテンツの位置。
     const boardContents1Data = ref<string[]>([
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
     ]);
@@ -164,8 +184,8 @@
             let j = i;  // 初期位置から移動していないとき、 i のまま。
 
             let [file, rank] = squareToFileRank(i);            
-            file = euclideanMod(file - boardContents1OriginFile.value, boardContents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            rank = euclideanMod(rank - boardContents1OriginRank.value, boardContents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            file = euclideanMod(file - boardContents1OriginFile.value, boardContents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            rank = euclideanMod(rank - boardContents1OriginRank.value, boardContents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
             j = fileRankToSquare(file, rank);
 
             return  boardContents1Data.value[j];
