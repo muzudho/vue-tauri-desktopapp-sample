@@ -188,6 +188,10 @@
             };
         };
     });    
+    const board1Motion = ref<Record<string, number>>({  // モーションへの入力
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
+    });
 
     // ++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　盤コンテンツ +
@@ -217,8 +221,10 @@
     }
 
     // コンテンツはシフトするので、 File, Rank しかない。 Left, Top は無い。
-    const contents1OriginFile = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
-    const contents1OriginRank = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
+    const contents1FileInit = -3;
+    const contents1RankInit = -3;
+    const contents1OriginFile = ref<number>(contents1FileInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
+    const contents1OriginRank = ref<number>(contents1RankInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
     const contents1Data = ref<string[]>([]);
     for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
         contents1Data.value.push(i.toString().padStart(2, "0"));
@@ -359,6 +365,8 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
+                board1Motion.value["toRight"] = 0;
+                board1Motion.value["toBottom"] = 0;
                 contents1Motion.value["toRight"] = 0;
                 contents1Motion.value["toBottom"] = 0;
                 player1Motion.value["toRight"] = 0;
@@ -370,8 +378,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    contents1OriginFile.value = 0;
-                    contents1OriginRank.value = 0;
+                    contents1OriginFile.value = contents1FileInit;
+                    contents1OriginRank.value = contents1RankInit;
                     player1Left.value = player1FileHome * board1SquareWidth;
                     player1Top.value = player1RankHome * board1SquareHeight;
                 }
@@ -432,6 +440,7 @@
 
                         if (willShift) {
                             contents1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                            board1Motion.value["toRight"] = commonSpriteMotionToRight;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
@@ -493,6 +502,7 @@
 
                         if (willShift) {
                             contents1Motion.value["toRight"] = commonSpriteMotionToRight;
+                            board1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0) {
@@ -549,6 +559,7 @@
 
                         if (willShift) {
                             contents1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                            board1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0) {
@@ -613,6 +624,7 @@
 
                         if (willShift) {
                             contents1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                            board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1FileNum - 1) {
@@ -640,16 +652,18 @@
             }
 
             // スクロール
-            if (contents1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                board1Top.value += player1Speed.value;
-            } else if (contents1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                board1Top.value -= player1Speed.value;
+            // 盤の方をスクロールさせる
+            // 斜め方向の場合、上下を優先する。
+            if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {
+                board1Left.value -= player1Speed.value;
+            } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {
+                board1Left.value += player1Speed.value;
             }
 
-            if (contents1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                board1Left.value += player1Speed.value;
-            } else if (contents1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                board1Left.value -= player1Speed.value;
+            if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {
+                board1Top.value += player1Speed.value;
+            } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
+                board1Top.value -= player1Speed.value;
             }
 
             // プレイヤーが歩くのは、盤の端を歩いているときだけ。このとき、画面スクロールは起こらない。
@@ -666,7 +680,7 @@
             }
 
             if (player1MotionWait.value <= 0) {
-                if (contents1Motion.value["toRight"]!=0 || contents1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || contents1Motion.value["toRight"]!=0 || contents1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }

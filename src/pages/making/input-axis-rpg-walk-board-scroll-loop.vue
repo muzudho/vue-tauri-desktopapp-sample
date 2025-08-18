@@ -153,6 +153,10 @@
             height: `${commonZoom * (board1RankNum + 1) * board1SquareHeight}px`,
         };
     });
+    const board1Motion = ref<Record<string, number>>({  // モーションへの入力
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
+    });
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　プレイヤー +
@@ -199,10 +203,6 @@
     };
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
-    const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
-    });
 
 
     // ##########
@@ -256,8 +256,9 @@
             player1MotionWait.value -= 1;
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["toRight"] = 0;    // クリアー
-                player1Motion.value["toBottom"] = 0;
+                // モーションのクリアー
+                board1Motion.value["toRight"] = 0;
+                board1Motion.value["toBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -268,40 +269,41 @@
                 // 移動関連（単発）
                 if (player1Input.ArrowLeft) {
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
-                    player1Motion.value["toRight"] = commonSpriteMotionToLeft; // 左
+                    board1Motion.value["toRight"] = commonSpriteMotionToLeft; // 左
                 }
 
                 if (player1Input.ArrowRight) {
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
-                    player1Motion.value["toRight"] = commonSpriteMotionToRight;  // 右
+                    board1Motion.value["toRight"] = commonSpriteMotionToRight;  // 右
                 }
 
                 if (player1Input.ArrowUp) {
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
-                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;   // 上
+                    board1Motion.value["toBottom"] = commonSpriteMotionToTop;   // 上
                 }
 
                 if (player1Input.ArrowDown) {
                     player1Frames.value = player1SourceFrames["down"]    // 向きを変える
-                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;   // 下
+                    board1Motion.value["toBottom"] = commonSpriteMotionToBottom;   // 下
                 }
 
-                if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
             }
 
             // 移動を処理
+            // 盤の方をスクロールさせる
             // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["toRight"]==1) {   // 右
-                board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
-            } else if (player1Motion.value["toRight"]==-1) {  // 左
+            if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
+                board1Left.value -= player1Speed.value;
+            } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
                 board1Left.value += player1Speed.value;
             }
 
-            if (player1Motion.value["toBottom"]==-1) {  // 上
+            if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
                 board1Top.value += player1Speed.value;
-            } else if (player1Motion.value["toBottom"]==1) {   // 下
+            } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
                 board1Top.value -= player1Speed.value;
             }
 
