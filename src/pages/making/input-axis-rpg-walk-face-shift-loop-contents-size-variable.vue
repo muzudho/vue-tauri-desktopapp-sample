@@ -9,7 +9,6 @@
         </ul>
         <br/>
 
-        <!-- スライダー -->
         <v-slider
             label="列数"
             v-model="contents1FileNum"
@@ -27,6 +26,12 @@
             step="1"
             showTicks="always"
             thumbLabel="always"
+            @click="focusRemove()" />
+        <v-switch
+            v-model="appIsLooping"
+            :label="appIsLooping ? '端でループ中' : '端でループしていません'"
+            color="green"
+            inset
             @click="focusRemove()" />
         <!-- フォーカスを外すためのダミー・ボタンです -->
         <v-btn ref="noopButton">何もしないボタン</v-btn>
@@ -97,6 +102,16 @@
     const commonSpriteMotionRight = 1;
     const commonSpriteMotionUp = -1;
     const commonSpriteMotionDown = 1;
+
+
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appIsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
 
 
     // ################
@@ -171,13 +186,13 @@
 
     /**
      * 変換
-     * @param tileIndex マス番号
+     * @param index マス番号
      * @returns [筋番号, 段番号]
      */
-    function tileIndexToTileFileRank(tileIndex: number) : number[] {
+    function tileIndexToTileFileRank(index: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = tileIndex % board1Files;
-        const rank = Math.floor(tileIndex / board1Ranks);
+        const file = index % board1Files;
+        const rank = Math.floor(index / board1Ranks);
 
         return [file, rank];
     }
@@ -205,11 +220,19 @@
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
             let contentsFile = tileFile - contents1OriginFile.value;
             let contentsRank = tileRank - contents1OriginRank.value;
-            contentsFile = euclideanMod(contentsFile, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            contentsRank = euclideanMod(contentsRank, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
+
+            if (appIsLooping.value) {
+                contentsFile = euclideanMod(contentsFile, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+                contentsRank = euclideanMod(contentsRank, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            } else {
+                // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
+                if (contentsFile < 0 || contents1FileNum.value <= contentsFile || contentsRank < 0 || contents1RankNum.value <= contentsRank) {
+                    return "-";
+                }
+            }
 
             // コンテンツ上の位置が示すデータを返す
+            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             return  contents1Data.value[contentsIndex];
         };
     });    
