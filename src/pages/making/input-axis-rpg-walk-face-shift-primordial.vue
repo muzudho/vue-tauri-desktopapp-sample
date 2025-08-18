@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・原始的シフト</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -34,7 +34,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・原始的シフト　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -144,14 +144,14 @@
      */
     function tileIndexToTileFileRank(tileIndex: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = tileIndex % contents1FileNum;
-        const rank = Math.floor(tileIndex / contents1RankNum);
+        const file = tileIndex % board1Files;
+        const rank = Math.floor(tileIndex / board1Ranks);
 
         return [file, rank];
     }
 
-    function contentsFileRankToContentsIndex(file: number, rank: number) : number {
-        return rank * contents1FileNum + file;
+    function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
+        return contentsRank * contents1FileNum + contentsFile;
     }
 
     const contents1OriginFile = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの左から何番目か。
