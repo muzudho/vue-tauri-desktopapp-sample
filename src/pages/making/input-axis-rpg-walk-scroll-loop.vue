@@ -1,9 +1,13 @@
 <template>
-    <the-header/>
 
-    <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　循環的スクロール</h3>
-    <section class="sec-3">
-        <p>👇キーボードの上下左右キーを押してくれだぜ！</p>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>循環的スクロール</h4>
+    <section class="sec-4">
+        <p>キーボード操作方法</p>
+        <ul>
+            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
+            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
+        </ul>
+        <br/>
 
         <div :style="boardMaskContainerStyle">
 
@@ -36,12 +40,10 @@
     </section>
 
     <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">循環的スクロール　＞　</span>ソースコード</h4>
+    <section class="sec-4">
         <source-link/>
     </section>
-
-    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -61,8 +63,6 @@
 
     import SourceLink from '../../components/SourceLink.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TheFooter from './the-footer.vue';
-    import TheHeader from './the-header.vue';
 
 
     // ##############
@@ -194,20 +194,26 @@
     // ##########
 
     onMounted(() => {
-        startGameLoop();
-        startTimer();
-
         // キーボードイベント
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // ［スペース］［↑］［↓］キーの場合
+            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
             if (p1Input.hasOwnProperty(e.key)) {
                 p1Input[e.key] = true;
             }
         });
-        window.addEventListener('keyup', (e) => {
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (p1Input.hasOwnProperty(e.key)) {
                 p1Input[e.key] = false;
             }
         });
+
+        startGameLoop();
+        startTimer();
 
 
         // ################
@@ -225,6 +231,10 @@
                 
                 // 入力（上下左右への移動）をモーションに変換
                 if (p1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+
+                    // 位置は動かないので、位置のリセットはありません。
+
+                    // 移動
                     if (p1Input.ArrowLeft) {
                         p1Motion.value["xAxis"] = moLeft; // 左
                     }
