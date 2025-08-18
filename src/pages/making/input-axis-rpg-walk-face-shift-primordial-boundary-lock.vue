@@ -11,7 +11,7 @@
 
         <v-switch
             v-model="appBoundaryIsLock"
-            :label="appBoundaryIsLock ? '［画面外隠し］中' : '［画面外隠し］をしていません'"
+            :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
             color="green"
             :hideDetails="true"
             inset
@@ -20,7 +20,7 @@
                 <v-switch
                     v-model="appBoundaryWalkingEdge"
                     :disabled="!appBoundaryWalkingEdgeIsEnabled"
-                    :label="appBoundaryWalkingEdge ? '［盤の端歩行］可能中' : '［盤の端歩行］を可能にしていません'"
+                    :label="appBoundaryWalkingEdge ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
                     color="green"
                     :hideDetails="true"
                     inset
@@ -50,7 +50,7 @@
             </div>
 
         <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
-        <p>上下左右の端に画面外が見えないようにスクロール・ロックがかかるようになっているぜ（＾▽＾）！</p>
+        <p>上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！</p>
     </section>
 
     <br/>
@@ -226,15 +226,21 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left: number = 2 * board1SquareWidth;       // スプライトのX座標
-    const player1Top: number = 2 * board1SquareHeight;       // スプライトのY座標
+    const player1File = ref<number>(2);
+    const player1Rank = ref<number>(2);
+    const player1Left = computed<number>(()=>{
+        return player1File.value * board1SquareWidth;       // スプライトのX座標
+    });
+    const player1Top = computed<number>(()=>{
+        return player1Rank.value * board1SquareHeight;       // スプライトのY座標
+    });
     const player1Input = <Record<string, boolean>>{             // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
     const player1Style = computed(() => ({
-        top: `${player1Top}px`,
-        left: `${player1Left}px`,
+        top: `${player1Top.value}px`,
+        left: `${player1Left.value}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -397,6 +403,11 @@
 
                     if (!isBoundaryLocked) {
                         contents1OriginFile.value -= 1;   // コンテンツの方を右へスクロールさせる
+                    } else if (appBoundaryWalkingEdge.value) {
+                        // ［盤の端まで歩ける］
+                        if (player1File.value < board1Files - 1) {
+                            player1File.value += 1;
+                        }
                     }
 
                 } else if (player1Motion.value["xAxis"]==-1) {  // 左
@@ -445,6 +456,11 @@
 
                     if (!isBoundaryLocked) {
                         contents1OriginFile.value += 1;     // 左
+                    } else if (appBoundaryWalkingEdge.value) {
+                        // ［盤の端まで歩ける］
+                        if (player1File.value > 0) {
+                            player1File.value -= 1;
+                        }
                     }
                 }
 
@@ -491,6 +507,11 @@
 
                     if (!isBoundaryLocked) {
                         contents1OriginRank.value += 1;     // 上
+                    } else if (appBoundaryWalkingEdge.value) {
+                        // ［盤の端まで歩ける］
+                        if (player1Rank.value > 0) {
+                            player1Rank.value -= 1;
+                        }
                     }
 
                 } else if (player1Motion.value["yAxis"]==1) {   // 下
@@ -544,6 +565,11 @@
 
                     if (!isBoundaryLocked) {
                         contents1OriginRank.value -= 1;     // 下
+                    } else if (appBoundaryWalkingEdge.value) {
+                        // ［盤の端まで歩ける］
+                        if (player1Rank.value < board1Files - 1) {
+                            player1Rank.value += 1;
+                        }
                     }
                 }
             }
