@@ -365,14 +365,23 @@
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
 
-                // 移動処理
+                // 移動処理０
+                let contentsWillToTop = false;
+                let contentsWillToRight = false;
+                let contentsWillToBottom = false;
+                let contentsWillToLeft = false;
+                let playerWillToTop = false;
+                let playerWillToRight = false;
+                let playerWillToBottom = false;
+                let playerWillToLeft = false;
+
                 // 斜め方向の場合、上下を優先する。
                 if (player1Motion.value["xAxis"]==1) {   // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1FileHome) {
-                        player1Left.value += 1 * board1SquareWidth;
+                        playerWillToRight = true;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -420,12 +429,12 @@
                         }
 
                         if (willShift) {
-                            contents1OriginFile.value -= 1;   // コンテンツの方を右へスクロールさせる
+                            contentsWillToLeft = true;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
                                 if (player1File.value < board1Files - 1) {
-                                    player1Left.value += 1 * board1SquareWidth;
+                                    playerWillToRight = true;
                                 }
                             }
                         }
@@ -436,7 +445,7 @@
 
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1FileHome) {
-                        player1Left.value -= 1 * board1SquareWidth;
+                        playerWillToLeft = true;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -480,11 +489,11 @@
                         }
 
                         if (willShift) {
-                            contents1OriginFile.value += 1;     // 左
+                            contentsWillToRight = true;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0) {
-                                player1Left.value -= 1 * board1SquareWidth;
+                                playerWillToLeft = true;
                             }
                         }
                     }
@@ -495,7 +504,7 @@
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1RankHome) {
-                        player1Top.value -= 1 * board1SquareHeight;
+                        playerWillToTop = true;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -536,11 +545,11 @@
                         }
 
                         if (willShift) {
-                            contents1OriginRank.value += 1;     // 上
+                            contentsWillToBottom = true;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0) {
-                                player1Top.value -= 1 * board1SquareHeight;
+                                playerWillToTop = true;
                             }
                         }
                     }
@@ -550,7 +559,7 @@
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1RankHome) {
-                        player1Top.value += 1 * board1SquareHeight;
+                        playerWillToBottom = true;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -599,14 +608,47 @@
                         }
 
                         if (willShift) {
-                            contents1OriginRank.value -= 1;     // 下
+                            contentsWillToTop = true;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1Files - 1) {
-                                player1Top.value += 1 * board1SquareHeight;
+                                playerWillToBottom = true;
                             }
                         }
                     }
+                }
+
+                // 移動処理１
+                if (contentsWillToTop) {
+                    contents1OriginRank.value -= 1;     // 下
+                }
+
+                if (contentsWillToRight) {
+                    contents1OriginFile.value += 1;
+                }
+
+                if (contentsWillToLeft) {
+                    contents1OriginFile.value -= 1;   // コンテンツの方を左へスクロールさせる
+                }
+
+                if (contentsWillToBottom) {
+                    contents1OriginRank.value += 1;     // 上
+                }
+
+                if (playerWillToTop) {
+                    player1Top.value -= 1 * board1SquareHeight;
+                }
+
+                if (playerWillToRight) {
+                    player1Left.value += 1 * board1SquareWidth;
+                }
+
+                if (playerWillToLeft) {
+                    player1Left.value -= 1 * board1SquareWidth;
+                }
+
+                if (playerWillToBottom) {
+                    player1Top.value += 1 * board1SquareHeight;
                 }
             }
 
