@@ -390,6 +390,7 @@
                     // |  |   p   |   |
                     // |  |       |   |
                     // |  +-------+   |
+                    // |              |
                     // +--------------+
                     //
                     // c が 0 以上なら、それ以上上に行くことはできない。
@@ -403,7 +404,48 @@
                 }
 
                 if (player1Input.ArrowDown) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    //  Contents
+                    // +------c-------+
+                    // |              |
+                    // |   Board      |
+                    // |  +---b---+   |
+                    // |  |       |   |
+                    // ch bh  p   |   |
+                    // |  |       |   |
+                    // |  +-------+   |
+                    // +--------------+
+                    //
+                    //  b ... Origin x on board.
+                    //  c ... contents's x from B.
+                    //  p ... player character's x from B.
+                    //  bh ... Board height.
+                    //  ch ... Contents height.
+                    //
+                    //
+                    // +------c-------+
+                    // |              |
+                    // |              |
+                    // |  +---b---+   |
+                    // |  |       |   |
+                    // ch bh  p   |   |
+                    // |  |       |   |
+                    // +--+-------+---+
+                    //
+                    // ch - bh ... max margin.
+                    //
+                    // -c が max margin 以上なら、それ以上下に行くことはできない。
+                    //
+
+                    const bh = board1Ranks;
+                    const ch = contents1RankNum;
+                    const c = contents1OriginRank.value;
+                    const maxMargin = ch - bh;
+
+                    if (maxMargin > -c) {
+                        player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                    }
                 }
 
                 if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
