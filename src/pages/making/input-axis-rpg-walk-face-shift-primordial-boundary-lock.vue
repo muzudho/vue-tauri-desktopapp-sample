@@ -13,8 +13,19 @@
             v-model="appBoundaryIsLock"
             :label="appBoundaryIsLock ? 'バウンダリー・ロック中' : 'バウンダリー・ロックをしていません'"
             color="green"
+            :hideDetails="true"
             inset
             @click="focusRemove()" />
+            <section class="sec-1">
+                <v-switch
+                    v-model="appBoundaryWalkingIsLock"
+                    :disabled="appBoundaryWalkingIsDisabled"
+                    :label="appBoundaryWalkingIsLock ? 'バウンダリー歩行・ロック中' : 'バウンダリー歩行・ロックをしていません'"
+                    color="green"
+                    :hideDetails="true"
+                    inset
+                    @click="focusRemove()" />
+            </section>
         <!-- フォーカスを外すためのダミー・ボタンです -->
         <v-btn ref="noopButton">何もしないボタン</v-btn>
 
@@ -96,6 +107,8 @@
     //
 
     const appBoundaryIsLock = ref<boolean>(false);    // バウンダリー・ロック状態を管理（true: ロックする, false: ロックしない）
+    const appBoundaryWalkingIsLock = ref<boolean>(false);    // バウンダリー歩行・ロック状態を管理（true: ロックする, false: ロックしない）
+    const appBoundaryWalkingIsDisabled = ref<boolean>(true);    // バウンダリー歩行・ロック状態を管理（true: 不活性にする, false: 活性にする）
 
 
     // ################
