@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>原始的ボード・スクロール</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>ボード・原始的スクロール</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -36,7 +36,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">原始的ボード・スクロール　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">ボード・原始的スクロール　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-primordial"/>

@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>境界チェック</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>プレイヤー・境界チェック</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -36,7 +36,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">境界チェック　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">プレイヤー・境界チェック　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-boundary-check"/>
