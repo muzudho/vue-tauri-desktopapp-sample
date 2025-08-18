@@ -5,6 +5,7 @@
         <p>キーボード操作方法</p>
         <ul>
             <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
+            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
         </ul>
         <br/>
 
@@ -159,15 +160,15 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(2 * board1SquareWidth);       // スプライトのX座標
-    const player1Top = ref<number>(2 * board1SquareHeight);       // スプライトのY座標
+    const player1Left: number = 2 * board1SquareWidth;       // スプライトのX座標
+    const player1Top: number = 2 * board1SquareHeight;       // スプライトのY座標
     const player1Input = <Record<string, boolean>>{             // 入力
-        ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
+        " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
     const player1Style = computed(() => ({
-        top: `${player1Top.value}px`,
-        left: `${player1Left.value}px`,
+        top: `${player1Top}px`,
+        left: `${player1Left}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -262,7 +263,11 @@
             // 入力（上下左右への移動）をモーションに変換
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
-                // 位置は動かないので、位置のリセットはありません。
+                // 位置のリセット
+                if (player1Input[" "]) {
+                    boardContents1OriginFile.value = 0;
+                    boardContents1OriginRank.value = 0;
+                }
 
                 // 移動
                 if (player1Input.ArrowLeft) {
@@ -284,24 +289,24 @@
                 if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
                     player1MotionWait.value = 16;    // フレーム数を設定
                 }
-            }
 
-            // 移動処理
-            // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["xAxis"]==1) {   // 右
-                player1Frames.value = player1SourceFrames["right"]
-                boardContents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
-            } else if (player1Motion.value["xAxis"]==-1) {  // 左
-                player1Frames.value = player1SourceFrames["left"]
-                boardContents1OriginFile.value += 1;
-            }
+                // 移動処理
+                // 斜め方向の場合、上下を優先する。
+                if (player1Motion.value["xAxis"]==1) {   // 右
+                    player1Frames.value = player1SourceFrames["right"]
+                    boardContents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
+                } else if (player1Motion.value["xAxis"]==-1) {  // 左
+                    player1Frames.value = player1SourceFrames["left"]
+                    boardContents1OriginFile.value += 1;
+                }
 
-            if (player1Motion.value["yAxis"]==-1) {  // 上
-                player1Frames.value = player1SourceFrames["up"]
-                boardContents1OriginRank.value += 1;
-            } else if (player1Motion.value["yAxis"]==1) {   // 下
-                player1Frames.value = player1SourceFrames["down"]
-                boardContents1OriginRank.value -= 1;
+                if (player1Motion.value["yAxis"]==-1) {  // 上
+                    player1Frames.value = player1SourceFrames["up"]
+                    boardContents1OriginRank.value += 1;
+                } else if (player1Motion.value["yAxis"]==1) {   // 下
+                    player1Frames.value = player1SourceFrames["down"]
+                    boardContents1OriginRank.value -= 1;
+                }
             }
 
             // 次のフレーム
