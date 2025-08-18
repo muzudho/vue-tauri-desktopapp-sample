@@ -10,6 +10,7 @@
     <input-axis-target/><br/>
     <input-axis-rpg-walk/><br/>
     <input-axis-rpg-walk-grid/><br/>
+    <input-axis-rpg-walk-boundary-check/><br/>
 
     <br/>
     <h3><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h3>
@@ -35,6 +36,7 @@
 
     import SourceLink from '../../components/SourceLink.vue';
     import inputAxisRpgWalk from './input-axis-rpg-walk.vue';
+    import inputAxisRpgWalkBoundaryCheck from './input-axis-rpg-walk-boundary-check.vue';
     import inputAxisRpgWalkGrid from './input-axis-rpg-walk-grid.vue';
     import InputAxisTarget from './input-axis-target.vue';
     import TheFooter from './the-footer.vue';

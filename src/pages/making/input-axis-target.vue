@@ -70,27 +70,25 @@
     // ##########
 
     onMounted(() => {
-        window.document.addEventListener('keydown', (event: KeyboardEvent) => {
-            // ［スペース］［↑］［↓］キーの場合
-            if (event.key === ' ' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
-                event.preventDefault();
-            }
-        });        
-
-        startGameLoop();
-
         // キーボードイベント
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // ［スペース］［↑］［↓］キーの場合
+            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
             if (p1Input.hasOwnProperty(e.key)) {
                 p1Input[e.key] = true;
             }
         });
-        window.addEventListener('keyup', (e) => {
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (p1Input.hasOwnProperty(e.key)) {
                 p1Input[e.key] = false;
             }
         });
+
+        startGameLoop();
 
 
         // ################
