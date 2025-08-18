@@ -29,8 +29,8 @@
                 style="image-rendering: pixelated;" /><br/>
             </div>
 
-        <p>👆 数字はタイルに付いているのではなく、書き換えられる番号だぜ（＾▽＾）！</p>
-        <p>だから、タイルは動いていないぜ（＾▽＾）！</p>
+        <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
+        <p>だから、数字がタイルの上を移動しているぜ（＾▽＾）！</p>
 
     </section>
 
@@ -163,21 +163,9 @@
 
             let [file, rank] = squareToFileRank(i);            
             file = euclideanMod(file - boardContents1OriginFile.value, board1Files); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            rank = euclideanMod(rank - boardContents1OriginRank.value, board1Ranks); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
             j = fileRankToSquare(file, rank);
 
-            /*
-            // プレイヤーが初期位置にいる場合の、マス位置。
-            const homeFile = i % board1Files;
-            const homeRank = Math.floor(i / board1Ranks);
-
-            // NOTE: 循環するだけなら、［剰余］を使えばいける。
-            // 盤の左端列を、右端列へ移動させる。
-            const board1FileInLoop = euclideanMod(homeFile + boardContents1OriginFile.value + board1Files, board1Files) - homeFile;
-            const board1RankInLoop = euclideanMod(homeRank + boardContents1OriginRank.value + board1Ranks, board1Ranks) - homeRank;
-            const board1IndexInLoop = Math.floor(board1RankInLoop / board1Ranks) + board1FileInLoop % board1Files;
-
-            return  boardContents1Data.value[board1IndexInLoop];
-            */
             return  boardContents1Data.value[j];
         };
     });    
