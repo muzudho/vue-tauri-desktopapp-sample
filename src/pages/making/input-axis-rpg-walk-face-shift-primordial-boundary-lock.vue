@@ -134,10 +134,8 @@
     // 盤上に表示されるもの。
     //
 
-    const contents1FileMax = 10;
-    const contents1RankMax = 10;
-    const contents1FileNum = contents1FileMax;       // 列数
-    const contents1RankNum = contents1RankMax;       // 行数
+    const contents1FileNum = 10;       // 列数
+    const contents1RankNum = 10;       // 行数
 
     /**
      * 変換
@@ -159,7 +157,7 @@
     const contents1OriginFile = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
     const contents1OriginRank = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
     const contents1Data = ref<string[]>([]);
-    for (let i=0; i<contents1FileMax * contents1RankMax; i++) {
+    for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
         contents1Data.value.push(i.toString().padStart(2, "0"));
     }
     const getFaceNumber = computed(() => {
@@ -289,7 +287,51 @@
                 }
 
                 if (player1Input.ArrowRight) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    //  Contents
+                    // +--------------+
+                    // |              |
+                    // |   Board      |
+                    // |  +-------+   |
+                    // |  |       |   |
+                    // c  b   p   |   |
+                    // |  |       |   |
+                    // |  +--bw---+   |
+                    // +-----cw-------+
+                    //
+                    //  b ... Origin x on board.
+                    //  c ... contents's x from B.
+                    //  p ... player character's x from B.
+                    //  bw ... Board width.
+                    //  cw ... Contents width.
+                    //
+                    //
+                    // +--------------+
+                    // |      +-------+
+                    // |      |       |
+                    // c      b   p   |
+                    // |      |       |
+                    // |      +--bw---+
+                    // +-----cw-------+
+                    //
+                    // cw - bw ... max margin.
+                    //
+                    // -c が max margin 以上なら、それ以上右に行くことはできない。
+                    //
+
+                    const bw = board1Files;
+                    const cw = contents1FileNum;
+                    const c = contents1OriginFile.value;
+                    const maxMargin = cw - bw;
+
+                    if (maxMargin <= -c) {
+                        console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin} これ以上左に行くことはできません。`)
+                    }
+                    else {
+                        console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin}`)
+                        player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                    }
                 }
 
                 if (player1Input.ArrowUp) {
