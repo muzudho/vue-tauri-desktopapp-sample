@@ -24,7 +24,7 @@
                 :style="getSquareStyle(i - 1)">{{ i - 1 }}</div>
 
             <!-- プレイヤー１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
@@ -84,10 +84,10 @@
     //
 
     const commonZoom = 4;
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
-    const commonSpriteMotionRight = 1;
-    const commonSpriteMotionUp = -1;
-    const commonSpriteMotionDown = 1;
+    const commonSpriteMotionToLeft = -1;  // モーション（motion）定数。左に移動する
+    const commonSpriteMotionToRight = 1;
+    const commonSpriteMotionToTop = -1;
+    const commonSpriteMotionToBottom = 1;
 
 
     // ################
@@ -121,7 +121,7 @@
         (i:number)=>CSSProperties
     >(() => {
         return (i:number)=>{
-            // プレイヤーが初期位置にいる場合の、マス位置。
+            // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum) * board1SquareWidth;
             const homeTop = Math.floor(i / board1RankNum) * board1SquareHeight;
             const boardWidth = (board1FileNum * board1SquareWidth);
@@ -200,8 +200,8 @@
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        xAxis: 0,   // 負なら左、正なら右
-        yAxis: 0,   // 負なら上、正なら下
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
     });
 
 
@@ -256,51 +256,51 @@
             player1MotionWait.value -= 1;
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["xAxis"] = 0;    // クリアー
-                player1Motion.value["yAxis"] = 0;
+                player1Motion.value["toRight"] = 0;    // クリアー
+                player1Motion.value["toBottom"] = 0;
             }
             
-            // 入力（上下左右への移動）をモーションに変換
+            // キー入力をモーションに変換
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
-                // 位置は動かないので、位置のリセットはありません。
+                // プレイヤーは中心から動かないので、位置のリセットはありません。
 
-                // 移動
+                // 移動関連
                 if (player1Input.ArrowLeft) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                    player1Motion.value["toRight"] = commonSpriteMotionToLeft; // 左
                 }
 
                 if (player1Input.ArrowRight) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                    player1Motion.value["toRight"] = commonSpriteMotionToRight;  // 右
                 }
 
                 if (player1Input.ArrowUp) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;   // 上
                 }
 
                 if (player1Input.ArrowDown) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;   // 下
                 }
 
-                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
             }
 
             // 移動処理
             // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["xAxis"]==1) {   // 右
+            if (player1Motion.value["toRight"]==1) {   // 右
                 player1Frames.value = player1SourceFrames["right"]
                 board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
-            } else if (player1Motion.value["xAxis"]==-1) {  // 左
+            } else if (player1Motion.value["toRight"]==-1) {  // 左
                 player1Frames.value = player1SourceFrames["left"]
                 board1Left.value += player1Speed.value;
             }
 
-            if (player1Motion.value["yAxis"]==-1) {  // 上
+            if (player1Motion.value["toBottom"]==-1) {  // 上
                 player1Frames.value = player1SourceFrames["up"]
                 board1Top.value += player1Speed.value;
-            } else if (player1Motion.value["yAxis"]==1) {   // 下
+            } else if (player1Motion.value["toBottom"]==1) {   // 下
                 player1Frames.value = player1SourceFrames["down"]
                 board1Top.value -= player1Speed.value;
             }

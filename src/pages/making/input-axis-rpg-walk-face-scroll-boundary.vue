@@ -45,7 +45,7 @@
                 :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
 
             <!-- プレイヤー１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
@@ -372,9 +372,11 @@
                 if (player1Input[" "]) {
                     contents1OriginFile.value = 0;
                     contents1OriginRank.value = 0;
+                    player1Left.value = player1FileHome * board1SquareWidth;
+                    player1Top.value = player1RankHome * board1SquareHeight;
                 }
 
-                // 移動
+                // 移動関連
                 // 斜め方向の場合、左右を上下で上書きする。（右、左）→（上、下）の順。
                 if (player1Input.ArrowRight) {  // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
