@@ -25,7 +25,8 @@
     <br/>
     <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span>ソースコード</h4>
     <section class="sec-4">
-        <source-link/>
+        <source-link
+            pagePath="/pages/input-axis-rpg-walk"/>
     </section>
 </template>
 

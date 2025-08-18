@@ -38,7 +38,8 @@
     <br/>
     <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">境界チェック　＞　</span>ソースコード</h4>
     <section class="sec-4">
-        <source-link/>
+        <source-link
+            pagePath="/pages/input-axis-rpg-walk-boundary-check"/>
     </section>
 </template>
 
