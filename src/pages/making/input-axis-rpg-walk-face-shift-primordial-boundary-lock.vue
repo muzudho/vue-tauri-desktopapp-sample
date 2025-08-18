@@ -226,8 +226,10 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1File = ref<number>(2);
-    const player1Rank = ref<number>(2);
+    const player1FileHome: number = 2;  // 盤の真ん中をホーム・ポジションとする
+    const player1RankHome: number = 2;
+    const player1File = ref<number>(player1FileHome);
+    const player1Rank = ref<number>(player1RankHome);
     const player1Left = computed<number>(()=>{
         return player1File.value * board1SquareWidth;       // スプライトのX座標
     });
@@ -356,110 +358,122 @@
                 if (player1Motion.value["xAxis"]==1) {   // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
 
-                    let isBoundaryLocked: boolean = false;
-                    if (appBoundaryIsLock.value) {
-                        // 見えている画面外が広がるような移動は禁止する：
-                        //
-                        //  Contents
-                        // +--------------+
-                        // |              |
-                        // |   Board      |
-                        // |  +-------+   |
-                        // |  |       |   |
-                        // c  b   p   |   |
-                        // |  |       |   |
-                        // |  +--bw---+   |
-                        // +-----cw-------+
-                        //
-                        //  b ... Origin x on board.
-                        //  c ... contents's x from B.
-                        //  p ... player character's x from B.
-                        //  bw ... Board width.
-                        //  cw ... Contents width.
-                        //
-                        //
-                        // +--------------+
-                        // |      +-------+
-                        // |      |       |
-                        // c      b   p   |
-                        // |      |       |
-                        // |      +--bw---+
-                        // +-----cw-------+
-                        //
-                        // cw - bw ... max margin.
-                        //
-                        // -c が max margin 以上なら、それ以上右に行くことはできない。
-                        //
+                    // ホーム・ポジションより左に居ればホームに近づける。
+                    if (player1File.value < player1FileHome) {
+                        player1File.value += 1;
+                    } else {
+                        let willShift: boolean = true;
+                        if (appBoundaryIsLock.value) {
+                            // 見えている画面外が広がるような移動は禁止する：
+                            //
+                            //  Contents
+                            // +--------------+
+                            // |              |
+                            // |   Board      |
+                            // |  +-------+   |
+                            // |  |       |   |
+                            // c  b   p   |   |
+                            // |  |       |   |
+                            // |  +--bw---+   |
+                            // +-----cw-------+
+                            //
+                            //  b ... Origin x on board.
+                            //  c ... contents's x from B.
+                            //  p ... player character's x from B.
+                            //  bw ... Board width.
+                            //  cw ... Contents width.
+                            //
+                            //
+                            // +--------------+
+                            // |      +-------+
+                            // |      |       |
+                            // c      b   p   |
+                            // |      |       |
+                            // |      +--bw---+
+                            // +-----cw-------+
+                            //
+                            // cw - bw ... max margin.
+                            //
+                            // -c が max margin 以上なら、それ以上右に行くことはできない。
+                            //
 
-                        const bw = board1Files;
-                        const cw = contents1FileNum;
-                        const c = contents1OriginFile.value;
-                        const maxMargin = cw - bw;
+                            const bw = board1Files;
+                            const cw = contents1FileNum;
+                            const c = contents1OriginFile.value;
+                            const maxMargin = cw - bw;
 
-                        if (maxMargin <= -c) {
-                            isBoundaryLocked = true;
+                            if (maxMargin <= -c) {
+                                willShift = false;
+                            }
                         }
-                    }
 
-                    if (!isBoundaryLocked) {
-                        contents1OriginFile.value -= 1;   // コンテンツの方を右へスクロールさせる
-                    } else if (appBoundaryWalkingEdge.value) {
-                        // ［盤の端まで歩ける］
-                        if (player1File.value < board1Files - 1) {
-                            player1File.value += 1;
+                        if (willShift) {
+                            contents1OriginFile.value -= 1;   // コンテンツの方を右へスクロールさせる
+                        } else {
+                            if (appBoundaryWalkingEdge.value) {
+                                // ［盤の端まで歩ける］
+                                if (player1File.value < board1Files - 1) {
+                                    player1File.value += 1;
+                                }
+                            }
                         }
                     }
 
                 } else if (player1Motion.value["xAxis"]==-1) {  // 左
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
 
-                    let isBoundaryLocked: boolean = false;
-                    if (appBoundaryIsLock.value) {
-                        // 見えている画面外が広がるような移動は禁止する：
-                        //
-                        //  Contents
-                        // +--------------+
-                        // |              |
-                        // |   Board      |
-                        // |  +-------+   |
-                        // |  |       |   |
-                        // c  b   p   |   |
-                        // |  |       |   |
-                        // |  +-------+   |
-                        // +--------------+
-                        //
-                        //  b ... Origin x on board.
-                        //  c ... contents's x from B.
-                        //  p ... player character's x from B.
-                        //
-                        //
-                        // +--------------+
-                        // |              |
-                        // c              |
-                        // |              |
-                        // +-------+      |
-                        // |       |      |
-                        // b   p   |      |
-                        // |       |      |
-                        // +-------+      |
-                        // +--------------+
-                        //
-                        // c が 0 以上なら、それ以上左に行くことはできない。
-                        //
+                    // ホーム・ポジションより右に居ればホームに近づける。
+                    if (player1File.value > player1FileHome) {
+                        player1File.value -= 1;
+                    } else {
+                        let willShift: boolean = true;
+                        if (appBoundaryIsLock.value) {
+                            // 見えている画面外が広がるような移動は禁止する：
+                            //
+                            //  Contents
+                            // +--------------+
+                            // |              |
+                            // |   Board      |
+                            // |  +-------+   |
+                            // |  |       |   |
+                            // c  b   p   |   |
+                            // |  |       |   |
+                            // |  +-------+   |
+                            // +--------------+
+                            //
+                            //  b ... Origin x on board.
+                            //  c ... contents's x from B.
+                            //  p ... player character's x from B.
+                            //
+                            //
+                            // +--------------+
+                            // |              |
+                            // c              |
+                            // |              |
+                            // +-------+      |
+                            // |       |      |
+                            // b   p   |      |
+                            // |       |      |
+                            // +-------+      |
+                            // +--------------+
+                            //
+                            // c が 0 以上なら、それ以上左に行くことはできない。
+                            //
 
-                        const c = contents1OriginFile.value;
+                            const c = contents1OriginFile.value;
 
-                        if (c >= 0) {
-                            isBoundaryLocked = true;
+                            if (c >= 0) {
+                                willShift = false;
+                            }
                         }
-                    }
 
-                    if (!isBoundaryLocked) {
-                        contents1OriginFile.value += 1;     // 左
-                    } else if (appBoundaryWalkingEdge.value) {
-                        // ［盤の端まで歩ける］
-                        if (player1File.value > 0) {
-                            player1File.value -= 1;
+                        if (willShift) {
+                            contents1OriginFile.value += 1;     // 左
+                        } else if (appBoundaryWalkingEdge.value) {
+                            // ［盤の端まで歩ける］
+                            if (player1File.value > 0) {
+                                player1File.value -= 1;
+                            }
                         }
                     }
                 }
@@ -467,108 +481,118 @@
                 if (player1Motion.value["yAxis"]==-1) {  // 上
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
 
-                    let isBoundaryLocked: boolean = false;
-                    if (appBoundaryIsLock.value) {
-                        // 見えている画面外が広がるような移動は禁止する：
-                        //
-                        //  Contents
-                        // +------c-------+
-                        // |              |
-                        // |   Board      |
-                        // |  +---b---+   |
-                        // |  |       |   |
-                        // |  |   p   |   |
-                        // |  |       |   |
-                        // |  +-------+   |
-                        // +--------------+
-                        //
-                        //  b ... Origin x on board.
-                        //  c ... contents's x from B.
-                        //  p ... player character's x from B.
-                        //
-                        //
-                        // +--+---b---+-c-+
-                        // |  |       |   |
-                        // |  |   p   |   |
-                        // |  |       |   |
-                        // |  +-------+   |
-                        // |              |
-                        // +--------------+
-                        //
-                        // c が 0 以上なら、それ以上上に行くことはできない。
-                        //
+                    // ホーム・ポジションより下に居ればホームに近づける。
+                    if (player1Rank.value > player1RankHome) {
+                        player1Rank.value -= 1;
+                    } else {
+                        let willShift: boolean = true;
+                        if (appBoundaryIsLock.value) {
+                            // 見えている画面外が広がるような移動は禁止する：
+                            //
+                            //  Contents
+                            // +------c-------+
+                            // |              |
+                            // |   Board      |
+                            // |  +---b---+   |
+                            // |  |       |   |
+                            // |  |   p   |   |
+                            // |  |       |   |
+                            // |  +-------+   |
+                            // +--------------+
+                            //
+                            //  b ... Origin x on board.
+                            //  c ... contents's x from B.
+                            //  p ... player character's x from B.
+                            //
+                            //
+                            // +--+---b---+-c-+
+                            // |  |       |   |
+                            // |  |   p   |   |
+                            // |  |       |   |
+                            // |  +-------+   |
+                            // |              |
+                            // +--------------+
+                            //
+                            // c が 0 以上なら、それ以上上に行くことはできない。
+                            //
 
-                        const c = contents1OriginRank.value;
+                            const c = contents1OriginRank.value;
 
-                        if (c >= 0) {
-                            isBoundaryLocked = true;
+                            if (c >= 0) {
+                                willShift = false;
+                            }
                         }
-                    }
 
-                    if (!isBoundaryLocked) {
-                        contents1OriginRank.value += 1;     // 上
-                    } else if (appBoundaryWalkingEdge.value) {
-                        // ［盤の端まで歩ける］
-                        if (player1Rank.value > 0) {
-                            player1Rank.value -= 1;
+                        if (willShift) {
+                            contents1OriginRank.value += 1;     // 上
+                        } else if (appBoundaryWalkingEdge.value) {
+                            // ［盤の端まで歩ける］
+                            if (player1Rank.value > 0) {
+                                player1Rank.value -= 1;
+                            }
                         }
                     }
 
                 } else if (player1Motion.value["yAxis"]==1) {   // 下
                     player1Frames.value = player1SourceFrames["down"]   // 向きを変える
 
-                    let isBoundaryLocked: boolean = false;
-                    if (appBoundaryIsLock.value) {
-                        // 見えている画面外が広がるような移動は禁止する：
-                        //
-                        //  Contents
-                        // +------c-------+
-                        // |              |
-                        // |   Board      |
-                        // |  +---b---+   |
-                        // |  |       |   |
-                        // ch bh  p   |   |
-                        // |  |       |   |
-                        // |  +-------+   |
-                        // +--------------+
-                        //
-                        //  b ... Origin x on board.
-                        //  c ... contents's x from B.
-                        //  p ... player character's x from B.
-                        //  bh ... Board height.
-                        //  ch ... Contents height.
-                        //
-                        //
-                        // +------c-------+
-                        // |              |
-                        // |              |
-                        // |  +---b---+   |
-                        // |  |       |   |
-                        // ch bh  p   |   |
-                        // |  |       |   |
-                        // +--+-------+---+
-                        //
-                        // ch - bh ... max margin.
-                        //
-                        // -c が max margin 以上なら、それ以上下に行くことはできない。
-                        //
+                    // ホーム・ポジションより上に居ればホームに近づける。
+                    if (player1Rank.value < player1RankHome) {
+                        player1Rank.value += 1;
+                    } else {
+                        let willShift: boolean = true;
+                        if (appBoundaryIsLock.value) {
+                            // 見えている画面外が広がるような移動は禁止する：
+                            //
+                            //  Contents
+                            // +------c-------+
+                            // |              |
+                            // |   Board      |
+                            // |  +---b---+   |
+                            // |  |       |   |
+                            // ch bh  p   |   |
+                            // |  |       |   |
+                            // |  +-------+   |
+                            // +--------------+
+                            //
+                            //  b ... Origin x on board.
+                            //  c ... contents's x from B.
+                            //  p ... player character's x from B.
+                            //  bh ... Board height.
+                            //  ch ... Contents height.
+                            //
+                            //
+                            // +------c-------+
+                            // |              |
+                            // |              |
+                            // |  +---b---+   |
+                            // |  |       |   |
+                            // ch bh  p   |   |
+                            // |  |       |   |
+                            // +--+-------+---+
+                            //
+                            // ch - bh ... max margin.
+                            //
+                            // -c が max margin 以上なら、それ以上下に行くことはできない。
+                            //
 
-                        const bh = board1Ranks;
-                        const ch = contents1RankNum;
-                        const c = contents1OriginRank.value;
-                        const maxMargin = ch - bh;
+                            const bh = board1Ranks;
+                            const ch = contents1RankNum;
+                            const c = contents1OriginRank.value;
+                            const maxMargin = ch - bh;
 
-                        if (maxMargin <= -c) {
-                             isBoundaryLocked = true;
+                            if (maxMargin <= -c) {
+                                willShift = false;
+                            }
                         }
-                    }
 
-                    if (!isBoundaryLocked) {
-                        contents1OriginRank.value -= 1;     // 下
-                    } else if (appBoundaryWalkingEdge.value) {
-                        // ［盤の端まで歩ける］
-                        if (player1Rank.value < board1Files - 1) {
-                            player1Rank.value += 1;
+                        if (willShift) {
+                            contents1OriginRank.value -= 1;     // 下
+                        } else if (appBoundaryWalkingEdge.value) {
+                            // ［盤の端まで歩ける］
+                            if (player1Rank.value < board1Files - 1) {
+                                player1Rank.value += 1;
+                            }
                         }
                     }
                 }
