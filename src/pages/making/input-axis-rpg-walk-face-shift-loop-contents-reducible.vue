@@ -1,27 +1,46 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>ボード・循環スクロール画像付き</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト、コンテンツ縮小可能</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
             <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
+            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
         </ul>
         <br/>
 
-        <div :style="board1MaskContainerStyle">
+        <!-- スライダー -->
+        <v-slider
+            label="列数"
+            v-model="contents1FileNum"
+            :min="contents1FileMin"
+            :max="contents1FileMax"
+            step="1"
+            showTicks="always"
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <v-slider
+            label="行数"
+            v-model="contents1RankNum"
+            :min="contents1RankMin"
+            :max="contents1RankMax"
+            step="1"
+            showTicks="always"
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <!-- フォーカスを外すためのダミー・ボタンです -->
+        <v-btn>
+            <button ref="dammyButton">何もしないボタン</button>
+        </v-btn>
+
+        <div :style="board1Style">
 
             <!--
-                TODO: 背景タイル
+                グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <Tile
-                v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)"
-                :srcLeft="getFloorLeftBySquare(i - 1)"
-                :srcTop="0"
-                :srcWidth="board1SquareWidth"
-                :srcHeight="board1SquareHeight"
-                tilemapUrl="/img/making/tilemap_floor.png" />
+            <div v-for="i in board1Area" :key="i"
+                :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
 
             <!-- プレイヤー１ -->
             <TileAnimation
@@ -32,43 +51,20 @@
                 class="cursor"
                 :style="player1Style"
                 style="image-rendering: pixelated;" /><br/>
-            
-            <!-- 半透明のマスク -->
-            <div
-                :style="`width:${board1FilesWithMask * board1SquareWidth}px; height:${board1RanksWithMask * board1SquareHeight}px; border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1SquareWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1SquareHeight}px rgba(0,0,0,0.5); border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
-                style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
-        </div>
+            </div>
 
-        <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>
-        <br/>
-
-        <p>👇タイルのインデックスだぜ（＾▽＾）：</p>
-        <div :style="board1ContainerStyle">
-            <!--
-                グリッド
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)"
-                style="border:dashed 1px gray;">{{ getTileIndexBySquare(i - 1) }}</div>
-        </div>
-        <p>：ここまで。</p>
-        <br/>
-
-        <p>元画像のタイルマップを表示：</p>
-        <v-img
-            src="/img/making/tilemap_floor.png"
-            :style="`zoom: ${commonZoom}; width: ${board1SquareWidth}px; height:${board1SquareHeight}px;`"
-            style="image-rendering: pixelated; border:dashed gray 1px;"/>
-        <p>：ここまで。</p>
+        <p>
+            👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げてみようぜ（＾▽＾）！<br/>
+            盤より狭いコンテンツを表示するのはめんどくさいから無しだぜ（＾～＾）
+        </p>
 
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">ボード・循環スクロール画像付き　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト、コンテンツ縮小可能　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-scroll-background"/>
+            pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
     </section>
 </template>
 
@@ -91,7 +87,6 @@
     //
 
     import SourceLink from '../../components/SourceLink.vue';
-    import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
 
 
@@ -114,6 +109,12 @@
     // ################
 
     // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const dammyButton = ref<HTMLButtonElement | null>(null);    
+
+    // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
@@ -126,105 +127,103 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1Files = 5;  // 筋
-    const board1Ranks = 5;  // 段
+    const board1Files = 5;
+    const board1Ranks = 5;
     const board1Area = computed(()=> {  // 盤のマス数
         return board1Files * board1Ranks;
     });
-    const board1FilesWithMask = board1Files + 1
-    const board1RanksWithMask = board1Ranks + 1
-    const board1Top = ref<number>(0);    // ボードの表示位置
-    const board1Left = ref<number>(0);
+    const board1Style = computed(()=>{ // ボードとマスクを含んでいる領域のスタイル
+        return {
+            position: 'relative',
+            left: "0",
+            top: "0",
+            width: `${commonZoom * board1Files * board1SquareWidth}px`,
+            height: `${commonZoom * board1Ranks * board1SquareHeight}px`,
+        };
+    });
     const getSquareStyle = computed(() => {
         return (i:number)=>{
-            // プレイヤーが初期位置にいる場合の、セルの top 位置。
+            // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1Files) * board1SquareWidth;
             const homeTop = Math.floor(i / board1Ranks) * board1SquareHeight;
-            const boardWidth = (board1Files * board1SquareWidth);
-            const boardHeight = (board1Ranks * board1SquareHeight);
-
-            // NOTE: 循環するだけなら、［剰余］を使えばいける。
-            // 盤の左端列を、右端列へ移動させる。
-            const boardLeftLoop = euclideanMod(homeLeft + board1Left.value + boardWidth, boardWidth) - homeLeft;
-            const boardTopLoop = euclideanMod(homeTop + board1Top.value + boardHeight, boardHeight) - homeTop;
 
             return {
                 position: 'absolute',
-                top: `${homeTop + boardTopLoop}px`,
-                left: `${homeLeft + boardLeftLoop}px`,
+                top: `${homeTop}px`,
+                left: `${homeLeft}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                zoom: commonZoom,
-                imagePixelated: true,
+                zoom: 4,
+                border: "solid 1px lightgray",
+                textAlign: "center",
             };
         };
-    });
-    const board1MaskContainerStyle = computed(()=>{  // ボードとマスクを含んでいる領域のスタイル
-        return {
-            position: 'relative',
-            left: "0",
-            top: "0",
-            width: `${commonZoom * board1FilesWithMask * board1SquareWidth}px`,
-            height: `${commonZoom * board1RanksWithMask * board1SquareHeight}px`,
+    });    
+
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　盤コンテンツ +
+    // ++++++++++++++++++++++++**++++++++
+    //
+    // 盤上に表示されるもの。
+    //
+
+    const contents1FileMin = 0;
+    const contents1RankMin = 0;
+    const contents1FileMax = 5;
+    const contents1RankMax = 5;
+    const contents1FileNum = ref<number>(contents1FileMax);       // 列数
+    const contents1RankNum = ref<number>(contents1RankMax);       // 行数
+
+    /**
+     * 変換
+     * @param sq マス番号
+     * @returns [筋番号, 段番号]
+     */
+    function squareToFileRankInTiles(sq: number) : number[] {
+        // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+        const file = sq % board1Files;
+        const rank = Math.floor(sq / board1Ranks);
+
+        return [file, rank];
+    }
+
+    function fileRankToSquareInContents(file: number, rank: number) : number {
+        return rank * contents1FileNum.value + file;
+    }
+
+    const contents1OriginFile = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの左から何番目か。
+    const contents1OriginRank = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの上から何番目か。
+    const contents1Data = ref<string[]>([]);
+    for (let i=0; i<contents1FileMax * contents1RankMax; i++) {
+        contents1Data.value.push(i.toString().padStart(2, "0"));
+    }
+    const getFaceNumber = computed(() => {
+        // 引数に渡されるのは、［盤のタイル番号］
+        return (tileIndex: number)=>{
+            // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
+            let [tileFile, tileRank] = squareToFileRankInTiles(tileIndex);
+            const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            const contentsIndex = fileRankToSquareInContents(contentsFile, contentsRank);
+
+            // コンテンツ上の位置が示すデータを返す
+            return  contents1Data.value[contentsIndex];
         };
-    });
-    const board1ContainerStyle = computed(()=>{  // ボードだけを含んでいる領域のスタイル
-        const zoom = 4;
-        
-        return {
-            position: 'relative',
-            left: "0",
-            top: "0",
-            width: `${zoom * board1Files * board1SquareWidth}px`,
-            height: `${zoom * board1Ranks * board1SquareHeight}px`,
-        };
-    });
-    const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
-    const board1FloorTilemapCoordination = computed(() => {   // 座標
-        const tileMap = [];
-        for (let i = 0; i < board1Area.value; i++) {
-            const files = i % board1Files;
-            const ranks = Math.floor(i / board1Files);
-            tileMap.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
-        }
-        return tileMap;
-    });
-    const board1MapFiles = board1Files;  // マップデータ
-    const board1MapRanks = board1Ranks;
-    const board1MapArea = board1MapFiles * board1MapRanks;
-    const mapData = computed(() => {    // ランダムなマップデータを生成
-        const data = [];
-        for (let i = 0; i < board1MapArea; i++) {
-            data.push(Math.floor(Math.random() * board1FloorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
-        }
-        return data;
-    });
-    const getTileIndexBySquare = computed(() => {
-        return (squareIndex: number) => {
-            return mapData.value[squareIndex];
-        };
-    });
-    const getFloorLeftBySquare = computed(() => {
-        return (squareIndex: number) => {
-            const tileIndex = mapData.value[squareIndex];
-            return board1FloorTilemapCoordination.value[tileIndex]["left"];
-        };
-    });
+    });    
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(2 * board1SquareWidth);      // スプライトのX座標
-    const player1Top = ref<number>(2 * board1SquareHeight);       // スプライトのY座標
-    const player1Speed = ref<number>(2);     // 移動速度
-    const player1Input = <Record<string, boolean>>{  // 入力
-        ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
+    const player1Left: number = 2 * board1SquareWidth;       // スプライトのX座標
+    const player1Top: number = 2 * board1SquareHeight;       // スプライトのY座標
+    const player1Input = <Record<string, boolean>>{             // 入力
+        " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
     const player1Style = computed(() => ({
-        top: `${player1Top.value}px`,
-        left: `${player1Left.value}px`,
+        top: `${player1Top}px`,
+        left: `${player1Left}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -286,9 +285,6 @@
 
         gameLoopStart();
         stopwatch1Start();
-
-
-
     });
 
 
@@ -304,7 +300,7 @@
      */
     function euclideanMod(a: number, b: number): number {
         return ((a % b) + b) % b;
-    }    
+    }
 
 
     /**
@@ -321,6 +317,14 @@
             
             // 入力（上下左右への移動）をモーションに変換
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+
+                // 位置のリセット
+                if (player1Input[" "]) {
+                    contents1OriginFile.value = 0;
+                    contents1OriginRank.value = 0;
+                }
+
+                // 移動
                 if (player1Input.ArrowLeft) {
                     player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
                 }
@@ -340,24 +344,24 @@
                 if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
                     player1MotionWait.value = 16;    // フレーム数を設定
                 }
-            }
 
-            // 移動処理
-            // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["xAxis"]==1) {   // 右
-                player1Frames.value = player1SourceFrames["right"]
-                board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
-            } else if (player1Motion.value["xAxis"]==-1) {  // 左
-                player1Frames.value = player1SourceFrames["left"]
-                board1Left.value += player1Speed.value;
-            }
+                // 移動処理
+                // 斜め方向の場合、上下を優先する。
+                if (player1Motion.value["xAxis"]==1) {   // 右
+                    player1Frames.value = player1SourceFrames["right"]
+                    contents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
+                } else if (player1Motion.value["xAxis"]==-1) {  // 左
+                    player1Frames.value = player1SourceFrames["left"]
+                    contents1OriginFile.value += 1;
+                }
 
-            if (player1Motion.value["yAxis"]==-1) {  // 上
-                player1Frames.value = player1SourceFrames["up"]
-                board1Top.value += player1Speed.value;
-            } else if (player1Motion.value["yAxis"]==1) {   // 下
-                player1Frames.value = player1SourceFrames["down"]
-                board1Top.value -= player1Speed.value;
+                if (player1Motion.value["yAxis"]==-1) {  // 上
+                    player1Frames.value = player1SourceFrames["up"]
+                    contents1OriginRank.value += 1;
+                } else if (player1Motion.value["yAxis"]==1) {   // 下
+                    player1Frames.value = player1SourceFrames["down"]
+                    contents1OriginRank.value -= 1;
+                }
             }
 
             // 次のフレーム
@@ -384,6 +388,16 @@
         stopwatch1TimerId.value = requestAnimationFrame(tick);
     }
 
+
+    /**
+     * フォーカスを外します
+     */
+    function focusRemove() : void {
+        console.log("フォーカスを外します");
+        if (dammyButton.value) {
+            dammyButton.value.focus();    // フォーカスを外すため
+        }
+    }
 </script>
 
 <style scoped>
