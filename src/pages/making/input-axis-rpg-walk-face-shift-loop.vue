@@ -164,13 +164,15 @@
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
-            let contentsFile = tileFile - contents1OriginFile.value;
-            let contentsRank = tileRank - contents1OriginRank.value;
-            contentsFile = euclideanMod(contentsFile, contents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            contentsRank = euclideanMod(contentsRank, contents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
+            let contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            let contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            
+            // 端でループする
+            contentsFile = euclideanMod(contentsFile, contents1FileNum);
+            contentsRank = euclideanMod(contentsRank, contents1RankNum);
 
             // コンテンツ上の位置が示すデータを返す
+            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             return  contents1Data.value[contentsIndex];
         };
     });    

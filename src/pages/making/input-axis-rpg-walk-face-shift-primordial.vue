@@ -172,9 +172,8 @@
                 return "-";
             }
             
-            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
-
             // コンテンツ上の位置が示すデータを返す
+            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             return  contents1Data.value[contentsIndex];
         };
     });    
