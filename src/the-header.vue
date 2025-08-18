@@ -25,4 +25,5 @@
     function goToHome() : void {
         router.push('/');
     }
+
 </script>

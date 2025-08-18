@@ -32,31 +32,6 @@
     </v-app>
 </template>
 
-<script setup lang="ts">
-
-    // ##############
-    // # インポート #
-    // ##############
-
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
-
-    import TheHeader from './the-header.vue';
-    import TheFooter from './the-footer.vue';
-
-</script>
-
-<style scoped>
-    .logo.vite:hover {
-        filter: drop-shadow(0 0 2em #747bff);
-    }
-
-    .logo.vue:hover {
-        filter: drop-shadow(0 0 2em #249b73);
-    }
-</style>
-
 <style>
 
     @import './styles/warabenture.css';
