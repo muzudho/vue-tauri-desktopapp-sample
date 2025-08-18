@@ -356,15 +356,24 @@
             //      h = tileRank * v + (2w-rot-(w-x))%w
             //
 
-            return player1RankDelta.value;
+            const rotH = player1FileDelta.value;  // どれだけ水平に盤を移動したか。
+            const rotV = player1RankDelta.value;  // どれだけ水平に盤を移動したか。
+            const v = contents1FileNum;             // 10
+            const w = board1FileNum;                // 5
+            let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
+            const nonLoopingFile = rotV * v + (2 * w - rotH - (w - tileIndex)) % w;
+
+            const horizontal = euclideanMod(rotH, v);
+            const vertical = euclideanMod(rotV, contents1RankNum);
+
+            const nonLoopingTileIndex = tileIndex + rotH;
+            return nonLoopingFile;
+
+            const y = vertical * contents1FileNum + horizontal;
+            return y;
 
             /*
-            const rotH = player1FileDelta.value;  // どれだけ水平に盤を移動したか。
-            const v = contents1FileNum;
-            const w = board1FileNum;
 
-            let [i, tileRank] = tileIndexToTileFileRank(tileIndex);
-            const h = tileRank * v + euclideanMod(2 * w - rotH - (w - tileIndex), w);
 
             // const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
             // const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
@@ -521,6 +530,8 @@
                     contents1OriginRank.value = contents1RankInit;
                     player1Left.value = player1FileHome * board1SquareWidth;
                     player1Top.value = player1RankHome * board1SquareHeight;
+                    player1FileDelta.value = 0;
+                    player1RankDelta.value = 0;
                 }
 
                 // 移動関連（単発）
