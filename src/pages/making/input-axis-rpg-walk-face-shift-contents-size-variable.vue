@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト、コンテンツサイズ可変</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・シフト、コンテンツサイズ可変</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -61,7 +61,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト、コンテンツサイズ可変　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・シフト、コンテンツサイズ可変　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -211,11 +211,6 @@
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
-
-            // 盤よりコンテンツの方が狭くて、範囲外になるところには、"-" でも表示しておく
-            if (contents1FileNum.value <= tileFile || contents1RankNum.value <= tileRank) {
-                return "-";
-            }
 
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
             let contentsFile = tileFile - contents1OriginFile.value;
