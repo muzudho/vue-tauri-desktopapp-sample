@@ -198,10 +198,12 @@
     const getFaceNumber = computed(() => {
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
-            // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
+
+            // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
             const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
             const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
             // コンテンツ上の位置が示すデータを返す
