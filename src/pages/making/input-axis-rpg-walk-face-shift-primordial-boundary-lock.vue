@@ -361,17 +361,45 @@
                     const c = contents1OriginFile.value;
                     const maxMargin = cw - bw;
 
-                    if (maxMargin <= -c) {
-                        console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin} これ以上左に行くことはできません。`)
-                    }
-                    else {
-                        console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin}`)
+                    if (maxMargin > -c) {
                         player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
                     }
                 }
 
                 if (player1Input.ArrowUp) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    //  Contents
+                    // +------c-------+
+                    // |              |
+                    // |   Board      |
+                    // |  +---b---+   |
+                    // |  |       |   |
+                    // |  |   p   |   |
+                    // |  |       |   |
+                    // |  +-------+   |
+                    // +--------------+
+                    //
+                    //  b ... Origin x on board.
+                    //  c ... contents's x from B.
+                    //  p ... player character's x from B.
+                    //
+                    //
+                    // +--+---b---+-c-+
+                    // |  |       |   |
+                    // |  |   p   |   |
+                    // |  |       |   |
+                    // |  +-------+   |
+                    // +--------------+
+                    //
+                    // c が 0 以上なら、それ以上上に行くことはできない。
+                    //
+
+                    const c = contents1OriginRank.value;
+
+                    if (c < 0) {
+                        player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                    }
                 }
 
                 if (player1Input.ArrowDown) {
