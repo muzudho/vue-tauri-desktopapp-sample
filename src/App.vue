@@ -59,7 +59,7 @@
 
 <style>
 
-    @import '../styles/warabenture.css';
+    @import './styles/warabenture.css';
 
     :root {
         font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
