@@ -265,20 +265,24 @@
 
                 // プレイヤーは中心から動かないので、位置のリセットはありません。
 
-                // 移動関連
+                // 移動関連（単発）
                 if (player1Input.ArrowLeft) {
+                    player1Frames.value = player1SourceFrames["left"]    // 向きを変える
                     player1Motion.value["toRight"] = commonSpriteMotionToLeft; // 左
                 }
 
                 if (player1Input.ArrowRight) {
+                    player1Frames.value = player1SourceFrames["right"]    // 向きを変える
                     player1Motion.value["toRight"] = commonSpriteMotionToRight;  // 右
                 }
 
                 if (player1Input.ArrowUp) {
+                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
                     player1Motion.value["toBottom"] = commonSpriteMotionToTop;   // 上
                 }
 
                 if (player1Input.ArrowDown) {
+                    player1Frames.value = player1SourceFrames["down"]    // 向きを変える
                     player1Motion.value["toBottom"] = commonSpriteMotionToBottom;   // 下
                 }
 
@@ -290,18 +294,14 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["toRight"]==1) {   // 右
-                player1Frames.value = player1SourceFrames["right"]
                 board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
             } else if (player1Motion.value["toRight"]==-1) {  // 左
-                player1Frames.value = player1SourceFrames["left"]
                 board1Left.value += player1Speed.value;
             }
 
             if (player1Motion.value["toBottom"]==-1) {  // 上
-                player1Frames.value = player1SourceFrames["up"]
                 board1Top.value += player1Speed.value;
             } else if (player1Motion.value["toBottom"]==1) {   // 下
-                player1Frames.value = player1SourceFrames["down"]
                 board1Top.value -= player1Speed.value;
             }
 

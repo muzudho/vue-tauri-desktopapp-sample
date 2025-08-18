@@ -376,7 +376,7 @@
                     player1Top.value = player1RankHome * board1SquareHeight;
                 }
 
-                // 移動関連
+                // 移動関連（単発）
                 // 斜め方向の場合、左右を上下で上書きする。（右、左）→（上、下）の順。
                 if (player1Input.ArrowRight) {  // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
