@@ -283,7 +283,43 @@
 
                 // 移動
                 if (player1Input.ArrowLeft) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    //  Contents
+                    // +--------------+
+                    // |              |
+                    // |   Board      |
+                    // |  +-------+   |
+                    // |  |       |   |
+                    // c  b   p   |   |
+                    // |  |       |   |
+                    // |  +-------+   |
+                    // +--------------+
+                    //
+                    //  b ... Origin x on board.
+                    //  c ... contents's x from B.
+                    //  p ... player character's x from B.
+                    //
+                    //
+                    // +--------------+
+                    // |              |
+                    // c              |
+                    // |              |
+                    // +-------+      |
+                    // |       |      |
+                    // b   p   |      |
+                    // |       |      |
+                    // +-------+      |
+                    // +--------------+
+                    //
+                    // c が 0 以上なら、それ以上左に行くことはできない。
+                    //
+
+                    const c = contents1OriginFile.value;
+
+                    if (c < 0) {
+                        player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                    }
                 }
 
                 if (player1Input.ArrowRight) {
