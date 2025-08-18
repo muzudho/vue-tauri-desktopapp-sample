@@ -55,14 +55,14 @@
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / board1Cols) * board1CellHeight}px; left: ${((i - 1) % board1Cols) * board1CellWidth}px; width:${board1CellWidth}px; height:${board1CellHeight}px; border: solid 1px gray;`"></div>
+                :style="`position:absolute; top: ${Math.floor((i - 1) / board1Files) * board1SquareHeight}px; left: ${((i - 1) % board1Files) * board1SquareWidth}px; width:${board1SquareWidth}px; height:${board1SquareHeight}px; border: solid 1px gray;`"></div>
 
             <!-- 星 -->
             <Tile
                 :srcLeft="0"
                 :srcTop="0"
-                :srcWidth="board1CellWidth"
-                :srcHeight="board1CellHeight"
+                :srcWidth="board1SquareWidth"
+                :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/sprite-objects-001.png"
                 :style="starStyle"
                 style="position:absolute;" /><br/>
@@ -77,8 +77,8 @@
             <Tile
                 :srcLeft="reloadPie1TileLeft"
                 :srcTop="reloadPie1TileTop"
-                :srcWidth="board1CellWidth"
-                :srcHeight="board1CellHeight"
+                :srcWidth="board1SquareWidth"
+                :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/202508__warabenture__16-2357-8counts-red.png"
                 :style="reloadPieStyle"
                 style="position:absolute;" /><br/>
@@ -88,8 +88,8 @@
         <!-- デバッグ用 -->
         <!--
             <p>スケジュール・ステップ: {{ appGameScheduleStep.value }}</p>
-            <p>星　行： {{ star1Rows }}</p>
-            <p>星　列： {{ star1Cols }}</p>
+            <p>星　行： {{ star1Ranks }}</p>
+            <p>星　列： {{ star1Files }}</p>
             <p>リロード・タイム: {{ finder1ReloadTime.value }}</p>
             <br/>
             <p>元画像のタイルマップを表示：</p>
@@ -225,8 +225,8 @@
                 // ゲーム開始から1秒後、星表示
                 if (newCount >= 1 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 5;
-                    star1StartRows.value = 3;
+                    star1StartFiles.value = 5;
+                    star1StartRanks.value = 3;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;                    
                 }
@@ -242,8 +242,8 @@
                 // ゲーム開始から4秒後、星表示
                 if (newCount >= 4 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 9;
-                    star1StartRows.value = 9;
+                    star1StartFiles.value = 9;
+                    star1StartRanks.value = 9;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -259,8 +259,8 @@
                 // ゲーム開始から8秒後、星表示
                 if (newCount >= 8 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 0;
-                    star1StartRows.value = 8;
+                    star1StartFiles.value = 0;
+                    star1StartRanks.value = 8;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -276,8 +276,8 @@
                 // ゲーム開始から14秒後、星表示
                 if (newCount >= 14 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 12;
-                    star1StartRows.value = 5;
+                    star1StartFiles.value = 12;
+                    star1StartRanks.value = 5;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -293,8 +293,8 @@
                 // ゲーム開始から19秒後、星表示
                 if (newCount >= 19 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 3;
-                    star1StartRows.value = 3;
+                    star1StartFiles.value = 3;
+                    star1StartRanks.value = 3;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -310,8 +310,8 @@
                 // ゲーム開始から27秒後、星表示
                 if (newCount >= 27 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 6;
-                    star1StartRows.value = 11;
+                    star1StartFiles.value = 6;
+                    star1StartRanks.value = 11;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -327,8 +327,8 @@
                 // ゲーム開始から33秒後、星表示
                 if (newCount >= 33 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 4;
-                    star1StartRows.value = 6;
+                    star1StartFiles.value = 4;
+                    star1StartRanks.value = 6;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -344,8 +344,8 @@
                 // ゲーム開始から39秒後、星表示
                 if (newCount >= 39 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 5;
-                    star1StartRows.value = 0;
+                    star1StartFiles.value = 5;
+                    star1StartRanks.value = 0;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -361,8 +361,8 @@
                 // ゲーム開始から45秒後、星表示
                 if (newCount >= 45 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 6;
-                    star1StartRows.value = 7;
+                    star1StartFiles.value = 6;
+                    star1StartRanks.value = 7;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -378,8 +378,8 @@
                 // ゲーム開始から51秒後、星表示
                 if (newCount >= 51 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 7;
-                    star1StartRows.value = 3;
+                    star1StartFiles.value = 7;
+                    star1StartRanks.value = 3;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -395,8 +395,8 @@
                 // ゲーム開始から57秒後、星表示
                 if (newCount >= 57 * commonSeconds) {
                     star1StartTime.value = newCount;
-                    star1StartCols.value = 8;
-                    star1StartRows.value = 9;
+                    star1StartFiles.value = 8;
+                    star1StartRanks.value = 9;
                     star1Visibility.value = 'visible';
                     appGameScheduleStep.value += 1;
                 }
@@ -420,36 +420,36 @@
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
 
-    const board1CellWidth = ref<number>(32);    // セルの横幅（ピクセル）
-    const board1CellHeight = ref<number>(32);   // セルの縦幅（ピクセル）
-    const board1Cols = ref<number>(16);         // 盤が横に何セルか
-    const board1Rows = ref<number>(12);         // 盤が縦に何セルか
-    const board1Area = computed(()=>{           // 盤のセル数
-        return board1Cols.value * board1Rows.value;
+    const board1SquareWidth = ref<number>(32);  // マスの横幅（ピクセル）
+    const board1SquareHeight = ref<number>(32); // マスの縦幅（ピクセル）
+    const board1Files = ref<number>(16);        // 盤が横に何マスか
+    const board1Ranks = ref<number>(12);        // 盤が縦に何マスか
+    const board1Area = computed(()=>{           // 盤のマス数
+        return board1Files.value * board1Ranks.value;
     });
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　星 +
     // ++++++++++++++++++++++++
 
-    const star1StartCols = ref<number>(0);      // 盤が横に何セルか
-    const star1StartRows = ref<number>(0);      // 星の出現位置。盤の上から何セルか
+    const star1StartFiles = ref<number>(0);      // 盤が横に何セルか
+    const star1StartRanks = ref<number>(0);      // 星の出現位置。盤の上から何セルか
     const star1StartTime = ref<number>(0);      // 星の出現count時間
     const star1Visibility = ref<'hidden' | 'visible'>('hidden');    // 星の表示／非表示
 
-    const star1Cols = computed(()=>{
-        return star1StartCols.value + Math.floor((stopwatch1Count.value - star1StartTime.value) / 20);
+    const star1Files = computed(()=>{
+        return star1StartFiles.value + Math.floor((stopwatch1Count.value - star1StartTime.value) / 20);
     });
-    const star1Rows = computed(()=>{
-        return star1StartRows.value;
+    const star1Ranks = computed(()=>{
+        return star1StartRanks.value;
     });
     const starStyle = computed(() => {
         return {
             visibility: star1Visibility.value,
-            top: `${star1Rows.value * board1CellHeight.value}px`,
-            left: `${star1Cols.value * board1CellWidth.value}px`,
-            width: `${board1CellWidth.value}px`,
-            height: `${board1CellHeight.value}px`,
+            top: `${star1Ranks.value * board1SquareHeight.value}px`,
+            left: `${star1Files.value * board1SquareWidth.value}px`,
+            width: `${board1SquareWidth.value}px`,
+            height: `${board1SquareHeight.value}px`,
         };
     });
 
@@ -460,12 +460,12 @@
     // 点線の枠
     //
 
-    const finder1Left = ref<number>(6 * board1CellWidth.value);     // スプライトのX座標
-    const finder1Top = ref<number>(4 * board1CellHeight.value);     // スプライトのY座標
-    const finder1ColNum = ref<number>(4);                           // スプライトの列数
-    const finder1RowNum = ref<number>(3);                           // スプライトの行数
-    const finder1Speed = ref<number>(4);                            // 移動速度
-    const finder1Input = ref<Record<string, boolean>>({             // 入力
+    const finder1Left = ref<number>(6 * board1SquareWidth.value);     // スプライトのX座標
+    const finder1Top = ref<number>(4 * board1SquareHeight.value);     // スプライトのY座標
+    const finder1FileNum = ref<number>(4);                            // スプライトの列数
+    const finder1RankNum = ref<number>(3);                            // スプライトの行数
+    const finder1Speed = ref<number>(4);                              // 移動速度
+    const finder1Input = ref<Record<string, boolean>>({               // 入力
         // アルファベット順
         ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
     });
@@ -479,8 +479,8 @@
         return {
             top: `${finder1Top.value}px`,
             left: `${finder1Left.value}px`,
-            width: `${finder1ColNum.value * board1CellWidth.value}px`,
-            height: `${finder1RowNum.value * board1CellHeight.value}px`,
+            width: `${finder1FileNum.value * board1SquareWidth.value}px`,
+            height: `${finder1RankNum.value * board1SquareHeight.value}px`,
             border: `dashed 4px ${finder1ReloadTime.value > 0 ? '#d85050' : '#f0f0f0'}`, // リロード中は赤い枠
         };
     });
@@ -495,14 +495,14 @@
     const reloadPie1Frames = <
         Record<number, {top: number, left: number}>
     >{
-        0: {top: 0 * board1CellHeight.value, left: 0 * board1CellWidth.value},
-        1: {top: 0 * board1CellHeight.value, left: 1 * board1CellWidth.value},
-        2: {top: 0 * board1CellHeight.value, left: 2 * board1CellWidth.value},
-        3: {top: 0 * board1CellHeight.value, left: 3 * board1CellWidth.value},
-        4: {top: 1 * board1CellHeight.value, left: 0 * board1CellWidth.value},
-        5: {top: 1 * board1CellHeight.value, left: 1 * board1CellWidth.value},
-        6: {top: 1 * board1CellHeight.value, left: 2 * board1CellWidth.value},
-        7: {top: 1 * board1CellHeight.value, left: 3 * board1CellWidth.value},
+        0: {top: 0 * board1SquareHeight.value, left: 0 * board1SquareWidth.value},
+        1: {top: 0 * board1SquareHeight.value, left: 1 * board1SquareWidth.value},
+        2: {top: 0 * board1SquareHeight.value, left: 2 * board1SquareWidth.value},
+        3: {top: 0 * board1SquareHeight.value, left: 3 * board1SquareWidth.value},
+        4: {top: 1 * board1SquareHeight.value, left: 0 * board1SquareWidth.value},
+        5: {top: 1 * board1SquareHeight.value, left: 1 * board1SquareWidth.value},
+        6: {top: 1 * board1SquareHeight.value, left: 2 * board1SquareWidth.value},
+        7: {top: 1 * board1SquareHeight.value, left: 3 * board1SquareWidth.value},
     };
     const reloadPie1Weight = 3 * commonSeconds;
     const reloadPie1Index = computed<number>(()=>{
@@ -524,8 +524,8 @@
     const reloadPieStyle = computed(() => {
         return {
             visibility: finder1ReloadTime.value > 0 ? 'visible' : 'hidden',
-            top: `${finder1Top.value + finder1RowNum.value * board1CellHeight.value / 2 - board1CellHeight.value / 2}px`,
-            left: `${finder1Left.value + finder1ColNum.value * board1CellWidth.value / 2 - board1CellWidth.value / 2}px`,
+            top: `${finder1Top.value + finder1RankNum.value * board1SquareHeight.value / 2 - board1SquareHeight.value / 2}px`,
+            left: `${finder1Left.value + finder1FileNum.value * board1SquareWidth.value / 2 - board1SquareWidth.value / 2}px`,
         };
     });
 
@@ -690,7 +690,7 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (finder1Motion.value["xAxis"]==1) {   // 右
-                if (finder1Left.value < (board1Cols.value - finder1ColNum.value) * board1CellWidth.value) {    // 境界チェック
+                if (finder1Left.value < (board1Files.value - finder1FileNum.value) * board1SquareWidth.value) {    // 境界チェック
                     finder1Left.value += finder1Speed.value;
                 }
             } else if (finder1Motion.value["xAxis"]==-1) {  // 左
@@ -704,7 +704,7 @@
                     finder1Top.value -= finder1Speed.value;
                 }
             } else if (finder1Motion.value["yAxis"]==1) {   // 下
-                if (finder1Top.value < (board1Rows.value - finder1RowNum.value) * board1CellHeight.value) {    // 境界チェック
+                if (finder1Top.value < (board1Ranks.value - finder1RankNum.value) * board1SquareHeight.value) {    // 境界チェック
                     finder1Top.value += finder1Speed.value;
                 }
             }
@@ -735,15 +735,15 @@
         }
 
         // ファインダーの位置とサイズ
-        const finderLeftCols = finder1Left.value / board1CellWidth.value;
-        const finderTopCols = finder1Top.value / board1CellHeight.value;
-        const finderRightEndCols = finderLeftCols + finder1ColNum.value;
-        const finderBottomEndCols = finderTopCols + finder1RowNum.value;
+        const finderLeftFiles = finder1Left.value / board1SquareWidth.value;
+        const finderTopRanks = finder1Top.value / board1SquareHeight.value;
+        const finderRightEndFiles = finderLeftFiles + finder1FileNum.value;
+        const finderBottomEndRanks = finderTopRanks + finder1RankNum.value;
 
         // ファインダーの枠内に星を含むか？
         if (
-            finderLeftCols <= star1Cols.value && star1Cols.value <= finderRightEndCols &&
-            finderTopCols <= star1Rows.value && star1Rows.value <= finderBottomEndCols) {
+            finderLeftFiles <= star1Files.value && star1Files.value <= finderRightEndFiles &&
+            finderTopRanks <= star1Ranks.value && star1Ranks.value <= finderBottomEndRanks) {
             // 星を含んだ。
             niceShot();
 

@@ -16,11 +16,11 @@
             -->
             <Tile
                 v-for="i in board1Area" :key="i"
-                :style="getCellStyle(i - 1)"
-                :srcLeft="getFloorLeftByCell(i - 1)"
+                :style="getSquareStyle(i - 1)"
+                :srcLeft="getFloorLeftBySquare(i - 1)"
                 srcTop="0"
-                :srcWidth="board1CellWidth"
-                :srcHeight="board1CellHeight"
+                :srcWidth="board1SquareWidth"
+                :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/tilemap_floor.png" />
 
             <!-- プレイヤー１ -->
@@ -35,7 +35,7 @@
             
             <!-- 半透明のマスク -->
             <div
-                :style="`width:${board1ColumnsWithMask * board1CellWidth}px; height:${board1RowsWithMask * board1CellHeight}px; border-top: solid ${board1CellHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1CellWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1CellHeight}px rgba(0,0,0,0.5); border-left: solid ${board1CellWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
+                :style="`width:${board1FilesWithMask * board1SquareWidth}px; height:${board1RanksWithMask * board1SquareHeight}px; border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1SquareWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1SquareHeight}px rgba(0,0,0,0.5); border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
         </div>
 
@@ -49,8 +49,8 @@
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
-                :style="getCellStyle(i - 1)"
-                style="border:dashed 1px gray;">{{ getTileIndexByCell(i - 1) }}</div>
+                :style="getSquareStyle(i - 1)"
+                style="border:dashed 1px gray;">{{ getTileIndexBySquare(i - 1) }}</div>
         </div>
         <p>：ここまで。</p>
         <br/>
@@ -58,7 +58,7 @@
         <p>元画像のタイルマップを表示：</p>
         <v-img
             src="/img/making/tilemap_floor.png"
-            :style="`zoom: ${commonZoom}; width: ${board1CellWidth}px; height:${board1CellHeight}px;`"
+            :style="`zoom: ${commonZoom}; width: ${board1SquareWidth}px; height:${board1SquareHeight}px;`"
             style="image-rendering: pixelated; border:dashed gray 1px;"/>
         <p>：ここまで。</p>
 
@@ -123,23 +123,24 @@
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
 
-    // 盤データ
-    const board1CellWidth = 32;
-    const board1CellHeight = 32;
-    const board1Columns = 5;
-    const board1Rows = 5;
-    const board1Area = board1Columns * board1Rows; // 盤のセル数
-    const board1ColumnsWithMask = board1Columns + 1
-    const board1RowsWithMask = board1Rows + 1
+    const board1SquareWidth = 32;
+    const board1SquareHeight = 32;
+    const board1Files = 5;  // 筋
+    const board1Ranks = 5;  // 段
+    const board1Area = computed(()=> {  // 盤のマス数
+        return board1Files * board1Ranks;
+    });
+    const board1FilesWithMask = board1Files + 1
+    const board1RanksWithMask = board1Ranks + 1
     const board1Top = ref<number>(0);    // ボードの表示位置
     const board1Left = ref<number>(0);
-    const getCellStyle = computed(() => {
+    const getSquareStyle = computed(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、セルの top 位置。
-            const homeLeft = (i % board1Columns) * board1CellWidth;
-            const homeTop = Math.floor(i / board1Rows) * board1CellHeight;
-            const boardWidth = (board1Columns * board1CellWidth);
-            const boardHeight = (board1Rows * board1CellHeight);
+            const homeLeft = (i % board1Files) * board1SquareWidth;
+            const homeTop = Math.floor(i / board1Ranks) * board1SquareHeight;
+            const boardWidth = (board1Files * board1SquareWidth);
+            const boardHeight = (board1Ranks * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
@@ -150,8 +151,8 @@
                 position: 'absolute',
                 top: `${homeTop + boardTopLoop}px`,
                 left: `${homeLeft + boardLeftLoop}px`,
-                width: `${board1CellWidth}px`,
-                height: `${board1CellHeight}px`,
+                width: `${board1SquareWidth}px`,
+                height: `${board1SquareHeight}px`,
                 zoom: commonZoom,
                 imagePixelated: true,
             };
@@ -162,8 +163,8 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1ColumnsWithMask * board1CellWidth}px`,
-            height: `${commonZoom * board1RowsWithMask * board1CellHeight}px`,
+            width: `${commonZoom * board1FilesWithMask * board1SquareWidth}px`,
+            height: `${commonZoom * board1RanksWithMask * board1SquareHeight}px`,
         };
     });
     const board1ContainerStyle = computed(()=>{  // ボードだけを含んでいる領域のスタイル
@@ -173,23 +174,23 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${zoom * board1Columns * board1CellWidth}px`,
-            height: `${zoom * board1Rows * board1CellHeight}px`,
+            width: `${zoom * board1Files * board1SquareWidth}px`,
+            height: `${zoom * board1Ranks * board1SquareHeight}px`,
         };
     });
     const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
     const board1FloorTilemapCoordination = computed(() => {   // 座標
         const tileMap = [];
-        for (let i = 0; i < board1Area; i++) {
-            const cols = i % board1Columns;
-            const rows = Math.floor(i / board1Columns);
-            tileMap.push({ top: rows * board1CellHeight, left: cols * board1CellWidth, width: board1CellWidth, height: board1CellHeight });
+        for (let i = 0; i < board1Area.value; i++) {
+            const files = i % board1Files;
+            const ranks = Math.floor(i / board1Files);
+            tileMap.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
         }
         return tileMap;
     });
-    const board1MapColumns = board1Columns;  // マップデータ
-    const board1MapRows = board1Rows;
-    const board1MapArea = board1MapColumns * board1MapRows;
+    const board1MapFiles = board1Files;  // マップデータ
+    const board1MapRanks = board1Ranks;
+    const board1MapArea = board1MapFiles * board1MapRanks;
     const mapData = computed(() => {    // ランダムなマップデータを生成
         const data = [];
         for (let i = 0; i < board1MapArea; i++) {
@@ -197,14 +198,14 @@
         }
         return data;
     });
-    const getTileIndexByCell = computed(() => {
-        return (cellIndex: number) => {
-            return mapData.value[cellIndex];
+    const getTileIndexBySquare = computed(() => {
+        return (squareIndex: number) => {
+            return mapData.value[squareIndex];
         };
     });
-    const getFloorLeftByCell = computed(() => {
-        return (cellIndex: number) => {
-            const tileIndex = mapData.value[cellIndex];
+    const getFloorLeftBySquare = computed(() => {
+        return (squareIndex: number) => {
+            const tileIndex = mapData.value[squareIndex];
             return board1FloorTilemapCoordination.value[tileIndex]["left"];
         };
     });
@@ -213,8 +214,8 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(2 * board1CellWidth);      // スプライトのX座標
-    const player1Top = ref<number>(2 * board1CellHeight);       // スプライトのY座標
+    const player1Left = ref<number>(2 * board1SquareWidth);      // スプライトのX座標
+    const player1Top = ref<number>(2 * board1SquareHeight);       // スプライトのY座標
     const player1Speed = ref<number>(2);     // 移動速度
     const player1Input = <Record<string, boolean>>{  // 入力
         ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
@@ -227,28 +228,28 @@
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         up:[    // 上向き
-            {top:  0 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  0 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  0 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  0 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
         right:[ // 右向き
-            {top:  1 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  1 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  1 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  1 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  1 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  1 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  1 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  1 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
         down:[  // 下向き
-            {top:  2 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  2 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  2 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  2 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
         left:[  // 左向き
-            {top:  3 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  3 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  3 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  3 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ]
     };
     const player1Frames = ref(player1SourceFrames["down"]);

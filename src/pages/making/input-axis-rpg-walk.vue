@@ -8,7 +8,7 @@
         </ul>
         <br/>
 
-        <div :style="`width: ${4 * board1CellWidth}px; height: ${4 * board1CellHeight}px; background-color:lightpink;`">
+        <div :style="`width: ${4 * board1SquareWidth}px; height: ${4 * board1SquareHeight}px; background-color:lightpink;`">
             <!-- プレイヤー１ -->
             <TileAnimation
                 :frames="player1Frames"
@@ -66,8 +66,8 @@
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
 
-    const board1CellWidth = 32;
-    const board1CellHeight = 32;
+    const board1SquareWidth = 32;
+    const board1SquareHeight = 32;
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　プレイヤー +
@@ -87,28 +87,28 @@
     // キャラクターの向きと、歩行タイルの指定
     const player1SourceFrames = {
         up:[    // 上向き
-            {top:  0 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  0 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  0 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  0 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
         right:[ // 右向き
-            {top:  1 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  1 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  1 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  1 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  1 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  1 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  1 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  1 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
         down:[  // 下向き
-            {top:  2 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  2 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  2 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  2 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
         left:[  // 左向き
-            {top:  3 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  3 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  3 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
-            {top:  3 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ]
     };
     const player1Frames = ref(player1SourceFrames["down"]);

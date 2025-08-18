@@ -9,7 +9,7 @@
         </ul>
         <br/>
 
-        <div :style="`width: ${board1CellWidth}px; height: ${board1CellHeight}px; background-color:lightpink;`">
+        <div :style="`width: ${board1SquareWidth}px; height: ${board1SquareHeight}px; background-color:lightpink;`">
             <!-- プレイヤー１（点線の枠） -->
             <div
                 class="cursor"
@@ -55,8 +55,8 @@
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
 
-    const board1CellWidth = 32;
-    const board1CellHeight = 32;
+    const board1SquareWidth = 32;
+    const board1SquareHeight = 32;
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ターゲット +
