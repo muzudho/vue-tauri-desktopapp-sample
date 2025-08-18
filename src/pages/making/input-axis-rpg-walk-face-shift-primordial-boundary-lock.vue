@@ -282,47 +282,31 @@
                 }
 
                 // 移動
-                if (player1Input.ArrowLeft) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    //  Contents
-                    // +--------------+
-                    // |              |
-                    // |   Board      |
-                    // |  +-------+   |
-                    // |  |       |   |
-                    // c  b   p   |   |
-                    // |  |       |   |
-                    // |  +-------+   |
-                    // +--------------+
-                    //
-                    //  b ... Origin x on board.
-                    //  c ... contents's x from B.
-                    //  p ... player character's x from B.
-                    //
-                    //
-                    // +--------------+
-                    // |              |
-                    // c              |
-                    // |              |
-                    // +-------+      |
-                    // |       |      |
-                    // b   p   |      |
-                    // |       |      |
-                    // +-------+      |
-                    // +--------------+
-                    //
-                    // c が 0 以上なら、それ以上左に行くことはできない。
-                    //
-
-                    const c = contents1OriginFile.value;
-
-                    if (c < 0) {
-                        player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
-                    }
+                if (player1Input.ArrowUp) {
+                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
                 }
 
                 if (player1Input.ArrowRight) {
+                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                }
+
+                if (player1Input.ArrowDown) {
+                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                }
+
+                if (player1Input.ArrowLeft) {
+                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                }
+
+                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                    player1MotionWait.value = 16;    // フレーム数を設定
+                }
+
+                // 移動処理
+                // 斜め方向の場合、上下を優先する。
+                if (player1Motion.value["xAxis"]==1) {   // 右
+                    player1Frames.value = player1SourceFrames["right"]    // 向きを変える
+
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     //  Contents
@@ -362,11 +346,54 @@
                     const maxMargin = cw - bw;
 
                     if (maxMargin > -c) {
-                        player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                        contents1OriginFile.value -= 1;   // コンテンツの方を右へスクロールさせる
+                    }
+
+                } else if (player1Motion.value["xAxis"]==-1) {  // 左
+                    player1Frames.value = player1SourceFrames["left"]    // 向きを変える
+
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    //  Contents
+                    // +--------------+
+                    // |              |
+                    // |   Board      |
+                    // |  +-------+   |
+                    // |  |       |   |
+                    // c  b   p   |   |
+                    // |  |       |   |
+                    // |  +-------+   |
+                    // +--------------+
+                    //
+                    //  b ... Origin x on board.
+                    //  c ... contents's x from B.
+                    //  p ... player character's x from B.
+                    //
+                    //
+                    // +--------------+
+                    // |              |
+                    // c              |
+                    // |              |
+                    // +-------+      |
+                    // |       |      |
+                    // b   p   |      |
+                    // |       |      |
+                    // +-------+      |
+                    // +--------------+
+                    //
+                    // c が 0 以上なら、それ以上左に行くことはできない。
+                    //
+
+                    const c = contents1OriginFile.value;
+
+                    if (c < 0) {
+                        contents1OriginFile.value += 1;     // 左
                     }
                 }
 
-                if (player1Input.ArrowUp) {
+                if (player1Motion.value["yAxis"]==-1) {  // 上
+                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
+
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     //  Contents
@@ -399,11 +426,12 @@
                     const c = contents1OriginRank.value;
 
                     if (c < 0) {
-                        player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                        contents1OriginRank.value += 1;     // 上
                     }
-                }
 
-                if (player1Input.ArrowDown) {
+                } else if (player1Motion.value["yAxis"]==1) {   // 下
+                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
+
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     //  Contents
@@ -444,30 +472,8 @@
                     const maxMargin = ch - bh;
 
                     if (maxMargin > -c) {
-                        player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                        contents1OriginRank.value -= 1;     // 下
                     }
-                }
-
-                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
-                    player1MotionWait.value = 16;    // フレーム数を設定
-                }
-
-                // 移動処理
-                // 斜め方向の場合、上下を優先する。
-                if (player1Motion.value["xAxis"]==1) {   // 右
-                    player1Frames.value = player1SourceFrames["right"]
-                    contents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
-                } else if (player1Motion.value["xAxis"]==-1) {  // 左
-                    player1Frames.value = player1SourceFrames["left"]
-                    contents1OriginFile.value += 1;
-                }
-
-                if (player1Motion.value["yAxis"]==-1) {  // 上
-                    player1Frames.value = player1SourceFrames["up"]
-                    contents1OriginRank.value += 1;
-                } else if (player1Motion.value["yAxis"]==1) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]
-                    contents1OriginRank.value -= 1;
                 }
             }
 
