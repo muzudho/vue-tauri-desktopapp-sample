@@ -73,7 +73,7 @@
     function initChart() {
         //const baseUrl = window.location.origin;
         //alert(`baseUrl=${baseUrl}`);
-        const ctx : HTMLCanvasElement = document.getElementById('pieChart') as HTMLCanvasElement;
+        const ctx : HTMLCanvasElement = window.document.getElementById('pieChart') as HTMLCanvasElement;
 
         if (ctx == null){
             return;

@@ -21,7 +21,7 @@
     <h1>ホームページの内容割合</h1>
     <canvas id="pieChart" width="400" height="400"></canvas>
     <script>
-        const ctx = document.getElementById('pieChart').getContext('2d');
+        const ctx = window.document.getElementById('pieChart').getContext('2d');
         const pieChart = new Chart(ctx, {
             type: 'pie',
             data: {
@@ -85,7 +85,7 @@
     <h1>ホームページの内容割合</h1>
     <canvas id="pieChart" width="400" height="400"></canvas>
     <script>
-        const ctx = document.getElementById('pieChart').getContext('2d');
+        const ctx = window.document.getElementById('pieChart').getContext('2d');
         const pieChart = new Chart(ctx, {
             type: 'pie',
             data: {

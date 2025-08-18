@@ -594,7 +594,7 @@
      * ［ゲームスタート］または［ゲーム終了］ボタン押下時。（状態により切り替わります）
      */
     function onGameStartOrEndButtonPushed() : void {
-        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+        window.document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(appGameIsPlaying.value) {
             // ゲームを終了させます
@@ -612,7 +612,7 @@
      * ［一時停止］または［再開］ボタン押下時。（状態により切り替わります）
      */
     function onGamePauseOrRestartButtonPushed() : void {
-        document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+        window.document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
 
         if(appGameIsPause.value) {
             stopwatch1CompoRef.value?.startTimer();  // タイマーをスタート

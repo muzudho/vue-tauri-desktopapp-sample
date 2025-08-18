@@ -168,6 +168,7 @@
             rank = euclideanMod(rank - contents1OriginRank.value, contents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
             contentsIndex = fileRankToSquareInContents(file, rank);
 
+            // コンテンツ上の位置が示すデータを返す
             return  contents1Data.value[contentsIndex];
         };
     });    

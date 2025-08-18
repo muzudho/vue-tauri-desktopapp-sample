@@ -14,18 +14,22 @@
             label="列数"
             v-model="contents1FileNum"
             :min="contents1FileMin"
-            max="10"
+            :max="contents1FileMax"
             step="1"
             showTicks="always"
-            thumbLabel="always" />
+            thumbLabel="always"
+            @click="focusRemove()" />
         <v-slider
             label="行数"
             v-model="contents1RankNum"
             :min="contents1RankMin"
-            max="10"
+            :max="contents1RankMax"
             step="1"
             showTicks="always"
-            thumbLabel="always" />
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <!-- フォーカスを外すためのダミー・ボタンです -->
+        <v-btn id="dammyButton">何もしないボタン</v-btn>
 
         <div :style="board1Style">
 
@@ -154,6 +158,8 @@
 
     const contents1FileMin = 5;
     const contents1RankMin = 5;
+    const contents1FileMax = 10;
+    const contents1RankMax = 10;
     const contents1FileNum = ref<number>(contents1FileMin);       // 列数
     const contents1RankNum = ref<number>(contents1RankMin);       // 行数
 
@@ -189,9 +195,10 @@
 
     const contents1OriginFile = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの左から何番目か。
     const contents1OriginRank = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの上から何番目か。
-    const contents1Data = ref<string[]>([
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
-    ]);
+    const contents1Data = ref<string[]>([]);
+    for (let i=0; i<contents1FileMax * contents1RankMax; i++) {
+        contents1Data.value.push(i.toString().padStart(2, "0"));
+    }
     const getFaceNumber = computed(() => {
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
@@ -199,11 +206,9 @@
             let [tileFile, tileRank] = squareToFileRankInTiles(tileIndex);
             const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
             const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-
             const contentsIndex = fileRankToSquareInContents(contentsFile, contentsRank);
 
-            // 盤コンテンツ上の位置を、盤上の位置に変換
-
+            // コンテンツ上の位置が示すデータを返す
             return  contents1Data.value[contentsIndex];
         };
     });    
@@ -385,6 +390,13 @@
         stopwatch1TimerId.value = requestAnimationFrame(tick);
     }
 
+
+    /**
+     * フォーカスを外します
+     */
+    function focusRemove() : void {
+        window.document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+    }
 </script>
 
 <style scoped>

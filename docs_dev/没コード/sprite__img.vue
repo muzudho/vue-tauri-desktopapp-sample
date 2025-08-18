@@ -65,7 +65,7 @@
 
     onMounted(() => {
         // Canvasとコンテキストを取得
-        myCanvas.value = document.getElementById('myCanvas') as HTMLCanvasElement;
+        myCanvas.value = window.document.getElementById('myCanvas') as HTMLCanvasElement;
 
         // // https://developer.mozilla.org/ja/docs/Web/API/HTMLCanvasElement/getContext
         // const ctx : CanvasRenderingContext2D | null = myCanvas.value.getContext('2d');

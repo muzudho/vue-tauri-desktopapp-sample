@@ -68,9 +68,9 @@ Tauri 2でTypeScriptを使って`/src/assets`フォルダーへのパスを取�
        const resourcePath = await resolveResource('assets/image.png');
        const assetUrl = convertFileSrc(resourcePath);
        // Webviewで使えるURLをimgタグに設定
-       const img = document.createElement('img');
+       const img = window.document.createElement('img');
        img.src = assetUrl;
-       document.body.appendChild(img);
+       window.document.body.appendChild(img);
      } catch (error) {
        console.error('Error loading image:', error);
      }
