@@ -166,8 +166,8 @@
 
     onMounted(() => {
         window.document.addEventListener('keydown', (event: KeyboardEvent) => {
-            // 上下キーの場合
-            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+            // ［スペース］［↑］［↓］キーの場合
+            if (event.key === ' ' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
                 // ブラウザーのデフォルトの上下スクロール動作をキャンセル
                 event.preventDefault();
             }
