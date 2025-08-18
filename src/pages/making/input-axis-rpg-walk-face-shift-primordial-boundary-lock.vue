@@ -11,16 +11,16 @@
 
         <v-switch
             v-model="appBoundaryIsLock"
-            :label="appBoundaryIsLock ? 'バウンダリー・ロック中' : 'バウンダリー・ロックをしていません'"
+            :label="appBoundaryIsLock ? '［画面外隠し］中' : '［画面外隠し］をしていません'"
             color="green"
             :hideDetails="true"
             inset
             @click="focusRemove()" />
             <section class="sec-1">
                 <v-switch
-                    v-model="appBoundaryWalkingIsLock"
-                    :disabled="appBoundaryWalkingIsDisabled"
-                    :label="appBoundaryWalkingIsLock ? 'バウンダリー歩行・ロック中' : 'バウンダリー歩行・ロックをしていません'"
+                    v-model="appBoundaryWalkingEdge"
+                    :disabled="!appBoundaryWalkingEdgeIsEnabled"
+                    :label="appBoundaryWalkingEdge ? '［盤の端歩行］可能中' : '［盤の端歩行］を可能にしていません'"
                     color="green"
                     :hideDetails="true"
                     inset
@@ -106,12 +106,12 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appBoundaryIsLock = ref<boolean>(false);    // バウンダリー・ロック状態を管理（true: ロックする, false: ロックしない）
+    const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(appBoundaryIsLock, (newValue: boolean)=>{
-        appBoundaryWalkingIsDisabled.value = !newValue;
+        appBoundaryWalkingEdgeIsEnabled.value = newValue;
     });
-    const appBoundaryWalkingIsLock = ref<boolean>(false);    // バウンダリー歩行・ロック状態を管理（true: ロックする, false: ロックしない）
-    const appBoundaryWalkingIsDisabled = ref<boolean>(true);    // バウンダリー歩行・ロック状態を管理（true: 不活性にする, false: 活性にする）
+    const appBoundaryWalkingEdge = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
+    const appBoundaryWalkingEdgeIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
 
     // ################
