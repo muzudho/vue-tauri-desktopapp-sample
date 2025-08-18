@@ -15,7 +15,7 @@
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)">{{ boardContents1Data[i - 1] }}</div>
+                :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
 
             <!-- プレイヤー１ -->
             <TileAnimation
@@ -28,8 +28,8 @@
                 style="image-rendering: pixelated;" /><br/>
             </div>
 
-        <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>
-        <p>数字は背景ではなく、セルに付いている番号だぜ（＾▽＾）！</p>
+        <p>👆 数字はタイルに付いているのではなく、書き換えられる番号だぜ（＾▽＾）！</p>
+        <p>だから、タイルは動いていないぜ（＾▽＾）！</p>
 
     </section>
 
@@ -139,6 +139,11 @@
     const boardContents1Data = ref<string[]>([
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
     ]);
+    const getFaceNumber = computed(() => {
+        return (i:number)=>{
+            return  boardContents1Data.value[i];
+        };
+    });    
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　プレイヤー +
