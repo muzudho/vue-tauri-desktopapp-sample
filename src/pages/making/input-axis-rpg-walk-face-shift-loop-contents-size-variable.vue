@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト、コンテンツ縮小可能</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・循環シフト、コンテンツサイズ可変</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -51,15 +51,12 @@
                 style="image-rendering: pixelated;" /><br/>
             </div>
 
-        <p>
-            👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げてみようぜ（＾▽＾）！<br/>
-            盤より狭いコンテンツを表示するのはめんどくさいから無しだぜ（＾～＾）
-        </p>
+        <p>👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げたり縮めたりしてみようぜ（＾▽＾）！</p>
 
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト、コンテンツ縮小可能　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・循環シフト、コンテンツサイズ可変　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -76,7 +73,7 @@
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
     import { VBtn } from 'vuetify/components';
-    
+
     // ++++++++++++++++++
     // + コンポーネント +
     // ++++++++++++++++++
@@ -167,10 +164,10 @@
 
     const contents1FileMin = 0;
     const contents1RankMin = 0;
-    const contents1FileMax = 5;
-    const contents1RankMax = 5;
-    const contents1FileNum = ref<number>(contents1FileMax);       // 列数
-    const contents1RankNum = ref<number>(contents1RankMax);       // 行数
+    const contents1FileMax = 10;
+    const contents1RankMax = 10;
+    const contents1FileNum = ref<number>(board1Files);       // 列数
+    const contents1RankNum = ref<number>(board1Ranks);       // 行数
 
     /**
      * 変換
@@ -200,7 +197,7 @@
         return (tileIndex: number)=>{
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
-            // 範囲外なら、"-" でも表示しておく
+            // 盤よりコンテンツの方が狭くて、範囲外になるところには、"-" でも表示しておく
             if (contents1FileNum.value <= tileFile || contents1RankNum.value <= tileRank) {
                 return "-";
             }
@@ -208,7 +205,6 @@
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
             let contentsFile = tileFile - contents1OriginFile.value;
             let contentsRank = tileRank - contents1OriginRank.value;
-
             contentsFile = euclideanMod(contentsFile, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
             contentsRank = euclideanMod(contentsRank, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
