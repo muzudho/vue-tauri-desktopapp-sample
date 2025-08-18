@@ -19,7 +19,7 @@
     </section>
 
     <br/>
-    <h4><span style="font-size: small;">ターゲット　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ターゲット　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link/>
     </section>

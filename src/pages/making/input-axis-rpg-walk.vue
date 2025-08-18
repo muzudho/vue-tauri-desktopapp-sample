@@ -23,8 +23,8 @@
     </section>
 
     <br/>
-    <h3><span style="font-size: small;">ＲＰＧの歩行グラフィック　＞　</span>ソースコード</h3>
-    <section class="sec-3">
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span>ソースコード</h4>
+    <section class="sec-4">
         <source-link/>
     </section>
 </template>

@@ -391,3 +391,14 @@ span.code-key {
 span.font-x2 {
     font-size: 200%;
 }
+
+/** ヘッダーの親テキスト */
+span.parent-header {
+    font-size: small;
+}
+
+/** ヘッダーの親テキスト（消灯） */
+span.parent-header-lights-out {
+    font-size: small;
+    color:slategray;
+}
