@@ -68,10 +68,9 @@
     // ##############
 
     import { computed, onMounted, ref, watch } from 'vue';
-    //
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
-    //
 
+    import type { CSSProperties } from 'vue';
     import { VBtn } from 'vuetify/components';
 
     // ++++++++++++++++++
@@ -142,7 +141,7 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1Files * board1Ranks;
     });
-    const board1Style = computed(()=>{ // ボードとマスクを含んでいる領域のスタイル
+    const board1Style = computed<CSSProperties>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
@@ -151,7 +150,9 @@
             height: `${commonZoom * board1Ranks * board1SquareHeight}px`,
         };
     });
-    const getSquareStyle = computed(() => {
+    const getSquareStyle = computed<
+        (i:number)=>CSSProperties
+    >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1Files) * board1SquareWidth;
