@@ -453,11 +453,14 @@
             // 
             const fixFile = euclideanMod(2 * w - rotH - (w - tileIndex), w);
             //return fixFile;
+            const fixFile2 = fixFile + Math.floor(tileIndex / w) * w;
+            //return fixFile2;    // 横方向はこれでOk.縦はローテーションしてしまう。
+            
 
             //const fixRank = (tileIndex-(6*rotV)-1)%(2*v+1) + 1; //+tileFile
             //const fixRank = euclideanMod(tileIndex-(v*rotV), 2*v); //+tileFile
             //const fixRank = euclideanMod(tileIndex-(v*rotV), board1RankNum * board1FileNum); //+tileFile
-            const fixRank = euclideanMod(tileIndex-(w*rotV), 25);   // 縦方向はこれでOK.横がダメ
+            const fixRank = euclideanMod(tileIndex-(w*rotV), 25);   // 縦方向はこれでOK.横はローテーションしてしまう。
             return fixRank;
 
             // const fixRank = euclideanMod(2 * w - rotV - (w - tileIndex), v);
