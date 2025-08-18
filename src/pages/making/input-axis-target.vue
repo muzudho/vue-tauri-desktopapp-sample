@@ -9,11 +9,11 @@
         </ul>
         <br/>
 
-        <div :style="`width: ${cellWidth}px; height: ${cellHeight}px; background-color:lightpink;`">
+        <div :style="`width: ${board1CellWidth}px; height: ${board1CellHeight}px; background-color:lightpink;`">
             <!-- プレイヤー１（点線の枠） -->
             <div
                 class="cursor"
-                :style="p1Style"></div>
+                :style="target1Style"></div>
         </div>
 
     </section>
@@ -33,6 +33,9 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
+    //
+    // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+    //
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -44,24 +47,33 @@
     import SourceLink from '../../components/SourceLink.vue';
 
 
-    // ##############
-    // # 共有データ #
-    // ##############
+    // ################
+    // # オブジェクト #
+    // ################
 
-    // 盤データ
-    const cellWidth = 32;
-    const cellHeight = 32;
+    // ++++++++++++++++++++++++
+    // + オブジェクト　＞　盤 +
+    // ++++++++++++++++++++++++
 
-    // プレイヤー１（点線の枠）
-    const p1Left = ref<number>(0);      // スプライトのX座標
-    const p1Top = ref<number>(0);       // スプライトのY座標
-    const p1Speed = ref<number>(2);     // 移動速度
-    const p1Input = <Record<string, boolean>>{  // 入力
+    const board1CellWidth = 32;
+    const board1CellHeight = 32;
+
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ターゲット +
+    // ++++++++++++++++++++++++++++++++
+    //
+    // 点線の枠。
+    //
+
+    const target1Left = ref<number>(0);      // スプライトのX座標
+    const target1Top = ref<number>(0);       // スプライトのY座標
+    const target1Speed = ref<number>(2);     // 移動速度
+    const target1Input = <Record<string, boolean>>{  // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
-    const p1Style = computed(() => ({
-        top: `${p1Top.value}px`,
-        left: `${p1Left.value}px`,
+    const target1Style = computed(() => ({
+        top: `${target1Top.value}px`,
+        left: `${target1Left.value}px`,
     }));
 
 
@@ -78,58 +90,61 @@
                 e.preventDefault();
             }
 
-            if (p1Input.hasOwnProperty(e.key)) {
-                p1Input[e.key] = true;
+            if (target1Input.hasOwnProperty(e.key)) {
+                target1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            if (p1Input.hasOwnProperty(e.key)) {
-                p1Input[e.key] = false;
+            if (target1Input.hasOwnProperty(e.key)) {
+                target1Input[e.key] = false;
             }
         });
 
-        startGameLoop();
-
-
-        // ################
-        // # サブルーチン #
-        // ################
-
-        function startGameLoop() : void {
-            const update = () => {
-
-                // 位置のリセット
-                if (p1Input[" "]) {
-                    p1Top.value = 0;
-                    p1Left.value = 0;
-                }
-
-                // 移動処理                
-                if (p1Input.ArrowUp) {
-                    p1Top.value -= p1Speed.value;
-                }
-
-                if (p1Input.ArrowRight) {
-                    p1Left.value += p1Speed.value;
-                }
-
-                if (p1Input.ArrowDown) {
-                    p1Top.value += p1Speed.value;
-                }
-
-                if (p1Input.ArrowLeft) {
-                    p1Left.value -= p1Speed.value;
-                }
-
-                // 次のフレーム
-                requestAnimationFrame(update);
-            };
-
-            // 初回呼び出し
-            requestAnimationFrame(update);
-        }
+        gameLoopStart();
 
     });
+
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    /**
+     * ゲームのメインループ開始
+     */
+    function gameLoopStart() : void {
+        const update = () => {
+
+            // 位置のリセット
+            if (target1Input[" "]) {
+                target1Top.value = 0;
+                target1Left.value = 0;
+            }
+
+            // 移動処理                
+            if (target1Input.ArrowUp) {
+                target1Top.value -= target1Speed.value;
+            }
+
+            if (target1Input.ArrowRight) {
+                target1Left.value += target1Speed.value;
+            }
+
+            if (target1Input.ArrowDown) {
+                target1Top.value += target1Speed.value;
+            }
+
+            if (target1Input.ArrowLeft) {
+                target1Left.value -= target1Speed.value;
+            }
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
 
 </script>
 

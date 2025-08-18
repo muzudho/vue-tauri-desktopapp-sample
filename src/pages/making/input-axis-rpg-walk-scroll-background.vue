@@ -8,34 +8,34 @@
         </ul>
         <br/>
 
-        <div :style="boardMaskContainerStyle">
+        <div :style="board1MaskContainerStyle">
 
             <!--
                 TODO: 背景タイル
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <Tile
-                v-for="i in tableArea" :key="i"
+                v-for="i in board1Area" :key="i"
                 :style="getCellStyle(i - 1)"
                 :srcLeft="getFloorLeftByCell(i - 1)"
                 srcTop="0"
-                :srcWidth="cellWidth"
-                :srcHeight="cellHeight"
+                :srcWidth="board1CellWidth"
+                :srcHeight="board1CellHeight"
                 tilemapUrl="/img/making/tilemap_floor.png" />
 
             <!-- プレイヤー１ -->
             <TileAnimation
-                :frames="p1Frames"
+                :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                :slow="slow"
-                :time="count"
+                :slow="player1AnimationSlow"
+                :time="stopwatch1Count"
                 class="cursor"
-                :style="p1Style"
+                :style="player1Style"
                 style="image-rendering: pixelated;" /><br/>
             
             <!-- 半透明のマスク -->
             <div
-                :style="`width:${tableColumnsWithMask * cellWidth}px; height:${tableRowsWithMask * cellHeight}px; border-top: solid ${cellHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * cellWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * cellHeight}px rgba(0,0,0,0.5); border-left: solid ${cellWidth}px rgba(0,0,0,0.5); zoom:${zoom};`"
+                :style="`width:${board1ColumnsWithMask * board1CellWidth}px; height:${board1RowsWithMask * board1CellHeight}px; border-top: solid ${board1CellHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1CellWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1CellHeight}px rgba(0,0,0,0.5); border-left: solid ${board1CellWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
         </div>
 
@@ -43,12 +43,12 @@
         <br/>
 
         <p>👇タイルのインデックスだぜ（＾▽＾）：</p>
-        <div :style="boardContainerStyle">
+        <div :style="board1ContainerStyle">
             <!--
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in tableArea" :key="i"
+            <div v-for="i in board1Area" :key="i"
                 :style="getCellStyle(i - 1)"
                 style="border:dashed 1px gray;">{{ getTileIndexByCell(i - 1) }}</div>
         </div>
@@ -58,7 +58,7 @@
         <p>元画像のタイルマップを表示：</p>
         <v-img
             src="/img/making/tilemap_floor.png"
-            :style="`zoom: ${zoom}; width: ${cellWidth}px; height:${cellHeight}px;`"
+            :style="`zoom: ${commonZoom}; width: ${board1CellWidth}px; height:${board1CellHeight}px;`"
             style="image-rendering: pixelated; border:dashed gray 1px;"/>
         <p>：ここまで。</p>
 
@@ -78,6 +78,9 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
+    //
+    // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+    //
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -91,182 +94,170 @@
     import TileAnimation from '@/components/TileAnimation.vue';
 
 
-    // ##############
-    // # 共有データ #
-    // ##############
+    // ##########
+    // # コモン #
+    // ##########
+    //
+    // よく使う設定をまとめたもの。特に不変のもの。
+    //
 
-    // 表示データ
-    const zoom = 4;
+    const commonZoom = 4;
+    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
+    const commonSpriteMotionRight = 1;
+    const commonSpriteMotionUp = -1;
+    const commonSpriteMotionDown = 1;
 
-    // 盤データ
-    const cellWidth = 32;
-    const cellHeight = 32;
 
-    // プレイヤー１
-    const p1Left = ref<number>(2 * cellWidth);      // スプライトのX座標
-    const p1Top = ref<number>(2 * cellHeight);       // スプライトのY座標
-    const p1Speed = ref<number>(2);     // 移動速度
-    const p1Input = <Record<string, boolean>>{  // 入力
-        ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
-    };
-    const p1Style = computed(() => ({
-        top: `${p1Top.value}px`,
-        left: `${p1Left.value}px`,
-        zoom: zoom,
-    }));
+    // ################
+    // # オブジェクト #
+    // ################
 
-    const count = ref<number>(0);   // カウントの初期値
-    const slow = ref<number>(8);   // スローモーションの倍率の初期値
-    const timerId = ref<number | null>(null);   // タイマーのIDを保持
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ストップウォッチ +
+    // ++++++++++++++++++++++++++++++++++++++
 
-    // キャラクターの向きと、歩行タイルの指定
-    const sourceFrames = {
-        up:[    // 上向き
-            {top:  0 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  0 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  0 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  0 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-        ],
-        right:[ // 右向き
-            {top:  1 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  1 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  1 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  1 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-        ],
-        down:[  // 下向き
-            {top:  2 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  2 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  2 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  2 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-        ],
-        left:[  // 左向き
-            {top:  3 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  3 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  3 * cellHeight, left: 0 * cellWidth, width: cellWidth, height: cellHeight },
-            {top:  3 * cellHeight, left: 1 * cellWidth, width: cellWidth, height: cellHeight },
-        ]
-    };
+    const stopwatch1Count = ref<number>(0);   // カウントの初期値
+    const stopwatch1TimerId = ref<number | null>(null);   // タイマーのIDを保持
 
-    const p1Frames = ref(sourceFrames["down"]);
-
-    // モーション
-    const p1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
-    const moLeft = -1;  // モーション（motion）定数。左に移動する
-    const moRight = 1;
-    const moUp = -1;
-    const moDown = 1;
-    const p1Motion = ref<Record<string, number>>({  // 入力
-        xAxis: 0,   // 負なら左、正なら右
-        yAxis: 0,   // 負なら上、正なら下
-    });
+    // ++++++++++++++++++++++++
+    // + オブジェクト　＞　盤 +
+    // ++++++++++++++++++++++++
 
     // 盤データ
-    const tableColumns = 5;
-    const tableRows = 5;
-    const tableArea = tableColumns * tableRows; // 盤のセル数
-    const tableColumnsWithMask = tableColumns + 1
-    const tableRowsWithMask = tableRows + 1
-
-    /**
-     * ユークリッド剰余
-     * 
-     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
-     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
-     */
-    function euclideanMod(a: number, b: number): number {
-        return ((a % b) + b) % b;
-    }    
-
-    // ボードの表示位置
-    const boardTop = ref<number>(0);
-    const boardLeft = ref<number>(0);
+    const board1CellWidth = 32;
+    const board1CellHeight = 32;
+    const board1Columns = 5;
+    const board1Rows = 5;
+    const board1Area = board1Columns * board1Rows; // 盤のセル数
+    const board1ColumnsWithMask = board1Columns + 1
+    const board1RowsWithMask = board1Rows + 1
+    const board1Top = ref<number>(0);    // ボードの表示位置
+    const board1Left = ref<number>(0);
     const getCellStyle = computed(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、セルの top 位置。
-            const homeLeft = (i % tableColumns) * cellWidth;
-            const homeTop = Math.floor(i / tableRows) * cellHeight;
-            const boardWidth = (tableColumns * cellWidth);
-            const boardHeight = (tableRows * cellHeight);
+            const homeLeft = (i % board1Columns) * board1CellWidth;
+            const homeTop = Math.floor(i / board1Rows) * board1CellHeight;
+            const boardWidth = (board1Columns * board1CellWidth);
+            const boardHeight = (board1Rows * board1CellHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const boardLeftLoop = euclideanMod(homeLeft + boardLeft.value + boardWidth, boardWidth) - homeLeft;
-            const boardTopLoop = euclideanMod(homeTop + boardTop.value + boardHeight, boardHeight) - homeTop;
+            const boardLeftLoop = euclideanMod(homeLeft + board1Left.value + boardWidth, boardWidth) - homeLeft;
+            const boardTopLoop = euclideanMod(homeTop + board1Top.value + boardHeight, boardHeight) - homeTop;
 
             return {
                 position: 'absolute',
                 top: `${homeTop + boardTopLoop}px`,
                 left: `${homeLeft + boardLeftLoop}px`,
-                width: `${cellWidth}px`,
-                height: `${cellHeight}px`,
-                zoom: zoom,
+                width: `${board1CellWidth}px`,
+                height: `${board1CellHeight}px`,
+                zoom: commonZoom,
                 imagePixelated: true,
             };
         };
     });
-
-    // ボードとマスクを含んでいる領域のスタイル
-    const boardMaskContainerStyle = computed(()=>{
+    const board1MaskContainerStyle = computed(()=>{  // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${zoom * tableColumnsWithMask * cellWidth}px`,
-            height: `${zoom * tableRowsWithMask * cellHeight}px`,
+            width: `${commonZoom * board1ColumnsWithMask * board1CellWidth}px`,
+            height: `${commonZoom * board1RowsWithMask * board1CellHeight}px`,
         };
     });
-
-    // ボードだけを含んでいる領域のスタイル
-    const boardContainerStyle = computed(()=>{
+    const board1ContainerStyle = computed(()=>{  // ボードだけを含んでいる領域のスタイル
         const zoom = 4;
         
         return {
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${zoom * tableColumns * cellWidth}px`,
-            height: `${zoom * tableRows * cellHeight}px`,
+            width: `${zoom * board1Columns * board1CellWidth}px`,
+            height: `${zoom * board1Rows * board1CellHeight}px`,
         };
     });
-
-    // 床のタイルマップ
-    const floorTilemapTileNum = 4;
-    const floorTileMapCoordination = computed(() => {   // 座標
+    const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
+    const board1FloorTilemapCoordination = computed(() => {   // 座標
         const tileMap = [];
-        for (let i = 0; i < tableArea; i++) {
-            const cols = i % tableColumns;
-            const rows = Math.floor(i / tableColumns);
-            tileMap.push({ top: rows * cellHeight, left: cols * cellWidth, width: cellWidth, height: cellHeight });
+        for (let i = 0; i < board1Area; i++) {
+            const cols = i % board1Columns;
+            const rows = Math.floor(i / board1Columns);
+            tileMap.push({ top: rows * board1CellHeight, left: cols * board1CellWidth, width: board1CellWidth, height: board1CellHeight });
         }
         return tileMap;
     });
-
-    // マップデータ
-    const mapColumns = tableColumns;  // TODO: 10ぐらいにしたい
-    const mapRows = tableRows;  // TODO: 10ぐらいにしたい
-    const mapArea = mapColumns * mapRows;
-
-    // ランダムなマップデータを生成
-    const mapData = computed(() => {
+    const board1MapColumns = board1Columns;  // マップデータ
+    const board1MapRows = board1Rows;
+    const board1MapArea = board1MapColumns * board1MapRows;
+    const mapData = computed(() => {    // ランダムなマップデータを生成
         const data = [];
-        for (let i = 0; i < mapArea; i++) {
-            data.push(Math.floor(Math.random() * floorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
+        for (let i = 0; i < board1MapArea; i++) {
+            data.push(Math.floor(Math.random() * board1FloorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
         }
         return data;
     });
-
     const getTileIndexByCell = computed(() => {
         return (cellIndex: number) => {
             return mapData.value[cellIndex];
         };
     });
-    
     const getFloorLeftByCell = computed(() => {
         return (cellIndex: number) => {
             const tileIndex = mapData.value[cellIndex];
-            return floorTileMapCoordination.value[tileIndex]["left"];
+            return board1FloorTilemapCoordination.value[tileIndex]["left"];
         };
     });
+
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　プレイヤー +
+    // ++++++++++++++++++++++++++++++++
+
+    const player1Left = ref<number>(2 * board1CellWidth);      // スプライトのX座標
+    const player1Top = ref<number>(2 * board1CellHeight);       // スプライトのY座標
+    const player1Speed = ref<number>(2);     // 移動速度
+    const player1Input = <Record<string, boolean>>{  // 入力
+        ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
+    };
+    const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
+    const player1Style = computed(() => ({
+        top: `${player1Top.value}px`,
+        left: `${player1Left.value}px`,
+        zoom: commonZoom,
+    }));
+    const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
+        up:[    // 上向き
+            {top:  0 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  0 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  0 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  0 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+        ],
+        right:[ // 右向き
+            {top:  1 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  1 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  1 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  1 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+        ],
+        down:[  // 下向き
+            {top:  2 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  2 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  2 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  2 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+        ],
+        left:[  // 左向き
+            {top:  3 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  3 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  3 * board1CellHeight, left: 0 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+            {top:  3 * board1CellHeight, left: 1 * board1CellWidth, width: board1CellWidth, height: board1CellHeight },
+        ]
+    };
+    const player1Frames = ref(player1SourceFrames["down"]);
+    const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1Motion = ref<Record<string, number>>({  // モーションへの入力
+        xAxis: 0,   // 負なら左、正なら右
+        yAxis: 0,   // 負なら上、正なら下
+    });
+
 
     // ##########
     // # 開始時 #
@@ -281,98 +272,114 @@
                 e.preventDefault();
             }
 
-            if (p1Input.hasOwnProperty(e.key)) {
-                p1Input[e.key] = true;
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            if (p1Input.hasOwnProperty(e.key)) {
-                p1Input[e.key] = false;
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = false;
             }
         });
 
-        startGameLoop();
-        startTimer();
+        gameLoopStart();
+        stopwatch1Start();
 
 
-        // ################
-        // # サブルーチン #
-        // ################
-
-        function startGameLoop() : void {
-            const update = () => {
-                p1MotionWait.value -= 1;
-
-                if (p1MotionWait.value==0) {
-                    p1Motion.value["xAxis"] = 0;    // クリアー
-                    p1Motion.value["yAxis"] = 0;
-                }
-                
-                // 入力（上下左右への移動）をモーションに変換
-                if (p1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
-                    if (p1Input.ArrowLeft) {
-                        p1Motion.value["xAxis"] = moLeft; // 左
-                    }
-
-                    if (p1Input.ArrowRight) {
-                        p1Motion.value["xAxis"] = moRight;  // 右
-                    }
-
-                    if (p1Input.ArrowUp) {
-                        p1Motion.value["yAxis"] = moUp;   // 上
-                    }
-
-                    if (p1Input.ArrowDown) {
-                        p1Motion.value["yAxis"] = moDown;   // 下
-                    }
-
-                    if (p1Motion.value["xAxis"]!=0 || p1Motion.value["yAxis"]!=0) {
-                        p1MotionWait.value = 16;    // フレーム数を設定
-                    }
-                }
-
-                // 移動処理
-                // 斜め方向の場合、上下を優先する。
-                if (p1Motion.value["xAxis"]==1) {   // 右
-                    p1Frames.value = sourceFrames["right"]
-                    boardLeft.value -= p1Speed.value;   // 盤の方をスクロールさせる
-                } else if (p1Motion.value["xAxis"]==-1) {  // 左
-                    p1Frames.value = sourceFrames["left"]
-                    boardLeft.value += p1Speed.value;
-                }
-
-                if (p1Motion.value["yAxis"]==-1) {  // 上
-                    p1Frames.value = sourceFrames["up"]
-                    boardTop.value += p1Speed.value;
-                } else if (p1Motion.value["yAxis"]==1) {   // 下
-                    p1Frames.value = sourceFrames["down"]
-                    boardTop.value -= p1Speed.value;
-                }
-
-                // 次のフレーム
-                requestAnimationFrame(update);
-            };
-
-            // 初回呼び出し
-            requestAnimationFrame(update);
-        }
 
     });
+
 
     // ################
     // # サブルーチン #
     // ################
 
-    function startTimer() : void {
+    /**
+     * ユークリッド剰余
+     * 
+     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
+     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
+     */
+    function euclideanMod(a: number, b: number): number {
+        return ((a % b) + b) % b;
+    }    
+
+
+    /**
+     * ゲームのメインループ開始
+     */
+    function gameLoopStart() : void {
+        const update = () => {
+            player1MotionWait.value -= 1;
+
+            if (player1MotionWait.value==0) {
+                player1Motion.value["xAxis"] = 0;    // クリアー
+                player1Motion.value["yAxis"] = 0;
+            }
+            
+            // 入力（上下左右への移動）をモーションに変換
+            if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+                if (player1Input.ArrowLeft) {
+                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                }
+
+                if (player1Input.ArrowRight) {
+                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                }
+
+                if (player1Input.ArrowUp) {
+                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                }
+
+                if (player1Input.ArrowDown) {
+                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                }
+
+                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                    player1MotionWait.value = 16;    // フレーム数を設定
+                }
+            }
+
+            // 移動処理
+            // 斜め方向の場合、上下を優先する。
+            if (player1Motion.value["xAxis"]==1) {   // 右
+                player1Frames.value = player1SourceFrames["right"]
+                board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
+            } else if (player1Motion.value["xAxis"]==-1) {  // 左
+                player1Frames.value = player1SourceFrames["left"]
+                board1Left.value += player1Speed.value;
+            }
+
+            if (player1Motion.value["yAxis"]==-1) {  // 上
+                player1Frames.value = player1SourceFrames["up"]
+                board1Top.value += player1Speed.value;
+            } else if (player1Motion.value["yAxis"]==1) {   // 下
+                player1Frames.value = player1SourceFrames["down"]
+                board1Top.value -= player1Speed.value;
+            }
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
+
+
+    /**
+     * ストップウォッチ１開始
+     */
+    function stopwatch1Start() : void {
         // 既にタイマーが動いてたら何もしない
-        if (timerId.value) return;
+        if (stopwatch1TimerId.value) return;
 
         // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
         const tick = () => {
-            count.value += 1;
-            timerId.value = requestAnimationFrame(tick);
+            stopwatch1Count.value += 1;
+            stopwatch1TimerId.value = requestAnimationFrame(tick);
         };
-        timerId.value = requestAnimationFrame(tick);
+        stopwatch1TimerId.value = requestAnimationFrame(tick);
     }
 
 </script>
