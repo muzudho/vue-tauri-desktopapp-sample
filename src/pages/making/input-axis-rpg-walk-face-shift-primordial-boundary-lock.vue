@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・シフト、コンテンツサイズ可変</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・原始的シフト、境界ロック</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -8,33 +8,6 @@
             <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
         </ul>
         <br/>
-
-        <v-slider
-            label="列数"
-            v-model="contents1FileNum"
-            :min="contents1FileMin"
-            :max="contents1FileMax"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <v-slider
-            label="行数"
-            v-model="contents1RankNum"
-            :min="contents1RankMin"
-            :max="contents1RankMax"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <v-switch
-            v-model="appIsLooping"
-            :label="appIsLooping ? '端でループ中' : '端でループしていません'"
-            color="green"
-            inset
-            @click="focusRemove()" />
-        <!-- フォーカスを外すためのダミー・ボタンです -->
-        <v-btn ref="noopButton">何もしないボタン</v-btn>
 
         <div :style="board1Style">
 
@@ -56,12 +29,12 @@
                 style="image-rendering: pixelated;" /><br/>
             </div>
 
-        <p>👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げたり縮めたりしてみようぜ（＾▽＾）！</p>
-
+        <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
+        <p>だから、数字がタイルの上を入れ替わっている（＝シフトしている）ぜ（＾▽＾）！</p>
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・シフト、コンテンツサイズ可変　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・原始的シフト、境界ロック　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -75,9 +48,9 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
+    //
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
-
-    import { VBtn } from 'vuetify/components';
+    //
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -104,25 +77,9 @@
     const commonSpriteMotionDown = 1;
 
 
-    // ############################
-    // # アプリケーション・データ #
-    // ############################
-    //
-    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
-    //
-
-    const appIsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
-
-
     // ################
     // # オブジェクト #
     // ################
-
-    // ++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　何もしないボタン +
-    // ++++++++++++++++++++++++++++++++++++++
-
-    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -177,55 +134,47 @@
     // 盤上に表示されるもの。
     //
 
-    const contents1FileMin = 0;
-    const contents1RankMin = 0;
     const contents1FileMax = 10;
     const contents1RankMax = 10;
-    const contents1FileNum = ref<number>(board1Files);       // 列数
-    const contents1RankNum = ref<number>(board1Ranks);       // 行数
+    const contents1FileNum = contents1FileMax;       // 列数
+    const contents1RankNum = contents1RankMax;       // 行数
 
     /**
      * 変換
-     * @param index マス番号
+     * @param tileIndex マス番号
      * @returns [筋番号, 段番号]
      */
-    function tileIndexToTileFileRank(index: number) : number[] {
+    function tileIndexToTileFileRank(tileIndex: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = index % board1Files;
-        const rank = Math.floor(index / board1Ranks);
+        const file = tileIndex % board1Files;
+        const rank = Math.floor(tileIndex / board1Ranks);
 
         return [file, rank];
     }
 
-    function contentsFileRankToContentsIndex(file: number, rank: number) : number {
-        return rank * contents1FileNum.value + file;
+    function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
+        return contentsRank * contents1FileNum + contentsFile;
     }
 
-    const contents1OriginFile = ref<number>(0);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
-    const contents1OriginRank = ref<number>(0);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
+    const contents1OriginFile = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
+    const contents1OriginRank = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
     const contents1Data = ref<string[]>([]);
     for (let i=0; i<contents1FileMax * contents1RankMax; i++) {
         contents1Data.value.push(i.toString().padStart(2, "0"));
     }
     const getFaceNumber = computed(() => {
-        // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
-            let contentsFile = tileFile - contents1OriginFile.value;
-            let contentsRank = tileRank - contents1OriginRank.value;
+            const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
 
-            if (appIsLooping.value) {
-                contentsFile = euclideanMod(contentsFile, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-                contentsRank = euclideanMod(contentsRank, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-            } else {
-                // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
-                if (contentsFile < 0 || contents1FileNum.value <= contentsFile || contentsRank < 0 || contents1RankNum.value <= contentsRank) {
-                    return "-";
-                }
+            // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
+            if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
+                return "-";
             }
-
+            
             // コンテンツ上の位置が示すデータを返す
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             return  contents1Data.value[contentsIndex];
@@ -314,17 +263,6 @@
     // ################
 
     /**
-     * ユークリッド剰余
-     * 
-     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
-     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
-     */
-    function euclideanMod(a: number, b: number): number {
-        return ((a % b) + b) % b;
-    }
-
-
-    /**
      * ゲームのメインループ開始
      */
     function gameLoopStart() : void {
@@ -407,16 +345,6 @@
             stopwatch1TimerId.value = requestAnimationFrame(tick);
         };
         stopwatch1TimerId.value = requestAnimationFrame(tick);
-    }
-
-
-    /**
-     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-     */
-    function focusRemove() : void {
-        if (noopButton.value) {
-            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-        }
     }
 
 </script>
