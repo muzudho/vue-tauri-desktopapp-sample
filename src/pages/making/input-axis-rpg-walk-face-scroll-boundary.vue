@@ -356,12 +356,14 @@
             //      h = tileRank * v + (2w-rot-(w-x))%w
             //
 
-            const rot = 0;
+            return player1FileDelta.value;
+            /*
+            const rot = -contents1OriginFile.value;  // どれだけ右へ移動したか。
             const v = contents1FileNum;
             const w = board1FileNum;
 
             let [i, tileRank] = tileIndexToTileFileRank(tileIndex);
-            const h = tileRank * v + (2 * w - rot - (w - tileIndex)) % w;
+            const h = tileRank * v + euclideanMod(2 * contents1FileNum - rot - (contents1FileNum - tileIndex), contents1FileNum);
 
             // const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
             // const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
@@ -375,6 +377,7 @@
             // const h = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             //return  h; //contents1Data.value[h];
             return  h;
+            */
         };
     });    
     const contents1Motion = ref<Record<string, number>>({  // モーションへの入力
@@ -391,6 +394,9 @@
     const player1RankHome: number = 2;
     const player1Left = ref<number>(player1FileHome * board1SquareWidth);    // スプライトのX座標
     const player1Top = ref<number>(player1RankHome * board1SquareHeight);       // スプライトのY座標
+    // 移動量を記録しておく。
+    const player1FileDelta = ref<number>(0);
+    const player1RankDelta = ref<number>(0);
     const player1Speed = ref<number>(2);     // 移動速度
     const player1File = computed<number>(()=>{
         return Math.round(player1Left.value / board1SquareWidth);
@@ -815,8 +821,24 @@
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {
                 player1Left.value -= player1Speed.value;
             }
+            
+            if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
+                    // 移動量を記録しておく。シフト。
+                    if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) { // 上
+                        player1RankDelta.value -= 1;
+                    } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
+                        player1RankDelta.value += 1;
+                    }
 
-            if (player1MotionWait.value <= 0) {
+                    if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {    // 右
+                        player1FileDelta.value += 1;
+                    } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
+                        player1FileDelta.value -= 1;
+                    }
+                    console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
+                }
+
                 if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || contents1Motion.value["toRight"]!=0 || contents1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
