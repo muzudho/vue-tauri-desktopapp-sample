@@ -235,16 +235,18 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
+    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome: number = 2;  // 盤の真ん中をホーム・ポジションとする
     const player1RankHome: number = 2;
-    const player1File = ref<number>(player1FileHome);
-    const player1Rank = ref<number>(player1RankHome);
-    const player1Left = computed<number>(()=>{
-        return player1File.value * board1SquareWidth;       // スプライトのX座標
+    const player1Left = ref<number>(player1FileHome * board1SquareWidth);    // スプライトのX座標
+    const player1Top = ref<number>(player1RankHome * board1SquareHeight);       // スプライトのY座標
+    const player1File = computed<number>(()=>{
+        return Math.round(player1Left.value / board1SquareWidth);
     });
-    const player1Top = computed<number>(()=>{
-        return player1Rank.value * board1SquareHeight;      // スプライトのY座標
+    const player1Rank = computed<number>(()=>{
+        return Math.round(player1Top.value / board1SquareHeight);
     });
+    
     const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
@@ -370,7 +372,7 @@
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1FileHome) {
-                        player1File.value += 1;
+                        player1Left.value += 1 * board1SquareWidth;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -423,7 +425,7 @@
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
                                 if (player1File.value < board1Files - 1) {
-                                    player1File.value += 1;
+                                    player1Left.value += 1 * board1SquareWidth;
                                 }
                             }
                         }
@@ -434,7 +436,7 @@
 
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1FileHome) {
-                        player1File.value -= 1;
+                        player1Left.value -= 1 * board1SquareWidth;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -482,7 +484,7 @@
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0) {
-                                player1File.value -= 1;
+                                player1Left.value -= 1 * board1SquareWidth;
                             }
                         }
                     }
@@ -493,7 +495,7 @@
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1RankHome) {
-                        player1Rank.value -= 1;
+                        player1Top.value -= 1 * board1SquareHeight;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -538,7 +540,7 @@
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0) {
-                                player1Rank.value -= 1;
+                                player1Top.value -= 1 * board1SquareHeight;
                             }
                         }
                     }
@@ -548,7 +550,7 @@
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1RankHome) {
-                        player1Rank.value += 1;
+                        player1Top.value += 1 * board1SquareHeight;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -601,7 +603,7 @@
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1Files - 1) {
-                                player1Rank.value += 1;
+                                player1Top.value += 1 * board1SquareHeight;
                             }
                         }
                     }
