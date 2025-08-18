@@ -164,8 +164,14 @@
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
-            const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+
+            // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
+            if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
+                return "-";
+            }
+            
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
             // コンテンツ上の位置が示すデータを返す
@@ -253,17 +259,6 @@
     // ################
     // # サブルーチン #
     // ################
-
-    /**
-     * ユークリッド剰余
-     * 
-     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
-     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
-     */
-    function euclideanMod(a: number, b: number): number {
-        return ((a % b) + b) % b;
-    }
-
 
     /**
      * ゲームのメインループ開始
