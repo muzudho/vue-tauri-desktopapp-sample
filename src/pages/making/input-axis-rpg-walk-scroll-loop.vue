@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>循環的ボード・スクロール</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>ボード・循環スクロール</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -39,7 +39,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">循環的ボード・スクロール　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">ボード・循環スクロール　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -110,7 +110,7 @@
     const board1Left = ref<number>(0);
     const getSquareStyle = computed(() => {
         return (i:number)=>{
-            // プレイヤーが初期位置にいる場合の、セルの top 位置。
+            // プレイヤーが初期位置にいる場合の、マス位置。
             const homeLeft = (i % board1Files) * board1SquareWidth;
             const homeTop = Math.floor(i / board1Ranks) * board1SquareHeight;
             const boardWidth = (board1Files * board1SquareWidth);

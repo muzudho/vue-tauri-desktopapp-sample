@@ -99,8 +99,6 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1Files * board1Ranks;
     });
-    const board1Top = ref<number>(0);
-    const board1Left = ref<number>(0);
     const board1Style = computed(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
@@ -136,12 +134,24 @@
     // 盤上に表示されるもの。
     //
 
+    const boardContents1OriginFile = ref<number>(0);
+    const boardContents1OriginRank = ref<number>(0);   // 0 番目のコンテンツの位置。
     const boardContents1Data = ref<string[]>([
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
     ]);
     const getFaceNumber = computed(() => {
         return (i:number)=>{
-            return  boardContents1Data.value[i];
+            // プレイヤーが初期位置にいる場合の、マス位置。
+            const homeFile = i % board1Files;
+            const homeRank = Math.floor(i / board1Ranks);
+
+            // NOTE: 循環するだけなら、［剰余］を使えばいける。
+            // 盤の左端列を、右端列へ移動させる。
+            const board1FileInLoop = euclideanMod(homeFile + boardContents1OriginFile.value + board1Files, board1Files) - homeFile;
+            const board1RankInLoop = euclideanMod(homeRank + boardContents1OriginRank.value + board1Ranks, board1Ranks) - homeRank;
+            const board1IndexInLoop = Math.floor(board1RankInLoop / board1Ranks) + board1FileInLoop % board1Files;
+
+            return  boardContents1Data.value[board1IndexInLoop];
         };
     });    
 
@@ -151,7 +161,6 @@
 
     const player1Left = ref<number>(2 * board1SquareWidth);       // スプライトのX座標
     const player1Top = ref<number>(2 * board1SquareHeight);       // スプライトのY座標
-    const player1Speed = ref<number>(2);                        // 移動速度
     const player1Input = <Record<string, boolean>>{             // 入力
         ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
@@ -228,6 +237,17 @@
     // ################
 
     /**
+     * ユークリッド剰余
+     * 
+     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
+     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
+     */
+    function euclideanMod(a: number, b: number): number {
+        return ((a % b) + b) % b;
+    }
+
+
+    /**
      * ゲームのメインループ開始
      */
     function gameLoopStart() : void {
@@ -270,18 +290,18 @@
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["xAxis"]==1) {   // 右
                 player1Frames.value = player1SourceFrames["right"]
-                board1Left.value -= player1Speed.value;   // 盤の方をスクロールさせる
+                boardContents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
             } else if (player1Motion.value["xAxis"]==-1) {  // 左
                 player1Frames.value = player1SourceFrames["left"]
-                board1Left.value += player1Speed.value;
+                boardContents1OriginFile.value += 1;
             }
 
             if (player1Motion.value["yAxis"]==-1) {  // 上
                 player1Frames.value = player1SourceFrames["up"]
-                board1Top.value += player1Speed.value;
+                boardContents1OriginRank.value += 1;
             } else if (player1Motion.value["yAxis"]==1) {   // 下
                 player1Frames.value = player1SourceFrames["down"]
-                board1Top.value -= player1Speed.value;
+                boardContents1OriginRank.value -= 1;
             }
 
             // 次のフレーム
