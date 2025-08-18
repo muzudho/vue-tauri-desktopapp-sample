@@ -134,41 +134,41 @@
     // 盤上に表示されるもの。
     //
 
-    const boardContents1FileNum = board1Files;       // 列数
-    const boardContents1RankNum = board1Ranks;       // 行数
+    const contents1FileNum = board1Files;       // 列数
+    const contents1RankNum = board1Ranks;       // 行数
 
     /**
      * 変換
      * @param sq マス番号
      * @returns [筋番号, 段番号]
      */
-    function squareToFileRank(sq: number) : number[] {
+    function squareToFileRankInContents(sq: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = sq % boardContents1FileNum;
-        const rank = Math.floor(sq / boardContents1RankNum);
+        const file = sq % contents1FileNum;
+        const rank = Math.floor(sq / contents1RankNum);
 
         return [file, rank];
     }
 
-    function fileRankToSquare(file: number, rank: number) : number {
-        return rank * boardContents1FileNum + file;
+    function fileRankToSquareInContents(file: number, rank: number) : number {
+        return rank * contents1FileNum + file;
     }
 
-    const boardContents1OriginFile = ref<number>(0);
-    const boardContents1OriginRank = ref<number>(0);   // 0 番目のコンテンツの位置。
-    const boardContents1Data = ref<string[]>([
+    const contents1OriginFile = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの左から何番目か。
+    const contents1OriginRank = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの上から何番目か。
+    const contents1Data = ref<string[]>([
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
     ]);
     const getFaceNumber = computed(() => {
-        return (i:number)=>{
-            let j = i;  // 初期位置から移動していないとき、 i のまま。
+        return (tileIndex: number)=>{
+            let contentsIndex = tileIndex;  // 盤と、盤コンテンツのサイズは同じなので、変換無し。
 
-            let [file, rank] = squareToFileRank(i);            
-            file = euclideanMod(file - boardContents1OriginFile.value, boardContents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            rank = euclideanMod(rank - boardContents1OriginRank.value, boardContents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-            j = fileRankToSquare(file, rank);
+            let [file, rank] = squareToFileRankInContents(contentsIndex);            
+            file = euclideanMod(file - contents1OriginFile.value, contents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            rank = euclideanMod(rank - contents1OriginRank.value, contents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            contentsIndex = fileRankToSquareInContents(file, rank);
 
-            return  boardContents1Data.value[j];
+            return  contents1Data.value[contentsIndex];
         };
     });    
 
@@ -281,8 +281,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    boardContents1OriginFile.value = 0;
-                    boardContents1OriginRank.value = 0;
+                    contents1OriginFile.value = 0;
+                    contents1OriginRank.value = 0;
                 }
 
                 // 移動
@@ -310,18 +310,18 @@
                 // 斜め方向の場合、上下を優先する。
                 if (player1Motion.value["xAxis"]==1) {   // 右
                     player1Frames.value = player1SourceFrames["right"]
-                    boardContents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
+                    contents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
                 } else if (player1Motion.value["xAxis"]==-1) {  // 左
                     player1Frames.value = player1SourceFrames["left"]
-                    boardContents1OriginFile.value += 1;
+                    contents1OriginFile.value += 1;
                 }
 
                 if (player1Motion.value["yAxis"]==-1) {  // 上
                     player1Frames.value = player1SourceFrames["up"]
-                    boardContents1OriginRank.value += 1;
+                    contents1OriginRank.value += 1;
                 } else if (player1Motion.value["yAxis"]==1) {   // 下
                     player1Frames.value = player1SourceFrames["down"]
-                    boardContents1OriginRank.value -= 1;
+                    contents1OriginRank.value -= 1;
                 }
             }
 

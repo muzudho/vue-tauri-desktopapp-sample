@@ -12,16 +12,16 @@
         <!-- スライダー -->
         <v-slider
             label="列数"
-            v-model="boardContents1FileNum"
-            :min="boardContents1FileMin"
+            v-model="contents1FileNum"
+            :min="contents1FileMin"
             max="10"
             step="1"
             showTicks="always"
             thumbLabel="always" />
         <v-slider
             label="行数"
-            v-model="boardContents1RankNum"
-            :min="boardContents1RankMin"
+            v-model="contents1RankNum"
+            :min="contents1RankMin"
             max="10"
             step="1"
             showTicks="always"
@@ -152,43 +152,59 @@
     // 盤上に表示されるもの。
     //
 
-    const boardContents1FileMin = 5;
-    const boardContents1RankMin = 5;
-    const boardContents1FileNum = ref<number>(boardContents1FileMin);       // 列数
-    const boardContents1RankNum = ref<number>(boardContents1RankMin);       // 行数
+    const contents1FileMin = 5;
+    const contents1RankMin = 5;
+    const contents1FileNum = ref<number>(contents1FileMin);       // 列数
+    const contents1RankNum = ref<number>(contents1RankMin);       // 行数
 
     /**
      * 変換
      * @param sq マス番号
      * @returns [筋番号, 段番号]
      */
-    function squareToFileRank(sq: number) : number[] {
+    function squareToFileRankInTiles(sq: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = sq % boardContents1FileNum.value;
-        const rank = Math.floor(sq / boardContents1RankNum.value);
+        const file = sq % board1Files;
+        const rank = Math.floor(sq / board1Ranks);
 
         return [file, rank];
     }
 
-    function fileRankToSquare(file: number, rank: number) : number {
-        return rank * boardContents1FileNum.value + file;
+    /**
+     * 変換
+     * @param sq マス番号
+     * @returns [筋番号, 段番号]
+     */
+    function squareToFileRankInContents(sq: number) : number[] {
+        // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+        const file = sq % contents1FileNum.value;
+        const rank = Math.floor(sq / contents1RankNum.value);
+
+        return [file, rank];
     }
 
-    const boardContents1OriginFile = ref<number>(0);
-    const boardContents1OriginRank = ref<number>(0);    // 0 番目のコンテンツの位置。
-    const boardContents1Data = ref<string[]>([
+    function fileRankToSquareInContents(file: number, rank: number) : number {
+        return rank * contents1FileNum.value + file;
+    }
+
+    const contents1OriginFile = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの左から何番目か。
+    const contents1OriginRank = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの上から何番目か。
+    const contents1Data = ref<string[]>([
         "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
     ]);
     const getFaceNumber = computed(() => {
-        return (i:number)=>{
-            let j = i;  // 初期位置から移動していないとき、 i のまま。
+        // 引数に渡されるのは、［盤のタイル番号］
+        return (tileIndex: number)=>{
+            // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
+            let [tileFile, tileRank] = squareToFileRankInTiles(tileIndex);
+            const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
 
-            let [file, rank] = squareToFileRank(i);            
-            file = euclideanMod(file - boardContents1OriginFile.value, boardContents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            rank = euclideanMod(rank - boardContents1OriginRank.value, boardContents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-            j = fileRankToSquare(file, rank);
+            const contentsIndex = fileRankToSquareInContents(contentsFile, contentsRank);
 
-            return  boardContents1Data.value[j];
+            // 盤コンテンツ上の位置を、盤上の位置に変換
+
+            return  contents1Data.value[contentsIndex];
         };
     });    
 
@@ -301,8 +317,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    boardContents1OriginFile.value = 0;
-                    boardContents1OriginRank.value = 0;
+                    contents1OriginFile.value = 0;
+                    contents1OriginRank.value = 0;
                 }
 
                 // 移動
@@ -330,18 +346,18 @@
                 // 斜め方向の場合、上下を優先する。
                 if (player1Motion.value["xAxis"]==1) {   // 右
                     player1Frames.value = player1SourceFrames["right"]
-                    boardContents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
+                    contents1OriginFile.value -= 1;   // コンテンツの方をスクロールさせる
                 } else if (player1Motion.value["xAxis"]==-1) {  // 左
                     player1Frames.value = player1SourceFrames["left"]
-                    boardContents1OriginFile.value += 1;
+                    contents1OriginFile.value += 1;
                 }
 
                 if (player1Motion.value["yAxis"]==-1) {  // 上
                     player1Frames.value = player1SourceFrames["up"]
-                    boardContents1OriginRank.value += 1;
+                    contents1OriginRank.value += 1;
                 } else if (player1Motion.value["yAxis"]==1) {   // 下
                     player1Frames.value = player1SourceFrames["down"]
-                    boardContents1OriginRank.value -= 1;
+                    contents1OriginRank.value -= 1;
                 }
             }
 
