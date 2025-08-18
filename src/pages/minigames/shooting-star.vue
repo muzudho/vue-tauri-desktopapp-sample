@@ -544,6 +544,9 @@
         }),
         reloadTime: 0,  // 0 になるまで、入力を受け付けない
     });
+    const finder1Conf = {
+        animationWalkingFrames: 8,          // 歩行フレーム数
+    };
     const finderStyle = computed(() => {
         return {
             top: `${finder1.top}px`,
@@ -755,7 +758,7 @@
                 }
 
                 if (finder1.motion["xAxis"]!=0 || finder1.motion["yAxis"]!=0) {
-                    finder1.motionWait = 8;    // フレーム数を設定
+                    finder1.motionWait = finder1Conf.animationWalkingFrames;
                 }
             }
 

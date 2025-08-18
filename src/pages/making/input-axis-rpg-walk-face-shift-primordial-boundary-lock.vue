@@ -243,12 +243,13 @@
         return player1File.value * board1SquareWidth;       // スプライトのX座標
     });
     const player1Top = computed<number>(()=>{
-        return player1Rank.value * board1SquareHeight;       // スプライトのY座標
+        return player1Rank.value * board1SquareHeight;      // スプライトのY座標
     });
-    const player1Input = <Record<string, boolean>>{             // 入力
+    const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
-    const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
@@ -325,14 +326,14 @@
      */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;
+            player1MotionWait.value -= 1;           // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["xAxis"] = 0;    // クリアー
+                player1Motion.value["xAxis"] = 0;   // クリアー
                 player1Motion.value["yAxis"] = 0;
             }
             
-            // 入力（上下左右への移動）をモーションに変換
+            // キー入力をモーションに変換
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
@@ -359,7 +360,7 @@
                 }
 
                 if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
-                    player1MotionWait.value = 16;    // フレーム数を設定
+                    player1MotionWait.value = player1AnimationWalkingFrames;
                 }
 
                 // 移動処理

@@ -157,13 +157,14 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(2 * board1SquareWidth);       // スプライトのX座標
-    const player1Top = ref<number>(2 * board1SquareHeight);       // スプライトのY座標
+    const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
+    const player1Top = ref<number>(2 * board1SquareHeight);     // スプライトのY座標
     const player1Speed = ref<number>(2);                        // 移動速度
     const player1Input = <Record<string, boolean>>{             // 入力
         ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
-    const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CSSProperties>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
@@ -281,7 +282,7 @@
                 }
 
                 if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
-                    player1MotionWait.value = 16;    // フレーム数を設定
+                    player1MotionWait.value = player1AnimationWalkingFrames;
                 }
             }
 

@@ -475,6 +475,7 @@
         // アルファベット順
         ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
     });
+    const player1AnimationWalkingFrames = 8;                        // 歩行フレーム数
     const finder1MotionWait = ref<number>(0);                       // TODO: 入力キーごとにウェイトを用意したい
     const finder1Motion = ref<Record<string, number>>({             // 入力
         xAxis: 0,   // 負なら左、正なら右
@@ -689,7 +690,7 @@
                 }
 
                 if (finder1Motion.value["xAxis"]!=0 || finder1Motion.value["yAxis"]!=0) {
-                    finder1MotionWait.value = 8;    // フレーム数を設定
+                    finder1MotionWait.value = player1AnimationWalkingFrames;
                 }
             }
 

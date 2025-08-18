@@ -125,13 +125,14 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(1 * board1SquareWidth);       // スプライトのX座標
-    const player1Top = ref<number>(1 * board1SquareHeight);       // スプライトのY座標
+    const player1Left = ref<number>(1 * board1SquareWidth);     // スプライトのX座標
+    const player1Top = ref<number>(1 * board1SquareHeight);     // スプライトのY座標
     const player1Speed = ref<number>(2);                        // 移動速度
     const player1Input = <Record<string, boolean>>{             // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
-    const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
@@ -195,81 +196,80 @@
             }
         });
 
-        startGameLoop();
+        gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-
-
-        // ################
-        // # サブルーチン #
-        // ################
-
-        function startGameLoop() : void {
-            const update = () => {
-                // モーション・タイマー
-                player1MotionWait.value -= 1;
-
-                if (player1MotionWait.value==0) {
-                    player1Motion.value["xAxis"] = 0;    // クリアー
-                    player1Motion.value["yAxis"] = 0;
-                }
-                
-                // 入力（上下左右への移動）をモーションに変換
-                if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
-
-                    // 位置のリセット
-                    if (player1Input[" "]) {
-                        player1Top.value = 1 * board1SquareHeight;
-                        player1Left.value = 1 * board1SquareWidth;
-                    }
-
-                    // 移動
-                    if (player1Input.ArrowLeft) {
-                        player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
-                    }
-
-                    if (player1Input.ArrowRight) {
-                        player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
-                    }
-
-                    if (player1Input.ArrowUp) {
-                        player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
-                    }
-
-                    if (player1Input.ArrowDown) {
-                        player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
-                    }
-
-                    if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
-                        player1MotionWait.value = 16;    // フレーム数を設定
-                    }
-                }
-
-                // 移動処理
-                // 斜め方向の場合、上下を優先する。
-                if (player1Motion.value["xAxis"]==1) {   // 右
-                    player1Frames.value = player1SourceFrames["right"]
-                    player1Left.value += player1Speed.value;
-                } else if (player1Motion.value["xAxis"]==-1) {  // 左
-                    player1Frames.value = player1SourceFrames["left"]
-                    player1Left.value -= player1Speed.value;
-                }
-
-                if (player1Motion.value["yAxis"]==-1) {  // 上
-                    player1Frames.value = player1SourceFrames["up"]
-                    player1Top.value -= player1Speed.value;
-                } else if (player1Motion.value["yAxis"]==1) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]
-                    player1Top.value += player1Speed.value;
-                }
-
-                // 次のフレーム
-                requestAnimationFrame(update);
-            };
-
-            // 初回呼び出し
-            requestAnimationFrame(update);
-        }
     });
+
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    function gameLoopStart() : void {
+        const update = () => {
+            player1MotionWait.value -= 1;           // モーション・タイマー
+
+            if (player1MotionWait.value==0) {
+                player1Motion.value["xAxis"] = 0;   // クリアー
+                player1Motion.value["yAxis"] = 0;
+            }
+            
+            // キー入力をモーションに変換
+            if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+
+                // 位置のリセット
+                if (player1Input[" "]) {
+                    player1Top.value = 1 * board1SquareHeight;
+                    player1Left.value = 1 * board1SquareWidth;
+                }
+
+                // 移動
+                if (player1Input.ArrowLeft) {
+                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                }
+
+                if (player1Input.ArrowRight) {
+                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                }
+
+                if (player1Input.ArrowUp) {
+                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                }
+
+                if (player1Input.ArrowDown) {
+                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                }
+
+                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                    player1MotionWait.value = player1AnimationWalkingFrames;
+                }
+            }
+
+            // 移動処理
+            // 斜め方向の場合、上下を優先する。
+            if (player1Motion.value["xAxis"]==1) {                  // 右
+                player1Frames.value = player1SourceFrames["right"]  // 向きを変える
+                player1Left.value += player1Speed.value;
+            } else if (player1Motion.value["xAxis"]==-1) {          // 左
+                player1Frames.value = player1SourceFrames["left"]   // 向きを変える
+                player1Left.value -= player1Speed.value;
+            }
+
+            if (player1Motion.value["yAxis"]==-1) {                 // 上
+                player1Frames.value = player1SourceFrames["up"]     // 向きを変える
+                player1Top.value -= player1Speed.value;
+            } else if (player1Motion.value["yAxis"]==1) {           // 下
+                player1Frames.value = player1SourceFrames["down"]   // 向きを変える
+                player1Top.value += player1Speed.value;
+            }
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
 
 </script>
 

@@ -50,7 +50,7 @@
         // スプライト画像の読み込み
         sprite.src = "/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png";
         sprite.onload = () => {
-            startGameLoop();
+            gameLoopStart();
         };
 
         // キーボードイベント
@@ -64,49 +64,49 @@
                 keys[e.key] = false;
             }
         });
-
-        // ################
-        // # サブルーチン #
-        // ################
-
-        function startGameLoop() : void {
-            const update = () => {
-                // 移動処理
-                if (keys.ArrowUp) {
-                    y.value -= speed.value;
-                }
-
-                if (keys.ArrowDown) {
-                    y.value += speed.value;
-                }
-
-                if (keys.ArrowLeft) {
-                    x.value -= speed.value;
-                }
-
-                if (keys.ArrowRight) {
-                    x.value += speed.value;
-                }
-
-                // 画面外に出ないように制限
-                x.value = Math.max(0, Math.min(x.value, myCanvas.value?.width ?? 1 - 32));
-                y.value = Math.max(0, Math.min(y.value, myCanvas.value?.height ?? 1 - 32));
-
-                // 描画
-                if (ctx != null){
-                    ctx.clearRect(0, 0, myCanvas.value?.width ?? 1, myCanvas.value?.height ?? 1);
-                    ctx.drawImage(sprite, x.value, y.value);
-                }
-
-                // 次のフレーム
-                requestAnimationFrame(update);
-            };
-
-            // 初回呼び出し
-            requestAnimationFrame(update);
-        }
-
     });
+
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    function gameLoopStart() : void {
+        const update = () => {
+            // 移動処理
+            if (keys.ArrowUp) {
+                y.value -= speed.value;
+            }
+
+            if (keys.ArrowDown) {
+                y.value += speed.value;
+            }
+
+            if (keys.ArrowLeft) {
+                x.value -= speed.value;
+            }
+
+            if (keys.ArrowRight) {
+                x.value += speed.value;
+            }
+
+            // 画面外に出ないように制限
+            x.value = Math.max(0, Math.min(x.value, myCanvas.value?.width ?? 1 - 32));
+            y.value = Math.max(0, Math.min(y.value, myCanvas.value?.height ?? 1 - 32));
+
+            // 描画
+            if (ctx != null){
+                ctx.clearRect(0, 0, myCanvas.value?.width ?? 1, myCanvas.value?.height ?? 1);
+                ctx.drawImage(sprite, x.value, y.value);
+            }
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
 
 </script>
 
