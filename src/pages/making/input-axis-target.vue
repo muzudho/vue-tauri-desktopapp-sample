@@ -22,7 +22,7 @@
     <h4><span class="parent-header-lights-out">ターゲット　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/pages/input-axis-target"/>
+            pagePath="/making/input-axis-target"/>
     </section>
 
 </template>

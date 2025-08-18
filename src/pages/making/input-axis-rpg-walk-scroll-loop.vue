@@ -42,7 +42,7 @@
     <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">循環的スクロール　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/pages/input-axis-rpg-walk-scroll-loop"/>
+            pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
     </section>
 </template>
 
