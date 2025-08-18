@@ -135,6 +135,23 @@
     // 盤上に表示されるもの。
     //
 
+    /**
+     * 変換
+     * @param sq マス番号
+     * @returns [筋番号, 段番号]
+     */
+    function squareToFileRank(sq: number) : number[] {
+        // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+        const file = sq % board1Files;
+        const rank = Math.floor(sq / board1Ranks);
+
+        return [file, rank];
+    }
+
+    function fileRankToSquare(file: number, rank: number) : number {
+        return rank * board1Files + file;
+    }
+
     const boardContents1OriginFile = ref<number>(0);
     const boardContents1OriginRank = ref<number>(0);   // 0 番目のコンテンツの位置。
     const boardContents1Data = ref<string[]>([
@@ -144,13 +161,9 @@
         return (i:number)=>{
             let j = i;  // 初期位置から移動していないとき、 i のまま。
 
-            // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            let file = i % board1Files;
-            const rank = Math.floor(i / board1Ranks);
-
-            file = euclideanMod(file + 1, board1Files);
-
-            j = rank * board1Files + file;
+            let [file, rank] = squareToFileRank(i);            
+            file = euclideanMod(file - boardContents1OriginFile.value, board1Files); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            j = fileRankToSquare(file, rank);
 
             /*
             // プレイヤーが初期位置にいる場合の、マス位置。
