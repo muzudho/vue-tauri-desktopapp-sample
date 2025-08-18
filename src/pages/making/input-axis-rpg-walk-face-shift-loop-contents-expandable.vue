@@ -29,7 +29,7 @@
             thumbLabel="always"
             @click="focusRemove()" />
         <!-- フォーカスを外すためのダミー・ボタンです -->
-        <v-btn id="dammyButton">何もしないボタン</v-btn>
+        <v-btn ref="noopButton">何もしないボタン</v-btn>
 
         <div :style="board1Style">
 
@@ -73,9 +73,9 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
-    //
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
-    //
+
+    import { VBtn } from 'vuetify/components';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -105,6 +105,12 @@
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -382,11 +388,14 @@
 
 
     /**
-     * フォーカスを外します
+     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
      */
     function focusRemove() : void {
-        window.document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+        if (noopButton.value) {
+            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+        }
     }
+
 </script>
 
 <style scoped>

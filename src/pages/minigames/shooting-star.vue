@@ -34,7 +34,7 @@
             <v-btn @click="onGamePauseOrRestartButtonPushed()">{{ app.game.isPause ? "再開" : "一時停止" }}</v-btn>
 
             <!-- フォーカスを外すためのダミー・ボタンです -->
-            <v-btn id="dammyButton">何もしないボタン</v-btn>
+            <v-btn ref="noopButton">何もしないボタン</v-btn>
             <br/>
 
             <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
@@ -118,6 +118,7 @@
 
     import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
     import type { Ref } from 'vue'
+    import { VBtn } from 'vuetify/components';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -257,6 +258,12 @@
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -659,7 +666,7 @@
      * ［ゲームスタート］または［ゲーム終了］ボタン押下時。（状態により切り替わります）
      */
     function onGameStartOrEndButtonPushed() : void {
-        window.document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+        focusRemove();  // フォーカスを外す
 
         if(app.game.isPlaying) {    // ［ゲーム終了］ボタン
             // ゲームを終了させます
@@ -677,7 +684,7 @@
      * ［一時停止］または［再開］ボタン押下時。（状態により切り替わります）
      */
     function onGamePauseOrRestartButtonPushed() : void {
-        window.document.getElementById("dammyButton")?.focus();    // フォーカスを外すため
+        focusRemove();  // フォーカスを外す
 
         if(app.game.isPause) {
             stopwatch1.compo?.startTimer();  // タイマーをスタート
@@ -834,6 +841,16 @@
         }
 
         app.game.score += 100;
+    }
+
+
+    /**
+     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
+     */
+    function focusRemove() : void {
+        if (noopButton.value) {
+            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+        }
     }
 
 </script>

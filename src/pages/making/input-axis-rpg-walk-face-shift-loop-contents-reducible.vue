@@ -29,7 +29,7 @@
             thumbLabel="always"
             @click="focusRemove()" />
         <!-- フォーカスを外すためのダミー・ボタンです -->
-        <v-btn ref="dammyButton">何もしないボタン</v-btn>
+        <v-btn ref="noopButton">何もしないボタン</v-btn>
 
         <div :style="board1Style">
 
@@ -110,7 +110,7 @@
     // + オブジェクト　＞　何もしないボタン +
     // ++++++++++++++++++++++++++++++++++++++
 
-    const dammyButton = ref<InstanceType<typeof VBtn> | null>(null);
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -391,10 +391,11 @@
      * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
      */
     function focusRemove() : void {
-        if (dammyButton.value) {
-            dammyButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+        if (noopButton.value) {
+            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
         }
     }
+
 </script>
 
 <style scoped>
