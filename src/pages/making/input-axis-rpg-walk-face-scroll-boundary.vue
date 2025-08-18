@@ -361,13 +361,19 @@
             const v = contents1FileNum;             // 10
             const w = board1FileNum;                // 5
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
+
             const nonLoopingFile = rotV * v + (2 * w - rotH - (w - tileIndex)) % w;
+            const bottom10 = rotV * contents1FileNum;
+            return nonLoopingFile - bottom10;
+            //const g = tileIndex - rotV * board1FileNum;
+            //return cancelRank;
+            const rightX10 = rotH * contents1FileNum;
+            return rightX10;
 
             const horizontal = euclideanMod(rotH, v);
             const vertical = euclideanMod(rotV, contents1RankNum);
 
             const nonLoopingTileIndex = tileIndex + rotH;
-            return nonLoopingFile;
 
             const y = vertical * contents1FileNum + horizontal;
             return y;
