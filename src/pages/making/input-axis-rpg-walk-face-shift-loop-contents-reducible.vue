@@ -112,7 +112,7 @@
     // + オブジェクト　＞　何もしないボタン +
     // ++++++++++++++++++++++++++++++++++++++
 
-    const dammyButton = ref<HTMLButtonElement | null>(null);    
+    const dammyButton = ref<HTMLButtonElement | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
