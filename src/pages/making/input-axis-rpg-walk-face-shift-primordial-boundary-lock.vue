@@ -344,28 +344,7 @@
                     contents1OriginRank.value = 0;
                 }
 
-                // 移動
-                if (player1Input.ArrowUp) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
-                }
-
-                if (player1Input.ArrowRight) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
-                }
-
-                if (player1Input.ArrowDown) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
-                }
-
-                if (player1Input.ArrowLeft) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
-                }
-
-                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
-                    player1MotionWait.value = player1AnimationWalkingFrames;
-                }
-
-                // 移動処理０
+                // 移動処理フラグ
                 let contentsWillToTop = false;
                 let contentsWillToRight = false;
                 let contentsWillToBottom = false;
@@ -375,9 +354,34 @@
                 let playerWillToBottom = false;
                 let playerWillToLeft = false;
 
+                // 移動
+                if (player1Input.ArrowUp) {   // 上
+                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
+                    player1Motion.value["yAxis"] = commonSpriteMotionUp;
+                }
+
+                if (player1Input.ArrowRight) {  // 右
+                    player1Frames.value = player1SourceFrames["right"]    // 向きを変える
+                    player1Motion.value["xAxis"] = commonSpriteMotionRight;
+                }
+
+                if (player1Input.ArrowDown) {   // 下
+                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
+                    player1Motion.value["yAxis"] = commonSpriteMotionDown;
+                }
+
+                if (player1Input.ArrowLeft) { // 左
+                    player1Frames.value = player1SourceFrames["left"]    // 向きを変える
+                    player1Motion.value["xAxis"] = commonSpriteMotionLeft;
+                }
+
+                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                    player1MotionWait.value = player1AnimationWalkingFrames;
+                }
+
+                // 移動処理０
                 // 斜め方向の場合、上下を優先する。
                 if (player1Motion.value["xAxis"]==1) {   // 右
-                    player1Frames.value = player1SourceFrames["right"]    // 向きを変える
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1FileHome) {
@@ -441,8 +445,6 @@
                     }
 
                 } else if (player1Motion.value["xAxis"]==-1) {  // 左
-                    player1Frames.value = player1SourceFrames["left"]    // 向きを変える
-
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1FileHome) {
                         playerWillToLeft = true;
@@ -500,7 +502,6 @@
                 }
 
                 if (player1Motion.value["yAxis"]==-1) {  // 上
-                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1RankHome) {
@@ -555,7 +556,6 @@
                     }
 
                 } else if (player1Motion.value["yAxis"]==1) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1RankHome) {
