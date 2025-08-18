@@ -61,6 +61,7 @@
 
     @import './styles/warabenture.css';
 
+    /*
     :root {
         font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
         font-size: 16px;
@@ -76,6 +77,7 @@
         -moz-osx-font-smoothing: grayscale;
         -webkit-text-size-adjust: 100%;
     }
+    */
 
     /* スマホ向けスタイル (画面幅が768px以下) */
     @media screen and (max-width: 768px) {
@@ -85,6 +87,7 @@
     @media screen and (min-width: 769px) {
     }
 
+    /*
     .container {
         margin: 0;
         padding-top: 10vh;
@@ -104,13 +107,17 @@
     .logo.tauri:hover {
         filter: drop-shadow(0 0 2em #24c8db);
     }
+    */
 
+    /* margin-top: 0px !important; .v-row に margin: -12px; が付いてるので、全部調整しなおすのは難しい。 */
+    /*
     .row {
-        /* margin-top: 0px !important; .v-row に margin: -12px; が付いてるので、全部調整しなおすのは難しい。 */
         display: flex;
         justify-content: center;
     }
+    */
 
+    /*
     a {
         font-weight: 500;
         color: #646cff;
@@ -179,4 +186,6 @@
             background-color: #0f0f0f69;
         }
     }
+    */
+
 </style>
