@@ -144,14 +144,14 @@
      */
     function tileIndexToTileFileRank(tileIndex: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = tileIndex % contents1FileNum;
-        const rank = Math.floor(tileIndex / contents1RankNum);
+        const file = tileIndex % board1Files;
+        const rank = Math.floor(tileIndex / board1Ranks);
 
         return [file, rank];
     }
 
-    function contentsFileRankToContentsIndex(file: number, rank: number) : number {
-        return rank * contents1FileNum + file;
+    function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
+        return contentsRank * contents1FileNum + contentsFile;
     }
 
     const contents1OriginFile = ref<number>(0);    // 盤の左上隅のタイルは、盤コンテンツの左から何番目か。
@@ -164,8 +164,10 @@
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
-            const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            let contentsFile = tileFile - contents1OriginFile.value;
+            let contentsRank = tileRank - contents1OriginRank.value;
+            contentsFile = euclideanMod(contentsFile, contents1FileNum); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            contentsRank = euclideanMod(contentsRank, contents1RankNum); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
             // コンテンツ上の位置が示すデータを返す
