@@ -100,10 +100,10 @@
     //
 
     const commonZoom = 4;
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
-    const commonSpriteMotionRight = 1;
-    const commonSpriteMotionUp = -1;
-    const commonSpriteMotionDown = 1;
+    const commonSpriteMotionToTop = -1;  // モーション（motion）定数。上に移動する
+    const commonSpriteMotionToRight = 1;
+    const commonSpriteMotionToBottom = 1;
+    const commonSpriteMotionToLeft = -1;
 
 
     // ############################
@@ -230,6 +230,10 @@
             return  contents1Data.value[contentsIndex];
         };
     });    
+    const contents1Motion = ref<Record<string, number>>({  // モーションへの入力
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
+    });
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　プレイヤー +
@@ -286,8 +290,8 @@
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        xAxis: 0,   // 負なら左、正なら右
-        yAxis: 0,   // 負なら上、正なら下
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
     });
 
 
@@ -331,8 +335,11 @@
             player1MotionWait.value -= 1;           // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["xAxis"] = 0;   // クリアー
-                player1Motion.value["yAxis"] = 0;
+                // モーションのクリアー
+                contents1Motion.value["toRight"] = 0;
+                contents1Motion.value["toBottom"] = 0;
+                player1Motion.value["toRight"] = 0;
+                player1Motion.value["toBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -345,10 +352,6 @@
                 }
 
                 // 移動処理フラグ
-                let contentsWillToTop = false;
-                let contentsWillToRight = false;
-                let contentsWillToBottom = false;
-                let contentsWillToLeft = false;
                 let playerWillToTop = false;
                 let playerWillToRight = false;
                 let playerWillToBottom = false;
@@ -357,31 +360,31 @@
                 // 移動
                 if (player1Input.ArrowUp) {   // 上
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
-                    player1Motion.value["yAxis"] = commonSpriteMotionUp;
+                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;
                 }
 
                 if (player1Input.ArrowRight) {  // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
-                    player1Motion.value["xAxis"] = commonSpriteMotionRight;
+                    player1Motion.value["toRight"] = commonSpriteMotionToRight;
                 }
 
                 if (player1Input.ArrowDown) {   // 下
                     player1Frames.value = player1SourceFrames["down"]   // 向きを変える
-                    player1Motion.value["yAxis"] = commonSpriteMotionDown;
+                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                 }
 
                 if (player1Input.ArrowLeft) { // 左
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
-                    player1Motion.value["xAxis"] = commonSpriteMotionLeft;
+                    player1Motion.value["toRight"] = commonSpriteMotionToLeft;
                 }
 
-                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
 
-                // 移動処理０
+                // 移動処理Ｂ
                 // 斜め方向の場合、上下を優先する。
-                if (player1Motion.value["xAxis"]==1) {   // 右
+                if (player1Motion.value["toRight"]==1) {   // 右
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1FileHome) {
@@ -433,7 +436,7 @@
                         }
 
                         if (willShift) {
-                            contentsWillToLeft = true;
+                            contents1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
@@ -444,7 +447,7 @@
                         }
                     }
 
-                } else if (player1Motion.value["xAxis"]==-1) {  // 左
+                } else if (player1Motion.value["toRight"]==-1) {  // 左
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1FileHome) {
                         playerWillToLeft = true;
@@ -491,7 +494,7 @@
                         }
 
                         if (willShift) {
-                            contentsWillToRight = true;
+                            contents1Motion.value["toRight"] = commonSpriteMotionToRight;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0) {
@@ -501,7 +504,7 @@
                     }
                 }
 
-                if (player1Motion.value["yAxis"]==-1) {  // 上
+                if (player1Motion.value["toBottom"]==-1) {  // 上
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1RankHome) {
@@ -546,7 +549,7 @@
                         }
 
                         if (willShift) {
-                            contentsWillToBottom = true;
+                            contents1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0) {
@@ -555,7 +558,7 @@
                         }
                     }
 
-                } else if (player1Motion.value["yAxis"]==1) {   // 下
+                } else if (player1Motion.value["toBottom"]==1) {   // 下
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1RankHome) {
@@ -608,7 +611,7 @@
                         }
 
                         if (willShift) {
-                            contentsWillToTop = true;
+                            contents1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1Files - 1) {
@@ -618,21 +621,21 @@
                     }
                 }
 
-                // 移動処理１
-                if (contentsWillToTop) {
+                // 移動処理
+                if (contents1Motion.value["toBottom"] == commonSpriteMotionToTop) {
                     contents1OriginRank.value -= 1;     // 下
                 }
 
-                if (contentsWillToRight) {
+                if (contents1Motion.value["toRight"] == commonSpriteMotionToRight) {
                     contents1OriginFile.value += 1;
                 }
 
-                if (contentsWillToLeft) {
-                    contents1OriginFile.value -= 1;   // コンテンツの方を左へスクロールさせる
+                if (contents1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
+                    contents1OriginRank.value += 1;     // 上
                 }
 
-                if (contentsWillToBottom) {
-                    contents1OriginRank.value += 1;     // 上
+                if (contents1Motion.value["toRight"] == commonSpriteMotionToLeft) {
+                    contents1OriginFile.value -= 1;   // コンテンツの方を左へスクロールさせる
                 }
 
                 if (playerWillToTop) {
@@ -643,12 +646,12 @@
                     player1Left.value += 1 * board1SquareWidth;
                 }
 
-                if (playerWillToLeft) {
-                    player1Left.value -= 1 * board1SquareWidth;
-                }
-
                 if (playerWillToBottom) {
                     player1Top.value += 1 * board1SquareHeight;
+                }
+
+                if (playerWillToLeft) {
+                    player1Left.value -= 1 * board1SquareWidth;
                 }
             }
 
