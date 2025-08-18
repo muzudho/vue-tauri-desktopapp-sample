@@ -67,7 +67,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
     //
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
     //
@@ -107,6 +107,9 @@
     //
 
     const appBoundaryIsLock = ref<boolean>(false);    // バウンダリー・ロック状態を管理（true: ロックする, false: ロックしない）
+    watch(appBoundaryIsLock, (newValue: boolean)=>{
+        appBoundaryWalkingIsDisabled.value = !newValue;
+    });
     const appBoundaryWalkingIsLock = ref<boolean>(false);    // バウンダリー歩行・ロック状態を管理（true: ロックする, false: ロックしない）
     const appBoundaryWalkingIsDisabled = ref<boolean>(true);    // バウンダリー歩行・ロック状態を管理（true: 不活性にする, false: 活性にする）
 
