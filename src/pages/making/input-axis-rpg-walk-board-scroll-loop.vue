@@ -107,24 +107,25 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1Files = 5;
-    const board1Ranks = 5;
-    const board1Area = computed(()=> {  // 盤のマス数
-        return board1Files * board1Ranks;
-    });
-    const board1FilesWithMask = board1Files + 1
-    const board1RanksWithMask = board1Ranks + 1
+    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const board1Top = ref<number>(0);
     const board1Left = ref<number>(0);
+    const board1FileNum = 5;
+    const board1RankNum = 5;
+    const board1Area = computed(()=> {  // 盤のマス数
+        return board1FileNum * board1RankNum;
+    });
+    const board1FilesWithMask = board1FileNum + 1
+    const board1RanksWithMask = board1RankNum + 1
     const getSquareStyle = computed<
         (i:number)=>CSSProperties
     >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マス位置。
-            const homeLeft = (i % board1Files) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1Ranks) * board1SquareHeight;
-            const boardWidth = (board1Files * board1SquareWidth);
-            const boardHeight = (board1Ranks * board1SquareHeight);
+            const homeLeft = (i % board1FileNum) * board1SquareWidth;
+            const homeTop = Math.floor(i / board1RankNum) * board1SquareHeight;
+            const boardWidth = (board1FileNum * board1SquareWidth);
+            const boardHeight = (board1RankNum * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
@@ -148,8 +149,8 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * (board1Files + 1) * board1SquareWidth}px`,
-            height: `${commonZoom * (board1Ranks + 1) * board1SquareHeight}px`,
+            width: `${commonZoom * (board1FileNum + 1) * board1SquareWidth}px`,
+            height: `${commonZoom * (board1RankNum + 1) * board1SquareHeight}px`,
         };
     });
 
