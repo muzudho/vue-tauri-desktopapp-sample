@@ -51,8 +51,11 @@
                 style="image-rendering: pixelated;" /><br/>
             </div>
 
-        <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
-        <p>だから、数字がタイルの上を入れ替わっている（＝シフトしている）ぜ（＾▽＾）！</p>
+        <p>
+            👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げてみようぜ（＾▽＾）！<br/>
+            盤より狭いコンテンツを表示するのはめんどくさいから無しだぜ（＾～＾）
+        </p>
+
     </section>
 
     <br/>
@@ -172,19 +175,6 @@
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
         const file = sq % board1Files;
         const rank = Math.floor(sq / board1Ranks);
-
-        return [file, rank];
-    }
-
-    /**
-     * 変換
-     * @param sq マス番号
-     * @returns [筋番号, 段番号]
-     */
-    function squareToFileRankInContents(sq: number) : number[] {
-        // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = sq % contents1FileNum.value;
-        const rank = Math.floor(sq / contents1RankNum.value);
 
         return [file, rank];
     }
