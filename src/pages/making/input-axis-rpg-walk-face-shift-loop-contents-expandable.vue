@@ -174,18 +174,18 @@
 
     /**
      * 変換
-     * @param sq マス番号
+     * @param tileIndex マス番号
      * @returns [筋番号, 段番号]
      */
-    function squareToFileRankInTiles(sq: number) : number[] {
+    function tileIndexToTileFileRank(tileIndex: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = sq % board1Files;
-        const rank = Math.floor(sq / board1Ranks);
+        const file = tileIndex % board1Files;
+        const rank = Math.floor(tileIndex / board1Ranks);
 
         return [file, rank];
     }
 
-    function fileRankToSquareInContents(file: number, rank: number) : number {
+    function contentsFileRankToContentsIndex(file: number, rank: number) : number {
         return rank * contents1FileNum.value + file;
     }
 
@@ -199,10 +199,10 @@
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
-            let [tileFile, tileRank] = squareToFileRankInTiles(tileIndex);
+            let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
             const contentsFile = euclideanMod(tileFile - contents1OriginFile.value, contents1FileNum.value); // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
             const contentsRank = euclideanMod(tileRank - contents1OriginRank.value, contents1RankNum.value); // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-            const contentsIndex = fileRankToSquareInContents(contentsFile, contentsRank);
+            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
             // コンテンツ上の位置が示すデータを返す
             return  contents1Data.value[contentsIndex];
