@@ -1,9 +1,13 @@
 <template>
-    <the-header/>
 
-    <h3>上下左右に移動しようぜ！　＞　ＲＰＧの歩行グラフィック　＞　背景的スクロール</h3>
-    <section class="sec-3">
-        <p>👇キーボードの上下左右キーを押してくれだぜ（＾▽＾）！</p>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>背景的スクロール</h4>
+    <section class="sec-4">
+        <p>キーボード操作方法</p>
+        <ul>
+            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
+        </ul>
+        <br/>
+
         <div :style="boardMaskContainerStyle">
 
             <!--
@@ -54,19 +58,17 @@
         <p>元画像のタイルマップを表示：</p>
         <v-img
             src="/img/making/tilemap_floor.png"
-            :style="`zoom: ${zoom};`"
-            style="width:128px; height:128px; image-rendering: pixelated; border:dashed gray 4px;"/>
+            :style="`zoom: ${zoom}; width: ${cellWidth}px; height:${cellHeight}px;`"
+            style="image-rendering: pixelated; border:dashed gray 1px;"/>
         <p>：ここまで。</p>
 
     </section>
 
     <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">背景的スクロール　＞　</span>ソースコード</h4>
+    <section class="sec-4">
         <source-link/>
     </section>
-
-    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -87,8 +89,6 @@
     import SourceLink from '../../components/SourceLink.vue';
     import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TheFooter from './the-footer.vue';
-    import TheHeader from './the-header.vue';
 
 
     // ##############
@@ -209,8 +209,8 @@
     const boardMaskContainerStyle = computed(()=>{
         return {
             position: 'relative',
-            left: 0,
-            top: 0,
+            left: "0",
+            top: "0",
             width: `${zoom * tableColumnsWithMask * cellWidth}px`,
             height: `${zoom * tableRowsWithMask * cellHeight}px`,
         };
@@ -222,8 +222,8 @@
         
         return {
             position: 'relative',
-            left: 0,
-            top: 0,
+            left: "0",
+            top: "0",
             width: `${zoom * tableColumns * cellWidth}px`,
             height: `${zoom * tableRows * cellHeight}px`,
         };
@@ -273,28 +273,26 @@
     // ##########
 
     onMounted(() => {
-        document.addEventListener('keydown', (event: KeyboardEvent) => {
-            // 上下キーの場合
-            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
-                event.preventDefault();
-            }
-        });        
-
-        startGameLoop();
-        startTimer();
-
         // キーボードイベント
-        window.addEventListener('keydown', (e) => {
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // ［スペース］［↑］［↓］キーの場合
+            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
             if (p1Input.hasOwnProperty(e.key)) {
                 p1Input[e.key] = true;
             }
         });
-        window.addEventListener('keyup', (e) => {
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (p1Input.hasOwnProperty(e.key)) {
                 p1Input[e.key] = false;
             }
         });
+
+        startGameLoop();
+        startTimer();
 
 
         // ################

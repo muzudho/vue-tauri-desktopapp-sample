@@ -5,7 +5,6 @@
         <p>キーボード操作方法</p>
         <ul>
             <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
-            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
         </ul>
         <br/>
 
@@ -182,8 +181,8 @@
     const boardMaskContainerStyle = computed(()=>{
         return {
             position: 'relative',
-            left: 0,
-            top: 0,
+            left: "0",
+            top: "0",
             width: `${zoom * (tableColumns + 1) * cellWidth}px`,
             height: `${zoom * (tableRows + 1) * cellHeight}px`,
         };
