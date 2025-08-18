@@ -8,6 +8,12 @@
         </ul>
         <br/>
 
+        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
+        <stopwatch
+            ref="stopwatch1Ref"
+            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            style="display: none;" />
+
         <div :style="board1MaskContainerStyle">
 
             <!--
@@ -53,9 +59,9 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
-    //
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
-    //
+
+    import type { CSSProperties } from 'vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -64,8 +70,10 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
+    // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
-    import TileAnimation from '@/components/TileAnimation.vue';
+    import Stopwatch from '../../components/Stopwatch.vue';
+    import TileAnimation from '../../components/TileAnimation.vue';
 
 
     // ##########
@@ -90,8 +98,8 @@
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
+    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
-    const stopwatch1TimerId = ref<number | null>(null);   // タイマーのIDを保持
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -108,7 +116,9 @@
     const board1RanksWithMask = board1Ranks + 1
     const board1Top = ref<number>(0);
     const board1Left = ref<number>(0);
-    const getSquareStyle = computed(() => {
+    const getSquareStyle = computed<
+        (i:number)=>CSSProperties
+    >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マス位置。
             const homeLeft = (i % board1Files) * board1SquareWidth;
@@ -133,7 +143,7 @@
             };
         };
     });    
-    const board1MaskContainerStyle = computed(()=>{ // ボードとマスクを含んでいる領域のスタイル
+    const board1MaskContainerStyle = computed<CSSProperties>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
@@ -154,7 +164,7 @@
         ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);   // アニメーションのスローモーションの倍率の初期値
-    const player1Style = computed(() => ({
+    const player1Style = computed<CSSProperties>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
         zoom: commonZoom,
@@ -217,7 +227,7 @@
         });
 
         gameLoopStart();
-        stopwatch1Start();
+        stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
 
 
@@ -299,22 +309,6 @@
 
         // 初回呼び出し
         requestAnimationFrame(update);
-    }
-
-
-    /**
-     * ストップウォッチ１開始
-     */
-    function stopwatch1Start() : void {
-        // 既にタイマーが動いてたら何もしない
-        if (stopwatch1TimerId.value) return;
-
-        // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
-        const tick = () => {
-            stopwatch1Count.value += 1;
-            stopwatch1TimerId.value = requestAnimationFrame(tick);
-        };
-        stopwatch1TimerId.value = requestAnimationFrame(tick);
     }
 
 </script>

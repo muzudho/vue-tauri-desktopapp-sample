@@ -9,6 +9,12 @@
         </ul>
         <br/>
 
+        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
+        <stopwatch
+            ref="stopwatch1Ref"
+            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            style="display: none;" />
+
         <v-switch
             v-model="appBoundaryIsLock"
             :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
@@ -80,8 +86,10 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
+    // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
-    import TileAnimation from '@/components/TileAnimation.vue';
+    import Stopwatch from '../../components/Stopwatch.vue';
+    import TileAnimation from '../../components/TileAnimation.vue';
 
 
     // ##########
@@ -127,8 +135,8 @@
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
+    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
-    const stopwatch1TimerId = ref<number | null>(null);   // タイマーのIDを保持
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -304,7 +312,7 @@
         });
 
         gameLoopStart();
-        stopwatch1Start();
+        stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
 
 
@@ -605,22 +613,6 @@
 
         // 初回呼び出し
         requestAnimationFrame(update);
-    }
-
-
-    /**
-     * ストップウォッチ１開始
-     */
-    function stopwatch1Start() : void {
-        // 既にタイマーが動いてたら何もしない
-        if (stopwatch1TimerId.value) return;
-
-        // requestAnimationFrameで約16.67ms（60fps）ごとにカウントアップ
-        const tick = () => {
-            stopwatch1Count.value += 1;
-            stopwatch1TimerId.value = requestAnimationFrame(tick);
-        };
-        stopwatch1TimerId.value = requestAnimationFrame(tick);
     }
 
 
