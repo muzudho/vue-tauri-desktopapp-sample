@@ -3,15 +3,12 @@
 
     <h3>上下左右に移動しようぜ！</h3>
     <section class="sec-3">
-        <p>キーボード操作方法</p>
-        <ul>
-            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
-            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
-        </ul>
+        <p>カーソルキーでオブジェクトが動いてしまっていることがあるから、そのときはスペースキーを押して元の位置に戻してくれだぜ（＾▽＾）！</p>
         <br/>
     </section>
 
-    <input-axis-target/>
+    <input-axis-target/><br/>
+    <input-axis-rpg-walk/><br/>
 
     <br/>
     <h3><span style="font-size: small;">上下左右に移動しようぜ！　＞　</span>ソースコード</h3>
@@ -38,6 +35,7 @@
     //
 
     import SourceLink from '../../components/SourceLink.vue';
+    import inputAxisRpgWalk from './input-axis-rpg-walk.vue';
     import InputAxisTarget from './input-axis-target.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';

@@ -2,11 +2,20 @@
 
     <h4>ターゲット</h4>
     <section class="sec-4">
+        <p>キーボード操作方法</p>
+        <ul>
+            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
+            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
+        </ul>
+        <br/>
 
-        <!-- プレイヤー１（点線の枠） -->
-        <div
-            class="cursor"
-            :style="p1Style"></div>
+        <div :style="`width: ${cellWidth}px; height: ${cellHeight}px; background-color:lightpink;`">
+            <!-- プレイヤー１（点線の枠） -->
+            <div
+                class="cursor"
+                :style="p1Style"></div>
+        </div>
+
     </section>
 
     <br/>
@@ -39,6 +48,10 @@
     // # 共有データ #
     // ##############
 
+    // 盤データ
+    const cellWidth = 32;
+    const cellHeight = 32;
+
     // プレイヤー１（点線の枠）
     const p1Left = ref<number>(0);      // スプライトのX座標
     const p1Top = ref<number>(0);       // スプライトのY座標
@@ -57,6 +70,14 @@
     // ##########
 
     onMounted(() => {
+        window.document.addEventListener('keydown', (event: KeyboardEvent) => {
+            // 上下キーの場合
+            if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                event.preventDefault();
+            }
+        });        
+
         startGameLoop();
 
         // キーボードイベント
