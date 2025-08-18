@@ -9,6 +9,15 @@
         </ul>
         <br/>
 
+        <v-switch
+            v-model="appBoundaryIsLock"
+            :label="appBoundaryIsLock ? 'バウンダリー・ロック中' : 'バウンダリー・ロックをしていません'"
+            color="green"
+            inset
+            @click="focusRemove()" />
+        <!-- フォーカスを外すためのダミー・ボタンです -->
+        <v-btn ref="noopButton">何もしないボタン</v-btn>
+
         <div :style="board1Style">
 
             <!--
@@ -29,8 +38,8 @@
                 style="image-rendering: pixelated;" /><br/>
             </div>
 
-        <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
-        <p>だから、数字がタイルの上を入れ替わっている（＝シフトしている）ぜ（＾▽＾）！</p>
+        <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
+        <p>上下左右の端に画面外が見えないようにスクロール・ロックがかかるようになっているぜ（＾▽＾）！</p>
     </section>
 
     <br/>
@@ -51,6 +60,8 @@
     //
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
     //
+
+    import { VBtn } from 'vuetify/components';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -77,9 +88,25 @@
     const commonSpriteMotionDown = 1;
 
 
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appBoundaryIsLock = ref<boolean>(false);    // バウンダリー・ロック状態を管理（true: ロックする, false: ロックしない）
+
+
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -307,86 +334,100 @@
                 if (player1Motion.value["xAxis"]==1) {   // 右
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
 
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    //  Contents
-                    // +--------------+
-                    // |              |
-                    // |   Board      |
-                    // |  +-------+   |
-                    // |  |       |   |
-                    // c  b   p   |   |
-                    // |  |       |   |
-                    // |  +--bw---+   |
-                    // +-----cw-------+
-                    //
-                    //  b ... Origin x on board.
-                    //  c ... contents's x from B.
-                    //  p ... player character's x from B.
-                    //  bw ... Board width.
-                    //  cw ... Contents width.
-                    //
-                    //
-                    // +--------------+
-                    // |      +-------+
-                    // |      |       |
-                    // c      b   p   |
-                    // |      |       |
-                    // |      +--bw---+
-                    // +-----cw-------+
-                    //
-                    // cw - bw ... max margin.
-                    //
-                    // -c が max margin 以上なら、それ以上右に行くことはできない。
-                    //
+                    let isBoundaryLocked: boolean = false;
+                    if (appBoundaryIsLock.value) {
+                        // 見えている画面外が広がるような移動は禁止する：
+                        //
+                        //  Contents
+                        // +--------------+
+                        // |              |
+                        // |   Board      |
+                        // |  +-------+   |
+                        // |  |       |   |
+                        // c  b   p   |   |
+                        // |  |       |   |
+                        // |  +--bw---+   |
+                        // +-----cw-------+
+                        //
+                        //  b ... Origin x on board.
+                        //  c ... contents's x from B.
+                        //  p ... player character's x from B.
+                        //  bw ... Board width.
+                        //  cw ... Contents width.
+                        //
+                        //
+                        // +--------------+
+                        // |      +-------+
+                        // |      |       |
+                        // c      b   p   |
+                        // |      |       |
+                        // |      +--bw---+
+                        // +-----cw-------+
+                        //
+                        // cw - bw ... max margin.
+                        //
+                        // -c が max margin 以上なら、それ以上右に行くことはできない。
+                        //
 
-                    const bw = board1Files;
-                    const cw = contents1FileNum;
-                    const c = contents1OriginFile.value;
-                    const maxMargin = cw - bw;
+                        const bw = board1Files;
+                        const cw = contents1FileNum;
+                        const c = contents1OriginFile.value;
+                        const maxMargin = cw - bw;
 
-                    if (maxMargin > -c) {
+                        if (maxMargin <= -c) {
+                            isBoundaryLocked = true;
+                        }
+                    }
+
+                    if (!isBoundaryLocked) {
                         contents1OriginFile.value -= 1;   // コンテンツの方を右へスクロールさせる
                     }
 
                 } else if (player1Motion.value["xAxis"]==-1) {  // 左
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
 
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    //  Contents
-                    // +--------------+
-                    // |              |
-                    // |   Board      |
-                    // |  +-------+   |
-                    // |  |       |   |
-                    // c  b   p   |   |
-                    // |  |       |   |
-                    // |  +-------+   |
-                    // +--------------+
-                    //
-                    //  b ... Origin x on board.
-                    //  c ... contents's x from B.
-                    //  p ... player character's x from B.
-                    //
-                    //
-                    // +--------------+
-                    // |              |
-                    // c              |
-                    // |              |
-                    // +-------+      |
-                    // |       |      |
-                    // b   p   |      |
-                    // |       |      |
-                    // +-------+      |
-                    // +--------------+
-                    //
-                    // c が 0 以上なら、それ以上左に行くことはできない。
-                    //
+                    let isBoundaryLocked: boolean = false;
+                    if (appBoundaryIsLock.value) {
+                        // 見えている画面外が広がるような移動は禁止する：
+                        //
+                        //  Contents
+                        // +--------------+
+                        // |              |
+                        // |   Board      |
+                        // |  +-------+   |
+                        // |  |       |   |
+                        // c  b   p   |   |
+                        // |  |       |   |
+                        // |  +-------+   |
+                        // +--------------+
+                        //
+                        //  b ... Origin x on board.
+                        //  c ... contents's x from B.
+                        //  p ... player character's x from B.
+                        //
+                        //
+                        // +--------------+
+                        // |              |
+                        // c              |
+                        // |              |
+                        // +-------+      |
+                        // |       |      |
+                        // b   p   |      |
+                        // |       |      |
+                        // +-------+      |
+                        // +--------------+
+                        //
+                        // c が 0 以上なら、それ以上左に行くことはできない。
+                        //
 
-                    const c = contents1OriginFile.value;
+                        const c = contents1OriginFile.value;
 
-                    if (c < 0) {
+                        if (c >= 0) {
+                            isBoundaryLocked = true;
+                        }
+                    }
+
+                    if (!isBoundaryLocked) {
                         contents1OriginFile.value += 1;     // 左
                     }
                 }
@@ -394,84 +435,98 @@
                 if (player1Motion.value["yAxis"]==-1) {  // 上
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
 
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    //  Contents
-                    // +------c-------+
-                    // |              |
-                    // |   Board      |
-                    // |  +---b---+   |
-                    // |  |       |   |
-                    // |  |   p   |   |
-                    // |  |       |   |
-                    // |  +-------+   |
-                    // +--------------+
-                    //
-                    //  b ... Origin x on board.
-                    //  c ... contents's x from B.
-                    //  p ... player character's x from B.
-                    //
-                    //
-                    // +--+---b---+-c-+
-                    // |  |       |   |
-                    // |  |   p   |   |
-                    // |  |       |   |
-                    // |  +-------+   |
-                    // |              |
-                    // +--------------+
-                    //
-                    // c が 0 以上なら、それ以上上に行くことはできない。
-                    //
+                    let isBoundaryLocked: boolean = false;
+                    if (appBoundaryIsLock.value) {
+                        // 見えている画面外が広がるような移動は禁止する：
+                        //
+                        //  Contents
+                        // +------c-------+
+                        // |              |
+                        // |   Board      |
+                        // |  +---b---+   |
+                        // |  |       |   |
+                        // |  |   p   |   |
+                        // |  |       |   |
+                        // |  +-------+   |
+                        // +--------------+
+                        //
+                        //  b ... Origin x on board.
+                        //  c ... contents's x from B.
+                        //  p ... player character's x from B.
+                        //
+                        //
+                        // +--+---b---+-c-+
+                        // |  |       |   |
+                        // |  |   p   |   |
+                        // |  |       |   |
+                        // |  +-------+   |
+                        // |              |
+                        // +--------------+
+                        //
+                        // c が 0 以上なら、それ以上上に行くことはできない。
+                        //
 
-                    const c = contents1OriginRank.value;
+                        const c = contents1OriginRank.value;
 
-                    if (c < 0) {
+                        if (c >= 0) {
+                            isBoundaryLocked = true;
+                        }
+                    }
+
+                    if (!isBoundaryLocked) {
                         contents1OriginRank.value += 1;     // 上
                     }
 
                 } else if (player1Motion.value["yAxis"]==1) {   // 下
                     player1Frames.value = player1SourceFrames["down"]   // 向きを変える
 
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    //  Contents
-                    // +------c-------+
-                    // |              |
-                    // |   Board      |
-                    // |  +---b---+   |
-                    // |  |       |   |
-                    // ch bh  p   |   |
-                    // |  |       |   |
-                    // |  +-------+   |
-                    // +--------------+
-                    //
-                    //  b ... Origin x on board.
-                    //  c ... contents's x from B.
-                    //  p ... player character's x from B.
-                    //  bh ... Board height.
-                    //  ch ... Contents height.
-                    //
-                    //
-                    // +------c-------+
-                    // |              |
-                    // |              |
-                    // |  +---b---+   |
-                    // |  |       |   |
-                    // ch bh  p   |   |
-                    // |  |       |   |
-                    // +--+-------+---+
-                    //
-                    // ch - bh ... max margin.
-                    //
-                    // -c が max margin 以上なら、それ以上下に行くことはできない。
-                    //
+                    let isBoundaryLocked: boolean = false;
+                    if (appBoundaryIsLock.value) {
+                        // 見えている画面外が広がるような移動は禁止する：
+                        //
+                        //  Contents
+                        // +------c-------+
+                        // |              |
+                        // |   Board      |
+                        // |  +---b---+   |
+                        // |  |       |   |
+                        // ch bh  p   |   |
+                        // |  |       |   |
+                        // |  +-------+   |
+                        // +--------------+
+                        //
+                        //  b ... Origin x on board.
+                        //  c ... contents's x from B.
+                        //  p ... player character's x from B.
+                        //  bh ... Board height.
+                        //  ch ... Contents height.
+                        //
+                        //
+                        // +------c-------+
+                        // |              |
+                        // |              |
+                        // |  +---b---+   |
+                        // |  |       |   |
+                        // ch bh  p   |   |
+                        // |  |       |   |
+                        // +--+-------+---+
+                        //
+                        // ch - bh ... max margin.
+                        //
+                        // -c が max margin 以上なら、それ以上下に行くことはできない。
+                        //
 
-                    const bh = board1Ranks;
-                    const ch = contents1RankNum;
-                    const c = contents1OriginRank.value;
-                    const maxMargin = ch - bh;
+                        const bh = board1Ranks;
+                        const ch = contents1RankNum;
+                        const c = contents1OriginRank.value;
+                        const maxMargin = ch - bh;
 
-                    if (maxMargin > -c) {
+                        if (maxMargin <= -c) {
+                             isBoundaryLocked = true;
+                        }
+                    }
+
+                    if (!isBoundaryLocked) {
                         contents1OriginRank.value -= 1;     // 下
                     }
                 }
@@ -499,6 +554,16 @@
             stopwatch1TimerId.value = requestAnimationFrame(tick);
         };
         stopwatch1TimerId.value = requestAnimationFrame(tick);
+    }
+
+
+    /**
+     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
+     */
+    function focusRemove() : void {
+        if (noopButton.value) {
+            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+        }
     }
 
 </script>
