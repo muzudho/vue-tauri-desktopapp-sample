@@ -231,6 +231,22 @@
     }
     const getFaceNumber = computed(() => {
         return (tileIndex: number)=>{
+
+            const gw = board1FileNum; // 幅 (例: 5)
+            const gh = board1Area.value / gw; // 高さ (例: 5)
+            const grotH = player1FileDelta.value; // 水平シフト
+            const grotV = player1RankDelta.value; // 垂直シフト
+
+            // 補正された列
+            const gfixCol = euclideanMod(tileIndex % gw - grotH, gw);
+            // 補正された行
+            const gfixRow = euclideanMod(Math.floor(tileIndex / gw) - grotV, gh);
+            // 補正されたインデックス
+            const gfixIndex = gfixRow * gw + gfixCol;
+
+            return gfixIndex;
+
+
             // タイルのインデックス x を、コンテンツ上のインデックス y へ変換：
             //
             // ひとまず、水平方向だけを考えます。
@@ -451,16 +467,44 @@
             // | 0 1 2 3 4 |
             // +-----------+
             // 
-            const fixFile = euclideanMod(2 * w - rotH - (w - tileIndex), w);
+            //const fixFile = euclideanMod(2 * w - rotH - (w - tileIndex), w);  // Ok だが長い。
+            const fixFile = euclideanMod(tileIndex - rotH + w, w);  // これで Ok.
             //return fixFile;
-            const fixFile2 = fixFile + Math.floor(tileIndex / w) * w;
+
+            //
+            // 以下の形を作る。 fix 形。
+            // +----------------+
+            // |  0  1  2  3  4 |
+            // |  5  6  7  8  9 |
+            // | 10 11 12 13 14 |
+            // | 15 16 17 18 19 |
+            // | 20 21 22 23 24 |
+            // +----------------+
+            //
+            const fixFile2 = fixFile + Math.floor(tileIndex / w) * w; // Ok.
+            //const fixFile2 = Math.floor(tileIndex / w) * w + euclideanMod(tileIndex - rotH, w);
             //return fixFile2;    // 横方向はこれでOk.縦はローテーションしてしまう。
             
 
             //const fixRank = (tileIndex-(6*rotV)-1)%(2*v+1) + 1; //+tileFile
             //const fixRank = euclideanMod(tileIndex-(v*rotV), 2*v); //+tileFile
             //const fixRank = euclideanMod(tileIndex-(v*rotV), board1RankNum * board1FileNum); //+tileFile
-            const fixRank = euclideanMod(tileIndex-(w*rotV), 25);   // 縦方向はこれでOK.横はローテーションしてしまう。
+            const fixRank = euclideanMod(tileIndex-(w*rotV), board1Area.value);   // 縦方向はこれでOK.横はローテーションしてしまう。
+
+
+            //
+            // 上下左右に移動してもローテーションしない以下のような表を作る
+            // +-----------+
+            // | 0 0 0 0 0 |
+            // | 1 1 1 1 1 |
+            // | 2 2 2 2 2 |
+            // | 3 3 3 3 3 |
+            // | 4 4 4 4 4 |
+            // +-----------+
+            // 
+            //const fixRank = euclideanMod(Math.floor(tileIndex / w) - rotV, board1RankNum);
+
+
             return fixRank;
 
             // const fixRank = euclideanMod(2 * w - rotV - (w - tileIndex), v);
