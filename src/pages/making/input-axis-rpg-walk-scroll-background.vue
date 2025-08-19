@@ -87,7 +87,7 @@
     import { computed, onMounted, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
-    import { CSSProperties } from 'vue';
+    import type { CSSProperties } from 'csstype';
 
     // ++++++++++++++++++
     // + コンポーネント +

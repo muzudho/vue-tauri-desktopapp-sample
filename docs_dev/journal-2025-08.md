@@ -374,3 +374,24 @@ pnpm add vue-router@4
 
 📖 [jsfxr](https://sfxr.me/)  
 
+
+
+## [2025-08-19_Tue]
+
+```ts
+import { CSSProperties } from 'vue';
+```
+
+👆という書き方は Tauri 用であって、 Nuxt にはないから、  
+
+```shell
+pnpm install csstype
+```
+
+として、  
+
+```ts
+import { CSSProperties } from 'csstype';
+```
+
+と書き直す。  

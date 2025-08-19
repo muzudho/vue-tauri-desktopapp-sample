@@ -57,7 +57,7 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
-    import type { CSSProperties } from 'vue';
+    import type { CSSProperties } from 'csstype';
 
     // ++++++++++++++++++
     // + コンポーネント +
