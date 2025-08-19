@@ -232,21 +232,40 @@
     const getFaceNumber = computed(() => {
         return (tileIndex: number)=>{
 
-            const gw = board1FileNum; // 幅 (例: 5)
-            const gh = board1Area.value / gw; // 高さ (例: 5)
-            const grotH = player1FileDelta.value; // 水平シフト
-            const grotV = player1RankDelta.value; // 垂直シフト
+            //
+            // 例えば、盤がヨコ、タテ 5×5 のとき、
+            const bw = board1FileNum; // 幅 (例: 5)
+            const bh = board1RankNum; // 高さ (例: 5)
+            //
+            // タイルのインデックスは下図のように振られるようにしたい。
+            // +----------------+
+            // |  0  1  2  3  4 |
+            // |  5  6  7  8  9 |
+            // | 10 11 12 13 14 |
+            // | 15 16 17 18 19 |
+            // | 20 21 22 23 24 |
+            // +----------------+
+            //
+            // とりあえず、上下左右について、移動量は以下の変数に格納しているとする。
+            const rotH = player1FileDelta.value; // 水平シフト
+            const rotV = player1RankDelta.value; // 垂直シフト
 
             // 補正された列
-            const gfixCol = euclideanMod(tileIndex % gw - grotH, gw);
+            const tileFile = tileIndex % bw;
+            const nextTileFile = tileFile - rotH;
+            const fixTileFile = euclideanMod(nextTileFile, bw);
+
             // 補正された行
-            const gfixRow = euclideanMod(Math.floor(tileIndex / gw) - grotV, gh);
+            const tileRank = Math.floor(tileIndex / bw);
+            const nextTileRank = tileRank - rotV;
+            const fixTileRank = euclideanMod(nextTileRank, bh);
+
             // 補正されたインデックス
-            const gfixIndex = gfixRow * gw + gfixCol;
+            const fixTileIndex = fixTileRank * bw + fixTileFile;
 
-            return gfixIndex;
+            return fixTileIndex;
 
-
+            /*
             // タイルのインデックス x を、コンテンツ上のインデックス y へ変換：
             //
             // ひとまず、水平方向だけを考えます。
@@ -510,25 +529,21 @@
             // const fixRank = euclideanMod(2 * w - rotV - (w - tileIndex), v);
             // return fixRank;
 
-            /*
-            const bottomMinus10 = -rotV * contents1FileNum;
-            //return bottomMinus10;
-            //return fixFile + bottomMinus10;
-            //const g = tileIndex - rotV * board1FileNum;
-            //return cancelRank;
-            const rightX10 = rotH * contents1FileNum;
-            return rightX10;
+            // const bottomMinus10 = -rotV * contents1FileNum;
+            // //return bottomMinus10;
+            // //return fixFile + bottomMinus10;
+            // //const g = tileIndex - rotV * board1FileNum;
+            // //return cancelRank;
+            // const rightX10 = rotH * contents1FileNum;
+            // return rightX10;
 
-            const horizontal = euclideanMod(rotH, v);
-            const vertical = euclideanMod(rotV, contents1RankNum);
+            // const horizontal = euclideanMod(rotH, v);
+            // const vertical = euclideanMod(rotV, contents1RankNum);
 
-            const nonLoopingTileIndex = tileIndex + rotH;
+            // const nonLoopingTileIndex = tileIndex + rotH;
 
-            const y = vertical * contents1FileNum + horizontal;
-            return y;
-            */
-
-            /*
+            // const y = vertical * contents1FileNum + horizontal;
+            // return y;
 
 
             // const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
@@ -542,7 +557,7 @@
             // // コンテンツ上の位置が示すデータを返す
             // const h = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             //return  h; //contents1Data.value[h];
-            return  h;
+            //return  h;
             */
         };
     });    
