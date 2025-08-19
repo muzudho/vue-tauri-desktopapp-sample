@@ -206,8 +206,8 @@
         return contentsRank * contents1FileNum + contentsFile;
     }
 
-    const contents1OriginFile = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
-    const contents1OriginRank = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
+    const contents1File = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
+    const contents1Rank = ref<number>(-3);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
     const contents1Data = ref<string[]>([]);
     for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
         contents1Data.value.push(i.toString().padStart(2, "0"));
@@ -217,8 +217,8 @@
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
             // タイル上のインデックスを、コンテンツ上のインデックスへ変換：
-            const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            const contentsFile = tileFile - contents1File.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+            const contentsRank = tileRank - contents1Rank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
 
             // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
             if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
@@ -348,8 +348,10 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    contents1OriginFile.value = 0;
-                    contents1OriginRank.value = 0;
+                    contents1File.value = 0;
+                    contents1Rank.value = 0;
+                    player1Left.value = player1FileHome * board1SquareWidth;
+                    player1Top.value = player1RankHome * board1SquareHeight;
                 }
 
                 // 移動
@@ -398,7 +400,7 @@
 
                             const bw = board1Files;
                             const cw = contents1FileNum;
-                            const c = contents1OriginFile.value;
+                            const c = contents1File.value;
                             const maxMargin = cw - bw;
 
                             if (maxMargin <= -c) {
@@ -460,7 +462,7 @@
                             // c が 0 以上なら、それ以上左に行くことはできない。
                             //
 
-                            const c = contents1OriginFile.value;
+                            const c = contents1File.value;
 
                             if (c >= 0) {
                                 willShift = false;
@@ -516,7 +518,7 @@
                             // c が 0 以上なら、それ以上上に行くことはできない。
                             //
 
-                            const c = contents1OriginRank.value;
+                            const c = contents1Rank.value;
 
                             if (c >= 0) {
                                 willShift = false;
@@ -579,7 +581,7 @@
 
                             const bh = board1Ranks;
                             const ch = contents1RankNum;
-                            const c = contents1OriginRank.value;
+                            const c = contents1Rank.value;
                             const maxMargin = ch - bh;
 
                             if (maxMargin <= -c) {
@@ -602,15 +604,15 @@
             // 移動処理
             if (player1MotionWait.value <= 0) {
                 if (contents1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                    contents1OriginRank.value -= 1;     // 下
+                    contents1Rank.value -= 1;     // 下
                 } else if (contents1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                    contents1OriginRank.value += 1;     // 上
+                    contents1Rank.value += 1;     // 上
                 }
 
                 if (contents1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                    contents1OriginFile.value += 1;
+                    contents1File.value += 1;
                 } else if (contents1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                    contents1OriginFile.value -= 1;   // コンテンツの方を左へスクロールさせる
+                    contents1File.value -= 1;   // コンテンツの方を左へスクロールさせる
                 }
             }
 

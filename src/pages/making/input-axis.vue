@@ -15,7 +15,9 @@
     <input-axis-rpg-walk-board-scroll-loop/><br/>
     <input-axis-rpg-walk-face-shift-primordial/><br/>
     <input-axis-rpg-walk-face-shift-boundary/><br/>
+    <!--
     <input-axis-rpg-walk-face-scroll-boundary/><br/>
+    -->
     <input-axis-rpg-walk-face-shift-loop/><br/>
     <input-axis-rpg-walk-face-shift-contents-size-variable/><br/>
     <input-axis-rpg-walk-scroll-background/><br/>

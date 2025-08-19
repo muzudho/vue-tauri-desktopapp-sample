@@ -223,8 +223,8 @@
     // コンテンツはシフトするので、 File, Rank しかない。 Left, Top は無い。
     const contents1FileInit = -3;
     const contents1RankInit = -3;
-    const contents1OriginFile = ref<number>(contents1FileInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
-    const contents1OriginRank = ref<number>(contents1RankInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
+    const contents1File = ref<number>(contents1FileInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
+    const contents1Rank = ref<number>(contents1RankInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
     const contents1Data = ref<string[]>([]);
     for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
         contents1Data.value.push(i.toString().padStart(2, "0"));
@@ -470,8 +470,8 @@
                 if (player1Input[" "]) {
                     board1Left.value = 0;
                     board1Top.value = 0;
-                    contents1OriginFile.value = contents1FileInit;
-                    contents1OriginRank.value = contents1RankInit;
+                    contents1File.value = contents1FileInit;
+                    contents1Rank.value = contents1RankInit;
                     player1Left.value = player1FileHome * board1SquareWidth;
                     player1Top.value = player1RankHome * board1SquareHeight;
                     player1FileDelta.value = 0;
@@ -491,6 +491,7 @@
                         if (appBoundaryIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
+                            // TODO 🌟 コンテンツは動かない、プレイヤーの移動量を見ること。
                             //  Contents
                             // +--------------+
                             // |              |
@@ -524,8 +525,9 @@
 
                             const bw = board1FileNum;
                             const cw = contents1FileNum;
-                            const c = contents1OriginFile.value;
+                            const c = contents1File.value;    // これは動かない
                             const maxMargin = cw - bw;
+                            console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin} maxMargin <= -c:${maxMargin <= -c}`);
 
                             if (maxMargin <= -c) {
                                 willShift = false;
@@ -587,7 +589,7 @@
                             // c が 0 以上なら、それ以上左に行くことはできない。
                             //
 
-                            const c = contents1OriginFile.value;
+                            const c = contents1File.value;
 
                             if (c >= 0) {
                                 willShift = false;
@@ -644,7 +646,7 @@
                             // c が 0 以上なら、それ以上上に行くことはできない。
                             //
 
-                            const c = contents1OriginRank.value;
+                            const c = contents1Rank.value;
 
                             if (c >= 0) {
                                 willShift = false;
@@ -708,7 +710,7 @@
 
                             const bh = board1RankNum;
                             const ch = contents1RankNum;
-                            const c = contents1OriginRank.value;
+                            const c = contents1Rank.value;
                             const maxMargin = ch - bh;
 
                             if (maxMargin <= -c) {
@@ -729,26 +731,27 @@
                 }
             }
 
+            /*
             // 移動を処理（シフト）
             // FIXME: 🌟 タイルがローテーションしていることに注意。
             // タイルがローテーションするのだから、コンテンツをシフトさせなくていいが、
             // ローテーションしたタイルをどうするか？
-            /*
+            //*
             if (player1MotionWait.value <= 0) {
                 // シフト
                 if (contents1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                    contents1OriginRank.value -= 1;     // 下
+                    contents1Rank.value -= 1;     // 下
                 } else if (contents1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                    contents1OriginRank.value += 1;     // 上
+                    contents1Rank.value += 1;     // 上
                 }
 
                 if (contents1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                    contents1OriginFile.value += 1;
+                    contents1File.value += 1;
                 } else if (contents1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                    contents1OriginFile.value -= 1;
+                    contents1File.value -= 1;
                 }
             }
-            */
+            //*/
 
             // スクロール
             // 盤の方をスクロールさせる
@@ -792,7 +795,7 @@
                     } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
                         player1FileDelta.value -= 1;
                     }
-                    console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
+                    //console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
                 }
 
                 if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || contents1Motion.value["toRight"]!=0 || contents1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
