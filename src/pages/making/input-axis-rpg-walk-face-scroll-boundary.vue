@@ -229,9 +229,59 @@
     for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
         contents1Data.value.push(i.toString().padStart(2, "0"));
     }
-    const getFaceNumber = computed(() => {
-        return (tileIndex: number)=>{
 
+    /**
+     * 👇 例えば以下のような 5x5 の盤があり、タイルにインデックスが振られているとき、
+     * 
+     *   +----------------+
+     *   |  0  1  2  3  4 |
+     *   |  5  6  7  8  9 |
+     *   | 10 11 12 13 14 |
+     *   | 15 16 17 18 19 |
+     *   | 20 21 22 23 24 |
+     *   +----------------+
+     *
+     * 👇 プレイヤーが右に移動すると、タイルは以下のようにラップアラウンド（wrap around）する。
+     *
+     *   +-------------+ +----+
+     *   |  1  2  3  4 | |  0 |
+     *   |  6  7  8  9 | |  5 |
+     *   | 11 12 13 14 | | 10 |
+     *   | 16 17 18 19 | | 15 |
+     *   | 21 22 23 24 | | 20 |
+     *   +-------------+ +----+
+     *
+     * 👇 同様に、同時に下方向に移動（右下への移動）であった場合、以下のようになるから、
+     *
+     *   +-------------+ +----+
+     *   |  6  7  8  9 | |  5 |
+     *   | 11 12 13 14 | | 10 |
+     *   | 16 17 18 19 | | 15 |
+     *   | 21 22 23 24 | | 20 |
+     *   +-------------+ +----+
+     *   +-------------+ +----+
+     *   |  1  2  3  4 | |  0 |
+     *   +-------------+ +----+
+     *
+     * 👇 元のテーブルに比べて、インデックスがずれてしまう。
+     *
+     *   +----------------+
+     *   |  6  7  8  9  5 |
+     *   | 11 12 13 14 10 |
+     *   | 16 17 18 19 15 |
+     *   | 21 22 23 24 20 |
+     *   |  1  2  3  4  0 |
+     *   +----------------+
+     *
+     * 👇 しかし、移動量から、元のインデックスに紐づけよう、というものだ。
+     * 
+     *   6→ 0   7→ 1   8→ 2   9→ 3  10→ 4
+     *  11→ 5  12→ 6  13→ 7  14→ 8  15→ 9
+     *  16→10  17→11  18→12  19→13  15→14
+     *  21→15  22→16  23→17  24→18  20→19
+     *   1→20   2→21   3→22   4→23   0→24
+     */
+    function getFixTileIndex(tileIndex: number) : number {
             //
             // 例えば、盤がヨコ、タテ 5×5 のとき、
             const bw = board1FileNum; // 幅 (例: 5)
@@ -250,315 +300,38 @@
             const rotH = player1FileDelta.value; // 水平シフト
             const rotV = player1RankDelta.value; // 垂直シフト
 
+            // 移動量を、逆方向に使うことで、巻き戻したときの列、行位置を割り出します。
             // 補正された列
             const tileFile = tileIndex % bw;
-            const nextTileFile = tileFile - rotH;
-            const fixTileFile = euclideanMod(nextTileFile, bw);
+            const previousTileFile = tileFile - rotH;
+            const fixTileFile = euclideanMod(previousTileFile, bw);
 
             // 補正された行
             const tileRank = Math.floor(tileIndex / bw);
-            const nextTileRank = tileRank - rotV;
-            const fixTileRank = euclideanMod(nextTileRank, bh);
+            const previousTileRank = tileRank - rotV;
+            const fixTileRank = euclideanMod(previousTileRank, bh);
 
-            // 補正されたインデックス
+            // 列と行を、インデックスに変換します。
             const fixTileIndex = fixTileRank * bw + fixTileFile;
-
             return fixTileIndex;
+    }
 
-            /*
-            // タイルのインデックス x を、コンテンツ上のインデックス y へ変換：
-            //
-            // ひとまず、水平方向だけを考えます。
-            //
-            //  Tile          Contents             rot=0    ※回転0回目
-            // +----------+  +-------------------+ tile[x]:
-            // |  A  B  C |  |  1  2  3  4  5  6 |   A=1 B=2 C=3 ...
-            // +----------+  +-------------------+
-            //
-            // Contents の横幅を v （例えば 6）とする：
-            //
-            //  Tile index                        Contents index                       rot=0
-            // +---------------------------+     +-----------------------------------+ tile[x]:
-            // |                           |     |                                   |   A= 1  B= 2  C= 3
-            // |  tileRank * w + tileFile  |     |  contentsRank * v + contentsFile  |
-            // |                           |     |                                   |
-            // +---------------------------+     +-----------------------------------+
-            //
-            // プレイヤーが右に１歩移動したとき：
-            //
-            //  Tile          rot=1
-            // +----------+   tile[x]:
-            // |  B  C  A |     A=4 B=2 C=3 ...
-            // +----------+  
-            //                rot=2
-            // +----------+   tile[x]:
-            // |  C  A  B |     A=4 B=5 C=3 ...
-            // +----------+  
-            //                rot=3
-            // +----------+   tile[x]:
-            // |  A  B  C |     A=4 B=5 C=6 ...
-            // +----------+  
-            //                rot=4
-            // +----------+   tile[x]:
-            // |  B  C  A |     A=7 B=5 C=6 ...
-            // +----------+  
-            //
-            // 👆 端でローテーションしたタイルだけ、指すコンテンツが変わるというのが、難しい。
-            // 仮に無限サイズの盤と仮定して、表にすると：
-            //
-            //   rot   0  1  2  ||  3  4  5  ||  6   7   8  ||   9  10  11
-            //   j     0  0  0  ||  1  1  1  ||  2   2   2  ||   3   3   3
-            //   k     0  1  2  ||  0  1  2  ||  0   1   2  ||   0   1   2
-            // -----------------++-----------++-------------++--------------
-            // x y:             ||           ||             ||
-            // 0   A   1  4  4  ||  4  7  7  ||  7  10  10  ||  10  13  13
-            // 1   B   2  2  5  ||  5  5  8  ||  8   8  11  ||  11  11  14
-            // 2   C   3  3  3  ||  6  6  6  ||  9   9   9  ||  12  12  12
-            //
-            // j = floor(rot / 3)
-            // k = rot mod 3
-            //
-            // とりあえず、 y から rot を引いてみる。
-            //
-            // rot         0  1  2  ||  3  4  5  ||  6   7   8  ||   9  10  11
-            // ---------------------++-----------++-------------++--------------
-            // y-rot:               ||           ||             ||
-            //   A-rot     1  3  2  ||  1  3  2  ||  1   3   2  ||   1   3   2
-            //   B-rot     2  1  3  ||  2  1  3  ||  2   1   3  ||   2   1   3
-            //   C-rot     3  2  1  ||  3  2  1  ||  3   2   1  ||   3   2   1
-            //
-            // グー・チョキ・パーで 勝:3、負:2、分:1 のとき出る表ではないか？
-            //
-            //        | 相手               |
-            //        | グー | チョ | パー |
-            // -------+------+------+------+
-            // グー   |    1 |    3 |    2 |
-            // チョキ |    2 |    1 |    3 |
-            // パー   |    3 |    2 |    1 |
-            //
-            // 循環してるから当たり前か。じゃんけんは拳が３つだが、４つ以上でも考え方は同じ。
-            // ... 3, 2, 1 といった降順の数列が並んでいるだけ。
-            //
-            // もうちょっと加工する。 y から rot+1 を引いてみる。
-            //
-            //    rot                 0  1  2  ||  3  4  5  ||  6   7   8  ||   9  10  11
-            // --------------------------------++-----------++-------------++--------------
-            //    h-rot-1:                     ||           ||             ||
-            //      A-rot-1           0  2  1  ||  0  2  1  ||  0   2   1  ||   0   2   1
-            //      B-rot-1           1  0  2  ||  1  0  2  ||  1   0   2  ||   1   0   2
-            //      C-rot-1           2  1  0  ||  2  1  0  ||  2   1   0  ||   2   1   0
-            // --------------------------------++-----------++-------------++--------------
-            // x  h-rot-1:                     ||           ||             ||
-            // 0    (6-rot-(3-x))%3   0  2  1  ||  0  2  1  ||  0   2   1  ||   0   2   1
-            // 1    (6-rot-(3-x))%3   1  0  2  ||  1  0  2  ||  1   0   2  ||   1   0   2
-            // 2    (6-rot-(3-x))%3   2  1  0  ||  2  1  0  ||  2   1   0  ||   2   1   0
-            //
-            // この形は、
-            // 盤の横幅を w （例えば 3）とすると、
-            //
-            //          (6 -rot-(w-x))%w
-            //      g = (2w-rot-(w-x))%w
-            //
-            // で取れる。
-            // 逆算していく。
-            //
-            //    rot                      0  1  2  ||  3  4  5  ||  6   7   8  ||   9  10  11
-            // -------------------------------------++-----------++-------------++--------------
-            // x  h-rot:                            ||           ||             ||
-            // 0    (2w-rot-(3-x))%3+1     1  3  2  ||  1  3  2  ||  1   3   2  ||   1   3   2
-            // 1    (2w-rot-(3-x))%3+1     2  1  3  ||  2  1  3  ||  2   1   3  ||   2   1   3
-            // 2    (2w-rot-(3-x))%3+1     3  2  1  ||  3  2  1  ||  3   2   1  ||   3   2   1
-            //    ----------------------------------++-----------++-------------++--------------
-            // x  h:                                ||           ||             ||
-            // 0    (2w-rot-(3-x))%3+1+i   1  4  4  ||  4  7  7  ||  7  10  10  ||  10  13  13
-            // 1    (2w-rot-(3-x))%3+1+i   2  2  5  ||  5  5  8  ||  8   8  11  ||  11  11  14
-            // 2    (2w-rot-(3-x))%3+1+i   3  3  3  ||  6  6  6  ||  9   9   9  ||  12  12  15
-            //
-            // 式は合っているようだ。
-            //
-            // 一応、段にも対応させる。
-            //
-            //      h = tileRank * v + (2w-rot-(w-x))%w
-            //
+    const getFaceNumber = computed(() => {
+        return (tileIndex: number)=>{
+            const fixTileIndex = getFixTileIndex(tileIndex);
+            //return fixTileIndex;   // デバッグに使えます。
 
-            // ひとまず、垂直方向だけを考えます。
-            //
-            //  Tile    Contents   rot=0    ※回転0回目
-            // +-----+  +------+   tile[y]:
-            // |  A  |  |   1  |     A=1 B=7 C=13 ...
-            // |  B  |  |   7  |
-            // |  C  |  |  13  |
-            // +-----+  +------+
-            //
-            // Contents の縦幅を v （例えば 6）とする：
-            //
-            //  Tile index                        Contents index                       rot=0
-            // +---------------------------+     +-----------------------------------+ tile[x]:
-            // |                           |     |                                   |   A= 1  B= 7  C= 13
-            // |  tileRank * w + tileFile  |     |  contentsRank * v + contentsFile  |
-            // |                           |     |                                   |
-            // +---------------------------+     +-----------------------------------+
-            //
-            // プレイヤーが下に１歩移動したとき：
-            //
-            //  Tile    rot=1                         rot=2                          rot=3
-            // +-----+  tile[x]:             +-----+  tile[x]:              +-----+  tile[x]:
-            // |  B  |    A=19 B=7 C=13 ...  |  C  |    A=19 B=25 C=13 ...  |  A  |    A=19 B=25 C=31 ...
-            // |  C  |                       |  A  |                        |  B  |
-            // |  A  |                       |  B  |                        |  C  |
-            // +-----+                       +-----+                        +-----+
-            //
-            // 👆 端でローテーションしたタイルだけ、指すコンテンツが変わるというのが、難しい。
-            // 仮に無限サイズの盤と仮定して、表にすると：
-            //
-            //    rot    0   1   2  ||   3   4   5  ||   6   7   8  ||  
-            // ---------------------++--------------++--------------++--
-            // x  y:                ||              ||              ||
-            // 0    A    1  19  19  ||  19  37  37  ||  37  55  55  ||  
-            // 1    B    7   7  25  ||  25  25  43  ||  43  43  61  ||  
-            // 2    C   13  13  13  ||  31  31  31  ||  49  49  49  ||  
-            //
-            // とりあえず、 y から rot を引いてみる。
-            //
-            //    rot        0   1   2  ||   3   4   5  ||   6   7   8  ||  
-            // -------------------------++--------------++--------------++--
-            // x  y-rot:                ||              ||              ||
-            // 0    A-rot    1  18  17  ||  16  33  32  ||  31  48  47  ||  
-            // 1    B-rot    7   6  23  ||  22  21  38  ||  37  36  53  ||  
-            // 2    C-rot   13  12  11  ||  28  27  26  ||  43  42  41  ||  
-            //
-            // もっと大きな数字で減らせそうだ。
-            // とりあえず、 y から 6*rot を引いてみる。
-            //
-            //    rot            0   1   2  ||   3   4   5  ||   6   7   8  ||  
-            // -----------------------------++--------------++--------------++--
-            // x  y-(6*rot):                ||              ||              ||
-            // 0    A-(6*rot)    1  13   7  ||   1  13   7  ||   1  13   7  ||  
-            // 1    B-(6*rot)    7   1  13  ||   7   1  13  ||   7   1  13  ||  
-            // 2    C-(6*rot)   13   7   1  ||  13   7   1  ||  13   7   1  ||  
-            //
-            // グー・チョキ・パーで 勝:13、負:7、分:1 のとき出る表ではないか？
-            //
-            //        | 相手               |
-            //        | グー | チョ | パー |
-            // -------+------+------+------+
-            // グー   |    1 |   13 |    7 |
-            // チョキ |    7 |    1 |   13 |
-            // パー   |   13 |    7 |    1 |
-            //
-            // 循環してるから当たり前か。じゃんけんは拳が３つだが、４つ以上でも考え方は同じ。
-            // ... 13, 7, 1 といった降順の数列が並んでいるだけ。
-            //
-            // もうちょっと加工する。全体を -1 してみる。
-            //
-            //    rot              0   1   2  ||   3   4   5  ||   6   7   8  ||  
-            // -------------------------------++--------------++--------------++--
-            // x  y-(6*rot)-1:                ||              ||              ||
-            // 0    A-(6*rot)-1    0  12   6  ||   0  12   6  ||   0  12   6  ||  
-            // 1    B-(6*rot)-1    6   0  12  ||   6   0  12  ||   6   0  12  ||  
-            // 2    C-(6*rot)-1   12   6   0  ||  12   6   0  ||  12   6   0  ||  
-            //
-            // この形は、
-            // 盤の縦幅を w （例えば 6）とすると、
-            //
-            //      g = (tileIndex-(6*rot)-1)%(2*w+1)
-            //
-            // で取れる。
-            //
-            // 一応、筋にも対応させる。
-            //
-            //      g = (tileIndex-(6*rot)-1)%(2*w+1)+tileFile
-            //
+            let [tileFile, tileRank] = tileIndexToTileFileRank(fixTileIndex);
+            const contentsFile = tileFile + player1FileDelta.value;
+            const contentsRank = tileRank + player1RankDelta.value;
+            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
-            const rotH = player1FileDelta.value;  // どれだけ水平に盤を移動したか。
-            const rotV = player1RankDelta.value;  // どれだけ水平に盤を移動したか。
-            const v = contents1FileNum;             // 10
-            const w = board1FileNum;                // 5
-            let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
+            // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
+            if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
+                return "-";
+            }
 
-            //
-            // 上下左右に移動してもローテーションしない以下のような表を作る
-            // +-----------+
-            // | 0 1 2 3 4 |
-            // | 0 1 2 3 4 |
-            // | 0 1 2 3 4 |
-            // | 0 1 2 3 4 |
-            // | 0 1 2 3 4 |
-            // +-----------+
-            // 
-            //const fixFile = euclideanMod(2 * w - rotH - (w - tileIndex), w);  // Ok だが長い。
-            const fixFile = euclideanMod(tileIndex - rotH + w, w);  // これで Ok.
-            //return fixFile;
-
-            //
-            // 以下の形を作る。 fix 形。
-            // +----------------+
-            // |  0  1  2  3  4 |
-            // |  5  6  7  8  9 |
-            // | 10 11 12 13 14 |
-            // | 15 16 17 18 19 |
-            // | 20 21 22 23 24 |
-            // +----------------+
-            //
-            const fixFile2 = fixFile + Math.floor(tileIndex / w) * w; // Ok.
-            //const fixFile2 = Math.floor(tileIndex / w) * w + euclideanMod(tileIndex - rotH, w);
-            //return fixFile2;    // 横方向はこれでOk.縦はローテーションしてしまう。
-            
-
-            //const fixRank = (tileIndex-(6*rotV)-1)%(2*v+1) + 1; //+tileFile
-            //const fixRank = euclideanMod(tileIndex-(v*rotV), 2*v); //+tileFile
-            //const fixRank = euclideanMod(tileIndex-(v*rotV), board1RankNum * board1FileNum); //+tileFile
-            const fixRank = euclideanMod(tileIndex-(w*rotV), board1Area.value);   // 縦方向はこれでOK.横はローテーションしてしまう。
-
-
-            //
-            // 上下左右に移動してもローテーションしない以下のような表を作る
-            // +-----------+
-            // | 0 0 0 0 0 |
-            // | 1 1 1 1 1 |
-            // | 2 2 2 2 2 |
-            // | 3 3 3 3 3 |
-            // | 4 4 4 4 4 |
-            // +-----------+
-            // 
-            //const fixRank = euclideanMod(Math.floor(tileIndex / w) - rotV, board1RankNum);
-
-
-            return fixRank;
-
-            // const fixRank = euclideanMod(2 * w - rotV - (w - tileIndex), v);
-            // return fixRank;
-
-            // const bottomMinus10 = -rotV * contents1FileNum;
-            // //return bottomMinus10;
-            // //return fixFile + bottomMinus10;
-            // //const g = tileIndex - rotV * board1FileNum;
-            // //return cancelRank;
-            // const rightX10 = rotH * contents1FileNum;
-            // return rightX10;
-
-            // const horizontal = euclideanMod(rotH, v);
-            // const vertical = euclideanMod(rotV, contents1RankNum);
-
-            // const nonLoopingTileIndex = tileIndex + rotH;
-
-            // const y = vertical * contents1FileNum + horizontal;
-            // return y;
-
-
-            // const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            // const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
-
-            // // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
-            // if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
-            //     return "-";
-            // }
-            
-            // // コンテンツ上の位置が示すデータを返す
-            // const h = contentsFileRankToContentsIndex(contentsFile, contentsRank);
-            //return  h; //contents1Data.value[h];
-            //return  h;
-            */
+            return  contents1Data.value[contentsIndex];
         };
     });    
     const contents1Motion = ref<Record<string, number>>({  // モーションへの入力
