@@ -27,8 +27,9 @@
             <li>📖 <router-link to="/making/tile-count-up-rpg-walk" :style="getPreviousLinkHighlight('/making/tile-count-up-rpg-walk')">タイル　＞　でカウントアップのアニメーションするぜ！　＞　ＲＰＧの歩行グラフィック</router-link></li>
             <li>📖 <router-link to="/making/input-axis" :style="getPreviousLinkHighlight('/making/input-axis')">上下左右に移動しようぜ！</router-link></li>
 
-            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-shift-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-shift-boundary')">上下左右に移動しようぜ！　フェース・シフト</router-link></li>
-            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-scroll-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-scroll-boundary')">上下左右に移動しようぜ！　フェース・スクロール</router-link></li>
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-shift-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-shift-boundary')">テスト：　上下左右に移動しようぜ！　フェース・シフト</router-link></li>
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-scroll-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-scroll-primordial')">テスト：　上下左右に移動しようぜ！　フェース・原始的スクロール</router-link></li>
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-scroll-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-scroll-boundary')">テスト：　上下左右に移動しようぜ！　フェース・スクロール</router-link></li>
             
 
             <li>📖 <router-link to="/making/sprite-routine" :style="getPreviousLinkHighlight('/making/sprite-routine')">スプライト　＞　ルーチン</router-link></li>
