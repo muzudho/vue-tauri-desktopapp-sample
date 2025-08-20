@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄のスクロール、盤の端処理</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の循環スクロール、数字柄のシフト、盤の端処理</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -66,7 +66,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄のスクロール、盤の端処理　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、数字柄のシフト、盤の端処理　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -173,8 +173,8 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1FileNum * board1SquareWidth}px`,
-            height: `${commonZoom * board1RankNum * board1SquareHeight}px`,
+            width: `${commonZoom * board1WithMaskFileNum * board1SquareWidth}px`,
+            height: `${commonZoom * board1WithMaskRankNum * board1SquareHeight}px`,
         };
     });
     const getSquareStyle = computed<
@@ -199,7 +199,7 @@
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 zoom: 4,
-                border: "solid 1px lightgray",
+                border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
                 textAlign: "center",
             };
         };
@@ -224,7 +224,7 @@
      * @param tileIndex マス番号
      * @returns [筋番号, 段番号]
      */
-    function tileIndexToTileFileRank(tileIndex: number) : number[] {
+    function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
         const file = tileIndex % board1FileNum;
         const rank = Math.floor(tileIndex / board1RankNum);

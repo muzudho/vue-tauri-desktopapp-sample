@@ -28,8 +28,8 @@
             <li>📖 <router-link to="/making/input-axis" :style="getPreviousLinkHighlight('/making/input-axis')">上下左右に移動しようぜ！</router-link></li>
 
             <li>📖 <router-link to="/making/input-axis-rpg-walk-face-shift-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-shift-boundary')">■テスト：　上下左右に移動しようぜ！　フェース・シフト</router-link></li>
-            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-scroll-primordial" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-scroll-primordial')">■テスト：　上下左右に移動しようぜ！　フェース・原始的スクロール</router-link></li>
-            <li>📖 <router-link to="/making/input-axis-rpg-walk-face-scroll-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-face-scroll-boundary')">■テスト：　上下左右に移動しようぜ！　フェース・スクロール</router-link></li>
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-primordial" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-primordial')">■テスト：　上下左右に移動しようぜ！　盤の循環スクロール、数字柄の原始的シフト</router-link></li>
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-boundary" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-boundary')">■テスト：　上下左右に移動しようぜ！　盤の循環スクロール、数字柄のシフト、盤の端処理</router-link></li>
             
 
             <li>📖 <router-link to="/making/sprite-routine" :style="getPreviousLinkHighlight('/making/sprite-routine')">スプライト　＞　ルーチン</router-link></li>

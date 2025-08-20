@@ -39,9 +39,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-player-boundary-check.vue'),
     },
     {
-        name: 'InputAxisRpgWalkFaceScrollBoundary',
-        path: '/making/input-axis-rpg-walk-face-scroll-boundary',
-        component: () => import('../pages/making/input-axis-rpg-walk-face-scroll-boundary.vue'),
+        name: 'InputAxisRpgWalkBoardScrollLoopAndFaceShiftBoundary',
+        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-boundary',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-boundary.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardScrollLoopAndFaceShiftPrimordial',
