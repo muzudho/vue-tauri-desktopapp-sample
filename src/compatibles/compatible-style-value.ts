@@ -12,7 +12,7 @@ import { StyleValue } from 'vue';   // Tauri2 用
         // これは使えない。 import { StyleValue } from 'vue';
 
     これでは、デスクトップアプリ版と、ウェブアプリ版でコードに違いがでてきてしまう。
-
+    そこで、型名を直接コードに書かず、型の別名を使うようにする。
  */
 export type CompatibleStyleValue = StyleValue;  // Tauri2 用
 //export type CompatibleStyleValue = Record<string, string | number>;     // Nuxt3 用
