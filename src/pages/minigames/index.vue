@@ -31,9 +31,9 @@
     import TheGrandParentHeader from '../../the-header.vue';
 
 
-    // ++++++++++++++
-    // + 互換性対応 +
-    // ++++++++++++++
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
 
     import { getPreviousLinkHighlight } from '../../composables/link-highlight';
 

@@ -109,18 +109,18 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1Files = 5;
-    const board1Ranks = 5;
+    const board1FileNum = 5;
+    const board1RankNum = 5;
     const board1Area = computed(()=> {  // 盤のマス数
-        return board1Files * board1Ranks;
+        return board1FileNum * board1RankNum;
     });
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1Files * board1SquareWidth}px`,
-            height: `${commonZoom * board1Ranks * board1SquareHeight}px`,
+            width: `${commonZoom * board1FileNum * board1SquareWidth}px`,
+            height: `${commonZoom * board1RankNum * board1SquareHeight}px`,
         };
     });
     const getSquareStyle = computed<
@@ -128,8 +128,8 @@
     >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (i % board1Files) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1Ranks) * board1SquareHeight;
+            const homeLeft = (i % board1FileNum) * board1SquareWidth;
+            const homeTop = Math.floor(i / board1RankNum) * board1SquareHeight;
 
             return {
                 position: 'absolute',
@@ -151,8 +151,8 @@
     // 盤上に表示されるもの。
     //
 
-    const contents1FileNum = board1Files;       // 列数
-    const contents1RankNum = board1Ranks;       // 行数
+    const contents1FileNum = board1FileNum;       // 列数
+    const contents1RankNum = board1RankNum;       // 行数
 
     /**
      * 変換
@@ -161,8 +161,8 @@
      */
     function tileIndexToTileFileRank(tileIndex: number) : number[] {
         // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-        const file = tileIndex % board1Files;
-        const rank = Math.floor(tileIndex / board1Ranks);
+        const file = tileIndex % board1FileNum;
+        const rank = Math.floor(tileIndex / board1RankNum);
 
         return [file, rank];
     }
