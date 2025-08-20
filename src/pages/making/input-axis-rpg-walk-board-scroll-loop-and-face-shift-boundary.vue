@@ -161,13 +161,22 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const board1Top = ref<number>(0);
     const board1Left = ref<number>(0);
+    // TODO: board1File は原点 x=0
+    // const board1File = computed<number>(()=>{
+    //     return Math.floor(board1Left.value / board1SquareWidth);
+    // });
+    // const board1Rank = computed<number>(()=>{
+    //     return Math.floor(board1Top.value / board1SquareWidth);
+    // });
     const board1FileNum = 5;
     const board1RankNum = 5;
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
-    const board1WithMaskFileNum = board1FileNum + 1   // マスク付きの場合の列数
-    const board1WithMaskRankNum = board1RankNum + 1
+    const board1WithMaskWidth = 1;  // マスクの幅（単位：マス）
+    const board1WithMaskBottomRightMargin = 1;          // マスクは右下に１マス分多く作ります。
+    const board1WithMaskFileNum = board1FileNum + board1WithMaskBottomRightMargin   // マスク付きの場合の列数
+    const board1WithMaskRankNum = board1RankNum + board1WithMaskBottomRightMargin
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
@@ -506,44 +515,52 @@
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             // TODO 🌟 印字は動かない、プレイヤーの移動量を見ること。
-                            //  Contents
+                            //  Printing
                             // +--------------+
                             // |              |
                             // |   Board      |
                             // |  +-------+   |
                             // |  |       |   |
-                            // c  b   p   |   |
+                            // c  0   p   |   |
                             // |  |       |   |
                             // |  +--bw---+   |
                             // +-----cw-------+
                             //
-                            //  b ... Origin x on board.
-                            //  c ... contents's x from B.
+                            //  0 ... Origin. x on board.
+                            //  c ... contents's x from B. 例えば -3。
                             //  p ... player character's x from B.
                             //  bw ... Board width.
                             //  cw ... Contents width.
                             //
                             //
-                            // +--------------+
-                            // |      +-------+
-                            // |      |       |
-                            // c      b   p   |
-                            // |      |       |
-                            // |      +--bw---+
-                            // +-----cw-------+
+                            //        pd
+                            // +-cw---------------+
+                            // |                  |
+                            // |      +-------+   |
+                            // |      |       |   |
+                            // |      0   p   |   |
+                            // |      |       |   |
+                            // |      +-------+   |
+                            // |                  |
+                            // +--------------+-m-+
+                            // c      +-----a-----+
                             //
-                            // cw - bw ... max margin.
+                            // pd は、プレイヤーの移動量
+                            // m が MaskMargin（例えば2）以下なら、それ以上右に行くことはできない。
                             //
-                            // -c が max margin 以上なら、それ以上右に行くことはできない。
+                            // a = cw + c
+                            // m = a - bw
                             //
 
+                            // board1WithMaskWidth
+                            const pd = -player1FileDelta.value;
+                            const cw = printing1FileNum; // 例えば 10
+                            const a = cw + pd;
                             const bw = board1FileNum;
-                            const cw = printing1FileNum;
-                            const c = printing1File.value;    // これは動かない
-                            const maxMargin = cw - bw;
-                            console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin} maxMargin <= -c:${maxMargin <= -c}`);
+                            const m = a - bw;
+                            console.log(`pd=${pd} cw=${cw} a=${a} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskWidth}`);
 
-                            if (maxMargin <= -c) {
+                            if (m <= -board1WithMaskBottomRightMargin) {
                                 willShift = false;
                             }
                         }
