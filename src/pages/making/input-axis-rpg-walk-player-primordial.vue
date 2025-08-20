@@ -51,7 +51,7 @@
     // ++++++++++++++
 
 
-    import { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
+    import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
 
 
     // ++++++++++++++++++

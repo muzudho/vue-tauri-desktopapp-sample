@@ -1,4 +1,4 @@
-//import type { Properties } from 'csstype';  // Nuxt3 用
+//import type { Properties } from 'csstype';  // Nuxt3 用。使わない
 import { StyleValue } from 'vue';   // Tauri2 用
 
 /*
@@ -14,8 +14,5 @@ import { StyleValue } from 'vue';   // Tauri2 用
     これでは、デスクトップアプリ版と、ウェブアプリ版でコードに違いがでてきてしまう。
 
  */
-export type CompatibleStyleValue = StyleValue;
-
-// 以下のような方法もあるらしい？
-// MyStyleValue 型を定義（StyleValue と Properties に互換）
-//type MyStyleValue = Record<string, string | number>;
+export type CompatibleStyleValue = StyleValue;  // Tauri2 用
+//export type CompatibleStyleValue = Record<string, string | number>;     // Nuxt3 用
