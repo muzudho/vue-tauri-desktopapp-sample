@@ -144,15 +144,20 @@
         };
     });    
 
-    // ++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
-    // ++++++++++++++++++++++++**++++++++
+    // ++++++++++++++++++++++++**
     //
-    // 盤上に表示されるもの。
+    // 盤上に表示される数字柄、絵柄など。
     //
 
     const printing1FileNum = board1FileNum;       // 列数
     const printing1RankNum = board1RankNum;       // 行数
+    const printing1File = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
+    const printing1Rank = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
+    const printing1Data = ref<string[]>([
+        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
+    ]);
 
     /**
      * 変換
@@ -171,11 +176,6 @@
         return contentsRank * printing1FileNum + contentsFile;
     }
 
-    const printing1File = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
-    const printing1Rank = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
-    const printing1Data = ref<string[]>([
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
-    ]);
     const getFaceNumber = computed(() => {
         return (tileIndex: number)=>{
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);

@@ -187,15 +187,21 @@
         };
     });    
 
-    // ++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
-    // ++++++++++++++++++++++++**++++++++
+    // ++++++++++++++++++++++++**
     //
-    // 盤上に表示されるもの。
+    // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1FileNum = 10;       // 列数
-    const printing1RankNum = 10;       // 行数
+    const printing1FileNum = 10;            // 列数
+    const printing1RankNum = 10;            // 行数
+    const printing1File = ref<number>(-3);  // 印字の左上隅のタイルは、盤タイルの左から何番目か。
+    const printing1Rank = ref<number>(-3);  // 印字の左上隅のタイルは、盤タイルの上から何番目か。
+    const printing1Data = ref<string[]>([]);
+    for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
+        printing1Data.value.push(i.toString().padStart(2, "0"));
+    }
 
     /**
      * 変換
@@ -214,12 +220,6 @@
         return contentsRank * printing1FileNum + contentsFile;
     }
 
-    const printing1File = ref<number>(-3);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
-    const printing1Rank = ref<number>(-3);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
-    const printing1Data = ref<string[]>([]);
-    for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
-        printing1Data.value.push(i.toString().padStart(2, "0"));
-    }
     const getFaceNumber = computed(() => {
         return (tileIndex: number)=>{
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
