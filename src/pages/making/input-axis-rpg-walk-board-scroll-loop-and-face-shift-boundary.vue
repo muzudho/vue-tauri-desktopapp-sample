@@ -533,32 +533,33 @@
                             //  cw ... Contents width.
                             //
                             //
-                            //        pd
-                            // +-cw---------------+
-                            // |                  |
-                            // |      +-------+   |
-                            // |      |       |   |
-                            // |      0   p   |   |
-                            // |      |       |   |
-                            // |      +-------+   |
-                            // |                  |
-                            // +--------------+-m-+
-                            // c      +-----a-----+
+                            //            pd
+                            // +<---------cw-------->+
+                            // |                     |
+                            // |       +<-bw-->+     |
+                            // |       |       |     |
+                            // |       |   p   |     |
+                            // |       |       |     |
+                            // |       +-------+     |
+                            // |                     |
+                            // +---------------+<-m->+
+                            //         0
+                            // c<------+
                             //
-                            // pd は、プレイヤーの移動量
+                            // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                            // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                            // pd は、プレイヤーの初期位置からの移動量。
                             // m が MaskMargin（例えば2）以下なら、それ以上右に行くことはできない。
                             //
-                            // a = cw + c
-                            // m = a - bw
+                            // m = cw + c - bw
                             //
 
                             // board1WithMaskWidth
                             const pd = -player1FileDelta.value;
                             const cw = printing1FileNum; // 例えば 10
-                            const a = cw + pd;
                             const bw = board1FileNum;
-                            const m = a - bw;
-                            console.log(`pd=${pd} cw=${cw} a=${a} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskWidth}`);
+                            const m = cw + pd - bw;
+                            console.log(`pd=${pd} cw=${cw} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskWidth}`);
 
                             if (m <= -board1WithMaskBottomRightMargin) {
                                 willShift = false;
