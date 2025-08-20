@@ -1,5 +1,5 @@
             /*
-            // タイルのインデックス x を、コンテンツ上のインデックス y へ変換：
+            // タイルのインデックス x を、印字上のインデックス y へ変換：
             //
             // ひとまず、水平方向だけを考えます。
             //
@@ -36,7 +36,7 @@
             // |  B  C  A |     A=7 B=5 C=6 ...
             // +----------+  
             //
-            // 👆 端でローテーションしたタイルだけ、指すコンテンツが変わるというのが、難しい。
+            // 👆 端でローテーションしたタイルだけ、指す印字が変わるというのが、難しい。
             // 仮に無限サイズの盤と仮定して、表にすると：
             //
             //   rot   0  1  2  ||  3  4  5  ||  6   7   8  ||   9  10  11
@@ -141,7 +141,7 @@
             // |  A  |                       |  B  |                        |  C  |
             // +-----+                       +-----+                        +-----+
             //
-            // 👆 端でローテーションしたタイルだけ、指すコンテンツが変わるというのが、難しい。
+            // 👆 端でローテーションしたタイルだけ、指す印字が変わるというのが、難しい。
             // 仮に無限サイズの盤と仮定して、表にすると：
             //
             //    rot    0   1   2  ||   3   4   5  ||   6   7   8  ||  
@@ -205,7 +205,7 @@
 
             const rotH = player1FileDelta.value;  // どれだけ水平に盤を移動したか。
             const rotV = player1RankDelta.value;  // どれだけ水平に盤を移動したか。
-            const v = contents1FileNum;             // 10
+            const v = printing1FileNum;             // 10
             const w = board1FileNum;                // 5
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
@@ -262,33 +262,33 @@
             // const fixRank = euclideanMod(2 * w - rotV - (w - tileIndex), v);
             // return fixRank;
 
-            // const bottomMinus10 = -rotV * contents1FileNum;
+            // const bottomMinus10 = -rotV * printing1FileNum;
             // //return bottomMinus10;
             // //return fixFile + bottomMinus10;
             // //const g = tileIndex - rotV * board1FileNum;
             // //return cancelRank;
-            // const rightX10 = rotH * contents1FileNum;
+            // const rightX10 = rotH * printing1FileNum;
             // return rightX10;
 
             // const horizontal = euclideanMod(rotH, v);
-            // const vertical = euclideanMod(rotV, contents1RankNum);
+            // const vertical = euclideanMod(rotV, printing1RankNum);
 
             // const nonLoopingTileIndex = tileIndex + rotH;
 
-            // const y = vertical * contents1FileNum + horizontal;
+            // const y = vertical * printing1FileNum + horizontal;
             // return y;
 
 
-            // const contentsFile = tileFile - contents1OriginFile.value; // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
-            // const contentsRank = tileRank - contents1OriginRank.value; // プレイヤーが下へ１マス移動したら、盤コンテンツは全行が上へ１つ移動する。
+            // const contentsFile = tileFile - printing1OriginFile.value; // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
+            // const contentsRank = tileRank - printing1OriginRank.value; // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
 
-            // // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
-            // if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
+            // // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            // if (contentsFile < 0 || printing1FileNum <= contentsFile || contentsRank < 0 || printing1RankNum <= contentsRank) {
             //     return "-";
             // }
             
-            // // コンテンツ上の位置が示すデータを返す
+            // // 印字上の位置が示すデータを返す
             // const h = contentsFileRankToContentsIndex(contentsFile, contentsRank);
-            //return  h; //contents1Data.value[h];
+            //return  h; //printing1Data.value[h];
             //return  h;
             */

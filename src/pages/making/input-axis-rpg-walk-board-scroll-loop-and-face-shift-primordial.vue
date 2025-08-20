@@ -167,14 +167,14 @@
     });
 
     // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　盤コンテンツ +
+    // + オブジェクト　＞　印字 +
     // ++++++++++++++++++++++++**++++++++
     //
     // 盤上に表示されるもの。
     //
 
-    const contents1FileNum = 10;       // 列数
-    const contents1RankNum = 10;       // 行数
+    const printing1FileNum = 10;       // 列数
+    const printing1RankNum = 10;       // 行数
 
     /**
      * 変換
@@ -182,7 +182,7 @@
      * @returns [筋番号, 段番号]
      */
     function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
-        // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+        // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
         const file = tileIndex % board1FileNum;
         const rank = Math.floor(tileIndex / board1RankNum);
 
@@ -190,17 +190,17 @@
     }
 
     function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
-        return contentsRank * contents1FileNum + contentsFile;
+        return contentsRank * printing1FileNum + contentsFile;
     }
 
-    // コンテンツはシフトするので、 File, Rank しかない。 Left, Top は無い。
-    const contents1FileInit = -3;
-    const contents1RankInit = -3;
-    const contents1File = ref<number>(contents1FileInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
-    const contents1Rank = ref<number>(contents1RankInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
-    const contents1Data = ref<string[]>([]);
-    for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
-        contents1Data.value.push(i.toString().padStart(2, "0"));
+    // 印字はシフトするので、 File, Rank しかない。 Left, Top は無い。
+    const printing1FileInit = -3;
+    const printing1RankInit = -3;
+    const printing1File = ref<number>(printing1FileInit);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
+    const printing1Rank = ref<number>(printing1RankInit);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
+    const printing1Data = ref<string[]>([]);
+    for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
+        printing1Data.value.push(i.toString().padStart(2, "0"));
     }
 
     /**
@@ -299,15 +299,15 @@
             const contentsRank = tileRank + player1RankDelta.value;
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
-            // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
-            if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            if (contentsFile < 0 || printing1FileNum <= contentsFile || contentsRank < 0 || printing1RankNum <= contentsRank) {
                 return "-";
             }
 
-            return  contents1Data.value[contentsIndex];
+            return  printing1Data.value[contentsIndex];
         };
     });    
-    const contents1Motion = ref<Record<string, number>>({  // モーションへの入力
+    const printing1Motion = ref<Record<string, number>>({  // モーションへの入力
         toRight: 0,   // 負なら左、正なら右
         toBottom: 0,   // 負なら上、正なら下
     });
@@ -430,8 +430,8 @@
                 // モーションのクリアー
                 board1Motion.value["toRight"] = 0;
                 board1Motion.value["toBottom"] = 0;
-                contents1Motion.value["toRight"] = 0;
-                contents1Motion.value["toBottom"] = 0;
+                printing1Motion.value["toRight"] = 0;
+                printing1Motion.value["toBottom"] = 0;
                 player1Motion.value["toRight"] = 0;
                 player1Motion.value["toBottom"] = 0;
             }
@@ -443,8 +443,8 @@
                 if (player1Input[" "]) {
                     board1Left.value = 0;
                     board1Top.value = 0;
-                    contents1File.value = contents1FileInit;
-                    contents1Rank.value = contents1RankInit;
+                    printing1File.value = printing1FileInit;
+                    printing1Rank.value = printing1RankInit;
                     player1Left.value = player1FileHome * board1SquareWidth;
                     player1Top.value = player1RankHome * board1SquareHeight;
                     player1FileDelta.value = 0;
@@ -460,7 +460,7 @@
                     if (player1File.value < player1FileHome) {
                         player1Motion.value["toRight"] = commonSpriteMotionToRight;
                     } else {
-                        contents1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                        printing1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         board1Motion.value["toRight"] = commonSpriteMotionToRight;
                     }
                 }
@@ -472,7 +472,7 @@
                     if (player1File.value > player1FileHome) {
                         player1Motion.value["toRight"] = commonSpriteMotionToLeft;
                     } else {
-                        contents1Motion.value["toRight"] = commonSpriteMotionToRight;
+                        printing1Motion.value["toRight"] = commonSpriteMotionToRight;
                         board1Motion.value["toRight"] = commonSpriteMotionToLeft;
                     }
                 }
@@ -484,7 +484,7 @@
                     if (player1Rank.value > player1RankHome) {
                         player1Motion.value["toBottom"] = commonSpriteMotionToTop;
                     } else {
-                        contents1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                        printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         board1Motion.value["toBottom"] = commonSpriteMotionToTop;
                     }
                 }
@@ -496,7 +496,7 @@
                     if (player1Rank.value < player1RankHome) {
                         player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                     } else {
-                        contents1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                        printing1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                     }
                 }
@@ -547,7 +547,7 @@
                     //console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
                 }
 
-                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || contents1Motion.value["toRight"]!=0 || contents1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }

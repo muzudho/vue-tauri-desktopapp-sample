@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の循環スクロール、数字柄のシフト、盤の端処理</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の循環スクロール、数字柄の非循環シフト、盤の端処理</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -66,7 +66,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、数字柄のシフト、盤の端処理　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、数字柄の非循環シフト、盤の端処理　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -210,14 +210,14 @@
     });
 
     // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　盤コンテンツ +
+    // + オブジェクト　＞　印字 +
     // ++++++++++++++++++++++++**++++++++
     //
     // 盤上に表示されるもの。
     //
 
-    const contents1FileNum = 10;       // 列数
-    const contents1RankNum = 10;       // 行数
+    const printing1FileNum = 10;       // 列数
+    const printing1RankNum = 10;       // 行数
 
     /**
      * 変換
@@ -225,7 +225,7 @@
      * @returns [筋番号, 段番号]
      */
     function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
-        // プレイヤーが右へ１マス移動したら、盤コンテンツは全行が左へ１つ移動する。
+        // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
         const file = tileIndex % board1FileNum;
         const rank = Math.floor(tileIndex / board1RankNum);
 
@@ -233,17 +233,17 @@
     }
 
     function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
-        return contentsRank * contents1FileNum + contentsFile;
+        return contentsRank * printing1FileNum + contentsFile;
     }
 
-    // コンテンツはシフトするので、 File, Rank しかない。 Left, Top は無い。
-    const contents1FileInit = -3;
-    const contents1RankInit = -3;
-    const contents1File = ref<number>(contents1FileInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの左から何番目か。
-    const contents1Rank = ref<number>(contents1RankInit);    // 盤コンテンツの左上隅のタイルは、盤タイルの上から何番目か。
-    const contents1Data = ref<string[]>([]);
-    for (let i=0; i<contents1FileNum * contents1RankNum; i++) {
-        contents1Data.value.push(i.toString().padStart(2, "0"));
+    // 印字はシフトするので、 File, Rank しかない。 Left, Top は無い。
+    const printing1FileInit = -3;
+    const printing1RankInit = -3;
+    const printing1File = ref<number>(printing1FileInit);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
+    const printing1Rank = ref<number>(printing1RankInit);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
+    const printing1Data = ref<string[]>([]);
+    for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
+        printing1Data.value.push(i.toString().padStart(2, "0"));
     }
 
     /**
@@ -342,15 +342,15 @@
             const contentsRank = tileRank + player1RankDelta.value;
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
-            // コンテンツのサイズの範囲外になるところには、"-" でも表示しておく
-            if (contentsFile < 0 || contents1FileNum <= contentsFile || contentsRank < 0 || contents1RankNum <= contentsRank) {
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            if (contentsFile < 0 || printing1FileNum <= contentsFile || contentsRank < 0 || printing1RankNum <= contentsRank) {
                 return "-";
             }
 
-            return  contents1Data.value[contentsIndex];
+            return  printing1Data.value[contentsIndex];
         };
     });    
-    const contents1Motion = ref<Record<string, number>>({  // モーションへの入力
+    const printing1Motion = ref<Record<string, number>>({  // モーションへの入力
         toRight: 0,   // 負なら左、正なら右
         toBottom: 0,   // 負なら上、正なら下
     });
@@ -473,8 +473,8 @@
                 // モーションのクリアー
                 board1Motion.value["toRight"] = 0;
                 board1Motion.value["toBottom"] = 0;
-                contents1Motion.value["toRight"] = 0;
-                contents1Motion.value["toBottom"] = 0;
+                printing1Motion.value["toRight"] = 0;
+                printing1Motion.value["toBottom"] = 0;
                 player1Motion.value["toRight"] = 0;
                 player1Motion.value["toBottom"] = 0;
             }
@@ -486,8 +486,8 @@
                 if (player1Input[" "]) {
                     board1Left.value = 0;
                     board1Top.value = 0;
-                    contents1File.value = contents1FileInit;
-                    contents1Rank.value = contents1RankInit;
+                    printing1File.value = printing1FileInit;
+                    printing1Rank.value = printing1RankInit;
                     player1Left.value = player1FileHome * board1SquareWidth;
                     player1Top.value = player1RankHome * board1SquareHeight;
                     player1FileDelta.value = 0;
@@ -507,7 +507,7 @@
                         if (appBoundaryIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
-                            // TODO 🌟 コンテンツは動かない、プレイヤーの移動量を見ること。
+                            // TODO 🌟 印字は動かない、プレイヤーの移動量を見ること。
                             //  Contents
                             // +--------------+
                             // |              |
@@ -540,8 +540,8 @@
                             //
 
                             const bw = board1FileNum;
-                            const cw = contents1FileNum;
-                            const c = contents1File.value;    // これは動かない
+                            const cw = printing1FileNum;
+                            const c = printing1File.value;    // これは動かない
                             const maxMargin = cw - bw;
                             console.log(`bw=${bw} cw=${cw} c=${c} maxMargin=${maxMargin} maxMargin <= -c:${maxMargin <= -c}`);
 
@@ -551,7 +551,7 @@
                         }
 
                         if (willShift) {
-                            contents1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                            printing1Motion.value["toRight"] = commonSpriteMotionToLeft;
                             board1Motion.value["toRight"] = commonSpriteMotionToRight;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
@@ -605,7 +605,7 @@
                             // c が 0 以上なら、それ以上左に行くことはできない。
                             //
 
-                            const c = contents1File.value;
+                            const c = printing1File.value;
 
                             if (c >= 0) {
                                 willShift = false;
@@ -613,7 +613,7 @@
                         }
 
                         if (willShift) {
-                            contents1Motion.value["toRight"] = commonSpriteMotionToRight;
+                            printing1Motion.value["toRight"] = commonSpriteMotionToRight;
                             board1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
@@ -662,7 +662,7 @@
                             // c が 0 以上なら、それ以上上に行くことはできない。
                             //
 
-                            const c = contents1Rank.value;
+                            const c = printing1Rank.value;
 
                             if (c >= 0) {
                                 willShift = false;
@@ -670,7 +670,7 @@
                         }
 
                         if (willShift) {
-                            contents1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                            printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                             board1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
@@ -725,8 +725,8 @@
                             //
 
                             const bh = board1RankNum;
-                            const ch = contents1RankNum;
-                            const c = contents1Rank.value;
+                            const ch = printing1RankNum;
+                            const c = printing1Rank.value;
                             const maxMargin = ch - bh;
 
                             if (maxMargin <= -c) {
@@ -735,7 +735,7 @@
                         }
 
                         if (willShift) {
-                            contents1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                            printing1Motion.value["toBottom"] = commonSpriteMotionToTop;
                             board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
@@ -750,21 +750,21 @@
             /*
             // 移動を処理（シフト）
             // FIXME: 🌟 タイルがローテーションしていることに注意。
-            // タイルがローテーションするのだから、コンテンツをシフトさせなくていいが、
+            // タイルがローテーションするのだから、印字をシフトさせなくていいが、
             // ローテーションしたタイルをどうするか？
             //*
             if (player1MotionWait.value <= 0) {
                 // シフト
-                if (contents1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                    contents1Rank.value -= 1;     // 下
-                } else if (contents1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                    contents1Rank.value += 1;     // 上
+                if (printing1Motion.value["toBottom"] == commonSpriteMotionToTop) {
+                    printing1Rank.value -= 1;     // 下
+                } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
+                    printing1Rank.value += 1;     // 上
                 }
 
-                if (contents1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                    contents1File.value += 1;
-                } else if (contents1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                    contents1File.value -= 1;
+                if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {
+                    printing1File.value += 1;
+                } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {
+                    printing1File.value -= 1;
                 }
             }
             //*/
@@ -814,7 +814,7 @@
                     //console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
                 }
 
-                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || contents1Motion.value["toRight"]!=0 || contents1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }
