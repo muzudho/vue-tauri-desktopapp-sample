@@ -53,7 +53,13 @@
                 class="cursor"
                 :style="player1Style"
                 style="image-rendering: pixelated;" /><br/>
-            </div>
+            
+            <!-- 半透明のマスク -->
+            <div
+                :style="`width:${board1FileNumWithMask * board1SquareWidth}px; height:${board1RankNumWithMask * board1SquareHeight}px; border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1SquareWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1SquareHeight}px rgba(0,0,0,0.5); border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
+                style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
+
+        </div>
 
         <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
         <p>上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！</p>
@@ -152,6 +158,8 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
+    const board1FileNumWithMask = board1FileNum + 1   // マスク付きの場合の列数
+    const board1RankNumWithMask = board1RankNum + 1
     const board1Style = computed<CSSProperties>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
