@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>フェース・原始的スクロール</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>ボード・循環スクロール　＆　フェース・原始的シフト</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -36,7 +36,7 @@
             
             <!-- 半透明のマスク -->
             <div
-                :style="`width:${board1FileNumWithMask * board1SquareWidth}px; height:${board1RankNumWithMask * board1SquareHeight}px; border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1SquareWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1SquareHeight}px rgba(0,0,0,0.5); border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
+                :style="`width:${board1WithMaskFileNum * board1SquareWidth}px; height:${board1WithMaskRankNum * board1SquareHeight}px; border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1SquareWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1SquareHeight}px rgba(0,0,0,0.5); border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
 
         </div>
@@ -46,7 +46,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">フェース・原始的スクロール　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">ボード・循環スクロール　＆　フェース・原始的シフト　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -123,17 +123,17 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
+    const board1WithMaskFileNum = board1FileNum + 1   // マスク付きの場合の列数
+    const board1WithMaskRankNum = board1RankNum + 1
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1FileNum * board1SquareWidth}px`,
-            height: `${commonZoom * board1RankNum * board1SquareHeight}px`,
+            width: `${commonZoom * board1WithMaskFileNum * board1SquareWidth}px`,
+            height: `${commonZoom * board1WithMaskRankNum * board1SquareHeight}px`,
         };
     });
-    const board1FileNumWithMask = board1FileNum + 1   // マスク付きの場合の列数
-    const board1RankNumWithMask = board1RankNum + 1
     const getSquareStyle = computed<
         (i:number)=>CompatibleStyleValue
     >(() => {
