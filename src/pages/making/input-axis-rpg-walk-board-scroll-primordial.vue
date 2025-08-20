@@ -59,12 +59,12 @@
     import { computed, onMounted, ref } from 'vue';
 
 
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
+    // ++++++++++++++
+    // + 互換性対応 +
+    // ++++++++++++++
 
 
-    import { CompatibleStyleValue }  from '../../composables/compatible-style-value';
+    import { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
 
 
     // ++++++++++++++++++

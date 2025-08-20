@@ -63,12 +63,12 @@
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
 
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
+    // ++++++++++++++
+    // + 互換性対応 +
+    // ++++++++++++++
 
 
-    import { CompatibleStyleValue }  from '../../composables/compatible-style-value';
+    import { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
 
 
     // ++++++++++++++++++
