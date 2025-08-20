@@ -514,47 +514,36 @@
                         if (appBoundaryIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
-                            // TODO 🌟 印字は動かない、プレイヤーの移動量を見ること。
-                            //  Printing
-                            // +--------------+
-                            // |              |
-                            // |   Board      |
-                            // |  +-------+   |
-                            // |  |       |   |
-                            // c  0   p   |   |
-                            // |  |       |   |
-                            // |  +--bw---+   |
-                            // +-----cw-------+
+                            // - 印字は動かない、プレイヤーの移動量を見ること。
+                            // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                             //
-                            //  0 ... Origin. x on board.
-                            //  c ... contents's x from B. 例えば -3。
-                            //  p ... player character's x from B.
-                            //  bw ... Board width.
-                            //  cw ... Contents width.
-                            //
-                            //
-                            //            pd
+                            // Printing
                             // +<---------cw-------->+
                             // |                     |
+                            // |       Board         |
                             // |       +<-bw-->+     |
                             // |       |       |     |
-                            // |       |   p   |     |
+                            // |       |   *   |     |
                             // |       |       |     |
                             // |       +-------+     |
                             // |                     |
                             // +---------------+<-m->+
                             //         0
+                            //         +-->p
                             // c<------+
+                            //         pd
                             //
                             // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                            // p は、0 からみた、登場人物の初期位置。
                             // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
                             // pd は、プレイヤーの初期位置からの移動量。
+                            // bw は、盤の列数。
+                            // cw は、印字の列数。
                             // m が MaskMargin（例えば2）以下なら、それ以上右に行くことはできない。
                             //
                             // m = cw + c - bw
                             //
 
-                            // board1WithMaskWidth
                             const pd = -player1FileDelta.value;
                             const cw = printing1FileNum; // 例えば 10
                             const bw = board1FileNum;
@@ -708,44 +697,45 @@
                         if (appBoundaryIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
-                            //  Contents
-                            // +------c-------+
-                            // |              |
-                            // |   Board      |
-                            // |  +---b---+   |
-                            // |  |       |   |
-                            // ch bh  p   |   |
-                            // |  |       |   |
-                            // |  +-------+   |
-                            // +--------------+
+                            // - 印字は動かない、プレイヤーの移動量を見ること。
+                            // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                             //
-                            //  b ... Origin x on board.
-                            //  c ... contents's x from B.
-                            //  p ... player character's x from B.
-                            //  bh ... Board height.
-                            //  ch ... Contents height.
+                            // Printing
+                            // +-------------------->+     c
+                            // |                     |     ^
+                            // |       Board         |     |
+                            // |       +-------+     | 0 + + pd
+                            // |       ^       |     |   |
+                            // |       |       |     |   v
+                            // ch      bh  *   |     |   p
+                            // |       |       |     |
+                            // |       v       |     |
+                            // |       +-------+     +
+                            // |                     ^
+                            // |                     |
+                            // |                     m
+                            // |                     |
+                            // |                     v
+                            // +---------------------+
                             //
+                            // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                            // p は、0 からみた、登場人物の初期位置。
+                            // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                            // pd は、プレイヤーの初期位置からの移動量。
+                            // bh は、盤の行数。
+                            // ch は、印字の行数。
+                            // m が MaskMargin（例えば2）以下なら、それ以上右に行くことはできない。
                             //
-                            // +------c-------+
-                            // |              |
-                            // |              |
-                            // |  +---b---+   |
-                            // |  |       |   |
-                            // ch bh  p   |   |
-                            // |  |       |   |
-                            // +--+-------+---+
-                            //
-                            // ch - bh ... max margin.
-                            //
-                            // -c が max margin 以上なら、それ以上下に行くことはできない。
+                            // m = cw + c - bw
                             //
 
+                            const pd = -player1RankDelta.value;
+                            const ch = printing1RankNum; // 例えば 10
                             const bh = board1RankNum;
-                            const ch = printing1RankNum;
-                            const c = printing1Rank.value;
-                            const maxMargin = ch - bh;
+                            const m = ch + pd - bh;
+                            console.log(`pd=${pd} ch=${ch} bw=${bh} m=${m} m <= board1WithMaskHeight:${m <= board1WithMaskWidth}`);
 
-                            if (maxMargin <= -c) {
+                            if (m <= -board1WithMaskBottomRightMargin) {
                                 willShift = false;
                             }
                         }
