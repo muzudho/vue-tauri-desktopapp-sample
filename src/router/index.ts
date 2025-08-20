@@ -44,9 +44,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-face-scroll-boundary.vue'),
     },
     {
-        name: 'InputAxisRpgWalkFaceScrollPrimordial',
-        path: '/making/input-axis-rpg-walk-face-scroll-primordial',
-        component: () => import('../pages/making/input-axis-rpg-walk-face-scroll-primordial.vue'),
+        name: 'InputAxisRpgWalkBoardScrollLoopAndFaceShiftPrimordial',
+        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-primordial',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-primordial.vue'),
     },
     {
         name: 'InputAxisRpgWalkFaceShiftBoundary',
