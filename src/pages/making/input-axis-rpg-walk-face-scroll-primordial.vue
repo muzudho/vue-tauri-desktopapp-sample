@@ -15,7 +15,7 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <div style="board1Style">
+        <div :style="board1Style">
 
             <!--
                 グリッド
@@ -59,8 +59,17 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref, StyleValue } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+
+
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
+
+
+    import { CompatibleStyleValue }  from '../../composables/compatible-style-value';
+
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -114,10 +123,19 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
+    const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+        return {
+            position: 'relative',
+            left: "0",
+            top: "0",
+            width: `${commonZoom * board1FileNum * board1SquareWidth}px`,
+            height: `${commonZoom * board1RankNum * board1SquareHeight}px`,
+        };
+    });
     const board1FileNumWithMask = board1FileNum + 1   // マスク付きの場合の列数
     const board1RankNumWithMask = board1RankNum + 1
     const getSquareStyle = computed<
-        (i:number)=>StyleValue
+        (i:number)=>CompatibleStyleValue
     >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
@@ -548,14 +566,4 @@
     div.cursor {
         position: relative; width:32px; height:32px;
     }
-
-    /* ボードとマスクを含んでいる領域のスタイル */
-    div.board1Style {
-        position: 'relative';
-        left: "0";
-        top: "0";
-        width: calc(v-bind(commonZoom) * v-bind(board1FileNum) * v-bind(board1SquareWidth)px);
-        height: calc(v-bind(commonZoom) * v-bind(board1RankNum) * v-bind(board1SquareHeight)px);
-    }
-
 </style>

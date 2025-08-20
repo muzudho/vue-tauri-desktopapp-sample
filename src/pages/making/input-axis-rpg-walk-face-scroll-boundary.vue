@@ -82,8 +82,16 @@
     import { computed, onMounted, ref, watch } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
-    import type { CSSProperties } from 'csstype';
     import { VBtn } from 'vuetify/components';
+
+
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
+
+
+    import { CompatibleStyleValue }  from '../../composables/compatible-style-value';
+
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -160,7 +168,7 @@
     });
     const board1FileNumWithMask = board1FileNum + 1   // マスク付きの場合の列数
     const board1RankNumWithMask = board1RankNum + 1
-    const board1Style = computed<CSSProperties>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+    const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
@@ -170,7 +178,7 @@
         };
     });
     const getSquareStyle = computed<
-        (i:number)=>CSSProperties
+        (i:number)=>CompatibleStyleValue
     >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
