@@ -12,13 +12,13 @@
                 <v-btn class="code-key hidden"/>
                 <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onUpButtonPressed);" @mouseup="buttonRepeat1Ref?.stop(onUpButtonReleased);" @mouseleave="buttonRepeat1Ref?.stop(onUpButtonReleased);">↑</v-btn>
                 <br/>
-                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onLeftButtonPressed)" @mouseup="buttonRepeat1Ref?.stop(onLeftButtonReleased)" @mouseleave="buttonRepeat1Ref?.stop(onLeftButtonReleased)">←</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onLeftButtonPressed)" @mouseup="buttonRepeat1Ref?.justStop()" @mouseleave="buttonRepeat1Ref?.justStop()">←</v-btn>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onRightButtonPressed)" @mouseup="buttonRepeat1Ref?.stop(onRightButtonReleased)" @mouseleave="buttonRepeat1Ref?.stop(onRightButtonReleased)">→</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onRightButtonPressed)" @mouseup="buttonRepeat1Ref?.justStop()" @mouseleave="buttonRepeat1Ref?.justStop()">→</v-btn>
                 　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onDownButtonPressed)" @mouseup="buttonRepeat1Ref?.stop(onDownButtonReleased)" @mouseleave="buttonRepeat1Ref?.stop(onDownButtonReleased)">↓</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onDownButtonPressed)" @mouseup="buttonRepeat1Ref?.justStop()" @mouseleave="buttonRepeat1Ref?.justStop()">↓</v-btn>
                 <br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
@@ -73,16 +73,6 @@
     // from の階層が上の順、アルファベット順
     import ButtonRepeat from '../../components/ButtonRepeat.vue';
     import SourceLink from '../../components/SourceLink.vue';
-
-
-    // ############################
-    // # アプリケーション・データ #
-    // ############################
-    //
-    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
-    //
-
-    const appManualKeyRepeatTimerId = ref<number | null>(null);   // ［キーボード操作説明］のボタンのキー・リピート用
 
 
     // ################
@@ -200,38 +190,10 @@
 
 
     /**
-     * 長押し開始
-     */
-    function onRepeatStart(callback:()=>void) : void {      
-        callback();   // 即時実行
-        
-        const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
-        appManualKeyRepeatTimerId.value = setInterval(() => {   // 指定の間隔で繰り返し実行
-            callback();
-        }, intervalTime);
-    }
-
-    /**
-     * 長押し終了
-     */
-    function onRepeatStop(callback:()=>void) {
-        if (appManualKeyRepeatTimerId.value) {
-            clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
-            appManualKeyRepeatTimerId.value = null;
-
-            callback();   // 即時実行
-        }
-    }
-
-    /**
      * 左。
      */
     function onLeftButtonPressed() : void {
         player1Left.value -= player1Speed.value;
-    }
-
-
-    function onLeftButtonReleased() : void {
     }
 
 
@@ -243,7 +205,11 @@
     }
 
 
+    /**
+     * 上ボタンを放したとき。
+     */
     function onUpButtonReleased() : void {
+        // 処理が書けるという例。
     }
 
 
@@ -255,19 +221,11 @@
     }
 
 
-    function onRightButtonReleased() : void {
-    }
-
-
     /**
      * 下。
      */
     function onDownButtonPressed() : void {
         player1Top.value += player1Speed.value;
-    }
-
-
-    function onDownButtonReleased() : void {
     }
 
 

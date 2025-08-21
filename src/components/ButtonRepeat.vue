@@ -33,12 +33,13 @@
     // ##########
 
     onUnmounted(()=>{
-        stopForce();
+        justStop();
     });
 
 
     /**
      * 長押し開始
+     * @param callback ボタンを押しっぱなしにしているときのコールバック関数
      */
     function start(callback:()=>void) : void {      
         callback(); // 即時実行
@@ -51,6 +52,7 @@
 
     /**
      * 長押し終了
+     * @param callback ボタンを放したときのコールバック関数
      */
     function stop(callback:()=>void) {
         if (appManualKeyRepeatTimerId.value) {
@@ -63,9 +65,9 @@
 
 
     /**
-     * 長押し終了
+     * ボタンを放したときのコールバックを呼ばずに長押し終了
      */
-    function stopForce() {
+    function justStop() {
         if (appManualKeyRepeatTimerId.value) {
             clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
             appManualKeyRepeatTimerId.value = null;
@@ -80,6 +82,7 @@
     defineExpose({
         start,
         stop,
+        justStop,
     });
 
 </script>
