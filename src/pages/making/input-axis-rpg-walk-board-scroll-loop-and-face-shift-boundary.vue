@@ -60,6 +60,12 @@
 
         </div>
 
+        <div>
+            盤x={{ board1Left }}　｜　人始筋={{ player1FileHome }} 人x={{ player1Left }} 人Δx={{ player1LeftDelta }}<br/>
+            盤y={{ board1Top }}　｜　人始段={{ player1RankHome }} 人y={{ player1Top }} 人Δx={{ player1TopDelta }}<br/>
+        </div>
+        <br/>
+
         <p>
             👆 フィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
             スクロールが付いている。スクロールってのは、タイルの塗り替えではなく、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
