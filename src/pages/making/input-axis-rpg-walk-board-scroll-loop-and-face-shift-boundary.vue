@@ -436,8 +436,8 @@
             // +----------------+
             //
             // とりあえず、上下左右について、移動量は以下の変数に格納しているとする。
-            const rotH = player1FileDelta.value; // 水平シフト（単位：マス）
-            const rotV = player1RankDelta.value; // 垂直シフト
+            const rotH = player1File.value; // 水平シフト（単位：マス）
+            const rotV = player1Rank.value; // 垂直シフト
 
             // 移動量を、逆方向に使うことで、巻き戻したときの列、行位置を割り出します。
             // 補正された列
@@ -463,8 +463,8 @@
             const virtualTileIndex = getFixTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
             let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
-            const printingFile = virtualTileFile + player1FileDelta.value;
-            const printingRank = virtualTileRank + player1RankDelta.value;
+            const printingFile = virtualTileFile + player1File.value;
+            const printingRank = virtualTileRank + player1Rank.value;
             const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
@@ -487,8 +487,6 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome = ref<number>(2);		// 基準の相対位置
     const player1RankHome = ref<number>(2);
-    const player1FileDelta = ref<number>(0);    // 移動量（単位：マス）     TODO: 🌟 計算で求まらないか？
-    const player1RankDelta = ref<number>(0);
     const player1LeftDelta = ref<number>(0);    // 移動量（単位：ピクセル））
     const player1TopDelta = ref<number>(0);
     const player1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
@@ -616,8 +614,6 @@
                 if (player1Input[" "]) {
                     player1LeftDelta.value = 0;     // 登場人物
                     player1TopDelta.value = 0;
-                    player1FileDelta.value = 0;
-                    player1RankDelta.value = 0;
                     board1Left.value = 0;           // 盤
                     board1Top.value = 0;
                     printing1FileDelta.value = 0;   // 印字
@@ -668,7 +664,7 @@
                             // m = cw + c - bw
                             //
 
-                            const pd = -player1FileDelta.value;
+                            const pd = -player1File.value;
                             const cw = printing1FileNum.value; // 例えば 10
                             const bw = board1FileNum.value;
                             const m = cw + pd - bw;
@@ -728,7 +724,7 @@
                             // m = c
                             //
 
-                            const pd = player1FileDelta.value - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
+                            const pd = player1File.value - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
                             const m = - pd;
 
                             if (board1WithMaskSizeSquare.value < m) {
@@ -788,7 +784,7 @@
                             // m = c
                             //
 
-                            const pd = player1RankDelta.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
+                            const pd = player1Rank.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
                             const m = - pd;
 
                             if (board1WithMaskSizeSquare.value < m) {
@@ -854,7 +850,7 @@
                             // m = ch + c - bh
                             //
 
-                            const pd = -(player1RankDelta.value+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
+                            const pd = -(player1Rank.value+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
                             const ch = printing1RankNum.value; // 例えば 10
                             const bh = board1RankNum.value;
                             const m = ch + pd - bh;
@@ -908,21 +904,21 @@
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
-                // 登場人物の移動量（単位：マス）を更新：
-                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
-                    if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) { // 上
-                        player1RankDelta.value -= 1;
-                    } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
-                        player1RankDelta.value += 1;
-                    }
+                // // 登場人物の移動量（単位：マス）を更新：
+                // if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
+                //     if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) { // 上
+                //         player1RankDelta.value -= 1;
+                //     } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
+                //         player1RankDelta.value += 1;
+                //     }
 
-                    if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {    // 右
-                        player1FileDelta.value += 1;
-                    } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
-                        player1FileDelta.value -= 1;
-                    }
-                    //console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
-                }
+                //     if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {    // 右
+                //         player1FileDelta.value += 1;
+                //     } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
+                //         player1FileDelta.value -= 1;
+                //     }
+                //     //console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
+                // }
 
                 if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
