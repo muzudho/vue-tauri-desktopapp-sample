@@ -6,10 +6,10 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右に動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、盤、印字の位置を最初に有ったところに戻すぜ。</li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、盤、印字の位置を最初に有ったところに戻すぜ。</li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -53,7 +53,7 @@
         </div>
 
         <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
-        <p>数字柄はループしていないぜ（＾▽＾）！</p>
+        <p>盤より大きな数字柄がシフトしているのを見てくれだぜ（＾▽＾）！</p>
     </section>
 
     <br/>
@@ -111,14 +111,6 @@
     const commonSpriteMotionToLeft = -1;
 
 
-    // ############################
-    // # アプリケーション・データ #
-    // ############################
-    //
-    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
-    //
-
-    const appManualIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
     // ################
     // # オブジェクト #
     // ################
@@ -340,14 +332,14 @@
         toBottom: 0,   // 負なら上、正なら下
     });
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　登場人物１ +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome: number = 2;  // 盤の真ん中をホーム・ポジションとする
     const player1RankHome: number = 2;
-    const player1LeftDelta = ref<number>(0);    // 登場人物の移動量
+    const player1LeftDelta = ref<number>(0);    // 自機の移動量
     const player1TopDelta = ref<number>(0);
     const player1Left = computed(()=>{
         return player1FileHome * board1SquareWidth + player1LeftDelta.value;
@@ -475,7 +467,7 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1LeftDelta.value = player1FileHome * board1SquareWidth;   // 登場人物
+                    player1LeftDelta.value = player1FileHome * board1SquareWidth;   // 自機
                     player1TopDelta.value = player1RankHome * board1SquareHeight;
                     player1FileDelta.value = 0;
                     player1RankDelta.value = 0;
@@ -595,14 +587,14 @@
     }
 
 
-    /**
-     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-     */
-    function focusRemove() : void {
-        if (noopButton.value) {
-            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-        }
-    }
+    // /**
+    //  * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
+    //  */
+    // function focusRemove() : void {
+    //     if (noopButton.value) {
+    //         noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+    //     }
+    // }
 
 
     function onUpButtonPressed() : void {

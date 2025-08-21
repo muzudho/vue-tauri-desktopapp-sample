@@ -1,15 +1,15 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の循環スクロール、数字柄の非循環シフト、盤の端処理</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の循環スクロール、数字柄の原始的シフト、自機の端歩き</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右へ、印字を逆方向へ動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右へ、印字を逆方向へ動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、印字の位置を最初に有ったところに戻すぜ。</li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -67,8 +67,7 @@
         <br/>
 
         <p>
-            👆 フィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
-            スクロールが付いている。スクロールってのは、タイルの塗り替えではなく、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
+            👆 フィールドの端まで歩いてみてくれだぜ（＾▽＾）！<br/>
             上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！<br/>
         </p>
         <br/>
@@ -124,10 +123,10 @@
             </section>
             <br/>
 
-            <p>登場人物の画面上の原則固定位置。マスクを含んだサイズ：</p>
+            <p>自機の画面上の原則固定位置。マスクを含んだサイズ：</p>
             <section class="sec-1">
                 <v-slider
-                    label="登場人物の基準の相対筋"
+                    label="自機の基準の相対筋"
                     v-model="player1FileHome"
                     :min="0"
                     :max="5"
@@ -136,7 +135,7 @@
                     thumbLabel="always"
                     @click="focusRemove()" />
                 <v-slider
-                    label="登場人物の基準の相対段"
+                    label="自機の基準の相対段"
                     v-model="player1RankHome"
                     :min="0"
                     :max="5"
@@ -182,7 +181,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、数字柄の非循環シフト、盤の端処理　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、数字柄の原始的シフト、自機の端歩き　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
@@ -481,9 +480,9 @@
         };
     });    
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　登場人物１ +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome = ref<number>(2);		// 基準の相対位置
@@ -497,7 +496,7 @@
     const player1Rank = computed<number>(()=>{
         return Math.round(player1Top.value / board1SquareHeight);
     });
-    const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
+    const player1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
         return Math.round(-printing1Left.value / board1SquareWidth);
     });
     const player1RankDelta = computed<number>(()=>{
@@ -600,7 +599,7 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                player1Motion.value["toRight"] = 0;		// 登場人物
+                player1Motion.value["toRight"] = 0;		// 自機
                 player1Motion.value["toBottom"] = 0;
                 printing1Motion.value["toRight"] = 0;		// TODO 印字
                 printing1Motion.value["toBottom"] = 0;
@@ -611,7 +610,7 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left.value = player1FileHome.value * board1SquareWidth;     // 登場人物
+                    player1Left.value = player1FileHome.value * board1SquareWidth;     // 自機
                     player1Top.value = player1RankHome.value * board1SquareHeight;
                     printing1Left.value = 0;           // 印字
                     printing1Top.value = 0;
@@ -884,7 +883,7 @@
                 printing1Top.value -= player1Speed.value;
             }
 
-            // 登場人物の移動量（単位：ピクセル）を更新、キー入力の向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+            // 自機の移動量（単位：ピクセル）を更新、キー入力の向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
                 player1Left.value += player1Speed.value;
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左

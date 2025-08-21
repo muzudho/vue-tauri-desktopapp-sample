@@ -28,7 +28,7 @@
 
         <div :style="`position:relative; left: 0; top: 0; height:${commonZoom * board1RankNum * board1SquareHeight}px;`">
 
-            <!-- 登場人物１の初期位置 -->
+            <!-- 自機１の初期位置 -->
             <div :style="`position:absolute; left: ${0 * board1SquareWidth}px; top: ${0 * board1SquareHeight}px; width: ${4 * 5 * board1SquareWidth}px; height: ${4 * 5 * board1SquareHeight}px; background-color: lightpink;`">
             </div>
 
@@ -160,9 +160,9 @@
         };
     });
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　登場人物１ +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
 
     const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
     const player1Top = ref<number>(2 * board1SquareHeight);     // スプライトのY座標
