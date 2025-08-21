@@ -290,8 +290,8 @@
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
 
-            //const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;     // FIXME: 🌟 筋の数と、段の数が異なるとき、座標はずれないが、印字がずれてしまう。
-            const homeTop = Math.floor(i / board1RankNum.value) * board1SquareHeight;   // FIXME: 🌟 筋の数と、段の数が異なるとき、座標がずれてしまう。
+            //const homeTop = Math.floor(i / board1RankNum.value) * board1SquareHeight;   // FIXME: 🌟 筋の数と、段の数が異なるとき、座標がずれてしまう。
+            const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;     // FIXME: 🌟 筋の数と、段の数が異なるとき、座標はずれないが、印字がずれてしまう。
 
             const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
             const bhPx = (board1RankNum.value * board1SquareHeight);
@@ -342,7 +342,8 @@
     function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
         // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
         const file = tileIndex % board1FileNum.value;
-        const rank = Math.floor(tileIndex / board1RankNum.value);
+        //const rank = Math.floor(tileIndex / board1RankNum.value);
+        const rank = Math.floor(tileIndex / board1FileNum.value);
 
         return [file, rank];
     }
