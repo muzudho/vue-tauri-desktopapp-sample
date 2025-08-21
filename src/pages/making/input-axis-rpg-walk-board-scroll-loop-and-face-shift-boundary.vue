@@ -275,8 +275,14 @@
         return board1FileNum.value * board1RankNum.value;
     });
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const board1Top = ref<number>(0);
     const board1Left = ref<number>(0);
+    const board1Top = ref<number>(0);
+    const board1File = computed<number>(()=>{
+        return Math.round(board1Left.value / board1SquareWidth);
+    });
+    const board1Rank = computed<number>(()=>{
+        return Math.round(board1Top.value / board1SquareHeight);
+    });
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const bothSide = 2;     // 左と右とか、上と下とか、対。
@@ -436,8 +442,8 @@
             // +----------------+
             //
             // とりあえず、上下左右について、移動量は以下の変数に格納しているとする。
-            const rotH = player1File.value; // 水平シフト（単位：マス）
-            const rotV = player1Rank.value; // 垂直シフト
+            const rotH = player1FileDelta.value; // 水平シフト（単位：マス）
+            const rotV = player1RankDelta.value; // 垂直シフト
 
             // 移動量を、逆方向に使うことで、巻き戻したときの列、行位置を割り出します。
             // 補正された列
@@ -463,8 +469,8 @@
             const virtualTileIndex = getFixTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
             let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
-            const printingFile = virtualTileFile + player1File.value;
-            const printingRank = virtualTileRank + player1Rank.value;
+            const printingFile = virtualTileFile + player1FileDelta.value;
+            const printingRank = virtualTileRank + player1RankDelta.value;
             const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
@@ -475,10 +481,6 @@
             return  printing1Data.value[printingIndex];
         };
     });    
-    const printing1Motion = ref<Record<string, number>>({  // モーションへの入力    FIXME: 🌟 使ってるか？
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
-    });
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　登場人物１ +
@@ -502,7 +504,13 @@
     const player1Rank = computed<number>(()=>{
         return Math.round(player1Top.value / board1SquareHeight);
     });
-    
+    const player1FileDelta = computed<number>(()=>{
+        return (player1File.value - player1FileHome.value) % printing1FileNum.value;
+    });
+    const player1RankDelta = computed<number>(()=>{
+        return (player1Rank.value - player1RankHome.value) % printing1RankNum.value;
+    });
+
     const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
@@ -572,6 +580,7 @@
 
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+        console.log(`player1File=${player1File.value} player1FileDelta=なし player1Rank=${player1Rank.value} board1File=${board1File.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
     });
 
 
@@ -601,8 +610,6 @@
                 // モーションのクリアー
                 board1Motion.value["toRight"] = 0;
                 board1Motion.value["toBottom"] = 0;
-                printing1Motion.value["toRight"] = 0;
-                printing1Motion.value["toBottom"] = 0;
                 player1Motion.value["toRight"] = 0;
                 player1Motion.value["toBottom"] = 0;
             }
@@ -664,7 +671,7 @@
                             // m = cw + c - bw
                             //
 
-                            const pd = -player1File.value;
+                            const pd = -player1FileDelta.value;
                             const cw = printing1FileNum.value; // 例えば 10
                             const bw = board1FileNum.value;
                             const m = cw + pd - bw;
@@ -675,7 +682,6 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toRight"] = commonSpriteMotionToLeft;
                             board1Motion.value["toRight"] = commonSpriteMotionToRight;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
@@ -724,7 +730,7 @@
                             // m = c
                             //
 
-                            const pd = player1File.value - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
+                            const pd = player1FileDelta.value - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
                             const m = - pd;
 
                             if (board1WithMaskSizeSquare.value < m) {
@@ -733,7 +739,6 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toRight"] = commonSpriteMotionToRight;
                             board1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
@@ -784,7 +789,7 @@
                             // m = c
                             //
 
-                            const pd = player1Rank.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
+                            const pd = player1RankDelta.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
                             const m = - pd;
 
                             if (board1WithMaskSizeSquare.value < m) {
@@ -793,7 +798,6 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                             board1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
@@ -850,7 +854,7 @@
                             // m = ch + c - bh
                             //
 
-                            const pd = -(player1Rank.value+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
+                            const pd = -(player1RankDelta.value+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
                             const ch = printing1RankNum.value; // 例えば 10
                             const bh = board1RankNum.value;
                             const m = ch + pd - bh;
@@ -862,7 +866,6 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toBottom"] = commonSpriteMotionToTop;
                             board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
@@ -905,7 +908,7 @@
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
-                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }
