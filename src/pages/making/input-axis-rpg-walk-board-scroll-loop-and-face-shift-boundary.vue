@@ -259,15 +259,16 @@
     const board1Left = ref<number>(0);
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
+    const bothSide = 2;     // 左と右とか、上と下とか、対。
     const board1WithMaskFileNum = computed<number>(()=>{        // マスク付きの場合の列数
-        const minWidth = 2 * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;  // マスクの横幅より小さくはなりません。
+        const minWidth = bothSide * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;  // マスクの横幅より小さくはなりません。
         if (board1FileNum.value < minWidth) {
             return minWidth;
         }
         return board1FileNum.value + board1WithMaskBottomRightMargin;
     });
     const board1WithMaskRankNum = computed<number>(()=>{
-        const minHeight = 2 * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin; // マスクの縦幅より小さくはなりません。
+        const minHeight = bothSide * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin; // マスクの縦幅より小さくはなりません。
         if (board1RankNum.value < minHeight) {
             return minHeight;
         }
@@ -321,12 +322,10 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1FileNum = ref<number>(10);    // 列数
-    const printing1RankNum = ref<number>(10);    // 行数
-    const printing1FileInit = -3;   // 印字はシフトするので、 File, Rank しかない。 Left, Top は無い。
-    const printing1RankInit = -3;
-    const printing1File = ref<number>(printing1FileInit);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
-    const printing1Rank = ref<number>(printing1RankInit);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
+    const printing1FileNum = ref<number>(10);   // 列数
+    const printing1RankNum = ref<number>(10);   // 行数
+    const printing1FileDelta = ref<number>(0);  // 印字の左上隅のタイルの、初期位置からの移動量。
+    const printing1RankDelta = ref<number>(0);  // 印字の左上隅のタイルの、初期位置からの移動量。
     const printing1Data = ref<string[]>([]);
     for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
@@ -595,8 +594,8 @@
                 if (player1Input[" "]) {
                     board1Left.value = 0;
                     board1Top.value = 0;
-                    printing1File.value = printing1FileInit;
-                    printing1Rank.value = printing1RankInit;
+                    printing1FileDelta.value = 0;
+                    printing1RankDelta.value = 0;
                     player1LeftDelta.value = 0;
                     player1TopDelta.value = 0;
                     player1FileDelta.value = 0;
