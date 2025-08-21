@@ -6,7 +6,7 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右へ、盤を逆方向へ動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、盤、印字の位置を最初に有ったところに戻すぜ。</li>
@@ -436,7 +436,7 @@
             // +----------------+
             //
             // とりあえず、上下左右について、移動量は以下の変数に格納しているとする。
-            const rotH = player1FileDelta.value; // 水平シフト
+            const rotH = player1FileDelta.value; // 水平シフト（単位：マス）
             const rotV = player1RankDelta.value; // 垂直シフト
 
             // 移動量を、逆方向に使うことで、巻き戻したときの列、行位置を割り出します。
@@ -487,7 +487,7 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome = ref<number>(2);		// 基準の相対位置
     const player1RankHome = ref<number>(2);
-    const player1FileDelta = ref<number>(0);    // 移動量（単位：マス）
+    const player1FileDelta = ref<number>(0);    // 移動量（単位：マス）     TODO: 🌟 計算で求まらないか？
     const player1RankDelta = ref<number>(0);
     const player1LeftDelta = ref<number>(0);    // 移動量（単位：ピクセル））
     const player1TopDelta = ref<number>(0);
@@ -894,6 +894,7 @@
             }
 
             // プレイヤーが歩くのは、盤の端を歩いているときだけ。このとき、画面スクロールは起こらない。
+            // 登場人物の移動量（単位：ピクセル）を更新：
             if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {
                 player1TopDelta.value -= player1Speed.value;
             } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
@@ -907,8 +908,8 @@
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+                // 登場人物の移動量（単位：マス）を更新：
                 if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
-                    // 移動量を記録しておく。シフト。
                     if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) { // 上
                         player1RankDelta.value -= 1;
                     } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
