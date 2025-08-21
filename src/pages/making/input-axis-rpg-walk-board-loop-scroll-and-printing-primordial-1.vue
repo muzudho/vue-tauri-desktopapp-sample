@@ -121,10 +121,10 @@
     //
 
     const commonZoom = 4;
-    const commonSpriteMotionToTop = -1;  // モーション（motion）定数。上に移動する
-    const commonSpriteMotionToRight = 1;
-    const commonSpriteMotionToBottom = 1;
-    const commonSpriteMotionToLeft = -1;
+    const commonSpriteMotionTop = -1;  // モーション（motion）定数。上。
+    const commonSpriteMotionRight = 1;
+    const commonSpriteMotionBottom = 1;
+    const commonSpriteMotionLeft = -1;
 
 
     // ################
@@ -214,8 +214,8 @@
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
     const printing1Motion = ref<Record<string, number>>({  // 印字への入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
+        goToRight: 0,   // 負なら左、正なら右
+        goToBottom: 0,   // 負なら上、正なら下
     });
 
     /**
@@ -398,8 +398,8 @@
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
+        goToRight: 0,     // 負なら左、正なら右へ移動する
+        goToBottom: 0,    // 負なら上、正なら下へ移動する
     });
 
 
@@ -455,10 +455,10 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                player1Motion.value["toRight"] = 0;		// 自機
-                player1Motion.value["toBottom"] = 0;
-                printing1Motion.value["toRight"] = 0;	// 印字
-                printing1Motion.value["toBottom"] = 0;
+                player1Motion.value["goToRight"] = 0;	// 自機
+                player1Motion.value["goToBottom"] = 0;
+                printing1Motion.value["goToRight"] = 0;	// 印字
+                printing1Motion.value["goToBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -474,23 +474,23 @@
                 // 移動関連（単発）
                 // 斜め方向の場合、左右を上下で上書きする。（右、左）→（上、下）の順。
                 if (player1Input.ArrowRight) {  // 右
-                    player1Motion.value["toRight"] = commonSpriteMotionToRight;
-                    printing1Motion.value["toRight"] = commonSpriteMotionToLeft;    // 印字は、キー入力とは逆向きへ進める
+                    player1Motion.value["goToRight"] = commonSpriteMotionRight;
+                    printing1Motion.value["goToRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowLeft) { // 左
-                    player1Motion.value["toRight"] = commonSpriteMotionToLeft;
-                    printing1Motion.value["toRight"] = commonSpriteMotionToRight;   // 印字は、キー入力とは逆向きへ進める
+                    player1Motion.value["goToRight"] = commonSpriteMotionLeft;
+                    printing1Motion.value["goToRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowUp) {   // 上
-                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;
-                    printing1Motion.value["toBottom"] = commonSpriteMotionToBottom; // 印字は、キー入力とは逆向きへ進める
+                    player1Motion.value["goToBottom"] = commonSpriteMotionTop;
+                    printing1Motion.value["goToBottom"] = commonSpriteMotionBottom; // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowDown) {   // 下
-                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
-                    printing1Motion.value["toBottom"] = commonSpriteMotionToTop;    // 印字は、キー入力とは逆向きへ進める
+                    player1Motion.value["goToBottom"] = commonSpriteMotionBottom;
+                    printing1Motion.value["goToBottom"] = commonSpriteMotionTop;    // 印字は、キー入力とは逆向きへ進める
                 }
             }
 
@@ -499,31 +499,31 @@
             // ++++++++++++++++++++
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
+            if (printing1Motion.value["goToRight"] == commonSpriteMotionRight) {   // 右
                 printing1Left.value += player1Speed.value;
-            } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
+            } else if (printing1Motion.value["goToRight"] == commonSpriteMotionLeft) {  // 左
                 printing1Left.value -= player1Speed.value;
             }
 
-            if (printing1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
+            if (printing1Motion.value["goToBottom"] == commonSpriteMotionTop) {  // 上
                 printing1Top.value -= player1Speed.value;
-            } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
+            } else if (printing1Motion.value["goToBottom"] == commonSpriteMotionBottom) {   // 下
                 printing1Top.value += player1Speed.value;
             }
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
                 // 自機の向きを更新、タテヨコ同時入力の場合、上下で上書きする： ※ 自機の位置は固定です。
-                if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
+                if (player1Motion.value["goToBottom"] == commonSpriteMotionTop) {   // 上
                     player1Frames.value = player1SourceFrames["up"]
-                } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
+                } else if (player1Motion.value["goToBottom"] == commonSpriteMotionBottom) { // 下
                     player1Frames.value = player1SourceFrames["down"]
-                } else if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
+                } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
                     player1Frames.value = player1SourceFrames["right"]
-                } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
+                } else if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
                     player1Frames.value = player1SourceFrames["left"]
                 }
 
-                if (printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (printing1Motion.value["goToRight"]!=0 || printing1Motion.value["goToBottom"]!=0 || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }
