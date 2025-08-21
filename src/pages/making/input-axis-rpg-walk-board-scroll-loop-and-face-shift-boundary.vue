@@ -7,6 +7,10 @@
             <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
             <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
         </ul>
+        <!-- フォーカスを外すためのダミー・ボタンです -->
+        <v-btn
+            ref="noopButton"
+            v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'" >何もしないボタン</v-btn><br/>
         <br/>
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
@@ -14,109 +18,6 @@
             ref="stopwatch1Ref"
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
-
-        <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
-        <section class="sec-1">
-            <v-slider
-                label="盤の筋の数"
-                v-model="board1FileNum"
-                :min="0"
-                :max="6"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-            <v-slider
-                label="盤の段の数"
-                v-model="board1RankNum"
-                :min="0"
-                :max="6"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-        </section>
-        <br/>
-
-        <p>要はマップデータのサイズ：</p>
-        <section class="sec-1">
-            <v-slider
-                label="印字の筋の数"
-                v-model="printing1FileNum"
-                :min="0"
-                :max="10"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-            <v-slider
-                label="印字の段の数"
-                v-model="printing1RankNum"
-                :min="0"
-                :max="10"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-        </section>
-        <br/>
-
-        <p>登場人物の画面上の原則固定位置。マスクを含んだサイズ：</p>
-        <section class="sec-1">
-            <v-slider
-                label="登場人物の基準の相対筋"
-                v-model="player1FileHome"
-                :min="0"
-                :max="5"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-            <v-slider
-                label="登場人物の基準の相対段"
-                v-model="player1RankHome"
-                :min="0"
-                :max="5"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-        </section>
-        <br/>
-
-        <p>マスクのタテヨコ幅。右側と下側は、１マス多めに付きます：</p>
-        <section class="sec-1">
-            <v-slider
-                label="マスクのタテヨコ幅"
-                v-model="board1WithMaskSizeSquare"
-                :min="0"
-                :max="2"
-                step="1"
-                showTicks="always"
-                thumbLabel="always"
-                @click="focusRemove()" />
-        </section>
-        <br/>
-
-        <v-switch
-            v-model="appBoundaryIsLock"
-            :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
-            color="green"
-            :hideDetails="true"
-            inset
-            @click="focusRemove()" />
-            <section class="sec-1">
-                <v-switch
-                    v-model="appBoundaryWalkingEdge"
-                    :disabled="!appBoundaryWalkingEdgeIsEnabled"
-                    :label="appBoundaryWalkingEdge ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
-                    color="green"
-                    :hideDetails="true"
-                    inset
-                    @click="focusRemove()" />
-            </section>
-        <!-- フォーカスを外すためのダミー・ボタンです -->
-        <v-btn ref="noopButton">何もしないボタン</v-btn>
 
         <div :style="board1Style">
 
@@ -152,8 +53,118 @@
 
         </div>
 
-        <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
-        <p>上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！</p>
+        <p>
+            👆 フィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
+            スクロールが付いている。スクロールってのは、タイルの塗り替えではなく、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
+            上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！<br/>
+        </p>
+        <br/>
+
+
+        <!-- 設定 -->
+        <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? '⚙️設定を閉じる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appManualIsShowing" class="sec-1">
+            <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
+            <section class="sec-1">
+                <v-slider
+                    label="盤の筋の数"
+                    v-model="board1FileNum"
+                    :min="0"
+                    :max="6"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+                <v-slider
+                    label="盤の段の数"
+                    v-model="board1RankNum"
+                    :min="0"
+                    :max="6"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+            </section>
+            <br/>
+
+            <p>要はマップデータのサイズ：</p>
+            <section class="sec-1">
+                <v-slider
+                    label="印字の筋の数"
+                    v-model="printing1FileNum"
+                    :min="0"
+                    :max="10"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+                <v-slider
+                    label="印字の段の数"
+                    v-model="printing1RankNum"
+                    :min="0"
+                    :max="10"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+            </section>
+            <br/>
+
+            <p>登場人物の画面上の原則固定位置。マスクを含んだサイズ：</p>
+            <section class="sec-1">
+                <v-slider
+                    label="登場人物の基準の相対筋"
+                    v-model="player1FileHome"
+                    :min="0"
+                    :max="5"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+                <v-slider
+                    label="登場人物の基準の相対段"
+                    v-model="player1RankHome"
+                    :min="0"
+                    :max="5"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+            </section>
+            <br/>
+
+            <p>マスクのタテヨコ幅。右側と下側は、１マス多めに付きます：</p>
+            <section class="sec-1">
+                <v-slider
+                    label="マスクのタテヨコ幅"
+                    v-model="board1WithMaskSizeSquare"
+                    :min="0"
+                    :max="2"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always"
+                    @click="focusRemove()" />
+            </section>
+            <br/>
+
+            <v-switch
+                v-model="appBoundaryIsLock"
+                :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
+                color="green"
+                :hideDetails="true"
+                inset
+                @click="focusRemove()" />
+                <section class="sec-1">
+                    <v-switch
+                        v-model="appBoundaryWalkingEdge"
+                        :disabled="!appBoundaryWalkingEdgeIsEnabled"
+                        :label="appBoundaryWalkingEdge ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
+                        color="green"
+                        :hideDetails="true"
+                        inset
+                        @click="focusRemove()" />
+                </section>
+        </section>
     </section>
 
     <br/>
@@ -218,6 +229,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
+    const appManualIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
     const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(appBoundaryIsLock, (newValue: boolean)=>{
         appBoundaryWalkingEdgeIsEnabled.value = newValue;
