@@ -316,13 +316,13 @@
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const offsetLeft = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
-            const offsetTop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
+            const offsetLeftLoop = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
+            const offsetTopLoop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
 
             return {
                 position: 'absolute',
-                top: `${homeTop + offsetTop}px`,
-                left: `${homeLeft + offsetLeft}px`,
+                top: `${homeTop + offsetTopLoop}px`,
+                left: `${homeLeft + offsetLeftLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 zoom: 4,
@@ -346,7 +346,7 @@
     const printing1FileNum = ref<number>(10);   // 列数
     const printing1RankNum = ref<number>(10);   // 行数
     const printing1FileDelta = ref<number>(0);  // 印字の左上隅のタイルの、初期位置からの移動量。
-    const printing1RankDelta = ref<number>(0);  // 印字の左上隅のタイルの、初期位置からの移動量。
+    const printing1RankDelta = ref<number>(0);
     const printing1Data = ref<string[]>([]);
     for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
@@ -365,8 +365,8 @@
         return [file, rank];
     }
 
-    function printingFileRankToPrintingIndex(printingFile: number, printingRank: number) : number {
-        return printingRank * printing1FileNum.value + printingFile;
+    function printingFileRankToPrintingIndex(file: number, rank: number) : number {
+        return rank * printing1FileNum.value + file;
     }
 
     /**
@@ -488,7 +488,7 @@
     const player1FileHome = ref<number>(2);  // 登場人物の相対基準位置
     const player1RankHome = ref<number>(2);
     const player1LeftDelta = ref<number>(0);    // 登場人物の移動量
-    const player1TopDelta = ref<number>(0);    // 登場人物の移動量
+    const player1TopDelta = ref<number>(0);
     const player1Left = computed(()=>{
         return player1FileHome.value * board1SquareWidth + player1LeftDelta.value;
     });

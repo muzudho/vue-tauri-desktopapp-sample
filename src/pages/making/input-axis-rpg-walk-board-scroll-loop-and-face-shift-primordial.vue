@@ -142,14 +142,14 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const board1Top = ref<number>(0);
-    const board1Left = ref<number>(0);
     const board1FileNum = 5;
     const board1RankNum = 5;
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
+    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
+    const board1Top = ref<number>(0);
+    const board1Left = ref<number>(0);
     const board1WithMaskBottomRightMargin = 1;          // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = board1FileNum + board1WithMaskBottomRightMargin   // マスク付きの場合の列数
     const board1WithMaskRankNum = board1RankNum + board1WithMaskBottomRightMargin
@@ -168,19 +168,19 @@
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1RankNum) * board1SquareHeight;
-            const boardWidth = (board1FileNum * board1SquareWidth);
-            const boardHeight = (board1RankNum * board1SquareHeight);
+            const homeTop = Math.floor(i / board1FileNum) * board1SquareHeight;
+            const bwPx = (board1FileNum * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
+            const bhPx = (board1RankNum * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const boardLeftLoop = euclideanMod(homeLeft + board1Left.value + boardWidth, boardWidth) - homeLeft;
-            const boardTopLoop = euclideanMod(homeTop + board1Top.value + boardHeight, boardHeight) - homeTop;
+            const offsetLeftLoop = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
+            const offsetTopLoop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
 
             return {
                 position: 'absolute',
-                top: `${homeTop + boardTopLoop}px`,
-                left: `${homeLeft + boardLeftLoop}px`,
+                top: `${homeTop + offsetTopLoop}px`,
+                left: `${homeLeft + offsetLeftLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 zoom: 4,
@@ -205,8 +205,8 @@
     const printing1RankNum = 10;        // 行数
     const printing1FileInit = -3;       // 印字はシフトするので、 File, Rank しかない。 Left, Top は無い。
     const printing1RankInit = -3;
-    const printing1File = ref<number>(printing1FileInit);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
-    const printing1Rank = ref<number>(printing1RankInit);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
+    const printing1FileDelta = ref<number>(printing1FileInit);    // 印字の左上隅のタイルの、初期位置からの移動量。
+    const printing1RankDelta = ref<number>(printing1RankInit);
     const printing1Data = ref<string[]>([]);
     for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
@@ -220,13 +220,13 @@
     function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
         // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
         const file = tileIndex % board1FileNum;
-        const rank = Math.floor(tileIndex / board1RankNum);
+        const rank = Math.floor(tileIndex / board1FileNum);
 
         return [file, rank];
     }
 
-    function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
-        return contentsRank * printing1FileNum + contentsFile;
+    function printingFileRankToPrintingIndex(file: number, rank: number) : number {
+        return rank * printing1FileNum + file;
     }
 
     /**
@@ -315,22 +315,24 @@
             return fixTileIndex;
     }
 
+    /**
+     * 印字。
+     */
     const getPrintingNumber = computed(() => {
         return (tileIndex: number)=>{
-            const fixTileIndex = getFixTileIndex(tileIndex);
-            //return fixTileIndex;   // デバッグに使えます。
+            const virtualTileIndex = getFixTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
-            let [tileFile, tileRank] = tileIndexToTileFileRank(fixTileIndex);
-            const contentsFile = tileFile + player1FileDelta.value;
-            const contentsRank = tileRank + player1RankDelta.value;
-            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
+            let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
+            const printingFile = virtualTileFile + player1FileDelta.value;
+            const printingRank = virtualTileRank + player1RankDelta.value;
+            const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (contentsFile < 0 || printing1FileNum <= contentsFile || contentsRank < 0 || printing1RankNum <= contentsRank) {
+            if (printingFile < 0 || printing1FileNum <= printingFile || printingRank < 0 || printing1RankNum <= printingRank) {
                 return "-";
             }
 
-            return  printing1Data.value[contentsIndex];
+            return  printing1Data.value[printingIndex];
         };
     });    
     const printing1Motion = ref<Record<string, number>>({  // モーションへの入力
@@ -339,14 +341,20 @@
     });
 
     // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
+    // + オブジェクト　＞　登場人物１ +
     // ++++++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome: number = 2;  // 盤の真ん中をホーム・ポジションとする
     const player1RankHome: number = 2;
-    const player1Left = ref<number>(player1FileHome * board1SquareWidth);    // スプライトのX座標
-    const player1Top = ref<number>(player1RankHome * board1SquareHeight);       // スプライトのY座標
+    const player1LeftDelta = ref<number>(0);    // 登場人物の移動量
+    const player1TopDelta = ref<number>(0);
+    const player1Left = computed(()=>{
+        return player1FileHome * board1SquareWidth + player1LeftDelta.value;
+    });
+    const player1Top = computed(()=>{
+        return player1RankHome * board1SquareHeight + player1TopDelta.value;
+    });
     // 移動量を記録しておく。
     const player1FileDelta = ref<number>(0);
     const player1RankDelta = ref<number>(0);
@@ -469,10 +477,10 @@
                 if (player1Input[" "]) {
                     board1Left.value = 0;
                     board1Top.value = 0;
-                    printing1File.value = printing1FileInit;
-                    printing1Rank.value = printing1RankInit;
-                    player1Left.value = player1FileHome * board1SquareWidth;
-                    player1Top.value = player1RankHome * board1SquareHeight;
+                    printing1FileDelta.value = printing1FileInit;
+                    printing1RankDelta.value = printing1RankInit;
+                    player1LeftDelta.value = player1FileHome * board1SquareWidth;
+                    player1TopDelta.value = player1RankHome * board1SquareHeight;
                     player1FileDelta.value = 0;
                     player1RankDelta.value = 0;
                 }
@@ -545,15 +553,15 @@
 
             // プレイヤーが歩くのは、盤の端を歩いているときだけ。このとき、画面スクロールは起こらない。
             if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                player1Top.value -= player1Speed.value;
+                player1TopDelta.value -= player1Speed.value;
             } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                player1Top.value += player1Speed.value;
+                player1TopDelta.value += player1Speed.value;
             }
 
             if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                player1Left.value += player1Speed.value;
+                player1LeftDelta.value += player1Speed.value;
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                player1Left.value -= player1Speed.value;
+                player1LeftDelta.value -= player1Speed.value;
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
