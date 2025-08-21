@@ -346,6 +346,7 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
+    const printing1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
     const printing1Data = ref<string[]>([]);
     for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
@@ -494,7 +495,6 @@
     const player1RankHome = ref<number>(2);
     const player1Left = ref<number>(player1FileHome.value * board1SquareWidth);    // 移動量（単位：ピクセル））
     const player1Top = ref<number>(player1RankHome.value * board1SquareHeight);
-    const printing1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
     const player1File = computed<number>(()=>{
         return Math.round(player1Left.value / board1SquareWidth);
     });
