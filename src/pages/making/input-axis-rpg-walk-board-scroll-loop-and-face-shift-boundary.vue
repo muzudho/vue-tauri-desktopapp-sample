@@ -9,7 +9,7 @@
                 <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右へ、印字を逆方向へ動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、盤、印字の位置を最初に有ったところに戻すぜ。</li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、印字の位置を最初に有ったところに戻すぜ。</li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -61,8 +61,8 @@
         </div>
 
         <div>
-            印字x={{ printing1Left }}　｜　人x={{ player1Left2 }}<br/>
-            印字y={{ printing1Top  }}　｜　人x={{ player1Top2  }}<br/>
+            印字x={{ printing1Left }}　｜　人x={{ player1Left }}<br/>
+            印字y={{ printing1Top  }}　｜　人x={{ player1Top  }}<br/>
         </div>
         <br/>
 
@@ -335,10 +335,6 @@
             };
         };
     });
-    const board1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
-    });
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -356,6 +352,10 @@
     for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
+    const printing1Motion = ref<Record<string, number>>({  // 印字への入力
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
+    });
 
     /**
      * 変換
@@ -488,25 +488,14 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome = ref<number>(2);		// 基準の相対位置
     const player1RankHome = ref<number>(2);
-
-    // TODO 盤座標での絶対値にできないか？
-    const player1Left2 = ref<number>(player1FileHome.value * board1SquareWidth);    // 移動量（単位：ピクセル））
-    const player1Top2 = ref<number>(player1RankHome.value * board1SquareHeight);
-    // const player1LeftDeltaOld = ref<number>(0);    // 移動量（単位：ピクセル））
-    // const player1TopDeltaOld = ref<number>(0);
-    // const player1LeftOld = computed(()=>{
-    //     return player1FileHome.value * board1SquareWidth + player1LeftDeltaOld.value;
-    // });
-    // const player1TopOld = computed(()=>{
-    //     return player1RankHome.value * board1SquareHeight + player1TopDeltaOld.value;
-    // });
+    const player1Left = ref<number>(player1FileHome.value * board1SquareWidth);    // 移動量（単位：ピクセル））
+    const player1Top = ref<number>(player1RankHome.value * board1SquareHeight);
     const player1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
-
     const player1File = computed<number>(()=>{
-        return Math.round(player1Left2.value / board1SquareWidth);
+        return Math.round(player1Left.value / board1SquareWidth);
     });
     const player1Rank = computed<number>(()=>{
-        return Math.round(player1Top2.value / board1SquareHeight);
+        return Math.round(player1Top.value / board1SquareHeight);
     });
     const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
         return Math.round(-printing1Left.value / board1SquareWidth);
@@ -521,8 +510,8 @@
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
-        top: `${player1Top2.value}px`,
-        left: `${player1Left2.value}px`,
+        top: `${player1Top.value}px`,
+        left: `${player1Left.value}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -611,10 +600,10 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                board1Motion.value["toRight"] = 0;
-                board1Motion.value["toBottom"] = 0;
-                player1Motion.value["toRight"] = 0;
+                player1Motion.value["toRight"] = 0;		// 登場人物
                 player1Motion.value["toBottom"] = 0;
+                printing1Motion.value["toRight"] = 0;		// TODO 印字
+                printing1Motion.value["toBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -622,9 +611,9 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left2.value = player1FileHome.value * board1SquareWidth;     // 登場人物
-                    player1Top2.value = player1RankHome.value * board1SquareHeight;
-                    printing1Left.value = 0;           // 盤
+                    player1Left.value = player1FileHome.value * board1SquareWidth;     // 登場人物
+                    player1Top.value = player1RankHome.value * board1SquareHeight;
+                    printing1Left.value = 0;           // 印字
                     printing1Top.value = 0;
                 }
 
@@ -683,7 +672,7 @@
                         }
 
                         if (willShift) {
-                            board1Motion.value["toRight"] = commonSpriteMotionToRight;
+                            printing1Motion.value["toRight"] = commonSpriteMotionToRight;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
@@ -740,7 +729,7 @@
                         }
 
                         if (willShift) {
-                            board1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                            printing1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0 + board1WithMaskSizeSquare.value) {
@@ -799,7 +788,7 @@
                         }
 
                         if (willShift) {
-                            board1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                            printing1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0 + board1WithMaskSizeSquare.value) {
@@ -867,7 +856,7 @@
                         }
 
                         if (willShift) {
-                            board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                            printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
@@ -883,33 +872,33 @@
             // ++++++++++++++
 
             // 盤の移動量（単位：ピクセル）を更新、キー入力とは逆向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
+            if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
                 printing1Left.value -= player1Speed.value;
-            } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
+            } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
                 printing1Left.value += player1Speed.value;
             }
 
-            if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
+            if (printing1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
                 printing1Top.value += player1Speed.value;
-            } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
+            } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
                 printing1Top.value -= player1Speed.value;
             }
 
             // 登場人物の移動量（単位：ピクセル）を更新、キー入力の向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
-                player1Left2.value += player1Speed.value;
+                player1Left.value += player1Speed.value;
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
-                player1Left2.value -= player1Speed.value;
+                player1Left.value -= player1Speed.value;
             }
 
             if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
-                player1Top2.value -= player1Speed.value;
+                player1Top.value -= player1Speed.value;
             } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
-                player1Top2.value += player1Speed.value;
+                player1Top.value += player1Speed.value;
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
-                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }
