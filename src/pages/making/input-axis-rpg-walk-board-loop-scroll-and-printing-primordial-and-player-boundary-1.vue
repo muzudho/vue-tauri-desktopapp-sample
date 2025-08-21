@@ -478,7 +478,7 @@
 
             return  printing1Data.value[printingIndex];
         };
-    });    
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -601,7 +601,7 @@
                 // モーションのクリアー
                 player1Motion.value["toRight"] = 0;		// 自機
                 player1Motion.value["toBottom"] = 0;
-                printing1Motion.value["toRight"] = 0;		// TODO 印字
+                printing1Motion.value["toRight"] = 0;	// 印字
                 printing1Motion.value["toBottom"] = 0;
             }
             
@@ -610,9 +610,9 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left.value = player1FileHome.value * board1SquareWidth;     // 自機
+                    player1Left.value = player1FileHome.value * board1SquareWidth;   // 自機
                     player1Top.value = player1RankHome.value * board1SquareHeight;
-                    printing1Left.value = 0;           // 印字
+                    printing1Left.value = 0;                                         // 印字
                     printing1Top.value = 0;
                 }
 
@@ -671,7 +671,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toRight"] = commonSpriteMotionToRight;
+                            printing1Motion.value["toRight"] = commonSpriteMotionToLeft;    // 印字は、キー入力とは逆向きへ進める
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
@@ -728,7 +728,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                            printing1Motion.value["toRight"] = commonSpriteMotionToRight;   // 印字は、キー入力とは逆向きへ進める
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0 + board1WithMaskSizeSquare.value) {
@@ -787,7 +787,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                            printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;     // 印字は、キー入力とは逆向きへ進める
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0 + board1WithMaskSizeSquare.value) {
@@ -855,7 +855,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                            printing1Motion.value["toBottom"] = commonSpriteMotionToTop;    // 印字は、キー入力とは逆向きへ進める
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
@@ -870,20 +870,20 @@
             // + 移動を処理 +
             // ++++++++++++++
 
-            // 盤の移動量（単位：ピクセル）を更新、キー入力とは逆向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+            // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
-                printing1Left.value -= player1Speed.value;
-            } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
                 printing1Left.value += player1Speed.value;
+            } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
+                printing1Left.value -= player1Speed.value;
             }
 
             if (printing1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
-                printing1Top.value += player1Speed.value;
-            } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
                 printing1Top.value -= player1Speed.value;
+            } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
+                printing1Top.value += player1Speed.value;
             }
 
-            // 自機の移動量（単位：ピクセル）を更新、キー入力の向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+            // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
                 player1Left.value += player1Speed.value;
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
@@ -895,7 +895,7 @@
             } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
                 player1Top.value += player1Speed.value;
             }
-            
+
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
                 if (printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
