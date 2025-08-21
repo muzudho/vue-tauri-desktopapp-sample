@@ -535,16 +535,21 @@
                             // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                             //
                             // Printing
-                            // +<---------cw-------->+
-                            // |                     |
-                            // |       Board         |
-                            // |       +<-bw-->+     |
-                            // |       |       |     |
-                            // |       |   *   |     |
-                            // |       |       |     |
-                            // |       +-------+     |
-                            // |                     |
-                            // +---------------+<-m->+
+                            // +<---------cw------------------->+
+                            // |                                |
+                            // |       Board                    |
+                            // |       +<------bw-------->+     |
+                            // |       |//////////////////|     |
+                            // |       |///+-------+//////|     |
+                            // |       |///|       |//////|     |
+                            // |       |///|   *   |//////|     |
+                            // |       |///|       |//////|     |
+                            // |       |///+-------+//////|     |
+                            // |       |//////////////////|     |
+                            // |       |//////////////////|     |
+                            // |       +------------------+     |
+                            // |                                |
+                            // +--------------------------+<-m->+
                             //         0
                             //         +-->p
                             // c<------+
@@ -556,7 +561,8 @@
                             // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
                             // bw は、盤の列数。
                             // cw は、印字の列数。
-                            // m が MaskMargin（例えば2）以下なら、それ以上右に行くことはできない。
+                            // m は、右側番外の余白。
+                            // m が、マスクの横幅（右側の多めの１を含まない）以下なら、それ以上右に行くことはできない。
                             //
                             // m = cw + c - bw
                             //
@@ -567,7 +573,7 @@
                             const m = cw + pd - bw;
                             console.log(`pd=${pd} cw=${cw} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskSizeSquare.value}`);
 
-                            if (m <= -board1WithMaskBottomRightMargin) {
+                            if (m <= -board1WithMaskSizeSquare.value) {
                                 willShift = false;
                             }
                         }
@@ -760,7 +766,7 @@
                             // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
                             // bh は、盤の行数。
                             // ch は、印字の行数。
-                            // m が MaskMargin（例えば2）以下なら、それ以上右に行くことはできない。
+                            // m が、マスクの横幅（下側の多めの１を含まない）以下なら、それ以上下に行くことはできない。
                             //
                             // m = cw + c - bw
                             //
@@ -771,7 +777,8 @@
                             const m = ch + pd - bh;
                             console.log(`pd=${pd} ch=${ch} bw=${bh} m=${m} m <= board1WithMaskHeight:${m <= board1WithMaskSizeSquare.value}`);
 
-                            if (m <= -board1WithMaskBottomRightMargin) {
+                            //if (m <= -board1WithMaskBottomRightMargin) {
+                            if (m <= -board1WithMaskSizeSquare.value) {
                                 willShift = false;
                             }
                         }
