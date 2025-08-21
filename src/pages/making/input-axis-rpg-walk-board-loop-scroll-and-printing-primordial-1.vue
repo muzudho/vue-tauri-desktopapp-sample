@@ -6,10 +6,10 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　印字を、上下左右キーの入力とは逆方向に動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　印字の位置を最初に有ったところに戻すぜ。</li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -349,15 +349,9 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome: number = 2;  // 基準の相対位置
     const player1RankHome: number = 2;
-    const player1Left = ref<number>(player1FileHome * board1SquareWidth);    // 移動量（単位：ピクセル））
-    const player1Top = ref<number>(player1RankHome * board1SquareHeight);
+    const player1Left: number = player1FileHome * board1SquareWidth;    // 自機の位置は固定です。
+    const player1Top: number = player1RankHome * board1SquareHeight;
     const player1Speed = ref<number>(2);     // 移動速度
-    const player1File = computed<number>(()=>{
-        return Math.round(player1Left.value / board1SquareWidth);
-    });
-    const player1Rank = computed<number>(()=>{
-        return Math.round(player1Top.value / board1SquareHeight);
-    });
     const player1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
         return Math.round(-printing1Left.value / board1SquareWidth);
     });
@@ -371,8 +365,8 @@
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
-        top: `${player1Top.value}px`,
-        left: `${player1Left.value}px`,
+        top: `${player1Top}px`,
+        left: `${player1Left}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -472,8 +466,7 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left.value = player1FileHome * board1SquareWidth;   // 自機
-                    player1Top.value = player1RankHome * board1SquareHeight;
+                    // ※ 自機の位置は固定です。
                     printing1Left.value = 0;                                   // 印字
                     printing1Top.value = 0;
                 }
@@ -481,53 +474,40 @@
                 // 移動関連（単発）
                 // 斜め方向の場合、左右を上下で上書きする。（右、左）→（上、下）の順。
                 if (player1Input.ArrowRight) {  // 右
-                    player1Frames.value = player1SourceFrames["right"]    // 向きを変える
-
-                    // ホーム・ポジションより左に居ればホームに近づける。
-                    if (player1File.value < player1FileHome) {
-                        player1Motion.value["toRight"] = commonSpriteMotionToRight;
-                    } else {
-                        printing1Motion.value["toRight"] = commonSpriteMotionToLeft;    // 印字は、キー入力とは逆向きへ進める
-                    }
+                    player1Motion.value["toRight"] = commonSpriteMotionToRight;
+                    printing1Motion.value["toRight"] = commonSpriteMotionToLeft;    // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowLeft) { // 左
-                    player1Frames.value = player1SourceFrames["left"]    // 向きを変える
-
-                    // ホーム・ポジションより右に居ればホームに近づける。
-                    if (player1File.value > player1FileHome) {
-                        player1Motion.value["toRight"] = commonSpriteMotionToLeft;
-                    } else {
-                        printing1Motion.value["toRight"] = commonSpriteMotionToRight;   // 印字は、キー入力とは逆向きへ進める
-                    }
+                    player1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                    printing1Motion.value["toRight"] = commonSpriteMotionToRight;   // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowUp) {   // 上
-                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
-
-                    // ホーム・ポジションより下に居ればホームに近づける。
-                    if (player1Rank.value > player1RankHome) {
-                        player1Motion.value["toBottom"] = commonSpriteMotionToTop;
-                    } else {
-                        printing1Motion.value["toBottom"] = commonSpriteMotionToBottom; // 印字は、キー入力とは逆向きへ進める
-                    }
+                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                    printing1Motion.value["toBottom"] = commonSpriteMotionToBottom; // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowDown) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
-
-                    // ホーム・ポジションより上に居ればホームに近づける。
-                    if (player1Rank.value < player1RankHome) {
-                        player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
-                    } else {
-                        printing1Motion.value["toBottom"] = commonSpriteMotionToTop;    // 印字は、キー入力とは逆向きへ進める
-                    }
+                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                    printing1Motion.value["toBottom"] = commonSpriteMotionToTop;    // 印字は、キー入力とは逆向きへ進める
                 }
             }
 
-            // ++++++++++++++
-            // + 移動を処理 +
-            // ++++++++++++++
+            // ++++++++++++++++++++
+            // + 向き、移動を処理 +
+            // ++++++++++++++++++++
+
+            // 自機の向きを更新、タテヨコ同時入力の場合、上下で上書きする： ※ 自機の位置は固定です。
+            if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
+                player1Frames.value = player1SourceFrames["up"]
+            } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
+                player1Frames.value = player1SourceFrames["down"]
+            } else if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
+                player1Frames.value = player1SourceFrames["right"]
+            } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
+                player1Frames.value = player1SourceFrames["left"]
+            }
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
@@ -540,19 +520,6 @@
                 printing1Top.value -= player1Speed.value;
             } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
                 printing1Top.value += player1Speed.value;
-            }
-
-            // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
-                player1Left.value += player1Speed.value;
-            } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
-                player1Left.value -= player1Speed.value;
-            }
-
-            if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
-                player1Top.value -= player1Speed.value;
-            } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
-                player1Top.value += player1Speed.value;
             }
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される

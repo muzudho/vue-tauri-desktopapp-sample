@@ -366,14 +366,14 @@
     }
 
 
-    /**
-     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-     */
-    function focusRemove() : void {
-        if (noopButton.value) {
-            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-        }
-    }
+    // /**
+    //  * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
+    //  */
+    // function focusRemove() : void {
+    //     if (noopButton.value) {
+    //         noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+    //     }
+    // }
 
 
     function onUpButtonPressed() : void {
