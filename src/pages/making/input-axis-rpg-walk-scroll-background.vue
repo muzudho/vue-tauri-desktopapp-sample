@@ -4,7 +4,19 @@
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
-            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
+            <li>
+                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右へ、印字を逆方向へ動かすぜ！<br/>
+                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
+            </li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn
+                    class="noop-key"
+                    ref="noopButton"
+                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'" >何もしないボタン</v-btn><br/>
+            </li>
         </ul>
         <br/>
 
@@ -17,7 +29,7 @@
         <div :style="board1MaskContainerStyle">
 
             <!--
-                TODO: 背景タイル
+                タイルのグリッド。
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <Tile
@@ -30,7 +42,7 @@
                 tilemapUrl="/img/making/tilemap_floor.png" />
 
             <!-- プレイヤー１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
@@ -41,7 +53,15 @@
             
             <!-- 半透明のマスク -->
             <div
-                :style="`width:${board1FilesWithMask * board1SquareWidth}px; height:${board1RanksWithMask * board1SquareHeight}px; border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5); border-right: solid ${2 * board1SquareWidth}px rgba(0,0,0,0.5); border-bottom: solid ${2 * board1SquareHeight}px rgba(0,0,0,0.5); border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5); zoom:${commonZoom};`"
+                :style="`
+                    width:${board1WithMaskFileNum * board1SquareWidth}px;
+                    height:${board1WithMaskRankNum * board1SquareHeight}px;
+                    border-top: solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5);
+                    border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
+                    border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
+                    border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
+                    zoom:${commonZoom};
+                `"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
         </div>
 
@@ -87,6 +107,8 @@
     import { computed, onMounted, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
+    import { VBtn } from 'vuetify/components';
+
 
     // ++++++++++++++
     // + 互換性対応 +
@@ -118,15 +140,21 @@
     //
 
     const commonZoom = 4;
-    const commonSpriteMotionToTop = -1;  // モーション（motion）定数。上に移動する
-    const commonSpriteMotionToRight = 1;
-    const commonSpriteMotionToBottom = 1;
-    const commonSpriteMotionToLeft = -1;
+    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
+    const commonSpriteMotionTop = -1;
+    const commonSpriteMotionRight = 1;
+    const commonSpriteMotionBottom = 1;
 
 
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -149,28 +177,30 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
+    const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin = 1;          // マスクは右下に１マス分多く作ります。
-    const board1FilesWithMask = board1FileNum + board1WithMaskBottomRightMargin
-    const board1RanksWithMask = board1RankNum + board1WithMaskBottomRightMargin
+    const board1WithMaskFileNum = board1FileNum + board1WithMaskBottomRightMargin
+    const board1WithMaskRankNum = board1RankNum + board1WithMaskBottomRightMargin
     const getSquareStyle = computed<
         (i:number)=>CompatibleStyleValue
     >(() => {
         return (i:number)=>{
-            // プレイヤーが初期位置にいる場合の、セルの top 位置。
+            // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1RankNum) * board1SquareHeight;
-            const boardWidth = (board1FileNum * board1SquareWidth);
-            const boardHeight = (board1RankNum * board1SquareHeight);
+            const homeTop = Math.floor(i / board1FileNum) * board1SquareHeight;
+
+            const bwPx = (board1FileNum * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
+            const bhPx = (board1RankNum * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const boardLeftLoop = euclideanMod(homeLeft + board1Left.value + boardWidth, boardWidth) - homeLeft;
-            const boardTopLoop = euclideanMod(homeTop + board1Top.value + boardHeight, boardHeight) - homeTop;
+            const offsetLeftLoop = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
+            const offsetTopLoop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
 
             return {
                 position: 'absolute',
-                top: `${homeTop + boardTopLoop}px`,
-                left: `${homeLeft + boardLeftLoop}px`,
+                left: `${homeLeft + offsetLeftLoop}px`,
+                top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 zoom: commonZoom,
@@ -183,8 +213,8 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1FilesWithMask * board1SquareWidth}px`,
-            height: `${commonZoom * board1RanksWithMask * board1SquareHeight}px`,
+            width: `${commonZoom * board1WithMaskFileNum * board1SquareWidth}px`,
+            height: `${commonZoom * board1WithMaskRankNum * board1SquareHeight}px`,
         };
     });
     const board1ContainerStyle = computed<CompatibleStyleValue>(()=>{  // ボードだけを含んでいる領域のスタイル
@@ -230,10 +260,11 @@
         };
     });
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
 
+    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
     const player1Top = ref<number>(2 * board1SquareHeight);     // スプライトのY座標
     const player1Speed = ref<number>(2);                        // 移動速度
@@ -243,11 +274,17 @@
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
-        top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
+        top: `${player1Top.value}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
+        left:[  // 左向き
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+        ],
         up:[    // 上向き
             {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
             {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
@@ -266,12 +303,6 @@
             {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
             {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
-        left:[  // 左向き
-            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-        ]
     };
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
@@ -288,8 +319,8 @@
     onMounted(() => {
         // キーボードイベント
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            // ［スペース］［↑］［↓］キーの場合
-            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            // ［↑］［↓］キーの場合
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 // ブラウザーのデフォルトの上下スクロール動作をキャンセル
                 e.preventDefault();
             }
@@ -321,7 +352,7 @@
      */
     function euclideanMod(a: number, b: number): number {
         return ((a % b) + b) % b;
-    }    
+    }
 
 
     /**
@@ -329,29 +360,37 @@
      */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;
+            player1MotionWait.value -= 1;           // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["toRight"] = 0;    // クリアー
+                // モーションのクリアー
+                player1Motion.value["toRight"] = 0;
                 player1Motion.value["toBottom"] = 0;
             }
             
-            // 入力（上下左右への移動）をモーションに変換
+            // キー入力をモーションに変換
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+
+                // TODO: 位置のリセット
+                if (player1Input[" "]) {
+                }
+
+                // 移動関連（単発）
+                // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
                 if (player1Input.ArrowLeft) {
-                    player1Motion.value["toRight"] = commonSpriteMotionToLeft; // 左
+                    player1Motion.value["toRight"] = commonSpriteMotionLeft; // 左
                 }
 
                 if (player1Input.ArrowRight) {
-                    player1Motion.value["toRight"] = commonSpriteMotionToRight;  // 右
+                    player1Motion.value["toRight"] = commonSpriteMotionRight;  // 右
                 }
 
                 if (player1Input.ArrowUp) {
-                    player1Motion.value["toBottom"] = commonSpriteMotionToTop;   // 上
+                    player1Motion.value["toBottom"] = commonSpriteMotionTop;   // 上
                 }
 
                 if (player1Input.ArrowDown) {
-                    player1Motion.value["toBottom"] = commonSpriteMotionToBottom;   // 下
+                    player1Motion.value["toBottom"] = commonSpriteMotionBottom;   // 下
                 }
 
                 if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
@@ -359,7 +398,10 @@
                 }
             }
 
-            // 移動処理
+            // ++++++++++++++++++++
+            // + 向き、移動を処理 +
+            // ++++++++++++++++++++
+
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["toRight"]==1) {   // 右
                 player1Frames.value = player1SourceFrames["right"]
@@ -383,6 +425,68 @@
 
         // 初回呼び出し
         requestAnimationFrame(update);
+    }
+
+
+    // /**
+    //  * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
+    //  */
+    // function focusRemove() : void {
+    //     if (noopButton.value) {
+    //         noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+    //     }
+    // }
+
+
+    function onUpButtonPressed() : void {
+        console.log(`↑ボタンを押し付けました。`)
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        console.log(`↑ボタンを放しました。`)
+        player1Input.ArrowUp = false;
+    }
+
+
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    function onLeftButtonPressed() : void {
+        player1Input.ArrowLeft = true;
+    }
+
+
+    function onLeftButtonReleased() : void {
+        player1Input.ArrowLeft = false;
+    }
+
+
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
+    }
+
+
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
     }
 
 </script>

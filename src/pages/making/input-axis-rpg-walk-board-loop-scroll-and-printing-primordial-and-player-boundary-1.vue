@@ -57,7 +57,6 @@
                     zoom:${commonZoom};
                 `"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
-
         </div>
 
         <div>
