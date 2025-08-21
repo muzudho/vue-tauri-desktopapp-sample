@@ -6,7 +6,7 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右へ、印字を逆方向へ動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressedStartRepeat()" @mouseup="onLeftButtonPressedStopRepeat()" @mouseleave="onLeftButtonPressedStopRepeat()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右へ、印字を逆方向へ動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
@@ -122,7 +122,6 @@
         });
 
         gameLoopStart();
-
     });
 
 
@@ -170,6 +169,33 @@
         requestAnimationFrame(update);
     }
 
+
+    const intervalTimerId = ref<number | null>(null);
+
+
+    /**
+     * 長押し開始
+     */
+    function onLeftButtonPressedStartRepeat() : void {      
+        onLeftButtonPressed();   // 即時実行
+        
+        const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
+        intervalTimerId.value = setInterval(() => {   // 指定の間隔で繰り返し実行
+            onLeftButtonPressed();
+        }, intervalTime);
+    }
+
+    /**
+     * 長押し終了
+     */
+    function onLeftButtonPressedStopRepeat() {
+        if (intervalTimerId.value) {
+            clearInterval(intervalTimerId.value);    // インターバルをクリア
+            intervalTimerId.value = null;
+
+            onLeftButtonReleased();   // 即時実行
+        }
+    }
 
     /**
      * 左。
