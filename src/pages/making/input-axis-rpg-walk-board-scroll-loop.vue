@@ -6,7 +6,7 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　盤を上下左右に動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　位置を最初の状態に戻すぜ。</li>
@@ -117,16 +117,6 @@
     const commonSpriteMotionToRight = 1;
     const commonSpriteMotionToBottom = 1;
     const commonSpriteMotionToLeft = -1;
-
-
-    // ############################
-    // # アプリケーション・データ #
-    // ############################
-    //
-    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
-    //
-
-    const appManualIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
 
 
     // ################
