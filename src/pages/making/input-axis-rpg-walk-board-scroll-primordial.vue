@@ -1,6 +1,6 @@
 <template>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の原始的スクロール</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の原始的スクロール、グリッド吸着</h4>
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
@@ -26,9 +26,9 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <div :style="`position:relative; left: 0; top: 0; height:${commonZoom * board1Ranks * board1SquareHeight}px;`">
+        <div :style="`position:relative; left: 0; top: 0; height:${commonZoom * board1RankNum * board1SquareHeight}px;`">
 
-            <!-- グリッド１の初期位置 -->
+            <!-- 登場人物１の初期位置 -->
             <div :style="`position:absolute; left: ${0 * board1SquareWidth}px; top: ${0 * board1SquareHeight}px; width: ${4 * 5 * board1SquareWidth}px; height: ${4 * 5 * board1SquareHeight}px; background-color: lightpink;`">
             </div>
 
@@ -53,7 +53,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の原始的スクロール　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の原始的スクロール、グリッド吸着　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-scroll-primordial"/>
@@ -102,10 +102,10 @@
     //
 
     const commonZoom = 4;
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
-    const commonSpriteMotionRight = 1;
-    const commonSpriteMotionUp = -1;
+    const commonSpriteMotionUp = -1;  // モーション（motion）定数。上に移動する
+    const commonSpriteMotionLeft = -1;
     const commonSpriteMotionDown = 1;
+    const commonSpriteMotionRight = 1;
 
 
     // ################
@@ -131,10 +131,10 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1Files = 5;  // 筋
-    const board1Ranks = 5;  // 段
+    const board1FileNum = 5;    // マスクを含めた盤サイズ。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+    const board1RankNum = 5;
     const board1Area = computed(()=> {  // 盤のマス数
-        return board1Files * board1Ranks;
+        return board1FileNum * board1RankNum;
     });
 
     // ボードの表示位置
@@ -145,8 +145,8 @@
     >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、セルの top 位置。
-            const homeLeft = (i % board1Files) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1Ranks) * board1SquareHeight;
+            const homeLeft = (i % board1FileNum) * board1SquareWidth;
+            const homeTop = Math.floor(i / board1FileNum) * board1SquareHeight;
 
             return {
                 position: 'absolute',
@@ -161,7 +161,7 @@
     });
 
     // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
+    // + オブジェクト　＞　登場人物１ +
     // ++++++++++++++++++++++++++++++++
 
     const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
@@ -172,10 +172,10 @@
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
-    const player1Style = computed(() => ({
+    const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
-        zoom: `${commonZoom}`,
+        zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         up:[    // 上向き
@@ -205,9 +205,9 @@
     };
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
-    const p1Motion = ref<Record<string, number>>({  // 入力
-        xAxis: 0,   // 負なら左、正なら右
-        yAxis: 0,   // 負なら上、正なら下
+    const player1Motion = ref<Record<string, number>>({  // 入力
+        toRight: 0,   // 負なら左、正なら右
+        toBottom: 0,   // 負なら上、正なら下
     });
 
 
@@ -218,8 +218,8 @@
     onMounted(() => {
         // キーボードイベント
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            // ［スペース］［↑］［↓］キーの場合
-            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            // ［↑］［↓］キーの場合
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 // ブラウザーのデフォルトの上下スクロール動作をキャンセル
                 e.preventDefault();
             }
@@ -236,79 +236,79 @@
 
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-
-
-        // ################
-        // # サブルーチン #
-        // ################
-
-        function gameLoopStart() : void {
-            const update = () => {
-                player1MotionWait.value -= 1;
-
-                if (player1MotionWait.value==0) {
-                    p1Motion.value["xAxis"] = 0;    // クリアー
-                    p1Motion.value["yAxis"] = 0;
-                }
-                
-                // 入力（上下左右への移動）をモーションに変換
-                if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
-
-                    // 位置のリセット
-                    if (player1Input[" "]) {
-                        boardTop.value = 0 * board1SquareHeight;
-                        boardLeft.value = 0 * board1SquareWidth;
-                    }
-
-                    // 移動
-                    if (player1Input.ArrowLeft) {
-                        p1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
-                    }
-
-                    if (player1Input.ArrowRight) {
-                        p1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
-                    }
-
-                    if (player1Input.ArrowUp) {
-                        p1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
-                    }
-
-                    if (player1Input.ArrowDown) {
-                        p1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
-                    }
-
-                    if (p1Motion.value["xAxis"]!=0 || p1Motion.value["yAxis"]!=0) {
-                        player1MotionWait.value = player1AnimationWalkingFrames;
-                    }
-                }
-
-                // 移動処理
-                // 斜め方向の場合、上下を優先する。
-                if (p1Motion.value["xAxis"]==1) {   // 右
-                    player1Frames.value = player1SourceFrames["right"]
-                    boardLeft.value -= player1Speed.value;   // 盤の方をスクロールさせる
-                } else if (p1Motion.value["xAxis"]==-1) {  // 左
-                    player1Frames.value = player1SourceFrames["left"]
-                    boardLeft.value += player1Speed.value;
-                }
-
-                if (p1Motion.value["yAxis"]==-1) {  // 上
-                    player1Frames.value = player1SourceFrames["up"]
-                    boardTop.value += player1Speed.value;
-                } else if (p1Motion.value["yAxis"]==1) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]
-                    boardTop.value -= player1Speed.value;
-                }
-
-                // 次のフレーム
-                requestAnimationFrame(update);
-            };
-
-            // 初回呼び出し
-            requestAnimationFrame(update);
-        }
-
     });
+
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    function gameLoopStart() : void {
+        const update = () => {
+            player1MotionWait.value -= 1;           // モーション・タイマー
+
+            if (player1MotionWait.value==0) {
+                // モーションのクリアー
+                player1Motion.value["toRight"] = 0;
+                player1Motion.value["toBottom"] = 0;
+            }
+            
+            // 入力（上下左右への移動）をモーションに変換
+            if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+
+                // 位置のリセット
+                if (player1Input[" "]) {
+                    boardTop.value = 0 * board1SquareHeight;
+                    boardLeft.value = 0 * board1SquareWidth;
+                }
+
+                // 移動
+                if (player1Input.ArrowLeft) {
+                    player1Motion.value["toRight"] = commonSpriteMotionLeft; // 左
+                }
+
+                if (player1Input.ArrowRight) {
+                    player1Motion.value["toRight"] = commonSpriteMotionRight;  // 右
+                }
+
+                if (player1Input.ArrowUp) {
+                    player1Motion.value["toBottom"] = commonSpriteMotionUp;   // 上
+                }
+
+                if (player1Input.ArrowDown) {
+                    player1Motion.value["toBottom"] = commonSpriteMotionDown;   // 下
+                }
+
+                if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                    player1MotionWait.value = player1AnimationWalkingFrames;
+                }
+            }
+
+            // 移動処理
+            // 斜め方向の場合、上下を優先する。
+            if (player1Motion.value["toRight"]==1) {   // 右
+                player1Frames.value = player1SourceFrames["right"]
+                boardLeft.value -= player1Speed.value;   // 盤の方をスクロールさせる
+            } else if (player1Motion.value["toRight"]==-1) {  // 左
+                player1Frames.value = player1SourceFrames["left"]
+                boardLeft.value += player1Speed.value;
+            }
+
+            if (player1Motion.value["toBottom"]==-1) {  // 上
+                player1Frames.value = player1SourceFrames["up"]
+                boardTop.value += player1Speed.value;
+            } else if (player1Motion.value["toBottom"]==1) {   // 下
+                player1Frames.value = player1SourceFrames["down"]
+                boardTop.value -= player1Speed.value;
+            }
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
 
 
     function onUpButtonPressed() : void {
