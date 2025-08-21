@@ -61,8 +61,8 @@
         </div>
 
         <div>
-            盤x={{ board1Left }} 人Δx={{ player1LeftDelta }}　｜　人始筋={{ player1FileHome }}　人Δ筋={{ player1FileDelta }}　｜　人x={{ player1Left }}<br/>
-            盤y={{ board1Top  }} 人Δx={{ player1TopDelta  }}　｜　人始段={{ player1RankHome }}　人Δ段={{ player1RankDelta }}　｜　人y={{ player1Top }}<br/>
+            印字x={{ board1Left }} 人x={{ player1Left2 }}　｜　人始筋={{ player1FileHome }}　人Δ筋={{ player1FileDelta }}<br/>
+            印字y={{ board1Top  }} 人x={{ player1Top2  }}　｜　人始段={{ player1RankHome }}　人Δ段={{ player1RankDelta }}<br/>
         </div>
         <br/>
 
@@ -493,21 +493,25 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1FileHome = ref<number>(2);		// 基準の相対位置
     const player1RankHome = ref<number>(2);
+
     // TODO 盤座標での絶対値にできないか？
-    const player1LeftDelta = ref<number>(0);    // 移動量（単位：ピクセル））
-    const player1TopDelta = ref<number>(0);
+    const player1Left2 = ref<number>(player1FileHome.value * board1SquareWidth);    // 移動量（単位：ピクセル））
+    const player1Top2 = ref<number>(player1RankHome.value * board1SquareHeight);
+    // const player1LeftDeltaOld = ref<number>(0);    // 移動量（単位：ピクセル））
+    // const player1TopDeltaOld = ref<number>(0);
+    // const player1LeftOld = computed(()=>{
+    //     return player1FileHome.value * board1SquareWidth + player1LeftDeltaOld.value;
+    // });
+    // const player1TopOld = computed(()=>{
+    //     return player1RankHome.value * board1SquareHeight + player1TopDeltaOld.value;
+    // });
     const player1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
-    const player1Left = computed(()=>{
-        return player1FileHome.value * board1SquareWidth + player1LeftDelta.value;
-    });
-    const player1Top = computed(()=>{
-        return player1RankHome.value * board1SquareHeight + player1TopDelta.value;
-    });
+
     const player1File = computed<number>(()=>{
-        return Math.round(player1Left.value / board1SquareWidth);
+        return Math.round(player1Left2.value / board1SquareWidth);
     });
     const player1Rank = computed<number>(()=>{
-        return Math.round(player1Top.value / board1SquareHeight);
+        return Math.round(player1Top2.value / board1SquareHeight);
     });
     const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
         return Math.round(-board1Left.value / board1SquareWidth);
@@ -522,8 +526,8 @@
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
-        top: `${player1Top.value}px`,
-        left: `${player1Left.value}px`,
+        top: `${player1Top2.value}px`,
+        left: `${player1Left2.value}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -585,8 +589,6 @@
 
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-        // console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
-        // // board1File=${board1File.value} 
     });
 
 
@@ -625,8 +627,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1LeftDelta.value = 0;     // 登場人物
-                    player1TopDelta.value = 0;
+                    player1Left2.value = player1FileHome.value * board1SquareWidth;     // 登場人物
+                    player1Top2.value = player1RankHome.value * board1SquareHeight;
                     board1Left.value = 0;           // 盤
                     board1Top.value = 0;
                 }
@@ -900,15 +902,15 @@
 
             // 登場人物の移動量（単位：ピクセル）を更新、キー入力の向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
-                player1LeftDelta.value += player1Speed.value;
+                player1Left2.value += player1Speed.value;
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
-                player1LeftDelta.value -= player1Speed.value;
+                player1Left2.value -= player1Speed.value;
             }
 
             if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
-                player1TopDelta.value -= player1Speed.value;
+                player1Top2.value -= player1Speed.value;
             } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
-                player1TopDelta.value += player1Speed.value;
+                player1Top2.value += player1Speed.value;
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
