@@ -363,6 +363,7 @@
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationFacingFrames = 1;         // 振り向きフレーム数
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1RankHome * board1SquareHeight}px`,     // プレイヤーは移動しません。固定位置です。
@@ -466,7 +467,7 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    // ※ 自機の位置は固定です。
+                    // ※ 自機の位置は固定なので、自機の位置のリセットはありません。
                     printing1Left.value = 0;                                   // 印字
                     printing1Top.value = 0;
                 }
@@ -478,12 +479,12 @@
                     printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
                 }
 
-                if (player1Input.ArrowLeft) { // 左
+                if (player1Input.ArrowLeft) {   // 左
                     player1Motion.value["lookRight"] = commonSpriteMotionLeft;
                     printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
                 }
 
-                if (player1Input.ArrowUp) {   // 上
+                if (player1Input.ArrowUp) {    // 上
                     player1Motion.value["lookBottom"] = commonSpriteMotionTop;
                     printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionBottom; // 印字は、キー入力とは逆向きへ進める
                 }
@@ -523,8 +524,14 @@
                     player1Frames.value = player1SourceFrames["left"]
                 }
 
+                // ++++++++++++++++
+                // + ウェイト設定 +
+                // ++++++++++++++++
+
                 if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0 || player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
+                    player1MotionWait.value = player1AnimationWalkingFrames;
+                } else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
+                    player1MotionWait.value = player1AnimationFacingFrames;
                 }
             }
 
