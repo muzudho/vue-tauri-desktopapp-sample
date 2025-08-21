@@ -6,7 +6,7 @@
         <p>キーボード操作方法</p>
         <ul>
             <li>
-                <v-btn class="code-key" @mousedown="onStartRepeat(onUpButtonPressed)" @mouseup="onStopRepeat(onUpButtonReleased)" @mouseleave="onStopRepeat(onUpButtonReleased)">↑</v-btn>
+                <v-btn class="code-key" @mousedown="onRepeatStart(onUpButtonPressed)" @mouseup="onRepeatStop(onUpButtonReleased)" @mouseleave="onRepeatStop(onUpButtonReleased)">↑</v-btn>
                 　…　とりあえず、上キーの押しっぱなしが利くようにするぜ！
                 <br/>
             </li>
@@ -149,7 +149,7 @@
     /**
      * 長押し開始
      */
-    function onStartRepeat(callback:()=>void) : void {      
+    function onRepeatStart(callback:()=>void) : void {      
         callback();   // 即時実行
         
         const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
@@ -161,7 +161,7 @@
     /**
      * 長押し終了
      */
-    function onStopRepeat(callback:()=>void) {
+    function onRepeatStop(callback:()=>void) {
         if (appManualKeyRepeatTimerId.value) {
             clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
             appManualKeyRepeatTimerId.value = null;

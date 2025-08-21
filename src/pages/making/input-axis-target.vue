@@ -7,15 +7,15 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="onStartRepeat(onUpButtonPressed)" @mouseup="onStopRepeat(onUpButtonReleased)" @mouseleave="onStopRepeat(onUpButtonReleased)">↑</v-btn>
+                <v-btn class="code-key" @mousedown="onRepeatStart(onUpButtonPressed)" @mouseup="onRepeatStop(onUpButtonReleased)" @mouseleave="onRepeatStop(onUpButtonReleased)">↑</v-btn>
                 <br/>
-                <v-btn class="code-key" @mousedown="onStartRepeat(onLeftButtonPressed)" @mouseup="onStopRepeat(onLeftButtonReleased)" @mouseleave="onStopRepeat(onLeftButtonReleased)">←</v-btn>
+                <v-btn class="code-key" @mousedown="onRepeatStart(onLeftButtonPressed)" @mouseup="onRepeatStop(onLeftButtonReleased)" @mouseleave="onRepeatStop(onLeftButtonReleased)">←</v-btn>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="onStartRepeat(onRightButtonPressed)" @mouseup="onStopRepeat(onRightButtonReleased)" @mouseleave="onStopRepeat(onRightButtonReleased)">→</v-btn>
+                <v-btn class="code-key" @mousedown="onRepeatStart(onRightButtonPressed)" @mouseup="onRepeatStop(onRightButtonReleased)" @mouseleave="onRepeatStop(onRightButtonReleased)">→</v-btn>
                 　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="onStartRepeat(onDownButtonPressed)" @mouseup="onStopRepeat(onDownButtonReleased)" @mouseleave="onStopRepeat(onDownButtonReleased)">↓</v-btn>
+                <v-btn class="code-key" @mousedown="onRepeatStart(onDownButtonPressed)" @mouseup="onRepeatStop(onDownButtonReleased)" @mouseleave="onRepeatStop(onDownButtonReleased)">↓</v-btn>
                 <br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
@@ -192,7 +192,7 @@
     /**
      * 長押し開始
      */
-    function onStartRepeat(callback:()=>void) : void {      
+    function onRepeatStart(callback:()=>void) : void {      
         callback();   // 即時実行
         
         const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
@@ -204,7 +204,7 @@
     /**
      * 長押し終了
      */
-    function onStopRepeat(callback:()=>void) {
+    function onRepeatStop(callback:()=>void) {
         if (appManualKeyRepeatTimerId.value) {
             clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
             appManualKeyRepeatTimerId.value = null;
