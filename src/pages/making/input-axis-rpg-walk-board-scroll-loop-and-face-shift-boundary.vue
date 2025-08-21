@@ -15,7 +15,7 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <p>マスクを含んだ盤サイズ：</p>
+        <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
         <section class="sec-1">
             <v-slider
                 label="盤の筋の数"
@@ -125,7 +125,7 @@
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
+                :style="getSquareStyle(i - 1)">{{ getPrintingNumber(i - 1) }}</div>
 
             <!-- プレイヤー１ -->
             <tile-animation
@@ -249,7 +249,7 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1FileNum = ref<number>(5);    // マスクを含めた盤サイズ
+    const board1FileNum = ref<number>(5);    // マスクを含めた盤サイズ。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(5);
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
@@ -289,19 +289,22 @@
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1RankNum.value) * board1SquareHeight;
-            const boardWidth = (board1FileNum.value * board1SquareWidth);
-            const boardHeight = (board1RankNum.value * board1SquareHeight);
+
+            //const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;     // FIXME: 🌟 筋の数と、段の数が異なるとき、座標はずれないが、印字がずれてしまう。
+            const homeTop = Math.floor(i / board1RankNum.value) * board1SquareHeight;   // FIXME: 🌟 筋の数と、段の数が異なるとき、座標がずれてしまう。
+
+            const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
+            const bhPx = (board1RankNum.value * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const boardLeftLoop = euclideanMod(homeLeft + board1Left.value + boardWidth, boardWidth) - homeLeft;
-            const boardTopLoop = euclideanMod(homeTop + board1Top.value + boardHeight, boardHeight) - homeTop;
+            const offsetLeft = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
+            const offsetTop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
 
             return {
                 position: 'absolute',
-                top: `${homeTop + boardTopLoop}px`,
-                left: `${homeLeft + boardLeftLoop}px`,
+                top: `${homeTop + offsetTop}px`,
+                left: `${homeLeft + offsetLeft}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 zoom: 4,
@@ -437,7 +440,7 @@
     /**
      * 印字。
      */
-    const getFaceNumber = computed(() => {
+    const getPrintingNumber = computed(() => {
         return (tileIndex: number)=>{
             const virtualTileIndex = getFixTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
