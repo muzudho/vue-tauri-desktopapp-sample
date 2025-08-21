@@ -15,58 +15,87 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <v-slider
-            label="盤の筋の数"
-            v-model="board1FileNum"
-            :min="0"
-            :max="6"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <v-slider
-            label="盤の段の数"
-            v-model="board1RankNum"
-            :min="0"
-            :max="6"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <p>👆 マスクを含んだサイズです。</p>
+        <p>マスクを含んだ盤サイズ：</p>
+        <section class="sec-1">
+            <v-slider
+                label="盤の筋の数"
+                v-model="board1FileNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="盤の段の数"
+                v-model="board1RankNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+        </section>
         <br/>
 
-        <v-slider
-            label="登場人物の基準の相対筋"
-            v-model="player1FileHome"
-            :min="0"
-            :max="5"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <v-slider
-            label="登場人物の基準の相対段"
-            v-model="player1RankHome"
-            :min="0"
-            :max="5"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <p>👆 マスクを含んだサイズです。</p>
+        <p>要はマップデータのサイズ：</p>
+        <section class="sec-1">
+            <v-slider
+                label="印字の筋の数"
+                v-model="printing1FileNum"
+                :min="0"
+                :max="10"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="印字の段の数"
+                v-model="printing1RankNum"
+                :min="0"
+                :max="10"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+        </section>
         <br/>
 
-        <v-slider
-            label="マスクのタテヨコ幅"
-            v-model="board1WithMaskSizeSquare"
-            :min="0"
-            :max="2"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <p>👆 右側と下側は、１マス多めに付きます。</p>
+        <p>登場人物の画面上の原則固定位置。マスクを含んだサイズ：</p>
+        <section class="sec-1">
+            <v-slider
+                label="登場人物の基準の相対筋"
+                v-model="player1FileHome"
+                :min="0"
+                :max="5"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="登場人物の基準の相対段"
+                v-model="player1RankHome"
+                :min="0"
+                :max="5"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+        </section>
+        <br/>
+
+        <p>マスクのタテヨコ幅。右側と下側は、１マス多めに付きます：</p>
+        <section class="sec-1">
+            <v-slider
+                label="マスクのタテヨコ幅"
+                v-model="board1WithMaskSizeSquare"
+                :min="0"
+                :max="2"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+        </section>
         <br/>
 
         <v-switch
@@ -292,14 +321,14 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1FileNum = 10;    // 列数
-    const printing1RankNum = 10;    // 行数
+    const printing1FileNum = ref<number>(10);    // 列数
+    const printing1RankNum = ref<number>(10);    // 行数
     const printing1FileInit = -3;   // 印字はシフトするので、 File, Rank しかない。 Left, Top は無い。
     const printing1RankInit = -3;
     const printing1File = ref<number>(printing1FileInit);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
     const printing1Rank = ref<number>(printing1RankInit);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
     const printing1Data = ref<string[]>([]);
-    for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
+    for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
 
@@ -317,7 +346,7 @@
     }
 
     function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
-        return contentsRank * printing1FileNum + contentsFile;
+        return contentsRank * printing1FileNum.value + contentsFile;
     }
 
     /**
@@ -417,7 +446,7 @@
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (contentsFile < 0 || printing1FileNum <= contentsFile || contentsRank < 0 || printing1RankNum <= contentsRank) {
+            if (contentsFile < 0 || printing1FileNum.value <= contentsFile || contentsRank < 0 || printing1RankNum.value <= contentsRank) {
                 return "-";
             }
 
@@ -624,7 +653,7 @@
                             //
 
                             const pd = -player1FileDelta.value;
-                            const cw = printing1FileNum; // 例えば 10
+                            const cw = printing1FileNum.value; // 例えば 10
                             const bw = board1FileNum.value;
                             const m = cw + pd - bw;
                             console.log(`board1WithMaskFileNum=${board1WithMaskFileNum.value} board1WithMaskRankNum=${board1WithMaskRankNum.value}`);
@@ -829,7 +858,7 @@
                             //
 
                             const pd = -player1RankDelta.value;
-                            const ch = printing1RankNum; // 例えば 10
+                            const ch = printing1RankNum.value; // 例えば 10
                             const bh = board1RankNum.value;
                             const m = ch + pd - bh;
                             console.log(`pd=${pd} ch=${ch} bw=${bh} m=${m} m <= board1WithMaskHeight:${m <= board1WithMaskSizeSquare.value}`);
