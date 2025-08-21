@@ -14,6 +14,9 @@
             <li>📖 <router-link to="/making/desktop/base-paths" :style="getPreviousLinkHighlight('/making/desktop/base-paths')">デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</router-link></li>
             <li>📖 <router-link to="/making/desktop/bundle-file-loading" :style="getPreviousLinkHighlight('/making/desktop/bundle-file-loading')">デスクトップアプリにて　＞　バンドルファイルの読込だぜ！</router-link></li>
             <li>📖 <router-link to="/making/json-file-loading" :style="getPreviousLinkHighlight('/making/json-file-loading')">JSONファイルの読込だぜ！</router-link></li>
+
+            <li>📖 <router-link to="/making/button-repeat-1" :style="getPreviousLinkHighlight('/making/button-repeat-1')">ボタンの押しっぱなしが利くようにしようぜ？</router-link></li>
+
             <li>📖 <router-link to="/making/tile-crop" :style="getPreviousLinkHighlight('/making/tile-crop')">タイル　＞　を画像から切り抜くぜ！</router-link></li>
             <li>📖 <router-link to="/making/count-up" :style="getPreviousLinkHighlight('/making/count-up')">カウントアップするぜ！</router-link></li>
             <li>📖 <router-link to="/making/input-key" :style="getPreviousLinkHighlight('/making/input-key')">キーボードのキー入力を受け取ろうぜ！</router-link></li>

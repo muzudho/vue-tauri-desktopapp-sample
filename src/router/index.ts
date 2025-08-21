@@ -19,6 +19,11 @@ const routes = [
     },
 
     {
+        name: 'ButtonRepeat1',
+        path: '/making/button-repeat-1',
+        component: () => import('../pages/making/button-repeat-1.vue'),
+    },
+    {
         name: 'CountUp',
         path: '/making/count-up',
         component: () => import('../pages/making/count-up.vue'),
