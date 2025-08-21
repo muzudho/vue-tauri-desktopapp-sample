@@ -62,7 +62,7 @@
 
         <div>
             印字x={{ printing1Left }}　｜　人x={{ player1Left }}<br/>
-            印字y={{ printing1Top  }}　｜　人x={{ player1Top  }}<br/>
+            印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
         </div>
         <br/>
 
