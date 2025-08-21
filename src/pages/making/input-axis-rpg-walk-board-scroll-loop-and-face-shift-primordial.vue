@@ -4,8 +4,19 @@
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
-            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
-            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
+            <li>
+                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
+            </li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　位置を最初の状態に戻すぜ。</li>
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn
+                    class="noop-key"
+                    ref="noopButton"
+                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'" >何もしないボタン</v-btn><br/>
+            </li>
         </ul>
         <br/>
 
@@ -18,11 +29,11 @@
         <div :style="board1Style">
 
             <!--
-                グリッド
+                タイルのグリッド。
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
+                :style="getSquareStyle(i - 1)">{{ getPrintingNumber(i - 1) }}</div>
 
             <!-- プレイヤー１ -->
             <tile-animation
@@ -42,7 +53,7 @@
         </div>
 
         <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
-        <p>フェースはループしていないぜ（＾▽＾）！</p>
+        <p>数字柄はループしていないぜ（＾▽＾）！</p>
     </section>
 
     <br/>
@@ -61,6 +72,8 @@
 
     import { computed, onMounted, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+
+    import { VBtn } from 'vuetify/components';
 
 
     // ++++++++++++++
@@ -98,9 +111,23 @@
     const commonSpriteMotionToLeft = -1;
 
 
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appManualIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -288,7 +315,7 @@
             return fixTileIndex;
     }
 
-    const getFaceNumber = computed(() => {
+    const getPrintingNumber = computed(() => {
         return (tileIndex: number)=>{
             const fixTileIndex = getFixTileIndex(tileIndex);
             //return fixTileIndex;   // デバッグに使えます。
@@ -557,6 +584,68 @@
 
         // 初回呼び出し
         requestAnimationFrame(update);
+    }
+
+
+    /**
+     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
+     */
+    function focusRemove() : void {
+        if (noopButton.value) {
+            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
+        }
+    }
+
+
+    function onUpButtonPressed() : void {
+        console.log(`↑ボタンを押し付けました。`)
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        console.log(`↑ボタンを放しました。`)
+        player1Input.ArrowUp = false;
+    }
+
+
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    function onLeftButtonPressed() : void {
+        player1Input.ArrowLeft = true;
+    }
+
+
+    function onLeftButtonReleased() : void {
+        player1Input.ArrowLeft = false;
+    }
+
+
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
+    }
+
+
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
     }
 
 </script>
