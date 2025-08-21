@@ -351,8 +351,6 @@
 
     const printing1FileNum = ref<number>(10);   // 列数
     const printing1RankNum = ref<number>(10);   // 行数
-    const printing1FileDelta = ref<number>(0);  // 印字の左上隅のタイルの、初期位置からの移動量。
-    const printing1RankDelta = ref<number>(0);
     const printing1Data = ref<string[]>([]);
     for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
@@ -504,12 +502,14 @@
     const player1Rank = computed<number>(()=>{
         return Math.round(player1Top.value / board1SquareHeight);
     });
-    const player1FileDelta = computed<number>(()=>{
-        return (player1File.value - player1FileHome.value) % printing1FileNum.value;
-    });
-    const player1RankDelta = computed<number>(()=>{
-        return (player1Rank.value - player1RankHome.value) % printing1RankNum.value;
-    });
+    const player1FileDelta = ref<number>(0);    // 登場人物の移動量（単位：マス）を記録しておく。
+    const player1RankDelta = ref<number>(0);
+    // const player1FileDelta = computed<number>(()=>{     // 印字の先頭要素の左上隅位置。
+    //     return Math.round(player1LeftDelta.value / board1SquareWidth) % printing1FileNum.value;
+    // });
+    // const player1RankDelta = computed<number>(()=>{
+    //     return Math.round(player1TopDelta.value / board1SquareWidth) % printing1RankNum.value;
+    // });
 
     const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
@@ -580,7 +580,7 @@
 
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-        console.log(`player1File=${player1File.value} player1FileDelta=なし player1Rank=${player1Rank.value} board1File=${board1File.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
+        console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} board1File=${board1File.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
     });
 
 
@@ -621,10 +621,10 @@
                 if (player1Input[" "]) {
                     player1LeftDelta.value = 0;     // 登場人物
                     player1TopDelta.value = 0;
+                    player1FileDelta.value = 0;
+                    player1RankDelta.value = 0;
                     board1Left.value = 0;           // 盤
                     board1Top.value = 0;
-                    printing1FileDelta.value = 0;   // 印字
-                    printing1RankDelta.value = 0;
                 }
 
                 // 移動関連（単発）
@@ -908,8 +908,26 @@
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+                // 登場人物の移動量（単位：マス）を更新：
+                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
+                    // 移動量を記録しておく。シフト。
+                    if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) { // 上
+                        player1RankDelta.value -= 1;
+                    } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
+                        player1RankDelta.value += 1;
+                    }
+
+                    if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {    // 右
+                        player1FileDelta.value += 1;
+                    } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
+                        player1FileDelta.value -= 1;
+                    }
+                    //console.log(`移動量を記録しておく。シフト。 player1FileDelta.value=${player1FileDelta.value} player1RankDelta.value=${player1RankDelta.value} player1Motion.value["toBottom"]=${player1Motion.value["toBottom"]} player1Motion.value["toRight"]=${player1Motion.value["toRight"]}`);
+                }
+                
                 if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
+                    console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} board1File=${board1File.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
                 }
             }
 
