@@ -6,7 +6,7 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右へ、盤を逆方向へ動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右へ、印字を逆方向へ動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、盤、印字の位置を最初に有ったところに戻すぜ。</li>
@@ -61,8 +61,8 @@
         </div>
 
         <div>
-            印字x={{ board1Left }} 人x={{ player1Left2 }}　｜　人始筋={{ player1FileHome }}　人Δ筋={{ player1FileDelta }}<br/>
-            印字y={{ board1Top  }} 人x={{ player1Top2  }}　｜　人始段={{ player1RankHome }}　人Δ段={{ player1RankDelta }}<br/>
+            印字x={{ printing1Left }}　｜　人x={{ player1Left2 }}<br/>
+            印字y={{ printing1Top  }}　｜　人x={{ player1Top2  }}<br/>
         </div>
         <br/>
 
@@ -280,15 +280,7 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
-    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const board1Left = ref<number>(0);
-    const board1Top = ref<number>(0);
-    // const board1File = computed<number>(()=>{
-    //     return Math.round(board1Left.value / board1SquareWidth);
-    // });
-    // const board1Rank = computed<number>(()=>{
-    //     return Math.round(board1Top.value / board1SquareHeight);
-    // });
+    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const bothSide = 2;     // 左と右とか、上と下とか、対。
@@ -328,8 +320,8 @@
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const offsetLeftLoop = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
-            const offsetTopLoop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
+            const offsetLeftLoop = euclideanMod(homeLeft + printing1Left.value + bwPx, bwPx) - homeLeft;
+            const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
 
             return {
                 position: 'absolute',
@@ -357,6 +349,9 @@
 
     const printing1FileNum = ref<number>(10);   // 列数
     const printing1RankNum = ref<number>(10);   // 行数
+    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
+    const printing1Left = ref<number>(0);
+    const printing1Top = ref<number>(0);
     const printing1Data = ref<string[]>([]);
     for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
         printing1Data.value.push(i.toString().padStart(2, "0"));
@@ -514,10 +509,10 @@
         return Math.round(player1Top2.value / board1SquareHeight);
     });
     const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
-        return Math.round(-board1Left.value / board1SquareWidth);
+        return Math.round(-printing1Left.value / board1SquareWidth);
     });
     const player1RankDelta = computed<number>(()=>{
-        return Math.round(-board1Top.value / board1SquareHeight);
+        return Math.round(-printing1Top.value / board1SquareHeight);
     });
 
     const player1Input = <Record<string, boolean>>{         // 入力
@@ -629,8 +624,8 @@
                 if (player1Input[" "]) {
                     player1Left2.value = player1FileHome.value * board1SquareWidth;     // 登場人物
                     player1Top2.value = player1RankHome.value * board1SquareHeight;
-                    board1Left.value = 0;           // 盤
-                    board1Top.value = 0;
+                    printing1Left.value = 0;           // 盤
+                    printing1Top.value = 0;
                 }
 
                 // 移動関連（単発）
@@ -889,15 +884,15 @@
 
             // 盤の移動量（単位：ピクセル）を更新、キー入力とは逆向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
-                board1Left.value -= player1Speed.value;
+                printing1Left.value -= player1Speed.value;
             } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
-                board1Left.value += player1Speed.value;
+                printing1Left.value += player1Speed.value;
             }
 
             if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
-                board1Top.value += player1Speed.value;
+                printing1Top.value += player1Speed.value;
             } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
-                board1Top.value -= player1Speed.value;
+                printing1Top.value -= player1Speed.value;
             }
 
             // 登場人物の移動量（単位：ピクセル）を更新、キー入力の向きへピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
