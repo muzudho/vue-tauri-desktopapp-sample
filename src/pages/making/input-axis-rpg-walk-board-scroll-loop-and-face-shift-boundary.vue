@@ -661,8 +661,8 @@
                             const cw = printing1FileNum.value; // 例えば 10
                             const bw = board1FileNum.value;
                             const m = cw + pd - bw;
-                            console.log(`board1WithMaskFileNum=${board1WithMaskFileNum.value} board1WithMaskRankNum=${board1WithMaskRankNum.value}`);
-                            console.log(`pd=${pd} cw=${cw} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskSizeSquare.value}`);
+                            // console.log(`board1WithMaskFileNum=${board1WithMaskFileNum.value} board1WithMaskRankNum=${board1WithMaskRankNum.value}`);
+                            // console.log(`pd=${pd} cw=${cw} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskSizeSquare.value}`);
 
                             if (m <= -board1WithMaskSizeSquare.value) {
                                 willShift = false;
@@ -730,7 +730,7 @@
                             const pd = player1FileDelta.value - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
                             const m = - pd;
                             //const m = c + p - pd;
-                            console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskSizeSquare} "board1WithMaskWidth <= m"=${board1WithMaskSizeSquare.value <= m}`);
+                            // console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskSizeSquare} "board1WithMaskWidth <= m"=${board1WithMaskSizeSquare.value <= m}`);
                             // c=${c} p=${p} 
 
                             if (board1WithMaskSizeSquare.value < m) {
@@ -799,7 +799,7 @@
                             const pd = player1RankDelta.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
                             const m = - pd;
                             //const m = c + p - pd;
-                            console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskSizeSquare} "board1WithMaskWidth <= m"=${board1WithMaskSizeSquare.value <= m}`);
+                            // console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskSizeSquare} "board1WithMaskWidth <= m"=${board1WithMaskSizeSquare.value <= m}`);
                             // c=${c} p=${p} 
 
                             if (board1WithMaskSizeSquare.value < m) {
@@ -834,22 +834,27 @@
                             // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                             //
                             // Printing
-                            // +-------------------->+     c
-                            // |                     |     ^
-                            // |       Board         |     |
-                            // |       +-------+     | 0 + + pd
-                            // |       ^       |     |   |
-                            // |       |       |     |   v
-                            // ch      bh  *   |     |   p
-                            // |       |       |     |
-                            // |       v       |     |
-                            // |       +-------+     +
-                            // |                     ^
-                            // |                     |
-                            // |                     m
-                            // |                     |
-                            // |                     v
-                            // +---------------------+
+                            // +------------------------------->+     c
+                            // |                                |     ^
+                            // |       Board                    |     |
+                            // |       +------------------+     | 0 + + pd
+                            // |       ^//////////////////|     |   |
+                            // |       |///+-------+//////|     |   |
+                            // |       |///|       |//////|     |   |
+                            // |       |///|       |//////|     |   v
+                            // ch      bh//|   *   |//////|     |   p
+                            // |       |///|       |//////|     |
+                            // |       |///|       |//////|     |
+                            // |       |///+-------+//////|     |
+                            // |       |//////////////////|     |
+                            // |       v//////////////////|     |
+                            // |       +------------------+     +
+                            // |                                ^
+                            // |                                |
+                            // |                                m
+                            // |                                |
+                            // |                                v
+                            // +--------------------------------+
                             //
                             // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
                             // p は、0 からみた、登場人物の初期位置。
@@ -857,18 +862,18 @@
                             // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
                             // bh は、盤の行数。
                             // ch は、印字の行数。
-                            // m が、マスクの横幅（下側の多めの１を含まない）以下なら、それ以上下に行くことはできない。
+                            // m が、マスクの横幅（下側の多めの１を含まない）より小さいなら、それ以上下に行くことはできない。
                             //
                             // m = cw + c - bw
                             //
 
-                            const pd = -player1RankDelta.value;
+                            const pd = -(player1RankDelta.value+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
                             const ch = printing1RankNum.value; // 例えば 10
                             const bh = board1RankNum.value;
                             const m = ch + pd - bh;
-                            console.log(`pd=${pd} ch=${ch} bw=${bh} m=${m} m <= board1WithMaskHeight:${m <= board1WithMaskSizeSquare.value}`);
+                            console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare.value}`);
 
-                            if (m <= -board1WithMaskSizeSquare.value) {
+                            if (m < -board1WithMaskSizeSquare.value) {
                                 willShift = false;
                             }
                         }
@@ -878,35 +883,13 @@
                             board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
-                            if (player1Rank.value < board1FileNum.value - board1WithMaskSizeSquare.value - 1) {
+                            if (player1Rank.value < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
                                 player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                             }
                         }
                     }
                 }
             }
-
-            /*
-            // 移動を処理（シフト）
-            // FIXME: 🌟 タイルがローテーションしていることに注意。
-            // タイルがローテーションするのだから、印字をシフトさせなくていいが、
-            // ローテーションしたタイルをどうするか？
-            //*
-            if (player1MotionWait.value <= 0) {
-                // シフト
-                if (printing1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                    printing1Rank.value -= 1;     // 下
-                } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                    printing1Rank.value += 1;     // 上
-                }
-
-                if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                    printing1File.value += 1;
-                } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                    printing1File.value -= 1;
-                }
-            }
-            //*/
 
             // スクロール
             // 盤の方をスクロールさせる
