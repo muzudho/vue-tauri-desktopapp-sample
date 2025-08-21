@@ -16,6 +16,27 @@
             style="display: none;" />
 
         <v-slider
+            label="盤の筋の数"
+            v-model="board1FileNum"
+            :min="0"
+            :max="6"
+            step="1"
+            showTicks="always"
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <v-slider
+            label="盤の段の数"
+            v-model="board1RankNum"
+            :min="0"
+            :max="6"
+            step="1"
+            showTicks="always"
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <p>👆 マスクを含んだサイズです。</p>
+        <br/>
+
+        <v-slider
             label="マスクのタテヨコ幅"
             v-model="board1WithMaskSizeSquare"
             :min="0"
@@ -24,6 +45,9 @@
             showTicks="always"
             thumbLabel="always"
             @click="focusRemove()" />
+        <p>👆 右側と下側は、１マス多めに付きます。</p>
+        <br/>
+
         <v-switch
             v-model="appBoundaryIsLock"
             :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
@@ -175,32 +199,37 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
+    const board1FileNum = ref<number>(5);    // マスクを含めた盤サイズ
+    const board1RankNum = ref<number>(5);
+    const board1Area = computed(()=> {  // 盤のマス数
+        return board1FileNum.value * board1RankNum.value;
+    });
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const board1Top = ref<number>(0);
     const board1Left = ref<number>(0);
-    // TODO: board1File は原点 x=0
-    // const board1File = computed<number>(()=>{
-    //     return Math.floor(board1Left.value / board1SquareWidth);
-    // });
-    // const board1Rank = computed<number>(()=>{
-    //     return Math.floor(board1Top.value / board1SquareWidth);
-    // });
-    const board1FileNum = 5;    // マスクを含めた盤サイズ
-    const board1RankNum = 5;
-    const board1Area = computed(()=> {  // 盤のマス数
-        return board1FileNum * board1RankNum;
+    const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
+    const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
+    const board1WithMaskFileNum = computed<number>(()=>{        // マスク付きの場合の列数
+        const minWidth = 2 * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;  // マスクの横幅より小さくはなりません。
+        if (board1FileNum.value < minWidth) {
+            return minWidth;
+        }
+        return board1FileNum.value + board1WithMaskBottomRightMargin;
     });
-    const board1WithMaskSizeSquare = ref<number>(1);  // マスクの幅（単位：マス）
-    const board1WithMaskBottomRightMargin = 1;          // マスクは右下に１マス分多く作ります。
-    const board1WithMaskFileNum = board1FileNum + board1WithMaskBottomRightMargin   // マスク付きの場合の列数
-    const board1WithMaskRankNum = board1RankNum + board1WithMaskBottomRightMargin
+    const board1WithMaskRankNum = computed<number>(()=>{
+        const minHeight = 2 * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin; // マスクの縦幅より小さくはなりません。
+        if (board1RankNum.value < minHeight) {
+            return minHeight;
+        }
+        return board1RankNum.value + board1WithMaskBottomRightMargin;
+    });
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1WithMaskFileNum * board1SquareWidth}px`,
-            height: `${commonZoom * board1WithMaskRankNum * board1SquareHeight}px`,
+            width: `${commonZoom * board1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${commonZoom * board1WithMaskRankNum.value * board1SquareHeight}px`,
         };
     });
     const getSquareStyle = computed<
@@ -208,10 +237,10 @@
     >(() => {
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (i % board1FileNum) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1RankNum) * board1SquareHeight;
-            const boardWidth = (board1FileNum * board1SquareWidth);
-            const boardHeight = (board1RankNum * board1SquareHeight);
+            const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
+            const homeTop = Math.floor(i / board1RankNum.value) * board1SquareHeight;
+            const boardWidth = (board1FileNum.value * board1SquareWidth);
+            const boardHeight = (board1RankNum.value * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
@@ -260,8 +289,8 @@
      */
     function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
         // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-        const file = tileIndex % board1FileNum;
-        const rank = Math.floor(tileIndex / board1RankNum);
+        const file = tileIndex % board1FileNum.value;
+        const rank = Math.floor(tileIndex / board1RankNum.value);
 
         return [file, rank];
     }
@@ -324,8 +353,8 @@
     function getFixTileIndex(tileIndex: number) : number {
             //
             // 例えば、盤がヨコ、タテ 5×5 のとき、
-            const bw = board1FileNum; // 幅 (例: 5)
-            const bh = board1RankNum; // 高さ (例: 5)
+            const bw = board1FileNum.value; // 幅 (例: 5)
+            const bh = board1RankNum.value; // 高さ (例: 5)
             //
             // タイルのインデックスは下図のように振られるようにしたい。
             // +----------------+
@@ -569,8 +598,9 @@
 
                             const pd = -player1FileDelta.value;
                             const cw = printing1FileNum; // 例えば 10
-                            const bw = board1FileNum;
+                            const bw = board1FileNum.value;
                             const m = cw + pd - bw;
+                            console.log(`board1WithMaskFileNum=${board1WithMaskFileNum.value} board1WithMaskRankNum=${board1WithMaskRankNum.value}`);
                             console.log(`pd=${pd} cw=${cw} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskSizeSquare.value}`);
 
                             if (m <= -board1WithMaskSizeSquare.value) {
@@ -584,7 +614,7 @@
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
-                                if (player1File.value < board1FileNum - board1WithMaskSizeSquare.value - 1) {
+                                if (player1File.value < board1FileNum.value - board1WithMaskSizeSquare.value - 1) {
                                     player1Motion.value["toRight"] = commonSpriteMotionToRight;
                                 }
                             }
@@ -773,11 +803,10 @@
 
                             const pd = -player1RankDelta.value;
                             const ch = printing1RankNum; // 例えば 10
-                            const bh = board1RankNum;
+                            const bh = board1RankNum.value;
                             const m = ch + pd - bh;
                             console.log(`pd=${pd} ch=${ch} bw=${bh} m=${m} m <= board1WithMaskHeight:${m <= board1WithMaskSizeSquare.value}`);
 
-                            //if (m <= -board1WithMaskBottomRightMargin) {
                             if (m <= -board1WithMaskSizeSquare.value) {
                                 willShift = false;
                             }
@@ -788,7 +817,7 @@
                             board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
-                            if (player1Rank.value < board1FileNum - board1WithMaskSizeSquare.value - 1) {
+                            if (player1Rank.value < board1FileNum.value - board1WithMaskSizeSquare.value - 1) {
                                 player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                             }
                         }
