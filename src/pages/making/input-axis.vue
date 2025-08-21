@@ -19,7 +19,7 @@
     <input-axis-rpg-walk-board-loop-scroll-1/><br/>
     <input-axis-rpg-walk-board-loop-scroll-and-printing-primordial-1/><br/>
     <input-axis-rpg-walk-board-loop-scroll-and-printing-primordial-and-player-boundary-1/><br/>
-    <input-axis-rpg-walk-scroll-background/><br/>
+    <input-axis-rpg-walk-using-background-image-1/><br/>
 
     <br/>
     <h3><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h3>
@@ -47,7 +47,7 @@
     import InputAxisRpgWalkPlayerPrimordial from './input-axis-rpg-walk-player-primordial.vue';
     import InputAxisRpgWalkPlayerBoundaryCheck from './input-axis-rpg-walk-player-boundary-check.vue';
     import InputAxisRpgWalkPlayerGrid from './input-axis-rpg-walk-player-grid.vue';
-    import InputAxisRpgWalkScrollBackground from './input-axis-rpg-walk-scroll-background.vue';
+    import InputAxisRpgWalkUsingBackgroundImage1 from './input-axis-rpg-walk-using-background-image-1.vue';
     import InputAxisRpgWalkBoardLoopScroll1 from './input-axis-rpg-walk-board-loop-scroll-1.vue';
     import InputAxisRpgWalkFaceShiftPrimordial from './input-axis-rpg-walk-face-shift-primordial.vue';
     import InputAxisRpgWalkBoardLoopScrollAndPrintingPrimordial1 from './input-axis-rpg-walk-board-loop-scroll-and-printing-primordial-1.vue';

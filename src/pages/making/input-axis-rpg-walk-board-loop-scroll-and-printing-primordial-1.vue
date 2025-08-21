@@ -76,7 +76,7 @@
     <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、数字柄の原始的シフト　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-scroll-loop"/>
+            pagePath="/making/input-axis-rpg-walk-board-loop-scroll-and-printing-primordial-1"/>
     </section>
 </template>
 

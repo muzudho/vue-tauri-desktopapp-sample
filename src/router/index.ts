@@ -66,9 +66,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-player-grid.vue'),
     },
     {
-        name: 'InputAxisRpgWalkScrollBackground',
-        path: '/making/input-axis-rpg-walk-scroll-background',
-        component: () => import('../pages/making/input-axis-rpg-walk-scroll-background.vue'),
+        name: 'InputAxisRpgWalkUsingBackgroundImage1',
+        path: '/making/input-axis-rpg-walk-using-background-image-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardScrollPrimordial',
