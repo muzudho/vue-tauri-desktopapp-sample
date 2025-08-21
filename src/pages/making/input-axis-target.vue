@@ -1,12 +1,7 @@
 <template>
 
     <!-- ボタンの押しっぱなし機能 -->
-    <button-repeat
-        ref="buttonRepeat1Ref"
-        :run="appButtonRepeat1Run"
-        v-on:buttonPress="() => { appButtonRepeat1Start(); }"
-        v-on:buttonRelease="() => { appButtonRepeat1Stop(); }"
-        />
+    <button-repeat ref="buttonRepeat1Ref"/>
 
     <h4>標的</h4>
     <section class="sec-4">
@@ -15,7 +10,7 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="appButtonRepeat1Start=onUpButtonPressed; appButtonRepeat1Stop=onUpButtonReleased; appButtonRepeat1Run=true;" @mouseup="appButtonRepeat1Run=false;" @mouseleave="appButtonRepeat1Run=false;">↑</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.repeatStart(onUpButtonPressed);" @mouseup="buttonRepeat1Ref?.repeatStop(onUpButtonReleased);" @mouseleave="buttonRepeat1Ref?.repeatStop(onUpButtonReleased);">↑</v-btn>
                 <br/>
                 <v-btn class="code-key" @mousedown="onRepeatStart(onLeftButtonPressed)" @mouseup="onRepeatStop(onLeftButtonReleased)" @mouseleave="onRepeatStop(onLeftButtonReleased)">←</v-btn>
                 <v-btn class="code-key hidden"/>
@@ -88,9 +83,6 @@
     //
 
     const appManualKeyRepeatTimerId = ref<number | null>(null);   // ［キーボード操作説明］のボタンのキー・リピート用
-    const appButtonRepeat1Run = ref<boolean>(false);
-    const appButtonRepeat1Start = ()=>{};
-    const appButtonRepeat1Stop = ()=>{};
 
 
     // ################
@@ -102,6 +94,12 @@
     // ++++++++++++++++++++++++++++++++++++++
 
     const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
+
+    // ++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ボタン押しっぱなし機能 +
+    // ++++++++++++++++++++++++++++++++++++++++++++
+
+    const buttonRepeat1Ref = ref<InstanceType<typeof ButtonRepeat> | null>(null);
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
