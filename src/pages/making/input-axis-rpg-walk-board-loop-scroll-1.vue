@@ -6,10 +6,10 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　盤を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　タイルを、上下左右キーの入力とは逆方向に動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　盤の位置を最初に有ったところに戻すぜ。</li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　タイルの位置を最初に有ったところに戻すぜ。</li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -50,14 +50,21 @@
                 :style="`
                     width:${board1WithMaskFileNum * board1SquareWidth}px;
                     height:${board1WithMaskRankNum * board1SquareHeight}px;
-                    border-top: solid ${board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-right: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                    border-bottom: solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-left: solid ${board1SquareWidth}px rgba(0,0,0,0.5);
+                    border-top: solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5);
+                    border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
+                    border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
+                    border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
                     zoom:${commonZoom};
                 `"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
+
         </div>
+
+        <div>
+            印字x={{ printing1Left }}　｜　人x={{ player1RankHome * board1SquareHeight }}<br/>
+            印字y={{ printing1Top  }}　｜　人y={{ player1RankHome * board1SquareHeight  }}<br/>
+        </div>
+        <br/>
 
         <p>
             👆　盤がラップ・アラウンドしているぜ（＾▽＾）<br/>
@@ -67,7 +74,6 @@
             数字はタイルに付いている番号だぜ（＾▽＾）！<br/>
             タイルはスワップ（塗り替え）ではなく、スクロールしているぜ。スクロールってのは、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
         </p>
-
     </section>
 
     <br/>
@@ -119,10 +125,10 @@
     //
 
     const commonZoom = 4;
-    const commonSpriteMotionToTop = -1;  // モーション（motion）定数。上に移動する
-    const commonSpriteMotionToRight = 1;
-    const commonSpriteMotionToBottom = 1;
-    const commonSpriteMotionToLeft = -1;
+    const commonSpriteMotionTop = -1;  // モーション（motion）定数。上。
+    const commonSpriteMotionRight = 1;
+    const commonSpriteMotionBottom = 1;
+    const commonSpriteMotionLeft = -1;
 
 
     // ################
@@ -153,10 +159,7 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum * board1RankNum;
     });
-    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const board1Top = ref<number>(0);
-    const board1Left = ref<number>(0);
-    const board1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
+    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が移動することはありません。
     const board1WithMaskSizeSquare: number = 1;    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = board1FileNum + board1WithMaskBottomRightMargin   // マスク付きの場合の列数。右側の多めの１マスを含む。
@@ -177,14 +180,13 @@
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum) * board1SquareWidth;
             const homeTop = Math.floor(i / board1FileNum) * board1SquareHeight;
-
             const bwPx = (board1FileNum * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
             const bhPx = (board1RankNum * board1SquareHeight);
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const offsetLeftLoop = euclideanMod(homeLeft + board1Left.value + bwPx, bwPx) - homeLeft;
-            const offsetTopLoop = euclideanMod(homeTop + board1Top.value + bhPx, bhPx) - homeTop;
+            const offsetLeftLoop = euclideanMod(homeLeft + printing1Left.value + bwPx, bwPx) - homeLeft;
+            const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
 
             return {
                 position: 'absolute',
@@ -198,19 +200,31 @@
             };
         };
     });
-    const board1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
+
+    // ++++++++++++++++++++++++++
+    // + オブジェクト　＞　印字 +
+    // ++++++++++++++++++++++++**
+    //
+    // 盤上に表示される数字柄、絵柄など。
+    //
+
+    // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
+    const printing1Top = ref<number>(0);
+    const printing1Left = ref<number>(0);
+    const printing1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
+    const printing1Motion = ref<Record<string, number>>({  // 印字への入力
+        goToRight: 0,   // 負なら左、正なら右
+        goToBottom: 0,   // 負なら上、正なら下
     });
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
 
     const player1FileHome: number = 2;  // 基準の相対位置
     const player1RankHome: number = 2;
     // ※プレイヤーは移動しません。
-    const player1Input = <Record<string, boolean>>{             // 入力
+    const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
@@ -302,8 +316,8 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                board1Motion.value["toRight"] = 0;
-                board1Motion.value["toBottom"] = 0;
+                printing1Motion.value["goToRight"] = 0;
+                printing1Motion.value["goToBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -311,33 +325,33 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    board1Left.value = 0;
-                    board1Top.value = 0;
+                    printing1Left.value = 0;
+                    printing1Top.value = 0;
 	                // プレイヤーは中心から動かないので、プレイヤーの位置のリセットはありません。
                 }
 
                 // 移動関連（単発）
                 if (player1Input.ArrowLeft) {
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
-                    board1Motion.value["toRight"] = commonSpriteMotionToLeft; // 左
+                    printing1Motion.value["goToRight"] = commonSpriteMotionLeft; // 左
                 }
 
                 if (player1Input.ArrowRight) {
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
-                    board1Motion.value["toRight"] = commonSpriteMotionToRight;  // 右
+                    printing1Motion.value["goToRight"] = commonSpriteMotionRight;  // 右
                 }
 
                 if (player1Input.ArrowUp) {
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
-                    board1Motion.value["toBottom"] = commonSpriteMotionToTop;   // 上
+                    printing1Motion.value["goToBottom"] = commonSpriteMotionTop;   // 上
                 }
 
                 if (player1Input.ArrowDown) {
                     player1Frames.value = player1SourceFrames["down"]    // 向きを変える
-                    board1Motion.value["toBottom"] = commonSpriteMotionToBottom;   // 下
+                    printing1Motion.value["goToBottom"] = commonSpriteMotionBottom;   // 下
                 }
 
-                if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0) {
+                if (printing1Motion.value["goToRight"]!=0 || printing1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
             }
@@ -345,16 +359,16 @@
             // 移動を処理
             // 盤の方をスクロールさせる
             // 斜め方向の場合、上下を優先する。
-            if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
-                board1Left.value -= board1Speed.value;
-            } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
-                board1Left.value += board1Speed.value;
+            if (printing1Motion.value["goToRight"] == commonSpriteMotionRight) {   // 右
+                printing1Left.value -= printing1Speed.value;
+            } else if (printing1Motion.value["goToRight"] == commonSpriteMotionLeft) {  // 左
+                printing1Left.value += printing1Speed.value;
             }
 
-            if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
-                board1Top.value += board1Speed.value;
-            } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
-                board1Top.value -= board1Speed.value;
+            if (printing1Motion.value["goToBottom"] == commonSpriteMotionTop) {  // 上
+                printing1Top.value += printing1Speed.value;
+            } else if (printing1Motion.value["goToBottom"] == commonSpriteMotionBottom) {   // 下
+                printing1Top.value -= printing1Speed.value;
             }
 
             // 次のフレーム

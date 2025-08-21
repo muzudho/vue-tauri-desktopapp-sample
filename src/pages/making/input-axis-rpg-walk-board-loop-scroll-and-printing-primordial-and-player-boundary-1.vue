@@ -352,8 +352,8 @@
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
     const printing1Motion = ref<Record<string, number>>({  // 印字への入力
-        goToRight: 0,   // 負なら左、正なら右
-        goToBottom: 0,   // 負なら上、正なら下
+        wrapAroundRight: 0,   // 負なら左、正なら右
+        wrapAroundBottom: 0,   // 負なら上、正なら下
     });
 
     /**
@@ -606,8 +606,8 @@
                 player1Motion.value["lookBottom"] = 0;
                 player1Motion.value["goToRight"] = 0;
                 player1Motion.value["goToBottom"] = 0;
-                printing1Motion.value["goToRight"] = 0;	// 印字
-                printing1Motion.value["goToBottom"] = 0;
+                printing1Motion.value["wrapAroundRight"] = 0;	// 印字
+                printing1Motion.value["wrapAroundBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -676,7 +676,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["goToRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
+                            printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
@@ -733,7 +733,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["goToRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
+                            printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0 + board1WithMaskSizeSquare.value) {
@@ -792,7 +792,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["goToBottom"] = commonSpriteMotionBottom;     // 印字は、キー入力とは逆向きへ進める
+                            printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionBottom;     // 印字は、キー入力とは逆向きへ進める
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0 + board1WithMaskSizeSquare.value) {
@@ -860,7 +860,7 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["goToBottom"] = commonSpriteMotionTop;    // 印字は、キー入力とは逆向きへ進める
+                            printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionTop;    // 印字は、キー入力とは逆向きへ進める
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
@@ -876,15 +876,15 @@
             // ++++++++++++++++++++
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (printing1Motion.value["goToRight"] == commonSpriteMotionRight) {   // 右
+            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
                 printing1Left.value += player1Speed.value;
-            } else if (printing1Motion.value["goToRight"] == commonSpriteMotionLeft) {  // 左
+            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
                 printing1Left.value -= player1Speed.value;
             }
 
-            if (printing1Motion.value["goToBottom"] == commonSpriteMotionTop) {  // 上
+            if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionTop) {  // 上
                 printing1Top.value -= player1Speed.value;
-            } else if (printing1Motion.value["goToBottom"] == commonSpriteMotionBottom) {   // 下
+            } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionBottom) {   // 下
                 printing1Top.value += player1Speed.value;
             }
 
@@ -917,7 +917,7 @@
                 // + ウェイト設定 +
                 // ++++++++++++++++
 
-                if (printing1Motion.value["goToRight"]!=0 || printing1Motion.value["goToBottom"]!=0 || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
+                if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0 || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
                     player1MotionWait.value = player1AnimationFacingFrames;
