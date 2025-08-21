@@ -121,7 +121,7 @@
         <div :style="board1Style">
 
             <!--
-                グリッド
+                タイルのグリッド。
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
@@ -344,8 +344,8 @@
         return [file, rank];
     }
 
-    function contentsFileRankToContentsIndex(contentsFile: number, contentsRank: number) : number {
-        return contentsRank * printing1FileNum.value + contentsFile;
+    function printingFileRankToPrintingIndex(printingFile: number, printingRank: number) : number {
+        return printingRank * printing1FileNum.value + printingFile;
     }
 
     /**
@@ -434,22 +434,24 @@
             return fixTileIndex;
     }
 
+    /**
+     * 印字。
+     */
     const getFaceNumber = computed(() => {
         return (tileIndex: number)=>{
-            const fixTileIndex = getFixTileIndex(tileIndex);
-            //return fixTileIndex;   // デバッグに使えます。
+            const virtualTileIndex = getFixTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
-            let [tileFile, tileRank] = tileIndexToTileFileRank(fixTileIndex);
-            const contentsFile = tileFile + player1FileDelta.value;
-            const contentsRank = tileRank + player1RankDelta.value;
-            const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
+            let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
+            const printingFile = virtualTileFile + player1FileDelta.value;
+            const printingRank = virtualTileRank + player1RankDelta.value;
+            const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (contentsFile < 0 || printing1FileNum.value <= contentsFile || contentsRank < 0 || printing1RankNum.value <= contentsRank) {
+            if (printingFile < 0 || printing1FileNum.value <= printingFile || printingRank < 0 || printing1RankNum.value <= printingRank) {
                 return "-";
             }
 
-            return  printing1Data.value[contentsIndex];
+            return  printing1Data.value[printingIndex];
         };
     });    
     const printing1Motion = ref<Record<string, number>>({  // モーションへの入力
