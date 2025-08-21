@@ -561,7 +561,7 @@
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
-                                if (player1File.value < board1FileNum - 1) {
+                                if (player1File.value < board1FileNum - board1WithMaskWidth - 1) {
                                     player1Motion.value["toRight"] = commonSpriteMotionToRight;
                                 }
                             }
@@ -629,7 +629,7 @@
                             board1Motion.value["toRight"] = commonSpriteMotionToLeft;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
-                            if (player1File.value > 0) {
+                            if (player1File.value > 0 + board1WithMaskWidth) {
                                 player1Motion.value["toRight"] = commonSpriteMotionToLeft;
                             }
                         }
@@ -698,7 +698,7 @@
                             board1Motion.value["toBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
-                            if (player1Rank.value > 0) {
+                            if (player1Rank.value > 0 + board1WithMaskWidth) {
                                 player1Motion.value["toBottom"] = commonSpriteMotionToTop;
                             }
                         }
@@ -764,7 +764,7 @@
                             board1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
-                            if (player1Rank.value < board1FileNum - 1) {
+                            if (player1Rank.value < board1FileNum - board1WithMaskWidth - 1) {
                                 player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                             }
                         }
