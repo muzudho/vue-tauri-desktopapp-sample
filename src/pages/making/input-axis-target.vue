@@ -5,9 +5,17 @@
         <p>キーボード操作方法</p>
         <ul>
             <li>
-                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
-                <v-btn class="code-key" @mousedown="onLeftButtonPressedStartRepeat()" @mouseup="onLeftButtonPressedStopRepeat()" @mouseleave="onLeftButtonPressedStopRepeat()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　自機を上下左右へ、印字を逆方向へ動かすぜ！<br/>
-                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
+                <v-btn class="code-key hidden"/>
+                <v-btn class="code-key" @mousedown="onStartRepeat(onUpButtonPressed)" @mouseup="onStopRepeat(onUpButtonReleased)" @mouseleave="onStopRepeat(onUpButtonReleased)">↑</v-btn>
+                <br/>
+                <v-btn class="code-key" @mousedown="onStartRepeat(onLeftButtonPressed)" @mouseup="onStopRepeat(onLeftButtonReleased)" @mouseleave="onStopRepeat(onLeftButtonReleased)">←</v-btn>
+                <v-btn class="code-key hidden"/>
+                <v-btn class="code-key" @mousedown="onStartRepeat(onRightButtonPressed)" @mouseup="onStopRepeat(onRightButtonReleased)" @mouseleave="onStopRepeat(onRightButtonReleased)">→</v-btn>
+                　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
+                <br/>
+                <v-btn class="code-key hidden"/>
+                <v-btn class="code-key" @mousedown="onStartRepeat(onDownButtonPressed)" @mouseup="onStopRepeat(onDownButtonReleased)" @mouseleave="onStopRepeat(onDownButtonReleased)">↓</v-btn>
+                <br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
             <li>
@@ -176,24 +184,24 @@
     /**
      * 長押し開始
      */
-    function onLeftButtonPressedStartRepeat() : void {      
-        onLeftButtonPressed();   // 即時実行
+    function onStartRepeat(callback:()=>void) : void {      
+        callback();   // 即時実行
         
         const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
         intervalTimerId.value = setInterval(() => {   // 指定の間隔で繰り返し実行
-            onLeftButtonPressed();
+            callback();
         }, intervalTime);
     }
 
     /**
      * 長押し終了
      */
-    function onLeftButtonPressedStopRepeat() {
+    function onStopRepeat(callback:()=>void) {
         if (intervalTimerId.value) {
             clearInterval(intervalTimerId.value);    // インターバルをクリア
             intervalTimerId.value = null;
 
-            onLeftButtonReleased();   // 即時実行
+            callback();   // 即時実行
         }
     }
 
