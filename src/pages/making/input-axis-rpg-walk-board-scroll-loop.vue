@@ -160,6 +160,7 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const board1Top = ref<number>(0);
     const board1Left = ref<number>(0);
+    const board1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
     const board1WithMaskSizeSquare: number = 1;    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = board1FileNum + board1WithMaskBottomRightMargin   // マスク付きの場合の列数。右側の多めの１マスを含む。
@@ -210,17 +211,17 @@
     // + オブジェクト　＞　プレイヤー +
     // ++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
-    const player1Top = ref<number>(2 * board1SquareHeight);     // スプライトのY座標
-    const player1Speed = ref<number>(2);                        // 移動速度
+    const player1FileHome: number = 2;  // 基準の相対位置
+    const player1RankHome: number = 2;
+    // ※プレイヤーは移動しません。
     const player1Input = <Record<string, boolean>>{             // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
-        top: `${player1Top.value}px`,
-        left: `${player1Left.value}px`,
+        top: `${player1RankHome * board1SquareHeight}px`,     // プレイヤーは移動しません。固定位置です。
+        left: `${player1FileHome * board1SquareWidth}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -349,15 +350,15 @@
             // 盤の方をスクロールさせる
             // 斜め方向の場合、上下を優先する。
             if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
-                board1Left.value -= player1Speed.value;
+                board1Left.value -= board1Speed.value;
             } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
-                board1Left.value += player1Speed.value;
+                board1Left.value += board1Speed.value;
             }
 
             if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
-                board1Top.value += player1Speed.value;
+                board1Top.value += board1Speed.value;
             } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
-                board1Top.value -= player1Speed.value;
+                board1Top.value -= board1Speed.value;
             }
 
             // 次のフレーム

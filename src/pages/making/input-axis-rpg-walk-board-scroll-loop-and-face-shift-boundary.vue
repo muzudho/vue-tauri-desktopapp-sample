@@ -485,20 +485,19 @@
     // ++++++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const player1FileHome = ref<number>(2);  // 登場人物の相対基準位置
+    const player1FileHome = ref<number>(2);		// 基準の相対位置
     const player1RankHome = ref<number>(2);
-    const player1LeftDelta = ref<number>(0);    // 登場人物の移動量
+    const player1FileDelta = ref<number>(0);    // 移動量（単位：マス）
+    const player1RankDelta = ref<number>(0);
+    const player1LeftDelta = ref<number>(0);    // 移動量（単位：ピクセル））
     const player1TopDelta = ref<number>(0);
+    const player1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
     const player1Left = computed(()=>{
         return player1FileHome.value * board1SquareWidth + player1LeftDelta.value;
     });
     const player1Top = computed(()=>{
         return player1RankHome.value * board1SquareHeight + player1TopDelta.value;
     });
-    // 移動量を記録しておく。
-    const player1FileDelta = ref<number>(0);
-    const player1RankDelta = ref<number>(0);
-    const player1Speed = ref<number>(2);     // 移動速度
     const player1File = computed<number>(()=>{
         return Math.round(player1Left.value / board1SquareWidth);
     });
