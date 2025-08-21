@@ -498,17 +498,6 @@
             // + 向き、移動を処理 +
             // ++++++++++++++++++++
 
-            // 自機の向きを更新、タテヨコ同時入力の場合、上下で上書きする： ※ 自機の位置は固定です。
-            if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
-                player1Frames.value = player1SourceFrames["up"]
-            } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
-                player1Frames.value = player1SourceFrames["down"]
-            } else if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
-                player1Frames.value = player1SourceFrames["right"]
-            } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
-                player1Frames.value = player1SourceFrames["left"]
-            }
-
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
                 printing1Left.value += player1Speed.value;
@@ -523,6 +512,17 @@
             }
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+                // 自機の向きを更新、タテヨコ同時入力の場合、上下で上書きする： ※ 自機の位置は固定です。
+                if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {   // 上
+                    player1Frames.value = player1SourceFrames["up"]
+                } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) { // 下
+                    player1Frames.value = player1SourceFrames["down"]
+                } else if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {  // 右
+                    player1Frames.value = player1SourceFrames["right"]
+                } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {    // 左
+                    player1Frames.value = player1SourceFrames["left"]
+                }
+
                 if (printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }

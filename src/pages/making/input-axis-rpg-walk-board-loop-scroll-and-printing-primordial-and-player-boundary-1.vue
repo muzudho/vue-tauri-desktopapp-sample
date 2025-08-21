@@ -507,6 +507,7 @@
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationFacingFrames = 1;         // 振り向くフレーム数
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
@@ -542,8 +543,10 @@
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
+        lookRight: 0,   // 向きを変える
+        lookBottom: 0,
+        toRight: 0,     // 負なら左、正なら右へ移動する
+        toBottom: 0,    // 負なら上、正なら下へ移動する
     });
 
 
@@ -599,7 +602,9 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                player1Motion.value["toRight"] = 0;		// 自機
+                player1Motion.value["lookRight"] = 0;	// 自機
+                player1Motion.value["lookBottom"] = 0;
+                player1Motion.value["toRight"] = 0;
                 player1Motion.value["toBottom"] = 0;
                 printing1Motion.value["toRight"] = 0;	// 印字
                 printing1Motion.value["toBottom"] = 0;
@@ -619,7 +624,7 @@
                 // 移動関連（単発）
                 // 斜め方向の場合、左右を上下で上書きする。（右、左）→（上、下）の順。
                 if (player1Input.ArrowRight) {  // 右
-                    player1Frames.value = player1SourceFrames["right"]    // 向きを変える
+                    player1Motion.value["lookRight"] = commonSpriteMotionToRight;
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1FileHome.value) {
@@ -684,7 +689,7 @@
                 }
 
                 if (player1Input.ArrowLeft) { // 左
-                    player1Frames.value = player1SourceFrames["left"]    // 向きを変える
+                    player1Motion.value["lookRight"] = commonSpriteMotionToLeft;
 
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1FileHome.value) {
@@ -739,7 +744,7 @@
                 }
 
                 if (player1Input.ArrowUp) {   // 上
-                    player1Frames.value = player1SourceFrames["up"]    // 向きを変える
+                    player1Motion.value["lookBottom"] = commonSpriteMotionToTop;
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1RankHome.value) {
@@ -798,7 +803,7 @@
                 }
 
                 if (player1Input.ArrowDown) {   // 下
-                    player1Frames.value = player1SourceFrames["down"]   // 向きを変える
+                    player1Motion.value["lookBottom"] = commonSpriteMotionToBottom;
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1RankHome.value) {
@@ -866,9 +871,9 @@
                 }
             }
 
-            // ++++++++++++++
-            // + 移動を処理 +
-            // ++++++++++++++
+            // ++++++++++++++++++++
+            // + 向き、移動を処理 +
+            // ++++++++++++++++++++
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
@@ -897,8 +902,25 @@
             }
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+                // 自機の向きを更新、タテヨコ同時入力の場合、上下で上書きする：
+                if (player1Motion.value["lookBottom"] == commonSpriteMotionToTop) {   // 上
+                    player1Frames.value = player1SourceFrames["up"]
+                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionToBottom) { // 下
+                    player1Frames.value = player1SourceFrames["down"]
+                } else if (player1Motion.value["lookRight"] == commonSpriteMotionToRight) {  // 右
+                    player1Frames.value = player1SourceFrames["right"]
+                } else if (player1Motion.value["lookRight"] == commonSpriteMotionToLeft) {    // 左
+                    player1Frames.value = player1SourceFrames["left"]
+                }
+
+                // ++++++++++++++++
+                // + ウェイト設定 +
+                // ++++++++++++++++
+
                 if (printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
+                    player1MotionWait.value = player1AnimationWalkingFrames;
+                }else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
+                    player1MotionWait.value = player1AnimationFacingFrames;
                 }
             }
 
