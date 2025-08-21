@@ -37,6 +37,27 @@
         <br/>
 
         <v-slider
+            label="登場人物の基準の相対筋"
+            v-model="player1FileHome"
+            :min="0"
+            :max="5"
+            step="1"
+            showTicks="always"
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <v-slider
+            label="登場人物の基準の相対段"
+            v-model="player1RankHome"
+            :min="0"
+            :max="5"
+            step="1"
+            showTicks="always"
+            thumbLabel="always"
+            @click="focusRemove()" />
+        <p>👆 マスクを含んだサイズです。</p>
+        <br/>
+
+        <v-slider
             label="マスクのタテヨコ幅"
             v-model="board1WithMaskSizeSquare"
             :min="0"
@@ -409,14 +430,20 @@
     });
 
     // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
+    // + オブジェクト　＞　登場人物１ +
     // ++++++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const player1FileHome: number = 2;  // 盤の真ん中をホーム・ポジションとする
-    const player1RankHome: number = 2;
-    const player1Left = ref<number>(player1FileHome * board1SquareWidth);    // スプライトのX座標
-    const player1Top = ref<number>(player1RankHome * board1SquareHeight);       // スプライトのY座標
+    const player1FileHome = ref<number>(2);  // 登場人物の相対基準位置
+    const player1RankHome = ref<number>(2);
+    const player1LeftDelta = ref<number>(0);    // 登場人物の移動量
+    const player1TopDelta = ref<number>(0);    // 登場人物の移動量
+    const player1Left = computed(()=>{
+        return player1FileHome.value * board1SquareWidth + player1LeftDelta.value;
+    });
+    const player1Top = computed(()=>{
+        return player1RankHome.value * board1SquareHeight + player1TopDelta.value;
+    });
     // 移動量を記録しておく。
     const player1FileDelta = ref<number>(0);
     const player1RankDelta = ref<number>(0);
@@ -541,8 +568,8 @@
                     board1Top.value = 0;
                     printing1File.value = printing1FileInit;
                     printing1Rank.value = printing1RankInit;
-                    player1Left.value = player1FileHome * board1SquareWidth;
-                    player1Top.value = player1RankHome * board1SquareHeight;
+                    player1LeftDelta.value = 0;
+                    player1TopDelta.value = 0;
                     player1FileDelta.value = 0;
                     player1RankDelta.value = 0;
                 }
@@ -553,7 +580,7 @@
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
 
                     // ホーム・ポジションより左に居ればホームに近づける。
-                    if (player1File.value < player1FileHome) {
+                    if (player1File.value < player1FileHome.value) {
                         player1Motion.value["toRight"] = commonSpriteMotionToRight;
                     } else {
                         let willShift: boolean = true;
@@ -626,7 +653,7 @@
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
 
                     // ホーム・ポジションより右に居ればホームに近づける。
-                    if (player1File.value > player1FileHome) {
+                    if (player1File.value > player1FileHome.value) {
                         player1Motion.value["toRight"] = commonSpriteMotionToLeft;
                     } else {
                         let willShift: boolean = true;
@@ -693,7 +720,7 @@
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
 
                     // ホーム・ポジションより下に居ればホームに近づける。
-                    if (player1Rank.value > player1RankHome) {
+                    if (player1Rank.value > player1RankHome.value) {
                         player1Motion.value["toBottom"] = commonSpriteMotionToTop;
                     } else {
                         let willShift: boolean = true;
@@ -762,7 +789,7 @@
                     player1Frames.value = player1SourceFrames["down"]   // 向きを変える
 
                     // ホーム・ポジションより上に居ればホームに近づける。
-                    if (player1Rank.value < player1RankHome) {
+                    if (player1Rank.value < player1RankHome.value) {
                         player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                     } else {
                         let willShift: boolean = true;
@@ -864,15 +891,15 @@
 
             // プレイヤーが歩くのは、盤の端を歩いているときだけ。このとき、画面スクロールは起こらない。
             if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {
-                player1Top.value -= player1Speed.value;
+                player1TopDelta.value -= player1Speed.value;
             } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
-                player1Top.value += player1Speed.value;
+                player1TopDelta.value += player1Speed.value;
             }
 
             if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {
-                player1Left.value += player1Speed.value;
+                player1LeftDelta.value += player1Speed.value;
             } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {
-                player1Left.value -= player1Speed.value;
+                player1LeftDelta.value -= player1Speed.value;
             }
             
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
