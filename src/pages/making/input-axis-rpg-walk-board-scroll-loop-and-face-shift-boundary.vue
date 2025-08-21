@@ -9,7 +9,7 @@
                 <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　登場人物を上下左右に動かすぜ！<br/>
                 <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　位置を最初の状態に戻すぜ。</li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　登場人物、盤、印字の位置を最初に有ったところに戻すぜ。</li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -614,14 +614,14 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    board1Left.value = 0;
-                    board1Top.value = 0;
-                    printing1FileDelta.value = 0;
-                    printing1RankDelta.value = 0;
-                    player1LeftDelta.value = 0;
+                    player1LeftDelta.value = 0;     // 登場人物
                     player1TopDelta.value = 0;
                     player1FileDelta.value = 0;
                     player1RankDelta.value = 0;
+                    board1Left.value = 0;           // 盤
+                    board1Top.value = 0;
+                    printing1FileDelta.value = 0;   // 印字
+                    printing1RankDelta.value = 0;
                 }
 
                 // 移動関連（単発）

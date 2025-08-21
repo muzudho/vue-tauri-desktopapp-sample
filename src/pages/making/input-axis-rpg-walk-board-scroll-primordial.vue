@@ -4,8 +4,19 @@
     <section class="sec-4">
         <p>キーボード操作方法</p>
         <ul>
-            <li><span class="code-key">↑</span><span class="code-key">↓</span><span class="code-key">←</span><span class="code-key">→</span>キー　…　上下左右に動かすぜ！</li>
-            <li><span class="code-key">（スペース）</span>キー　…　位置を最初の状態に戻すぜ。</li>
+            <li>
+                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onUpButtonPressed()" @mouseup="onUpButtonReleased()">↑</v-btn><br/>
+                <v-btn class="code-key" @mousedown="onLeftButtonPressed()" @mouseup="onLeftButtonReleased()">←</v-btn><v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onRightButtonPressed()" @mouseup="onRightButtonReleased()">→</v-btn>　…　盤を上下左右に動かすぜ！<br/>
+                <v-btn class="code-key hidden"/><v-btn class="code-key" @mousedown="onDownButtonPressed()" @mouseup="onDownButtonReleased()">↓</v-btn><br/>
+            </li>
+            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　盤の位置を最初に有ったところに戻すぜ。</li>
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn
+                    class="noop-key"
+                    ref="noopButton"
+                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'" >何もしないボタン</v-btn><br/>
+            </li>
         </ul>
         <br/>
 
@@ -22,14 +33,14 @@
             </div>
 
             <!--
-                グリッド
+                タイルのグリッド。
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)"></div>
 
             <!-- プレイヤー１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
@@ -57,6 +68,9 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
+    // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+
+    import { VBtn } from 'vuetify/components';
 
 
     // ++++++++++++++
@@ -77,7 +91,7 @@
     // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
-    import TileAnimation from '@/components/TileAnimation.vue';
+    import TileAnimation from '../../components/TileAnimation.vue';
 
 
     // ##########
@@ -97,6 +111,12 @@
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　何もしないボタン +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -289,6 +309,58 @@
         }
 
     });
+
+
+    function onUpButtonPressed() : void {
+        console.log(`↑ボタンを押し付けました。`)
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        console.log(`↑ボタンを放しました。`)
+        player1Input.ArrowUp = false;
+    }
+
+
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    function onLeftButtonPressed() : void {
+        player1Input.ArrowLeft = true;
+    }
+
+
+    function onLeftButtonReleased() : void {
+        player1Input.ArrowLeft = false;
+    }
+
+
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
+    }
+
+
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
+    }
 
 </script>
 
