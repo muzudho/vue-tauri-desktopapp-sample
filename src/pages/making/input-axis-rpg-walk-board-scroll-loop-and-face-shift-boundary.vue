@@ -61,8 +61,8 @@
         </div>
 
         <div>
-            盤x={{ board1Left }}　｜　人始筋={{ player1FileHome }} 人x={{ player1Left }} 人Δx={{ player1LeftDelta }}<br/>
-            盤y={{ board1Top }}　｜　人始段={{ player1RankHome }} 人y={{ player1Top }} 人Δx={{ player1TopDelta }}<br/>
+            盤x={{ board1Left }}　｜　人始筋={{ player1FileHome }}　人Δ筋={{ player1FileDelta }}　｜　人x={{ player1Left }} 人Δx={{ player1LeftDelta }}<br/>
+            盤y={{ board1Top }}　｜　人始段={{ player1RankHome }}　人Δ段={{ player1RankDelta }}　｜　人y={{ player1Top }} 人Δx={{ player1TopDelta }}<br/>
         </div>
         <br/>
 
@@ -283,12 +283,12 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const board1Left = ref<number>(0);
     const board1Top = ref<number>(0);
-    const board1File = computed<number>(()=>{
-        return Math.round(board1Left.value / board1SquareWidth);
-    });
-    const board1Rank = computed<number>(()=>{
-        return Math.round(board1Top.value / board1SquareHeight);
-    });
+    // const board1File = computed<number>(()=>{
+    //     return Math.round(board1Left.value / board1SquareWidth);
+    // });
+    // const board1Rank = computed<number>(()=>{
+    //     return Math.round(board1Top.value / board1SquareHeight);
+    // });
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const bothSide = 2;     // 左と右とか、上と下とか、対。
@@ -510,11 +510,11 @@
     });
     const player1FileDelta = ref<number>(0);    // 登場人物の移動量（単位：マス）を記録しておく。
     const player1RankDelta = ref<number>(0);
-    // const player1FileDelta = computed<number>(()=>{     // 印字の先頭要素の左上隅位置。
-    //     return Math.round(player1LeftDelta.value / board1SquareWidth) % printing1FileNum.value;
+    // const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
+    //     return player1LeftDelta.value - player1FileHome.value * board1SquareWidth;
     // });
     // const player1RankDelta = computed<number>(()=>{
-    //     return Math.round(player1TopDelta.value / board1SquareWidth) % printing1RankNum.value;
+    //     return player1TopDelta.value - player1RankHome.value * board1SquareHeight;
     // });
 
     const player1Input = <Record<string, boolean>>{         // 入力
@@ -586,7 +586,8 @@
 
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-        console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} board1File=${board1File.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
+        // console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
+        // // board1File=${board1File.value} 
     });
 
 
@@ -627,8 +628,8 @@
                 if (player1Input[" "]) {
                     player1LeftDelta.value = 0;     // 登場人物
                     player1TopDelta.value = 0;
-                    player1FileDelta.value = 0;
-                    player1RankDelta.value = 0;
+                    // player1FileDelta.value = 0;
+                    // player1RankDelta.value = 0;
                     board1Left.value = 0;           // 盤
                     board1Top.value = 0;
                 }
@@ -933,7 +934,8 @@
                 
                 if (board1Motion.value["toRight"]!=0 || board1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
-                    console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} board1File=${board1File.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
+                    // console.log(`player1Left=${player1Left.value} player1File=${player1File.value} player1FileDelta=${player1FileDelta.value} player1Rank=${player1Rank.value} getPrintingNumber.value(0)=${getPrintingNumber.value(0)} getFixTileIndex(0)=${getFixTileIndex(0)}`);
+                    // // board1File=${board1File.value}
                 }
             }
 
