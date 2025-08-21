@@ -647,36 +647,48 @@
                         if (appBoundaryIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
-                            //  Contents
-                            // +------c-------+
-                            // |              |
-                            // |   Board      |
-                            // |  +---b---+   |
-                            // |  |       |   |
-                            // |  |   p   |   |
-                            // |  |       |   |
-                            // |  +-------+   |
-                            // +--------------+
+                            // - 印字は動かない、プレイヤーの移動量を見ること。
+                            // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                             //
-                            //  b ... Origin x on board.
-                            //  c ... contents's x from B.
-                            //  p ... player character's x from B.
+                            // Printing
+                            // +-------------------->+     c
+                            // |                     |     ^
+                            // |       Board         |     |
+                            // |       +-------+     | 0 + + pd
+                            // |       ^       |     |   |
+                            // |       |       |     |   v
+                            // ch      bh  *   |     |   p
+                            // |       |       |     |
+                            // |       v       |     |
+                            // |       +-------+     +
+                            // |                     ^
+                            // |                     |
+                            // |                     m
+                            // |                     |
+                            // |                     v
+                            // +---------------------+
                             //
+                            // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                            // p は、0 からみた、登場人物の初期位置。
+                            // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                            // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
+                            // bh は、盤の行数。
+                            // ch は、印字の行数。
+                            // m は、 pd の正負を反転したもの。
+                            // m が、マスク幅より大きいなら、それ以上上に行くことはできない。
                             //
-                            // +--+---b---+-c-+
-                            // |  |       |   |
-                            // |  |   p   |   |
-                            // |  |       |   |
-                            // |  +-------+   |
-                            // |              |
-                            // +--------------+
-                            //
-                            // c が 0 以上なら、それ以上上に行くことはできない。
+                            // m = c
                             //
 
-                            const c = printing1Rank.value;
+                            //const c = printing1File.value;
+                            //const p = player1File.value;
+                            const pd = player1RankDelta.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
+                            const m = - pd;
+                            //const m = c + p - pd;
+                            console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskWidth} "board1WithMaskWidth <= m"=${board1WithMaskWidth <= m}`);
+                            // c=${c} p=${p} 
 
-                            if (c >= 0) {
+                            if (board1WithMaskWidth < m) {
                                 willShift = false;
                             }
                         }
