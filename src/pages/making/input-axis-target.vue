@@ -10,15 +10,15 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.repeatStart(onUpButtonPressed);" @mouseup="buttonRepeat1Ref?.repeatStop(onUpButtonReleased);" @mouseleave="buttonRepeat1Ref?.repeatStop(onUpButtonReleased);">↑</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onUpButtonPressed);" @mouseup="buttonRepeat1Ref?.stop(onUpButtonReleased);" @mouseleave="buttonRepeat1Ref?.stop(onUpButtonReleased);">↑</v-btn>
                 <br/>
-                <v-btn class="code-key" @mousedown="onRepeatStart(onLeftButtonPressed)" @mouseup="onRepeatStop(onLeftButtonReleased)" @mouseleave="onRepeatStop(onLeftButtonReleased)">←</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onLeftButtonPressed)" @mouseup="buttonRepeat1Ref?.stop(onLeftButtonReleased)" @mouseleave="buttonRepeat1Ref?.stop(onLeftButtonReleased)">←</v-btn>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="onRepeatStart(onRightButtonPressed)" @mouseup="onRepeatStop(onRightButtonReleased)" @mouseleave="onRepeatStop(onRightButtonReleased)">→</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onRightButtonPressed)" @mouseup="buttonRepeat1Ref?.stop(onRightButtonReleased)" @mouseleave="buttonRepeat1Ref?.stop(onRightButtonReleased)">→</v-btn>
                 　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="onRepeatStart(onDownButtonPressed)" @mouseup="onRepeatStop(onDownButtonReleased)" @mouseleave="onRepeatStop(onDownButtonReleased)">↓</v-btn>
+                <v-btn class="code-key" @mousedown="buttonRepeat1Ref?.start(onDownButtonPressed)" @mouseup="buttonRepeat1Ref?.stop(onDownButtonReleased)" @mouseleave="buttonRepeat1Ref?.stop(onDownButtonReleased)">↓</v-btn>
                 <br/>
             </li>
             <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>

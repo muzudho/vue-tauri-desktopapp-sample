@@ -33,14 +33,14 @@
     // ##########
 
     onUnmounted(()=>{
-        repeatStopForce();
+        stopForce();
     });
 
 
     /**
      * 長押し開始
      */
-    function repeatStart(callback:()=>void) : void {      
+    function start(callback:()=>void) : void {      
         callback(); // 即時実行
         
         const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
@@ -52,7 +52,7 @@
     /**
      * 長押し終了
      */
-    function repeatStop(callback:()=>void) {
+    function stop(callback:()=>void) {
         if (appManualKeyRepeatTimerId.value) {
             clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
             appManualKeyRepeatTimerId.value = null;
@@ -65,7 +65,7 @@
     /**
      * 長押し終了
      */
-    function repeatStopForce() {
+    function stopForce() {
         if (appManualKeyRepeatTimerId.value) {
             clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
             appManualKeyRepeatTimerId.value = null;
@@ -78,8 +78,8 @@
     // ################
 
     defineExpose({
-        repeatStart,
-        repeatStop,
+        start,
+        stop,
     });
 
 </script>
