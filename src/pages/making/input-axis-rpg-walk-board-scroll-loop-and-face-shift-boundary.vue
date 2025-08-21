@@ -508,14 +508,14 @@
     const player1Rank = computed<number>(()=>{
         return Math.round(player1Top.value / board1SquareHeight);
     });
-    const player1FileDelta = ref<number>(0);    // 登場人物の移動量（単位：マス）を記録しておく。
-    const player1RankDelta = ref<number>(0);
-    // const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
-    //     return player1LeftDelta.value - player1FileHome.value * board1SquareWidth;
-    // });
-    // const player1RankDelta = computed<number>(()=>{
-    //     return player1TopDelta.value - player1RankHome.value * board1SquareHeight;
-    // });
+    // const player1FileDelta = ref<number>(0);    // 登場人物の移動量（単位：マス）を記録しておく。
+    // const player1RankDelta = ref<number>(0);
+    const player1FileDelta = computed<number>(()=>{     // 登場人物の移動量（単位：マス）
+        return Math.round(-board1Left.value / board1SquareWidth);
+    });
+    const player1RankDelta = computed<number>(()=>{
+        return Math.round(-board1Top.value / board1SquareHeight);
+    });
 
     const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
