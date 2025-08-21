@@ -138,8 +138,8 @@
     });
 
     // ボードの表示位置
-    const boardTop = ref<number>(0);
-    const boardLeft = ref<number>(0);
+    const board1Top = ref<number>(0);
+    const board1Left = ref<number>(0);
     const getSquareStyle = computed<
         (i:number)=>CompatibleStyleValue
     >(() => {
@@ -150,8 +150,8 @@
 
             return {
                 position: 'absolute',
-                top: `${homeTop + boardTop.value}px`,
-                left: `${homeLeft + boardLeft.value}px`,
+                top: `${homeTop + board1Top.value}px`,
+                left: `${homeLeft + board1Left.value}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 zoom: 4,
@@ -258,8 +258,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    boardTop.value = 0 * board1SquareHeight;
-                    boardLeft.value = 0 * board1SquareWidth;
+                    board1Top.value = 0 * board1SquareHeight;
+                    board1Left.value = 0 * board1SquareWidth;
                 }
 
                 // 移動
@@ -287,19 +287,19 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["toRight"]==1) {   // 右
-                player1Frames.value = player1SourceFrames["right"]
-                boardLeft.value -= player1Speed.value;   // 盤の方をスクロールさせる
+                player1Frames.value = player1SourceFrames["right"]      // 画像の向きを更新
+                board1Left.value -= player1Speed.value;                 // 盤の方を、キー入力とは逆方向へスクロールさせる
             } else if (player1Motion.value["toRight"]==-1) {  // 左
                 player1Frames.value = player1SourceFrames["left"]
-                boardLeft.value += player1Speed.value;
+                board1Left.value += player1Speed.value;
             }
 
             if (player1Motion.value["toBottom"]==-1) {  // 上
                 player1Frames.value = player1SourceFrames["up"]
-                boardTop.value += player1Speed.value;
+                board1Top.value += player1Speed.value;
             } else if (player1Motion.value["toBottom"]==1) {   // 下
                 player1Frames.value = player1SourceFrames["down"]
-                boardTop.value -= player1Speed.value;
+                board1Top.value -= player1Speed.value;
             }
 
             // 次のフレーム
