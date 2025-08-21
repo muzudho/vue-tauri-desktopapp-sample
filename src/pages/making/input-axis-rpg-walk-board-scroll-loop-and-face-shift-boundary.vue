@@ -289,9 +289,7 @@
         return (i:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
-
-            //const homeTop = Math.floor(i / board1RankNum.value) * board1SquareHeight;   // FIXME: 🌟 筋の数と、段の数が異なるとき、座標がずれてしまう。
-            const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;     // FIXME: 🌟 筋の数と、段の数が異なるとき、座標はずれないが、印字がずれてしまう。
+            const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;
 
             const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
             const bhPx = (board1RankNum.value * board1SquareHeight);
@@ -342,7 +340,6 @@
     function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
         // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
         const file = tileIndex % board1FileNum.value;
-        //const rank = Math.floor(tileIndex / board1RankNum.value);
         const rank = Math.floor(tileIndex / board1FileNum.value);
 
         return [file, rank];
@@ -640,15 +637,10 @@
                             // |       +------------------+     |
                             // |                                |
                             // +--------------------------+<-m->+
-                            //         0
-                            //         +-->p
                             // c<------+
-                            //         pd
                             //
                             // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                            // p は、0 からみた、登場人物の初期位置。
                             // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                            // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
                             // bw は、盤の列数。
                             // cw は、印字の列数。
                             // m は、右側番外の余白。
@@ -661,8 +653,6 @@
                             const cw = printing1FileNum.value; // 例えば 10
                             const bw = board1FileNum.value;
                             const m = cw + pd - bw;
-                            // console.log(`board1WithMaskFileNum=${board1WithMaskFileNum.value} board1WithMaskRankNum=${board1WithMaskRankNum.value}`);
-                            // console.log(`pd=${pd} cw=${cw} bw=${bw} m=${m} m <= board1WithMaskWidth:${m <= board1WithMaskSizeSquare.value}`);
 
                             if (m <= -board1WithMaskSizeSquare.value) {
                                 willShift = false;
@@ -698,10 +688,10 @@
                             // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                             //
                             // Printing
-                            // +<---------cw-------->+
+                            // +---------------------+
                             // |                     |
                             // |       Board         |
-                            // |       +<-bw-->+     |
+                            // |       +-------+     |
                             // |       |       |     |
                             // |       |   *   |     |
                             // |       |       |     |
@@ -709,29 +699,18 @@
                             // |                     |
                             // +<--m-->*-------------+
                             //         0
-                            //         +-->p
                             // c<------+
-                            //         pd
                             //
                             // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                            // p は、0 からみた、登場人物の初期位置。
                             // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                            // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
-                            // bw は、盤の列数。
-                            // cw は、印字の列数。
                             // m は、 pd の正負を反転したもの。
                             // m が、マスク幅より大きいなら、それ以上左に行くことはできない。
                             //
                             // m = c
                             //
 
-                            //const c = printing1File.value;
-                            //const p = player1File.value;
                             const pd = player1FileDelta.value - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
                             const m = - pd;
-                            //const m = c + p - pd;
-                            // console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskSizeSquare} "board1WithMaskWidth <= m"=${board1WithMaskSizeSquare.value <= m}`);
-                            // c=${c} p=${p} 
 
                             if (board1WithMaskSizeSquare.value < m) {
                                 willShift = false;
@@ -768,12 +747,12 @@
                             // +-------------------->+     c
                             // |                     |     ^
                             // |       Board         |     |
-                            // |       +-------+     | 0 + + pd
-                            // |       ^       |     |   |
-                            // |       |       |     |   v
-                            // ch      bh  *   |     |   p
+                            // |       +-------+     |     +
                             // |       |       |     |
-                            // |       v       |     |
+                            // |       |       |     |
+                            // |       |   *   |     |
+                            // |       |       |     |
+                            // |       |       |     |
                             // |       +-------+     +
                             // |                     ^
                             // |                     |
@@ -783,24 +762,15 @@
                             // +---------------------+
                             //
                             // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                            // p は、0 からみた、登場人物の初期位置。
                             // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                            // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
-                            // bh は、盤の行数。
-                            // ch は、印字の行数。
                             // m は、 pd の正負を反転したもの。
                             // m が、マスク幅より大きいなら、それ以上上に行くことはできない。
                             //
                             // m = c
                             //
 
-                            //const c = printing1File.value;
-                            //const p = player1File.value;
                             const pd = player1RankDelta.value - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
                             const m = - pd;
-                            //const m = c + p - pd;
-                            // console.log(`pd=${pd} m=${m} board1WithMaskWidth=${board1WithMaskSizeSquare} "board1WithMaskWidth <= m"=${board1WithMaskSizeSquare.value <= m}`);
-                            // c=${c} p=${p} 
 
                             if (board1WithMaskSizeSquare.value < m) {
                                 willShift = false;
@@ -835,14 +805,14 @@
                             //
                             // Printing
                             // +------------------------------->+     c
-                            // |                                |     ^
+                            // ^                                |     ^
                             // |       Board                    |     |
-                            // |       +------------------+     | 0 + + pd
-                            // |       ^//////////////////|     |   |
-                            // |       |///+-------+//////|     |   |
-                            // |       |///|       |//////|     |   |
-                            // |       |///|       |//////|     |   v
-                            // ch      bh//|   *   |//////|     |   p
+                            // |       +------------------+     | 0   +
+                            // |       ^//////////////////|     |
+                            // |       |///+-------+//////|     |
+                            // |       |///|       |//////|     |
+                            // |       |///|       |//////|     |
+                            // ch      bh//|   *   |//////|     |
                             // |       |///|       |//////|     |
                             // |       |///|       |//////|     |
                             // |       |///+-------+//////|     |
@@ -853,25 +823,23 @@
                             // |                                |
                             // |                                m
                             // |                                |
-                            // |                                v
+                            // v                                v
                             // +--------------------------------+
                             //
                             // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                            // p は、0 からみた、登場人物の初期位置。
                             // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                            // pd は、プレイヤーの初期位置からの移動量。（判定後更新）
                             // bh は、盤の行数。
                             // ch は、印字の行数。
                             // m が、マスクの横幅（下側の多めの１を含まない）より小さいなら、それ以上下に行くことはできない。
                             //
-                            // m = cw + c - bw
+                            // m = ch + c - bh
                             //
 
                             const pd = -(player1RankDelta.value+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
                             const ch = printing1RankNum.value; // 例えば 10
                             const bh = board1RankNum.value;
                             const m = ch + pd - bh;
-                            console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare.value}`);
+                            //console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare.value}`);
 
                             if (m < -board1WithMaskSizeSquare.value) {
                                 willShift = false;
