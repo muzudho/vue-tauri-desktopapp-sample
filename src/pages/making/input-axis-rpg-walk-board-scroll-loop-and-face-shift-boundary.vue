@@ -280,7 +280,7 @@
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const bothSide = 2;     // 左と右とか、上と下とか、対。
-    const board1WithMaskFileNum = computed<number>(()=>{        // マスク付きの場合の列数
+    const board1WithMaskFileNum = computed<number>(()=>{        // マスク付きの場合の列数。右側の多めの１マスを含む。
         const minWidth = bothSide * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;  // マスクの横幅より小さくはなりません。
         if (board1FileNum.value < minWidth) {
             return minWidth;
@@ -330,7 +330,7 @@
                 textAlign: "center",
             };
         };
-    });    
+    });
     const board1Motion = ref<Record<string, number>>({  // モーションへの入力
         toRight: 0,   // 負なら左、正なら右
         toBottom: 0,   // 負なら上、正なら下
@@ -511,7 +511,7 @@
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
-    const player1Style = computed(() => ({
+    const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
         zoom: commonZoom,
@@ -557,8 +557,8 @@
     onMounted(() => {
         // キーボードイベント
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            // ［スペース］［↑］［↓］キーの場合
-            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            // ［↑］［↓］キーの場合
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 // ブラウザーのデフォルトの上下スクロール動作をキャンセル
                 e.preventDefault();
             }
@@ -879,18 +879,18 @@
                 }
             }
 
-            // スクロール
+            // 移動を処理
             // 盤の方をスクロールさせる
             // 斜め方向の場合、上下を優先する。
-            if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {
+            if (board1Motion.value["toRight"] == commonSpriteMotionToRight) {   // 右
                 board1Left.value -= player1Speed.value;
-            } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {
+            } else if (board1Motion.value["toRight"] == commonSpriteMotionToLeft) {  // 左
                 board1Left.value += player1Speed.value;
             }
 
-            if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {
+            if (board1Motion.value["toBottom"] == commonSpriteMotionToTop) {  // 上
                 board1Top.value += player1Speed.value;
-            } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
+            } else if (board1Motion.value["toBottom"] == commonSpriteMotionToBottom) {   // 下
                 board1Top.value -= player1Speed.value;
             }
 
