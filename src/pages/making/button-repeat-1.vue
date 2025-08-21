@@ -1,4 +1,10 @@
+<!--
+    このページの［ボタンの押しっぱなし］機能をコンポーネント化したものがあります。
+    ../../components/ButtonRepeat.vue を参照してください。
+-->
+
 <template>
+    <the-header/>
 
     <h4>ボタンの押しっぱなしが利くようにしようぜ？</h4>
     <section class="sec-4">
@@ -25,12 +31,12 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ボタンの押しっぱなしが利くようにしようぜ？　＞　</span>ソースコード</h4>
+    <h4>ソースコード</h4>
     <section class="sec-4">
-        <source-link
-            pagePath="/making/button-repeat-1"/>
+        <source-link/>
     </section>
 
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -55,6 +61,8 @@
 
     // from の階層が上の順、アルファベット順
     import SourceLink from '../../components/SourceLink.vue';
+    import TheFooter from './the-footer.vue';
+    import TheHeader from './the-header.vue';
 
 
     // ############################

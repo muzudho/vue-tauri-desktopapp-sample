@@ -112,8 +112,8 @@
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1Style = computed(() => ({
-        top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
+        top: `${player1Top.value}px`,
     }));
 
 
