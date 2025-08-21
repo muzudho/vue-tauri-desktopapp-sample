@@ -2,6 +2,7 @@
 
     <h4>標的</h4>
     <section class="sec-4">
+        <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
             <li>
@@ -32,7 +33,7 @@
             <!-- プレイヤー１（点線の枠） -->
             <div
                 class="cursor"
-                :style="target1Style"></div>
+                :style="player1Style"></div>
         </div>
 
     </section>
@@ -70,6 +71,16 @@
     import SourceLink from '../../components/SourceLink.vue';
 
 
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appManualKeyRepeatTimerId = ref<number | null>(null);   // ［キーボード操作説明］のボタンのキー・リピート用
+
+
     // ################
     // # オブジェクト #
     // ################
@@ -94,15 +105,15 @@
     // 点線の枠。
     //
 
-    const target1Left = ref<number>(0);      // スプライトのX座標
-    const target1Top = ref<number>(0);       // スプライトのY座標
-    const target1Speed = ref<number>(2);     // 移動速度
-    const target1Input = <Record<string, boolean>>{  // 入力
+    const player1Left = ref<number>(0);      // スプライトのX座標
+    const player1Top = ref<number>(0);       // スプライトのY座標
+    const player1Speed = ref<number>(2);     // 移動速度
+    const player1Input = <Record<string, boolean>>{  // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
-    const target1Style = computed(() => ({
-        top: `${target1Top.value}px`,
-        left: `${target1Left.value}px`,
+    const player1Style = computed(() => ({
+        top: `${player1Top.value}px`,
+        left: `${player1Left.value}px`,
     }));
 
 
@@ -119,13 +130,13 @@
                 e.preventDefault();
             }
 
-            if (target1Input.hasOwnProperty(e.key)) {
-                target1Input[e.key] = true;
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            if (target1Input.hasOwnProperty(e.key)) {
-                target1Input[e.key] = false;
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = false;
             }
         });
 
@@ -144,29 +155,29 @@
         const update = () => {
 
             // 位置のリセット
-            if (target1Input[" "]) {
-                target1Top.value = 0;
-                target1Left.value = 0;
+            if (player1Input[" "]) {
+                player1Top.value = 0;
+                player1Left.value = 0;
             }
 
             // ++++++++++++++
             // + 移動を処理 +
             // ++++++++++++++
 
-            if (target1Input.ArrowLeft) {   // 左
-                target1Left.value -= target1Speed.value;
+            if (player1Input.ArrowLeft) {   // 左
+                player1Left.value -= player1Speed.value;
             }
 
-            if (target1Input.ArrowUp) {     // 上
-                target1Top.value -= target1Speed.value;
+            if (player1Input.ArrowUp) {     // 上
+                player1Top.value -= player1Speed.value;
             }
 
-            if (target1Input.ArrowRight) {  // 右
-                target1Left.value += target1Speed.value;
+            if (player1Input.ArrowRight) {  // 右
+                player1Left.value += player1Speed.value;
             }
 
-            if (target1Input.ArrowDown) {   // 下
-                target1Top.value += target1Speed.value;
+            if (player1Input.ArrowDown) {   // 下
+                player1Top.value += player1Speed.value;
             }
 
             // 次のフレーム
@@ -178,9 +189,6 @@
     }
 
 
-    const intervalTimerId = ref<number | null>(null);
-
-
     /**
      * 長押し開始
      */
@@ -188,7 +196,7 @@
         callback();   // 即時実行
         
         const intervalTime = 17;    // インターバルの時間（ミリ秒）は調整可能
-        intervalTimerId.value = setInterval(() => {   // 指定の間隔で繰り返し実行
+        appManualKeyRepeatTimerId.value = setInterval(() => {   // 指定の間隔で繰り返し実行
             callback();
         }, intervalTime);
     }
@@ -197,9 +205,9 @@
      * 長押し終了
      */
     function onStopRepeat(callback:()=>void) {
-        if (intervalTimerId.value) {
-            clearInterval(intervalTimerId.value);    // インターバルをクリア
-            intervalTimerId.value = null;
+        if (appManualKeyRepeatTimerId.value) {
+            clearInterval(appManualKeyRepeatTimerId.value);    // インターバルをクリア
+            appManualKeyRepeatTimerId.value = null;
 
             callback();   // 即時実行
         }
@@ -209,7 +217,7 @@
      * 左。
      */
     function onLeftButtonPressed() : void {
-        target1Left.value -= target1Speed.value;
+        player1Left.value -= player1Speed.value;
     }
 
 
@@ -221,7 +229,7 @@
      * 上。
      */
     function onUpButtonPressed() : void {
-        target1Top.value -= target1Speed.value;
+        player1Top.value -= player1Speed.value;
     }
 
 
@@ -233,7 +241,7 @@
      * 右。
      */
     function onRightButtonPressed() : void {
-        target1Left.value += target1Speed.value;
+        player1Left.value += player1Speed.value;
     }
 
 
@@ -245,7 +253,7 @@
      * 下。
      */
     function onDownButtonPressed() : void {
-        target1Top.value += target1Speed.value;
+        player1Top.value += player1Speed.value;
     }
 
 
@@ -257,8 +265,8 @@
      * スペースキー。
      */
     function onSpaceButtonPressed() : void {
-        target1Top.value = 0;
-        target1Left.value = 0;
+        player1Top.value = 0;
+        player1Left.value = 0;
     }
 
 
