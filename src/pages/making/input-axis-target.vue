@@ -1,5 +1,13 @@
 <template>
 
+    <!-- ボタンの押しっぱなし機能 -->
+    <button-repeat
+        ref="buttonRepeat1Ref"
+        :run="appButtonRepeat1Run"
+        v-on:buttonPress="() => { appButtonRepeat1Start(); }"
+        v-on:buttonRelease="() => { appButtonRepeat1Stop(); }"
+        />
+
     <h4>標的</h4>
     <section class="sec-4">
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
@@ -7,7 +15,7 @@
         <ul>
             <li>
                 <v-btn class="code-key hidden"/>
-                <v-btn class="code-key" @mousedown="onRepeatStart(onUpButtonPressed)" @mouseup="onRepeatStop(onUpButtonReleased)" @mouseleave="onRepeatStop(onUpButtonReleased)">↑</v-btn>
+                <v-btn class="code-key" @mousedown="appButtonRepeat1Start=onUpButtonPressed; appButtonRepeat1Stop=onUpButtonReleased; appButtonRepeat1Run=true;" @mouseup="appButtonRepeat1Run=false;" @mouseleave="appButtonRepeat1Run=false;">↑</v-btn>
                 <br/>
                 <v-btn class="code-key" @mousedown="onRepeatStart(onLeftButtonPressed)" @mouseup="onRepeatStop(onLeftButtonReleased)" @mouseleave="onRepeatStop(onLeftButtonReleased)">←</v-btn>
                 <v-btn class="code-key hidden"/>
@@ -68,6 +76,7 @@
 
 
     // from の階層が上の順、アルファベット順
+    import ButtonRepeat from '../../components/ButtonRepeat.vue';
     import SourceLink from '../../components/SourceLink.vue';
 
 
@@ -79,6 +88,9 @@
     //
 
     const appManualKeyRepeatTimerId = ref<number | null>(null);   // ［キーボード操作説明］のボタンのキー・リピート用
+    const appButtonRepeat1Run = ref<boolean>(false);
+    const appButtonRepeat1Start = ()=>{};
+    const appButtonRepeat1Stop = ()=>{};
 
 
     // ################
