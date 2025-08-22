@@ -16,11 +16,10 @@
         <!-- 盤領域 -->
         <div :style="board1Style">
 
-            <!--
-                タイルのグリッド。
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div v-for="i in board1Area" :key="i"
+            <!-- タイルのグリッド -->
+            <div
+                v-for="i in board1Area"
+                :key="i"
                 :style="getSquareStyle(i - 1)"
             >{{ getFaceNumber(i - 1) }}
             </div>
@@ -103,35 +102,60 @@
                 >（スペース）</v-btn>
                 　…　印字をホームに戻すぜ。
             </li>
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn ref="noopButton">何もしないボタン</v-btn>
+            </li>
         </ul>
         <br/>
 
-        <v-slider
-            label="列数"
-            v-model="printing1FileNum"
-            :min="printing1FileMin"
-            :max="printing1FileMax"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <v-slider
-            label="行数"
-            v-model="printing1RankNum"
-            :min="printing1RankMin"
-            :max="printing1RankMax"
-            step="1"
-            showTicks="always"
-            thumbLabel="always"
-            @click="focusRemove()" />
-        <v-switch
-            v-model="appIsLooping"
-            :label="appIsLooping ? '端でループ中' : '端でループしていません'"
-            color="green"
-            inset
-            @click="focusRemove()" />
-        <!-- フォーカスを外すためのダミー・ボタンです -->
-        <v-btn ref="noopButton">何もしないボタン</v-btn>
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="列数"
+                v-model="printing1FileNum"
+                :min="printing1FileMin"
+                :max="printing1FileMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="行数"
+                v-model="printing1RankNum"
+                :min="printing1RankMin"
+                :max="printing1RankMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-switch
+                v-model="appIsLooping"
+                :label="appIsLooping ? '端でループ中' : '端でループしていません'"
+                color="green"
+                inset
+                @click="focusRemove()" />
+            <br/>
+        </section>
     </section>
 
     <br/>
@@ -193,7 +217,8 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = 4;
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
+    const appZoom = ref<number>(4);    // ズーム
     const appIsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
 
 
@@ -236,8 +261,9 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${appZoom * board1FileNum * board1SquareWidth}px`,
-            height: `${appZoom * board1RankNum * board1SquareHeight}px`,
+            width: `${board1FileNum * board1SquareWidth}px`,
+            height: `${board1RankNum * board1SquareHeight}px`,
+            zoom: appZoom.value,
         };
     });
     const getSquareStyle = computed<
@@ -254,7 +280,7 @@
                 left: `${homeLeft}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                zoom: 4,
+                //zoom: appZoom.value,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
                 textAlign: "center",
             };
@@ -558,6 +584,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>

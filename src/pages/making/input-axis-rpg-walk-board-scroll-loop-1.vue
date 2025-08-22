@@ -128,7 +128,7 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　タイルの位置を最初に有ったところに戻すぜ。
+                　…　タイルの位置をホームに戻すぜ。
             </li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
