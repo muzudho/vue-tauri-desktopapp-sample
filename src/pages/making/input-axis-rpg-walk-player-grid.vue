@@ -14,7 +14,7 @@
 
         <br/>
         <!-- ゲーム画面 -->
-        <div :style="`position:relative; left: 0; top: 0; height: ${commonZoom * board1Ranks * board1SquareHeight}px;`">
+        <div :style="`position:relative; left: 0; top: 0; height: ${commonZoom * board1RankNum * board1SquareHeight}px;`">
 
             <!-- プレイヤー１の初期位置 -->
             <div :style="`position:absolute; left: ${4 * board1SquareWidth}px; top: ${4 * board1SquareHeight}px; width: ${4 * board1SquareWidth}px; height: ${4 * board1SquareHeight}px; background-color: lightpink;`">
@@ -27,8 +27,8 @@
             <div v-for="i in board1Area" :key="i"
                 :style="`
                     position:absolute;
-                    top: ${Math.floor((i - 1) / board1Files) * board1SquareHeight}px;
-                    left: ${((i - 1) % board1Files) * board1SquareWidth}px;
+                    top: ${Math.floor((i - 1) / board1FileNum) * board1SquareHeight}px;
+                    left: ${((i - 1) % board1FileNum) * board1SquareWidth}px;
                     width:${board1SquareWidth}px;
                     height:${board1SquareHeight}px;
                     zoom: ${commonZoom};
@@ -137,8 +137,28 @@
             @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        >{{ appManualIsShowing ? '⚙️設定を閉じる' : '⚙️設定を表示' }}</v-btn>
+        >{{ appManualIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
         <section v-if="appManualIsShowing" class="sec-1">
+            <br/>
+            <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
+            <section class="sec-1">
+                <v-slider
+                    label="盤の筋の数"
+                    v-model="board1FileNum"
+                    :min="0"
+                    :max="6"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-slider
+                    label="盤の段の数"
+                    v-model="board1RankNum"
+                    :min="0"
+                    :max="6"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+            </section>
             <br/>
         </section>
 
@@ -222,10 +242,10 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1Files = 3;      // 筋の数
-    const board1Ranks = 3;      // 段の数
+    const board1FileNum = ref<number>(3);      // 筋の数
+    const board1RankNum = ref<number>(3);      // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
-        return board1Files * board1Ranks;
+        return board1FileNum.value * board1RankNum.value;
     });
 
     // ++++++++++++++++++++++++++++++++

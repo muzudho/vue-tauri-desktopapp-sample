@@ -133,7 +133,7 @@
 
 
         <!-- 設定 -->
-        <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? '⚙️設定を閉じる' : '⚙️設定を表示' }}</v-btn>
+        <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
         <section v-if="appManualIsShowing" class="sec-1">
             <br/>
             <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
