@@ -158,7 +158,6 @@
                 thumbLabel="always" />
             <br/>
         </section>
-
     </section>
 
     <br/>

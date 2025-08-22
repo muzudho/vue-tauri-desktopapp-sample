@@ -154,28 +154,40 @@
                 step="0.5"
                 showTicks="always"
                 thumbLabel="always" />
-            <p>盤サイズ：</p>
-            <section class="sec-1">
-                <v-slider
-                    label="盤の筋の数"
-                    v-model="board1FileNum"
-                    :min="0"
-                    :max="6"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <v-slider
-                    label="盤の段の数"
-                    v-model="board1RankNum"
-                    :min="0"
-                    :max="6"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-            </section>
+            <v-slider
+                label="自機のホーム　＞　筋"
+                v-model="player1HomeFile"
+                :min="0"
+                :max="2"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="自機のホーム　＞　段"
+                v-model="player1HomeRank"
+                :min="0"
+                :max="2"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="盤の筋の数"
+                v-model="board1FileNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="盤の段の数"
+                v-model="board1RankNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <br/>
         </section>
-
     </section>
 
     <br/>
