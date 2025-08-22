@@ -41,7 +41,7 @@
             </div>
 
             <!--
-                グリッド
+                タイルのグリッド。
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
             <div v-for="i in board1Area" :key="i"
@@ -244,8 +244,8 @@
     //
 
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
-    const commonSpriteMotionRight = 1;
     const commonSpriteMotionUp = -1;
+    const commonSpriteMotionRight = 1;
     const commonSpriteMotionDown = 1;
 
 
@@ -283,8 +283,8 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1FileNum = ref<number>(3);      // 筋の数
-    const board1RankNum = ref<number>(3);      // 段の数
+    const board1FileNum = ref<number>(3);   // 筋の数
+    const board1RankNum = ref<number>(3);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
