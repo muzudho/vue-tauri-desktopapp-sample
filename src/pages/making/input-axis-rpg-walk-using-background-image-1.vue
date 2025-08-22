@@ -52,7 +52,8 @@
                     border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
                     border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
                 `"
-                style="position:absolute; left:0; top:0; image-rendering: pixelated;"></div>
+                style="position:absolute; left:0; top:0; image-rendering: pixelated;">
+            </div>
         </div>
 
         <p>👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！</p>

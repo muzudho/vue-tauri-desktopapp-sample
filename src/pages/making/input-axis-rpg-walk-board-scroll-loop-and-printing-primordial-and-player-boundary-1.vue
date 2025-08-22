@@ -20,7 +20,9 @@
                 タイルのグリッド。
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
             -->
-            <div v-for="i in board1Area" :key="i"
+            <div
+                v-for="i in board1Area"
+                :key="i"
                 :style="getSquareStyle(i - 1)"
             >{{ getPrintingNumber(i - 1) }}
             </div>
@@ -139,92 +141,86 @@
         <br/>
 
         <!-- 設定 -->
-        <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
-        <section v-if="appManualIsShowing" class="sec-1">
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
             <br/>
             <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
-            <section class="sec-1">
-                <v-slider
-                    label="盤の筋の数"
-                    v-model="board1FileNum"
-                    :min="0"
-                    :max="6"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-                <v-slider
-                    label="盤の段の数"
-                    v-model="board1RankNum"
-                    :min="0"
-                    :max="6"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-            </section>
+            <v-slider
+                label="盤の筋の数"
+                v-model="board1FileNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="盤の段の数"
+                v-model="board1RankNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
             <br/>
-
-            <p>要はマップデータのサイズ：</p>
-            <section class="sec-1">
-                <v-slider
-                    label="印字の筋の数"
-                    v-model="printing1FileNum"
-                    :min="0"
-                    :max="10"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-                <v-slider
-                    label="印字の段の数"
-                    v-model="printing1RankNum"
-                    :min="0"
-                    :max="10"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-            </section>
+            <p>印字は、要はマップデータのこと。</p>
+            <v-slider
+                label="印字の筋の数"
+                v-model="printing1FileNum"
+                :min="0"
+                :max="10"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="印字の段の数"
+                v-model="printing1RankNum"
+                :min="0"
+                :max="10"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="自機のホームの筋"
+                v-model="player1HomeFile"
+                :min="0"
+                :max="5"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
+            <v-slider
+                label="自機のホームの段"
+                v-model="player1HomeRank"
+                :min="0"
+                :max="5"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
             <br/>
-
-            <p>自機の画面上の原則固定位置。マスクを含んだサイズ：</p>
-            <section class="sec-1">
-                <v-slider
-                    label="自機の基準の相対筋"
-                    v-model="player1HomeFile"
-                    :min="0"
-                    :max="5"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-                <v-slider
-                    label="自機の基準の相対段"
-                    v-model="player1HomeRank"
-                    :min="0"
-                    :max="5"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-            </section>
-            <br/>
-
             <p>マスクのタテヨコ幅。右側と下側は、１マス多めに付きます：</p>
-            <section class="sec-1">
-                <v-slider
-                    label="マスクのタテヨコ幅"
-                    v-model="board1WithMaskSizeSquare"
-                    :min="0"
-                    :max="2"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always"
-                    @click="focusRemove()" />
-            </section>
-            <br/>
-
+            <v-slider
+                label="マスクのタテヨコ幅"
+                v-model="board1WithMaskSizeSquare"
+                :min="0"
+                :max="2"
+                step="1"
+                showTicks="always"
+                thumbLabel="always"
+                @click="focusRemove()" />
             <v-switch
                 v-model="appBoundaryIsLock"
                 :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
@@ -242,6 +238,7 @@
                         inset
                         @click="focusRemove()" />
                 </section>
+            <br/>
         </section>
     </section>
 
@@ -304,8 +301,8 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
     const appZoom = 4;
-    const appManualIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
     const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(appBoundaryIsLock, (newValue: boolean)=>{
         appBoundaryWalkingEdgeIsEnabled.value = newValue;
@@ -1061,6 +1058,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>
