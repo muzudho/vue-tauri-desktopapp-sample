@@ -23,7 +23,7 @@
                 width: ${appZoom * 3 * board1SquareWidth}px;
                 height: ${appZoom * 3 * board1SquareHeight}px;
             `">
-            
+
             <!-- 自機の基準位置 -->
             <div
                 :style="`
@@ -35,7 +35,7 @@
                 `"
                 style="
                     position: absolute;
-                    background-color:lightpink;
+                    background-color: lightpink;
                 ">
             </div>
 
@@ -205,7 +205,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
+    const appConfigIsShowing = ref<boolean>(false);     // 操作方法等を表示中
     const appZoom = ref<number>(4);     // ズーム
 
 

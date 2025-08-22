@@ -25,14 +25,18 @@
             `">
 
             <!-- 自機の基準位置 -->
-            <div :style="`
-                position: absolute;
-                left: ${4 * board1SquareWidth}px;
-                top: ${4 * board1SquareHeight}px;
-                width: ${4 * board1SquareWidth}px;
-                height: ${4 * board1SquareHeight}px;
-                background-color: lightpink;
-            `">
+            <div
+                :style="`
+                    left: ${player1HomeLeft}px;
+                    top: ${player1HomeTop}px;
+                    width: ${board1SquareWidth}px;
+                    height: ${board1SquareHeight}px;
+                    zoom: ${appZoom};
+                `"
+                style="
+                    position: absolute;
+                    background-color: lightpink;
+                ">
             </div>
             
             <!--
@@ -142,6 +146,14 @@
         >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
         <section v-if="appConfigIsShowing" class="sec-1">
             <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
             <p>盤サイズ：</p>
             <section class="sec-1">
                 <v-slider
@@ -250,12 +262,22 @@
         return board1FileNum.value * board1RankNum.value;
     });
 
+
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
     // ++++++++++++++++++++++++++++++++++++
     //
     // このサンプルでは、ピンク色に着色しているマスです。
     //
+
+    const player1HomeFile = ref<number>(1);     // 基準位置
+    const player1HomeRank = ref<number>(1);
+    const player1HomeLeft = computed(()=>{
+        return player1HomeFile.value * board1SquareWidth;
+    });
+    const player1HomeTop = computed(()=>{
+        return player1HomeRank.value * board1SquareHeight;
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
