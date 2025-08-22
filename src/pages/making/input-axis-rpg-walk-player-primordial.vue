@@ -67,7 +67,7 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　位置を最初の状態に戻すぜ。
+                　…　自機をホームに戻すぜ。
             </li>
         </ul>
         <br/>
@@ -78,20 +78,28 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <!-- ゲーム領域 -->
+        <!--
+            ゲーム領域
+            キャラクターより２倍角ぐらい大きく。
+        -->
         <div
             style="position: relative;"
             :style="`
-
+                width: ${2 * appZoom * board1SquareWidth}px;
+                height: ${2 * appZoom * board1SquareHeight}px;
             `"
         >
             <!-- 自機の基準位置 -->
             <div
                 :style="`
-                    width: ${appZoom * board1SquareWidth}px;
-                    height: ${appZoom * board1SquareHeight}px;
+                    left: ${player1HomeLeft}px;
+                    top: ${player1HomeTop}px;
+                    width: ${board1SquareWidth}px;
+                    height: ${board1SquareHeight}px;
+                    zoom: ${appZoom};
                     background-color:lightpink;
-                `">
+                `"
+                style="position: absolute;">
             </div>
 
             <!-- 自機１ -->
@@ -102,7 +110,7 @@
                 :time="stopwatch1Count"
                 class="cursor"
                 :style="player1Style"
-                style="position:absolute; image-rendering: pixelated;" /><br/>
+                style="position: absolute; image-rendering: pixelated;" /><br/>
         </div>
 
         <br/>
@@ -119,17 +127,30 @@
         >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
         <section v-if="appConfigIsShowing" class="sec-1">
             <br/>
-            <p>ズーム：</p>
-            <section class="sec-1">
-                <v-slider
-                    label="ズーム"
-                    v-model="appZoom"
-                    :min="0.5"
-                    :max="4"
-                    step="0.5"
-                    showTicks="always"
-                    thumbLabel="always" />
-            </section>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="自機のホーム　＞　筋"
+                v-model="player1HomeFile"
+                :min="0"
+                :max="1"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="自機のホーム　＞　段"
+                v-model="player1HomeRank"
+                :min="0"
+                :max="1"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <br/>
         </section>
 
@@ -207,12 +228,25 @@
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１のホーム +
+    // ++++++++++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(0);      // スプライトのX座標
-    const player1Top = ref<number>(0);       // スプライトのY座標
+    const player1HomeFile = ref<number>(0);     // 基準位置
+    const player1HomeRank = ref<number>(0);
+    const player1HomeLeft = computed(()=>{
+        return player1HomeFile.value * board1SquareWidth;
+    });
+    const player1HomeTop = computed(()=>{
+        return player1HomeRank.value * board1SquareHeight;
+    });
+
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
+
+    const player1Left = ref<number>(player1HomeLeft.value);      // スプライトの位置
+    const player1Top = ref<number>(player1HomeTop.value);
     const player1Speed = ref<number>(2);     // 移動速度
     const player1Input = <Record<string, boolean>>{  // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
@@ -290,8 +324,8 @@
 
             // 位置のリセット
             if (player1Input[" "]) {
-                player1Top.value = 0;
-                player1Left.value = 0;
+                player1Left.value = player1HomeLeft.value;
+                player1Top.value = player1HomeTop.value;
             }
 
             // 移動処理
