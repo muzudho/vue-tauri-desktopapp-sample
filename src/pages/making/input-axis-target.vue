@@ -79,7 +79,6 @@
                     @mouseup="button1Ref?.release();"
                     @mouseleave="button1Ref?.release();"
                 >→</v-btn>
-                　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
                 <v-btn
@@ -92,6 +91,7 @@
                     @mouseup="button1Ref?.release();"
                     @mouseleave="button1Ref?.release();"
                 >↓</v-btn>
+                　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
                 <br/>
             </li>
             <li>

@@ -103,7 +103,6 @@
                     @mouseup="button1Ref?.release(onRightButtonReleased);"
                     @mouseleave="button1Ref?.release(onRightButtonReleased);"
                 >→</v-btn>
-                　…　上下左右に動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
                 <v-btn
@@ -116,6 +115,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
+                　…　上下左右に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -130,6 +130,14 @@
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
                 　…　自機をホームに戻すぜ。
+            </li>
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn
+                    class="noop-key"
+                    ref="noopButton"
+                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
+                >何もしないボタン</v-btn><br/>
             </li>
         </ul>
 
@@ -207,6 +215,12 @@
 
     import { computed, onMounted, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+
+    // ++++++++++++++
+    // + 互換性対応 +
+    // ++++++++++++++
+
+    import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -296,15 +310,14 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(1 * board1SquareWidth);     // スプライトのX座標
-    const player1Top = ref<number>(1 * board1SquareHeight);     // スプライトのY座標
+    const player1Left = ref<number>(player1HomeLeft.value);     // スプライトの位置
+    const player1Top = ref<number>(player1HomeTop.value);
     const player1Speed = ref<number>(2);                        // 移動速度
     const player1Input = <Record<string, boolean>>{             // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
-    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
-    const player1Style = computed(() => ({
+    const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
         zoom: appZoom.value,
@@ -337,6 +350,7 @@
         ]
     };
     const player1Frames = ref(player1SourceFrames["down"]);
+    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({     // モーションへの入力
         xAxis: 0,   // 負なら左、正なら右
@@ -384,8 +398,10 @@
                 player1Motion.value["xAxis"] = 0;   // クリアー
                 player1Motion.value["yAxis"] = 0;
             }
-            
-            // キー入力をモーションに変換
+
+            // ++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換 +
+            // ++++++++++++++++++++++++++++++
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
@@ -416,7 +432,10 @@
                 }
             }
 
-            // 移動処理
+            // ++++++++++++++
+            // + 移動を処理 +
+            // ++++++++++++++
+            //
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["xAxis"]==1) {                  // 右
                 player1Frames.value = player1SourceFrames["right"]  // 向きを変える

@@ -14,17 +14,18 @@
             style="display: none;" />
 
         <!-- 盤領域
-            キャラクターより３倍角ぐらい大きく。
+            自機より３倍角ぐらい大きく。
         -->
         <div
-            style="position: relative;"
             :style="`
-                zoom: ${appZoom},
-                width: ${appZoom * 3 * board1SquareWidth}px;
-                height: ${appZoom * 3 * board1SquareHeight}px;
-            `">
+                width: ${3 * appZoom * board1SquareWidth}px;
+                height: ${3 * appZoom * board1SquareHeight}px;
+            `"
+            style="
+                position: relative;
+            ">
 
-            <!-- 自機のホーム -->
+            <!-- 自機のホーム１ -->
             <div
                 :style="`
                     left: ${player1HomeLeft}px;
@@ -47,7 +48,7 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style"
-                style="position: absolute; image-rendering: pixelated;" /><br/>
+                style="image-rendering: pixelated;" /><br/>
         </div>
         <br/>
 
@@ -88,7 +89,6 @@
                     @mouseup="button1Ref?.release(onRightButtonReleased);"
                     @mouseleave="button1Ref?.release(onRightButtonReleased);"
                 >→</v-btn>
-                　…　上下左右に動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
                 <v-btn
@@ -101,6 +101,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
+                　…　上下左右に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -115,6 +116,14 @@
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
                 　…　自機をホームに戻すぜ。
+            </li>
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn
+                    class="noop-key"
+                    ref="noopButton"
+                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
+                >何もしないボタン</v-btn><br/>
             </li>
         </ul>
 
@@ -252,10 +261,10 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(player1HomeLeft.value);      // スプライトの位置
+    const player1Left = ref<number>(player1HomeLeft.value);     // スプライトの位置
     const player1Top = ref<number>(player1HomeTop.value);
-    const player1Speed = ref<number>(2);     // 移動速度
-    const player1Input = <Record<string, boolean>>{  // 入力
+    const player1Speed = ref<number>(2);                        // 移動速度
+    const player1Input = <Record<string, boolean>>{             // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
@@ -335,25 +344,28 @@
                 player1Top.value = player1HomeTop.value;
             }
 
-            // 移動処理
-            if (player1Input.ArrowUp) {
+            // ++++++++++++++++++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換　＆　移動を処理 +
+            // ++++++++++++++++++++++++++++++++++++++++++++++
+            
+            if (player1Input.ArrowLeft) {   // 左
+                player1Frames.value = player1SourceFrames["left"];
+                player1Left.value -= player1Speed.value;
+            }
+            
+            if (player1Input.ArrowUp) { // 上
                 player1Frames.value = player1SourceFrames["up"]
                 player1Top.value -= player1Speed.value;
             }
 
-            if (player1Input.ArrowRight) {
+            if (player1Input.ArrowRight) {  // 右
                 player1Frames.value = player1SourceFrames["right"];
                 player1Left.value += player1Speed.value;
             }
 
-            if (player1Input.ArrowDown) {
+            if (player1Input.ArrowDown) {   // 下
                 player1Frames.value = player1SourceFrames["down"];
                 player1Top.value += player1Speed.value;
-            }
-
-            if (player1Input.ArrowLeft) {
-                player1Frames.value = player1SourceFrames["left"];
-                player1Left.value -= player1Speed.value;
             }
 
             // 次のフレーム
