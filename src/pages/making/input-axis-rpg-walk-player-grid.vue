@@ -14,12 +14,14 @@
             style="display: none;" />
 
         <!-- 盤領域
-            キャラクターより２倍角ぐらい大きく。
+            キャラクターより３倍角ぐらい大きく。
         -->
         <div
             style="position: relative;"
             :style="`
-                height: ${appZoom * board1RankNum * board1SquareHeight}px;
+                zoom: ${appZoom},
+                width: ${appZoom * 3 * board1SquareWidth}px;
+                height: ${appZoom * 3 * board1SquareHeight}px;
             `">
 
             <!-- 自機の基準位置 -->

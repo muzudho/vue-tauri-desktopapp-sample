@@ -14,14 +14,14 @@
             style="display: none;" />
 
         <!-- 盤領域
-            キャラクターより２倍角ぐらい大きく。
+            キャラクターより３倍角ぐらい大きく。
         -->
         <div
             style="position: relative;"
             :style="`
                 zoom: ${appZoom},
-                width: ${2 * appZoom * board1SquareWidth}px;
-                height: ${2 * appZoom * board1SquareHeight}px;
+                width: ${appZoom * 3 * board1SquareWidth}px;
+                height: ${appZoom * 3 * board1SquareHeight}px;
             `">
             
             <!-- 自機の基準位置 -->
@@ -144,7 +144,7 @@
                 label="自機のホーム　＞　筋"
                 v-model="player1HomeFile"
                 :min="0"
-                :max="1"
+                :max="2"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -152,7 +152,7 @@
                 label="自機のホーム　＞　段"
                 v-model="player1HomeRank"
                 :min="0"
-                :max="1"
+                :max="2"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -237,8 +237,8 @@
     // + オブジェクト　＞　自機１のホーム +
     // ++++++++++++++++++++++++++++++++++++
 
-    const player1HomeFile = ref<number>(0);     // 基準位置
-    const player1HomeRank = ref<number>(0);
+    const player1HomeFile = ref<number>(1);     // 基準位置
+    const player1HomeRank = ref<number>(1);
     const player1HomeLeft = computed(()=>{
         return player1HomeFile.value * board1SquareWidth;
     });
