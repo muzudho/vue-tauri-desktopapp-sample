@@ -140,7 +140,7 @@
                     class="noop-key"
                     ref="noopButton"
                     v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                >何もしないボタン</v-btn><br/>
+                >何もしないボタン</v-btn>
             </li>
         </ul>
         <br/>
