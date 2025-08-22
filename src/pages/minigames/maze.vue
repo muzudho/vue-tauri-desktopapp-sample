@@ -1,10 +1,11 @@
 <template>
+    <the-header/>
 
     <!-- ボタンの押しっぱなし機能 -->
     <button-repeat ref="buttonRepeat1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の循環スクロール、絵柄付き</h4>
-    <section class="sec-4">
+    <h3>迷路</h3>
+    <section class="sec-3">
         <p>キーボード操作方法</p>
         <ul>
             <li>
@@ -95,7 +96,7 @@
             <Tile
                 v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)"
-                :srcLeft="getFloorLeftBySquare(i - 1)"
+                :srcLeft="getSourceTileLeftBySquare(i - 1)"
                 :srcTop="0"
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
@@ -149,13 +150,14 @@
         <p>：ここまで。</p>
 
     </section>
-
+    
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の循環スクロール、絵柄付き　＞　</span>ソースコード</h4>
-    <section class="sec-4">
-        <source-link
-            pagePath="/making/input-axis-rpg-walk-using-background-image-1"/>
+    <h3>ソースコード</h3>
+    <section class="sec-3">
+        <source-link/>
     </section>
+
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -188,6 +190,8 @@
     import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
+    import TheFooter from './the-footer.vue';
+    import TheHeader from './the-header.vue';
 
 
     // ##########
@@ -290,7 +294,7 @@
         };
     });
     const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
-    const board1SourceTilemapCoordination = computed(() => {   // 座標
+    const board1FloorTilemapCoordination = computed(() => {   // 座標
         const tileMap = [];
         for (let i = 0; i < board1Area.value; i++) {
             const files = i % board1FileNum;
@@ -307,10 +311,10 @@
             return printingMapData.value[squareIndex];
         };
     });
-    const getFloorLeftBySquare = computed(() => {
+    const getSourceTileLeftBySquare = computed(() => {
         return (squareIndex: number) => {
             const tileIndex = printingMapData.value[squareIndex];
-            return board1SourceTilemapCoordination.value[tileIndex]["left"];
+            return board1FloorTilemapCoordination.value[tileIndex]["left"];
         };
     });
 
@@ -544,16 +548,6 @@
         // 初回呼び出し
         requestAnimationFrame(update);
     }
-
-
-    // /**
-    //  * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-    //  */
-    // function focusRemove() : void {
-    //     if (noopButton.value) {
-    //         noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-    //     }
-    // }
 
 
     /**
