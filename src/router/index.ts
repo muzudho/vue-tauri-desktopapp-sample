@@ -56,14 +56,14 @@ const routes = [
     /*
     {
         name: 'InputAxisRpgWalkBoardScrollLoopAndFaceShiftBoundary',
-        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-boundary',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-face-shift-boundary.vue'),
+        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-printing-shift-boundary',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-printing-shift-boundary.vue'),
     },
     */
     {
         name: 'InputAxisRpgWalkFaceShiftBoundary',
-        path: '/making/input-axis-rpg-walk-face-shift-boundary',
-        component: () => import('../pages/making/input-axis-rpg-walk-face-shift-boundary.vue'),
+        path: '/making/input-axis-rpg-walk-printing-shift-boundary',
+        component: () => import('../pages/making/input-axis-rpg-walk-printing-shift-boundary.vue'),
     },
     {
         name: 'InputAxisRpgWalkPlayerGrid',
