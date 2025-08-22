@@ -206,16 +206,16 @@
     //
 
     const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
-    const appZoom = ref<number>(4);
+    const appZoom = ref<number>(4);     // ズーム
 
 
     // ################
     // # オブジェクト #
     // ################
 
-    // ++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ボタン押しっぱなし機能 +
-    // ++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ボタン拡張 +
+    // ++++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
@@ -224,7 +224,7 @@
     // ++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
-    const stopwatch1Count = ref<number>(0);                 // カウントの初期値
+    const stopwatch1Count = ref<number>(0);   // カウントの初期値
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -236,6 +236,9 @@
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
     // ++++++++++++++++++++++++++++++++++++
+    //
+    // このサンプルでは、ピンク色に着色しているマスです。
+    //
 
     const player1HomeFile = ref<number>(1);     // 基準位置
     const player1HomeRank = ref<number>(1);

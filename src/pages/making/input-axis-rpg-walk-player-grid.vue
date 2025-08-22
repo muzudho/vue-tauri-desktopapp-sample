@@ -218,7 +218,7 @@
     //
 
     const appConfigIsShowing = ref<boolean>(false);     // 操作方法等を表示中
-    const appZoom = 4;  // ズーム
+    const appZoom = ref<number>(4);     // ズーム
 
 
     // ################
@@ -250,9 +250,16 @@
         return board1FileNum.value * board1RankNum.value;
     });
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　プレイヤー +
-    // ++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１のホーム +
+    // ++++++++++++++++++++++++++++++++++++
+    //
+    // このサンプルでは、ピンク色に着色しているマスです。
+    //
+
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
 
     const player1Left = ref<number>(1 * board1SquareWidth);     // スプライトのX座標
     const player1Top = ref<number>(1 * board1SquareHeight);     // スプライトのY座標
@@ -265,7 +272,7 @@
     const player1Style = computed(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
-        zoom: `${appZoom}`,
+        zoom: appZoom.value,
     }));
     // キャラクターの向きと、歩行タイルの指定
     const player1SourceFrames = {
