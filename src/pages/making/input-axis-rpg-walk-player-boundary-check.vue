@@ -52,7 +52,9 @@
                     width:${board1SquareWidth}px;
                     height:${board1SquareHeight}px;
                     zoom: ${appZoom};
-                    border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};`"></div>
+                    border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};
+                `">
+            </div>
 
             <!-- 自機１ -->
             <tile-animation
@@ -115,7 +117,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
-                　…　上下左右に動かすぜ！
+                　…　自機を上下左右に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -256,7 +258,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appConfigIsShowing = ref<boolean>(false);     // 操作方法等を表示中
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
     const appZoom = ref<number>(4);     // ズーム
 
 
@@ -351,8 +353,8 @@
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1MotionWait = ref(0);    // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({    // モーションへの入力
-        xAxis: 0,   // 負なら左、正なら右
-        yAxis: 0,   // 負なら上、正なら下
+        goToRight: 0,   // 負なら左、正なら右
+        goToBottom: 0,   // 負なら上、正なら下
     });
 
 
@@ -396,8 +398,8 @@
             player1MotionWait.value -= 1;    // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["xAxis"] = 0;    // クリアー
-                player1Motion.value["yAxis"] = 0;
+                player1Motion.value["goToRight"] = 0;    // クリアー
+                player1Motion.value["goToBottom"] = 0;
             }
 
             // ++++++++++++++++++++++++++++++
@@ -413,22 +415,22 @@
 
                 // 移動
                 if (player1Input.ArrowLeft) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionLeft; // 左
+                    player1Motion.value["goToRight"] = commonSpriteMotionLeft; // 左
                 }
 
                 if (player1Input.ArrowRight) {
-                    player1Motion.value["xAxis"] = commonSpriteMotionRight;  // 右
+                    player1Motion.value["goToRight"] = commonSpriteMotionRight;  // 右
                 }
 
                 if (player1Input.ArrowUp) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionUp;   // 上
+                    player1Motion.value["goToBottom"] = commonSpriteMotionUp;   // 上
                 }
 
                 if (player1Input.ArrowDown) {
-                    player1Motion.value["yAxis"] = commonSpriteMotionDown;   // 下
+                    player1Motion.value["goToBottom"] = commonSpriteMotionDown;   // 下
                 }
 
-                if (player1Motion.value["xAxis"]!=0 || player1Motion.value["yAxis"]!=0) {
+                if (player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
             }
@@ -438,13 +440,13 @@
             // ++++++++++++++
             //
             // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["xAxis"]==1) {    // 右
+            if (player1Motion.value["goToRight"]==1) {    // 右
                 player1Frames.value = player1SourceFrames["right"]
 
                 if (player1Left.value < (board1FileNum.value - 1) * board1SquareWidth) {    // 境界チェック
                     player1Left.value += player1Speed.value;
                 }
-            } else if (player1Motion.value["xAxis"]==-1) {    // 左
+            } else if (player1Motion.value["goToRight"]==-1) {    // 左
                 player1Frames.value = player1SourceFrames["left"]
 
                 if (0 < player1Left.value) {
@@ -452,13 +454,13 @@
                 }
             }
 
-            if (player1Motion.value["yAxis"]==-1) {    // 上
+            if (player1Motion.value["goToBottom"]==-1) {    // 上
                 player1Frames.value = player1SourceFrames["up"]
 
                 if (0 < player1Top.value) {
                     player1Top.value -= player1Speed.value;
                 }
-            } else if (player1Motion.value["yAxis"]==1) {    // 下
+            } else if (player1Motion.value["goToBottom"]==1) {    // 下
                 player1Frames.value = player1SourceFrames["down"]
 
                 if (player1Top.value < (board1RankNum.value - 1) * board1SquareHeight) {

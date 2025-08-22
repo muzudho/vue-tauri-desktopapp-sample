@@ -14,18 +14,32 @@
             style="display: none;" />
 
         <!-- 盤領域
-            自機より３倍角ぐらい大きく。
+            盤の大きさと同じ。
         -->
         <div
             :style="`
-                height:${appZoom * board1RankNum * board1SquareHeight}px;
+                width: ${board1FileNum * appZoom * board1SquareWidth}px;
+                height: ${board1RankNum * appZoom * board1SquareHeight}px;
             `"
             style="
-                position:relative;
+                position: relative;
             ">
 
-            <!-- 自機のホーム１ -->
-            <div :style="`position:absolute; left: ${0 * board1SquareWidth}px; top: ${0 * board1SquareHeight}px; width: ${4 * 5 * board1SquareWidth}px; height: ${4 * 5 * board1SquareHeight}px; background-color: lightpink;`">
+            <!-- 盤のホーム１
+                自機ではなく、盤のホームであることに注意してください。
+            -->
+            <div
+                :style="`
+                    width: ${board1FileNum * board1SquareWidth}px;
+                    height: ${board1RankNum * board1SquareHeight}px;
+                    zoom: ${appZoom};
+                `"
+                style="
+                    position:absolute;
+                    left: 0px;
+                    top: 0px;
+                    background-color: lightgreen;
+                ">
             </div>
 
             <!--
@@ -111,7 +125,7 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　自機をホームに戻すぜ。
+                　…　盤をホームに戻すぜ。
             </li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
@@ -123,6 +137,46 @@
             </li>
         </ul>
 
+        <br/>
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="盤の筋の数"
+                v-model="board1FileNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="盤の段の数"
+                v-model="board1RankNum"
+                :min="0"
+                :max="6"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <br/>
+        </section>
     </section>
 
     <br/>
@@ -186,6 +240,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
     const appZoom = ref<number>(4);     // ズーム
 
 
@@ -211,6 +266,14 @@
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
+
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　盤１のホーム +
+    // ++++++++++++++++++++++++++++++++++
+    //
+    // このサンプルでは、ピンク色に着色しているマスです。
+    // 自機ではなく、盤のホームであることに注意してください。
+    //
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -249,20 +312,25 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
-    const player1Top = ref<number>(2 * board1SquareHeight);     // スプライトのY座標
-    const player1Speed = ref<number>(2);                        // 移動速度
-    const player1Input = <Record<string, boolean>>{             // 入力
+    const player1Left = ref<number>(2 * board1SquareWidth);    // スプライトの位置
+    const player1Top = ref<number>(2 * board1SquareHeight);
+    const player1Speed = ref<number>(2);    // 移動速度
+    const player1Input = <Record<string, boolean>>{    // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
-    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
         zoom: appZoom.value,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
+        left:[  // 左向き
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+        ],
         up:[    // 上向き
             {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
             {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
@@ -281,15 +349,10 @@
             {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
             {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
-        left:[  // 左向き
-            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-        ]
     };
     const player1Frames = ref(player1SourceFrames["down"]);
-    const player1MotionWait = ref(0);  // TODO 入力キーごとに用意したい。
+    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
+    const player1MotionWait = ref(0);    // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // 入力
         toRight: 0,   // 負なら左、正なら右
         toBottom: 0,   // 負なら上、正なら下
@@ -396,38 +459,9 @@
     }
 
 
-    function onUpButtonPressed() : void {
-        console.log(`↑ボタンを押し付けました。`)
-        player1Input.ArrowUp = true;
-    }
-
-
-    function onUpButtonReleased() : void {
-        console.log(`↑ボタンを放しました。`)
-        player1Input.ArrowUp = false;
-    }
-
-
-    function onRightButtonPressed() : void {
-        player1Input.ArrowRight = true;
-    }
-
-
-    function onRightButtonReleased() : void {
-        player1Input.ArrowRight = false;
-    }
-
-
-    function onDownButtonPressed() : void {
-        player1Input.ArrowDown = true;
-    }
-
-
-    function onDownButtonReleased() : void {
-        player1Input.ArrowDown = false;
-    }
-
-
+    /**
+     * 左。
+     */
     function onLeftButtonPressed() : void {
         player1Input.ArrowLeft = true;
     }
@@ -438,6 +472,48 @@
     }
 
 
+    /**
+     * 上。
+     */
+    function onUpButtonPressed() : void {
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        player1Input.ArrowUp = false;
+    }
+
+
+    /**
+     * 右。
+     */
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    /**
+     * 下。
+     */
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    /**
+     * スペース・キー。
+     */
     function onSpaceButtonPressed() : void {
         player1Input[" "] = true;
     }
@@ -445,6 +521,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>
