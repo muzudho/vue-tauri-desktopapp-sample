@@ -16,17 +16,16 @@
         <!-- 盤領域 -->
         <div :style="board1Style">
 
-            <!--
-                グリッド
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div v-for="i in board1Area" :key="i"
+            <!-- タイルのグリッド -->
+            <div
+                v-for="i in board1Area"
+                :key="i"
                 :style="getSquareStyle(i - 1)"
             >{{ getFaceNumber(i - 1) }}
             </div>
 
             <!-- 自機１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
@@ -106,6 +105,30 @@
             </li>
         </ul>
         <br/>
+
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <br/>
+        </section>
     </section>
 
     <br/>
@@ -152,9 +175,9 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
-    const commonSpriteMotionRight = 1;
+    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
     const commonSpriteMotionUp = -1;
+    const commonSpriteMotionRight = 1;
     const commonSpriteMotionDown = 1;
 
 
@@ -165,16 +188,17 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = 4;
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
+    const appZoom = ref<number>(4);    // ズーム
 
 
     // ################
     // # オブジェクト #
     // ################
 
-    // ++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ボタン押しっぱなし機能 +
-    // ++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ボタン拡張 +
+    // ++++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
@@ -201,8 +225,9 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${appZoom * board1FileNum * board1SquareWidth}px`,
-            height: `${appZoom * board1RankNum * board1SquareHeight}px`,
+            width: `${board1FileNum * board1SquareWidth}px`,
+            height: `${board1RankNum * board1SquareHeight}px`,
+            zoom: appZoom.value,
         };
     });
     const getSquareStyle = computed<
@@ -219,7 +244,7 @@
                 left: `${homeLeft}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                zoom: 4,
+                //zoom: appZoom.value,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
                 textAlign: "center",
             };
@@ -501,6 +526,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>
