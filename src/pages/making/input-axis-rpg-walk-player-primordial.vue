@@ -5,6 +5,7 @@
 
     <h4>ＲＰＧの歩行グラフィック　＞　自機の原始的ウォーキング</h4>
     <section class="sec-4">
+        <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
             <li>
@@ -79,7 +80,7 @@
             style="display: none;" />
 
         <!--
-            ゲーム領域
+            盤領域
             キャラクターより２倍角ぐらい大きく。
         -->
         <div
@@ -103,7 +104,7 @@
             </div>
 
             <!-- 自機１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
@@ -200,7 +201,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appConfigIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
     const appZoom = ref<number>(4);
 
 
