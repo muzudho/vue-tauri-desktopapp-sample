@@ -12,9 +12,8 @@
         -->
         <div
             :style="`
-                zoom: ${appZoom},
-                width: ${3 * board1SquareWidth}px;
-                height: ${3 * board1SquareHeight}px;
+                width: ${appZoom * board1SquareWidth}px;
+                height: ${appZoom * board1SquareHeight}px;
             `"
             style="
                 position: relative;
@@ -27,6 +26,7 @@
                     top: 0px;
                     width: ${board1SquareWidth}px;
                     height: ${board1SquareHeight}px;
+                    zoom: ${appZoom};
                 `"
                 style="
                     position: absolute;
@@ -40,8 +40,11 @@
                 :style="player1Style"
                 style="
                     position: relative;
-                "></div>
+                ">
             </div>
+        </div>
+        <br/>
+        
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -105,6 +108,30 @@
             </li>
         </ul>
 
+        <br/>
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <br/>
+        </section>
     </section>
 
     <br/>
@@ -148,7 +175,8 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = ref<number>(4);     // ズーム
+    const appConfigIsShowing = ref<boolean>(false);     // 操作方法等を表示中
+    const appZoom = ref<number>(1);     // ズーム
 
 
     // ################
@@ -190,6 +218,7 @@
     const player1Style = computed(() => ({
         left: `${player1Left.value}px`,
         top: `${player1Top.value}px`,
+        zoom: appZoom.value,
     }));
 
 
@@ -315,6 +344,14 @@
 
 
     function onSpaceButtonReleased() : void {
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>
