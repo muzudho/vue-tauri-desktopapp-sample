@@ -14,12 +14,12 @@
             style="display: none;" />
 
         <!-- 盤領域
-            盤の大きさと同じ。
+            盤の大きさと同じ。かつ、自機を含められる大きさ。
         -->
         <div
             :style="`
-                width: ${board1FileNum * appZoom * board1SquareWidth}px;
-                height: ${board1RankNum * appZoom * board1SquareHeight}px;
+                width: ${board1FileNum * appZoom * board1SquareWidth >= (player1HomeFile + 1) * appZoom * board1SquareWidth ? board1FileNum * appZoom * board1SquareWidth : (player1HomeFile + 1) * appZoom * board1SquareWidth}px;
+                height: ${board1RankNum * appZoom * board1SquareHeight >= (player1HomeRank + 1) * appZoom * board1SquareHeight ? board1RankNum * appZoom * board1SquareHeight : (player1HomeRank + 1) * appZoom * board1SquareHeight}px;
             `"
             style="
                 position: relative;
@@ -302,11 +302,29 @@
                 left: `${homeLeft + board1Left.value}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                zoom: 4,
+                zoom: appZoom.value,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
             };
         };
     });
+    const board1AnimationWalkingFrames = 16;       // 盤が歩行と同じフレーム数で動く
+    const board1MotionWait = ref(0);    // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const board1Motion = ref<Record<string, number>>({    // モーションへの入力
+        goToRight: 0,   // 負なら左、正なら右
+        goToBottom: 0,   // 負なら上、正なら下
+    });
+
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１のホーム +
+    // ++++++++++++++++++++++++++++++++++++
+    //
+    // このサンプルでは、ピンク色に着色しているマスはありません。
+    //
+
+    const player1HomeFile: number = 2;    // ホーム
+    const player1HomeRank: number = 2;
+
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -351,12 +369,6 @@
         ],
     };
     const player1Frames = ref(player1SourceFrames["down"]);
-    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
-    const player1MotionWait = ref(0);    // TODO: モーション入力拒否時間。入力キーごとに用意したい。
-    const player1Motion = ref<Record<string, number>>({  // 入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
-    });
 
 
     // ##########
@@ -391,63 +403,76 @@
     // # サブルーチン #
     // ################
 
+    /**
+     * ゲームのメインループ開始
+     */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;           // モーション・タイマー
+            board1MotionWait.value -= 1;    // モーション・タイマー
 
-            if (player1MotionWait.value==0) {
+            if (board1MotionWait.value==0) {
                 // モーションのクリアー
-                player1Motion.value["toRight"] = 0;
-                player1Motion.value["toBottom"] = 0;
+                board1Motion.value["goToRight"] = 0;
+                board1Motion.value["goToBottom"] = 0;
             }
             
-            // 入力（上下左右への移動）をモーションに変換
-            if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
+            // ++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換 +
+            // ++++++++++++++++++++++++++++++
+            if (board1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    board1Top.value = 0 * board1SquareHeight;
-                    board1Left.value = 0 * board1SquareWidth;
+                    board1Top.value = 0;
+                    board1Left.value = 0;
                 }
 
-                // 移動
-                if (player1Input.ArrowLeft) {
-                    player1Motion.value["toRight"] = commonSpriteMotionLeft; // 左
+                // 方向キー
+                if (player1Input.ArrowLeft) {    // 左
+                    board1Motion.value["goToRight"] = commonSpriteMotionLeft;
                 }
 
-                if (player1Input.ArrowRight) {
-                    player1Motion.value["toRight"] = commonSpriteMotionRight;  // 右
+                if (player1Input.ArrowRight) {    // 右
+                    board1Motion.value["goToRight"] = commonSpriteMotionRight;
                 }
 
-                if (player1Input.ArrowUp) {
-                    player1Motion.value["toBottom"] = commonSpriteMotionUp;   // 上
+                if (player1Input.ArrowUp) {    // 上
+                    board1Motion.value["goToBottom"] = commonSpriteMotionUp;
                 }
 
-                if (player1Input.ArrowDown) {
-                    player1Motion.value["toBottom"] = commonSpriteMotionDown;   // 下
+                if (player1Input.ArrowDown) {    // 下
+                    board1Motion.value["goToBottom"] = commonSpriteMotionDown;
                 }
 
-                if (player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationWalkingFrames;
+                // モーションの入力があれば、ウェイトを入れる。
+                if (board1Motion.value["goToRight"]!=0 || board1Motion.value["goToBottom"]!=0) {
+                    board1MotionWait.value = board1AnimationWalkingFrames;
                 }
             }
 
-            // 移動処理
+            // ++++++++++++++
+            // + 移動を処理 +
+            // ++++++++++++++
+            //
             // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["toRight"]==1) {   // 右
-                player1Frames.value = player1SourceFrames["right"]      // 画像の向きを更新
-                board1Left.value -= player1Speed.value;                 // 盤の方を、キー入力とは逆方向へスクロールさせる
-            } else if (player1Motion.value["toRight"]==-1) {  // 左
+            if (board1Motion.value["goToRight"]==1) {    // 右
+                player1Frames.value = player1SourceFrames["right"]    // 画像の向きを更新
+                board1Left.value -= player1Speed.value;    // 盤の方を、キー入力とは逆方向へスクロールさせる
+
+            } else if (board1Motion.value["goToRight"]==-1) {  // 左
                 player1Frames.value = player1SourceFrames["left"]
                 board1Left.value += player1Speed.value;
+
             }
 
-            if (player1Motion.value["toBottom"]==-1) {  // 上
+            if (board1Motion.value["goToBottom"]==-1) {  // 上
                 player1Frames.value = player1SourceFrames["up"]
                 board1Top.value += player1Speed.value;
-            } else if (player1Motion.value["toBottom"]==1) {   // 下
+
+            } else if (board1Motion.value["goToBottom"]==1) {   // 下
                 player1Frames.value = player1SourceFrames["down"]
                 board1Top.value -= player1Speed.value;
+
             }
 
             // 次のフレーム

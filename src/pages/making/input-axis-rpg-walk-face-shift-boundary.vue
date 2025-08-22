@@ -309,8 +309,8 @@
         };
     });    
     const printing1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
+        shiftToRight: 0,   // 負なら左、正なら右
+        shiftToBottom: 0,   // 負なら上、正なら下
     });
 
     // ++++++++++++++++++++++++++++++++
@@ -369,8 +369,8 @@
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        toRight: 0,   // 負なら左、正なら右
-        toBottom: 0,   // 負なら上、正なら下
+        shiftToRight: 0,   // 負なら左、正なら右
+        shiftToBottom: 0,   // 負なら上、正なら下
     });
 
 
@@ -415,10 +415,10 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                printing1Motion.value["toRight"] = 0;
-                printing1Motion.value["toBottom"] = 0;
-                player1Motion.value["toRight"] = 0;
-                player1Motion.value["toBottom"] = 0;
+                printing1Motion.value["shiftToRight"] = 0;
+                printing1Motion.value["shiftToBottom"] = 0;
+                player1Motion.value["shiftToRight"] = 0;
+                player1Motion.value["shiftToBottom"] = 0;
             }
             
             // キー入力をモーションに変換
@@ -439,7 +439,7 @@
 
                     // ホーム・ポジションより左に居ればホームに近づける。
                     if (player1File.value < player1HomeFile) {
-                        player1Motion.value["toRight"] = commonSpriteMotionToRight;
+                        player1Motion.value["shiftToRight"] = commonSpriteMotionToRight;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -487,12 +487,12 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                            printing1Motion.value["shiftToRight"] = commonSpriteMotionToLeft;
                         } else {
                             if (appBoundaryWalkingEdge.value) {
                                 // ［盤の端まで歩ける］
                                 if (player1File.value < board1Files - 1) {
-                                    player1Motion.value["toRight"] = commonSpriteMotionToRight;
+                                    player1Motion.value["shiftToRight"] = commonSpriteMotionToRight;
                                 }
                             }
                         }
@@ -504,7 +504,7 @@
 
                     // ホーム・ポジションより右に居ればホームに近づける。
                     if (player1File.value > player1HomeFile) {
-                        player1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                        player1Motion.value["shiftToRight"] = commonSpriteMotionToLeft;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -548,11 +548,11 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toRight"] = commonSpriteMotionToRight;
+                            printing1Motion.value["shiftToRight"] = commonSpriteMotionToRight;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0) {
-                                player1Motion.value["toRight"] = commonSpriteMotionToLeft;
+                                player1Motion.value["shiftToRight"] = commonSpriteMotionToLeft;
                             }
                         }
                     }
@@ -563,7 +563,7 @@
 
                     // ホーム・ポジションより下に居ればホームに近づける。
                     if (player1Rank.value > player1HomeRank) {
-                        player1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                        player1Motion.value["shiftToBottom"] = commonSpriteMotionToTop;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -604,11 +604,11 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                            printing1Motion.value["shiftToBottom"] = commonSpriteMotionToBottom;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0) {
-                                player1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                                player1Motion.value["shiftToBottom"] = commonSpriteMotionToTop;
                             }
                         }
                     }
@@ -619,7 +619,7 @@
 
                     // ホーム・ポジションより上に居ればホームに近づける。
                     if (player1Rank.value < player1HomeRank) {
-                        player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                        player1Motion.value["shiftToBottom"] = commonSpriteMotionToBottom;
                     } else {
                         let willShift: boolean = true;
                         if (appBoundaryIsLock.value) {
@@ -668,11 +668,11 @@
                         }
 
                         if (willShift) {
-                            printing1Motion.value["toBottom"] = commonSpriteMotionToTop;
+                            printing1Motion.value["shiftToBottom"] = commonSpriteMotionToTop;
                         } else if (appBoundaryWalkingEdge.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1Files - 1) {
-                                player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
+                                player1Motion.value["shiftToBottom"] = commonSpriteMotionToBottom;
                             }
                         }
                     }
@@ -681,33 +681,33 @@
 
             // 移動処理
             if (player1MotionWait.value <= 0) {
-                if (printing1Motion.value["toBottom"] == commonSpriteMotionToTop) {
+                if (printing1Motion.value["shiftToBottom"] == commonSpriteMotionToTop) {
                     printing1Rank.value -= 1;     // 下
-                } else if (printing1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
+                } else if (printing1Motion.value["shiftToBottom"] == commonSpriteMotionToBottom) {
                     printing1Rank.value += 1;     // 上
                 }
 
-                if (printing1Motion.value["toRight"] == commonSpriteMotionToRight) {
+                if (printing1Motion.value["shiftToRight"] == commonSpriteMotionToRight) {
                     printing1File.value += 1;
-                } else if (printing1Motion.value["toRight"] == commonSpriteMotionToLeft) {
+                } else if (printing1Motion.value["shiftToRight"] == commonSpriteMotionToLeft) {
                     printing1File.value -= 1;   // 印字の方を左へスクロールさせる
                 }
             }
 
-            if (player1Motion.value["toBottom"] == commonSpriteMotionToTop) {
+            if (player1Motion.value["shiftToBottom"] == commonSpriteMotionToTop) {
                 player1Top.value -= player1Speed.value;
-            } else if (player1Motion.value["toBottom"] == commonSpriteMotionToBottom) {
+            } else if (player1Motion.value["shiftToBottom"] == commonSpriteMotionToBottom) {
                 player1Top.value += player1Speed.value;
             }
 
-            if (player1Motion.value["toRight"] == commonSpriteMotionToRight) {
+            if (player1Motion.value["shiftToRight"] == commonSpriteMotionToRight) {
                 player1Left.value += player1Speed.value;
-            } else if (player1Motion.value["toRight"] == commonSpriteMotionToLeft) {
+            } else if (player1Motion.value["shiftToRight"] == commonSpriteMotionToLeft) {
                 player1Left.value -= player1Speed.value;
             }
 
             if (player1MotionWait.value <= 0) {
-                if (printing1Motion.value["toRight"]!=0 || printing1Motion.value["toBottom"]!=0 || player1Motion.value["toRight"]!=0 || player1Motion.value["toBottom"]!=0) {
+                if (printing1Motion.value["shiftToRight"]!=0 || printing1Motion.value["shiftToBottom"]!=0 || player1Motion.value["shiftToRight"]!=0 || player1Motion.value["shiftToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;    // ウェイト設定
                 }
             }

@@ -298,7 +298,7 @@
     // このサンプルでは、ピンク色に着色しているマスです。
     //
 
-    const player1HomeFile = ref<number>(1);     // ホーム
+    const player1HomeFile = ref<number>(1);    // ホーム
     const player1HomeRank = ref<number>(1);
     const player1HomeLeft = computed(()=>{
         return player1HomeFile.value * board1SquareWidth;
@@ -365,8 +365,8 @@
     onMounted(() => {
         // キーボードイベント
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            // ［スペース］［↑］［↓］キーの場合
-            if (e.key === ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            // ［↑］［↓］キーの場合
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 // ブラウザーのデフォルトの上下スクロール動作をキャンセル
                 e.preventDefault();
             }
@@ -398,7 +398,8 @@
             player1MotionWait.value -= 1;    // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["goToRight"] = 0;    // クリアー
+                // モーションのクリアー
+                player1Motion.value["goToRight"] = 0;
                 player1Motion.value["goToBottom"] = 0;
             }
 
@@ -413,23 +414,24 @@
                     player1Left.value = 1 * board1SquareWidth;
                 }
 
-                // 移動
-                if (player1Input.ArrowLeft) {
-                    player1Motion.value["goToRight"] = commonSpriteMotionLeft; // 左
+                // 方向キー
+                if (player1Input.ArrowLeft) {    // 左
+                    player1Motion.value["goToRight"] = commonSpriteMotionLeft;
                 }
 
-                if (player1Input.ArrowRight) {
-                    player1Motion.value["goToRight"] = commonSpriteMotionRight;  // 右
+                if (player1Input.ArrowRight) {    // 右
+                    player1Motion.value["goToRight"] = commonSpriteMotionRight;
                 }
 
-                if (player1Input.ArrowUp) {
-                    player1Motion.value["goToBottom"] = commonSpriteMotionUp;   // 上
+                if (player1Input.ArrowUp) {    // 上
+                    player1Motion.value["goToBottom"] = commonSpriteMotionUp;
                 }
 
-                if (player1Input.ArrowDown) {
-                    player1Motion.value["goToBottom"] = commonSpriteMotionDown;   // 下
+                if (player1Input.ArrowDown) {    // 下
+                    player1Motion.value["goToBottom"] = commonSpriteMotionDown;
                 }
 
+                // モーションの入力があれば、ウェイトを入れる。
                 if (player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
@@ -441,17 +443,19 @@
             //
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["goToRight"]==1) {    // 右
-                player1Frames.value = player1SourceFrames["right"]
+                player1Frames.value = player1SourceFrames["right"]    // 画像の向きを更新
 
                 if (player1Left.value < (board1FileNum.value - 1) * board1SquareWidth) {    // 境界チェック
                     player1Left.value += player1Speed.value;
                 }
+
             } else if (player1Motion.value["goToRight"]==-1) {    // 左
                 player1Frames.value = player1SourceFrames["left"]
 
                 if (0 < player1Left.value) {
                     player1Left.value -= player1Speed.value;
                 }
+
             }
 
             if (player1Motion.value["goToBottom"]==-1) {    // 上
@@ -460,12 +464,14 @@
                 if (0 < player1Top.value) {
                     player1Top.value -= player1Speed.value;
                 }
+
             } else if (player1Motion.value["goToBottom"]==1) {    // 下
                 player1Frames.value = player1SourceFrames["down"]
 
                 if (player1Top.value < (board1RankNum.value - 1) * board1SquareHeight) {
                     player1Top.value += player1Speed.value;
                 }
+
             }
 
             // 次のフレーム
