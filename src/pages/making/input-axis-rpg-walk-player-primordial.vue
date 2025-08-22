@@ -78,8 +78,23 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <div :style="`width: ${4 * board1SquareWidth}px; height: ${4 * board1SquareHeight}px; background-color:lightpink;`">
-            <!-- プレイヤー１ -->
+        <!-- ゲーム領域 -->
+        <div
+            style="position: relative;"
+            :style="`
+
+            `"
+        >
+            <!-- 自機の基準位置 -->
+            <div
+                :style="`
+                    width: ${appZoom * board1SquareWidth}px;
+                    height: ${appZoom * board1SquareHeight}px;
+                    background-color:lightpink;
+                `">
+            </div>
+
+            <!-- 自機１ -->
             <TileAnimation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
@@ -87,8 +102,36 @@
                 :time="stopwatch1Count"
                 class="cursor"
                 :style="player1Style"
-                style="zoom:4; image-rendering: pixelated;" /><br/>
+                style="position:absolute; image-rendering: pixelated;" /><br/>
         </div>
+
+        <br/>
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <p>ズーム：</p>
+            <section class="sec-1">
+                <v-slider
+                    label="ズーム"
+                    v-model="appZoom"
+                    :min="0.5"
+                    :max="4"
+                    step="0.5"
+                    showTicks="always"
+                    thumbLabel="always" />
+            </section>
+            <br/>
+        </section>
 
     </section>
 
@@ -129,6 +172,17 @@
     import TileAnimation from '../../components/TileAnimation.vue';
 
 
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appConfigIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
+    const appZoom = ref<number>(4);
+
+
     // ################
     // # オブジェクト #
     // ################
@@ -167,6 +221,7 @@
     const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
+        zoom: appZoom.value,
     }));
     // キャラクターの向きと、歩行タイルの指定
     const player1SourceFrames = {
@@ -331,6 +386,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>

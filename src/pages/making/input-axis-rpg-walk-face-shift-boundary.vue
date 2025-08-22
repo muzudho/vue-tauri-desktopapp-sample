@@ -107,7 +107,7 @@
             <div v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
 
-            <!-- プレイヤー１ -->
+            <!-- 自機１ -->
             <TileAnimation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
@@ -318,10 +318,10 @@
     // ++++++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const player1FileHome: number = 2;  // 盤の真ん中をホーム・ポジションとする
-    const player1RankHome: number = 2;
-    const player1Left = ref<number>(player1FileHome * board1SquareWidth);    // スプライトのX座標
-    const player1Top = ref<number>(player1RankHome * board1SquareHeight);       // スプライトのY座標
+    const player1HomeFile: number = 2;     // 基準位置
+    const player1HomeRank: number = 2;
+    const player1Left = ref<number>(player1HomeFile * board1SquareWidth);    // スプライトのX座標
+    const player1Top = ref<number>(player1HomeRank * board1SquareHeight);       // スプライトのY座標
     const player1Speed = ref<number>(2);     // 移動速度
     const player1File = computed<number>(()=>{
         return Math.round(player1Left.value / board1SquareWidth);
@@ -428,8 +428,8 @@
                 if (player1Input[" "]) {
                     printing1File.value = 0;
                     printing1Rank.value = 0;
-                    player1Left.value = player1FileHome * board1SquareWidth;
-                    player1Top.value = player1RankHome * board1SquareHeight;
+                    player1Left.value = player1HomeFile * board1SquareWidth;
+                    player1Top.value = player1HomeRank * board1SquareHeight;
                 }
 
                 // 移動
@@ -438,7 +438,7 @@
                     player1Frames.value = player1SourceFrames["right"]    // 向きを変える
 
                     // ホーム・ポジションより左に居ればホームに近づける。
-                    if (player1File.value < player1FileHome) {
+                    if (player1File.value < player1HomeFile) {
                         player1Motion.value["toRight"] = commonSpriteMotionToRight;
                     } else {
                         let willShift: boolean = true;
@@ -503,7 +503,7 @@
                     player1Frames.value = player1SourceFrames["left"]    // 向きを変える
 
                     // ホーム・ポジションより右に居ればホームに近づける。
-                    if (player1File.value > player1FileHome) {
+                    if (player1File.value > player1HomeFile) {
                         player1Motion.value["toRight"] = commonSpriteMotionToLeft;
                     } else {
                         let willShift: boolean = true;
@@ -562,7 +562,7 @@
                     player1Frames.value = player1SourceFrames["up"]    // 向きを変える
 
                     // ホーム・ポジションより下に居ればホームに近づける。
-                    if (player1Rank.value > player1RankHome) {
+                    if (player1Rank.value > player1HomeRank) {
                         player1Motion.value["toBottom"] = commonSpriteMotionToTop;
                     } else {
                         let willShift: boolean = true;
@@ -618,7 +618,7 @@
                     player1Frames.value = player1SourceFrames["down"]   // 向きを変える
 
                     // ホーム・ポジションより上に居ればホームに近づける。
-                    if (player1Rank.value < player1RankHome) {
+                    if (player1Rank.value < player1HomeRank) {
                         player1Motion.value["toBottom"] = commonSpriteMotionToBottom;
                     } else {
                         let willShift: boolean = true;

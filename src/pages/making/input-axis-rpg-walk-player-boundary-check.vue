@@ -98,7 +98,7 @@
                     zoom: ${commonZoom};
                     border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};`"></div>
 
-            <!-- プレイヤー１ -->
+            <!-- 自機１ -->
             <TileAnimation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"

@@ -99,7 +99,7 @@
             <div v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)"></div>
 
-            <!-- プレイヤー１ -->
+            <!-- 自機１ -->
             <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"

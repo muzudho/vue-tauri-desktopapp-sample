@@ -95,7 +95,7 @@
             <div v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)">{{ getPrintingNumber(i - 1) }}</div>
 
-            <!-- プレイヤー１ -->
+            <!-- 自機１ -->
             <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
@@ -186,7 +186,7 @@
             <section class="sec-1">
                 <v-slider
                     label="自機の基準の相対筋"
-                    v-model="player1FileHome"
+                    v-model="player1HomeFile"
                     :min="0"
                     :max="5"
                     step="1"
@@ -195,7 +195,7 @@
                     @click="focusRemove()" />
                 <v-slider
                     label="自機の基準の相対段"
-                    v-model="player1RankHome"
+                    v-model="player1HomeRank"
                     :min="0"
                     :max="5"
                     step="1"
@@ -557,11 +557,11 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
+    const player1HomeFile = ref<number>(2);     // 基準位置
+    const player1HomeRank = ref<number>(2);
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const player1FileHome = ref<number>(2);		// 基準の相対位置
-    const player1RankHome = ref<number>(2);
-    const player1Left = ref<number>(player1FileHome.value * board1SquareWidth);    // 移動量（単位：ピクセル））
-    const player1Top = ref<number>(player1RankHome.value * board1SquareHeight);
+    const player1Left = ref<number>(player1HomeFile.value * board1SquareWidth);    // 移動量（単位：ピクセル））
+    const player1Top = ref<number>(player1HomeRank.value * board1SquareHeight);
     const player1File = computed<number>(()=>{
         return Math.round(player1Left.value / board1SquareWidth);
     });
@@ -681,8 +681,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left.value = player1FileHome.value * board1SquareWidth;   // 自機
-                    player1Top.value = player1RankHome.value * board1SquareHeight;
+                    player1Left.value = player1HomeFile.value * board1SquareWidth;   // 自機
+                    player1Top.value = player1HomeRank.value * board1SquareHeight;
                     printing1Left.value = 0;                                         // 印字
                     printing1Top.value = 0;
                 }
@@ -693,7 +693,7 @@
                     player1Motion.value["lookRight"] = commonSpriteMotionLeft;
 
                     // ホーム・ポジションより右に居ればホームに近づける。
-                    if (player1File.value > player1FileHome.value) {
+                    if (player1File.value > player1HomeFile.value) {
                         player1Motion.value["goToRight"] = commonSpriteMotionLeft;
                     } else {
                         let willShift: boolean = true;
@@ -748,7 +748,7 @@
                     player1Motion.value["lookRight"] = commonSpriteMotionRight;
 
                     // ホーム・ポジションより左に居ればホームに近づける。
-                    if (player1File.value < player1FileHome.value) {
+                    if (player1File.value < player1HomeFile.value) {
                         player1Motion.value["goToRight"] = commonSpriteMotionRight;
                     } else {
                         let willShift: boolean = true;
@@ -813,7 +813,7 @@
                     player1Motion.value["lookBottom"] = commonSpriteMotionTop;
 
                     // ホーム・ポジションより下に居ればホームに近づける。
-                    if (player1Rank.value > player1RankHome.value) {
+                    if (player1Rank.value > player1HomeRank.value) {
                         player1Motion.value["goToBottom"] = commonSpriteMotionTop;
                     } else {
                         let willShift: boolean = true;
@@ -872,7 +872,7 @@
                     player1Motion.value["lookBottom"] = commonSpriteMotionBottom;
 
                     // ホーム・ポジションより上に居ればホームに近づける。
-                    if (player1Rank.value < player1RankHome.value) {
+                    if (player1Rank.value < player1HomeRank.value) {
                         player1Motion.value["goToBottom"] = commonSpriteMotionBottom;
                     } else {
                         let willShift: boolean = true;

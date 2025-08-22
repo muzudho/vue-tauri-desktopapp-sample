@@ -95,7 +95,7 @@
             <div v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)">{{ i - 1 }}</div>
 
-            <!-- プレイヤー１ -->
+            <!-- 自機１ -->
             <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
@@ -121,8 +121,8 @@
         </div>
 
         <div>
-            印字x={{ printing1Left }}　｜　人x={{ player1RankHome * board1SquareHeight }}<br/>
-            印字y={{ printing1Top  }}　｜　人y={{ player1RankHome * board1SquareHeight  }}<br/>
+            印字x={{ printing1Left }}　｜　人x={{ player1HomeRank * board1SquareHeight }}<br/>
+            印字y={{ printing1Top  }}　｜　人y={{ player1HomeRank * board1SquareHeight  }}<br/>
         </div>
         <br/>
 
@@ -285,8 +285,8 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
-    const player1FileHome: number = 2;  // 基準の相対位置
-    const player1RankHome: number = 2;
+    const player1HomeFile: number = 2;     // 基準位置
+    const player1HomeRank: number = 2;
     // ※プレイヤーは移動しません。
     const player1Input = <Record<string, boolean>>{         // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
@@ -295,8 +295,8 @@
     const player1AnimationFacingFrames = 1;         // 振り向きフレーム数
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
-        left: `${player1FileHome * board1SquareWidth}px`,     // プレイヤーは移動しません。固定位置です。
-        top: `${player1RankHome * board1SquareHeight}px`,
+        left: `${player1HomeFile * board1SquareWidth}px`,     // プレイヤーは移動しません。固定位置です。
+        top: `${player1HomeRank * board1SquareHeight}px`,
         zoom: commonZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定

@@ -48,7 +48,7 @@
                 <div style="position:absolute; top:64px; left:64px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
             -->
 
-            <!-- プレイヤー１ -->
+            <!-- 自機１ -->
             <TileAnimation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
@@ -137,10 +137,10 @@
             @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        >{{ appManualIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
-        <section v-if="appManualIsShowing" class="sec-1">
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
             <br/>
-            <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
+            <p>盤サイズ：</p>
             <section class="sec-1">
                 <v-slider
                     label="盤の筋の数"
@@ -216,7 +216,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appManualIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
+    const appConfigIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
 
 
     // ################
@@ -468,7 +468,7 @@
      * 設定ボタン。
      */
     function onConfigButtonPressed() : void {
-        appManualIsShowing.value = !appManualIsShowing.value;
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>
