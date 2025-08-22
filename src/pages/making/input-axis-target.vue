@@ -8,7 +8,7 @@
         <br/>
 
         <!-- 盤領域
-            自機より３倍角ぐらい大きく。
+            自機と同サイズ。
         -->
         <div
             :style="`
@@ -30,21 +30,18 @@
                 `"
                 style="
                     position: absolute;
-                    background-color:lightpink;
+                    background-color: lightpink;
                 ">
             </div>
 
             <!-- 自機１（点線の枠） -->
             <div
                 class="player"
-                :style="player1Style"
-                style="
-                    position: relative;
-                ">
+                :style="player1Style">
             </div>
         </div>
         <br/>
-        
+
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -97,7 +94,19 @@
                 >↓</v-btn>
                 <br/>
             </li>
-            <li><v-btn class="code-key" @mousedown="onSpaceButtonPressed()" @mouseup="onSpaceButtonReleased()">（スペース）</v-btn>　…　自機、印字の位置を最初に有ったところに戻すぜ。</li>
+            <li>
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release();"
+                    @touchcancel="button1Ref?.release();"
+                    @touchleave="button1Ref?.release();"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release();"
+                    @mouseleave="button1Ref?.release();"
+                >（スペース）</v-btn>
+                　…　自機をホームに戻すぜ。
+            </li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn

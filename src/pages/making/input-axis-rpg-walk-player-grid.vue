@@ -18,9 +18,8 @@
         -->
         <div
             :style="`
-                zoom: ${appZoom},
-                width: ${appZoom * 3 * board1SquareWidth}px;
-                height: ${appZoom * 3 * board1SquareHeight}px;
+                width: ${3 * appZoom * board1SquareWidth}px;
+                height: ${3 * appZoom * board1SquareHeight}px;
             `"
             style="
                 position: relative;
@@ -56,7 +55,7 @@
                     border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};`"></div>
 
             <!-- 自機１ -->
-            <TileAnimation
+            <tile-animation
                 :frames="player1Frames"
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
