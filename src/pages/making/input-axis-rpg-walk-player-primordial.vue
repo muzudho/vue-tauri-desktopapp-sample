@@ -347,7 +347,9 @@
             // ++++++++++++++++++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換　＆　移動を処理 +
             // ++++++++++++++++++++++++++++++++++++++++++++++
-            
+            //
+            // このサンプルでは、［キー入力をモーションに変換］と、［移動を処理］を分けていません。
+            //            
             if (player1Input.ArrowLeft) {   // 左
                 player1Frames.value = player1SourceFrames["left"];
                 player1Left.value -= player1Speed.value;

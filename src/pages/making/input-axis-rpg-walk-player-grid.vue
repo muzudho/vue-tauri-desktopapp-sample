@@ -39,7 +39,7 @@
                     background-color: lightpink;
                 ">
             </div>
-            
+
             <!--
                 グリッド
                 NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
@@ -289,7 +289,6 @@
         return board1FileNum.value * board1RankNum.value;
     });
 
-
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
     // ++++++++++++++++++++++++++++++++++++
@@ -310,10 +309,10 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
-    const player1Left = ref<number>(player1HomeLeft.value);     // スプライトの位置
+    const player1Left = ref<number>(player1HomeLeft.value);    // スプライトの位置
     const player1Top = ref<number>(player1HomeTop.value);
-    const player1Speed = ref<number>(2);                        // 移動速度
-    const player1Input = <Record<string, boolean>>{             // 入力
+    const player1Speed = ref<number>(2);    // 移動速度
+    const player1Input = <Record<string, boolean>>{    // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
@@ -322,8 +321,13 @@
         left: `${player1Left.value}px`,
         zoom: appZoom.value,
     }));
-    // キャラクターの向きと、歩行タイルの指定
-    const player1SourceFrames = {
+    const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
+        left:[  // 左向き
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
+        ],
         up:[    // 上向き
             {top:  0 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
             {top:  0 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
@@ -342,17 +346,11 @@
             {top:  2 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
             {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
-        left:[  // 左向き
-            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-            {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
-        ]
     };
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
-    const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
-    const player1Motion = ref<Record<string, number>>({     // モーションへの入力
+    const player1MotionWait = ref(0);    // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1Motion = ref<Record<string, number>>({    // モーションへの入力
         xAxis: 0,   // 負なら左、正なら右
         yAxis: 0,   // 負なら上、正なら下
     });
@@ -390,12 +388,15 @@
     // # サブルーチン #
     // ################
 
+    /**
+     * ゲームのメインループ開始
+     */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;           // モーション・タイマー
+            player1MotionWait.value -= 1;    // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                player1Motion.value["xAxis"] = 0;   // クリアー
+                player1Motion.value["xAxis"] = 0;    // クリアー
                 player1Motion.value["yAxis"] = 0;
             }
 
@@ -437,19 +438,19 @@
             // ++++++++++++++
             //
             // 斜め方向の場合、上下を優先する。
-            if (player1Motion.value["xAxis"]==1) {                  // 右
-                player1Frames.value = player1SourceFrames["right"]  // 向きを変える
+            if (player1Motion.value["xAxis"]==1) {    // 右
+                player1Frames.value = player1SourceFrames["right"]    // 向きを変える
                 player1Left.value += player1Speed.value;
-            } else if (player1Motion.value["xAxis"]==-1) {          // 左
-                player1Frames.value = player1SourceFrames["left"]   // 向きを変える
+            } else if (player1Motion.value["xAxis"]==-1) {    // 左
+                player1Frames.value = player1SourceFrames["left"]
                 player1Left.value -= player1Speed.value;
             }
 
-            if (player1Motion.value["yAxis"]==-1) {                 // 上
-                player1Frames.value = player1SourceFrames["up"]     // 向きを変える
+            if (player1Motion.value["yAxis"]==-1) {    // 上
+                player1Frames.value = player1SourceFrames["up"]
                 player1Top.value -= player1Speed.value;
-            } else if (player1Motion.value["yAxis"]==1) {           // 下
-                player1Frames.value = player1SourceFrames["down"]   // 向きを変える
+            } else if (player1Motion.value["yAxis"]==1) {    // 下
+                player1Frames.value = player1SourceFrames["down"]
                 player1Top.value += player1Speed.value;
             }
 
