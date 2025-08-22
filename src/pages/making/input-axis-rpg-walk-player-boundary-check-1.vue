@@ -400,7 +400,7 @@
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
-                player1Motion.value["goToRight"] = 0;
+                player1Motion.value["goToRight"] = 0;   // 自機
                 player1Motion.value["goToBottom"] = 0;
             }
 
@@ -411,7 +411,7 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Top.value = 1 * board1SquareHeight;
+                    player1Top.value = 1 * board1SquareHeight;  // 自機
                     player1Left.value = 1 * board1SquareWidth;
                 }
 
