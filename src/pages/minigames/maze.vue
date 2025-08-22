@@ -203,9 +203,9 @@
 
     const commonZoom = 4;
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-    const commonSpriteMotionTop = -1;
+    const commonSpriteMotionUp = -1;
     const commonSpriteMotionRight = 1;
-    const commonSpriteMotionBottom = 1;
+    const commonSpriteMotionDown = 1;
 
 
     // ################
@@ -477,13 +477,13 @@
                 }
 
                 if (player1Input.ArrowUp) {    // 上
-                    player1Motion.value["lookBottom"] = commonSpriteMotionTop;
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionBottom;     // 印字は、キー入力とは逆向きへ進める
+                    player1Motion.value["lookBottom"] = commonSpriteMotionUp;
+                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
                 }
 
                 if (player1Input.ArrowDown) {   // 下
-                    player1Motion.value["lookBottom"] = commonSpriteMotionBottom;
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionTop;    // 印字は、キー入力とは逆向きへ進める
+                    player1Motion.value["lookBottom"] = commonSpriteMotionDown;
+                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
                 }
             }
 
@@ -498,9 +498,9 @@
                 printing1Left.value += printing1Speed.value;
             }
 
-            if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionTop) {  // 上
+            if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
                 printing1Top.value -= printing1Speed.value;
-            } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionBottom) {   // 下
+            } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
                 printing1Top.value += printing1Speed.value;
             }
 
@@ -511,7 +511,7 @@
             //     player1Left.value += printing1Speed.value;
             // }
 
-            // if (player1Motion.value["goToBottom"] == commonSpriteMotionTop) {   // 上
+            // if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
             //     player1Top.value -= printing1Speed.value;
             // } else if (player1Motion.value["goToBottom"] == commonSpriteMotionBottom) { // 下
             //     player1Top.value += printing1Speed.value;
@@ -519,9 +519,9 @@
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
                 // 自機の向きを更新、タテヨコ同時入力の場合、上下を優先する：
-                if (player1Motion.value["lookBottom"] == commonSpriteMotionTop) {   // 上
+                if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
                     player1Frames.value = player1SourceFrames["up"]
-                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionBottom) { // 下
+                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
                     player1Frames.value = player1SourceFrames["down"]
                 } else if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
                     player1Frames.value = player1SourceFrames["left"]

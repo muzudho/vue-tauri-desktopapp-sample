@@ -5,6 +5,41 @@
 
     <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄の循環シフト</h4>
     <section class="sec-4">
+        <br/>
+
+        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
+        <stopwatch
+            ref="stopwatch1Ref"
+            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            style="display: none;" />
+
+        <!-- 盤領域 -->
+        <div :style="board1Style">
+
+            <!--
+                グリッド
+                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
+            -->
+            <div v-for="i in board1Area" :key="i"
+                :style="getSquareStyle(i - 1)"
+            >{{ getFaceNumber(i - 1) }}
+            </div>
+
+            <!-- 自機１ -->
+            <TileAnimation
+                :frames="player1Frames"
+                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                :slow="player1AnimationSlow"
+                :time="stopwatch1Count"
+                class="player"
+                :style="player1Style"
+                style="image-rendering: pixelated;" /><br/>
+        </div>
+        <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
+        <p>だから、数字がタイルの上を入れ替わっている（＝シフトしている）ぜ（＾▽＾）！</p>
+        <br/>
+
+        <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
             <li>
@@ -41,7 +76,6 @@
                     @mouseup="button1Ref?.release(onRightButtonReleased);"
                     @mouseleave="button1Ref?.release(onRightButtonReleased);"
                 >→</v-btn>
-                キー　…　上下左右に動かすぜ！
                 <br/>
                 <v-btn class="code-key hidden"/>
                 <v-btn
@@ -54,6 +88,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
+                　…　上下左右に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -67,39 +102,10 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　位置を最初の状態に戻すぜ。
+                　…　印字をホームに戻すぜ。
             </li>
         </ul>
         <br/>
-
-        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
-        <stopwatch
-            ref="stopwatch1Ref"
-            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
-            style="display: none;" />
-
-        <div :style="board1Style">
-
-            <!--
-                グリッド
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)">{{ getFaceNumber(i - 1) }}</div>
-
-            <!-- 自機１ -->
-            <TileAnimation
-                :frames="player1Frames"
-                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                :slow="player1AnimationSlow"
-                :time="stopwatch1Count"
-                class="player"
-                :style="player1Style"
-                style="image-rendering: pixelated;" /><br/>
-            </div>
-
-        <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
-        <p>だから、数字がタイルの上を入れ替わっている（＝シフトしている）ぜ（＾▽＾）！</p>
     </section>
 
     <br/>
@@ -136,7 +142,7 @@
     import Button20250822 from '../../components/Button20250822.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
-    import TileAnimation from '@/components/TileAnimation.vue';
+    import TileAnimation from '../../components/TileAnimation.vue';
 
 
     // ##########
@@ -146,11 +152,20 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
-    const commonZoom = 4;
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
     const commonSpriteMotionRight = 1;
     const commonSpriteMotionUp = -1;
     const commonSpriteMotionDown = 1;
+
+
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appZoom = 4;
 
 
     // ################
@@ -186,8 +201,8 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${commonZoom * board1FileNum * board1SquareWidth}px`,
-            height: `${commonZoom * board1RankNum * board1SquareHeight}px`,
+            width: `${appZoom * board1FileNum * board1SquareWidth}px`,
+            height: `${appZoom * board1RankNum * board1SquareHeight}px`,
         };
     });
     const getSquareStyle = computed<
@@ -275,7 +290,7 @@
     const player1Style = computed(() => ({
         top: `${player1Top}px`,
         left: `${player1Left}px`,
-        zoom: commonZoom,
+        zoom: appZoom,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         up:[    // 上向き

@@ -45,21 +45,14 @@ const routes = [
     },
     {
         name: 'InputAxisRpgWalkBoardLoopScroll1',
-        path: '/making/input-axis-rpg-walk-board-loop-scroll-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-loop-scroll-1.vue'),
+        path: '/making/input-axis-rpg-walk-board-scroll-loop-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardLoopScrollAndPrintingPrimordial1',
-        path: '/making/input-axis-rpg-walk-board-loop-scroll-and-printing-primordial-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-loop-scroll-and-printing-primordial-1.vue'),
+        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-printing-primordial-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-printing-primordial-1.vue'),
     },
-    /*
-    {
-        name: 'InputAxisRpgWalkBoardScrollLoopAndFaceShiftBoundary',
-        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-printing-shift-boundary',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-printing-shift-boundary.vue'),
-    },
-    */
     {
         name: 'InputAxisRpgWalkFaceShiftBoundary',
         path: '/making/input-axis-rpg-walk-printing-shift-boundary',
@@ -76,9 +69,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkBoardScrollPrimordial',
-        path: '/making/input-axis-rpg-walk-board-scroll-primordial',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-primordial.vue'),
+        name: 'InputAxisRpgWalkBoardScrollPrimordial1',
+        path: '/making/input-axis-rpg-walk-board-scroll-primordial-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-primordial-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkPlayerPrimordial',

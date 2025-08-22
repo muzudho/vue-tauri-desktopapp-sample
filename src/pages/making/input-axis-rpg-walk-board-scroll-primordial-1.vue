@@ -183,9 +183,8 @@
     <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の原始的スクロール、グリッド吸着　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-board-scroll-primordial"/>
+            pagePath="/making/input-axis-rpg-walk-board-scroll-primordial-1"/>
     </section>
-
 </template>
 
 <script setup lang="ts">
