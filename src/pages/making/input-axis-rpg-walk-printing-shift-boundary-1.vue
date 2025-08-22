@@ -132,7 +132,7 @@
     <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄のシフト、盤の端処理　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-printing-shift-boundary"/>
+            pagePath="/making/input-axis-rpg-walk-printing-shift-boundary-1"/>
     </section>
 </template>
 

@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄の循環シフト</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄の原始的シフト</h4>
     <section class="sec-4">
         <br/>
 
@@ -106,13 +106,14 @@
             </li>
         </ul>
         <br/>
+
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄の循環シフト　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄の原始的シフト　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-printing-shift-loop"/>
+            pagePath="/making/input-axis-rpg-walk-printing-shift-primordial-1"/>
     </section>
 </template>
 
@@ -153,8 +154,8 @@
     //
 
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
-    const commonSpriteMotionRight = 1;
     const commonSpriteMotionUp = -1;
+    const commonSpriteMotionRight = 1;
     const commonSpriteMotionDown = 1;
 
 
@@ -172,18 +173,18 @@
     // # オブジェクト #
     // ################
 
-    // ++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ボタン押しっぱなし機能 +
-    // ++++++++++++++++++++++++++++++++++++++++++++
-
-    const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
-
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
+
+    // ++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ボタン押しっぱなし機能 +
+    // ++++++++++++++++++++++++++++++++++++++++++++
+
+    const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -263,13 +264,14 @@
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
             // タイル上のインデックスを、印字上のインデックスへ変換：
-            let contentsFile = tileFile - printing1File.value; // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-            let contentsRank = tileRank - printing1Rank.value; // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
-            
-            // 端でループする
-            contentsFile = euclideanMod(contentsFile, printing1FileNum);
-            contentsRank = euclideanMod(contentsRank, printing1RankNum);
+            const contentsFile = tileFile - printing1File.value; // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
+            const contentsRank = tileRank - printing1Rank.value; // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
 
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            if (contentsFile < 0 || printing1FileNum <= contentsFile || contentsRank < 0 || printing1RankNum <= contentsRank) {
+                return "-";
+            }
+            
             // 印字上の位置が示すデータを返す
             const contentsIndex = contentsFileRankToContentsIndex(contentsFile, contentsRank);
             return  printing1Data.value[contentsIndex];
@@ -357,17 +359,6 @@
     // ################
     // # サブルーチン #
     // ################
-
-    /**
-     * ユークリッド剰余
-     * 
-     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
-     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
-     */
-    function euclideanMod(a: number, b: number): number {
-        return ((a % b) + b) % b;
-    }
-
 
     /**
      * ゲームのメインループ開始
@@ -502,6 +493,7 @@
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
     }
+
 
 </script>
 

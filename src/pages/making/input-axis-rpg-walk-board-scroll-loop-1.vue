@@ -202,6 +202,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
     const appZoom = 4;
 
 
@@ -215,9 +216,9 @@
 
     const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
-    // ++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ボタン押しっぱなし機能 +
-    // ++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ボタン拡張 +
+    // ++++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
@@ -397,7 +398,7 @@
      */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;           // モーション・タイマー
+            player1MotionWait.value -= 1;    // モーション・タイマー
 
             if (player1MotionWait.value==0) {
                 // モーションのクリアー
@@ -407,7 +408,9 @@
                 printing1Motion.value["wrapAroundBottom"] = 0;
             }
             
-            // キー入力をモーションに変換
+            // ++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換 +
+            // ++++++++++++++++++++++++++++++
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
@@ -417,7 +420,7 @@
                     printing1Top.value = 0;
                 }
 
-                // 移動関連（単発）
+                // 方向キー
                 // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
                 if (player1Input.ArrowLeft) {   // 左
                     player1Motion.value["lookRight"] = commonSpriteMotionLeft;
@@ -434,6 +437,7 @@
                     printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown; // 印字は、キー入力とは逆向きへ進める
                 }
 
+                // モーションの入力があれば、ウェイトを入れる。
                 if (player1Input.ArrowDown) {   // 下
                     player1Motion.value["lookBottom"] = commonSpriteMotionDown;
                     printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
@@ -445,14 +449,17 @@
             // ++++++++++++++++++++
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
-                printing1Left.value -= printing1Speed.value;
-            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
+            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
                 printing1Left.value += printing1Speed.value;
+
+            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
+                printing1Left.value -= printing1Speed.value;
+
             }
 
             if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
                 printing1Top.value -= printing1Speed.value;
+
             } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
                 printing1Top.value += printing1Speed.value;
             }
@@ -487,16 +494,6 @@
         // 初回呼び出し
         requestAnimationFrame(update);
     }
-
-
-    // /**
-    //  * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-    //  */
-    // function focusRemove() : void {
-    //     if (noopButton.value) {
-    //         noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-    //     }
-    // }
 
 
     /**
@@ -561,6 +558,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>

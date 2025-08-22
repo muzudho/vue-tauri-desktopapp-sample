@@ -39,9 +39,9 @@ const routes = [
         component: () => import('../pages/making/input-axis.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerBoundaryCheck',
-        path: '/making/input-axis-rpg-walk-player-boundary-check',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-boundary-check.vue'),
+        name: 'InputAxisRpgWalkPlayerBoundaryCheck1',
+        path: '/making/input-axis-rpg-walk-player-boundary-check-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-player-boundary-check-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardLoopScroll1',
@@ -54,14 +54,14 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-printing-primordial-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkFaceShiftBoundary',
-        path: '/making/input-axis-rpg-walk-printing-shift-boundary',
-        component: () => import('../pages/making/input-axis-rpg-walk-printing-shift-boundary.vue'),
+        name: 'InputAxisRpgWalkFaceShiftBoundary1',
+        path: '/making/input-axis-rpg-walk-printing-shift-boundary-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-printing-shift-boundary-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerGrid',
-        path: '/making/input-axis-rpg-walk-player-grid',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-grid.vue'),
+        name: 'InputAxisRpgWalkPlayerPrimordialGrid1',
+        path: '/making/input-axis-rpg-walk-player-primordial-grid-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-player-primordial-grid-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkUsingBackgroundImage1',
@@ -69,14 +69,14 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkBoardScrollPrimordial1',
-        path: '/making/input-axis-rpg-walk-board-scroll-primordial-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-primordial-1.vue'),
+        name: 'InputAxisRpgWalkBoardScrollPrimordialGrid1',
+        path: '/making/input-axis-rpg-walk-board-scroll-primordial-grid-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-primordial-grid-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerPrimordial',
-        path: '/making/input-axis-rpg-walk-player-primordial',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-primordial.vue'),
+        name: 'InputAxisRpgWalkPlayerPrimordial1',
+        path: '/making/input-axis-rpg-walk-player-primordial-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-player-primordial-1.vue'),
     },
     {
         name: 'Making',
