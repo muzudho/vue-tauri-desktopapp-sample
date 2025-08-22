@@ -105,7 +105,7 @@
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
-                class="cursor"
+                class="player"
                 :style="player1Style"
                 style="image-rendering: pixelated;" /><br/>
         </div>
@@ -432,7 +432,7 @@
 </script>
 
 <style scoped>
-    div.cursor {
+    div.player {
         position: relative; width:32px; height:32px;
     }
 </style>

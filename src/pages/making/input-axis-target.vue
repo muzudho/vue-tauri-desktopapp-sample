@@ -5,6 +5,43 @@
 
     <h4>標的</h4>
     <section class="sec-4">
+        <br/>
+
+        <!-- 盤領域
+            自機より３倍角ぐらい大きく。
+        -->
+        <div
+            :style="`
+                zoom: ${appZoom},
+                width: ${3 * board1SquareWidth}px;
+                height: ${3 * board1SquareHeight}px;
+            `"
+            style="
+                position: relative;
+            ">
+
+            <!-- 自機のホーム１ -->
+            <div
+                :style="`
+                    left: 0px;
+                    top: 0px;
+                    width: ${board1SquareWidth}px;
+                    height: ${board1SquareHeight}px;
+                `"
+                style="
+                    position: absolute;
+                    background-color:lightpink;
+                ">
+            </div>
+
+            <!-- 自機１（点線の枠） -->
+            <div
+                class="player"
+                :style="player1Style"
+                style="
+                    position: relative;
+                "></div>
+            </div>
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -67,14 +104,6 @@
                 >何もしないボタン</v-btn><br/>
             </li>
         </ul>
-        <br/>
-
-        <div :style="`width: ${board1SquareWidth}px; height: ${board1SquareHeight}px; background-color:lightpink;`">
-            <!-- プレイヤー１（点線の枠） -->
-            <div
-                class="cursor"
-                :style="player1Style"></div>
-        </div>
 
     </section>
 
@@ -110,6 +139,16 @@
     // from の階層が上の順、アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
     import SourceLink from '../../components/SourceLink.vue';
+
+
+    // ############################
+    // # アプリケーション・データ #
+    // ############################
+    //
+    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
+    //
+
+    const appZoom = ref<number>(4);     // ズーム
 
 
     // ################
@@ -281,7 +320,9 @@
 </script>
 
 <style scoped>
-    div.cursor {
-        position: relative; border:dashed 4px green; width:32px; height:32px;
+    div.player {
+        position: relative;
+        border:dashed 4px green;
+        width:32px; height:32px;
     }
 </style>

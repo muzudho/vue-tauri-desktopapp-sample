@@ -24,7 +24,7 @@
                 height: ${appZoom * 3 * board1SquareHeight}px;
             `">
 
-            <!-- 自機の基準位置 -->
+            <!-- 自機のホーム -->
             <div
                 :style="`
                     left: ${player1HomeLeft}px;
@@ -45,7 +45,7 @@
                 tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
-                class="cursor"
+                class="player"
                 :style="player1Style"
                 style="position: absolute; image-rendering: pixelated;" /><br/>
         </div>
@@ -239,7 +239,7 @@
     // このサンプルでは、ピンク色に着色しているマスです。
     //
 
-    const player1HomeFile = ref<number>(1);     // 基準位置
+    const player1HomeFile = ref<number>(1);     // ホーム
     const player1HomeRank = ref<number>(1);
     const player1HomeLeft = computed(()=>{
         return player1HomeFile.value * board1SquareWidth;
@@ -440,7 +440,7 @@
 </script>
 
 <style scoped>
-    div.cursor {
+    div.player {
         position: relative; width:32px; height:32px;
     }
 </style>
