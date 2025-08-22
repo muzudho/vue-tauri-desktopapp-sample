@@ -288,8 +288,6 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
-    const board1lastFileIndex = board1FileNum.value - 1;
-    const board1lastRankIndex = board1RankNum.value - 1;
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
@@ -443,7 +441,7 @@
             if (player1Motion.value["xAxis"]==1) {    // 右
                 player1Frames.value = player1SourceFrames["right"]
 
-                if (player1Left.value < board1lastFileIndex * board1SquareWidth) {    // 境界チェック
+                if (player1Left.value < (board1FileNum.value - 1) * board1SquareWidth) {    // 境界チェック
                     player1Left.value += player1Speed.value;
                 }
             } else if (player1Motion.value["xAxis"]==-1) {    // 左
@@ -463,7 +461,7 @@
             } else if (player1Motion.value["yAxis"]==1) {    // 下
                 player1Frames.value = player1SourceFrames["down"]
 
-                if (player1Top.value < board1lastRankIndex * board1SquareHeight) {
+                if (player1Top.value < (board1RankNum.value - 1) * board1SquareHeight) {
                     player1Top.value += player1Speed.value;
                 }
             }
