@@ -5,6 +5,52 @@
 
     <h4>ＲＰＧの歩行グラフィック　＞　自機の原始的ウォーキング</h4>
     <section class="sec-4">
+        <br/>
+
+        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
+        <stopwatch
+            ref="stopwatch1Ref"
+            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            style="display: none;" />
+
+        <!-- 盤領域
+            キャラクターより２倍角ぐらい大きく。
+        -->
+        <div
+            style="position: relative;"
+            :style="`
+                zoom: ${appZoom},
+                width: ${2 * appZoom * board1SquareWidth}px;
+                height: ${2 * appZoom * board1SquareHeight}px;
+            `">
+            
+            <!-- 自機の基準位置 -->
+            <div
+                :style="`
+                    left: ${player1HomeLeft}px;
+                    top: ${player1HomeTop}px;
+                    width: ${board1SquareWidth}px;
+                    height: ${board1SquareHeight}px;
+                    zoom: ${appZoom};
+                `"
+                style="
+                    position: absolute;
+                    background-color:lightpink;
+                ">
+            </div>
+
+            <!-- 自機１ -->
+            <tile-animation
+                :frames="player1Frames"
+                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                :slow="player1AnimationSlow"
+                :time="stopwatch1Count"
+                class="cursor"
+                :style="player1Style"
+                style="position: absolute; image-rendering: pixelated;" /><br/>
+        </div>
+        <br/>
+
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -71,48 +117,6 @@
                 　…　自機をホームに戻すぜ。
             </li>
         </ul>
-        <br/>
-
-        <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
-        <stopwatch
-            ref="stopwatch1Ref"
-            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
-            style="display: none;" />
-
-        <!--
-            盤領域
-            キャラクターより２倍角ぐらい大きく。
-        -->
-        <div
-            style="position: relative;"
-            :style="`
-                width: ${2 * appZoom * board1SquareWidth}px;
-                height: ${2 * appZoom * board1SquareHeight}px;
-            `"
-        >
-            <!-- 自機の基準位置 -->
-            <div
-                :style="`
-                    left: ${player1HomeLeft}px;
-                    top: ${player1HomeTop}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                    zoom: ${appZoom};
-                    background-color:lightpink;
-                `"
-                style="position: absolute;">
-            </div>
-
-            <!-- 自機１ -->
-            <tile-animation
-                :frames="player1Frames"
-                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                :slow="player1AnimationSlow"
-                :time="stopwatch1Count"
-                class="cursor"
-                :style="player1Style"
-                style="position: absolute; image-rendering: pixelated;" /><br/>
-        </div>
 
         <br/>
         <!-- 設定 -->

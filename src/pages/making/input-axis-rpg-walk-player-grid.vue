@@ -5,6 +5,7 @@
 
     <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>自機のグリッド吸着</h4>
     <section class="sec-4">
+        <br/>
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
@@ -12,12 +13,24 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <br/>
-        <!-- ゲーム画面 -->
-        <div :style="`position:relative; left: 0; top: 0; height: ${commonZoom * board1RankNum * board1SquareHeight}px;`">
+        <!-- 盤領域
+            キャラクターより２倍角ぐらい大きく。
+        -->
+        <div
+            style="position: relative;"
+            :style="`
+                height: ${appZoom * board1RankNum * board1SquareHeight}px;
+            `">
 
-            <!-- プレイヤー１の初期位置 -->
-            <div :style="`position:absolute; left: ${4 * board1SquareWidth}px; top: ${4 * board1SquareHeight}px; width: ${4 * board1SquareWidth}px; height: ${4 * board1SquareHeight}px; background-color: lightpink;`">
+            <!-- 自機の基準位置 -->
+            <div :style="`
+                position: absolute;
+                left: ${4 * board1SquareWidth}px;
+                top: ${4 * board1SquareHeight}px;
+                width: ${4 * board1SquareWidth}px;
+                height: ${4 * board1SquareHeight}px;
+                background-color: lightpink;
+            `">
             </div>
             
             <!--
@@ -31,22 +44,8 @@
                     left: ${((i - 1) % board1FileNum) * board1SquareWidth}px;
                     width:${board1SquareWidth}px;
                     height:${board1SquareHeight}px;
-                    zoom: ${commonZoom};
+                    zoom: ${appZoom};
                     border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};`"></div>
-            <!--
-                👆 上記のコードは、以下のコードと同じ。
-                <div style="position:absolute; top: 0px; left: 0px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-                <div style="position:absolute; top: 0px; left:32px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-                <div style="position:absolute; top: 0px; left:64px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-
-                <div style="position:absolute; top:32px; left: 0px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-                <div style="position:absolute; top:32px; left:32px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-                <div style="position:absolute; top:32px; left:64px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-
-                <div style="position:absolute; top:64px; left: 0px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-                <div style="position:absolute; top:64px; left:32px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-                <div style="position:absolute; top:64px; left:64px; width:32px; height:32px; zoom: 4; border: solid 1px lightgray;"></div>
-            -->
 
             <!-- 自機１ -->
             <TileAnimation
@@ -60,6 +59,7 @@
         </div>
         <br/>
 
+        <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
             <li>
@@ -122,7 +122,7 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　位置を最初の状態に戻すぜ。
+                　…　自機をホームに戻すぜ。
             </li>
         </ul>
 
@@ -202,7 +202,6 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
-    const commonZoom = 4; // ズーム
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左に移動する
     const commonSpriteMotionRight = 1;
     const commonSpriteMotionUp = -1;
@@ -216,7 +215,8 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appConfigIsShowing = ref<boolean>(false);                 // 操作方法等を表示中
+    const appConfigIsShowing = ref<boolean>(false);     // 操作方法等を表示中
+    const appZoom = 4;  // ズーム
 
 
     // ################
@@ -263,7 +263,7 @@
     const player1Style = computed(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
-        zoom: `${commonZoom}`,
+        zoom: `${appZoom}`,
     }));
     // キャラクターの向きと、歩行タイルの指定
     const player1SourceFrames = {
