@@ -1,6 +1,6 @@
 <template>
 
-    <!-- ボタンの押しっぱなし機能 -->
+    <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
     <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>自機のグリッド吸着</h4>
@@ -227,7 +227,7 @@
     // + オブジェクト　＞　ボタン拡張 +
     // ++++++++++++++++++++++++++++++++
 
-    const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null); // ボタン押しっぱなし機能
+    const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
