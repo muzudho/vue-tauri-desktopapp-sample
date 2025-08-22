@@ -16,11 +16,10 @@
         <!-- 盤領域 -->
         <div :style="board1Style">
 
-            <!--
-                タイルのグリッド。
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div v-for="i in board1Area" :key="i"
+            <!-- タイルのグリッド -->
+            <div
+                v-for="i in board1Area"
+                :key="i"
                 :style="getSquareStyle(i - 1)"
             >{{ getPrintingNumber(i - 1) }}
             </div>
@@ -44,9 +43,9 @@
                     border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
                     border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
                     border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                    zoom:${appZoom};
                 `"
                 style="position:absolute; left:0; top:0; image-rendering: pixelated;">
+                <!-- zoom:${appZoom}; -->
             </div>
         </div>
 
@@ -137,6 +136,30 @@
             </li>
         </ul>
         <br/>
+
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <br/>
+        </section>
     </section>
 
     <br/>
@@ -198,7 +221,8 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = 4;
+    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
+    const appZoom = ref<number>(4);    // ズーム
 
 
     // ################
@@ -245,8 +269,9 @@
             position: 'relative',
             left: "0",
             top: "0",
-            width: `${appZoom * board1WithMaskFileNum * board1SquareWidth}px`,
-            height: `${appZoom * board1WithMaskRankNum * board1SquareHeight}px`,
+            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            zoom: appZoom.value,
         };
     });
     const getSquareStyle = computed<
@@ -270,7 +295,7 @@
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                zoom: 4,
+                //zoom: appZoom.value,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
                 textAlign: "center",
             };
@@ -448,7 +473,7 @@
     const player1Style = computed<CompatibleStyleValue>(() => ({
         left: `${player1HomeFile * board1SquareWidth}px`,     // プレイヤーは移動しません。固定位置です。
         top: `${player1HomeRank * board1SquareHeight}px`,
-        zoom: appZoom,
+        zoom: appZoom.value,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
@@ -683,6 +708,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>

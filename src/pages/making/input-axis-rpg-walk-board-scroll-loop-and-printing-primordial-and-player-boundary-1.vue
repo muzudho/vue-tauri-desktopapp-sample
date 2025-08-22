@@ -153,7 +153,7 @@
         >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
         <section v-if="appConfigIsShowing" class="sec-1">
             <br/>
-            <p>マスクを含んだ盤サイズ。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
+            <p>盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
             <v-slider
                 label="盤の筋の数"
                 v-model="board1FileNum"
@@ -172,8 +172,6 @@
                 showTicks="always"
                 thumbLabel="always"
                 @click="focusRemove()" />
-            <br/>
-            <p>印字は、要はマップデータのこと。</p>
             <v-slider
                 label="印字の筋の数"
                 v-model="printing1FileNum"
@@ -211,9 +209,9 @@
                 thumbLabel="always"
                 @click="focusRemove()" />
             <br/>
-            <p>マスクのタテヨコ幅。右側と下側は、１マス多めに付きます：</p>
+            <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
             <v-slider
-                label="マスクのタテヨコ幅"
+                label="マスクの枠の幅"
                 v-model="board1WithMaskSizeSquare"
                 :min="0"
                 :max="2"
