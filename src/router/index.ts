@@ -3,8 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
     {
         name: 'Blog',
-        path: '/blog',
-        component: () => import('@/pages/blog/index.vue'),
+        path: '/blog',     // URL
+        component: () => import('@/pages/blog/index.vue'),  // importした Vue ファイル
     },
 
     {
@@ -148,29 +148,29 @@ const routes = [
 
     {
         name: 'MiniGames',
-        path: '/minigames',     // URL
-        component: () => import('../pages/minigames/index.vue'),  // importした Vue ファイル
+        path: '/minigames',
+        component: () => import('../pages/minigames/index.vue'),
     },
     {
         name: 'ShootingStar',
-        path: '/minigames/shooting-star',     // URL
-        component: () => import('../pages/minigames/shooting-star.vue'),  // importした Vue ファイル
+        path: '/minigames/shooting-star',
+        component: () => import('../pages/minigames/shooting-star.vue'),
     },
     {
         name: 'ShootingStarNaive',
-        path: '/minigames/shooting-star-naive',     // URL
-        component: () => import('../pages/minigames/shooting-star-naive.vue'),  // importした Vue ファイル
+        path: '/minigames/shooting-star-naive',
+        component: () => import('../pages/minigames/shooting-star-naive.vue'),
     },
     {
         name: 'Maze',
-        path: '/minigames/maze',     // URL
-        component: () => import('../pages/minigames/maze.vue'),  // importした Vue ファイル
+        path: '/minigames/maze',
+        component: () => import('../pages/minigames/maze.vue'),
     },
 
     {
         name: 'About',
-        path: '/about',     // URL
-        component: () => import('../pages/about.vue'),  // importした Vue ファイル
+        path: '/about',
+        component: () => import('../pages/about.vue'),
     },
     {
         name: 'Home',
