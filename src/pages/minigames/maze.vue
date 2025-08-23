@@ -87,7 +87,9 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <div :style="board1Style">
+        <div
+            class="board"
+            :style="board1Style">
 
             <!--
                 タイルのグリッド。
@@ -248,9 +250,6 @@
     const board1WithMaskRankNum = board1RankNum + board1WithMaskBottomRightMargin
     const board1Style = computed<CompatibleStyleValue>(()=>{  // ボードとマスクを含んでいる領域のスタイル
         return {
-            position: 'relative',
-            left: "0",
-            top: "0",
             width: `${commonZoom * board1WithMaskFileNum * board1SquareWidth}px`,
             height: `${commonZoom * board1WithMaskRankNum * board1SquareHeight}px`,
         };
@@ -616,7 +615,14 @@
 </script>
 
 <style scoped>
-    div.player {
-        position: relative; width:32px; height:32px;
+    div.board { /* 盤１ */
+        position: relative;
+        left: 0;
+        top: 0;
+    }
+    div.player {    /* 自機１ */
+        position: relative;
+        width: 32px;
+        height: 32px;
     }
 </style>

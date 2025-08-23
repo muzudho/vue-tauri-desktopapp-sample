@@ -14,7 +14,9 @@
             style="display: none;" />
 
         <!-- 盤領域 -->
-        <div :style="board1Style">
+        <div
+            class="board"
+            :style="board1Style">
 
             <!-- 自機のホーム１ -->
             <div
@@ -271,9 +273,6 @@
     });
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
-            position: 'relative',
-            left: "0",
-            top: "0",
             width: `${board1FileNum.value * board1SquareWidth}px`,
             height: `${board1RankNum.value * board1SquareHeight}px`,
             zoom: appZoom.value,
@@ -603,7 +602,14 @@
 </script>
 
 <style scoped>
-    div.player {
-        position: relative; width:32px; height:32px;
+    div.board { /* 盤１ */
+        position: relative;
+        left: 0;
+        top: 0;
+    }
+    div.player {    /* 自機１ */
+        position: relative;
+        width: 32px;
+        height: 32px;
     }
 </style>
