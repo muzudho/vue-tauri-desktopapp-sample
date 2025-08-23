@@ -102,7 +102,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
-                　…　上下左右に動かすぜ！
+                　…　印字を上下左右に動かすぜ！
                 <br/>
             </li>
             <li>

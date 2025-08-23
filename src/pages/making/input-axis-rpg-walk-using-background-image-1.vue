@@ -75,7 +75,7 @@
         </p>
         <br/>
 
-        <p>👇タイルのインデックスだぜ（＾▽＾）：</p>
+        <p>👇印字のインデックスだぜ（＾▽＾）：</p>
         <div :style="board1SourceTileSampleStyle">
             <!--
                 グリッド
@@ -390,9 +390,9 @@
         }
         return tileMap;
     });
-    const board1MapFiles = board1FileNum;  // マップデータ
-    const board1MapRanks = board1RankNum;
-    const board1MapArea = board1MapFiles.value * board1MapRanks.value;
+    //const board1MapFiles = board1FileNum;  // マップデータ
+    //const board1MapRanks = board1RankNum;
+    //const board1MapArea = board1MapFiles.value * board1MapRanks.value;
     const getTileIndexBySquare = computed(() => {
         return (squareIndex: number) => {
             return printingMapData.value[squareIndex];
