@@ -293,9 +293,10 @@
     const printing1RankNum = board1RankNum;       // 行数
     const printing1File = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
     const printing1Rank = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
-    const printing1Data = ref<string[]>([
-        "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24",
-    ]);
+    const printing1Data = ref<string[]>([]);
+    for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
+        printing1Data.value.push(i.toString().padStart(2, "0"));
+    }
 
     /**
      * 変換
