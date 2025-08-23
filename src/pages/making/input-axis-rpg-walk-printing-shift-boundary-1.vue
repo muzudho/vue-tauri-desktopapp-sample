@@ -346,19 +346,19 @@
     const printing1File = ref<number>(-3);  // 印字の左上隅のタイルは、盤タイルの左から何番目か。
     const printing1Rank = ref<number>(-3);  // 印字の左上隅のタイルは、盤タイルの上から何番目か。
     const printing1Data = ref<string[]>([]);
-    for (let i=0; i<printing1FileMax * printing1RankMax; i++) {     // 印字データは最初から最大サイズで用意しておく
+    for (let i=0; i<printing1FileMax * printing1RankMax; i++) { // 印字データは最初から最大サイズで用意しておく
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
 
     /**
      * 変換
-     * @param tileIndex マス番号
+     * @param index マス番号
      * @returns [筋番号, 段番号]
      */
-    function tileIndexToTileFileRank(tileIndex: number) : number[] {
+    function tileIndexToTileFileRank(index: number) : number[] {
         // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-        const file = tileIndex % board1FileNum.value;
-        const rank = Math.floor(tileIndex / board1FileNum.value);
+        const file = index % board1FileNum.value;
+        const rank = Math.floor(index / board1FileNum.value);
 
         return [file, rank];
     }
