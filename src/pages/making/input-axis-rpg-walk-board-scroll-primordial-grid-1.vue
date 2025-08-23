@@ -361,6 +361,8 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
+    const player1Width = board1SquareWidth;
+    const player1Height = board1SquareHeight;
     const player1Left = ref<number>(player1HomeLeft.value);    // スプライトの位置
     const player1Top = ref<number>(player1HomeTop.value);
     const player1Speed = ref<number>(2);    // 移動速度
@@ -371,6 +373,8 @@
     const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
+        width: `${player1Width}px`,
+        height: `${player1Height}px`,
         zoom: appZoom.value,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
@@ -597,7 +601,5 @@
     }
     div.player {    /* 自機１ */
         position: relative;
-        width: 32px;
-        height: 32px;
     }
 </style>

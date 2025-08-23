@@ -374,6 +374,8 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
+    const player1Width = board1SquareWidth;
+    const player1Height = board1SquareHeight;
     const player1Left = ref<number>(player1HomeLeft.value); // スプライトの位置
     const player1Top = ref<number>(player1HomeTop.value);
     const player1Input = <Record<string, boolean>>{ // 入力
@@ -381,9 +383,11 @@
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationWalkingFrames = 16;   // 歩行フレーム数
-    const player1Style = computed(() => ({
+    const player1Style = computed<CompatibleStyleValue>(() => ({
         top: `${player1Top.value}px`,
         left: `${player1Left.value}px`,
+        width: `${player1Width}px`,
+        height: `${player1Height}px`,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
@@ -617,12 +621,8 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
-        left: 0;
-        top: 0;
     }
     div.player {    /* 自機１ */
         position: relative;
-        width: 32px;
-        height: 32px;
     }
 </style>

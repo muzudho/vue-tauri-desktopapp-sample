@@ -403,6 +403,8 @@
     const player1Style = computed<CompatibleStyleValue>(() => ({
         left: `${player1Left.value}px`,
         top: `${player1Top.value}px`,
+        width: `${player1Width}px`,
+        height: `${player1Height}px`,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
@@ -665,7 +667,5 @@
     }
     div.player {    /* 自機１ */
         position: relative;
-        width: v-bind(player1Width + 'px');
-        height: v-bind(player1Height + 'px');
     }
 </style>

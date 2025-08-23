@@ -417,6 +417,7 @@ import { CSSProperties } from 'csstype';
 pnpm add -D eslint-plugin-vue vue-eslint-parser
 
 # 依存関係の同期
+pnpm store prune
 pnpm install
 ```
 
@@ -462,3 +463,5 @@ VSCode の `.vscode/settings.json` を新規作成:
   "volar.takeOverMode.enabled": true
 }
 ```
+
+効果なかった。ダメだった。  

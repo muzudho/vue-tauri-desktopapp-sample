@@ -216,6 +216,8 @@
     // 点線の枠。
     //
 
+    const player1Width = board1SquareWidth;
+    const player1Height = board1SquareHeight;
     const player1Left = ref<number>(0);      // スプライトのX座標
     const player1Top = ref<number>(0);       // スプライトのY座標
     const player1Speed = ref<number>(2);     // 移動速度
@@ -225,6 +227,8 @@
     const player1Style = computed(() => ({
         left: `${player1Left.value}px`,
         top: `${player1Top.value}px`,
+        width: `${player1Width}px`,
+        height: `${player1Height}px`,
         zoom: appZoom.value,
     }));
 
@@ -370,7 +374,5 @@
     div.player {    /* 自機１ */
         position: relative;
         border:dashed 4px green;
-        width: 32px;
-        height: 32px;
     }
 </style>
