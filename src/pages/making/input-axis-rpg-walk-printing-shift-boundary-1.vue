@@ -163,8 +163,7 @@
                 :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
                 color="green"
                 :hideDetails="true"
-                inset
-                @click="focusRemove()" />
+                inset />
                 <section class="sec-1">
                     <v-switch
                         v-model="appBoundaryWalkingEdge"
@@ -172,8 +171,7 @@
                         :label="appBoundaryWalkingEdge ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
                         color="green"
                         :hideDetails="true"
-                        inset
-                        @click="focusRemove()" />
+                        inset />
                 </section>
             <!-- フォーカスを外すためのダミー・ボタンです -->
             <v-btn ref="noopButton">何もしないボタン
@@ -794,16 +792,6 @@
 
         // 初回呼び出し
         requestAnimationFrame(update);
-    }
-
-
-    /**
-     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-     */
-    function focusRemove() : void {
-        if (noopButton.value) {
-            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-        }
     }
 
 

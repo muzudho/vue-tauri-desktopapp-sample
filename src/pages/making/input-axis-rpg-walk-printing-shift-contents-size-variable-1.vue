@@ -172,7 +172,6 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
-            <!-- @click="focusRemove()" -->
             <v-slider
                 label="印字　＞　段の数"
                 v-model="printing1RankNum"
@@ -562,16 +561,6 @@
         // 初回呼び出し
         requestAnimationFrame(update);
     }
-
-
-    // /**
-    //  * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-    //  */
-    // function focusRemove() : void {
-    //     if (noopButton.value) {
-    //         noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-    //     }
-    // }
 
 
     /**

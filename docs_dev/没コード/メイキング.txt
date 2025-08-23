@@ -7,4 +7,5 @@
     //     }
     // }
 
-
+            <v-slider
+                @click="focusRemove()" />
