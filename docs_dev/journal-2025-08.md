@@ -395,3 +395,70 @@ import { CSSProperties } from 'csstype';
 ```
 
 と書き直す。  
+
+
+## [2025-08-24_Sun]
+
+```ts
+    const player1Width = board1SquareWidth;
+```
+
+って書いて、  
+
+```css
+    div.player {    /* 自機１ */
+        width: v-bind(player1Width + 'px');
+    }
+```
+
+って書いても、 `player1Width` は使わてないってエラーが出てくるんで、ESLint を更新してみる。  
+
+```shell
+pnpm add -D eslint-plugin-vue vue-eslint-parser
+
+# 依存関係の同期
+pnpm install
+```
+
+プロジェクトルートの `package.json` を確認（抜粋）。  
+
+```json
+{
+    "devDependencies": {
+        "eslint-plugin-vue": "^10.4.0",
+        "vue-eslint-parser": "^10.2.0"
+    }
+}
+```
+
+プロジェクトルートに `.eslintrc.json` を作る。  
+
+```json
+{
+  "parser": "vue-eslint-parser",
+  "parserOptions": {
+    "parser": "@typescript-eslint/parser",
+    "sourceType": "module"
+  },
+  "plugins": ["vue"],
+  "rules": {
+    "no-unused-vars": ["error", { "varsIgnorePattern": "^player1Width|player1Height" }]
+  }
+}
+```
+
+VSCode のコマンドパレット（Ctrl+Shift+P）を開き、ESLint: Restart ESLint Serverを選択したいが無かったので VSCode を再起動。
+
+Volar 拡張機能を更新：  
+
+```shell
+pnpm add -D @vue/language-server
+```
+
+VSCode の `.vscode/settings.json` を新規作成:  
+
+```json
+{
+  "volar.takeOverMode.enabled": true
+}
+```

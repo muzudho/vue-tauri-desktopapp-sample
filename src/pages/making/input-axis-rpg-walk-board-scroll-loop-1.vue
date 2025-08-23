@@ -390,6 +390,8 @@
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
+    const player1Width = board1SquareWidth;
+    const player1Height = board1SquareHeight;
     const player1Left = ref<number>(player1HomeLeft.value);    // スプライトの位置
     const player1Top = ref<number>(player1HomeTop.value);
     const player1Input = <Record<string, boolean>>{    // 入力
@@ -663,7 +665,7 @@
     }
     div.player {    /* 自機１ */
         position: relative;
-        width: 32px;
-        height: 32px;
+        width: v-bind(player1Width + 'px');
+        height: v-bind(player1Height + 'px');
     }
 </style>

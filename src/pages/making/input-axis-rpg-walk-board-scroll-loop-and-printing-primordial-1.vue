@@ -797,7 +797,7 @@
     }
     div.player {    /* 自機１ */
         position: relative;
-        width: 32px;
-        height: 32px;
+        width: v-bind(player1Width + 'px');
+        height: v-bind(player1Height + 'px');
     }
 </style>
