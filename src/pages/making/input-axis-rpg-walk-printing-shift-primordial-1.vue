@@ -306,14 +306,14 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1FileMax = board1FileMax;    // 印字の最大サイズを、盤の最大サイズとする。
+    const printing1FileMax = board1FileMax;     // 印字の最大サイズは、盤の最大サイズと同じものとする。
     const printing1RankMax = board1RankMax;
-    const printing1FileNum = board1FileNum;    // 列数
-    const printing1RankNum = board1RankNum;    // 行数
+    const printing1FileNum = board1FileNum;     // 列数
+    const printing1RankNum = board1RankNum;     // 行数
     const printing1File = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
     const printing1Rank = ref<number>(0);    // 印字の左上隅のタイルは、盤タイルの上から何番目か。
     const printing1Data = ref<string[]>([]);
-    for (let i=0; i<printing1FileMax * printing1RankMax; i++) {
+    for (let i=0; i<printing1FileMax * printing1RankMax; i++) {     // 印字データは最初から最大サイズで用意しておく
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
 
