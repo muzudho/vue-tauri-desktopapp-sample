@@ -18,10 +18,7 @@
         -->
         <div
             class="board"
-            :style="`
-                width: ${board1FileNum * appZoom * board1SquareWidth >= (player1HomeFile + 1) * appZoom * board1SquareWidth ? board1FileNum * appZoom * board1SquareWidth : (player1HomeFile + 1) * appZoom * board1SquareWidth}px;
-                height: ${board1RankNum * appZoom * board1SquareHeight >= (player1HomeRank + 1) * appZoom * board1SquareHeight ? board1RankNum * appZoom * board1SquareHeight : (player1HomeRank + 1) * appZoom * board1SquareHeight}px;
-            `">
+            :style="board1Style">
 
             <!-- 盤のホーム１
                 自機ではなく、盤のホームであることに注意してください。
@@ -30,7 +27,6 @@
                 :style="`
                     width: ${board1FileNum * board1SquareWidth}px;
                     height: ${board1RankNum * board1SquareHeight}px;
-                    zoom: ${appZoom};
                 `"
                 style="
                     position:absolute;
@@ -45,7 +41,6 @@
                     top: ${player1HomeTop}px;
                     width: ${board1SquareWidth}px;
                     height: ${board1SquareHeight}px;
-                    zoom: ${appZoom};
                 `"
                 style="
                     position: absolute;
@@ -314,6 +309,19 @@
     });
     const board1Top = ref<number>(0);   // ボードの表示位置
     const board1Left = ref<number>(0);
+    const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+        const boardWidth = board1FileNum.value * board1SquareWidth;
+        const boardHeight = board1RankNum.value * board1SquareHeight;
+        const boardWidthContainsPlayer = (player1HomeFile.value + 1) * board1SquareWidth;
+        const boardHeightContainsPlayer = (player1HomeRank.value + 1) * board1SquareHeight;
+        const width = boardWidth >= boardWidthContainsPlayer ? boardWidth : boardWidthContainsPlayer;
+        const height = boardHeight >= boardHeightContainsPlayer ? boardHeight : boardHeightContainsPlayer;
+        return {
+            width: `${width}px`,
+            height: `${height}px`,
+            zoom: appZoom.value,
+        };
+    });
     const getSquareStyle = computed<
         (i:number)=>CompatibleStyleValue
     >(() => {
@@ -328,7 +336,6 @@
                 left: `${homeLeft + board1Left.value}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                zoom: appZoom.value,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
             };
         };
@@ -375,7 +382,6 @@
         left: `${player1Left.value}px`,
         width: `${player1Width}px`,
         height: `${player1Height}px`,
-        zoom: appZoom.value,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
