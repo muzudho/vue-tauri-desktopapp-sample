@@ -18,10 +18,7 @@
         -->
         <div
             class="board"
-            :style="`
-                width: ${3 * appZoom * board1SquareWidth}px;
-                height: ${3 * appZoom * board1SquareHeight}px;
-            `">
+            :style="board1Style">
 
             <!-- 自機のホーム１ -->
             <div
@@ -30,7 +27,6 @@
                     top: ${player1HomeTop}px;
                     width: ${board1SquareWidth}px;
                     height: ${board1SquareHeight}px;
-                    zoom: ${appZoom};
                 `"
                 style="
                     position: absolute;
@@ -47,7 +43,6 @@
                     left: ${((i - 1) % board1FileNum) * board1SquareWidth}px;
                     width:${board1SquareWidth}px;
                     height:${board1SquareHeight}px;
-                    zoom: ${appZoom};
                     border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};
                 `"
                 style="
@@ -289,7 +284,20 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
-
+    const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+        const boardWidth = board1FileNum.value * board1SquareWidth;
+        const boardHeight = board1RankNum.value * board1SquareHeight;
+        const boardWidthContainsPlayer = (player1HomeFile.value + 1) * board1SquareWidth;
+        const boardHeightContainsPlayer = (player1HomeRank.value + 1) * board1SquareHeight;
+        const width = boardWidth >= boardWidthContainsPlayer ? boardWidth : boardWidthContainsPlayer;
+        const height = boardHeight >= boardHeightContainsPlayer ? boardHeight : boardHeightContainsPlayer;
+        return {
+            width: `${width}px`,
+            height: `${height}px`,
+            zoom: appZoom.value,
+        };
+    });
+    
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
     // ++++++++++++++++++++++++++++++++++++
@@ -324,7 +332,6 @@
         top: `${player1Top.value}px`,
         width: `${player1Width}px`,
         height: `${player1Height}px`,
-        zoom: appZoom.value,
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
