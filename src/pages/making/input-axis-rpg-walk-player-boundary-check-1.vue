@@ -17,13 +17,11 @@
             自機より３倍角ぐらい大きく。
         -->
         <div
+            class="board"
             :style="`
                 width: ${3 * appZoom * board1SquareWidth}px;
                 height: ${3 * appZoom * board1SquareHeight}px;
-            `"
-            style="
-                position: relative;
-            ">
+            `">
 
             <!-- 自機のホーム１ -->
             <div
@@ -558,7 +556,12 @@
 </script>
 
 <style scoped>
-    div.player {
-        position: relative; width:32px; height:32px;
+    div.board { /* 盤１ */
+        position: relative;
+    }
+    div.player {    /* 自機１ */
+        position: relative;
+        width: 32px;
+        height: 32px;
     }
 </style>

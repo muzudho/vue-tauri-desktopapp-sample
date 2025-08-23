@@ -660,8 +660,6 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
-        left: 0;
-        top: 0;
     }
     div.player {    /* 自機１ */
         position: relative;

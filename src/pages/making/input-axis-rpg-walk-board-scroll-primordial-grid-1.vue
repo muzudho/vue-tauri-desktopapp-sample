@@ -17,13 +17,11 @@
             盤の大きさと同じ。かつ、自機を含められる大きさ。
         -->
         <div
+            class="board"
             :style="`
                 width: ${board1FileNum * appZoom * board1SquareWidth >= (player1HomeFile + 1) * appZoom * board1SquareWidth ? board1FileNum * appZoom * board1SquareWidth : (player1HomeFile + 1) * appZoom * board1SquareWidth}px;
                 height: ${board1RankNum * appZoom * board1SquareHeight >= (player1HomeRank + 1) * appZoom * board1SquareHeight ? board1RankNum * appZoom * board1SquareHeight : (player1HomeRank + 1) * appZoom * board1SquareHeight}px;
-            `"
-            style="
-                position: relative;
-            ">
+            `">
 
             <!-- 盤のホーム１
                 自機ではなく、盤のホームであることに注意してください。
@@ -594,7 +592,12 @@
 </script>
 
 <style scoped>
-    div.player {
-        position: relative; width:32px; height:32px;
+    div.board { /* 盤１ */
+        position: relative;
+    }
+    div.player {    /* 自機１ */
+        position: relative;
+        width: 32px;
+        height: 32px;
     }
 </style>

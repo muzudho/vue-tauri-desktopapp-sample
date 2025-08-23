@@ -11,13 +11,11 @@
             自機と同サイズ。
         -->
         <div
+            class="board"
             :style="`
                 width: ${appZoom * board1SquareWidth}px;
                 height: ${appZoom * board1SquareHeight}px;
-            `"
-            style="
-                position: relative;
-            ">
+            `">
 
             <!-- 自機のホーム１ -->
             <div
@@ -366,9 +364,13 @@
 </script>
 
 <style scoped>
-    div.player {
+    div.board { /* 盤１ */
+        position: relative;
+    }
+    div.player {    /* 自機１ */
         position: relative;
         border:dashed 4px green;
-        width:32px; height:32px;
+        width: 32px;
+        height: 32px;
     }
 </style>
