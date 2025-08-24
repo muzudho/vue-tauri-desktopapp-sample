@@ -20,17 +20,8 @@
 
             <!-- 自機のホーム１ -->
             <div
-                :style="`
-                    left: ${player1HomeLeft}px;
-                    top: ${player1HomeTop}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `"
-                style="
-                    position: absolute;
-                    background-color: lightpink;
-                ">
-                <!-- zoom: ${appZoom}; -->
+                class="playerHome"
+                :style="player1HomeStyle">
             </div>
 
             <!-- タイルのグリッド -->
@@ -385,6 +376,14 @@
     const player1HomeTop = computed(()=>{
         return player1HomeRank.value * board1SquareHeight;
     });
+    const player1HomeStyle = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+        return {
+            left: `${player1HomeLeft.value}px`,
+            top: `${player1HomeTop.value}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -664,6 +663,10 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.playerHome {    /* 自機１のホーム */
+        position: absolute;
+        background-color: lightpink;
     }
     div.player {    /* 自機１ */
         position: relative;
