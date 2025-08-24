@@ -49,7 +49,7 @@
                 class="player"
                 :style="player1Style" />
             
-            <!-- 半透明のマスク
+            <!-- 視界の外
                 親要素で zoom を設定しているので、ここで zoom は不要です。
             -->
             <div

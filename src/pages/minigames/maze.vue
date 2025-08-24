@@ -114,7 +114,7 @@
                 :style="player1Style"
                 style="image-rendering: pixelated;" /><br/>
             
-            <!-- 半透明のマスク -->
+            <!-- 視界の外 -->
             <div
                 :style="`
                     width:${board1WithMaskFileNum * board1SquareWidth}px;

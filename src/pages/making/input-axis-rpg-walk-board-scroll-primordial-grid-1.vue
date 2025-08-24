@@ -45,10 +45,7 @@
                 `">
             </div>
 
-            <!--
-                スクウェアのグリッド。
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
+            <!-- スクウェアのグリッド -->
             <div v-for="i in board1Area" :key="i"
                 :style="getSquareStyle(i - 1)">
             </div>

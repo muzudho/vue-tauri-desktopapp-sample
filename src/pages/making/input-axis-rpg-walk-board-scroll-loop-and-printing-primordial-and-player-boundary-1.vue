@@ -46,8 +46,9 @@
                 class="player"
                 :style="player1Style" />
             
-            <!-- 半透明のマスク -->
+            <!-- 視界の外 -->
             <div
+                class="out-of-sight"
                 :style="`
                     width:${board1WithMaskFileNum * board1SquareWidth}px;
                     height:${board1WithMaskRankNum * board1SquareHeight}px;
@@ -55,9 +56,7 @@
                     border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
                     border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
                     border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                `"
-                style="position:absolute; left:0; top:0; image-rendering: pixelated;">
-                <!-- zoom:${appZoom}; -->
+                `">
             </div>
         </div>
 
@@ -1120,6 +1119,10 @@
     }
     div.player {    /* 自機１ */
         position: relative;
+        image-rendering: pixelated;
+    }
+    div.out-of-sight {  /* 視界の外 */
+        position: absolute;
         image-rendering: pixelated;
     }
 </style>
