@@ -16,17 +16,14 @@
 
             <!-- 自機のホーム１ -->
             <div
+                class="playerHome"
                 :style="`
                     left: 0px;
                     top: 0px;
                     width: ${board1SquareWidth}px;
                     height: ${board1SquareHeight}px;
                     zoom: ${appZoom};
-                `"
-                style="
-                    position: absolute;
-                    background-color: lightpink;
-                ">
+                `">
             </div>
 
             <!-- 自機１（点線の枠） -->
@@ -375,6 +372,10 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.playerHome {    /* 自機１のホーム */
+        position: absolute;
+        background-color: lightpink;
     }
     div.player {    /* 自機１ */
         position: relative;
