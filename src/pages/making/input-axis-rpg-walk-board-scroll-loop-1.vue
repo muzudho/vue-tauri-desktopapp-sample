@@ -407,29 +407,78 @@
     const getPrintingNumber = computed(() => {
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
-            return tileIndex;
+            //return tileIndex;
 
             /*
+                例えば
+                
+                +---+---+---+
+                | 0 | 1 | 2 |
+                +---+---+---+
+                | 3 | 4 | 5 |
+                +---+---+---+
+                | 6 | 7 | 8 |
+                +---+---+---+
+
+                という印字表があって、そのうち、以下のような穴が空いていれば、
+                
+                +---+---+---+
+                |///|///|///|
+                +---+---+---+
+                |   |   |///|
+                +---+---+---+
+                |   |   |///|
+                +---+---+---+
+
+                以下のようなサブ印字表が得られる。
+
+                +---+---+
+                | 3 | 4 |
+                +---+---+
+                | 6 | 7 |
+                +---+---+
+
+                このとき、
+                subprintingFile = 0
+                subprintingRank = 1
+                と言える。
+
+                逆に、サブ印字表は盤とイコールであると考えると、
+                printingFile = 0
+                printingRank = -1
+                である。
+
+                計算してみよう。
+                盤のタイルの index を 0 とするとき、
+                tileFile = 0、
+                tileRank = 0。
+
+                subprintingFile = tileFile - printingFile = 0
+                subprintingRank = tileRank - printingRank = 1
+                subprintingIndex = subprintingRank * (印字表の筋の数 3) + subprintingFile = 3。
+             */
+
+            //*
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
 
-            // タイル上のインデックスを、印字上のインデックスへ変換：
-            let printingFile = tileFile - printing1File.value;
-            let printingRank = tileRank - printing1Rank.value;
+            // タイル上の筋、段を、サブ印字表の筋、段へ変換：
+            let subprintingFile = tileFile - printing1File.value;
+            let subprintingRank = tileRank - printing1Rank.value;
 
             // if (appIsLooping.value) {
-                printingFile = euclideanMod(printingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-                printingRank = euclideanMod(printingRank, printing1RankNum.value); // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
+                subprintingFile = euclideanMod(subprintingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
+                subprintingRank = euclideanMod(subprintingRank, printing1RankNum.value); // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
             // } else {
-            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            // if (printingFile < 0 || printing1FileNum.value <= printingFile || printingRank < 0 || printing1RankNum.value <= printingRank) {
-            //     return "-";
-            // }
+                // // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+                // if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
+                //     return "-";
+                // }
             // }
 
-            // 印字上の位置が示すデータを返す
-            const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
-            return  printing1Data.value[printingIndex];
-            */
+            // サブ印字表上の指定位置にある印字を返す
+            const subprintingIndex = printingFileRankToPrintingIndex(subprintingFile, subprintingRank);
+            return  printing1Data.value[subprintingIndex];
+            // */
         };
     });    
 
