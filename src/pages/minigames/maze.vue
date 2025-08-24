@@ -345,8 +345,8 @@
     // ++++++++++++++++++++++++++++
 
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
-    const player1HomeFile = ref<number>(2);     // ホーム
-    const player1HomeRank = ref<number>(2);
+    const playerHome1File = ref<number>(2);     // ホーム
+    const playerHome1Rank = ref<number>(2);
     const player1Left = ref<number>(2 * board1SquareWidth);     // スプライトのX座標
     const player1Top = ref<number>(2 * board1SquareHeight);     // スプライトのY座標
     const player1Input = <Record<string, boolean>>{             // 入力
@@ -457,8 +457,8 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left.value = player1HomeFile.value * board1SquareWidth;   // 自機
-                    player1Top.value = player1HomeRank.value * board1SquareHeight;
+                    player1Left.value = playerHome1File.value * board1SquareWidth;   // 自機
+                    player1Top.value = playerHome1Rank.value * board1SquareHeight;
                     printing1Left.value = 0;                                         // 印字
                     printing1Top.value = 0;
                 }

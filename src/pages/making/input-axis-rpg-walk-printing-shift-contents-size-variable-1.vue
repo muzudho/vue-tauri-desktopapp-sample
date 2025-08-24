@@ -21,8 +21,8 @@
             <!-- 自機のホーム１ -->
             <div
                 :style="`
-                    left: ${player1HomeLeft}px;
-                    top: ${player1HomeTop}px;
+                    left: ${playerHome1Left}px;
+                    top: ${playerHome1Top}px;
                     width: ${board1SquareWidth}px;
                     height: ${board1SquareHeight}px;
                 `"
@@ -154,7 +154,7 @@
                 thumbLabel="always" />
             <v-slider
                 label="自機のホーム　＞　筋"
-                v-model="player1HomeFile"
+                v-model="playerHome1File"
                 :min="0"
                 :max="board1FileMax - 1"
                 step="1"
@@ -162,7 +162,7 @@
                 thumbLabel="always" />
             <v-slider
                 label="自機のホーム　＞　段"
-                v-model="player1HomeRank"
+                v-model="playerHome1Rank"
                 :min="0"
                 :max="board1RankMax - 1"
                 step="1"
@@ -405,13 +405,13 @@
     // このサンプルでは、ピンク色に着色しているマスです。
     //
 
-    const player1HomeFile = ref<number>(2);    // ホーム
-    const player1HomeRank = ref<number>(2);
-    const player1HomeLeft = computed(()=>{
-        return player1HomeFile.value * board1SquareWidth;
+    const playerHome1File = ref<number>(2);    // ホーム
+    const playerHome1Rank = ref<number>(2);
+    const playerHome1Left = computed(()=>{
+        return playerHome1File.value * board1SquareWidth;
     });
-    const player1HomeTop = computed(()=>{
-        return player1HomeRank.value * board1SquareHeight;
+    const playerHome1Top = computed(()=>{
+        return playerHome1Rank.value * board1SquareHeight;
     });
 
     // ++++++++++++++++++++++++++++
@@ -420,8 +420,8 @@
 
     const player1Width = board1SquareWidth;
     const player1Height = board1SquareHeight;
-    const player1Left = ref<number>(player1HomeLeft.value); // スプライトの位置
-    const player1Top = ref<number>(player1HomeTop.value);
+    const player1Left = ref<number>(playerHome1Left.value); // スプライトの位置
+    const player1Top = ref<number>(playerHome1Top.value);
     const player1Input = <Record<string, boolean>>{ // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
@@ -533,8 +533,8 @@
                 if (player1Input[" "]) {
                     printing1File.value = 0;    // 印字
                     printing1Rank.value = 0;
-                    player1Left.value = player1HomeLeft.value;  // 自機
-                    player1Top.value = player1HomeTop.value;
+                    player1Left.value = playerHome1Left.value;  // 自機
+                    player1Top.value = playerHome1Top.value;
                 }
 
                 // 移動
