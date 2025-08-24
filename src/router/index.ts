@@ -4,7 +4,18 @@ const routes = [
     {
         name: 'Blog',
         path: '/blog',     // URL
-        component: () => import('@/pages/blog/index.vue'),  // importした Vue ファイル
+        component: () => import('../pages/blog/index.vue'),  // importした Vue ファイル
+    },
+
+    {
+        name: 'CodingStyles',
+        path: '/coding-styles',
+        component: () => import('../pages/coding-styles/index.vue'),
+    },
+    {
+        name: 'CodingStylesStyle',
+        path: '/coding-styles/style',
+        component: () => import('../pages/coding-styles/style.vue'),
     },
 
     {
