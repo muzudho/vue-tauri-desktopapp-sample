@@ -30,7 +30,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyle(i - 1)"
-            >{{ i - 1 }}
+            >{{ getPrintingNumber(i - 1) }}
             </div>
 
             <!-- 自機１ -->
@@ -349,6 +349,14 @@
         wrapAroundRight: 0,   // 負なら左、正なら右
         wrapAroundBottom: 0,   // 負なら上、正なら下
     });
+
+
+    const getPrintingNumber = computed(() => {
+        // 引数に渡されるのは、［盤のタイル番号］
+        return (tileIndex: number)=>{
+            return tileIndex;
+        };
+    });    
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
