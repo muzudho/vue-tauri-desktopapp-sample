@@ -1,7 +1,7 @@
 <template>
     <the-parent-header/>
 
-    <h2>Welcome to Tauri + Vue の章だぜ！</h2>
+    <h2>Welcome to Tauri + Vue の部だぜ！</h2>
 
     <v-container class="row">
         <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->

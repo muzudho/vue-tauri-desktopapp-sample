@@ -1,7 +1,7 @@
 <template>
     <the-grand-parent-header/>
 
-    <h2>メイキングの章だぜ！</h2>
+    <h2>メイキングの部だぜ！</h2>
     <section class="sec-2">
         <v-btn @click="goToMaking" v-tooltip="'下の節を閉じる'">❌</v-btn>
     </section>
