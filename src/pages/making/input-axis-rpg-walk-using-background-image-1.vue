@@ -249,7 +249,13 @@
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
 
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
 
+    import { euclideanMod } from '../../composables/board-operation';
+
+    
     // ##########
     // # コモン #
     // ##########
@@ -535,17 +541,6 @@
     // ################
     // # サブルーチン #
     // ################
-
-    /**
-     * ユークリッド剰余
-     * 
-     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
-     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
-     */
-    function euclideanMod(a: number, b: number): number {
-        return ((a % b) + b) % b;
-    }
-
 
     /**
      * ゲームのメインループ開始

@@ -35,8 +35,8 @@
                     i - 1,
                     board1FileNum,
                     board1RankNum,
-                    printing1Left / board1SquareWidth,
-                    printing1Top / board1SquareHeight
+                    -printing1Left / board1SquareWidth,
+                    -printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="square-printing-number">{{ getPrintingNumber(i - 1) }}</span>
             </div>
@@ -68,7 +68,10 @@
             つまり、端のタイルが、反対側にワープして出てきているぜ（＾▽＾）<br/>
             端はちらつくから、ゲームで使うときは、半透明の黒いマスクが掛かっているところは画面に映らないようにしてくれだぜ（＾～＾）！<br/>
             <br/>
-            数字はタイルに付いている番号だぜ（＾▽＾）！<br/>
+            マスの中の１段目の数字は、タイルに付いている番号だぜ（＾▽＾）！<br/>
+            ２段目の数字は、スタビライザーだぜ、つまり、見た目上、左上から 0, 1, 2 ... となるように画面に固定（Fix）した番号だぜ（＾▽＾）！<br/>
+            ３段目の大きな数字は、印字だぜ（＾▽＾）！<br/>
+            <br/>
             タイルはスワップ（塗り替え）ではなく、スクロールしているぜ。スクロールってのは、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
         </p>
         <br/>
@@ -264,7 +267,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixIndexByTileIndex } from '../../composables/board-operation';
+    import { euclideanMod, getFixIndexByTileIndex } from '../../composables/board-operation';
 
 
     // ##########
@@ -619,17 +622,6 @@
     // ################
     // # サブルーチン #
     // ################
-
-    /**
-     * ユークリッド剰余
-     * 
-     * NOTE: 負の剰余は数学の定義では［ユークリッド剰余］と、［トランケート剰余］の２種類あって、プログラム言語ごとにどっちを使ってるか違うから注意。
-     * TypeScript では［トランケート剰余］なので、［ユークリッド剰余］を使いたいときはこれを使う。
-     */
-    function euclideanMod(a: number, b: number): number {
-        return ((a % b) + b) % b;
-    }
-
 
     /**
      * ゲームのメインループ開始
