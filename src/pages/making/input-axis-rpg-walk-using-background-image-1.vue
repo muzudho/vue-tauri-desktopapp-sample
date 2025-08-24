@@ -424,10 +424,11 @@
     });
 
     // ++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　自機１のホーム +
+    // + オブジェクト　＞　自機のホーム１ +
     // ++++++++++++++++++++++++++++++++++++
     //
     // このサンプルでは、ピンク色に着色しているマスです。
+    // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
     const playerHome1File = ref<number>(2);    // ホーム
@@ -730,7 +731,7 @@
     div.board { /* 盤１ */
         position: relative;
     }
-    div.playerHome {    /* 自機１のホーム */
+    div.playerHome {    /* 自機のホーム１ */
         position: absolute;
         border: dashed 4px lightpink;
         z-index: 10;

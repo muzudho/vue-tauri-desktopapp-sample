@@ -373,7 +373,7 @@
     div.board { /* 盤１ */
         position: relative;
     }
-    div.playerHome {    /* 自機１のホーム */
+    div.playerHome {    /* 自機のホーム１ */
         position: absolute;
         background-color: lightpink;
     }

@@ -21,7 +21,7 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="playerHomeStyle"
+                :style="playerHome1Style"
             ></div>
 
             <!-- スクウェアのグリッド -->
@@ -42,10 +42,10 @@
                 class="player"
                 :style="player1Style" />
             
-            <!-- 視界の外 -->
+            <!-- 視界の外１ -->
             <div
                 class="out-of-sight"
-                :style="outOfSightStyle">
+                :style="outOfSight1Style">
             </div>
         </div>
 
@@ -501,7 +501,7 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
-    const playerHomeStyle = computed<CompatibleStyleValue>(()=>{
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
         return {
             left: `${playerHome1Left}px`,
             top: `${playerHome1Top}px`,
@@ -568,7 +568,7 @@
     // + オブジェクト　＞　視界の外１ +
     // ++++++++++++++++++++++++++++++++
 
-    const outOfSightStyle = computed<CompatibleStyleValue>(()=>{
+    const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
         return {
             width: `${board1WithMaskFileNum * board1SquareWidth}px`,
             height: `${board1WithMaskRankNum * board1SquareHeight}px`,
@@ -805,7 +805,7 @@
         position: absolute;
         text-align: center;
     }
-    div.playerHome {    /* 自機１のホーム */
+    div.playerHome {    /* 自機のホーム１ */
         position: absolute;
         background-color: lightpink;
     }
