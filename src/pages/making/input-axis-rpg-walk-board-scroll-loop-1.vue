@@ -24,7 +24,7 @@
                 :style="playerHome1Style">
             </div>
 
-            <!-- タイルのグリッド -->
+            <!-- スクウェアのグリッド -->
             <div
                 v-for="i in board1Area"
                 :key="i"
