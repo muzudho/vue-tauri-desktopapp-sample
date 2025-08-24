@@ -46,7 +46,7 @@
         <br/>
 
         📄 example.vue ：<br/>
-        <pre class="coding-example">
+        <pre class="coding-example-good">
 &lt;template&gt;
     &lt;div <span class="em">class="blue-rectangle-1"</span>&gt;
     &lt;/div&gt;
@@ -73,7 +73,7 @@
         <br/>
 
         📄 example.vue ：<br/>
-        <pre class="coding-example">
+        <pre class="coding-example-bad">
 &lt;template&gt;
     &lt;div <span class="em">class="blue-rectangle-2"</span>&gt;
     &lt;/div&gt;
@@ -125,6 +125,40 @@
         </p>
         <br/>
 
+        <p>
+                しかし、HTMLを書くところにコードが増えていくと読みづらくなる。<br/>
+                以下のようにも書ける：<br/>
+        </p>
+        <br/>
+
+        <div
+            :style="getRectangle4()">
+        </div>
+        <br/>
+
+        📄 example.vue ：<br/>
+        <pre class="coding-example">
+&lt;template&gt;
+    &lt;div
+        <span class="em">:style="getRectangle4()"</span>&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+    <span class="em">function getRectangle4() : any {
+        return {
+            width: `${apple}px`,
+            height: "100px",
+            backgroundColor: "blue",
+        }
+    }</span>
+&lt;/script&gt;
+        </pre>
+        <p>
+            👆　インラインに関数を書くことができる。<br/>
+            欠点としては、あとで apple の値を変更してもスタイルに反映してくれないことだ。<br/>
+        </p>
+        <br/>
 
     </section>
 
@@ -155,11 +189,19 @@
     import TheHeader from './the-header.vue';
 
 
-    // ########
-    // # 変数 #
-    // ########
+    // ##########
+    // # その他 #
+    // ##########
 
     const apple: number = 250;
+
+    function getRectangle4() : any {
+        return {
+            width: `${apple}px`,
+            height: "100px",
+            backgroundColor: "blue",
+        }
+    }
 
 </script>
 
@@ -168,6 +210,24 @@
         display: inline-block;
         border: dashed 4px gray;
         background-color: #f0f0f0;
+        padding-left: 24px;
+        padding-top: 16px;
+        padding-right: 24px;
+    }
+
+    pre.coding-example-bad {    /* ソースコード例 */
+        display: inline-block;
+        border: dashed 4px gray;
+        background-color: #f8e8e8;
+        padding-left: 24px;
+        padding-top: 16px;
+        padding-right: 24px;
+    }
+
+    pre.coding-example-good {    /* ソースコード例 */
+        display: inline-block;
+        border: dashed 4px gray;
+        background-color: #e8f8e8;
         padding-left: 24px;
         padding-top: 16px;
         padding-right: 24px;
