@@ -28,6 +28,7 @@
             <div
                 v-for="i in board1Area"
                 :key="i"
+                class="square"
                 :style="getSquareStyle(i - 1)"
             >{{ i - 1 }}
             </div>
@@ -40,10 +41,10 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style"/>
-            <br/>
             
-            <!-- 半透明のマスク -->
+            <!-- 視界の外 -->
             <div
+                class="out-of-sight"
                 :style="`
                     width:${board1WithMaskFileNum * board1SquareWidth}px;
                     height:${board1WithMaskRankNum * board1SquareHeight}px;
@@ -51,9 +52,7 @@
                     border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
                     border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
                     border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                `"
-                style="position:absolute; left:0; top:0; image-rendering: pixelated;">
-                <!-- zoom:${appZoom}; -->
+                `">
             </div>
         </div>
 
@@ -333,13 +332,11 @@
             const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
 
             return {
-                position: 'absolute',
                 left: `${homeLeft + offsetLeftLoop}px`,
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
-                textAlign: "center",
             };
         };
     });
@@ -663,12 +660,20 @@
     div.board { /* 盤１ */
         position: relative;
     }
+    div.square {    /* マス */
+        position: absolute;
+        text-align: center;
+    }
     div.playerHome {    /* 自機１のホーム */
         position: absolute;
         background-color: lightpink;
     }
     div.player {    /* 自機１ */
-        position: relative;
+        position: absolute;
+        image-rendering: pixelated;
+    }
+    div.out-of-sight {  /* 視界の外 */
+        position: absolute;
         image-rendering: pixelated;
     }
 </style>
