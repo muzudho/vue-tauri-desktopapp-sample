@@ -305,6 +305,7 @@
     pre.coding-example {    /* ソースコード例 */
         display: inline-block;
         border: dashed 4px gray;
+        color: #303030;
         background-color: #f0f0f0;
         padding-left: 24px;
         padding-top: 16px;
@@ -314,7 +315,8 @@
     pre.coding-example-bad {    /* 悪いソースコード例 */
         display: inline-block;
         border: dashed 4px gray;
-        background-color: #f8e8e8;
+        color: #303030;
+        background-color: #f8c0c0;
         padding-left: 24px;
         padding-top: 16px;
         padding-right: 24px;
@@ -323,7 +325,8 @@
     pre.coding-example-good {    /* 良いソースコード例 */
         display: inline-block;
         border: dashed 4px gray;
-        background-color: #e8f8e8;
+        color: #303030;
+        background-color: #c0f8c0;
         padding-left: 24px;
         padding-top: 16px;
         padding-right: 24px;
@@ -335,12 +338,14 @@
     }
 
     span.good {   /* 良い強調 */
-        background-color: #e8f8e8;
+        color: #303030;
+        background-color: #c0f8c0;
         font-weight: bolder;
     }
 
     span.bad {   /* 悪い強調 */
-        background-color: #f8e8e8;
+        color: #303030;
+        background-color: #f8c0c0;
         font-weight: bolder;
     }
 
