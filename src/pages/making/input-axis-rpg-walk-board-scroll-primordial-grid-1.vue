@@ -46,7 +46,10 @@
             </div>
 
             <!-- スクウェアのグリッド -->
-            <div v-for="i in board1Area" :key="i"
+            <div
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
                 :style="getSquareStyle(i - 1)">
             </div>
 
@@ -324,7 +327,6 @@
             const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;
 
             return {
-                position: 'absolute',
                 top: `${homeTop + board1Top.value}px`,
                 left: `${homeLeft + board1Left.value}px`,
                 width: `${board1SquareWidth}px`,
@@ -597,6 +599,9 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.square {    /* マス */
+        position: absolute;
     }
     div.playerHome {    /* 自機１のホーム */
         position: absolute;

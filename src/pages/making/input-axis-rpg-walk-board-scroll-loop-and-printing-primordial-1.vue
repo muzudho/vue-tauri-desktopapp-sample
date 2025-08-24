@@ -21,18 +21,14 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `">
-            </div>
+                :style="playerHomeStyle"
+            ></div>
 
             <!-- スクウェアのグリッド -->
             <div
                 v-for="i in board1Area"
                 :key="i"
+                class="square"
                 :style="getSquareStyle(i - 1)"
             >{{ getPrintingNumber(i - 1) }}
             </div>
@@ -49,14 +45,7 @@
             <!-- 視界の外 -->
             <div
                 class="out-of-sight"
-                :style="`
-                    width:${board1WithMaskFileNum * board1SquareWidth}px;
-                    height:${board1WithMaskRankNum * board1SquareHeight}px;
-                    border-top: solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
-                    border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                `">
+                :style="outOfSightStyle">
             </div>
         </div>
 
@@ -333,13 +322,11 @@
             const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
 
             return {
-                position: 'absolute',
                 left: `${homeLeft + offsetLeftLoop}px`,
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
-                textAlign: "center",
             };
         };
     });
@@ -514,6 +501,14 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
+    const playerHomeStyle = computed<CompatibleStyleValue>(()=>{
+        return {
+            left: `${playerHome1Left}px`,
+            top: `${playerHome1Top}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px;`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -567,6 +562,21 @@
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
         lookRight: 0,     // 向きを変える
         lookBottom: 0,
+    });
+
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　視界の外１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const outOfSightStyle = computed<CompatibleStyleValue>(()=>{
+        return {
+            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            borderTop: `solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderRight: `solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderBottom: `solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderLeft: `solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5)`,
+        };
     });
 
 
@@ -791,12 +801,16 @@
     div.board { /* 盤１ */
         position: relative;
     }
+    div.square {    /* マス */
+        position: absolute;
+        text-align: center;
+    }
     div.playerHome {    /* 自機１のホーム */
         position: absolute;
         background-color: lightpink;
     }
     div.player {    /* 自機１ */
-        position: relative;
+        position: absolute;
         image-rendering: pixelated;
     }
     div.out-of-sight {  /* 視界の外 */

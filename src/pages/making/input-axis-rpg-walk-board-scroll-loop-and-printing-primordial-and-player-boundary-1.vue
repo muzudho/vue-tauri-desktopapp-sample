@@ -33,6 +33,7 @@
             <div
                 v-for="i in board1Area"
                 :key="i"
+                class="square"
                 :style="getSquareStyle(i - 1)"
             >{{ getPrintingNumber(i - 1) }}
             </div>
@@ -408,14 +409,11 @@
             const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
 
             return {
-                position: 'absolute',
                 left: `${homeLeft + offsetLeftLoop}px`,
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                //zoom: 4,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
-                textAlign: "center",
             };
         };
     });
@@ -1113,12 +1111,16 @@
     div.board { /* 盤１ */
         position: relative;
     }
+    div.square {    /* マス */
+        position: absolute;
+        text-align: center;
+    }
     div.playerHome {    /* 自機１のホーム */
         position: absolute;
         background-color: lightpink;
     }
     div.player {    /* 自機１ */
-        position: relative;
+        position: absolute;
         image-rendering: pixelated;
     }
     div.out-of-sight {  /* 視界の外 */

@@ -35,16 +35,8 @@
             <div
                 v-for="i in board1Area"
                 :key="i"
-                :style="`
-                    top: ${Math.floor((i - 1) / board1FileNum) * board1SquareHeight}px;
-                    left: ${((i - 1) % board1FileNum) * board1SquareWidth}px;
-                    width:${board1SquareWidth}px;
-                    height:${board1SquareHeight}px;
-                    border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};
-                `"
-                style="
-                    position:absolute;
-                ">
+                class="square"
+                :style="getSquareStyle(i - 1)">
             </div>
 
             <!-- 自機１ -->
@@ -293,7 +285,20 @@
             zoom: appZoom.value,
         };
     });
-    
+    const getSquareStyle = computed<
+        (i:number)=>CompatibleStyleValue
+    >(() => {
+        return (i:number)=>{
+            return {
+                top: `${Math.floor(i / board1FileNum.value) * board1SquareHeight}px`,
+                left: `${(i % board1FileNum.value) * board1SquareWidth}px`,
+                width: `${board1SquareWidth}px`,
+                height: `${board1SquareHeight}px`,
+                border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
+            };
+        };
+    });
+
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１のホーム +
     // ++++++++++++++++++++++++++++++++++++
@@ -565,6 +570,9 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.square {    /* マス */
+        position: absolute;
     }
     div.playerHome {    /* 自機１のホーム */
         position: absolute;
