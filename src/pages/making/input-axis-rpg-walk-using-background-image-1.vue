@@ -48,7 +48,6 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style" />
-            <br/>
             
             <!-- 半透明のマスク
                 親要素で zoom を設定しているので、ここで zoom は不要です。

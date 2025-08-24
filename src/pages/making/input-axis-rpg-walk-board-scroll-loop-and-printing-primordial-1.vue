@@ -45,7 +45,6 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style" />
-            <br/>
             
             <!-- 半透明のマスク -->
             <div

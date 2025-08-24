@@ -43,7 +43,6 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style" />
-            <br/>
         </div>
         <br/>
 
