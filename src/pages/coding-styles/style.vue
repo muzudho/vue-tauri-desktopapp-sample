@@ -156,9 +156,43 @@
         </pre>
         <p>
             👆　インラインに関数を書くことができる。<br/>
-            欠点としては、あとで apple の値を変更してもスタイルに反映してくれないことだ。<br/>
+            欠点としては、あとで apple の値を変更してもスタイルに反映（リアクティブ）してくれないことだ。<br/>
+            <br/>
+            リアクティブさせるには、以下のようにも書ける：<br/>
         </p>
         <br/>
+
+        <div
+            :style="getRectangle5">
+        </div>
+        <br/>
+
+        📄 example.vue ：<br/>
+        <pre class="coding-example">
+&lt;template&gt;
+    &lt;div
+        <span class="em">:style="getRectangle5"</span>&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+    <span class="em">import { computed } from "vue";
+
+    const getRectangle5 = computed<
+        any
+    >(() => {
+        return {
+            width: `${apple}px`,
+            height: "100px",
+            backgroundColor: "blue",
+        };
+    });</span>
+&lt;/script&gt;
+        </pre>
+        <p>
+            👆　この書き方でリアクティブが利く。<br/>
+            ジェネリクスと、（関数ではなく）ラムダ式を使っているので、いきなり複雑に見えるが、この形をそっくり真似するだけでもいける。<br/>
+        </p>
 
     </section>
 
@@ -176,6 +210,8 @@
     // ##############
     // # インポート #
     // ##############
+
+    import { computed } from "vue";
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -195,6 +231,7 @@
 
     const apple: number = 250;
 
+
     function getRectangle4() : any {
         return {
             width: `${apple}px`,
@@ -202,6 +239,17 @@
             backgroundColor: "blue",
         }
     }
+
+
+    const getRectangle5 = computed<
+        any
+    >(() => {
+        return {
+            width: `${apple}px`,
+            height: "100px",
+            backgroundColor: "blue",
+        };
+    });
 
 </script>
 
