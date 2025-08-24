@@ -61,11 +61,11 @@
 &lt;/style&gt;
         </pre>
         <p>
-            👆　これはスタイルシートを使った書き方。<br/>
+            👆　グッド。これはスタイルシートを使った書き方。<br/>
         </p>
         <br/>
 
-        <p>スタイルシートの中では、TypeScript の変数を使うこともできるとされている：</p>
+        <p>スタイルシートの中では、TypeScript の変数を使うこともできるとされている。しかし：</p>
         <br/>
 
         <div class="blue-rectangle-2">
@@ -92,7 +92,7 @@
 &lt;/style&gt;
         </pre>
         <p>
-            👆　しかし、その設定が無視されることがある。手元の環境で動作が確実になるまで、使わない方針。<br/>
+            👆　今はバッド。その設定が無視されることがある。手元の環境で動作が確実になるまで、使わない方針。<br/>
         </p>
         <br/>
 
@@ -168,7 +168,7 @@
         <br/>
 
         📄 example.vue ：<br/>
-        <pre class="coding-example">
+        <pre class="coding-example-good">
 &lt;template&gt;
     &lt;div
         <span class="em">:style="getRectangle5"</span>&gt;
@@ -190,8 +190,43 @@
 &lt;/script&gt;
         </pre>
         <p>
-            👆　この書き方でリアクティブが利く。<br/>
+            👆　グッド。この書き方でリアクティブが利く。<br/>
             ジェネリクスと、（関数ではなく）ラムダ式を使っているので、いきなり複雑に見えるが、この形をそっくり真似するだけでもいける。<br/>
+            <br/>
+            リアクティブを利かせながら、引数を渡すこともできる：
+        </p>
+
+        <div
+            :style="getRectangle6(100)">
+        </div>
+        <br/>
+
+        📄 example.vue ：<br/>
+        <pre class="coding-example-good">
+&lt;template&gt;
+    &lt;div
+        <span class="em">:style="getRectangle6(100)"</span>&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+    <span class="em">import { computed } from "vue";
+
+    const getRectangle6 = computed<
+        (banana: number) => any
+    >(<span class="em" style="color: blue;">() => {
+        return <span style="color: green;">(banana: number)=>{
+            return <span style="color: red;">{
+                width: `${apple}px`,
+                height: `${banana}px`,
+                backgroundColor: "blue",
+            }</span>
+        }</span>;
+    }</span>);</span>
+&lt;/script&gt;
+        </pre>
+        <p>
+            👆　グッド。<span class="em" style="color: blue;">［<span style="color: green">［<span style="color: red">［スタイル］</span>を返すラムダ式］</span>を返すラムダ式］</span>を書いているので、複雑だが、この形をそっくり真似するだけでもいける。<br/>
         </p>
 
     </section>
@@ -248,6 +283,19 @@
             width: `${apple}px`,
             height: "100px",
             backgroundColor: "blue",
+        };
+    });
+
+
+    const getRectangle6 = computed<
+        (banana: number) => any
+    >(() => {
+        return (banana: number)=>{
+            return {
+                width: `${apple}px`,
+                height: `${banana}px`,
+                backgroundColor: "blue",
+            }
         };
     });
 
