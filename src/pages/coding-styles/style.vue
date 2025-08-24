@@ -61,7 +61,7 @@
 &lt;/style&gt;
         </pre>
         <p>
-            👆　グッド。これはスタイルシートを使った書き方。<br/>
+            👆　<span class="good">グッド</span>。これはスタイルシートを使った書き方。<br/>
         </p>
         <br/>
 
@@ -92,7 +92,7 @@
 &lt;/style&gt;
         </pre>
         <p>
-            👆　今はバッド。その設定が無視されることがある。手元の環境で動作が確実になるまで、使わない方針。<br/>
+            👆　今は<span class="bad">バッド</span>。その設定が無視されることがある。手元の環境で動作が確実になるまで、使わない方針。<br/>
         </p>
         <br/>
 
@@ -178,20 +178,20 @@
 &lt;script setup lang="ts"&gt;
     <span class="em">import { computed } from "vue";
 
-    const getRectangle5 = computed<
+    const getRectangle5 = computed<span style="color: red;">&lt;
         any
-    >(() => {
+    &gt;</span>(<span style="color: green;">() => {
         return {
             width: `${apple}px`,
             height: "100px",
             backgroundColor: "blue",
         };
-    });</span>
+    }</span>);</span>
 &lt;/script&gt;
         </pre>
         <p>
-            👆　グッド。この書き方でリアクティブが利く。<br/>
-            ジェネリクスと、（関数ではなく）ラムダ式を使っているので、いきなり複雑に見えるが、この形をそっくり真似するだけでもいける。<br/>
+            👆　<span class="good">グッド</span>。この書き方でリアクティブが利く。<br/>
+            <span class="em" style="color: red;">戻り値の型</span>と、（関数ではなく）<span class="em" style="color: green;">ラムダ式</span>を使っているので、いきなり複雑に見えるが、この形をそっくり真似するだけでもいける。<br/>
             <br/>
             リアクティブを利かせながら、引数を渡すこともできる：
         </p>
@@ -212,9 +212,9 @@
 &lt;script setup lang="ts"&gt;
     <span class="em">import { computed } from "vue";
 
-    const getRectangle6 = computed<
+    const getRectangle6 = computed&lt;
         (banana: number) => any
-    >(<span class="em" style="color: blue;">() => {
+    &gt;(<span class="em" style="color: blue;">() => {
         return <span style="color: green;">(banana: number)=>{
             return <span style="color: red;">{
                 width: `${apple}px`,
@@ -226,7 +226,7 @@
 &lt;/script&gt;
         </pre>
         <p>
-            👆　グッド。<span class="em" style="color: blue;">［<span style="color: green">［<span style="color: red">［スタイル］</span>を返すラムダ式］</span>を返すラムダ式］</span>を書いているので、複雑だが、この形をそっくり真似するだけでもいける。<br/>
+            👆　<span class="good">グッド</span>。<span class="em" style="color: blue;">［<span style="color: green">［<span style="color: red">［スタイル］</span>を返すラムダ式］</span>を返すラムダ式］</span>を書いているので、複雑だが、この形をそっくり真似するだけでもいける。<br/>
         </p>
 
     </section>
@@ -311,7 +311,7 @@
         padding-right: 24px;
     }
 
-    pre.coding-example-bad {    /* ソースコード例 */
+    pre.coding-example-bad {    /* 悪いソースコード例 */
         display: inline-block;
         border: dashed 4px gray;
         background-color: #f8e8e8;
@@ -320,7 +320,7 @@
         padding-right: 24px;
     }
 
-    pre.coding-example-good {    /* ソースコード例 */
+    pre.coding-example-good {    /* 良いソースコード例 */
         display: inline-block;
         border: dashed 4px gray;
         background-color: #e8f8e8;
@@ -331,6 +331,16 @@
 
     span.em {   /* 強調 */
         color: brown;
+        font-weight: bolder;
+    }
+
+    span.good {   /* 良い強調 */
+        background-color: #e8f8e8;
+        font-weight: bolder;
+    }
+
+    span.bad {   /* 悪い強調 */
+        background-color: #f8e8e8;
         font-weight: bolder;
     }
 
