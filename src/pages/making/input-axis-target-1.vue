@@ -17,13 +17,7 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: 0px;
-                    top: 0px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                    zoom: ${appZoom};
-                `">
+                :style="playerHome1Style">
             </div>
 
             <!-- 自機１（点線の枠） -->
@@ -212,6 +206,21 @@
             width: `${board1SquareWidth}px`,
             height: `${board1SquareHeight}px`,
             zoom: appZoom.value,
+        };
+    });
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機のホーム１ +
+    // ++++++++++++++++++++++++++++++++++++
+    //
+    // このサンプルでは、ピンク色に着色しているマスです。
+    // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
+    //
+
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
         };
     });
 
