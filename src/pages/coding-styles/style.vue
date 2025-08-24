@@ -41,19 +41,19 @@
         <p>以下のようにも書ける：</p>
         <br/>
 
-        <div class="blue-rectangle">
+        <div class="blue-rectangle-1">
         </div>
         <br/>
 
         📄 example.vue ：<br/>
         <pre class="coding-example">
 &lt;template&gt;
-    &lt;div <span class="em">class="blue-rectangle"</span>&gt;
+    &lt;div <span class="em">class="blue-rectangle-1"</span>&gt;
     &lt;/div&gt;
 &lt;/template&gt;
 
 &lt;style scoped&gt;
-    <span class="em">div.blue-rectangle {    /* 青い長方形 */
+    <span class="em">div.blue-rectangle-1 {    /* 青い長方形１ */
         width: 200px;
         height: 100px;
         background-color: blue;
@@ -64,6 +64,37 @@
             👆　これはスタイルシートを使った書き方。<br/>
         </p>
         <br/>
+
+        <p>スタイルシートの中では、TypeScript の変数を使うこともできるとされている：</p>
+        <br/>
+
+        <div class="blue-rectangle-2">
+        </div>
+        <br/>
+
+        <pre class="coding-example">
+&lt;template&gt;
+    &lt;div <span class="em">class="blue-rectangle-2"</span>&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+    <span class="em">const apple: number = 10;</span>
+&lt;/script&gt;
+
+&lt;style scoped&gt;
+    div.blue-rectangle-2 {    /* 青い長方形２ */
+        width: <span class="em">v-bind(apple)</span> px;
+        height: 100px;
+        background-color: blue;
+    }
+&lt;/style&gt;
+        </pre>
+        <p>
+            👆　しかし、その設定が無視されることがある。手元の環境で動作が確実になるまで、使わない方針。<br/>
+        </p>
+        <br/>
+
 
     </section>
 
@@ -93,6 +124,13 @@
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
+
+    // ########
+    // # 変数 #
+    // ########
+
+    const apple: number = 10;
+
 </script>
 
 <style scoped>
@@ -110,8 +148,14 @@
         font-weight: bolder;
     }
 
-    div.blue-rectangle {    /* 青い長方形 */
+    div.blue-rectangle-1 {    /* 青い長方形１ */
         width: 200px;
+        height: 100px;
+        background-color: blue;
+    }
+
+    div.blue-rectangle-2 {    /* 青い長方形２ */
+        width: v-bind(apple) px;
         height: 100px;
         background-color: blue;
     }
