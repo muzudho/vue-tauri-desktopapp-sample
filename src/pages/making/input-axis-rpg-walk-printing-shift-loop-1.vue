@@ -21,12 +21,7 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `">
+                :style="playerHome1Style">
             </div>
 
             <!-- スクウェアのグリッド -->
@@ -364,6 +359,14 @@
     });
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
+    });
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
     });
 
     // ++++++++++++++++++++++++++++

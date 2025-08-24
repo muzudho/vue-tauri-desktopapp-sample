@@ -21,16 +21,11 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `">
+                :style="playerHome1Style">
             </div>
 
             <!-- スクウェアのグリッド -->
-            <Tile
+            <tile
                 v-for="i in board1Area"
                 :key="i"
                 :style="getSquareStyle(i - 1)"
@@ -49,19 +44,10 @@
                 class="player"
                 :style="player1Style" />
             
-            <!-- 視界の外
-                親要素で zoom を設定しているので、ここで zoom は不要です。
-            -->
+            <!-- 視界の外１ -->
             <div
-                :style="`
-                    width:${board1WithMaskFileNum * board1SquareWidth}px;
-                    height:${board1WithMaskRankNum * board1SquareHeight}px;
-                    border-top: solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
-                    border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                `"
-                style="position:absolute; left:0; top:0; image-rendering: pixelated;">
+                class="out-of-sight"
+                :style="outOfSight1Style">
             </div>
         </div>
 
@@ -439,6 +425,14 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -495,6 +489,20 @@
         lookBottom: 0,
     });
 
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　視界の外１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            borderTop: `solid ${board1WithMaskSizeSquare.value * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderRight: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderBottom: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderLeft: `solid ${board1WithMaskSizeSquare.value * board1SquareWidth}px rgba(0,0,0,0.5)`,
+        };
+    });
 
     // ##########
     // # 開始時 #
@@ -737,7 +745,12 @@
         z-index: 10;
     }
     div.player {    /* 自機１ */
-        position: relative;
+        position: absolute;
         image-rendering: pixelated;
     }
+    div.out-of-sight {  /* 視界の外１ */
+        position: absolute;
+        image-rendering: pixelated;
+    }
+
 </style>
