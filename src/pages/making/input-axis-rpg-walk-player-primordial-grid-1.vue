@@ -23,26 +23,16 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `">
+                :style="playerHome1Style">
             </div>
 
-            <!--
-                グリッド
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div v-for="i in board1Area" :key="i"
-                :style="`
-                    position:absolute;
-                    top: ${Math.floor((i - 1) / board1FileNum) * board1SquareHeight}px;
-                    left: ${((i - 1) % board1FileNum) * board1SquareWidth}px;
-                    width:${board1SquareWidth}px;
-                    height:${board1SquareHeight}px;
-                    border: solid 1px ${(i - 1) % 2 == 0 ? 'darkgray' : 'lightgray'};`"></div>
+            <!-- スクウェアのグリッド -->
+            <div
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
+                :style="getSquareStyle(i - 1)">
+            </div>
 
             <!-- 自機１ -->
             <tile-animation
@@ -290,6 +280,19 @@
             zoom: appZoom.value,
         };
     });
+    const getSquareStyle = computed<
+        (i:number)=>CompatibleStyleValue
+    >(() => {
+        return (i:number)=>{
+            return {
+                left: `${(i % board1FileNum.value) * board1SquareWidth}px`,
+                top: `${Math.floor(i / board1FileNum.value) * board1SquareHeight}px`,
+                width: `${board1SquareWidth}px`,
+                height: `${board1SquareHeight}px`,
+                border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
+            };
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
@@ -305,6 +308,14 @@
     });
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
+    });
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
     });
 
     // ++++++++++++++++++++++++++++
@@ -545,6 +556,9 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.square {    /* スクウェア */
+        position: absolute;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
