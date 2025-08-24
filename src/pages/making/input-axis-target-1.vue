@@ -12,10 +12,7 @@
         -->
         <div
             class="board"
-            :style="`
-                width: ${appZoom * board1SquareWidth}px;
-                height: ${appZoom * board1SquareHeight}px;
-            `">
+            :style="board1Style">
 
             <!-- 自機のホーム１ -->
             <div
@@ -161,6 +158,11 @@
 
     import { VBtn } from 'vuetify/components';
 
+    // ++++++++++++++
+    // + 互換性対応 +
+    // ++++++++++++++
+
+    import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -208,6 +210,13 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
+    const board1Style = computed<CompatibleStyleValue>(()=>{  // ボードとマスクを含んでいる領域のスタイル
+        return {
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+            zoom: appZoom.value,
+        };
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -351,10 +360,6 @@
     function onSpaceButtonPressed() : void {
         player1Top.value = 0;
         player1Left.value = 0;
-    }
-
-
-    function onSpaceButtonReleased() : void {
     }
 
 
