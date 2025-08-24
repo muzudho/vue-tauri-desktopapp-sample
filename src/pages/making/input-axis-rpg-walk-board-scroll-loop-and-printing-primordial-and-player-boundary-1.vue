@@ -21,12 +21,7 @@
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `">
+                :style="playerHome1Style">
             </div>
 
             <!-- スクウェアのグリッド -->
@@ -47,17 +42,10 @@
                 class="player"
                 :style="player1Style" />
             
-            <!-- 視界の外 -->
+            <!-- 視界の外１ -->
             <div
                 class="out-of-sight"
-                :style="`
-                    width:${board1WithMaskFileNum * board1SquareWidth}px;
-                    height:${board1WithMaskRankNum * board1SquareHeight}px;
-                    border-top: solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-right: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5);
-                    border-bottom: solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5);
-                    border-left: solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5);
-                `">
+                :style="outOfSight1Style">
             </div>
         </div>
 
@@ -586,6 +574,14 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            left: `${playerHome1Left}px`,
+            top: `${playerHome1Top}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px;`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -648,6 +644,21 @@
         lookBottom: 0,
         goToRight: 0,     // 負なら左、正なら右へ移動する
         goToBottom: 0,    // 負なら上、正なら下へ移動する
+    });
+
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　視界の外１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
+            borderTop: `solid ${board1WithMaskSizeSquare.value * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderRight: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderBottom: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderLeft: `solid ${board1WithMaskSizeSquare.value * board1SquareWidth}px rgba(0,0,0,0.5)`,
+        };
     });
 
 

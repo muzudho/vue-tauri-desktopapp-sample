@@ -24,25 +24,14 @@
                 自機ではなく、盤のホームであることに注意してください。
             -->
             <div
-                :style="`
-                    width: ${board1FileNum * board1SquareWidth}px;
-                    height: ${board1RankNum * board1SquareHeight}px;
-                `"
-                style="
-                    position:absolute;
-                    background-color: lightgreen;
-                ">
+                class="boardHome1Style"
+                :style="boardHome1Stlye">
             </div>
 
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                `">
+                :style="playerHome1Style">
             </div>
 
             <!-- スクウェアのグリッド -->
@@ -342,6 +331,20 @@
         goToBottom: 0,   // 負なら上、正なら下
     });
 
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　盤のホーム１ +
+    // ++++++++++++++++++++++++++++++++++
+    //
+    // このサンプルでは、黄緑色に着色しているマスです。
+    // ［盤１］に紐づくホームというわけではなく、［盤のホーム］の１つです。
+    //
+
+    const boardHome1Stlye = computed<CompatibleStyleValue>(() => {
+        return {
+            width: `${board1FileNum.value * board1SquareWidth}px`,
+            height: `${board1RankNum.value * board1SquareHeight}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
@@ -359,6 +362,14 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
+    const playerHome1Style = computed<CompatibleStyleValue>(() => {
+        return {
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -373,12 +384,14 @@
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
-    const player1Style = computed<CompatibleStyleValue>(() => ({
-        top: `${player1Top.value}px`,
-        left: `${player1Left.value}px`,
-        width: `${player1Width}px`,
-        height: `${player1Height}px`,
-    }));
+    const player1Style = computed<CompatibleStyleValue>(() => {
+        return {
+            left: `${player1Left.value}px`,
+            top: `${player1Top.value}px`,
+            width: `${player1Width}px`,
+            height: `${player1Height}px`,
+        };
+    });
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
             {top:  3 * board1SquareHeight, left: 0 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
@@ -603,6 +616,10 @@
     }
     div.square {    /* マス */
         position: absolute;
+    }
+    div.boardHome1Style {   /* 盤のホーム１ */
+        position: absolute;
+        background-color: lightgreen;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
