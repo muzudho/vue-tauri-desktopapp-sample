@@ -430,7 +430,7 @@
      *  21→15  22→16  23→17  24→18  20→19
      *   1→20   2→21   3→22   4→23   0→24
      */
-    function getFixTileIndex(tileIndex: number) : number {
+    function getFixIndexByTileIndex(tileIndex: number) : number {
             //
             // 例えば、盤がヨコ、タテ 5×5 のとき、
             const bw = board1FileNum.value; // 幅 (例: 5)
@@ -470,7 +470,7 @@
      */
     const getPrintingNumber = computed(() => {
         return (tileIndex: number)=>{
-            const virtualTileIndex = getFixTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
+            const virtualTileIndex = getFixIndexByTileIndex(tileIndex);    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
             let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
             const printingFile = virtualTileFile + printing1FileDelta.value;

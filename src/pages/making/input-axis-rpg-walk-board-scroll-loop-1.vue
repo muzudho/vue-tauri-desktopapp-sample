@@ -31,6 +31,13 @@
                 class="square"
                 :style="getSquareStyle(i - 1)">
                 <span class="square-index">[{{ (i - 1) }}]</span>
+                <span class="square-fix-index">[{{ getFixIndexByTileIndex(
+                    i - 1,
+                    board1FileNum,
+                    board1RankNum,
+                    printing1Left / board1SquareWidth,
+                    printing1Top / board1SquareHeight
+                ) }}]</span>
                 <span class="square-printing-number">{{ getPrintingNumber(i - 1) }}</span>
             </div>
 
@@ -253,6 +260,12 @@
     import Stopwatch from '../../components/Stopwatch.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
 
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
+
+    import { getFixIndexByTileIndex } from '../../composables/board-operation';
+
 
     // ##########
     // # コモン #
@@ -403,7 +416,6 @@
         wrapAroundRight: 0,   // 負なら左、正なら右
         wrapAroundBottom: 0,   // 負なら上、正なら下
     });
-
 
     const getPrintingNumber = computed(() => {
         // 引数に渡されるのは、［盤のタイル番号］
@@ -807,14 +819,21 @@
     }
     span.square-index {
         position: absolute;
-        top: 2px;
+        top: 1px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.square-fix-index {
+        position: absolute;
+        top: 8px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
     span.square-printing-number {
         position: absolute;
-        top: 6px;
+        top: 12px;
         width: 100%;
         text-align: center;
         font-size: 12px;
