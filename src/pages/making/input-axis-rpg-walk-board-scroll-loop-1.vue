@@ -194,6 +194,22 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-slider
+                label="印字　＞　筋の数"
+                v-model="printing1FileNum"
+                :min="printing1FileMin"
+                :max="printing1FileMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="印字　＞　段の数"
+                v-model="printing1RankNum"
+                :min="printing1RankMin"
+                :max="printing1RankMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <br/>
         </section>
     </section>
@@ -341,9 +357,46 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1FileMin = 0;
+    const printing1RankMin = 0;
+    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
+    const printing1RankMax = 10;
+    const printing1FileNum = ref<number>(board1FileNum.value);  // 列数
+    const printing1RankNum = ref<number>(board1RankNum.value);  // 行数
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
+    const printing1File = computed<number>(()=>{    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
+        return Math.round(printing1Left.value / board1SquareWidth); // FIXME:
+    });
+    const printing1Rank = computed<number>(()=>{
+        return Math.round(printing1Top.value / board1SquareHeight); // FIXME:
+    });
+    const printing1Data = ref<string[]>([]);
+    for (let i=0; i<printing1FileMax * printing1RankMax; i++) { // 印字データは最初から最大サイズで用意しておく
+        printing1Data.value.push(i.toString().padStart(2, "0"));
+    }
+
+    
+    /**
+     * 変換
+     * @param index マス番号
+     * @returns [筋番号, 段番号]
+     */
+    function tileIndexToTileFileRank(index: number) : number[] {
+        // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
+        const file = index % board1FileNum.value;
+        const rank = Math.floor(index / board1FileNum.value);
+
+        return [file, rank];
+    }
+
+
+    function printingFileRankToPrintingIndex(file: number, rank: number) : number {
+        return rank * printing1FileNum.value + file;
+    }
+
+
     const printing1Speed = ref<number>(2);     // 移動速度（単位：ピクセル）
     const printing1Motion = ref<Record<string, number>>({  // 印字への入力
         wrapAroundRight: 0,   // 負なら左、正なら右
@@ -355,6 +408,28 @@
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
             return tileIndex;
+
+            /*
+            let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
+
+            // タイル上のインデックスを、印字上のインデックスへ変換：
+            let printingFile = tileFile - printing1File.value;
+            let printingRank = tileRank - printing1Rank.value;
+
+            // if (appIsLooping.value) {
+                printingFile = euclideanMod(printingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
+                printingRank = euclideanMod(printingRank, printing1RankNum.value); // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
+            // } else {
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            // if (printingFile < 0 || printing1FileNum.value <= printingFile || printingRank < 0 || printing1RankNum.value <= printingRank) {
+            //     return "-";
+            // }
+            // }
+
+            // 印字上の位置が示すデータを返す
+            const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
+            return  printing1Data.value[printingIndex];
+            */
         };
     });    
 
