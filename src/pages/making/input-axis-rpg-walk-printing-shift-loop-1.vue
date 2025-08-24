@@ -44,8 +44,7 @@
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
                 class="player"
-                :style="player1Style"
-                style="image-rendering: pixelated;" />
+                :style="player1Style" />
         </div>
         <p>
             👆 タイルは動いていないぜ（＾▽＾）！<br/>
@@ -624,5 +623,6 @@
     }
     div.player {    /* 自機１ */
         position: relative;
+        image-rendering: pixelated;
     }
 </style>

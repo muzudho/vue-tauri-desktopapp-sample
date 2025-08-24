@@ -44,8 +44,7 @@
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
                 class="player"
-                :style="player1Style"
-                style="image-rendering: pixelated;" />
+                :style="player1Style" />
         </div>
         <p>
             👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げたり縮めたりしてみようぜ（＾▽＾）！<br/>
@@ -669,5 +668,6 @@
     }
     div.player {    /* 自機１ */
         position: relative;
+        image-rendering: pixelated;
     }
 </style>

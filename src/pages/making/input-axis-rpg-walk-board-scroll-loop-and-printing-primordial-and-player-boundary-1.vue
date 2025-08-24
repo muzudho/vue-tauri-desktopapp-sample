@@ -44,8 +44,8 @@
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
                 class="player"
-                :style="player1Style"
-                style="image-rendering: pixelated;" /><br/>
+                :style="player1Style" />
+            <br/>
             
             <!-- 半透明のマスク -->
             <div
@@ -1121,5 +1121,6 @@
     }
     div.player {    /* 自機１ */
         position: relative;
+        image-rendering: pixelated;
     }
 </style>

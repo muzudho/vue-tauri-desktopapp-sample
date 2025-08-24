@@ -44,8 +44,7 @@
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
                 class="player"
-                :style="player1Style"
-                style="image-rendering: pixelated;" />
+                :style="player1Style" />
         </div>
         <p>👆 タイルは動いていないぜ（＾▽＾）！</p>
         <p>だから、数字がタイルの上を入れ替わっている（＝シフトしている）ぜ（＾▽＾）！</p>
@@ -610,5 +609,6 @@
     }
     div.player {    /* 自機１ */
         position: relative;
+        image-rendering: pixelated;
     }
 </style>

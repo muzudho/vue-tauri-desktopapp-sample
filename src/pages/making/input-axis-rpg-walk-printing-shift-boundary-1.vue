@@ -44,8 +44,7 @@
                 :slow="player1AnimationSlow"
                 :time="stopwatch1Count"
                 class="player"
-                :style="player1Style"
-                style="image-rendering: pixelated;" />
+                :style="player1Style" />
         </div>
         <p>👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！</p>
         <p>上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！</p>
@@ -898,5 +897,6 @@
     }
     div.player {    /* 自機１ */
         position: relative;
+        image-rendering: pixelated;
     }
 </style>
