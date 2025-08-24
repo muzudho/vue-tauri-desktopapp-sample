@@ -38,7 +38,17 @@
                     -printing1Left / board1SquareWidth,
                     -printing1Top / board1SquareHeight
                 ) }}]</span>
-                <span class="square-printing-number">{{ getPrintingNumber(i - 1) }}</span>
+                <span class="square-printing-number">{{
+                    getPrintingNumber(
+                        getFixIndexByTileIndex(
+                            i - 1,
+                            board1FileNum,
+                            board1RankNum,
+                            -printing1Left / board1SquareWidth,
+                            -printing1Top / board1SquareHeight
+                        )
+                    )
+                }}</span>
             </div>
 
             <!-- 自機１ -->
