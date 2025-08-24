@@ -29,8 +29,9 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyle(i - 1)"
-            >{{ getPrintingNumber(i - 1) }}
+                :style="getSquareStyle(i - 1)">
+                <span class="square-index">[{{ (i - 1) }}]</span>
+                <span class="square-printing-number">{{ getPrintingNumber(i - 1) }}</span>
             </div>
 
             <!-- 自機１ -->
@@ -650,23 +651,23 @@
                 // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
                 if (player1Input.ArrowLeft) {   // 左
                     player1Motion.value["lookRight"] = commonSpriteMotionLeft;
-                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ回り込む
                 }
 
                 if (player1Input.ArrowRight) {  // 右
                     player1Motion.value["lookRight"] = commonSpriteMotionRight;
-                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ回り込む
                 }
 
                 if (player1Input.ArrowUp) {    // 上
                     player1Motion.value["lookBottom"] = commonSpriteMotionUp;
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown; // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown; // 印字は、キー入力とは逆向きへ回り込む
                 }
 
                 // モーションの入力があれば、ウェイトを入れる。
                 if (player1Input.ArrowDown) {   // 下
                     player1Motion.value["lookBottom"] = commonSpriteMotionDown;
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ回り込む
                 }
             }
 
@@ -675,11 +676,11 @@
             // ++++++++++++++++++++
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
-                printing1Left.value += printing1Speed.value;
-
-            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
+            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
                 printing1Left.value -= printing1Speed.value;
+
+            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
+                printing1Left.value += printing1Speed.value;
 
             }
 
@@ -802,7 +803,21 @@
     }
     div.square {    /* マス */
         position: absolute;
+        /*text-align: center;*/
+    }
+    span.square-index {
+        position: absolute;
+        top: 2px;
+        width: 100%;
         text-align: center;
+        font-size: 6px;
+    }
+    span.square-printing-number {
+        position: absolute;
+        top: 6px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
