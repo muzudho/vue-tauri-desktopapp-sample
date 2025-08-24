@@ -18,21 +18,12 @@
         -->
         <div
             class="board"
-            :style="`
-                width: ${3 * appZoom * board1SquareWidth}px;
-                height: ${3 * appZoom * board1SquareHeight}px;
-            `">
+            :style="board1Style">
 
             <!-- 自機のホーム１ -->
             <div
                 class="playerHome"
-                :style="`
-                    left: ${playerHome1Left}px;
-                    top: ${playerHome1Top}px;
-                    width: ${board1SquareWidth}px;
-                    height: ${board1SquareHeight}px;
-                    zoom: ${appZoom};
-                `">
+                :style="playerHome1Style">
             </div>
 
             <!-- 自機１ -->
@@ -234,6 +225,13 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
+    const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+        return {
+            width: `${3 * board1SquareWidth}px`,
+            height: `${3 * board1SquareHeight}px`,
+            zoom: appZoom.value,
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
@@ -250,6 +248,14 @@
     });
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
+    });
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
     });
 
     // ++++++++++++++++++++++++++++
@@ -270,7 +276,6 @@
         left: `${player1Left.value}px`,
         width: `${player1Width}px`,
         height: `${player1Height}px`,
-        zoom: appZoom.value,
     }));
     // キャラクターの向きと、歩行タイルの指定
     const player1SourceFrames = {
