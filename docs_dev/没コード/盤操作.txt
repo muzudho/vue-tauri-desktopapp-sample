@@ -1,0 +1,48 @@
+            /*
+                例えば
+                
+                +---+---+---+
+                | 0 | 1 | 2 |
+                +---+---+---+
+                | 3 | 4 | 5 |
+                +---+---+---+
+                | 6 | 7 | 8 |
+                +---+---+---+
+
+                という印字表があって、そのうち、以下のような穴が空いていれば、
+                
+                +---+---+---+
+                |///|///|///|
+                +---+---+---+
+                |   |   |///|
+                +---+---+---+
+                |   |   |///|
+                +---+---+---+
+
+                以下のようなサブ印字表が得られる。
+
+                +---+---+
+                | 3 | 4 |
+                +---+---+
+                | 6 | 7 |
+                +---+---+
+
+                このとき、
+                subprintingFile = 0
+                subprintingRank = 1
+                と言える。
+
+                逆に、サブ印字表は盤とイコールであると考えると、
+                printingFile = 0
+                printingRank = -1
+                である。
+
+                計算してみよう。
+                盤のタイルの index を 0 とするとき、
+                tileFile = 0、
+                tileRank = 0。
+
+                subprintingFile = tileFile - printingFile = 0
+                subprintingRank = tileRank - printingRank = 1
+                subprintingIndex = subprintingRank * (印字表の筋の数 3) + subprintingFile = 3。
+             */

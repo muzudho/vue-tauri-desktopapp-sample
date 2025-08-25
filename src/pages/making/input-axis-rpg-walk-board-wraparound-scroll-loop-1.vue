@@ -42,14 +42,43 @@
                         printing1Top,
                     )
                 }}]</span>
-                <span class="board-square-printing-string">{{
-                    getPrintingStringBySquare(
-                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                <span class="board-printing-index">print[{{
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
                             i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
                             board1FileNum,
                             board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                }}]</span>
+                <span class="board-square-printing-string">{{
+                    getPrintingStringFromPrintingIndex(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
                             -printing1Left / board1SquareWidth,
-                            -printing1Top / board1SquareHeight
+                            -printing1Top / board1SquareHeight,
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
                         )
                     )
                 }}</span>
@@ -286,8 +315,8 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getIndexFromFileAndRank } from '../../composables/board-operation';
-    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
+    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
+    import { euclideanMod } from '../../composables/periodic-table-operation';
 
 
     // ##########
@@ -404,12 +433,12 @@
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1File = computed<number>(()=>{    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
-        return Math.round(printing1Left.value / board1SquareWidth); // FIXME:
-    });
-    const printing1Rank = computed<number>(()=>{
-        return Math.round(printing1Top.value / board1SquareHeight); // FIXME:
-    });
+    // const printing1File = computed<number>(()=>{    // 印字の左上隅のタイルは、盤タイルの左から何番目か。
+    //     return Math.round(printing1Left.value / board1SquareWidth); // FIXME:
+    // });
+    // const printing1Rank = computed<number>(()=>{
+    //     return Math.round(printing1Top.value / board1SquareHeight); // FIXME:
+    // });
     const printing1StringData = ref<string[]>([]);
     for (let i=0; i<printing1FileMax * printing1RankMax; i++) { // 印字データは最初から最大サイズで用意しておく
         printing1StringData.value.push(i.toString().padStart(2, "0"));
@@ -420,81 +449,11 @@
         wrapAroundBottom: 0,   // 負なら上、正なら下
     });
 
-    const getPrintingStringBySquare = computed<
-        (fixedSquareIndex: number) => string
+    const getPrintingStringFromPrintingIndex = computed<
+        (printingIndex: number) => string
     >(() => {
-        // 引数に渡されるのは、［盤のタイル番号］
-        return (fixedSquareIndex: number) => {
-            //return tileIndex;
-
-            /*
-                例えば
-                
-                +---+---+---+
-                | 0 | 1 | 2 |
-                +---+---+---+
-                | 3 | 4 | 5 |
-                +---+---+---+
-                | 6 | 7 | 8 |
-                +---+---+---+
-
-                という印字表があって、そのうち、以下のような穴が空いていれば、
-                
-                +---+---+---+
-                |///|///|///|
-                +---+---+---+
-                |   |   |///|
-                +---+---+---+
-                |   |   |///|
-                +---+---+---+
-
-                以下のようなサブ印字表が得られる。
-
-                +---+---+
-                | 3 | 4 |
-                +---+---+
-                | 6 | 7 |
-                +---+---+
-
-                このとき、
-                subprintingFile = 0
-                subprintingRank = 1
-                と言える。
-
-                逆に、サブ印字表は盤とイコールであると考えると、
-                printingFile = 0
-                printingRank = -1
-                である。
-
-                計算してみよう。
-                盤のタイルの index を 0 とするとき、
-                tileFile = 0、
-                tileRank = 0。
-
-                subprintingFile = tileFile - printingFile = 0
-                subprintingRank = tileRank - printingRank = 1
-                subprintingIndex = subprintingRank * (印字表の筋の数 3) + subprintingFile = 3。
-             */
-
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
-
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            let subprintingFile = squareFile - printing1File.value;
-            let subprintingRank = squareRank - printing1Rank.value;
-
-            if (printing1IsLooping.value) {
-                subprintingFile = euclideanMod(subprintingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-                subprintingRank = euclideanMod(subprintingRank, printing1RankNum.value); // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
-            } else {
-                // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-                if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
-                    return "-";
-                }
-            }
-
-            // サブ印字表上の指定位置にある印字を返す
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
-            return  printing1StringData.value[subprintingIndex];
+        return (printingIndex: number) => {
+            return  printing1StringData.value[printingIndex];
         };
     });    
 
