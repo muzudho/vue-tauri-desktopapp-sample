@@ -32,8 +32,8 @@
                 :style="getSquareStyle(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
-                        board1FileNum,
-                        board1RankNum,
+                        printing1FileNum,
+                        printing1RankNum,
                         printing1Left / board1SquareWidth,
                         printing1Top / board1SquareHeight
                     )
@@ -41,8 +41,8 @@
                 :srcLeft="getPrintingLeftBySquare(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
-                        board1FileNum,
-                        board1RankNum,
+                        printing1FileNum,
+                        printing1RankNum,
                         printing1Left / board1SquareWidth,
                         printing1Top / board1SquareHeight
                     )
@@ -63,8 +63,8 @@
                     getPrintingIndexStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
-                            board1FileNum,
-                            board1RankNum,
+                            printing1FileNum,
+                            printing1RankNum,
                             printing1Left / board1SquareWidth,
                             printing1Top / board1SquareHeight
                         )
@@ -74,8 +74,8 @@
                     getPrintingSourceTileIndexBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
-                            board1FileNum,
-                            board1RankNum,
+                            printing1FileNum,
+                            printing1RankNum,
                             printing1Left / board1SquareWidth,
                             printing1Top / board1SquareHeight
                         )
@@ -209,8 +209,8 @@
             printing: {{ getPrintingIndexStringBySquare(
                             getIndexWhenAddUpFileAndRankOnPeriodicTable(
                                 i - 1,
-                                board1FileNum,
-                                board1RankNum,
+                                printing1FileNum,
+                                printing1RankNum,
                                 printing1Left / board1SquareWidth,
                                 printing1Top / board1SquareHeight
                             )
