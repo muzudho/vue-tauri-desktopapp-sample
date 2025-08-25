@@ -361,7 +361,6 @@
     const board1SquareHeight = 32;
     const board1FileMax = 6;
     const board1RankMax = 6;
-    const board1AreaMax = board1FileMax * board1RankMax;
     const board1FileNum = ref<number>(5);   // 筋の数
     const board1RankNum = ref<number>(5);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
@@ -369,12 +368,16 @@
     });
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin = 1;          // マスクは右下に１マス分多く作ります。
-    const board1WithMaskFileNum = board1FileNum.value + board1WithMaskBottomRightMargin
-    const board1WithMaskRankNum = board1RankNum.value + board1WithMaskBottomRightMargin
+    const board1WithMaskFileNum = computed(()=>{
+        return board1FileNum.value + board1WithMaskBottomRightMargin;
+    });
+    const board1WithMaskRankNum = computed(()=>{
+        return board1RankNum.value + board1WithMaskBottomRightMargin;
+    }); 
     const board1Style = computed<CompatibleStyleValue>(()=>{  // ボードとマスクを含んでいる領域のスタイル
         return {
-            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
-            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
             zoom: appZoom.value,
         };
     });
@@ -417,7 +420,7 @@
     const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
     const board1SourceTilemapCoordination = computed(() => {   // 座標
         const tileMap = [];
-        for (let i = 0; i < board1AreaMax; i++) {   // 最大サイズで作っておく。
+        for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
             const files = i % board1FileNum.value;
             const ranks = Math.floor(i / board1FileNum.value);
             tileMap.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
@@ -427,12 +430,16 @@
     //const board1MapFiles = board1FileNum;  // マップデータ
     //const board1MapRanks = board1RankNum;
     //const board1MapArea = board1MapFiles.value * board1MapRanks.value;
-    const getPrintingSourceTileIndexBySquare = computed(() => {
+    const getPrintingSourceTileIndexBySquare = computed<
+        (fixedSquareIndex:number)=>number
+    >(() => {
         return (fixedSquareIndex: number) => {
             return printingMapData.value[fixedSquareIndex];
         };
     });
-    const getFloorLeftBySquare = computed(() => {
+    const getFloorLeftBySquare = computed<
+        (fixedSquareIndex:number)=>number
+    >(() => {
         return (fixedSquareIndex: number) => {
             const sourceTileIndex = printingMapData.value[fixedSquareIndex];
             return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
@@ -448,7 +455,7 @@
 
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
-    const printingAreaMax = printing1FileMax * printing1RankMax;
+    const printing1AreaMax = printing1FileMax * printing1RankMax;
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
@@ -459,7 +466,7 @@
     });
     const printingMapData = computed(() => {    // ランダムなマップデータを生成
         const data = [];
-        for (let i = 0; i < printingAreaMax; i++) { // 最初から最大サイズで用意します。
+        for (let i = 0; i < printing1AreaMax; i++) { // 最初から最大サイズで用意します。
             data.push(Math.floor(Math.random() * board1FloorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
         }
         return data;
@@ -551,8 +558,8 @@
 
     const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
         return {
-            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
-            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
             borderTop: `solid ${board1WithMaskSizeSquare.value * board1SquareHeight}px rgba(0,0,0,0.5)`,
             borderRight: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
             borderBottom: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
