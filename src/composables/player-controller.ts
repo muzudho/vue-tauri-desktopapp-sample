@@ -103,8 +103,6 @@ export function handlePlayerController(
     player1MotionWait: Ref<number>,
     player1Input: PlayerInput,
     player1Motion: Ref<Record<string, number>>,
-    // player1File: Ref<number>,
-    // player1Rank: Ref<number>,
     player1Left: Ref<number>,
     player1Top: Ref<number>,
     player1CanBoardEdgeWalking: Ref<boolean>,
