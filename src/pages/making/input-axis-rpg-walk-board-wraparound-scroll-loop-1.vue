@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の回り込み循環スクロール</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の回り込みスクロール、印字の両端つながり</h4>
     <section class="sec-4">
         <br/>
 
@@ -74,8 +74,7 @@
         <br/>
 
         <p>
-            👆　盤がラップ・アラウンドしているぜ（＾▽＾）<br/>
-            つまり、端のタイルが、反対側にワープして出てきているぜ（＾▽＾）<br/>
+            👆　自機が動く代わりに、盤の方がスクロールして、そして画面外に出た端のタイルが、反対側の端に回り込み（ラップアラウンド）しているぜ（＾▽＾）<br/>
             端はちらつくから、ゲームで使うときは、半透明の黒いマスクが掛かっているところは画面に映らないようにしてくれだぜ（＾～＾）！<br/>
             <br/>
             マスの中の１段目の数字は、タイルに付いている番号だぜ（＾▽＾）！<br/>
@@ -233,7 +232,7 @@
                 thumbLabel="always" />
             <v-switch
                 v-model="printing1IsLooping"
-                :label="printing1IsLooping ? '［印字の端と端がつながって］います' : '［印字の端と端がつながって］いません'"
+                :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
                 color="green"
                 :hideDetails="true"
                 inset />
@@ -242,7 +241,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の回り込み循環スクロール　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の回り込みスクロール、印字の両端つながり　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-board-wraparound-scroll-loop-1"/>

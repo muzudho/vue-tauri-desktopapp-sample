@@ -68,9 +68,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-loop-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkBoardWraparoundScrollLoopAndPrintingPrimordial1',
-        path: '/making/input-axis-rpg-walk-board-wraparound-scroll-loop-and-printing-primordial-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-loop-and-printing-primordial-1.vue'),
+        name: 'InputAxisRpgWalkBoardWraparoundScrollAndPrintingLoop1',
+        path: '/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardWraparoundLoopAndPrintingPrimordialAndPlayerBoundary1',

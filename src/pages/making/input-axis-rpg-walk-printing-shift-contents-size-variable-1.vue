@@ -192,7 +192,7 @@
                 thumbLabel="always" />
             <v-switch
                 v-model="printing1IsLooping"
-                :label="printing1IsLooping ? '［印字の端と端がつながって］います' : '［印字の端と端がつながって］いません'"
+                :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
                 color="green"
                 inset />
             <br/>

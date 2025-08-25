@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄の循環シフト</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄のシフト、印字の両端つながり</h4>
     <section class="sec-4">
         <br/>
 
@@ -170,7 +170,7 @@
                 thumbLabel="always" />
             <v-switch
                 v-model="printing1IsLooping"
-                :label="printing1IsLooping ? '［印字の端と端がつながって］います' : '［印字の端と端がつながって］いません'"
+                :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
                 color="green"
                 :hideDetails="true"
                 inset />
@@ -179,7 +179,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄の循環シフト　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄のシフト、印字の両端つながり　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-printing-shift-loop-1"/>

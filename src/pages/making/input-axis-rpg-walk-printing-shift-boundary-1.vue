@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄のシフト、盤の端処理</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄のシフト、盤の端歩き</h4>
     <section class="sec-4">
         <br/>
 
@@ -189,7 +189,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄のシフト、盤の端処理　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄のシフト、盤の端歩き　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-printing-shift-boundary-1"/>

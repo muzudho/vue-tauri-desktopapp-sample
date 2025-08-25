@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の回り込み循環スクロール、数字柄の原始的シフト</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>盤の回り込みスクロール、印字の両端つながり、数字柄の原始的シフト</h4>
     <section class="sec-4">
         <br/>
 
@@ -208,15 +208,21 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-switch
+                v-model="printing1IsLooping"
+                :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
+                color="green"
+                :hideDetails="true"
+                inset />
             <br/>
         </section>
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の回り込み循環スクロール、数字柄の原始的シフト　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の回り込みスクロール、印字の両端つながり、数字柄の原始的シフト　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-board-wraparound-scroll-loop-and-printing-primordial-1"/>
+            pagePath="/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1"/>
     </section>
 </template>
 
@@ -363,6 +369,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1IsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileNum = 10;    // 列数
     const printing1RankNum = 10;    // 行数
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
@@ -395,12 +402,18 @@
             let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
 
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const subprintingFile = squareFile + printing1FileDelta.value;
-            const subprintingRank = squareRank + printing1RankDelta.value;
+            let subprintingFile = squareFile + printing1FileDelta.value;
+            let subprintingRank = squareRank + printing1RankDelta.value;
 
-            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
-                return "-";
+            if (printing1IsLooping.value) {
+                // 端でループする
+                subprintingFile = euclideanMod(subprintingFile, printing1FileNum);
+                subprintingRank = euclideanMod(subprintingRank, printing1RankNum);
+            } else {
+                // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+                if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
+                    return "-";
+                }
             }
 
             const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);

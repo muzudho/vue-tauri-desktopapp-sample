@@ -274,12 +274,19 @@
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
 
     // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　盤１のホーム +
+    // + オブジェクト　＞　盤のホーム１ +
     // ++++++++++++++++++++++++++++++++++
     //
     // このサンプルでは、黄緑色に着色しているマスです。
-    // 自機ではなく、盤のホームであることに注意してください。
+    // ［盤１］に紐づくホームというわけではなく、［盤のホーム］の１つです。
     //
+
+    const boardHome1Stlye = computed<CompatibleStyleValue>(() => {
+        return {
+            width: `${board1FileNum.value * board1SquareWidth}px`,
+            height: `${board1RankNum.value * board1SquareHeight}px`,
+        };
+    });
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -329,21 +336,6 @@
     const board1Motion = ref<Record<string, number>>({    // モーションへの入力
         goToRight: 0,   // 負なら左、正なら右
         goToBottom: 0,   // 負なら上、正なら下
-    });
-
-    // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　盤のホーム１ +
-    // ++++++++++++++++++++++++++++++++++
-    //
-    // このサンプルでは、黄緑色に着色しているマスです。
-    // ［盤１］に紐づくホームというわけではなく、［盤のホーム］の１つです。
-    //
-
-    const boardHome1Stlye = computed<CompatibleStyleValue>(() => {
-        return {
-            width: `${board1FileNum.value * board1SquareWidth}px`,
-            height: `${board1RankNum.value * board1SquareHeight}px`,
-        };
     });
 
     // ++++++++++++++++++++++++++++++++++++
