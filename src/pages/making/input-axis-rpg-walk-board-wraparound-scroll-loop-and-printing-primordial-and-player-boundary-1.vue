@@ -39,7 +39,7 @@
                     printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="square-printing-number">{{
-                    getPrintingNumber(
+                    getPrintingBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
@@ -438,8 +438,11 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1FileNum = ref<number>(10);   // 列数
-    const printing1RankNum = ref<number>(10);   // 行数
+    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
+    const printing1RankMax = 10;
+    const printing1AreaMax = printing1FileMax * printing1RankMax;
+    const printing1FileNum = ref<number>(printing1FileMax);   // 列数
+    const printing1RankNum = ref<number>(printing1RankMax);   // 行数
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
@@ -449,24 +452,24 @@
     const printing1RankDelta = computed<number>(()=>{
         return Math.round(-printing1Top.value / board1SquareHeight);
     });
-    const printing1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
+    const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1Data = ref<string[]>([]);
-    for (let i=0; i<printing1FileNum.value * printing1RankNum.value; i++) {
+    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1Data.value.push(i.toString().padStart(2, "0"));
     }
-    const printing1Motion = ref<Record<string, number>>({  // 印字への入力
-        wrapAroundRight: 0,   // 負なら左、正なら右
-        wrapAroundBottom: 0,   // 負なら上、正なら下
+    const printing1Motion = ref<Record<string, number>>({   // 印字への入力
+        wrapAroundRight: 0, // 負なら左、正なら右
+        wrapAroundBottom: 0,    // 負なら上、正なら下
     });
 
 
     /**
-     * 印字。
+     * マスの印字。
      */
-    const getPrintingNumber = computed<
-        (fixedSquareIndex: number)=>string
+    const getPrintingBySquare = computed<
+        (fixedSquareIndex: number) => string
     >(() => {
-        return (fixedSquareIndex: number)=>{
+        return (fixedSquareIndex: number) => {
             let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
 
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：

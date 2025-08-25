@@ -60,7 +60,7 @@
                     printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="square-printing-number">{{
-                    getPrintingSourceTileIndexBySquare(
+                    getPrintingBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
@@ -117,7 +117,7 @@
                         printing1Top / board1SquareHeight
                     )
                 )"
-            >{{ getPrintingSourceTileIndexBySquare(
+            >{{ getPrintingBySquare(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
                         board1FileNum,
@@ -437,25 +437,11 @@
         }
         return tileMap;
     });
-    const getPrintingSourceTileIndexBySquare = computed<
-        (fixedSquareIndex:number)=>number
-    >(() => {
-        return (fixedSquareIndex: number) => {
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
-
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const printingFile = squareFile + printing1FileDelta.value;
-            const printingRank = squareRank + printing1RankDelta.value;
-
-            const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum.value);
-            return printing1Data.value[printingIndex];
-        };
-    });
     const getFloorLeftBySquare = computed<
         (fixedSquareIndex:number)=>number
     >(() => {
         return (fixedSquareIndex: number) => {
-            const sourceTileIndex = printing1Data.value[fixedSquareIndex];
+            const sourceTileIndex = printing1IndexesData.value[fixedSquareIndex];
             return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
         };
     });
@@ -469,9 +455,9 @@
 
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
+    const printing1AreaMax = printing1FileMax * printing1RankMax;
     const printing1FileNum = ref<number>(printing1FileMax);   // 列数
     const printing1RankNum = ref<number>(printing1RankMax);   // 行数
-    const printing1AreaMax = printing1FileMax * printing1RankMax;
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
@@ -482,17 +468,36 @@
         return Math.round(-printing1Top.value / board1SquareHeight);
     });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const printing1Data = computed(() => {   // ランダムなマップデータを生成
-        const data = [];
-        for (let i = 0; i < printing1AreaMax; i++) { // 最初から最大サイズで用意します。
-            data.push(Math.floor(Math.random() * board1FloorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
-        }
-        return data;
-    });
+    const printing1IndexesData = ref<number[]>([]);
+    // ランダムなマップデータを生成
+    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
+        const sourceTileIndex = Math.floor(Math.random() * board1FloorTilemapTileNum);  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
+        printing1IndexesData.value.push(sourceTileIndex);
+    }
     const printing1Motion = ref<Record<string, number>>({   // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
+
+
+    /**
+     * マスの印字。
+     */
+    const getPrintingBySquare = computed<
+        (fixedSquareIndex: number) => number
+    >(() => {
+        return (fixedSquareIndex: number) => {
+            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+
+            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+            const printingFile = squareFile + printing1FileDelta.value;
+            const printingRank = squareRank + printing1RankDelta.value;
+
+            const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum.value);
+            return printing1IndexesData.value[printingIndex];
+        };
+    });
+
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
