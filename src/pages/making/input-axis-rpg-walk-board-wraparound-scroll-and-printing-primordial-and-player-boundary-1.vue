@@ -322,7 +322,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
     import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput } from '../../composables/player-controller';
 
@@ -417,8 +417,9 @@
     >(() => {
         return (tileIndex:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
+            const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
+            const homeLeft = tileFile * board1SquareWidth;
+            const homeTop = tileRank * board1SquareHeight;
 
             const [offsetLeftLoop, offsetTopLoop] = wrapAround(
                 homeLeft,
