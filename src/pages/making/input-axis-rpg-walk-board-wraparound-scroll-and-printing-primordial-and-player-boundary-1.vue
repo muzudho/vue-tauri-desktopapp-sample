@@ -101,7 +101,7 @@
         </div>
 
         <div>
-            印字x={{ printing1Left }}　｜　人x={{ player1Left }}<br/>
+            印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
             印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
         </div>
         <br/>

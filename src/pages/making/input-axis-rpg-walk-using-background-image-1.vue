@@ -124,7 +124,7 @@
         </div>
 
         <div>
-            印字x={{ printing1Left }}　｜　人x={{ player1Left }}<br/>
+            印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
             印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
         </div>
         <br/>
@@ -773,7 +773,7 @@
 
             // if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
             //     player1Top.value -= printing1Speed.value;
-            // } else if (player1Motion.value["goToBottom"] == commonSpriteMotionBottom) { // 下
+            // } else if (player1Motion.value["goToBottom"] == commonSpriteMotionDown) { // 下
             //     player1Top.value += printing1Speed.value;
             // }
 
