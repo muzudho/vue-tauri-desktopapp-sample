@@ -75,48 +75,31 @@ export const getFixedSquareIndexFromTileIndex = computed<
 
 /**
  * 印字盤のマスのインデックスを取得します。
+ * @returns 範囲外なら -1 を返します。
  */
-export const getPrintingSquareIndexFromTileIndex = computed<
+export const getPrintingSquareIndexFromTileIndexOLD = computed<
     (
-        tileIndex: number,
-        board1SquareWidth: number,
-        board1SquareHeight: number,
+        fixedSquareIndex: number,
         board1FileNum: number,
-        board1RankNum: number,
         printing1IsLooping: boolean,
         printing1FileNum: number,
         printing1RankNum: number,
-        printing1Left: number,
-        printing1Top: number,
         offsetFile: number,
         offsetRank: number,
-    ) => string
+    ) => number
 >(() => {
     return (
-        tileIndex: number,
-        board1SquareWidth: number,
-        board1SquareHeight: number,
+        fixedSquareIndex: number,
         board1FileNum: number,
-        board1RankNum: number,
         printing1IsLooping: boolean,
         printing1FileNum: number,
         printing1RankNum: number,
-        printing1Left: number,
-        printing1Top: number,
         offsetFile: number,
         offsetRank: number,
     ) => {
-        const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
-            tileIndex,
-            board1FileNum,
-            board1RankNum,
-            printing1Left / board1SquareWidth,
-            printing1Top / board1SquareHeight
-        );
-
         let [fixedSquareFile, fixedSquareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum);
 
-        const printingIndex = getSubprintingIndexFromFixedSquareIndex(
+        return getPrintingIndexFromFixedSquareIndex(  // 範囲外なら -1 を返します。
             fixedSquareIndex,
             fixedSquareFile + offsetFile,
             fixedSquareRank + offsetRank,
@@ -124,13 +107,6 @@ export const getPrintingSquareIndexFromTileIndex = computed<
             printing1FileNum,
             printing1RankNum,
             printing1IsLooping);
-
-        // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-        if (printingIndex == -1) {
-            return "-";
-        }
-
-        return `${printingIndex}`;
     };
 });
 
@@ -140,7 +116,7 @@ export const getPrintingSquareIndexFromTileIndex = computed<
  * @param fixedSquareIndex 
  * @returns 該当なしのとき -1
  */
-export function getSubprintingIndexFromFixedSquareIndex(
+export function getPrintingIndexFromFixedSquareIndex(
     fixedSquareIndex: number,
     offsetFile: number,
     offsetRank: number,
