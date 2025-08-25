@@ -388,7 +388,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
+    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
     import { euclideanMod } from '../../composables/periodic-table-operation';
 
 
@@ -474,11 +474,12 @@
     >(() => {
         return (tileIndex:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
+            const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
+            const homeLeft = tileFile * board1SquareWidth;
+            const homeTop = tileRank * board1SquareHeight;
 
-            const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
-            const bhPx = (board1RankNum.value * board1SquareHeight);
+            const bwPx = board1FileNum.value * board1SquareWidth;   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
+            const bhPx = board1RankNum.value * board1SquareHeight;
 
             // NOTE: 循環するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
