@@ -30,7 +30,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)">
-                
+
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
@@ -93,7 +93,7 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style" />
-            
+
             <!-- 視界の外１ -->
             <div
                 class="out-of-sight"
@@ -267,9 +267,9 @@
                 inset />
                 <section class="sec-1">
                     <v-switch
-                        v-model="appBoundaryWalkingEdge"
-                        :disabled="!appBoundaryWalkingEdgeIsEnabled"
-                        :label="appBoundaryWalkingEdge ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
+                        v-model="player1CanBoardEdgeWalking"
+                        :disabled="!player1CanBoardEdgeWalkingIsEnabled"
+                        :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
                         color="green"
                         :hideDetails="true"
                         inset />
@@ -321,6 +321,8 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
+    import type { MotionInput, PlayerInput } from '../../composables/player-controller';
 
 
     // ##########
@@ -347,10 +349,8 @@
     const appZoom = ref<number>(4);    // ズーム
     const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(appBoundaryIsLock, (newValue: boolean)=>{
-        appBoundaryWalkingEdgeIsEnabled.value = newValue;
+        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
-    const appBoundaryWalkingEdge = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
-    const appBoundaryWalkingEdgeIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
 
     // ################
@@ -469,7 +469,7 @@
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
-    const printing1Motion = ref<Record<string, number>>({   // 印字への入力
+    const printing1Motion = ref<MotionInput>({   // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
@@ -534,9 +534,9 @@
         return Math.round(player1Top.value / board1SquareHeight);
     });
 
-    const player1Input = <Record<string, boolean>>{         // 入力
+    const player1Input = { // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
-    };
+    } as PlayerInput;
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationFacingFrames = 1;         // 振り向くフレーム数
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
@@ -573,13 +573,15 @@
         ],
     };
     const player1Frames = ref(player1SourceFrames["down"]);
-    const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1MotionWait = ref<number>(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
         lookRight: 0,     // 向きを変える
         lookBottom: 0,
         goToRight: 0,     // 負なら左、正なら右へ移動する
         goToBottom: 0,    // 負なら上、正なら下へ移動する
     });
+    const player1CanBoardEdgeWalking = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
+    const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -610,14 +612,20 @@
                 e.preventDefault();
             }
 
-            if (player1Input.hasOwnProperty(e.key)) {
-                player1Input[e.key] = true;
+            if (isPlayerInputKey(e.key)) {  // 型ガード
+                player1Input[e.key] = true; // 型チェック済み（文字列→キー名）
             }
+            // if (player1Input.hasOwnProperty(e.key)) {
+            //     player1Input[e.key] = true;
+            // }
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            if (player1Input.hasOwnProperty(e.key)) {
-                player1Input[e.key] = false;
+            if (isPlayerInputKey(e.key)) {  // 型ガード
+                player1Input[e.key] = true; // 型チェック済み（文字列→キー名）
             }
+            // if (player1Input.hasOwnProperty(e.key)) {
+            //     player1Input[e.key] = false;
+            // }
         });
 
         gameLoopStart();
@@ -645,10 +653,38 @@
                 printing1Motion.value["wrapAroundRight"] = 0;	// 印字
                 printing1Motion.value["wrapAroundBottom"] = 0;
             }
-            
+
             // ++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
+
+            /*
+            handlePlayerController(
+                appBoundaryIsLock,
+                board1SquareWidth,
+                board1FileNum,
+                board1RankNum,
+                board1WithMaskSizeSquare,
+                playerHome1File,
+                playerHome1Rank,
+                playerHome1Left,
+                playerHome1Top,
+                player1MotionWait,
+                player1Input,
+                player1Motion,
+                player1File,
+                player1Rank,
+                player1Left,
+                player1Top,
+                player1CanBoardEdgeWalking,
+                printing1FileNum,
+                printing1RankNum,
+                printing1Left,
+                printing1Top,
+                printing1Motion,
+            );
+            // */
+
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
@@ -707,7 +743,7 @@
 
                         if (willShift) {
                             printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
-                        } else if (appBoundaryWalkingEdge.value) {
+                        } else if (player1CanBoardEdgeWalking.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0 + board1WithMaskSizeSquare.value) {
                                 player1Motion.value["goToRight"] = commonSpriteMotionLeft;
@@ -771,7 +807,7 @@
                         if (willShift) {
                             printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
                         } else {
-                            if (appBoundaryWalkingEdge.value) {
+                            if (player1CanBoardEdgeWalking.value) {
                                 // ［盤の端まで歩ける］
                                 if (player1File.value < board1FileNum.value - board1WithMaskSizeSquare.value - 1) {
                                     player1Motion.value["goToRight"] = commonSpriteMotionRight;
@@ -831,7 +867,7 @@
 
                         if (willShift) {
                             printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
-                        } else if (appBoundaryWalkingEdge.value) {
+                        } else if (player1CanBoardEdgeWalking.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0 + board1WithMaskSizeSquare.value) {
                                 player1Motion.value["goToBottom"] = commonSpriteMotionUp;
@@ -899,7 +935,7 @@
 
                         if (willShift) {
                             printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
-                        } else if (appBoundaryWalkingEdge.value) {
+                        } else if (player1CanBoardEdgeWalking.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
                                 player1Motion.value["goToBottom"] = commonSpriteMotionDown;

@@ -174,9 +174,9 @@
                 inset />
                 <section class="sec-1">
                     <v-switch
-                        v-model="appBoundaryWalkingEdge"
-                        :disabled="!appBoundaryWalkingEdgeIsEnabled"
-                        :label="appBoundaryWalkingEdge ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
+                        v-model="player1CanBoardEdgeWalking"
+                        :disabled="!player1CanBoardEdgeWalkingIsEnabled"
+                        :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
                         color="green"
                         :hideDetails="true"
                         inset />
@@ -252,10 +252,8 @@
     const appZoom = ref<number>(4);    // ズーム
     const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(appBoundaryIsLock, (newValue: boolean)=>{
-        appBoundaryWalkingEdgeIsEnabled.value = newValue;
+        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
-    const appBoundaryWalkingEdge = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
-    const appBoundaryWalkingEdgeIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
 
     // ################
@@ -464,6 +462,8 @@
         shiftToRight: 0,   // 負なら左、正なら右
         shiftToBottom: 0,   // 負なら上、正なら下
     });
+    const player1CanBoardEdgeWalking = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
+    const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
 
     // ##########
@@ -583,7 +583,7 @@
                         if (willShift) {
                             printing1Motion.value["shiftToRight"] = commonSpriteMotionLeft;
                         } else {
-                            if (appBoundaryWalkingEdge.value) {
+                            if (player1CanBoardEdgeWalking.value) {
                                 // ［盤の端まで歩ける］
                                 if (player1File.value < board1FileNum.value - 1) {
                                     player1Motion.value["shiftToRight"] = commonSpriteMotionRight;
@@ -643,7 +643,7 @@
 
                         if (willShift) {
                             printing1Motion.value["shiftToRight"] = commonSpriteMotionRight;
-                        } else if (appBoundaryWalkingEdge.value) {
+                        } else if (player1CanBoardEdgeWalking.value) {
                             // ［盤の端まで歩ける］
                             if (player1File.value > 0) {
                                 player1Motion.value["shiftToRight"] = commonSpriteMotionLeft;
@@ -699,7 +699,7 @@
 
                         if (willShift) {
                             printing1Motion.value["shiftToBottom"] = commonSpriteMotionDown;
-                        } else if (appBoundaryWalkingEdge.value) {
+                        } else if (player1CanBoardEdgeWalking.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value > 0) {
                                 player1Motion.value["shiftToBottom"] = commonSpriteMotionUp;
@@ -763,7 +763,7 @@
 
                         if (willShift) {
                             printing1Motion.value["shiftToBottom"] = commonSpriteMotionUp;
-                        } else if (appBoundaryWalkingEdge.value) {
+                        } else if (player1CanBoardEdgeWalking.value) {
                             // ［盤の端まで歩ける］
                             if (player1Rank.value < board1FileNum.value - 1) {
                                 player1Motion.value["shiftToBottom"] = commonSpriteMotionDown;
