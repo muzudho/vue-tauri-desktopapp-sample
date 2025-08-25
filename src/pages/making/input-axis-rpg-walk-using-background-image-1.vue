@@ -79,18 +79,7 @@
                         printing1Top / board1SquareHeight,
                     )
                 }}]</span>
-                <span class="board-square-printing-string">{{
-                    getPrintingIndexStringBySquare(
-                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                            i - 1,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1Left / board1SquareWidth,
-                            printing1Top / board1SquareHeight
-                        )
-                    )
-                }}</span>
-                <span class="board-square-source-tile-index">[{{ getSourceTileIndexStringFromTileIndex(i - 1) }}]</span>
+                <span class="board-square-printing-string">{{ getSourceTileIndexStringFromTileIndex(i - 1) }}</span>
             </tile>
 
             <!-- 自機１ -->
@@ -958,14 +947,6 @@
         width: 100%;
         text-align: center;
         font-size: 12px;
-    }
-    span.board-square-source-tile-index {    /* マスの画像の、ソースのタイルのインデックス */
-        position: absolute;
-        left: 10px;
-        top: 24px;
-        width: 100%;
-        text-align: center;
-        font-size: 6px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
