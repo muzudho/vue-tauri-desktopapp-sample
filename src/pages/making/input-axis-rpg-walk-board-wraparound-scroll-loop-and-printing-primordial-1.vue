@@ -39,7 +39,7 @@
                     printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="board-square-printing-string">{{
-                    getPrintingBySquare(
+                    getPrintingStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
@@ -388,7 +388,7 @@
     /**
      * マスの印字。
      */
-    const getPrintingBySquare = computed<
+    const getPrintingStringBySquare = computed<
         (fixedSquareIndex: number) => string
     >(() => {
         return (fixedSquareIndex: number) => {

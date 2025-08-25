@@ -60,7 +60,7 @@
                     printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="board-square-printing-string">{{
-                    getPrintingBySquare(
+                    getPrintingIndexStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
@@ -194,6 +194,29 @@
             </li>
         </ul>
         <br/>
+
+        <!-- デバッグ出力 -->
+        <div
+            v-for="i in board1Area"
+            :key="i">
+            fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                            i - 1,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1Left / board1SquareWidth,
+                            printing1Top / board1SquareHeight
+                        ) }} | 
+            printing: {{ getPrintingIndexStringBySquare(
+                            getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                                i - 1,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left / board1SquareWidth,
+                                printing1Top / board1SquareHeight
+                            )
+                        )}}<br/>
+        </div>
+        
 
         <!-- 設定 -->
         <v-btn
@@ -446,7 +469,7 @@
     /**
      * マスの印字。
      */
-    const getPrintingBySquare = computed<
+    const getPrintingIndexStringBySquare = computed<
         (fixedSquareIndex: number) => string
     >(() => {
         return (fixedSquareIndex: number) => {
