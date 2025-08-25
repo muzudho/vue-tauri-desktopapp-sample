@@ -1,12 +1,19 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
+
+    // ++++++++
+    // + Blog +
+    // ++++++++
     {
         name: 'Blog',
         path: '/blog',     // URL
         component: () => import('../pages/blog/index.vue'),  // importした Vue ファイル
     },
 
+    // +++++++++++++++++
+    // + Coding styles +
+    // +++++++++++++++++
     {
         name: 'CodingStyles',
         path: '/coding-styles',
@@ -18,6 +25,9 @@ const routes = [
         component: () => import('../pages/coding-styles/style.vue'),
     },
 
+    // ++++++++++++++++++++
+    // + Making / Desktop +
+    // ++++++++++++++++++++
     {
         name: 'BasePaths',
         path: '/making/desktop/base-paths',
@@ -29,6 +39,9 @@ const routes = [
         component: () => import('../pages/making/desktop/bundle-file-loading.vue'),
     },
 
+    // ++++++++++
+    // + Making +
+    // ++++++++++
     {
         name: 'ButtonRepeat1',
         path: '/making/button-repeat-1',
@@ -40,44 +53,9 @@ const routes = [
         component: () => import('../pages/making/count-up.vue'),
     },
     {
-        name: 'InputKey',
-        path: '/making/input-key',
-        component: () => import('../pages/making/input-key.vue'),
-    },
-    {
-        name: 'InputAxis',
-        path: '/making/input-axis',
-        component: () => import('../pages/making/input-axis.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkPlayerBoundaryCheck1',
-        path: '/making/input-axis-rpg-walk-player-boundary-check-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-boundary-check-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkBoardLoopScroll1',
-        path: '/making/input-axis-rpg-walk-board-scroll-loop-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkBoardLoopScrollAndPrintingPrimordial1',
-        path: '/making/input-axis-rpg-walk-board-scroll-loop-and-printing-primordial-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-loop-and-printing-primordial-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkFaceShiftBoundary1',
-        path: '/making/input-axis-rpg-walk-printing-shift-boundary-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-printing-shift-boundary-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkPlayerPrimordialGrid1',
-        path: '/making/input-axis-rpg-walk-player-primordial-grid-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-primordial-grid-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkUsingBackgroundImage1',
-        path: '/making/input-axis-rpg-walk-using-background-image-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
+        name: 'Making',
+        path: '/making',
+        component: () => import('@/pages/making/index.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardScrollPrimordialGrid1',
@@ -85,14 +63,64 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-primordial-grid-1.vue'),
     },
     {
+        name: 'InputAxisRpgWalkBoardWraparoundLoopScroll1',
+        path: '/making/input-axis-rpg-walk-board-wraparound-scroll-loop-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-loop-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkBoardWraparoundScrollLoopAndPrintingPrimordial1',
+        path: '/making/input-axis-rpg-walk-board-wraparound-scroll-loop-and-printing-primordial-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-loop-and-printing-primordial-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkBoardWraparoundLoopAndPrintingPrimordialAndPlayerBoundary1',
+        path: '/making/input-axis-rpg-walk-board-wraparound-loop-and-printing-primordial-and-player-boundary-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkPlayerBoundaryCheck1',
+        path: '/making/input-axis-rpg-walk-player-boundary-check-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-player-boundary-check-1.vue'),
+    },
+    {
         name: 'InputAxisRpgWalkPlayerPrimordial1',
         path: '/making/input-axis-rpg-walk-player-primordial-1',
         component: () => import('../pages/making/input-axis-rpg-walk-player-primordial-1.vue'),
     },
     {
-        name: 'Making',
-        path: '/making',
-        component: () => import('@/pages/making/index.vue'),
+        name: 'InputAxisRpgWalkPlayerPrimordialGrid1',
+        path: '/making/input-axis-rpg-walk-player-primordial-grid-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-player-primordial-grid-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkFaceShiftBoundary1',
+        path: '/making/input-axis-rpg-walk-printing-shift-boundary-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-printing-shift-boundary-1.vue'),
+    },
+
+    // input-axis-rpg-walk-printing-shift-contents-size-variable-1
+    // input-axis-rpg-walk-printing-shift-loop-1
+    // input-axis-rpg-walk-printing-shift-primordial-1
+
+    {
+        name: 'InputAxisRpgWalkUsingBackgroundImage1',
+        path: '/making/input-axis-rpg-walk-using-background-image-1',
+        component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
+    },
+    {
+        name: 'InputAxisTarget1',
+        path: '/making/input-axis-target-1',
+        component: () => import('../pages/making/input-axis-target-1.vue'),
+    },
+    {
+        name: 'InputAxis',
+        path: '/making/input-axis',
+        component: () => import('../pages/making/input-axis.vue'),
+    },
+    {
+        name: 'InputKey',
+        path: '/making/input-key',
+        component: () => import('../pages/making/input-key.vue'),
     },
     {
         name: 'JsonFileLoading',
@@ -105,11 +133,6 @@ const routes = [
         component: () => import('../pages/making/mount-practice.vue'),
     },
     {
-        name: 'SkillTreeLayout',
-        path: '/making/skill-tree-layout',
-        component: () => import('../pages/making/skill-tree-layout.vue'),
-    },
-    {
         name: 'PageLayout',
         path: '/making/page-layout',
         component: () => import('../pages/making/page-layout.vue'),
@@ -118,6 +141,11 @@ const routes = [
         name: 'SfxPractice',
         path: '/making/sfx-practice',
         component: () => import('../pages/making/sfx-practice.vue'),
+    },
+    {
+        name: 'SkillTreeLayout',
+        path: '/making/skill-tree-layout',
+        component: () => import('../pages/making/skill-tree-layout.vue'),
     },
     {
         name: 'SpriteRoutine',
@@ -130,14 +158,14 @@ const routes = [
         component: () => import('../pages/making/svg-arrow.vue'),
     },
     {
-        name: 'TileCountUpRpgWalk',
-        path: '/making/tile-count-up-rpg-walk',
-        component: () => import('../pages/making/tile-count-up-rpg-walk.vue'),
-    },
-    {
         name: 'TileCountUpNaive',
         path: '/making/tile-count-up-naive',
         component: () => import('../pages/making/tile-count-up-naive.vue'),
+    },
+    {
+        name: 'TileCountUpRpgWalk',
+        path: '/making/tile-count-up-rpg-walk',
+        component: () => import('../pages/making/tile-count-up-rpg-walk.vue'),
     },
     {
         name: 'TileCountUp',
@@ -149,6 +177,11 @@ const routes = [
         path: '/making/tile-crop',
         component: () => import('../pages/making/tile-crop.vue'),
     },
+
+
+    // ++++++++++
+    // + その他 +
+    // ++++++++++
 
     {
         name: 'MiniGames',
