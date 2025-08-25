@@ -315,8 +315,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
-    import { euclideanMod } from '../../composables/periodic-table-operation';
+    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
 
 
     // ##########
@@ -398,13 +397,15 @@
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
             const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;
-            const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
-            const bhPx = (board1RankNum.value * board1SquareHeight);
 
-            // NOTE: 循環するだけなら、［剰余］を使えばいける。
-            // 盤の左端列を、右端列へ移動させる。
-            const offsetLeftLoop = euclideanMod(homeLeft + printing1Left.value + bwPx, bwPx) - homeLeft;
-            const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
+            const [offsetLeftLoop, offsetTopLoop] = wrapAround(
+                homeLeft,
+                homeTop,
+                printing1Left.value,
+                printing1Top.value,
+                board1FileNum.value * board1SquareWidth,
+                board1RankNum.value * board1SquareHeight,
+            );
 
             return {
                 left: `${homeLeft + offsetLeftLoop}px`,
