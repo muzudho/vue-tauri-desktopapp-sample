@@ -30,14 +30,18 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyle(i - 1)">
-                <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">[{{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                    i - 1,
-                    board1FileNum,
-                    board1RankNum,
-                    -printing1Left / board1SquareWidth,
-                    -printing1Top / board1SquareHeight
-                ) }}]</span>
+                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">fix[{{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
@@ -282,7 +286,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getIndexFromFileAndRank } from '../../composables/board-operation';
+    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getIndexFromFileAndRank } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -806,21 +810,27 @@
     }
     span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
         position: absolute;
-        top: 1px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
     span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
         position: absolute;
-        top: 8px;
+        top: 6px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-printing-index {
+        position: absolute;
+        top: 12px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
     span.board-square-printing-string {   /* マスの印字 */
         position: absolute;
-        top: 12px;
+        top: 16px;
         width: 100%;
         text-align: center;
         font-size: 12px;

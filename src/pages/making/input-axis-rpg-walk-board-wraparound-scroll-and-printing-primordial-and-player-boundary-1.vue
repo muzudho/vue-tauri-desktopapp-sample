@@ -1080,7 +1080,7 @@
     div.square {    /* マス */
         position: absolute;
     }
-    span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
         position: absolute;
         width: 100%;
         text-align: center;
