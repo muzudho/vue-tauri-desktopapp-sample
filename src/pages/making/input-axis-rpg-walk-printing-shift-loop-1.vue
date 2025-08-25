@@ -168,6 +168,12 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-switch
+                v-model="printing1IsLooping"
+                :label="printing1IsLooping ? '［印字の端と端がつながって］います' : '［印字の端と端がつながって］いません'"
+                color="green"
+                :hideDetails="true"
+                inset />
             <br/>
         </section>
     </section>
@@ -303,6 +309,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1IsLooping = ref<boolean>(true); // 印字がループする
     const printing1FileMax = board1FileMax; // 印字の最大サイズは、盤の最大サイズと同じものとする。
     const printing1RankMax = board1RankMax;
     const printing1FileNum = board1FileNum; // 列数
@@ -340,9 +347,16 @@
             let printingFile = tileFile - printing1File.value; // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
             let printingRank = tileRank - printing1Rank.value; // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
             
-            // 端でループする
-            printingFile = euclideanMod(printingFile, printing1FileNum.value);
-            printingRank = euclideanMod(printingRank, printing1RankNum.value);
+            if (printing1IsLooping.value) {
+                // 端でループする
+                printingFile = euclideanMod(printingFile, printing1FileNum.value);
+                printingRank = euclideanMod(printingRank, printing1RankNum.value);
+            } else {
+                // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+                if (printingFile < 0 || printing1FileNum.value <= printingFile || printingRank < 0 || printing1RankNum.value <= printingRank) {
+                    return "-";
+                }
+            }
 
             // 印字上の位置が示すデータを返す
             const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);

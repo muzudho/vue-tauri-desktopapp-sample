@@ -29,7 +29,7 @@
                 v-for="i in board1Area"
                 :key="i"
                 :style="getSquareStyle(i - 1)"
-            >{{ getPrintingNumber(i - 1) }}
+            >{{ getPrintingStringBySquare(i - 1) }}
             </div>
 
             <!-- 自機１ -->
@@ -191,8 +191,8 @@
                 showTicks="always"
                 thumbLabel="always" />
             <v-switch
-                v-model="appIsLooping"
-                :label="appIsLooping ? '端でループ中' : '端でループしていません'"
+                v-model="printing1IsLooping"
+                :label="printing1IsLooping ? '［印字の端と端がつながって］います' : '［印字の端と端がつながって］いません'"
                 color="green"
                 inset />
             <br/>
@@ -266,7 +266,6 @@
 
     const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
     const appZoom = ref<number>(4);    // ズーム
-    const appIsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
 
 
     // ################
@@ -339,6 +338,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1IsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMin = 0;
     const printing1RankMin = 0;
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
@@ -372,7 +372,9 @@
     }
 
 
-    const getPrintingNumber = computed(() => {
+    const getPrintingStringBySquare = computed<
+        (tileIndex: number) => string
+    >(() => {
         // 引数に渡されるのは、［盤のタイル番号］
         return (tileIndex: number)=>{
             let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
@@ -381,7 +383,7 @@
             let printingFile = tileFile - printing1File.value;
             let printingRank = tileRank - printing1Rank.value;
 
-            if (appIsLooping.value) {
+            if (printing1IsLooping.value) {
                 printingFile = euclideanMod(printingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
                 printingRank = euclideanMod(printingRank, printing1RankNum.value); // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
             } else {

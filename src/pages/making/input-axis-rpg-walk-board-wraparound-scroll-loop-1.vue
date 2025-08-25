@@ -231,6 +231,12 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-switch
+                v-model="printing1IsLooping"
+                :label="printing1IsLooping ? '［印字の端と端がつながって］います' : '［印字の端と端がつながって］いません'"
+                color="green"
+                :hideDetails="true"
+                inset />
             <br/>
         </section>
     </section>
@@ -385,6 +391,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1IsLooping = ref<boolean>(true);    // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMin = 0;
     const printing1RankMin = 0;
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
@@ -472,15 +479,15 @@
             let subprintingFile = squareFile - printing1File.value;
             let subprintingRank = squareRank - printing1Rank.value;
 
-            // if (appIsLooping.value) {
+            if (printing1IsLooping.value) {
                 subprintingFile = euclideanMod(subprintingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
                 subprintingRank = euclideanMod(subprintingRank, printing1RankNum.value); // プレイヤーが下へ１マス移動したら、印字は全行が上へ１つ移動する。
-            // } else {
-                // // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-                // if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
-                //     return "-";
-                // }
-            // }
+            } else {
+                // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+                if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
+                    return "-";
+                }
+            }
 
             // サブ印字表上の指定位置にある印字を返す
             const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
