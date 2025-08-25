@@ -251,6 +251,15 @@
                 color="green"
                 :hideDetails="true"
                 inset />
+            <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
+            <v-slider
+                label="マスクの枠の幅"
+                v-model="board1WithMaskSizeSquare"
+                :min="0"
+                :max="2"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <br/>
         </section>
     </section>
@@ -361,7 +370,7 @@
         return board1FileNum.value * board1RankNum.value;
     });
     // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が大きく移動することはありません。
-    const board1WithMaskSizeSquare: number = 1;    // マスクの幅（単位：マス）
+    const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = board1FileNum.value + board1WithMaskBottomRightMargin   // マスク付きの場合の列数。右側の多めの１マスを含む。
     const board1WithMaskRankNum = board1RankNum.value + board1WithMaskBottomRightMargin
@@ -535,10 +544,10 @@
         return {
             width: `${board1WithMaskFileNum * board1SquareWidth}px`,
             height: `${board1WithMaskRankNum * board1SquareHeight}px`,
-            borderTop: `solid ${board1WithMaskSizeSquare * board1SquareHeight}px rgba(0,0,0,0.5)`,
-            borderRight: `solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
-            borderBottom: `solid ${(board1WithMaskSizeSquare + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
-            borderLeft: `solid ${board1WithMaskSizeSquare * board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderTop: `solid ${board1WithMaskSizeSquare.value * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderRight: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderBottom: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderLeft: `solid ${board1WithMaskSizeSquare.value * board1SquareWidth}px rgba(0,0,0,0.5)`,
         };
     });
 

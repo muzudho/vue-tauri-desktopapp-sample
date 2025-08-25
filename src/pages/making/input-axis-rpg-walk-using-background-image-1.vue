@@ -345,6 +345,15 @@
                 color="green"
                 :hideDetails="true"
                 inset />
+            <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
+            <v-slider
+                label="マスクの枠の幅"
+                v-model="board1WithMaskSizeSquare"
+                :min="0"
+                :max="2"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <br/>
         </section>
     </section>
