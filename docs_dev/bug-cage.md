@@ -25,3 +25,8 @@
 👆　みたいなやつがあれば、列数３、行数４で、 index/fileNum とするところを index/rankNum としてるかも。  
 
 また、 index/printingWidth とすべきところで、間違えて index/boardWidth としているケースもある。  
+
+
+## コピー貼り付けミス
+
+これで、 true, false が逆になるパターン。  

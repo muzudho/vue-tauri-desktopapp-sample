@@ -61,12 +61,12 @@ function getPrinting1FileDelta(
 ) : number {
     return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
 }
-// function getPrinting1RankDelta(
-//     printing1Top: Ref<number>,
-//     board1SquareHeight: number,
-// ) : number {
-//     return Math.round(-printing1Top.value / board1SquareHeight);
-// }
+function getPrinting1RankDelta(
+    printing1Top: Ref<number>,
+    board1SquareHeight: number,
+) : number {
+    return Math.round(-printing1Top.value / board1SquareHeight);
+}
 
 
 /**
@@ -75,6 +75,7 @@ function getPrinting1FileDelta(
 export function handlePlayerController(
     appBoundaryIsLock: Ref<boolean>,
     boardSquareWidth: number,
+    boardSquareHeight: number,
     board1FileNum: Ref<number>,
     board1RankNum: Ref<number>,
     board1WithMaskSizeSquare: Ref<number>,
@@ -268,7 +269,7 @@ export function handlePlayerController(
                     // m = c
                     //
 
-                    const pd = getPrinting1FileDelta(printing1Left, boardSquareWidth) - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
+                    const pd = getPrinting1RankDelta(printing1Top, boardSquareHeight) - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
                     const m = - pd;
 
                     if (board1WithMaskSizeSquare.value < m) {
@@ -333,7 +334,7 @@ export function handlePlayerController(
                     // m = ch + c - bh
                     //
 
-                    const pd = -(getPrinting1FileDelta(printing1Left, boardSquareWidth)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
+                    const pd = -(getPrinting1RankDelta(printing1Top, boardSquareHeight)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
                     const ch = printing1RankNum.value; // 例えば 10
                     const bh = board1RankNum.value;
                     const m = ch + pd - bh;

@@ -660,10 +660,11 @@
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
 
-            /*
+            //*
             handlePlayerController(
                 appBoundaryIsLock,
                 board1SquareWidth,
+                board1SquareHeight,
                 board1FileNum,
                 board1RankNum,
                 board1WithMaskSizeSquare,
@@ -687,6 +688,7 @@
             );
             // */
 
+            /*
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
@@ -946,6 +948,7 @@
                     }
                 }
             }
+            // */
 
             // ++++++++++++++++++++
             // + 向き、移動を処理 +
