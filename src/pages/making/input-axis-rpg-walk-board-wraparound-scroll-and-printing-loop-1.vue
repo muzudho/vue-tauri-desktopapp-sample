@@ -30,8 +30,8 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyle(i - 1)">
-                <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">[{{
+                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
                         i - 1,
                         board1SquareWidth,
@@ -42,7 +42,7 @@
                         printing1Top,
                     )
                 }}]</span>
-                <span class="board-printing-index">[{{
+                <span class="board-printing-index">print[{{
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
@@ -63,12 +63,22 @@
                 }}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingStringFromPrintingIndex(
-                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                            i - 1,
-                            board1FileNum,
-                            board1RankNum,
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
                             -printing1Left / board1SquareWidth,
                             -printing1Top / board1SquareHeight,
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
                         )
                     )
                 }}</span>
@@ -284,7 +294,7 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
-    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
+    import { euclideanMod } from '../../composables/periodic-table-operation';
 
 
     // ##########
@@ -392,7 +402,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1IsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
+    const printing1IsLooping = ref<boolean>(true);    // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileNum = 10;    // 列数
     const printing1RankNum = 10;    // 行数
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
