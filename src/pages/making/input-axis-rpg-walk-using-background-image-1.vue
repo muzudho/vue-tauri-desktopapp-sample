@@ -481,10 +481,10 @@
             const bwPx = board1FileNum.value * board1SquareWidth;   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
             const bhPx = board1RankNum.value * board1SquareHeight;
 
-            // NOTE: 循環するだけなら、［剰余］を使えばいける。
+            // NOTE: ［オーバーラッピング］するだけなら、［剰余］を使えばいける。
             // 盤の左端列を、右端列へ移動させる。
-            const offsetLeftLoop = euclideanMod(homeLeft + printing1Left.value + bwPx, bwPx) - homeLeft;
-            const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
+            const offsetLeftLoop = euclideanMod(homeLeft + printing1Left.value, bwPx) - homeLeft;
+            const offsetTopLoop = euclideanMod(homeTop + printing1Top.value, bhPx) - homeTop;
 
             return {
                 left: `${homeLeft + offsetLeftLoop}px`,
