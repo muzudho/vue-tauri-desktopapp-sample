@@ -64,7 +64,7 @@
                     )
                 }}]</span>
                 <span class="board-printing-index">[{{
-                    getPrintingSquareIndexFromTileIndex(
+                    getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -74,12 +74,12 @@
                             printing1Left,
                             printing1Top,
                         ),
-                        board1FileNum,
-                        printing1IsLooping,
-                        printing1FileNum,
-                        printing1RankNum,
                         printing1Left / board1SquareWidth,
                         printing1Top / board1SquareHeight,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{ getSourceTileIndexStringFromTileIndex(i - 1) }}</span>
@@ -350,7 +350,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getPrintingSquareIndexFromTileIndex, getSubprintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
+    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -507,7 +507,7 @@
         (fixedSquareIndex: number) => string
     >(() => {
         return (fixedSquareIndex: number) => {
-            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+            const subprintingIndex = getPrintingIndexFromFixedSquareIndex(
                 fixedSquareIndex,
                 printing1FileDelta.value,
                 printing1RankDelta.value,
@@ -542,7 +542,7 @@
                 printing1Top.value / board1SquareHeight
             );
 
-            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+            const subprintingIndex = getPrintingIndexFromFixedSquareIndex(
                 fixedSquareIndex,
                 printing1FileDelta.value,
                 printing1RankDelta.value,
@@ -568,7 +568,7 @@
         (fixedSquareIndex:number)=>number
     >(() => {
         return (fixedSquareIndex: number) => {
-            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+            const subprintingIndex = getPrintingIndexFromFixedSquareIndex(
                 fixedSquareIndex,
                 printing1FileDelta.value,
                 printing1RankDelta.value,

@@ -30,8 +30,8 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyle(i - 1)">
-                <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">[{{
+                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
                         i - 1,
                         board1SquareWidth,
@@ -42,8 +42,8 @@
                         printing1Top,
                     )
                 }}]</span>
-                <span class="board-printing-index">[{{
-                    getPrintingSquareIndexFromTileIndex(
+                <span class="board-printing-index">print[{{
+                    getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -53,22 +53,32 @@
                             printing1Left,
                             printing1Top,
                         ),
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
                         board1FileNum,
-                        printing1IsLooping,
                         printing1FileNum,
                         printing1RankNum,
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight,
+                        printing1IsLooping,
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
-                    getPrintingStringBySquare(
-                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                            i - 1,
+                    getPrintingStringFromPrintingSquare(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -printing1Left / board1SquareWidth,
+                            -printing1Top / board1SquareHeight,
                             board1FileNum,
-                            board1RankNum,
-                            printing1Left / board1SquareWidth,
-                            printing1Top / board1SquareHeight
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
                         )
                     )
                 }}</span>
@@ -341,9 +351,8 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getSubprintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
-    import { getFixedSquareIndexFromTileIndex, getPrintingSquareIndexFromTileIndex } from '../../composables/board-operation'
-    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
+    import { getPrintingIndexFromFixedSquareIndex, getFixedSquareIndexFromTileIndex } from '../../composables/board-operation'
+    import { euclideanMod } from '../../composables/periodic-table-operation';
 
 
     // ##########
@@ -497,25 +506,17 @@
     /**
      * マスの印字。
      */
-    const getPrintingStringBySquare = computed<
-        (fixedSquareIndex: number) => string
+    const getPrintingStringFromPrintingSquare = computed<
+        (printingIndex: number) => string
     >(() => {
-        return (fixedSquareIndex: number) => {
-            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
-                fixedSquareIndex,
-                printing1FileDelta.value,
-                printing1RankDelta.value,
-                board1FileNum.value,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1IsLooping.value);
+        return (printingIndex: number) => {
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (subprintingIndex == -1) {
+            if (printingIndex == -1) {
                 return "-";
             }
 
-            return  printing1StringData.value[subprintingIndex];
+            return  printing1StringData.value[printingIndex];
         };
     });
 

@@ -35,8 +35,8 @@
                     i - 1,
                     board1FileNum,
                     board1RankNum,
-                    printing1Left / board1SquareWidth,
-                    printing1Top / board1SquareHeight
+                    -printing1Left / board1SquareWidth,
+                    -printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingStringBySquare(
@@ -44,8 +44,8 @@
                             i - 1,
                             board1FileNum,
                             board1RankNum,
-                            printing1Left / board1SquareWidth,
-                            printing1Top / board1SquareHeight
+                            -printing1Left / board1SquareWidth,
+                            -printing1Top / board1SquareHeight
                         )
                     )
                 }}</span>

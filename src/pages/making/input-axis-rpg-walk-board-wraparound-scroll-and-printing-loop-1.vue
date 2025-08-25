@@ -43,7 +43,7 @@
                     )
                 }}]</span>
                 <span class="board-printing-index">[{{
-                    getPrintingSquareIndexFromTileIndex(
+                    getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -53,22 +53,22 @@
                             printing1Left,
                             printing1Top,
                         ),
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
                         board1FileNum,
-                        printing1IsLooping,
                         printing1FileNum,
                         printing1RankNum,
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight,
+                        printing1IsLooping,
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
-                    getPrintingStringBySquare(
+                    getPrintingStringFromPrintingIndex(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
                             board1RankNum,
-                            printing1Left / board1SquareWidth,
-                            printing1Top / board1SquareHeight,
+                            -printing1Left / board1SquareWidth,
+                            -printing1Top / board1SquareHeight,
                         )
                     )
                 }}</span>
@@ -283,7 +283,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getIndexFromFileAndRank, getPrintingSquareIndexFromTileIndex } from '../../composables/board-operation';
+    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -407,40 +407,27 @@
         wrapAroundRight: 0,   // 負なら左、正なら右
         wrapAroundBottom: 0,   // 負なら上、正なら下
     });
-    const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
-        return Math.round(-printing1Left.value / board1SquareWidth);
-    });
-    const printing1RankDelta = computed<number>(()=>{
-        return Math.round(-printing1Top.value / board1SquareHeight);
-    });
+    // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
+    //     return Math.round(-printing1Left.value / board1SquareWidth);
+    // });
+    // const printing1RankDelta = computed<number>(()=>{
+    //     return Math.round(-printing1Top.value / board1SquareHeight);
+    // });
 
 
     /**
      * マスの印字。
      */
-    const getPrintingStringBySquare = computed<
-        (fixedSquareIndex: number) => string
+    const getPrintingStringFromPrintingIndex = computed<
+        (printingIndex: number) => string
     >(() => {
-        return (fixedSquareIndex: number) => {
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+        return (printingIndex: number) => {
 
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            let subprintingFile = squareFile + printing1FileDelta.value;
-            let subprintingRank = squareRank + printing1RankDelta.value;
-
-            if (printing1IsLooping.value) {
-                // 端でループする
-                subprintingFile = euclideanMod(subprintingFile, printing1FileNum);
-                subprintingRank = euclideanMod(subprintingRank, printing1RankNum);
-            } else {
-                // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-                if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
-                    return "-";
-                }
+            if (printingIndex < 0) {
+                return "-";
             }
 
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
-            return  printing1StringData.value[subprintingIndex];
+            return  printing1StringData.value[printingIndex];
         };
     });
 
