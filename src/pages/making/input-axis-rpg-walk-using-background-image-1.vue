@@ -53,6 +53,7 @@
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/tilemap_floor.png">
+
                 <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">[{{
                     getFixedSquareIndexFromTileIndex(
@@ -493,15 +494,12 @@
         };
     });
     const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
-    const board1SourceTilemapCoordination = computed(() => {   // 座標
-        const tileMap = [];
-        for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
-            const files = i % board1FileNum.value;
-            const ranks = Math.floor(i / board1FileNum.value);
-            tileMap.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
-        }
-        return tileMap;
-    });
+    interface SourceTile {
+        left: number,
+        top: number,
+        width: number,
+        height: number,
+    }
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -530,6 +528,12 @@
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
+    const board1SourceTilemapCoordination : SourceTile[] = [];
+    for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
+        const files = i % board1FileNum.value;
+        const ranks = Math.floor(i / board1FileNum.value);
+        board1SourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+    }
 
 
     /**
@@ -565,7 +569,7 @@
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-            return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
+            return board1SourceTilemapCoordination[sourceTileIndex]["left"];
         };
     });
 

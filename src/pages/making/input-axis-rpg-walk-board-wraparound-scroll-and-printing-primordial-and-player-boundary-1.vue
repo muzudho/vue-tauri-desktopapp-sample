@@ -30,6 +30,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)">
+                
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
