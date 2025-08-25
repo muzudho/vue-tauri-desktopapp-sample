@@ -29,8 +29,26 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyle(i - 1)"
-            >{{ getPrintingNumber(i - 1) }}
+                :style="getSquareStyle(i - 1)">
+                <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">[{{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                    i - 1,
+                    board1FileNum,
+                    board1RankNum,
+                    printing1Left / board1SquareWidth,
+                    printing1Top / board1SquareHeight
+                ) }}]</span>
+                <span class="square-printing-number">{{
+                    getPrintingNumber(
+                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                            i - 1,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left / board1SquareWidth,
+                            printing1Top / board1SquareHeight
+                        )
+                    )
+                }}</span>
             </div>
 
             <!-- 自機１ -->
@@ -462,18 +480,12 @@
      * 印字。
      */
     const getPrintingNumber = computed(() => {
-        return (tileIndex: number)=>{
-            const virtualTileIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
-                tileIndex,
-                board1FileNum.value,
-                board1RankNum.value,
-                printing1Left.value / board1FileNum.value,
-                printing1Top.value / board1RankNum.value
-            );
+        return (fixedSquareIndex: number)=>{
+            let [squareFile, squareRank] = tileIndexToTileFileRank(fixedSquareIndex);
 
-            let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
-            const printingFile = virtualTileFile + printing1FileDelta.value;
-            const printingRank = virtualTileRank + printing1RankDelta.value;
+            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+            const printingFile = squareFile + printing1FileDelta.value;
+            const printingRank = squareRank + printing1RankDelta.value;
             const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
@@ -1041,7 +1053,27 @@
     }
     div.square {    /* マス */
         position: absolute;
+    }
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
+        position: absolute;
+        top: 1px;
+        width: 100%;
         text-align: center;
+        font-size: 6px;
+    }
+    span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
+        position: absolute;
+        top: 8px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.square-printing-number {   /* マスの印字 */
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;

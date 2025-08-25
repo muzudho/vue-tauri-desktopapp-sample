@@ -432,7 +432,7 @@
 
     const getPrintingNumber = computed(() => {
         // 引数に渡されるのは、［盤のタイル番号］
-        return (tileIndex: number)=>{
+        return (fixedSquareIndex: number)=>{
             //return tileIndex;
 
             /*
@@ -485,11 +485,11 @@
              */
 
             //*
-            let [tileFile, tileRank] = getTileIndexToTileFileRank(tileIndex);  // 実際のタイル番号を、見た目上のタイルの位置に変換します。
+            let [squareFile, squareRank] = getTileIndexToTileFileRank(fixedSquareIndex);  // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
-            // タイル上の筋、段を、サブ印字表の筋、段へ変換：
-            let subprintingFile = tileFile - printing1File.value;
-            let subprintingRank = tileRank - printing1Rank.value;
+            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+            let subprintingFile = squareFile - printing1File.value;
+            let subprintingRank = squareRank - printing1Rank.value;
 
             // if (appIsLooping.value) {
                 subprintingFile = euclideanMod(subprintingFile, printing1FileNum.value); // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
