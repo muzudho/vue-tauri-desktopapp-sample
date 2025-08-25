@@ -18,9 +18,28 @@ const commonSpriteMotionRight = 1;
 const commonSpriteMotionDown = 1;
 
 
-// ##########
-// # その他 #
-// ##########
+// ################
+// # オブジェクト #
+// ################
+
+// ++++++++++++++++++++++++++
+// + オブジェクト　＞　印字 +
+// ++++++++++++++++++++++++**
+//
+// 盤上に表示される数字柄、絵柄など。
+//
+
+/**
+ * 印字への入力
+ */
+export interface MotionInput {
+    wrapAroundRight: number,    // 負なら左、正なら右
+    wrapAroundBottom: number,   // 負なら上、正なら下
+}
+
+// ++++++++++++++++++++++++++++
+// + オブジェクト　＞　自機１ +
+// ++++++++++++++++++++++++++++
 
 /**
  * プレイヤーへの入力
@@ -43,12 +62,11 @@ export function isPlayerInputKey(key: string): key is keyof PlayerInput {
 //     }
 // }
 
-/**
- * 印字への入力
- */
-export interface MotionInput {
-    wrapAroundRight: number,    // 負なら左、正なら右
-    wrapAroundBottom: number,   // 負なら上、正なら下
+export interface PlayerMotion {
+    lookRight: number,  // 向きを変える
+    lookBottom: number,
+    goToRight: number,  // 負なら左、正なら右へ移動する
+    goToBottom: number, // 負なら上、正なら下へ移動する
 }
 
 /**
@@ -85,7 +103,7 @@ function getPlayer1Rank(
  * キー入力を、モーションに変換します。
  * 
  * 十字方向の入力をした場合、player1Motion の ["lookRight"], ["lookBottom"] （自機の向き）を更新。
- * また、自機の移動を伴うケースでは、 ["goToRight"], ["goToBottom"] （自機の位置）を更新。
+ * また、自機の移動を伴うケースでは、十字方向の入力をした場合、player1Motion の ["goToRight"], ["goToBottom"] （自機の位置）を更新。
  * 
  * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
  */
@@ -102,7 +120,7 @@ export function handlePlayerController(
     playerHome1Top: Ref<number>,
     player1MotionWait: Ref<number>,
     player1Input: PlayerInput,
-    player1Motion: Ref<Record<string, number>>,
+    player1Motion: Ref<PlayerMotion>,
     player1Left: Ref<number>,
     player1Top: Ref<number>,
     player1CanBoardEdgeWalking: Ref<boolean>,

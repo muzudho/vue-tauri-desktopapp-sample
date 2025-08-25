@@ -417,7 +417,7 @@
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
     import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
-    import type { MotionInput, PlayerInput } from '../../composables/player-controller';
+    import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
 
     // ##########
@@ -548,7 +548,7 @@
     const printing1AreaMax = printing1FileMax * printing1RankMax;
     const printing1FileNum = ref<number>(printing1FileMax);   // 列数
     const printing1RankNum = ref<number>(printing1RankMax);   // 行数
-    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
+    // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
@@ -680,10 +680,12 @@
         ],
     };
     const player1Frames = ref(player1SourceFrames["down"]);
-    const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
-    const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        lookRight: 0,     // 向きを変える
+    const player1MotionWait = ref<number>(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1Motion = ref<PlayerMotion>({  // モーションへの入力
+        lookRight: 0,   // 向きを変える
         lookBottom: 0,
+        goToRight: 0,   // 負なら左、正なら右へ移動する
+        goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
     const player1CanBoardEdgeWalking = ref<boolean>(false);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）

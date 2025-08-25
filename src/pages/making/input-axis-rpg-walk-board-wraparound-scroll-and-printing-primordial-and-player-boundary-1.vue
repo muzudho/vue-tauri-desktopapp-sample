@@ -324,7 +324,7 @@
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
     import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
-    import type { MotionInput, PlayerInput } from '../../composables/player-controller';
+    import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
 
     // ##########
@@ -460,12 +460,6 @@
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
-    //     return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
-    // });
-    // const printing1RankDelta = computed<number>(()=>{
-    //     return Math.round(-printing1Top.value / board1SquareHeight);
-    // });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1StringData = ref<string[]>([]);
     // マップデータを生成
@@ -479,7 +473,7 @@
 
 
     /**
-     * マスの印字。
+     * マスの印字。ソース・タイルマップのタイルのインデックス x の文字列。
      * @returns 該当なしのとき "-"
      */
     const getPrintingStringFromPrintingIndex = computed<
@@ -491,7 +485,7 @@
                 return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             }
 
-            return  printing1StringData.value[printingIndex];
+            return printing1StringData.value[printingIndex];
         };
     });
 
@@ -530,7 +524,7 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1Left = ref<number>(playerHome1Left.value);    // スプライトの位置
     const player1Top = ref<number>(playerHome1Top.value);
-    const player1Input = { // 入力
+    const player1Input = {  // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     } as PlayerInput;
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
@@ -570,11 +564,11 @@
     };
     const player1Frames = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref<number>(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
-    const player1Motion = ref<Record<string, number>>({  // モーションへの入力
-        lookRight: 0,     // 向きを変える
+    const player1Motion = ref<PlayerMotion>({   // モーションへの入力
+        lookRight: 0,   // 向きを変える
         lookBottom: 0,
-        goToRight: 0,     // 負なら左、正なら右へ移動する
-        goToBottom: 0,    // 負なら上、正なら下へ移動する
+        goToRight: 0,   // 負なら左、正なら右へ移動する
+        goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
     const player1CanBoardEdgeWalking = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
