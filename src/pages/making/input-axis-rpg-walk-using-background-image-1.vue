@@ -29,22 +29,24 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyle(
-                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                        i - 1,
+                :style="getSquareStyleFromTileIndex(i - 1)"
+                :srcLeft="getPrintingLeftFromPrintingIndex(
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
+                        board1FileNum,
                         printing1FileNum,
                         printing1RankNum,
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight
-                    )
-                )"
-                :srcLeft="getPrintingLeftBySquare(
-                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                        i - 1,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight
+                        printing1IsLooping,
                     )
                 )"
                 :srcTop="0"
@@ -315,6 +317,7 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <p>盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
             <v-slider
                 label="盤の筋の数"
                 v-model="board1FileNum"
@@ -385,7 +388,7 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
-    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
+    import { euclideanMod } from '../../composables/periodic-table-operation';
 
 
     // ##########
@@ -464,13 +467,13 @@
             zoom: appZoom.value,
         };
     });
-    const getSquareStyle = computed<
-        (i:number)=>CompatibleStyleValue
+    const getSquareStyleFromTileIndex = computed<
+        (tileIndex:number)=>CompatibleStyleValue
     >(() => {
-        return (i:number)=>{
+        return (tileIndex:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;
+            const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
+            const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
 
             const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
             const bhPx = (board1RankNum.value * board1SquareHeight);
@@ -506,7 +509,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1IsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
+    const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
@@ -515,12 +518,12 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
-        return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
-    });
-    const printing1RankDelta = computed<number>(()=>{
-        return Math.round(-printing1Top.value / board1SquareHeight);
-    });
+    // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
+    //     return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
+    // });
+    // const printing1RankDelta = computed<number>(()=>{
+    //     return Math.round(-printing1Top.value / board1SquareHeight);
+    // });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // ランダムなマップデータを生成
@@ -556,25 +559,17 @@
     /**
      * ソース・タイルマップのタイルの位置 x。
      */
-    const getPrintingLeftBySquare = computed<
-        (fixedSquareIndex:number)=>number
+    const getPrintingLeftFromPrintingIndex = computed<
+        (printingIndex:number)=>number
     >(() => {
-        return (fixedSquareIndex: number) => {
-            const subprintingIndex = getPrintingIndexFromFixedSquareIndex(
-                fixedSquareIndex,
-                printing1FileDelta.value,
-                printing1RankDelta.value,
-                board1FileNum.value,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1IsLooping.value);
+        return (printingIndex: number) => {
 
             // 印字のサイズの範囲外になるところには、とりあえず -1 を返す
-            if (subprintingIndex == -1) {
+            if (printingIndex == -1) {
                 return -1;
             }
 
-            const sourceTileIndex = printing1SourceTileIndexesBoard.value[subprintingIndex];
+            const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
             return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
         };
     });

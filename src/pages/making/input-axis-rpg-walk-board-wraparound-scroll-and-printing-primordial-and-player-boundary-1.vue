@@ -29,7 +29,7 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyle(i - 1)">
+                :style="getSquareStyleFromTileIndex(i - 1)">
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
@@ -213,7 +213,7 @@
                 label="自機のホーム　＞　筋"
                 v-model="playerHome1File"
                 :min="0"
-                :max="2"
+                :max="4"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -221,7 +221,7 @@
                 label="自機のホーム　＞　段"
                 v-model="playerHome1Rank"
                 :min="0"
-                :max="2"
+                :max="4"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -230,7 +230,7 @@
                 label="盤の筋の数"
                 v-model="board1FileNum"
                 :min="0"
-                :max="6"
+                :max="board1FileMax"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -238,39 +238,7 @@
                 label="盤の段の数"
                 v-model="board1RankNum"
                 :min="0"
-                :max="6"
-                step="1"
-                showTicks="always"
-                thumbLabel="always" />
-            <v-slider
-                label="印字の筋の数"
-                v-model="printing1FileNum"
-                :min="0"
-                :max="10"
-                step="1"
-                showTicks="always"
-                thumbLabel="always" />
-            <v-slider
-                label="印字の段の数"
-                v-model="printing1RankNum"
-                :min="0"
-                :max="10"
-                step="1"
-                showTicks="always"
-                thumbLabel="always" />
-            <v-slider
-                label="自機のホームの筋"
-                v-model="playerHome1File"
-                :min="0"
-                :max="5"
-                step="1"
-                showTicks="always"
-                thumbLabel="always" />
-            <v-slider
-                label="自機のホームの段"
-                v-model="playerHome1Rank"
-                :min="0"
-                :max="5"
+                :max="board1RankMax"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -351,7 +319,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getPrintingIndexFromFixedSquareIndex, getFixedSquareIndexFromTileIndex } from '../../composables/board-operation'
+    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
     import { euclideanMod } from '../../composables/periodic-table-operation';
 
 
@@ -414,6 +382,8 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
+    const board1FileMax = 6;
+    const board1RankMax = 6;
     const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(5);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
@@ -444,13 +414,13 @@
             zoom: appZoom.value,
         };
     });
-    const getSquareStyle = computed<
-        (i:number)=>CompatibleStyleValue
+    const getSquareStyleFromTileIndex = computed<
+        (tileIndex:number)=>CompatibleStyleValue
     >(() => {
-        return (i:number)=>{
+        return (tileIndex:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;
+            const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
+            const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
 
             const bwPx = (board1FileNum.value * board1SquareWidth);   // 盤の横幅（ピクセル）。右側と下側に余分に付いている１マス分のマスクを含まない。
             const bhPx = (board1RankNum.value * board1SquareHeight);
@@ -465,7 +435,7 @@
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
+                border: `solid 1px ${tileIndex % 2 == 0 ? 'darkgray' : 'lightgray'}`,
             };
         };
     });
