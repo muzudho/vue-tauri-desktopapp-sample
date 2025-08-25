@@ -561,7 +561,6 @@
         top: `${player1Top.value}px`,
         width: `${player1Width}px`,
         height: `${player1Height}px`,
-        // 親要素で zoom を設定しているので、ここで zoom は不要です。
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
@@ -610,6 +609,7 @@
             borderLeft: `solid ${board1WithMaskSizeSquare.value * board1SquareWidth}px rgba(0,0,0,0.5)`,
         };
     });
+
 
     // ##########
     // # 開始時 #
@@ -665,10 +665,10 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    printing1Left.value = 0;    // 印字
-                    printing1Top.value = 0;
                     player1Left.value = playerHome1Left.value;  // 自機
                     player1Top.value = playerHome1Top.value;
+                    printing1Left.value = 0;    // 印字
+                    printing1Top.value = 0;
                 }
 
                 // 移動関連（単発）

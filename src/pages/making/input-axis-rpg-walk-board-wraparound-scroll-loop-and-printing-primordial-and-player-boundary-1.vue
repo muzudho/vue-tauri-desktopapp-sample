@@ -639,14 +639,16 @@
                 printing1Motion.value["wrapAroundBottom"] = 0;
             }
             
-            // キー入力をモーションに変換
+            // ++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換 +
+            // ++++++++++++++++++++++++++++++
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Left.value = playerHome1File.value * board1SquareWidth;   // 自機
-                    player1Top.value = playerHome1Rank.value * board1SquareHeight;
-                    printing1Left.value = 0;                                         // 印字
+                    player1Left.value = playerHome1Left.value;  // 自機
+                    player1Top.value = playerHome1Top.value;
+                    printing1Left.value = 0;    // 印字
                     printing1Top.value = 0;
                 }
 
