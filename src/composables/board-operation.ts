@@ -146,3 +146,20 @@ export function getPrintingIndexFromFixedSquareIndex(
     const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
     return subprintingIndex;
 }
+
+
+export function wrapAround(
+    homeLeft: number,
+    homeTop: number,
+    printingLeftDelta: number,
+    printingTopDelta: number,
+    boardWidthPixels: number,
+    boardHeightPixels: number,
+) : [number, number] {
+    // NOTE: ［ラップアラウンド］するだけなら、［剰余］を使えばいける。
+    // 盤の左端列を、右端列へ移動させる。
+    const offsetLeftLoop = euclideanMod(homeLeft + printingLeftDelta, boardWidthPixels) - homeLeft;
+    const offsetTopLoop = euclideanMod(homeTop + printingTopDelta, boardHeightPixels) - homeTop;
+
+    return [offsetLeftLoop, offsetTopLoop];
+}
