@@ -196,26 +196,40 @@
         <br/>
 
         <!-- デバッグ出力 -->
-        <div
-            v-for="i in board1Area"
-            :key="i">
-            fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                            i - 1,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1Left / board1SquareWidth,
-                            printing1Top / board1SquareHeight
-                        ) }} | 
-            printing: {{ getPrintingIndexStringBySquare(
-                            getIndexWhenAddUpFileAndRankOnPeriodicTable(
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appDebugInfoIsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
+        <section v-if="appDebugInfoIsShowing" class="sec-1">
+            <br/>
+            <div
+                v-for="i in board1Area"
+                :key="i">
+                fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
                                 i - 1,
                                 printing1FileNum,
                                 printing1RankNum,
                                 printing1Left / board1SquareWidth,
                                 printing1Top / board1SquareHeight
-                            )
-                        )}}<br/>
-        </div>
+                            ) }} | 
+                printing: {{ getPrintingIndexStringBySquare(
+                                getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                                    i - 1,
+                                    printing1FileNum,
+                                    printing1RankNum,
+                                    printing1Left / board1SquareWidth,
+                                    printing1Top / board1SquareHeight
+                                )
+                            )}}<br/>
+            </div>
+            <br/>
+        </section>
         
 
         <!-- 設定 -->
@@ -342,7 +356,8 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appConfigIsShowing = ref<boolean>(false);    // 操作方法等を表示中
+    const appDebugInfoIsShowing = ref<boolean>(false);  // デバッグ情報を表示中
+    const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
     const appZoom = ref<number>(4);    // ズーム
 
 
@@ -467,24 +482,53 @@
 
 
     /**
+     * 
+     * @param fixedSquareIndex 
+     * @returns 該当なしのとき -1
+     */
+    function getSubprintingIndexFromFixedSquareIndex(
+            fixedSquareIndex: number,
+            offsetFile: number,
+            offsetRank: number,
+            width: number,
+            printing1FileNum: number,
+            printing1RankNum: number) : number {
+        let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, width);
+
+        // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+        const subprintingFile = squareFile + offsetFile;
+        const subprintingRank = squareRank + offsetRank;
+
+        // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+        if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
+            return -1;
+        }
+
+        const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
+        return subprintingIndex;
+    }
+
+
+    /**
      * マスの印字。
      */
     const getPrintingIndexStringBySquare = computed<
         (fixedSquareIndex: number) => string
     >(() => {
         return (fixedSquareIndex: number) => {
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
-
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const subprintingFile = squareFile + printing1FileDelta.value;
-            const subprintingRank = squareRank + printing1RankDelta.value;
+            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+                fixedSquareIndex,
+                printing1FileDelta.value,
+                printing1RankDelta.value,
+                board1FileNum.value,
+                printing1FileNum.value,
+                printing1RankNum.value);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
+            if (subprintingIndex == -1) {
                 return "-";
             }
 
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
             return subprintingIndex.toString();
         };
     });
@@ -492,17 +536,24 @@
 
     /**
      * ソース・タイルマップのタイルのインデックス x。
+     * @returns 該当なしのとき -1
      */
     const getPrintingSourceTileIndexBySquare = computed<
         (fixedSquareIndex:number)=>number
     >(() => {
         return (fixedSquareIndex: number) => {
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+                fixedSquareIndex,
+                printing1FileDelta.value,
+                printing1RankDelta.value,
+                board1FileNum.value,
+                printing1FileNum.value,
+                printing1RankNum.value);
 
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const subprintingFile = squareFile + printing1FileDelta.value;
-            const subprintingRank = squareRank + printing1RankDelta.value;
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+            // 印字のサイズの範囲外になるところには、とりあえず -1 を返す
+            if (subprintingIndex == -1) {
+                return -1;
+            }
 
             return printing1SourceTileIndexesBoard.value[subprintingIndex];
         };
@@ -516,12 +567,18 @@
         (fixedSquareIndex:number)=>number
     >(() => {
         return (fixedSquareIndex: number) => {
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+                fixedSquareIndex,
+                printing1FileDelta.value,
+                printing1RankDelta.value,
+                board1FileNum.value,
+                printing1FileNum.value,
+                printing1RankNum.value);
 
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const subprintingFile = squareFile + printing1FileDelta.value;
-            const subprintingRank = squareRank + printing1RankDelta.value;
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+            // 印字のサイズの範囲外になるところには、とりあえず -1 を返す
+            if (subprintingIndex == -1) {
+                return -1;
+            }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[subprintingIndex];
             return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
@@ -835,7 +892,15 @@
 
 
     /**
-     * 設定ボタン。
+     * ［デバッグ情報を表示］ボタン。
+     */
+    function onDebugInfoButtonPressed() : void {
+        appDebugInfoIsShowing.value = !appDebugInfoIsShowing.value;
+    }
+
+
+    /**
+     * ［設定を表示］ボタン。
      */
     function onConfigButtonPressed() : void {
         appConfigIsShowing.value = !appConfigIsShowing.value;
