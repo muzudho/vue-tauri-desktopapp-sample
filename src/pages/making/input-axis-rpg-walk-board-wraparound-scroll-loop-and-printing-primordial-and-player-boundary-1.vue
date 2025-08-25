@@ -32,6 +32,7 @@
                 :style="getSquareStyle(i - 1)">
                 <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">[{{ getFixedSquareIndexFromTileIndex(i - 1) }}]</span>
+                <span class="board-printing-index">[{{ getPrintingSquareIndexFromTileIndex(i - 1)}}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
@@ -496,6 +497,39 @@
                 printing1Left.value / board1SquareWidth,
                 printing1Top.value / board1SquareHeight
             );
+        };
+    });
+
+
+    /**
+     * 印字盤のマスのインデックスを取得します。
+     */
+    const getPrintingSquareIndexFromTileIndex = computed<
+        (tileIndex: number) => string
+    >(() => {
+        return (tileIndex: number) => {
+            const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                tileIndex,
+                board1FileNum.value,
+                board1RankNum.value,
+                printing1Left.value / board1SquareWidth,
+                printing1Top.value / board1SquareHeight
+            );
+
+            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+                fixedSquareIndex,
+                printing1FileDelta.value,
+                printing1RankDelta.value,
+                board1FileNum.value,
+                printing1FileNum.value,
+                printing1RankNum.value);
+
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            if (subprintingIndex == -1) {
+                return "-";
+            }
+
+            return `${subprintingIndex}`;
         };
     });
 
@@ -1061,21 +1095,27 @@
     }
     span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
         position: absolute;
-        top: 1px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
     span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
         position: absolute;
-        top: 8px;
+        top: 6px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-printing-index {
+        position: absolute;
+        top: 12px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
     span.board-square-printing-string {   /* マスの印字 */
         position: absolute;
-        top: 12px;
+        top: 16px;
         width: 100%;
         text-align: center;
         font-size: 12px;
