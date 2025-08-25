@@ -49,7 +49,26 @@
                 :srcTop="0"
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
-                tilemapUrl="/img/making/tilemap_floor.png" />
+                tilemapUrl="/img/making/tilemap_floor.png">
+                <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">[{{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                    i - 1,
+                    board1FileNum,
+                    board1RankNum,
+                    printing1Left / board1SquareWidth,
+                    printing1Top / board1SquareHeight
+                ) }}]</span>
+                <span class="square-printing-number">{{
+                    getPrintingSourceTileIndexBySquare(
+                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                            i - 1,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left / board1SquareWidth,
+                            printing1Top / board1SquareHeight
+                        )
+                    )
+                }}</span>            </tile>
 
             <!-- 自機１ -->
             <tile-animation
@@ -86,7 +105,7 @@
                     )
                 )"
                 style="border:dashed 1px gray;"
-            >{{ getTileIndexBySquare(
+            >{{ getPrintingSourceTileIndexBySquare(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
                         board1FileNum,
@@ -408,15 +427,15 @@
     //const board1MapFiles = board1FileNum;  // マップデータ
     //const board1MapRanks = board1RankNum;
     //const board1MapArea = board1MapFiles.value * board1MapRanks.value;
-    const getTileIndexBySquare = computed(() => {
-        return (squareIndex: number) => {
-            return printingMapData.value[squareIndex];
+    const getPrintingSourceTileIndexBySquare = computed(() => {
+        return (fixedSquareIndex: number) => {
+            return printingMapData.value[fixedSquareIndex];
         };
     });
     const getFloorLeftBySquare = computed(() => {
-        return (squareIndex: number) => {
-            const tileIndex = printingMapData.value[squareIndex];
-            return board1SourceTilemapCoordination.value[tileIndex]["left"];
+        return (fixedSquareIndex: number) => {
+            const sourceTileIndex = printingMapData.value[fixedSquareIndex];
+            return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
         };
     });
 
@@ -427,8 +446,8 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1FileMax = board1FileMax; // 印字の最大サイズは、盤の最大サイズと同じものとする。
-    const printing1RankMax = board1RankMax;
+    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
+    const printing1RankMax = 10;
     const printingAreaMax = printing1FileMax * printing1RankMax;
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
@@ -764,6 +783,30 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.square {    /* マス */
+        position: absolute;
+    }
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
+        position: absolute;
+        top: 1px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
+        position: absolute;
+        top: 8px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.square-printing-number {   /* マスの印字 */
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
