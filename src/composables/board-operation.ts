@@ -20,3 +20,31 @@ export function getFileAndRankFromIndex(index: number, width: number) : [number,
 export function getIndexFromFileAndRank(file: number, rank: number, width: number) : number {
     return rank * width + file;
 }
+
+
+/**
+ * 固定マス・インデックスを、サブ印字表インデックスへ変換します。
+ * @param fixedSquareIndex 
+ * @returns 該当なしのとき -1
+ */
+export function getSubprintingIndexFromFixedSquareIndex(
+        fixedSquareIndex: number,
+        offsetFile: number,
+        offsetRank: number,
+        width: number,
+        printing1FileNum: number,
+        printing1RankNum: number) : number {
+    let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, width);
+
+    // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+    const subprintingFile = squareFile + offsetFile;
+    const subprintingRank = squareRank + offsetRank;
+
+    // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+    if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
+        return -1;
+    }
+
+    const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
+    return subprintingIndex;
+}

@@ -70,17 +70,7 @@
                         )
                     )
                 }}</span>
-                <span class="board-square-source-tile-index">[{{
-                    getPrintingSourceTileIndexBySquare(
-                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                            i - 1,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1Left / board1SquareWidth,
-                            printing1Top / board1SquareHeight
-                        )
-                    )
-                }}]</span>
+                <span class="board-square-source-tile-index">[{{ getSourceTileIndexStringFromTileIndex(i - 1) }}]</span>
             </tile>
 
             <!-- 自機１ -->
@@ -208,11 +198,36 @@
         >{{ appDebugInfoIsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
         <section v-if="appDebugInfoIsShowing" class="sec-1">
             <br/>
+            <p>👇 盤の各マス</p>
             <div
                 v-for="i in board1Area"
                 :key="i">
+                tile-index: {{ i - 1 }} | 
                 fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
                                 i - 1,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left / board1SquareWidth,
+                                printing1Top / board1SquareHeight
+                            ) }} | 
+                printing: {{ getPrintingIndexStringBySquare(
+                                getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                                    i - 1,
+                                    board1FileNum,
+                                    board1RankNum,
+                                    printing1Left / board1SquareWidth,
+                                    printing1Top / board1SquareHeight
+                                )
+                            )}}<br/>
+            </div>
+            <br/>
+            <p>👇 印字表の各マス</p>
+            <div
+                v-for="j in printing1AreaMax"
+                :key="j">
+                printing-index: {{ j - 1 }} | 
+                fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                                j - 1,
                                 printing1FileNum,
                                 printing1RankNum,
                                 printing1Left / board1SquareWidth,
@@ -220,7 +235,7 @@
                             ) }} | 
                 printing: {{ getPrintingIndexStringBySquare(
                                 getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                                    i - 1,
+                                    j - 1,
                                     printing1FileNum,
                                     printing1RankNum,
                                     printing1Left / board1SquareWidth,
@@ -507,13 +522,21 @@
 
 
     /**
-     * ソース・タイルマップのタイルのインデックス x。
-     * @returns 該当なしのとき -1
+     * ソース・タイルマップのタイルのインデックス x の文字列。
+     * @returns 該当なしのとき "not found"
      */
-    const getPrintingSourceTileIndexBySquare = computed<
-        (fixedSquareIndex:number)=>number
-    >(() => {
-        return (fixedSquareIndex: number) => {
+    const getSourceTileIndexStringFromTileIndex = computed<
+        (tileIndex: number) => string
+    >(()=>{
+        return (tileIndex: number)=>{
+            const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                tileIndex - 1,
+                printing1FileNum.value,
+                printing1RankNum.value,
+                printing1Left.value / board1SquareWidth,
+                printing1Top.value / board1SquareHeight
+            );
+
             const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
                 fixedSquareIndex,
                 printing1FileDelta.value,
@@ -522,12 +545,12 @@
                 printing1FileNum.value,
                 printing1RankNum.value);
 
-            // 印字のサイズの範囲外になるところには、とりあえず -1 を返す
             if (subprintingIndex == -1) {
-                return -1;
+                return "not found";
             }
 
-            return printing1SourceTileIndexesBoard.value[subprintingIndex];
+            const sourceTileIndex = printing1SourceTileIndexesBoard.value[subprintingIndex];
+            return `${sourceTileIndex}`;
         };
     });
 
@@ -556,7 +579,6 @@
             return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
         };
     });
-
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +

@@ -482,7 +482,7 @@
             if (subprintingIndex == -1) {
                 return "-";
             }
-        
+
             return  printing1StringData.value[subprintingIndex];
         };
     });
