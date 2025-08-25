@@ -212,7 +212,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { euclideanMod } from '../../composables/board-operation';
+    import { euclideanMod } from '../../composables/periodic-table-operation';
 
     
     // ##########

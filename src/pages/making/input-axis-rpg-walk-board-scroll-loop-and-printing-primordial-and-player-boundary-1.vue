@@ -294,7 +294,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/board-operation';
+    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
     // ##########
