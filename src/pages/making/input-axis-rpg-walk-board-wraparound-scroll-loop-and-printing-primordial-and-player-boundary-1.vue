@@ -464,24 +464,53 @@
 
 
     /**
+     * 
+     * @param fixedSquareIndex 
+     * @returns 該当なしのとき -1
+     */
+    function getSubprintingIndexFromFixedSquareIndex(
+            fixedSquareIndex: number,
+            offsetFile: number,
+            offsetRank: number,
+            width: number,
+            printing1FileNum: number,
+            printing1RankNum: number) : number {
+        let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, width);
+
+        // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+        const subprintingFile = squareFile + offsetFile;
+        const subprintingRank = squareRank + offsetRank;
+
+        // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+        if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
+            return -1;
+        }
+
+        const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
+        return subprintingIndex;
+    }
+
+
+    /**
      * マスの印字。
      */
     const getPrintingStringBySquare = computed<
         (fixedSquareIndex: number) => string
     >(() => {
         return (fixedSquareIndex: number) => {
-            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
-
-            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const subprintingFile = squareFile + printing1FileDelta.value;
-            const subprintingRank = squareRank + printing1RankDelta.value;
+            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
+                fixedSquareIndex,
+                printing1FileDelta.value,
+                printing1RankDelta.value,
+                board1FileNum.value,
+                printing1FileNum.value,
+                printing1RankNum.value);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
+            if (subprintingIndex == -1) {
                 return "-";
             }
-
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+        
             return  printing1StringData.value[subprintingIndex];
         };
     });
