@@ -389,7 +389,7 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
-    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が移動することはありません。
+    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
     const bothSide = 2;     // 左と右とか、上と下とか、対。
@@ -447,7 +447,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1IsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
+    const printing1IsLooping = ref<boolean>(false); // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
@@ -464,6 +464,7 @@
     });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1StringData = ref<string[]>([]);
+    // マップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
@@ -475,15 +476,15 @@
 
     /**
      * マスの印字。
+     * @returns 該当なしのとき "-"
      */
     const getPrintingStringFromPrintingIndex = computed<
         (printingIndex: number) => string
     >(() => {
         return (printingIndex: number) => {
 
-            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             if (printingIndex == -1) {
-                return "-";
+                return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             }
 
             return  printing1StringData.value[printingIndex];
@@ -1085,8 +1086,9 @@
         position: absolute;
         image-rendering: pixelated;
     }
-    div.out-of-sight {  /* 視界の外 */
+    div.out-of-sight {  /* 視界の外１ */
         position: absolute;
         image-rendering: pixelated;
     }
+
 </style>

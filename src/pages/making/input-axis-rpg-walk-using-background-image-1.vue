@@ -447,11 +447,12 @@
     const board1SquareHeight = 32;
     const board1FileMax = 6;
     const board1RankMax = 6;
-    const board1FileNum = ref<number>(5);   // 筋の数
+    const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(5);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
+    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = computed<number>(()=>{
@@ -518,12 +519,6 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
-    //     return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
-    // });
-    // const printing1RankDelta = computed<number>(()=>{
-    //     return Math.round(-printing1Top.value / board1SquareHeight);
-    // });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // ランダムなマップデータを生成
@@ -538,16 +533,16 @@
 
 
     /**
-     * ソース・タイルマップのタイルのインデックス x の文字列。
-     * @returns 該当なしのとき "not found"
+     * マスの印字。ソース・タイルマップのタイルのインデックス x の文字列。
+     * @returns 該当なしのとき "-"
      */
     const getPrintingStringFromPrintingIndex = computed<
         (printingIndex: number) => string
-    >(()=>{
-        return (printingIndex: number)=>{
+    >(() => {
+        return (printingIndex: number) => {
 
             if (printingIndex == -1) {
-                return "not found";
+                return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
@@ -904,7 +899,7 @@
         position: absolute;
         image-rendering: pixelated;
     }
-    span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
         position: absolute;
         width: 100%;
         text-align: center;
