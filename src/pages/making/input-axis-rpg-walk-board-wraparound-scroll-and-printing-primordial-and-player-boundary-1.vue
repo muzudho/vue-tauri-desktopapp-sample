@@ -31,7 +31,17 @@
                 class="square"
                 :style="getSquareStyle(i - 1)">
                 <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">[{{ getFixedSquareIndexFromTileIndex(i - 1) }}]</span>
+                <span class="board-fixed-square-index">[{{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }}]</span>
                 <span class="board-printing-index">[{{ getPrintingSquareIndexFromTileIndex(i - 1)}}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingStringBySquare(
@@ -314,6 +324,7 @@
     // ++++++++++++++++++
 
     import { getSubprintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
+    import { getFixedSquareIndexFromTileIndex } from '../../composables/board-operation'
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -487,24 +498,6 @@
             }
 
             return  printing1StringData.value[subprintingIndex];
-        };
-    });
-
-
-    /**
-     * 見た目のマスのインデックスを取得します。
-     */
-    const getFixedSquareIndexFromTileIndex = computed<
-        (tileIndex: number) => number
-    >(() => {
-        return (tileIndex: number) => {
-            return getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                tileIndex,
-                board1FileNum.value,
-                board1RankNum.value,
-                printing1Left.value / board1SquareWidth,
-                printing1Top.value / board1SquareHeight
-            );
         };
     });
 

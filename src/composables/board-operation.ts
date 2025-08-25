@@ -2,7 +2,13 @@
 // # インポート #
 // ##############
 
-import { euclideanMod } from "./periodic-table-operation"
+import { computed } from "vue";
+
+// ++++++++++++++++++
+// + コンポーザブル +
+// ++++++++++++++++++
+
+import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from "./periodic-table-operation"
 
 
 // ################
@@ -34,7 +40,41 @@ export function getIndexFromFileAndRank(file: number, rank: number, width: numbe
 
 
 /**
- * 固定マス・インデックスを、サブ印字表インデックスへ変換します。
+ * 見た目のマスのインデックス（固定インデックス）を取得します。
+ */
+export const getFixedSquareIndexFromTileIndex = computed<
+    (
+        tileIndex: number,
+        board1SquareWidth: number,
+        board1SquareHeight: number,
+        board1FileNum: number,
+        board1RankNum: number,
+        printing1Left: number,
+        printing1Top: number,
+    ) => number
+>(() => {
+    return (
+        tileIndex: number,
+        board1SquareWidth: number,
+        board1SquareHeight: number,
+        board1FileNum: number,
+        board1RankNum: number,
+        printing1Left: number,
+        printing1Top: number,
+    ) => {
+        return getIndexWhenAddUpFileAndRankOnPeriodicTable(
+            tileIndex,
+            board1FileNum,
+            board1RankNum,
+            printing1Left / board1SquareWidth,
+            printing1Top / board1SquareHeight
+        );
+    };
+});
+
+
+/**
+ * 見た目のマスのインデックス（固定インデックス）を、サブ印字表インデックスへ変換します。
  * @param fixedSquareIndex 
  * @returns 該当なしのとき -1
  */
