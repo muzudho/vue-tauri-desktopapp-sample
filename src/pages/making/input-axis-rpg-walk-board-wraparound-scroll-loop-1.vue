@@ -38,7 +38,7 @@
                     printing1Left / board1SquareWidth,
                     printing1Top / board1SquareHeight
                 ) }}]</span>
-                <span class="square-printing-number">{{
+                <span class="board-square-printing-string">{{
                     getPrintingBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
@@ -812,7 +812,7 @@
         text-align: center;
         font-size: 6px;
     }
-    span.square-printing-number {   /* マスの印字 */
+    span.board-square-printing-string {   /* マスの印字 */
         position: absolute;
         top: 12px;
         width: 100%;

@@ -59,7 +59,7 @@
                     printing1Left / board1SquareWidth,
                     printing1Top / board1SquareHeight
                 ) }}]</span>
-                <span class="square-printing-number">{{
+                <span class="board-square-printing-string">{{
                     getPrintingBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
@@ -70,6 +70,17 @@
                         )
                     )
                 }}</span>
+                <span class="board-square-source-tile-index">[{{
+                    getPrintingSourceTileIndexBySquare(
+                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                            i - 1,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left / board1SquareWidth,
+                            printing1Top / board1SquareHeight
+                        )
+                    )
+                }}]</span>
             </tile>
 
             <!-- 自機１ -->
@@ -95,40 +106,9 @@
         <br/>
 
         <p>
-            👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！<br/>
+            👆 半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！<br/>
+            マスの中の４段目の数字は、ソース・タイルのインデックスだぜ（＾～＾）！<br/>
         </p>
-        <br/>
-
-        <p>👇印字のインデックスだぜ（＾▽＾）：</p>
-        <div
-            class="square"
-            :style="board1SourceTileSampleStyle">
-            <!-- グリッド・タイル -->
-            <div
-                v-for="i in board1Area"
-                :key="i"
-                class="printing-square"
-                :style="getSquareStyle(
-                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                        i - 1,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight
-                    )
-                )"
-            >{{ getPrintingBySquare(
-                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                        i - 1,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight
-                    )
-                ) }}
-            </div>
-        </div>
-        <p>：ここまで。</p>
         <br/>
 
         <p>元画像のタイルマップを表示：</p>
@@ -418,15 +398,6 @@
             };
         };
     });
-    const board1SourceTileSampleStyle = computed<CompatibleStyleValue>(()=>{  // ボードだけを含んでいる領域のスタイル
-        return {
-            position: 'relative',
-            left: "0",
-            top: "0",
-            width: `${board1FileNum.value * board1SquareWidth}px`,
-            height: `${board1RankNum.value * board1SquareHeight}px`,
-        };
-    });
     const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
     const board1SourceTilemapCoordination = computed(() => {   // 座標
         const tileMap = [];
@@ -492,6 +463,25 @@
 
             const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
             return subprintingIndex.toString();
+        };
+    });
+
+
+    /**
+     * ソース・タイルマップのタイルのインデックス x。
+     */
+    const getPrintingSourceTileIndexBySquare = computed<
+        (fixedSquareIndex:number)=>number
+    >(() => {
+        return (fixedSquareIndex: number) => {
+            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+
+            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+            const subprintingFile = squareFile + printing1FileDelta.value;
+            const subprintingRank = squareRank + printing1RankDelta.value;
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+
+            return printing1SourceTileIndexesBoard.value[subprintingIndex];
         };
     });
 
@@ -741,7 +731,6 @@
                 // ++++++++++++++++
 
                 if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0) {
-                    //  || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 } else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
                     player1MotionWait.value = player1AnimationFacingFrames;
@@ -839,11 +828,6 @@
         position: absolute;
         image-rendering: pixelated;
     }
-    div.printing-square {    /* ソース印字表のマス */
-        position: absolute;
-        image-rendering: pixelated;
-        border: dashed 1px gray;
-    }
     span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
         position: absolute;
         top: 1px;
@@ -858,12 +842,19 @@
         text-align: center;
         font-size: 6px;
     }
-    span.square-printing-number {   /* マスの印字 */
+    span.board-square-printing-string {   /* マスの印字 */
         position: absolute;
         top: 12px;
         width: 100%;
         text-align: center;
         font-size: 12px;
+    }
+    span.board-square-source-tile-index {    /* マスの画像の、ソースのタイルのインデックス */
+        position: absolute;
+        top: 24px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
