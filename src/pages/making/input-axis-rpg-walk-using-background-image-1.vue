@@ -63,7 +63,7 @@
                         printing1Top,
                     )
                 }}]</span>
-                <span class="board-printing-index">[{{
+                <span class="board-printing-index">print[{{
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
@@ -74,15 +74,35 @@
                             printing1Left,
                             printing1Top,
                         ),
-                        printing1Left / board1SquareWidth,
-                        printing1Top / board1SquareHeight,
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
                         board1FileNum,
                         printing1FileNum,
                         printing1RankNum,
                         printing1IsLooping,
                     )
                 }}]</span>
-                <span class="board-square-printing-string">{{ getSourceTileIndexStringFromTileIndex(i - 1) }}</span>
+                <span class="board-square-printing-string">{{
+                    getPrintingStringFromPrintingIndex(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -printing1Left / board1SquareWidth,
+                            -printing1Top / board1SquareHeight,
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    )
+                }}</span>
             </tile>
 
             <!-- 自機１ -->
@@ -215,22 +235,36 @@
                 v-for="i in board1Area"
                 :key="i">
                 tile-index: {{ i - 1 }} | 
-                fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                                i - 1,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left / board1SquareWidth,
-                                printing1Top / board1SquareHeight
-                            ) }} | 
-                printing: {{ getPrintingIndexStringBySquare(
-                                getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                                    i - 1,
-                                    board1FileNum,
-                                    board1RankNum,
-                                    printing1Left / board1SquareWidth,
-                                    printing1Top / board1SquareHeight
-                                )
-                            )}}<br/>
+                fix-index: {{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }} | 
+                printing: {{
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                }}<br/>
             </div>
             <br/>
             <p>👇 印字表の各マス</p>
@@ -501,61 +535,19 @@
 
 
     /**
-     * マスの印字。
-     */
-    const getPrintingIndexStringBySquare = computed<
-        (fixedSquareIndex: number) => string
-    >(() => {
-        return (fixedSquareIndex: number) => {
-            const subprintingIndex = getPrintingIndexFromFixedSquareIndex(
-                fixedSquareIndex,
-                printing1FileDelta.value,
-                printing1RankDelta.value,
-                board1FileNum.value,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1IsLooping.value);
-
-            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (subprintingIndex == -1) {
-                return "-";
-            }
-
-            return subprintingIndex.toString();
-        };
-    });
-
-
-    /**
      * ソース・タイルマップのタイルのインデックス x の文字列。
      * @returns 該当なしのとき "not found"
      */
-    const getSourceTileIndexStringFromTileIndex = computed<
-        (tileIndex: number) => string
+    const getPrintingStringFromPrintingIndex = computed<
+        (printingIndex: number) => string
     >(()=>{
-        return (tileIndex: number)=>{
-            const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(   // マスの物自体に付いているインデックスを、見た目のマスのインデックスに変換します。
-                tileIndex,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1Left.value / board1SquareWidth,
-                printing1Top.value / board1SquareHeight
-            );
+        return (printingIndex: number)=>{
 
-            const subprintingIndex = getPrintingIndexFromFixedSquareIndex(
-                fixedSquareIndex,
-                printing1FileDelta.value,
-                printing1RankDelta.value,
-                board1FileNum.value,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1IsLooping.value);
-
-            if (subprintingIndex == -1) {
+            if (printingIndex == -1) {
                 return "not found";
             }
 
-            const sourceTileIndex = printing1SourceTileIndexesBoard.value[subprintingIndex];
+            const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
             return `${sourceTileIndex}`;
         };
     });
