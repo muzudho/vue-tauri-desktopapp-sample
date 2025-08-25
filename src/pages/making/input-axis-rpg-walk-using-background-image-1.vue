@@ -416,6 +416,8 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
+    import type { MotionInput, PlayerInput } from '../../composables/player-controller';
 
 
     // ##########

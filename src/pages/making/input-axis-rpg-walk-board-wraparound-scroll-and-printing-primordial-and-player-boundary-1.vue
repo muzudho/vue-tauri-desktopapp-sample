@@ -529,13 +529,6 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1Left = ref<number>(playerHome1Left.value);    // スプライトの位置
     const player1Top = ref<number>(playerHome1Top.value);
-    // const player1File = computed<number>(()=>{
-    //     return Math.round(player1Left.value / board1SquareWidth);
-    // });
-    // const player1Rank = computed<number>(()=>{
-    //     return Math.round(player1Top.value / board1SquareHeight);
-    // });
-
     const player1Input = { // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     } as PlayerInput;
