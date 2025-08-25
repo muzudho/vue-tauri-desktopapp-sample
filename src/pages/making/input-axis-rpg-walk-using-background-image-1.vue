@@ -63,7 +63,22 @@
                         printing1Top,
                     )
                 }}]</span>
-                <span class="board-printing-index">[{{ getPrintingSquareIndexFromTileIndex(i - 1)}}]</span>
+                <span class="board-printing-index">[{{
+                    getPrintingSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1IsLooping,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1Left,
+                        printing1Top,
+                        printing1Left / board1SquareWidth,
+                        printing1Top / board1SquareHeight,
+                    )
+                }}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingIndexStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
@@ -343,7 +358,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getSubprintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
+    import { getFixedSquareIndexFromTileIndex, getPrintingSquareIndexFromTileIndex, getSubprintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -515,40 +530,6 @@
             }
 
             return subprintingIndex.toString();
-        };
-    });
-
-
-    /**
-     * 印字盤のマスのインデックスを取得します。
-     */
-    const getPrintingSquareIndexFromTileIndex = computed<
-        (tileIndex: number) => string
-    >(() => {
-        return (tileIndex: number) => {
-            const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                tileIndex,
-                board1FileNum.value,
-                board1RankNum.value,
-                printing1Left.value / board1SquareWidth,
-                printing1Top.value / board1SquareHeight
-            );
-
-            const subprintingIndex = getSubprintingIndexFromFixedSquareIndex(
-                fixedSquareIndex,
-                printing1FileDelta.value,
-                printing1RankDelta.value,
-                board1FileNum.value,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1IsLooping.value);
-
-            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (subprintingIndex == -1) {
-                return "-";
-            }
-
-            return `${subprintingIndex}`;
         };
     });
 
@@ -956,6 +937,13 @@
         width: 100%;
         text-align: center;
         font-size: 6px;
+    }
+    span.board-square-printing-string {   /* マスの印字 */
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
     }
     span.board-printing-index {
         position: absolute;
