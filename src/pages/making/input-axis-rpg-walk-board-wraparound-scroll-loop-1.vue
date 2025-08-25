@@ -39,7 +39,7 @@
                     printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="square-printing-number">{{
-                    getPrintingNumber(
+                    getPrintingBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
@@ -277,6 +277,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
+    import { getFileAndRankFromIndex, getIndexFromFileAndRank } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -399,40 +400,21 @@
     const printing1Rank = computed<number>(()=>{
         return Math.round(printing1Top.value / board1SquareHeight); // FIXME:
     });
-    const printing1Data = ref<string[]>([]);
+    const printing1StringData = ref<string[]>([]);
     for (let i=0; i<printing1FileMax * printing1RankMax; i++) { // 印字データは最初から最大サイズで用意しておく
-        printing1Data.value.push(i.toString().padStart(2, "0"));
+        printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
-
-    
-    /**
-     * マスの物自体（タイル）に付いているインデックスを、筋、段へ変換。
-     * @param index マス番号
-     * @returns [筋番号, 段番号]
-     */
-    function getTileIndexToTileFileRank(index: number) : number[] {
-        // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-        const file = index % board1FileNum.value;
-        const rank = Math.floor(index / board1FileNum.value);
-
-        return [file, rank];
-    }
-
-
-    function printingFileRankToPrintingIndex(file: number, rank: number) : number {
-        return rank * printing1FileNum.value + file;
-    }
-
-
     const printing1Speed = ref<number>(2);     // 移動速度（単位：ピクセル）
     const printing1Motion = ref<Record<string, number>>({  // 印字への入力
         wrapAroundRight: 0,   // 負なら左、正なら右
         wrapAroundBottom: 0,   // 負なら上、正なら下
     });
 
-    const getPrintingNumber = computed(() => {
+    const getPrintingBySquare = computed<
+        (fixedSquareIndex: number) => string
+    >(() => {
         // 引数に渡されるのは、［盤のタイル番号］
-        return (fixedSquareIndex: number)=>{
+        return (fixedSquareIndex: number) => {
             //return tileIndex;
 
             /*
@@ -484,8 +466,7 @@
                 subprintingIndex = subprintingRank * (印字表の筋の数 3) + subprintingFile = 3。
              */
 
-            //*
-            let [squareFile, squareRank] = getTileIndexToTileFileRank(fixedSquareIndex);  // 実際のタイル番号を、見た目上のタイルの位置に変換します。
+            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
 
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：
             let subprintingFile = squareFile - printing1File.value;
@@ -502,9 +483,8 @@
             // }
 
             // サブ印字表上の指定位置にある印字を返す
-            const subprintingIndex = printingFileRankToPrintingIndex(subprintingFile, subprintingRank);
-            return  printing1Data.value[subprintingIndex];
-            // */
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+            return  printing1StringData.value[subprintingIndex];
         };
     });    
 

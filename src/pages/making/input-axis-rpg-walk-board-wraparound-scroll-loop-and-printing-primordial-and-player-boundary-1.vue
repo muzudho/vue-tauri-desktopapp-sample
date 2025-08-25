@@ -453,9 +453,9 @@
         return Math.round(-printing1Top.value / board1SquareHeight);
     });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const printing1Data = ref<string[]>([]);
+    const printing1StringData = ref<string[]>([]);
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
-        printing1Data.value.push(i.toString().padStart(2, "0"));
+        printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
     const printing1Motion = ref<Record<string, number>>({   // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
@@ -473,16 +473,16 @@
             let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
 
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const printingFile = squareFile + printing1FileDelta.value;
-            const printingRank = squareRank + printing1RankDelta.value;
+            const subprintingFile = squareFile + printing1FileDelta.value;
+            const subprintingRank = squareRank + printing1RankDelta.value;
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (printingFile < 0 || printing1FileNum.value <= printingFile || printingRank < 0 || printing1RankNum.value <= printingRank) {
+            if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
                 return "-";
             }
 
-            const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum.value);
-            return  printing1Data.value[printingIndex];
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+            return  printing1StringData.value[subprintingIndex];
         };
     });
 
@@ -504,10 +504,10 @@
     });
     const playerHome1Style = computed<CompatibleStyleValue>(()=>{
         return {
-            left: `${playerHome1Left}px`,
-            top: `${playerHome1Top}px`,
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
             width: `${board1SquareWidth}px`,
-            height: `${board1SquareHeight}px;`,
+            height: `${board1SquareHeight}px`,
         };
     });
 

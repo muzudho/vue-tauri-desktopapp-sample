@@ -39,7 +39,7 @@
                     printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="square-printing-number">{{
-                    getPrintingNumber(
+                    getPrintingBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
@@ -254,6 +254,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
+    import { getFileAndRankFromIndex, getIndexFromFileAndRank } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -368,9 +369,9 @@
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
     const printing1Speed = ref<number>(2);     // 移動速度（単位：ピクセル）
-    const printing1Data = ref<string[]>([]);
+    const printing1StringData = ref<string[]>([]);
     for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
-        printing1Data.value.push(i.toString().padStart(2, "0"));
+        printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
     const printing1Motion = ref<Record<string, number>>({  // 印字への入力
         wrapAroundRight: 0,   // 負なら左、正なら右
@@ -385,42 +386,25 @@
 
 
     /**
-     * 変換
-     * @param tileIndex マス番号
-     * @returns [筋番号, 段番号]
+     * マスの印字。
      */
-    function tileIndexToTileFileRank(tileIndex: number) : [number, number] {
-        // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
-        const file = tileIndex % board1FileNum.value;
-        const rank = Math.floor(tileIndex / board1FileNum.value);
-
-        return [file, rank];
-    }
-
-
-    function printingFileRankToPrintingIndex(file: number, rank: number) : number {
-        return rank * printing1FileNum + file;
-    }
-
-
-    /**
-     * 印字。
-     */
-    const getPrintingNumber = computed(() => {
-        return (fixedSquareIndex: number)=>{
-            let [squareFile, squareRank] = tileIndexToTileFileRank(fixedSquareIndex);
+    const getPrintingBySquare = computed<
+        (fixedSquareIndex: number) => string
+    >(() => {
+        return (fixedSquareIndex: number) => {
+            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
 
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const printingFile = squareFile + printing1FileDelta.value;
-            const printingRank = squareRank + printing1RankDelta.value;
-            const printingIndex = printingFileRankToPrintingIndex(printingFile, printingRank);
+            const subprintingFile = squareFile + printing1FileDelta.value;
+            const subprintingRank = squareRank + printing1RankDelta.value;
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-            if (printingFile < 0 || printing1FileNum <= printingFile || printingRank < 0 || printing1RankNum <= printingRank) {
+            if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
                 return "-";
             }
 
-            return  printing1Data.value[printingIndex];
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
+            return  printing1StringData.value[subprintingIndex];
         };
     });
 
@@ -441,10 +425,10 @@
     });
     const playerHome1Style = computed<CompatibleStyleValue>(()=>{
         return {
-            left: `${playerHome1Left}px`,
-            top: `${playerHome1Top}px`,
+            left: `${playerHome1Left.value}px`,
+            top: `${playerHome1Top.value}px`,
             width: `${board1SquareWidth}px`,
-            height: `${board1SquareHeight}px;`,
+            height: `${board1SquareHeight}px`,
         };
     });
 

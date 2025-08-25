@@ -476,17 +476,22 @@
      * マスの印字。
      */
     const getPrintingBySquare = computed<
-        (fixedSquareIndex: number) => number
+        (fixedSquareIndex: number) => string
     >(() => {
         return (fixedSquareIndex: number) => {
             let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
-            
+
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：
             const subprintingFile = squareFile + printing1FileDelta.value;
             const subprintingRank = squareRank + printing1RankDelta.value;
-            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
 
-            return subprintingIndex;
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            if (subprintingFile < 0 || printing1FileNum.value <= subprintingFile || subprintingRank < 0 || printing1RankNum.value <= subprintingRank) {
+                return "-";
+            }
+
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+            return subprintingIndex.toString();
         };
     });
 
