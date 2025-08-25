@@ -31,13 +31,7 @@
                 class="square"
                 :style="getSquareStyle(i - 1)">
                 <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">[{{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                    i - 1,
-                    board1FileNum,
-                    board1RankNum,
-                    printing1Left / board1SquareWidth,
-                    printing1Top / board1SquareHeight
-                ) }}]</span>
+                <span class="board-fixed-square-index">[{{ getFixedSquareIndexFromTileIndex(i - 1) }}]</span>
                 <span class="board-square-printing-string">{{
                     getPrintingStringBySquare(
                         getIndexWhenAddUpFileAndRankOnPeriodicTable(
@@ -486,6 +480,25 @@
             return  printing1StringData.value[subprintingIndex];
         };
     });
+
+
+    /**
+     * 見た目のマスのインデックスを取得します。
+     */
+    const getFixedSquareIndexFromTileIndex = computed<
+        (tileIndex: number) => number
+    >(() => {
+        return (tileIndex: number) => {
+            return getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                tileIndex,
+                board1FileNum.value,
+                board1RankNum.value,
+                printing1Left.value / board1SquareWidth,
+                printing1Top.value / board1SquareHeight
+            );
+        };
+    });
+
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
