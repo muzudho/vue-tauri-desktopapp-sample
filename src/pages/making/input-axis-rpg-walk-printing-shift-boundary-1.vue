@@ -167,8 +167,8 @@
                 showTicks="always"
                 thumbLabel="always" />
             <v-switch
-                v-model="appBoundaryIsLock"
-                :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
+                v-model="printing1OutOfSightIsLock"
+                :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
                 color="green"
                 :hideDetails="true"
                 inset />
@@ -250,10 +250,6 @@
 
     const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
     const appZoom = ref<number>(4);    // ズーム
-    const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
-    watch(appBoundaryIsLock, (newValue: boolean)=>{
-        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
-    });
 
 
     // ################
@@ -326,6 +322,10 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1OutOfSightIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
+    watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
+        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
+    });
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1FileNum = printing1FileMax;    // 列数
@@ -536,7 +536,7 @@
                         player1Motion.value["shiftToRight"] = commonSpriteMotionRight;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             //  Contents
@@ -601,7 +601,7 @@
                         player1Motion.value["shiftToRight"] = commonSpriteMotionLeft;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             //  Contents
@@ -660,7 +660,7 @@
                         player1Motion.value["shiftToBottom"] = commonSpriteMotionUp;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             //  Contents
@@ -716,7 +716,7 @@
                         player1Motion.value["shiftToBottom"] = commonSpriteMotionDown;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             //  Contents

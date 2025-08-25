@@ -262,8 +262,8 @@
                 showTicks="always"
                 thumbLabel="always" />
             <v-switch
-                v-model="appBoundaryIsLock"
-                :label="appBoundaryIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
+                v-model="printing1OutOfSightIsLock"
+                :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
                 color="green"
                 :hideDetails="true"
                 inset />
@@ -349,10 +349,6 @@
 
     const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
     const appZoom = ref<number>(4);    // ズーム
-    const appBoundaryIsLock = ref<boolean>(true);                   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
-    watch(appBoundaryIsLock, (newValue: boolean)=>{
-        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
-    });
 
 
     // ################
@@ -450,6 +446,10 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1OutOfSightIsLock = ref<boolean>(true);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
+    watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
+        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
+    });
     const printing1IsLooping = ref<boolean>(false); // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
@@ -459,12 +459,12 @@
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
-        return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
-    });
-    const printing1RankDelta = computed<number>(()=>{
-        return Math.round(-printing1Top.value / board1SquareHeight);
-    });
+    // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
+    //     return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
+    // });
+    // const printing1RankDelta = computed<number>(()=>{
+    //     return Math.round(-printing1Top.value / board1SquareHeight);
+    // });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1StringData = ref<string[]>([]);
     // マップデータを生成
@@ -662,7 +662,7 @@
 
             //*
             handlePlayerController(
-                appBoundaryIsLock,
+                printing1OutOfSightIsLock,
                 board1SquareWidth,
                 board1SquareHeight,
                 board1FileNum,
@@ -709,7 +709,7 @@
                         player1Motion.value["goToRight"] = commonSpriteMotionLeft;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             // - 印字は動かない、プレイヤーの移動量を見ること。
@@ -764,7 +764,7 @@
                         player1Motion.value["goToRight"] = commonSpriteMotionRight;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             // - 印字は動かない、プレイヤーの移動量を見ること。
@@ -829,7 +829,7 @@
                         player1Motion.value["goToBottom"] = commonSpriteMotionUp;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             // - 印字は動かない、プレイヤーの移動量を見ること。
@@ -888,7 +888,7 @@
                         player1Motion.value["goToBottom"] = commonSpriteMotionDown;
                     } else {
                         let willShift: boolean = true;
-                        if (appBoundaryIsLock.value) {
+                        if (printing1OutOfSightIsLock.value) {
                             // 見えている画面外が広がるような移動は禁止する：
                             //
                             // - 印字は動かない、プレイヤーの移動量を見ること。

@@ -73,7 +73,7 @@ function getPrinting1RankDelta(
  * キー入力を、モーションに変換します。
  */
 export function handlePlayerController(
-    appBoundaryIsLock: Ref<boolean>,
+    printingOutOfSightIsLock: Ref<boolean>,
     boardSquareWidth: number,
     boardSquareHeight: number,
     board1FileNum: Ref<number>,
@@ -117,7 +117,7 @@ export function handlePlayerController(
                 player1Motion.value["goToRight"] = commonSpriteMotionLeft;
             } else {
                 let willShift: boolean = true;
-                if (appBoundaryIsLock.value) {
+                if (printingOutOfSightIsLock.value) {
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     // - 印字は動かない、プレイヤーの移動量を見ること。
@@ -172,7 +172,7 @@ export function handlePlayerController(
                 player1Motion.value["goToRight"] = commonSpriteMotionRight;
             } else {
                 let willShift: boolean = true;
-                if (appBoundaryIsLock.value) {
+                if (printingOutOfSightIsLock.value) {
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     // - 印字は動かない、プレイヤーの移動量を見ること。
@@ -237,7 +237,7 @@ export function handlePlayerController(
                 player1Motion.value["goToBottom"] = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
-                if (appBoundaryIsLock.value) {
+                if (printingOutOfSightIsLock.value) {
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     // - 印字は動かない、プレイヤーの移動量を見ること。
@@ -296,7 +296,7 @@ export function handlePlayerController(
                 player1Motion.value["goToBottom"] = commonSpriteMotionDown;
             } else {
                 let willShift: boolean = true;
-                if (appBoundaryIsLock.value) {
+                if (printingOutOfSightIsLock.value) {
                     // 見えている画面外が広がるような移動は禁止する：
                     //
                     // - 印字は動かない、プレイヤーの移動量を見ること。
