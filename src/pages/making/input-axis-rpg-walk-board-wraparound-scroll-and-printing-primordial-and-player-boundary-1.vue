@@ -154,7 +154,7 @@
                 >→</v-btn>
                 <br/>
                 <v-btn class="code-key hidden"/>
-                <v-btn
+                <button
                     class="code-key"
                     @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
                     @touchend="button1Ref?.release(onDownButtonReleased);"
@@ -163,7 +163,7 @@
                     @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                >↓</v-btn>
+                >↓</button>
                 　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
                 <br/>
             </li>
@@ -623,7 +623,7 @@
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = true; // 型チェック済み（文字列→キー名）
+                player1Input[e.key] = false; // 型チェック済み（文字列→キー名）
             }
             // if (player1Input.hasOwnProperty(e.key)) {
             //     player1Input[e.key] = false;
