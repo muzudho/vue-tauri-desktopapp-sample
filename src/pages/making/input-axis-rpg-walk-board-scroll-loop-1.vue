@@ -30,22 +30,22 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyle(i - 1)">
-                <span class="square-index">[{{ (i - 1) }}]</span>
-                <span class="square-fix-index">[{{ getFixIndexByTileIndex(
+                <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">[{{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
                     i - 1,
                     board1FileNum,
                     board1RankNum,
-                    -printing1Left / board1SquareWidth,
-                    -printing1Top / board1SquareHeight
+                    printing1Left / board1SquareWidth,
+                    printing1Top / board1SquareHeight
                 ) }}]</span>
                 <span class="square-printing-number">{{
                     getPrintingNumber(
-                        getFixIndexByTileIndex(
+                        getIndexWhenAddUpFileAndRankOnPeriodicTable(
                             i - 1,
                             board1FileNum,
                             board1RankNum,
-                            -printing1Left / board1SquareWidth,
-                            -printing1Top / board1SquareHeight
+                            printing1Left / board1SquareWidth,
+                            printing1Top / board1SquareHeight
                         )
                     )
                 }}</span>
@@ -277,7 +277,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { euclideanMod, getFixIndexByTileIndex } from '../../composables/board-operation';
+    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/board-operation';
 
 
     // ##########
@@ -406,11 +406,11 @@
 
     
     /**
-     * 変換
+     * マスの物自体（タイル）に付いているインデックスを、筋、段へ変換。
      * @param index マス番号
      * @returns [筋番号, 段番号]
      */
-    function tileIndexToTileFileRank(index: number) : number[] {
+    function getTileIndexToTileFileRank(index: number) : number[] {
         // プレイヤーが右へ１マス移動したら、印字は全行が左へ１つ移動する。
         const file = index % board1FileNum.value;
         const rank = Math.floor(index / board1FileNum.value);
@@ -485,7 +485,7 @@
              */
 
             //*
-            let [tileFile, tileRank] = tileIndexToTileFileRank(tileIndex);
+            let [tileFile, tileRank] = getTileIndexToTileFileRank(tileIndex);  // 実際のタイル番号を、見た目上のタイルの位置に変換します。
 
             // タイル上の筋、段を、サブ印字表の筋、段へ変換：
             let subprintingFile = tileFile - printing1File.value;
@@ -817,23 +817,22 @@
     }
     div.square {    /* マス */
         position: absolute;
-        /*text-align: center;*/
     }
-    span.square-index {
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
         position: absolute;
         top: 1px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
-    span.square-fix-index {
+    span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
         position: absolute;
         top: 8px;
         width: 100%;
         text-align: center;
         font-size: 6px;
     }
-    span.square-printing-number {
+    span.square-printing-number {   /* マスの印字 */
         position: absolute;
         top: 12px;
         width: 100%;

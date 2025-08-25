@@ -294,7 +294,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { euclideanMod, getFixIndexByTileIndex } from '../../composables/board-operation';
+    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/board-operation';
 
 
     // ##########
@@ -463,12 +463,12 @@
      */
     const getPrintingNumber = computed(() => {
         return (tileIndex: number)=>{
-            const virtualTileIndex = getFixIndexByTileIndex(    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
+            const virtualTileIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(    // 実際のタイル番号を、見た目上のタイルの位置に変換します。
                 tileIndex,
                 board1FileNum.value,
                 board1RankNum.value,
-                -printing1Left.value / board1FileNum.value,
-                -printing1Top.value / board1RankNum.value
+                printing1Left.value / board1FileNum.value,
+                printing1Top.value / board1RankNum.value
             );
 
             let [virtualTileFile, virtualTileRank] = tileIndexToTileFileRank(virtualTileIndex);
