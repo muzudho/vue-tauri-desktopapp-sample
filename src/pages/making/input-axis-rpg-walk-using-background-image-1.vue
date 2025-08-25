@@ -56,7 +56,7 @@
                 :srcTop="0"
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
-                tilemapUrl="/img/making/tilemap_floor.png">
+                tilemapUrl="/img/making/tilemap-floor-20250826.png">
 
                 <span class="board-slidable-tile-index">[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">[{{
@@ -521,7 +521,7 @@
             };
         };
     });
-    const board1FloorTilemapTileNum = 4;  // 床のタイルマップ
+    const board1FloorTilemapTileNum = 4;  // 床のタイルマップ。ただし、左上隅は画面外の黒なのでそれを除く。
     interface SourceTile {
         left: number,
         top: number,
@@ -553,7 +553,8 @@
     const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // ランダムなマップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
-        const sourceTileIndex = Math.floor(Math.random() * board1FloorTilemapTileNum);  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
+        // 左上のタイルは画面外の黒なので、それを避けて設定。
+        const sourceTileIndex = Math.floor(Math.random() * board1FloorTilemapTileNum) + 1;
         printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
     }
     const printing1Motion = ref<Record<string, number>>({   // 印字への入力
