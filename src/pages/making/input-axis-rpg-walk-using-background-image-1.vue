@@ -38,7 +38,7 @@
                         printing1Top / board1SquareHeight
                     )
                 )"
-                :srcLeft="getFloorLeftBySquare(
+                :srcLeft="getPrintingLeftBySquare(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
                         board1FileNum,
@@ -437,14 +437,6 @@
         }
         return tileMap;
     });
-    const getFloorLeftBySquare = computed<
-        (fixedSquareIndex:number)=>number
-    >(() => {
-        return (fixedSquareIndex: number) => {
-            const sourceTileIndex = printing1IndexesData.value[fixedSquareIndex];
-            return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
-        };
-    });
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -468,11 +460,11 @@
         return Math.round(-printing1Top.value / board1SquareHeight);
     });
     const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const printing1IndexesData = ref<number[]>([]);
+    const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // ランダムなマップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         const sourceTileIndex = Math.floor(Math.random() * board1FloorTilemapTileNum);  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
-        printing1IndexesData.value.push(sourceTileIndex);
+        printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
     }
     const printing1Motion = ref<Record<string, number>>({   // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
@@ -488,13 +480,33 @@
     >(() => {
         return (fixedSquareIndex: number) => {
             let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+            
+            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+            const subprintingFile = squareFile + printing1FileDelta.value;
+            const subprintingRank = squareRank + printing1RankDelta.value;
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
+
+            return subprintingIndex;
+        };
+    });
+
+
+    /**
+     * ソース・タイルマップのタイルの位置 x。
+     */
+    const getPrintingLeftBySquare = computed<
+        (fixedSquareIndex:number)=>number
+    >(() => {
+        return (fixedSquareIndex: number) => {
+            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
 
             // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-            const printingFile = squareFile + printing1FileDelta.value;
-            const printingRank = squareRank + printing1RankDelta.value;
+            const subprintingFile = squareFile + printing1FileDelta.value;
+            const subprintingRank = squareRank + printing1RankDelta.value;
+            const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum.value);
 
-            const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum.value);
-            return printing1IndexesData.value[printingIndex];
+            const sourceTileIndex = printing1SourceTileIndexesBoard.value[subprintingIndex];
+            return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
         };
     });
 
