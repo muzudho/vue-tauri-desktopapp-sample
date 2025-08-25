@@ -131,6 +131,8 @@
         <div>
             印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
             印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
+            人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
+            印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
         </div>
         <br/>
 
@@ -833,18 +835,18 @@
                 printing1Top.value += printing1Speed.value;
             }
 
-            // // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            // if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
-            //     player1Left.value -= printing1Speed.value;
-            // } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
-            //     player1Left.value += printing1Speed.value;
-            // }
+            // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+            if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
+                player1Left.value -= printing1Speed.value;
+            } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
+                player1Left.value += printing1Speed.value;
+            }
 
-            // if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
-            //     player1Top.value -= printing1Speed.value;
-            // } else if (player1Motion.value["goToBottom"] == commonSpriteMotionDown) { // 下
-            //     player1Top.value += printing1Speed.value;
-            // }
+            if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
+                player1Top.value -= printing1Speed.value;
+            } else if (player1Motion.value["goToBottom"] == commonSpriteMotionDown) { // 下
+                player1Top.value += printing1Speed.value;
+            }
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
                 // 自機の向きを更新、タテヨコ同時入力の場合、上下を優先する：
@@ -862,7 +864,7 @@
                 // + ウェイト設定 +
                 // ++++++++++++++++
 
-                if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0) {
+                if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0 || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 } else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
                     player1MotionWait.value = player1AnimationFacingFrames;
