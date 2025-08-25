@@ -28,6 +28,7 @@
             <tile
                 v-for="i in board1Area"
                 :key="i"
+                class="square"
                 :style="getSquareStyle(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
@@ -68,7 +69,8 @@
                             printing1Top / board1SquareHeight
                         )
                     )
-                }}</span>            </tile>
+                }}</span>
+            </tile>
 
             <!-- 自機１ -->
             <tile-animation
@@ -86,15 +88,26 @@
             </div>
         </div>
 
+        <div>
+            印字x={{ printing1Left }}　｜　人x={{ player1Left }}<br/>
+            印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
+        </div>
+        <br/>
+
         <p>
             👆半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！<br/>
         </p>
         <br/>
 
         <p>👇印字のインデックスだぜ（＾▽＾）：</p>
-        <div :style="board1SourceTileSampleStyle">
+        <div
+            class="square"
+            :style="board1SourceTileSampleStyle">
             <!-- グリッド・タイル -->
-            <div v-for="i in board1Area" :key="i"
+            <div
+                v-for="i in board1Area"
+                :key="i"
+                class="printing-square"
                 :style="getSquareStyle(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
@@ -104,7 +117,6 @@
                         printing1Top / board1SquareHeight
                     )
                 )"
-                style="border:dashed 1px gray;"
             >{{ getPrintingSourceTileIndexBySquare(
                     getIndexWhenAddUpFileAndRankOnPeriodicTable(
                         i - 1,
@@ -305,7 +317,7 @@
 
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
-    
+
     // ##########
     // # コモン #
     // ##########
@@ -367,14 +379,14 @@
         return board1FileNum.value * board1RankNum.value;
     });
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
-    const board1WithMaskBottomRightMargin = 1;          // マスクは右下に１マス分多く作ります。
-    const board1WithMaskFileNum = computed(()=>{
+    const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
+    const board1WithMaskFileNum = computed<number>(()=>{
         return board1FileNum.value + board1WithMaskBottomRightMargin;
     });
-    const board1WithMaskRankNum = computed(()=>{
+    const board1WithMaskRankNum = computed<number>(()=>{
         return board1RankNum.value + board1WithMaskBottomRightMargin;
-    }); 
-    const board1Style = computed<CompatibleStyleValue>(()=>{  // ボードとマスクを含んでいる領域のスタイル
+    });
+    const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
             width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
             height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
@@ -398,13 +410,10 @@
             const offsetTopLoop = euclideanMod(homeTop + printing1Top.value + bhPx, bhPx) - homeTop;
 
             return {
-                position: 'absolute',
                 left: `${homeLeft + offsetLeftLoop}px`,
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                // 親要素で zoom を設定しているので、ここで zoom は不要です。
-                imagePixelated: true,
             };
         };
     });
@@ -793,6 +802,12 @@
     }
     div.square {    /* マス */
         position: absolute;
+        image-rendering: pixelated;
+    }
+    div.printing-square {    /* ソース印字表のマス */
+        position: absolute;
+        image-rendering: pixelated;
+        border: dashed 1px gray;
     }
     span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
         position: absolute;

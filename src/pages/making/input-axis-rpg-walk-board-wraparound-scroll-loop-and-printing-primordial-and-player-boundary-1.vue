@@ -381,7 +381,7 @@
     });
     // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
-    const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
+    const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
     const bothSide = 2;     // 左と右とか、上と下とか、対。
     const board1WithMaskFileNum = computed<number>(()=>{        // マスク付きの場合の列数。右側の多めの１マスを含む。
         const minWidth = bothSide * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;  // マスクの横幅より小さくはなりません。
@@ -397,7 +397,7 @@
         }
         return board1RankNum.value + board1WithMaskBottomRightMargin;
     });
-    const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
+    const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
             width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
             height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
