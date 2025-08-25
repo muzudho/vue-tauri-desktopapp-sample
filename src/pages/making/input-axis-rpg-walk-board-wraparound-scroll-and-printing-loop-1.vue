@@ -260,6 +260,21 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-switch
+                v-model="printing1OutOfSightIsLock"
+                :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
+                color="green"
+                :hideDetails="true"
+                inset />
+                <section class="sec-1">
+                    <v-switch
+                        v-model="player1CanBoardEdgeWalking"
+                        :disabled="!player1CanBoardEdgeWalkingIsEnabled"
+                        :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
+                        color="green"
+                        :hideDetails="true"
+                        inset />
+                </section>
             <br/>
         </section>
     </section>
@@ -278,7 +293,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref } from 'vue';
+    import { computed, onMounted, ref, watch } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
     import { VBtn } from 'vuetify/components';
@@ -307,6 +322,8 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
+    import type { MotionInput, PlayerInput } from '../../composables/player-controller';
 
 
     // ##########
@@ -415,12 +432,16 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1OutOfSightIsLock = ref<boolean>(true);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
+    watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
+        player1CanBoardEdgeWalkingIsEnabled.value = newValue;
+    });
     const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
-    const printing1FileNum = printing1FileMax;    // 列数
-    const printing1RankNum = printing1RankMax;    // 行数
+    const printing1FileNum = ref<number>(printing1FileMax); // 列数
+    const printing1RankNum = ref<number>(printing1RankMax); // 行数
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
@@ -430,7 +451,7 @@
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
-    const printing1Motion = ref<Record<string, number>>({   // 印字への入力
+    const printing1Motion = ref<MotionInput>({   // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
@@ -490,9 +511,9 @@
     const player1Height = board1SquareHeight;
     const player1Left = ref<number>(playerHome1Left.value);    // スプライトの位置
     const player1Top = ref<number>(playerHome1Top.value);
-    const player1Input = <Record<string, boolean>>{         // 入力
+    const player1Input = {  // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
-    };
+    } as PlayerInput;
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
     const player1AnimationFacingFrames = 1;         // 振り向きフレーム数
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
@@ -535,6 +556,8 @@
         lookRight: 0,     // 向きを変える
         lookBottom: 0,
     });
+    const player1CanBoardEdgeWalking = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
+    const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -565,13 +588,13 @@
                 e.preventDefault();
             }
 
-            if (player1Input.hasOwnProperty(e.key)) {
-                player1Input[e.key] = true;
+            if (isPlayerInputKey(e.key)) {  // 型ガード
+                player1Input[e.key] = true; // 型チェック済み（文字列→キー名）
             }
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
-            if (player1Input.hasOwnProperty(e.key)) {
-                player1Input[e.key] = false;
+            if (isPlayerInputKey(e.key)) {  // 型ガード
+                player1Input[e.key] = false; // 型チェック済み（文字列→キー名）
             }
         });
 
@@ -602,6 +625,32 @@
             // ++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
+
+            handlePlayerController(
+                printing1OutOfSightIsLock,
+                board1SquareWidth,
+                board1SquareHeight,
+                board1FileNum,
+                board1RankNum,
+                board1WithMaskSizeSquare,
+                playerHome1File,
+                playerHome1Rank,
+                playerHome1Left,
+                playerHome1Top,
+                player1MotionWait,
+                player1Input,
+                player1Motion,
+                player1Left,
+                player1Top,
+                player1CanBoardEdgeWalking,
+                printing1FileNum,
+                printing1RankNum,
+                printing1Left,
+                printing1Top,
+                printing1Motion,
+            );
+
+            /*
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
                 // 位置のリセット
@@ -634,6 +683,7 @@
                     printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
                 }
             }
+            */
 
             // ++++++++++++++++++++
             // + 向き、移動を処理 +

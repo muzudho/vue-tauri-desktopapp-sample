@@ -67,6 +67,18 @@ function getPrinting1RankDelta(
 ) : number {
     return Math.round(-printing1Top.value / board1SquareHeight);
 }
+function getPlayer1File(
+    player1Left: Ref<number>,
+    board1SquareWidth: number,
+) : number {
+    return Math.round(player1Left.value / board1SquareWidth);
+}
+function getPlayer1Rank(
+    player1Top: Ref<number>,
+    board1SquareHeight: number,
+) : number {
+    return Math.round(player1Top.value / board1SquareHeight);
+}
 
 
 /**
@@ -86,8 +98,8 @@ export function handlePlayerController(
     player1MotionWait: Ref<number>,
     player1Input: PlayerInput,
     player1Motion: Ref<Record<string, number>>,
-    player1File: Ref<number>,
-    player1Rank: Ref<number>,
+    // player1File: Ref<number>,
+    // player1Rank: Ref<number>,
     player1Left: Ref<number>,
     player1Top: Ref<number>,
     player1CanBoardEdgeWalking: Ref<boolean>,
@@ -113,7 +125,7 @@ export function handlePlayerController(
             player1Motion.value["lookRight"] = commonSpriteMotionLeft;
 
             // ホーム・ポジションより右に居ればホームに近づける。
-            if (player1File.value > playerHome1File.value) {
+            if (getPlayer1File(player1Left, boardSquareWidth) > playerHome1File.value) {
                 player1Motion.value["goToRight"] = commonSpriteMotionLeft;
             } else {
                 let willShift: boolean = true;
@@ -157,7 +169,7 @@ export function handlePlayerController(
                     printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
                 } else if (player1CanBoardEdgeWalking.value) {
                     // ［盤の端まで歩ける］
-                    if (player1File.value > 0 + board1WithMaskSizeSquare.value) {
+                    if (getPlayer1File(player1Left, boardSquareWidth) > 0 + board1WithMaskSizeSquare.value) {
                         player1Motion.value["goToRight"] = commonSpriteMotionLeft;
                     }
                 }
@@ -168,7 +180,7 @@ export function handlePlayerController(
             player1Motion.value["lookRight"] = commonSpriteMotionRight;
 
             // ホーム・ポジションより左に居ればホームに近づける。
-            if (player1File.value < playerHome1File.value) {
+            if (getPlayer1File(player1Left, boardSquareWidth) < playerHome1File.value) {
                 player1Motion.value["goToRight"] = commonSpriteMotionRight;
             } else {
                 let willShift: boolean = true;
@@ -221,7 +233,7 @@ export function handlePlayerController(
                 } else {
                     if (player1CanBoardEdgeWalking.value) {
                         // ［盤の端まで歩ける］
-                        if (player1File.value < board1FileNum.value - board1WithMaskSizeSquare.value - 1) {
+                        if (getPlayer1File(player1Left, boardSquareWidth) < board1FileNum.value - board1WithMaskSizeSquare.value - 1) {
                             player1Motion.value["goToRight"] = commonSpriteMotionRight;
                         }
                     }
@@ -233,7 +245,7 @@ export function handlePlayerController(
             player1Motion.value["lookBottom"] = commonSpriteMotionUp;
 
             // ホーム・ポジションより下に居ればホームに近づける。
-            if (player1Rank.value > playerHome1Rank.value) {
+            if (getPlayer1Rank(player1Top, boardSquareHeight) > playerHome1Rank.value) {
                 player1Motion.value["goToBottom"] = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
@@ -281,7 +293,7 @@ export function handlePlayerController(
                     printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
                 } else if (player1CanBoardEdgeWalking.value) {
                     // ［盤の端まで歩ける］
-                    if (player1Rank.value > 0 + board1WithMaskSizeSquare.value) {
+                    if (getPlayer1Rank(player1Top, boardSquareHeight) > 0 + board1WithMaskSizeSquare.value) {
                         player1Motion.value["goToBottom"] = commonSpriteMotionUp;
                     }
                 }
@@ -292,7 +304,7 @@ export function handlePlayerController(
             player1Motion.value["lookBottom"] = commonSpriteMotionDown;
 
             // ホーム・ポジションより上に居ればホームに近づける。
-            if (player1Rank.value < playerHome1Rank.value) {
+            if (getPlayer1Rank(player1Top, boardSquareHeight) < playerHome1Rank.value) {
                 player1Motion.value["goToBottom"] = commonSpriteMotionDown;
             } else {
                 let willShift: boolean = true;
@@ -349,7 +361,7 @@ export function handlePlayerController(
                     printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
                 } else if (player1CanBoardEdgeWalking.value) {
                     // ［盤の端まで歩ける］
-                    if (player1Rank.value < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
+                    if (getPlayer1Rank(player1Top, boardSquareHeight) < board1RankNum.value - board1WithMaskSizeSquare.value - 1) {
                         player1Motion.value["goToBottom"] = commonSpriteMotionDown;
                     }
                 }
