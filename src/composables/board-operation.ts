@@ -1,3 +1,14 @@
+// ##############
+// # インポート #
+// ##############
+
+import { euclideanMod } from "./periodic-table-operation"
+
+
+// ################
+// # ライブラリー #
+// ################
+
 /**
  * 変換
  * @param index マス番号
@@ -28,21 +39,30 @@ export function getIndexFromFileAndRank(file: number, rank: number, width: numbe
  * @returns 該当なしのとき -1
  */
 export function getSubprintingIndexFromFixedSquareIndex(
-        fixedSquareIndex: number,
-        offsetFile: number,
-        offsetRank: number,
-        width: number,
-        printing1FileNum: number,
-        printing1RankNum: number) : number {
+    fixedSquareIndex: number,
+    offsetFile: number,
+    offsetRank: number,
+    width: number,
+    printing1FileNum: number,
+    printing1RankNum: number,
+    printing1IsLooping: boolean
+) : number {
+
     let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, width);
 
     // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-    const subprintingFile = squareFile + offsetFile;
-    const subprintingRank = squareRank + offsetRank;
+    let subprintingFile = squareFile + offsetFile;
+    let subprintingRank = squareRank + offsetRank;
 
-    // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-    if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
-        return -1;
+    if (printing1IsLooping) {
+        // 端でループする
+        subprintingFile = euclideanMod(subprintingFile, printing1FileNum);
+        subprintingRank = euclideanMod(subprintingRank, printing1RankNum);
+    } else {
+        // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+        if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
+            return -1;
+        }
     }
 
     const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
