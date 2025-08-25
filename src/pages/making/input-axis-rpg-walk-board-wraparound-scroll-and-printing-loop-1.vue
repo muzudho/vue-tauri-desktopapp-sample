@@ -29,7 +29,8 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyle(i - 1)">
+                :style="getSquareStyleFromTileIndex(i - 1)">
+
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
@@ -92,7 +93,7 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style" />
-            
+
             <!-- 視界の外１ -->
             <div
                 class="out-of-sight"
@@ -101,7 +102,7 @@
         </div>
 
         <div>
-            印字x={{ printing1Left }}　｜　人x={{ player1Left }}<br/>
+            印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
             印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
         </div>
         <br/>
@@ -213,7 +214,7 @@
                 label="自機のホーム　＞　筋"
                 v-model="playerHome1File"
                 :min="0"
-                :max="2"
+                :max="4"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
@@ -221,10 +222,11 @@
                 label="自機のホーム　＞　段"
                 v-model="playerHome1Rank"
                 :min="0"
-                :max="2"
+                :max="4"
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <p>盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
             <v-slider
                 label="盤の筋の数"
                 v-model="board1FileNum"
@@ -351,12 +353,12 @@
     const board1SquareHeight = 32;
     const board1FileMax = 6;
     const board1RankMax = 6;
-    const board1FileNum = ref<number>(5);   // 筋の数
+    const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(5);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
-    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が移動することはありません。
+    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare: number = 1;    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = board1FileNum.value + board1WithMaskBottomRightMargin   // マスク付きの場合の列数。右側の多めの１マスを含む。
@@ -368,13 +370,13 @@
             zoom: appZoom.value,
         };
     });
-    const getSquareStyle = computed<
-        (i:number)=>CompatibleStyleValue
+    const getSquareStyleFromTileIndex = computed<
+        (tileIndex:number)=>CompatibleStyleValue
     >(() => {
-        return (i:number)=>{
+        return (tileIndex:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (i % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(i / board1FileNum.value) * board1SquareHeight;
+            const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
+            const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
 
             const [offsetLeftLoop, offsetTopLoop] = wrapAround(
                 homeLeft,
@@ -390,7 +392,7 @@
                 top: `${homeTop + offsetTopLoop}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
-                border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
+                border: `solid 1px ${tileIndex % 2 == 0 ? 'darkgray' : 'lightgray'}`,
             };
         };
     });
@@ -402,20 +404,24 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1IsLooping = ref<boolean>(true);    // ループ状態を管理（true: ループする, false: ループしない）
-    const printing1FileNum = 10;    // 列数
-    const printing1RankNum = 10;    // 行数
+    const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
+    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
+    const printing1RankMax = 10;
+    const printing1AreaMax = printing1FileMax * printing1RankMax;
+    const printing1FileNum = printing1FileMax;    // 列数
+    const printing1RankNum = printing1RankMax;    // 行数
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1Speed = ref<number>(2);     // 移動速度（単位：ピクセル）
+    const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1StringData = ref<string[]>([]);
-    for (let i=0; i<printing1FileNum * printing1RankNum; i++) {
+    // マップデータを生成
+    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
-    const printing1Motion = ref<Record<string, number>>({  // 印字への入力
-        wrapAroundRight: 0,   // 負なら左、正なら右
-        wrapAroundBottom: 0,   // 負なら上、正なら下
+    const printing1Motion = ref<Record<string, number>>({   // 印字への入力
+        wrapAroundRight: 0, // 負なら左、正なら右
+        wrapAroundBottom: 0,    // 負なら上、正なら下
     });
     // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
     //     return Math.round(-printing1Left.value / board1SquareWidth);

@@ -104,6 +104,8 @@
         <div>
             印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
             印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
+            人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
+            印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
         </div>
         <br/>
 
@@ -454,7 +456,7 @@
     const printing1AreaMax = printing1FileMax * printing1RankMax;
     const printing1FileNum = ref<number>(printing1FileMax);   // 列数
     const printing1RankNum = ref<number>(printing1RankMax);   // 行数
-    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
+    // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
     const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
