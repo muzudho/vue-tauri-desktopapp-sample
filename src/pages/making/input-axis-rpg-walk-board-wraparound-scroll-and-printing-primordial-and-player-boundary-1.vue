@@ -44,16 +44,19 @@
                 }}]</span>
                 <span class="board-printing-index">[{{
                     getPrintingSquareIndexFromTileIndex(
-                        i - 1,
-                        board1SquareWidth,
-                        board1SquareHeight,
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
                         board1FileNum,
-                        board1RankNum,
                         printing1IsLooping,
                         printing1FileNum,
                         printing1RankNum,
-                        printing1Left,
-                        printing1Top,
                         printing1Left / board1SquareWidth,
                         printing1Top / board1SquareHeight,
                     )
