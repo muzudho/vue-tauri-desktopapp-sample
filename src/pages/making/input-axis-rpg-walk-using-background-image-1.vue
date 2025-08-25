@@ -34,7 +34,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)"
-                :srcLeft="getPrintingLeftFromPrintingIndex(
+                :srcLeft="getSourceTileLeftFromPrintingIndex(
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
@@ -224,67 +224,6 @@
         </ul>
         <br/>
 
-        <!-- デバッグ出力 -->
-        <v-btn
-            class="code-key"
-            @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
-            @touchend="button1Ref?.release();"
-            @touchcancel="button1Ref?.release();"
-            @touchleave="button1Ref?.release();"
-            @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
-            @mouseup="button1Ref?.release();"
-            @mouseleave="button1Ref?.release();"
-        >{{ appDebugInfoIsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
-        <section v-if="appDebugInfoIsShowing" class="sec-1">
-            <br/>
-            <p>👇 盤の各マス</p>
-            <div
-                v-for="i in board1Area"
-                :key="i">
-                tile-index: {{ i - 1 }} | 
-                fix-index: {{
-                    getFixedSquareIndexFromTileIndex(
-                        i - 1,
-                        board1SquareWidth,
-                        board1SquareHeight,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left,
-                        printing1Top,
-                    )
-                }} | 
-                printing: {{
-                    getPrintingIndexFromFixedSquareIndex(
-                        getFixedSquareIndexFromTileIndex(
-                            i - 1,
-                            board1SquareWidth,
-                            board1SquareHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
-                        -printing1Left / board1SquareWidth,
-                        -printing1Top / board1SquareHeight,
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1IsLooping,
-                    )
-                }}<br/>
-            </div>
-            <br/>
-            <p>👇 印字表の各マス</p>
-            <div
-                v-for="j in printing1AreaMax"
-                :key="j">
-                printing-index: {{ j - 1 }} | 
-                source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
-            </div>
-            <br/>
-        </section>
-        
-
         <!-- 設定 -->
         <v-btn
             class="code-key"
@@ -369,6 +308,66 @@
                         :hideDetails="true"
                         inset />
                 </section>
+            <br/>
+        </section>
+
+        <!-- デバッグ出力 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appDebugInfoIsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
+        <section v-if="appDebugInfoIsShowing" class="sec-1">
+            <br/>
+            <p>👇 盤の各マス</p>
+            <div
+                v-for="i in board1Area"
+                :key="i">
+                tile-index: {{ i - 1 }} | 
+                fix-index: {{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }} | 
+                printing: {{
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -printing1Left / board1SquareWidth,
+                        -printing1Top / board1SquareHeight,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                }}<br/>
+            </div>
+            <br/>
+            <p>👇 印字表の各マス</p>
+            <div
+                v-for="j in printing1AreaMax"
+                :key="j">
+                printing-index: {{ j - 1 }} | 
+                source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
+            </div>
             <br/>
         </section>
     </section>
@@ -591,14 +590,13 @@
     /**
      * ソース・タイルマップのタイルの位置 x。
      */
-    const getPrintingLeftFromPrintingIndex = computed<
+    const getSourceTileLeftFromPrintingIndex = computed<
         (printingIndex:number)=>number
     >(() => {
         return (printingIndex: number) => {
 
-            // 印字のサイズの範囲外になるところには、とりあえず -1 を返す
             if (printingIndex == -1) {
-                return -1;
+                return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
