@@ -28,8 +28,24 @@
             <tile
                 v-for="i in board1Area"
                 :key="i"
-                :style="getSquareStyle(i - 1)"
-                :srcLeft="getFloorLeftBySquare(i - 1)"
+                :style="getSquareStyle(
+                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                        i - 1,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left / board1SquareWidth,
+                        printing1Top / board1SquareHeight
+                    )
+                )"
+                :srcLeft="getFloorLeftBySquare(
+                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                        i - 1,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left / board1SquareWidth,
+                        printing1Top / board1SquareHeight
+                    )
+                )"
                 :srcTop="0"
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
@@ -58,13 +74,28 @@
 
         <p>👇印字のインデックスだぜ（＾▽＾）：</p>
         <div :style="board1SourceTileSampleStyle">
-            <!--
-                グリッド
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
+            <!-- グリッド・タイル -->
             <div v-for="i in board1Area" :key="i"
-                :style="getSquareStyle(i - 1)"
-                style="border:dashed 1px gray;">{{ getTileIndexBySquare(i - 1) }}</div>
+                :style="getSquareStyle(
+                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                        i - 1,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left / board1SquareWidth,
+                        printing1Top / board1SquareHeight
+                    )
+                )"
+                style="border:dashed 1px gray;"
+            >{{ getTileIndexBySquare(
+                    getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                        i - 1,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left / board1SquareWidth,
+                        printing1Top / board1SquareHeight
+                    )
+                ) }}
+            </div>
         </div>
         <p>：ここまで。</p>
         <br/>
@@ -253,7 +284,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { euclideanMod } from '../../composables/periodic-table-operation';
+    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
     
     // ##########
