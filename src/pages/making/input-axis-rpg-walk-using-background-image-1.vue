@@ -315,6 +315,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
+    import { getFileAndRankFromIndex, getIndexFromFileAndRank } from '../../composables/board-operation';
     import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from '../../composables/periodic-table-operation';
 
 
@@ -436,21 +437,25 @@
         }
         return tileMap;
     });
-    //const board1MapFiles = board1FileNum;  // マップデータ
-    //const board1MapRanks = board1RankNum;
-    //const board1MapArea = board1MapFiles.value * board1MapRanks.value;
     const getPrintingSourceTileIndexBySquare = computed<
         (fixedSquareIndex:number)=>number
     >(() => {
         return (fixedSquareIndex: number) => {
-            return printingMapData.value[fixedSquareIndex];
+            let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum.value);
+
+            // 盤上の筋、段を、サブ印字表の筋、段へ変換：
+            const printingFile = squareFile + printing1FileDelta.value;
+            const printingRank = squareRank + printing1RankDelta.value;
+
+            const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum.value);
+            return printing1Data.value[printingIndex];
         };
     });
     const getFloorLeftBySquare = computed<
         (fixedSquareIndex:number)=>number
     >(() => {
         return (fixedSquareIndex: number) => {
-            const sourceTileIndex = printingMapData.value[fixedSquareIndex];
+            const sourceTileIndex = printing1Data.value[fixedSquareIndex];
             return board1SourceTilemapCoordination.value[sourceTileIndex]["left"];
         };
     });
@@ -464,21 +469,29 @@
 
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
+    const printing1FileNum = ref<number>(printing1FileMax);   // 列数
+    const printing1RankNum = ref<number>(printing1RankMax);   // 行数
     const printing1AreaMax = printing1FileMax * printing1RankMax;
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
-    const printing1Motion = ref<Record<string, number>>({  // 印字への入力
-        wrapAroundRight: 0,   // 負なら左、正なら右
-        wrapAroundBottom: 0,   // 負なら上、正なら下
+    const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
+        return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
     });
-    const printingMapData = computed(() => {    // ランダムなマップデータを生成
+    const printing1RankDelta = computed<number>(()=>{
+        return Math.round(-printing1Top.value / board1SquareHeight);
+    });
+    const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
+    const printing1Data = computed(() => {   // ランダムなマップデータを生成
         const data = [];
         for (let i = 0; i < printing1AreaMax; i++) { // 最初から最大サイズで用意します。
             data.push(Math.floor(Math.random() * board1FloorTilemapTileNum));  // 0からfloorTilemapTileNum - 1のランダムな整数を配置
         }
         return data;
+    });
+    const printing1Motion = ref<Record<string, number>>({   // 印字への入力
+        wrapAroundRight: 0, // 負なら左、正なら右
+        wrapAroundBottom: 0,    // 負なら上、正なら下
     });
 
     // ++++++++++++++++++++++++++++++++++++
