@@ -236,6 +236,12 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-switch
+                v-model="printing1IsLooping"
+                :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
+                color="green"
+                :hideDetails="true"
+                inset />
             <br/>
             <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
             <v-slider
@@ -433,6 +439,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
+    const printing1IsLooping = ref<boolean>(false);    // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
@@ -471,7 +478,8 @@
                 printing1RankDelta.value,
                 board1FileNum.value,
                 printing1FileNum.value,
-                printing1RankNum.value);
+                printing1RankNum.value,
+                printing1IsLooping.value);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             if (subprintingIndex == -1) {
@@ -522,7 +530,8 @@
                 printing1RankDelta.value,
                 board1FileNum.value,
                 printing1FileNum.value,
-                printing1RankNum.value);
+                printing1RankNum.value,
+                printing1IsLooping.value);
 
             // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             if (subprintingIndex == -1) {
