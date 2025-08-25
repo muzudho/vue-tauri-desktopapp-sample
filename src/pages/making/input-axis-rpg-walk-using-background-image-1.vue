@@ -226,22 +226,7 @@
                 v-for="j in printing1AreaMax"
                 :key="j">
                 printing-index: {{ j - 1 }} | 
-                fix-index: {{ getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                                j - 1,
-                                printing1FileNum,
-                                printing1RankNum,
-                                printing1Left / board1SquareWidth,
-                                printing1Top / board1SquareHeight
-                            ) }} | 
-                printing: {{ getPrintingIndexStringBySquare(
-                                getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                                    j - 1,
-                                    printing1FileNum,
-                                    printing1RankNum,
-                                    printing1Left / board1SquareWidth,
-                                    printing1Top / board1SquareHeight
-                                )
-                            )}}<br/>
+                source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
             </div>
             <br/>
         </section>
@@ -529,8 +514,8 @@
         (tileIndex: number) => string
     >(()=>{
         return (tileIndex: number)=>{
-            const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
-                tileIndex - 1,
+            const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(   // マスの物自体に付いているインデックスを、見た目のマスのインデックスに変換します。
+                tileIndex,
                 printing1FileNum.value,
                 printing1RankNum.value,
                 printing1Left.value / board1SquareWidth,
