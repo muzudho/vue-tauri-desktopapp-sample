@@ -4,6 +4,12 @@
 
 import { Ref } from 'vue';
 
+// ********************
+// * インターフェース *
+// ********************
+
+import type Rectangle from '../interfaces/Rectangle';
+
 
 // ##########
 // # コモン #
@@ -16,6 +22,25 @@ const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左�
 const commonSpriteMotionUp = -1;
 const commonSpriteMotionRight = 1;
 const commonSpriteMotionDown = 1;
+
+
+// ################
+// # 外部リソース #
+// ################
+
+// ++++++++++++++++++++++++++++++++++++++++
+// + 外部リソース　＞　タイルマップの仕様 +
+// ++++++++++++++++++++++++**++++++++++++++
+
+/**
+ * RPGのキャラクターの歩行グラフィック
+ */
+export interface RpgWalkingImagePosition {
+    left: Rectangle[],
+    up: Rectangle[],
+    right: Rectangle[],
+    down: Rectangle[],
+}
 
 
 // ################
@@ -400,8 +425,8 @@ export function processingMoveAndWait(
     player1Top: Ref<number>,
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: Ref<number>,
-    player1SourceFrames: any,
-    player1Frames: Ref<any>,
+    player1SourceFrames: any,   // FIXME: any
+    player1Frames: Ref<any>,    // FIXME: any
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
     printing1Motion: Ref<MotionInput>,
