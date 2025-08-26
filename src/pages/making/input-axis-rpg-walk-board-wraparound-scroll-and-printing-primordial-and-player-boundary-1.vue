@@ -475,7 +475,7 @@
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
-    const printing1Motion = ref<MotionInput>({   // 印字への入力
+    const printing1Motion = ref<MotionInput>({  // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
@@ -579,8 +579,8 @@
         goToRight: 0,   // 負なら左、正なら右へ移動する
         goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
-    const player1CanBoardEdgeWalking = ref<boolean>(true);              // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
-    const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true);     // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
+    const player1CanBoardEdgeWalking = ref<boolean>(true);  // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
+    const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true); // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -617,7 +617,7 @@
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = false; // 型チェック済み（文字列→キー名）
+                player1Input[e.key] = false;    // 型チェック済み（文字列→キー名）
             }
         });
 
@@ -675,9 +675,9 @@
                 printing1Motion,
             );
 
-            // ++++++++++++++++++++
-            // + 向き、移動を処理 +
-            // ++++++++++++++++++++
+            // ++++++++++++++++++++++++++++++
+            // + 向き・移動・ウェイトを処理 +
+            // ++++++++++++++++++++++++++++++
 
             processingMoveAndWait(
                 player1Left,
