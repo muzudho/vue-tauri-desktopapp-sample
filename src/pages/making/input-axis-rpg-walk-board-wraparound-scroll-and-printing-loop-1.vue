@@ -333,21 +333,6 @@
     import type Rectangle from '../../interfaces/Rectangle';
 
 
-    // ##########
-    // # コモン #
-    // ##########
-    //
-    // よく使う設定をまとめたもの。特に不変のもの。
-    //
-
-    /*
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-    const commonSpriteMotionUp = -1;
-    const commonSpriteMotionRight = 1;
-    const commonSpriteMotionDown = 1;
-    */
-
-
     // ############################
     // # アプリケーション・データ #
     // ############################
@@ -464,12 +449,6 @@
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
-    // const printing1FileDelta = computed<number>(()=>{     // 自機の移動量（単位：マス）
-    //     return Math.round(-printing1Left.value / board1SquareWidth);
-    // });
-    // const printing1RankDelta = computed<number>(()=>{
-    //     return Math.round(-printing1Top.value / board1SquareHeight);
-    // });
 
 
     /**
@@ -623,7 +602,7 @@
      */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;           // モーション・タイマー
+            player1MotionWait.value -= 1;   // モーション・タイマー
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // + モーション・ウェイトが０のとき、モーションのクリアー +
@@ -634,19 +613,6 @@
                 player1MotionWait,
                 printing1Motion
             );
-            // if (player1MotionWait.value==0) {
-            //     // モーションのクリアー
-            //     player1Motion.value.lookRight = 0;  // 自機
-            //     player1Motion.value.lookBottom = 0;
-            //     player1Motion.value.goToRight = 0;
-            //     player1Motion.value.goToBottom = 0;
-            //     // player1Motion.value["goToRight"] = 0;
-            //     // player1Motion.value["goToBottom"] = 0;
-            //     printing1Motion.value.wrapAroundRight = 0;  // 印字
-            //     printing1Motion.value.wrapAroundBottom = 0;
-            //     // printing1Motion.value["wrapAroundRight"] = 0;	
-            //     // printing1Motion.value["wrapAroundBottom"] = 0;
-            // }
             
             // ++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換 +
@@ -694,44 +660,6 @@
                 player1AnimationFacingFrames,
                 player1AnimationWalkingFrames,
             );
-            /*
-            // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
-            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
-                printing1Left.value -= printing1Speed.value;
-            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
-                printing1Left.value += printing1Speed.value;
-            }
-
-            if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
-                printing1Top.value -= printing1Speed.value;
-            } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
-                printing1Top.value += printing1Speed.value;
-            }
-
-            if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
-
-                // 自機の向き（単位：ピクセル）を更新、上下左右の複数同時入力の場合、左、上、右、下の順で優先：
-                if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
-                    player1Frames.value = player1SourceFrames["left"]
-                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
-                    player1Frames.value = player1SourceFrames["up"]
-                } else if (player1Motion.value["lookRight"] == commonSpriteMotionRight) {  // 右
-                    player1Frames.value = player1SourceFrames["right"]
-                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
-                    player1Frames.value = player1SourceFrames["down"]
-                }
-
-                // ++++++++++++++++
-                // + ウェイト設定 +
-                // ++++++++++++++++
-
-                if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationWalkingFrames;
-                } else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationFacingFrames;
-                }
-            }
-            */
 
             // 次のフレーム
             requestAnimationFrame(update);

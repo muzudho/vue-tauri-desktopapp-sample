@@ -136,17 +136,12 @@ export function motionClearIfCountZero(
     printing1Motion: Ref<MotionInput>,
 ) : void {
     if (player1MotionWait.value==0) {
-        // モーションのクリアー
         player1Motion.value.lookRight = 0;  // 自機
         player1Motion.value.lookBottom = 0;
         player1Motion.value.goToRight = 0;
         player1Motion.value.goToBottom = 0;
-        // player1Motion.value["goToRight"] = 0;
-        // player1Motion.value["goToBottom"] = 0;
         printing1Motion.value.wrapAroundRight = 0;  // 印字
         printing1Motion.value.wrapAroundBottom = 0;
-        // printing1Motion.value["wrapAroundRight"] = 0;	
-        // printing1Motion.value["wrapAroundBottom"] = 0;
     }
 }
 
