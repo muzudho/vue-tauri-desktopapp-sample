@@ -462,7 +462,8 @@ export function processingMoveAndWait(
     player1AnimationFacingFrames: number,
     player1AnimationWalkingFrames: number,
 ) : void {
-    // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+
+    // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
         printing1Left.value -= printing1Speed.value;
     } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
@@ -489,15 +490,16 @@ export function processingMoveAndWait(
     }
 
     if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
-        // 自機の向きを更新、タテヨコ同時入力の場合、上下を優先する：
-        if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
-            player1Frames.value = player1SourceFrames["up"]
-        } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
-            player1Frames.value = player1SourceFrames["down"]
-        } else if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
+
+        // 自機の向き（単位：ピクセル）を更新、上下左右の複数同時入力の場合、左、上、右、下の順で優先：
+        if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
             player1Frames.value = player1SourceFrames["left"]
+        } else if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
+            player1Frames.value = player1SourceFrames["up"]
         } else if (player1Motion.value["lookRight"] == commonSpriteMotionRight) {  // 右
             player1Frames.value = player1SourceFrames["right"]
+        } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
+            player1Frames.value = player1SourceFrames["down"]
         }
 
         // ++++++++++++++++

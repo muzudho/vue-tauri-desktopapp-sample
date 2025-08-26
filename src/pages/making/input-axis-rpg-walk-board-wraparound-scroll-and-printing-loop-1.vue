@@ -323,7 +323,7 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { handlePlayerControllerWithWrapAround, isPlayerInputKey, motionClearIfCountZero } from '../../composables/player-controller';
+    import { handlePlayerControllerWithWrapAround, isPlayerInputKey, motionClearIfCountZero, processingMoveAndWait } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -340,10 +340,12 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
+    /*
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
     const commonSpriteMotionUp = -1;
     const commonSpriteMotionRight = 1;
     const commonSpriteMotionDown = 1;
+    */
 
 
     // ############################
@@ -678,6 +680,21 @@
             // + 向き、移動を処理 +
             // ++++++++++++++++++++
 
+            processingMoveAndWait(
+                player1Left,
+                player1Top,
+                player1Motion,
+                player1MotionWait,
+                player1SourceFrames,
+                player1Frames,
+                printing1Left,
+                printing1Top,
+                printing1Motion,
+                printing1Speed,
+                player1AnimationFacingFrames,
+                player1AnimationWalkingFrames,
+            );
+            /*
             // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
             if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
                 printing1Left.value -= printing1Speed.value;
@@ -691,18 +708,18 @@
                 printing1Top.value += printing1Speed.value;
             }
 
-            // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
-                player1Frames.value = player1SourceFrames["up"]
-            } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
-                player1Frames.value = player1SourceFrames["down"]
-            } else if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
-                player1Frames.value = player1SourceFrames["left"]
-            } else if (player1Motion.value["lookRight"] == commonSpriteMotionRight) {  // 右
-                player1Frames.value = player1SourceFrames["right"]
-            }
-
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+
+                // 自機の向き（単位：ピクセル）を更新、上下左右の複数同時入力の場合、左、上、右、下の順で優先：
+                if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
+                    player1Frames.value = player1SourceFrames["left"]
+                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
+                    player1Frames.value = player1SourceFrames["up"]
+                } else if (player1Motion.value["lookRight"] == commonSpriteMotionRight) {  // 右
+                    player1Frames.value = player1SourceFrames["right"]
+                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
+                    player1Frames.value = player1SourceFrames["down"]
+                }
 
                 // ++++++++++++++++
                 // + ウェイト設定 +
@@ -714,6 +731,7 @@
                     player1MotionWait.value = player1AnimationFacingFrames;
                 }
             }
+            */
 
             // 次のフレーム
             requestAnimationFrame(update);
