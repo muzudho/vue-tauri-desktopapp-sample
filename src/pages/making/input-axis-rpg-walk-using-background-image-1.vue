@@ -772,11 +772,11 @@
                 playerHome1Rank,
                 playerHome1Left,
                 playerHome1Top,
-                player1MotionWait,
-                player1Input,
-                player1Motion,
                 player1Left,
                 player1Top,
+                player1Input,
+                player1Motion,
+                player1MotionWait,
                 player1CanBoardEdgeWalking,
                 printing1FileNum,
                 printing1RankNum,
@@ -784,41 +784,6 @@
                 printing1Top,
                 printing1Motion,
             );
-
-            /*
-            if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
-
-                // 位置のリセット
-                if (player1Input[" "]) {
-                    player1Left.value = playerHome1Left.value;  // 自機
-                    player1Top.value = playerHome1Top.value;
-                    printing1Left.value = 0;    // 印字
-                    printing1Top.value = 0;
-                }
-
-                // 移動関連（単発）
-                // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
-                if (player1Input.ArrowLeft) { // 左
-                    player1Motion.value["lookRight"] = commonSpriteMotionLeft;
-                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
-                }
-
-                if (player1Input.ArrowRight) {  // 右
-                    player1Motion.value["lookRight"] = commonSpriteMotionRight;
-                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
-                }
-
-                if (player1Input.ArrowUp) {    // 上
-                    player1Motion.value["lookBottom"] = commonSpriteMotionUp;
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
-                }
-
-                if (player1Input.ArrowDown) {   // 下
-                    player1Motion.value["lookBottom"] = commonSpriteMotionDown;
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
-                }
-            }
-            */
 
             // ++++++++++++++++++++
             // + 向き、移動を処理 +

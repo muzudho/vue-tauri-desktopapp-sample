@@ -528,8 +528,8 @@
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     } as PlayerInput;
     const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
-    const player1AnimationFacingFrames = 1;         // 振り向くフレーム数
-    const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
+    const player1AnimationFacingFrames: number = 1;         // 振り向くフレーム数
+    const player1AnimationWalkingFrames: number = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
         left: `${player1Left.value}px`,
         top: `${player1Top.value}px`,
@@ -653,11 +653,11 @@
                 playerHome1Rank,
                 playerHome1Left,
                 playerHome1Top,
-                player1MotionWait,
-                player1Input,
-                player1Motion,
                 player1Left,
                 player1Top,
+                player1Input,
+                player1Motion,
+                player1MotionWait,
                 player1CanBoardEdgeWalking,
                 printing1FileNum,
                 printing1RankNum,
