@@ -17,6 +17,10 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
+        <!-- 免責 -->
+        <v-alert type="warning" title="免責！" text="処理堕ちしていたら、［設定を表示］ボタンから盤のサイズを小さくしてください。" closable />
+        <br/>
+
         <!-- 盤領域 -->
         <div
             class="board"
@@ -427,19 +431,6 @@
     // ********************
 
     import type Rectangle from '../../interfaces/Rectangle';
-
-
-    // ##########
-    // # コモン #
-    // ##########
-    //
-    // よく使う設定をまとめたもの。特に不変のもの。
-    //
-
-    // const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-    // const commonSpriteMotionUp = -1;
-    // const commonSpriteMotionRight = 1;
-    // const commonSpriteMotionDown = 1;
 
 
     // ############################
