@@ -324,7 +324,7 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { handlePlayerController, isPlayerInputKey, processingMoveAndWait } from '../../composables/player-controller';
+    import { handlePlayerControllerWithWrapAround, isPlayerInputKey, processingMoveAndWait } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -651,8 +651,7 @@
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
 
-            handlePlayerController(
-                true,   // ラップ・アラウンド
+            handlePlayerControllerWithWrapAround(
                 printing1OutOfSightIsLock,
                 board1SquareWidth,
                 board1SquareHeight,
