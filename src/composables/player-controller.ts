@@ -125,14 +125,40 @@ function getPlayer1Rank(
 
 
 /**
+ * モーション・ウェイトが０のとき、モーションのクリアー
+ * @param player1Motion 
+ * @param player1MotionWait 
+ * @param printing1Motion 
+ */
+export function motionClearIfCountZero(
+    player1Motion: Ref<PlayerMotion>,
+    player1MotionWait: Ref<number>,
+    printing1Motion: Ref<MotionInput>,
+) : void {
+    if (player1MotionWait.value==0) {
+        // モーションのクリアー
+        player1Motion.value.lookRight = 0;  // 自機
+        player1Motion.value.lookBottom = 0;
+        player1Motion.value.goToRight = 0;
+        player1Motion.value.goToBottom = 0;
+        // player1Motion.value["goToRight"] = 0;
+        // player1Motion.value["goToBottom"] = 0;
+        printing1Motion.value.wrapAroundRight = 0;  // 印字
+        printing1Motion.value.wrapAroundBottom = 0;
+        // printing1Motion.value["wrapAroundRight"] = 0;	
+        // printing1Motion.value["wrapAroundBottom"] = 0;
+    }
+}
+
+/**
  * キー入力を、モーションに変換します。
+ * 
+ * ［ラップ・アラウンド］するタイプです。十字キー入力とは逆方向に盤を動かします。ラップ・アラウンドしたタイルの印字は差し変わります。
  * 
  * 十字方向の入力をした場合、player1Motion の ["lookRight"], ["lookBottom"] （自機の向き）を更新。
  * また、自機の移動を伴うケースでは、十字方向の入力をした場合、player1Motion の ["goToRight"], ["goToBottom"] （自機の位置）を更新。
  * 
  * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
- * 
- * ［ラップ・アラウンド］するタイプです。十字キー入力とは逆方向に盤を動かします。ラップ・アラウンドしたタイルの印字は差し変わります。
  */
 export function handlePlayerControllerWithWrapAround(
     printingOutOfSightIsLock: Ref<boolean>,
@@ -420,7 +446,7 @@ export function handlePlayerControllerWithWrapAround(
 
 
 /**
- * TODO 向き・移動・ウェイトを処理
+ * 向き・移動・ウェイトを処理
  */
 export function processingMoveAndWait(
     player1Left: Ref<number>,
@@ -449,7 +475,7 @@ export function processingMoveAndWait(
         printing1Top.value += printing1Speed.value;
     }
 
-    // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+    // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
         player1Left.value -= printing1Speed.value;
     } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
