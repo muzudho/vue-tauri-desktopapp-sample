@@ -643,7 +643,7 @@
 
             motionClearIfCountZero(
                 player1Motion,
-                player1MotionWait,
+                player1MotionWait.value,
                 printing1Motion
             );
 
@@ -652,24 +652,24 @@
             // ++++++++++++++++++++++++++++++
 
             handlePlayerControllerWithWrapAround(
-                printing1OutOfSightIsLock,
+                printing1OutOfSightIsLock.value,
                 board1SquareWidth,
                 board1SquareHeight,
-                board1FileNum,
-                board1RankNum,
-                board1WithMaskSizeSquare,
-                playerHome1File,
-                playerHome1Rank,
-                playerHome1Left,
-                playerHome1Top,
+                board1FileNum.value,
+                board1RankNum.value,
+                board1WithMaskSizeSquare.value,
+                playerHome1File.value,
+                playerHome1Rank.value,
+                playerHome1Left.value,
+                playerHome1Top.value,
                 player1Left,
                 player1Top,
                 player1Input,
                 player1Motion,
-                player1MotionWait,
-                player1CanBoardEdgeWalking,
-                printing1FileNum,
-                printing1RankNum,
+                player1MotionWait.value,
+                player1CanBoardEdgeWalking.value,
+                printing1FileNum.value,
+                printing1RankNum.value,
                 printing1Left,
                 printing1Top,
                 printing1Motion,
@@ -682,14 +682,14 @@
             processingMoveAndWait(
                 player1Left,
                 player1Top,
-                player1Motion,
+                player1Motion.value,
                 player1MotionWait,
                 player1SourceFrames,
                 player1Frames,
                 printing1Left,
                 printing1Top,
-                printing1Motion,
-                printing1Speed,
+                printing1Motion.value,
+                printing1Speed.value,
                 player1AnimationFacingFrames,
                 player1AnimationWalkingFrames,
             );
