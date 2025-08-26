@@ -419,7 +419,7 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { handlePlayerControllerWithWrapAround, isPlayerInputKey } from '../../composables/player-controller';
+    import { handlePlayerControllerWithWrapAround, isPlayerInputKey, motionClearIfCountZero, processingMoveAndWait } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -436,10 +436,10 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-    const commonSpriteMotionUp = -1;
-    const commonSpriteMotionRight = 1;
-    const commonSpriteMotionDown = 1;
+    // const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
+    // const commonSpriteMotionUp = -1;
+    // const commonSpriteMotionRight = 1;
+    // const commonSpriteMotionDown = 1;
 
 
     // ############################
@@ -754,15 +754,24 @@
         const update = () => {
             player1MotionWait.value -= 1;           // モーション・タイマー
 
-            if (player1MotionWait.value==0) {
-                // モーションのクリアー
-                player1Motion.value["lookRight"] = 0;	// 自機
-                player1Motion.value["lookBottom"] = 0;
-                player1Motion.value["goToRight"] = 0;
-                player1Motion.value["goToBottom"] = 0;
-                printing1Motion.value["wrapAroundRight"] = 0;	// 印字
-                printing1Motion.value["wrapAroundBottom"] = 0;
-            }
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // + モーション・ウェイトが０のとき、モーションのクリアー +
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            motionClearIfCountZero(
+                player1Motion,
+                player1MotionWait,
+                printing1Motion
+            );
+            // if (player1MotionWait.value==0) {
+            //     // モーションのクリアー
+            //     player1Motion.value["lookRight"] = 0;	// 自機
+            //     player1Motion.value["lookBottom"] = 0;
+            //     player1Motion.value["goToRight"] = 0;
+            //     player1Motion.value["goToBottom"] = 0;
+            //     printing1Motion.value["wrapAroundRight"] = 0;	// 印字
+            //     printing1Motion.value["wrapAroundBottom"] = 0;
+            // }
 
             // ++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換 +
@@ -792,58 +801,76 @@
                 printing1Motion,
             );
 
-            // ++++++++++++++++++++
-            // + 向き、移動を処理 +
-            // ++++++++++++++++++++
+            // ++++++++++++++++++++++++++++++
+            // + 向き・移動・ウェイトを処理 +
+            // ++++++++++++++++++++++++++++++
 
-            // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
-                printing1Left.value -= printing1Speed.value;
-            } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
-                printing1Left.value += printing1Speed.value;
-            }
+            processingMoveAndWait(
+                player1Left,
+                player1Top,
+                player1Motion,
+                player1MotionWait,
+                player1SourceFrames,
+                player1Frames,
+                printing1Left,
+                printing1Top,
+                printing1Motion,
+                printing1Speed,
+                player1AnimationFacingFrames,
+                player1AnimationWalkingFrames,
+            );
+            // // ++++++++++++++++++++
+            // // + 向き、移動を処理 +
+            // // ++++++++++++++++++++
 
-            if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
-                printing1Top.value -= printing1Speed.value;
-            } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
-                printing1Top.value += printing1Speed.value;
-            }
+            // // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+            // if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
+            //     printing1Left.value -= printing1Speed.value;
+            // } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
+            //     printing1Left.value += printing1Speed.value;
+            // }
 
-            // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
-                player1Left.value -= printing1Speed.value;
-            } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
-                player1Left.value += printing1Speed.value;
-            }
+            // if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
+            //     printing1Top.value -= printing1Speed.value;
+            // } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
+            //     printing1Top.value += printing1Speed.value;
+            // }
 
-            if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
-                player1Top.value -= printing1Speed.value;
-            } else if (player1Motion.value["goToBottom"] == commonSpriteMotionDown) { // 下
-                player1Top.value += printing1Speed.value;
-            }
+            // // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
+            // if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
+            //     player1Left.value -= printing1Speed.value;
+            // } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
+            //     player1Left.value += printing1Speed.value;
+            // }
 
-            if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
-                // 自機の向きを更新、タテヨコ同時入力の場合、上下を優先する：
-                if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
-                    player1Frames.value = player1SourceFrames["up"]
-                } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
-                    player1Frames.value = player1SourceFrames["down"]
-                } else if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
-                    player1Frames.value = player1SourceFrames["left"]
-                } else if (player1Motion.value["lookRight"] == commonSpriteMotionRight) {  // 右
-                    player1Frames.value = player1SourceFrames["right"]
-                }
+            // if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
+            //     player1Top.value -= printing1Speed.value;
+            // } else if (player1Motion.value["goToBottom"] == commonSpriteMotionDown) { // 下
+            //     player1Top.value += printing1Speed.value;
+            // }
 
-                // ++++++++++++++++
-                // + ウェイト設定 +
-                // ++++++++++++++++
+            // if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+            //     // 自機の向きを更新、タテヨコ同時入力の場合、上下を優先する：
+            //     if (player1Motion.value["lookBottom"] == commonSpriteMotionUp) {   // 上
+            //         player1Frames.value = player1SourceFrames["up"]
+            //     } else if (player1Motion.value["lookBottom"] == commonSpriteMotionDown) { // 下
+            //         player1Frames.value = player1SourceFrames["down"]
+            //     } else if (player1Motion.value["lookRight"] == commonSpriteMotionLeft) {    // 左
+            //         player1Frames.value = player1SourceFrames["left"]
+            //     } else if (player1Motion.value["lookRight"] == commonSpriteMotionRight) {  // 右
+            //         player1Frames.value = player1SourceFrames["right"]
+            //     }
 
-                if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0 || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationWalkingFrames;
-                } else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
-                    player1MotionWait.value = player1AnimationFacingFrames;
-                }
-            }
+            //     // ++++++++++++++++
+            //     // + ウェイト設定 +
+            //     // ++++++++++++++++
+
+            //     if (printing1Motion.value["wrapAroundRight"]!=0 || printing1Motion.value["wrapAroundBottom"]!=0 || player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
+            //         player1MotionWait.value = player1AnimationWalkingFrames;
+            //     } else if (player1Motion.value["lookRight"]!=0 || player1Motion.value["lookBottom"]!=0) {
+            //         player1MotionWait.value = player1AnimationFacingFrames;
+            //     }
+            // }
 
             // 次のフレーム
             requestAnimationFrame(update);
