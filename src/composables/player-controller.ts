@@ -425,8 +425,8 @@ export function processingMoveAndWait(
     player1Top: Ref<number>,
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: Ref<number>,
-    player1SourceFrames: any,   // FIXME: any
-    player1Frames: Ref<any>,    // FIXME: any
+    player1SourceFrames: RpgWalkingImagePosition,
+    player1Frames: Ref<Rectangle[]>,
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
     printing1Motion: Ref<MotionInput>,

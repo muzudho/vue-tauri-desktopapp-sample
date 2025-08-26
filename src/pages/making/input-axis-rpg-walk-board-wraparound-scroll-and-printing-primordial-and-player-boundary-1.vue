@@ -324,7 +324,7 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { handlePlayerController, isPlayerInputKey } from '../../composables/player-controller';
+    import { handlePlayerController, isPlayerInputKey, processingMoveAndWait } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -341,10 +341,12 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
+    /*
     const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
     const commonSpriteMotionUp = -1;
     const commonSpriteMotionRight = 1;
     const commonSpriteMotionDown = 1;
+    */
 
 
     // ############################
@@ -677,6 +679,22 @@
             // + 向き、移動を処理 +
             // ++++++++++++++++++++
 
+            processingMoveAndWait(
+                player1Left,
+                player1Top,
+                player1Motion,
+                player1MotionWait,
+                player1SourceFrames,
+                player1Frames,
+                printing1Left,
+                printing1Top,
+                printing1Motion,
+                printing1Speed,
+                player1AnimationFacingFrames,
+                player1AnimationWalkingFrames,
+            );
+
+            /*
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
                 printing1Left.value -= printing1Speed.value;
@@ -725,6 +743,7 @@
                     player1MotionWait.value = player1AnimationFacingFrames;
                 }
             }
+            */
 
             // 次のフレーム
             requestAnimationFrame(update);
