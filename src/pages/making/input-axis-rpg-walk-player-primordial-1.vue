@@ -170,6 +170,7 @@
 
     import { computed, onMounted, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+    import type { Ref } from 'vue';
 
     // ++++++++++++++
     // + 互換性対応 +
@@ -189,6 +190,12 @@
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
+
+    // ********************
+    // * インターフェース *
+    // ********************
+
+    import type Rectangle from '../../interfaces/Rectangle';
 
 
     // ############################
@@ -304,7 +311,7 @@
             {top:  3 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ]
     };
-    const player1Frames = ref(player1SourceFrames["down"]);
+    const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
 
 
     // ##########

@@ -204,6 +204,7 @@
 
     import { computed, onMounted, ref, watch } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+    import type { Ref } from 'vue';
 
     import { VBtn } from 'vuetify/components';
 
@@ -226,6 +227,12 @@
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
+
+    // ********************
+    // * インターフェース *
+    // ********************
+
+    import type Rectangle from '../../interfaces/Rectangle';
 
 
     // ##########
@@ -456,7 +463,7 @@
             {top:  2 * board1SquareHeight, left: 1 * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight },
         ],
     };
-    const player1Frames = ref(player1SourceFrames["down"]);
+    const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
     const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
         shiftToRight: 0,   // 負なら左、正なら右
