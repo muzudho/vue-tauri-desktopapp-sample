@@ -131,8 +131,12 @@ function getPlayer1Rank(
  * また、自機の移動を伴うケースでは、十字方向の入力をした場合、player1Motion の ["goToRight"], ["goToBottom"] （自機の位置）を更新。
  * 
  * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
+ * 
+ * ［ラップ・アラウンド］しないタイプは、十字キー入力の方向に自機を動かします。
+ * ［ラップ・アラウンド］するタイプは、十字キー入力とは逆方向に印字盤を動かします。
  */
 export function handlePlayerController(
+    isWrapAround: boolean,
     printingOutOfSightIsLock: Ref<boolean>,
     board1SquareWidth: number,
     board1SquareHeight: number,
@@ -170,8 +174,10 @@ export function handlePlayerController(
         if (player1Input.ArrowLeft) { // 左
             player1Motion.value["lookRight"] = commonSpriteMotionLeft;
 
-            // ホーム・ポジションより右に居ればホームに近づける。
-            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File.value) {
+            if (!isWrapAround) {
+                //board1Motion.value["goToRight"] = commonSpriteMotionLeft;
+            } else if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File.value) {
+                // ホーム・ポジションより右に居ればホームに近づける。
                 player1Motion.value["goToRight"] = commonSpriteMotionLeft;
             } else {
                 let willShift: boolean = true;

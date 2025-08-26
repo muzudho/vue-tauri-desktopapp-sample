@@ -636,6 +636,7 @@
             // ++++++++++++++++++++++++++++++
 
             handlePlayerController(
+                true,   // ラップ・アラウンド
                 printing1OutOfSightIsLock,
                 board1SquareWidth,
                 board1SquareHeight,
