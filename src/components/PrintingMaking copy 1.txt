@@ -1,0 +1,107 @@
+<template>
+</template>
+
+<script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
+    import { ref } from 'vue';
+    // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
+
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
+
+    import type { PrintingInput, PrintingMotion } from '../composables/player-controller';
+
+    // ********************
+    // * インターフェース *
+    // ********************
+
+    import type Rectangle from '../interfaces/Rectangle';
+
+
+    // ####################################
+    // # このコンポーネントが受け取る引数 #
+    // ####################################
+    
+    interface Props {
+        // ++++++++++++++++++++++++
+        // + オブジェクト　＞　盤 +
+        // ++++++++++++++++++++++++
+
+        board1SquareWidth: number,
+        board1SquareHeight: number,
+        board1FileNum: number,  // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+        //board1RankNum: number,  // 段の数
+        board1FloorTilemapTileNum: number,  // 床のタイルマップの、左上隅から数えたタイル数
+    }
+    // デフォルト値を設定
+    const props = defineProps<Props>();
+
+
+    // ################
+    // # オブジェクト #
+    // ################
+
+    // ++++++++++++++++++++++++
+    // + オブジェクト　＞　盤 +
+    // ++++++++++++++++++++++++
+
+    const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
+
+    // ++++++++++++++++++++++++++
+    // + オブジェクト　＞　印字 +
+    // ++++++++++++++++++++++++**
+    //
+    // 盤上に表示される数字柄、絵柄など。
+    //
+
+    const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
+    // watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
+    //     player1CanBoardEdgeWalkingIsEnabled.value = newValue;
+    // });
+    const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
+    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
+    const printing1RankMax = 10;
+    const printing1AreaMax = printing1FileMax * printing1RankMax;
+    const printing1FileNum = ref<number>(printing1FileMax);   // 列数
+    const printing1RankNum = ref<number>(printing1RankMax);   // 行数
+    // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
+    const printing1Left = ref<number>(0);
+    const printing1Top = ref<number>(0);
+    const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
+    // ランダムなマップデータを生成
+    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
+        // 左上のタイルは画面外の黒なので、それを避けて設定。
+        const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
+        printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
+    }
+    const printing1Input = {  // 入力
+        " ": false,
+    } as PrintingInput;
+    const printing1Motion = ref<PrintingMotion>({   // 印字への入力
+        goToHome: false,    // ホームに戻る
+        wrapAroundRight: 0, // 負なら左、正なら右
+        wrapAroundBottom: 0,    // 負なら上、正なら下
+    });
+    const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
+    const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
+    const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
+    const printing1SourceTilemapCoordination : Rectangle[] = [];
+    for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
+        const files = i % props.board1FileNum;
+        const ranks = Math.floor(i / props.board1FileNum);
+        printing1SourceTilemapCoordination.push({
+            top: ranks * props.board1SquareHeight,
+            left: files * props.board1SquareWidth,
+            width: props.board1SquareWidth,
+            height: props.board1SquareHeight
+        });
+    }
+</script>
+
+<style scoped>
+</style>

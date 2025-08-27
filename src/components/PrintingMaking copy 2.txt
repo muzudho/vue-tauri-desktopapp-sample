@@ -10,6 +10,12 @@
     import { computed } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
+    // ++++++++++++++++++
+    // + コンポーザブル +
+    // ++++++++++++++++++
+
+    // import type { PrintingInput, PrintingMotion } from '../composables/player-controller';
+
     // ********************
     // * インターフェース *
     // ********************
@@ -23,17 +29,65 @@
     
     interface Props {
 
+        // ++++++++++++++++++++++++++
+        // + オブジェクト　＞　盤１ +
+        // ++++++++++++++++++++++++++
+
+        // board1SquareWidth: number,
+        // board1SquareHeight: number,
+        // board1FileNum: number,  // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+        // board1FloorTilemapTileNum: number,  // 床のタイルマップの、左上隅から数えたタイル数
+
         // ++++++++++++++++++++++++++++
         // + オブジェクト　＞　印字１ +
         // ++++++++++++++++++++++++++++
 
+        // printing1FileMax: number,
+        // printing1RankMax: number,
+        // printing1FileNum: number,
+        // printing1RankNum: number,
+        // printing1Left: number,
+        // printing1Top: number,
+        // printing1Input: PrintingInput,
+        // printing1Motion: PrintingMotion,
+        // printing1MotionSpeed: number,
+        // printing1MotionWait: number,
+        // printing1MotionWalkingFrames: number,
         printing1SourceTilemapCoordination: Rectangle[],
+        // printing1OutOfSightIsLock: boolean,
+        // printing1IsLooping: boolean,
         printing1SourceTileIndexesBoard: number[],
 
     }
     // デフォルト値を設定
     const props = defineProps<Props>();
+    // 双方向に変更通知が飛ぶよう v-model 化：
+    defineEmits<{
 
+        // ++++++++++++++++++++++++++
+        // + オブジェクト　＞　盤１ +
+        // ++++++++++++++++++++++++++
+
+        // 'update:board1FileNum': [value: number];
+
+        // ++++++++++++++++++++++++++++
+        // + オブジェクト　＞　印字１ +
+        // ++++++++++++++++++++++++++++
+
+        // 'update:printing1FileNum': [value: number];
+        // 'update:printing1RankNum': [value: number];
+        // 'update:printing1Left': [value: number];
+        // 'update:printing1Top': [value: number];
+        // 'update:printing1Input': [value: PrintingInput];
+        // 'update:printing1Motion': [value: PrintingMotion];
+        // 'update:printing1MotionSpeed': [value: number];
+        // 'update:printing1MotionWait': [value: number];
+        // 'update:printing1MotionWalkingFrames': [value: number];
+        'update:printing1SourceTilemapCoordination': [value: Rectangle[]];
+        // 'update:printing1OutOfSightIsLock': [value: boolean];
+        // 'update:printing1IsLooping': [value: boolean];
+        'update:printing1SourceTileIndexesBoard': [value: number[]];
+    }>();
 
     // ################
     // # オブジェクト #

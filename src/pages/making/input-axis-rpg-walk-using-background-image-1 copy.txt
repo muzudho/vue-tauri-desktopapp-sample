@@ -21,12 +21,31 @@
         <v-alert type="warning" title="免責！" text="処理堕ちしていたら、［設定を表示］ボタンから盤のサイズを小さくしてください。" closable />
         <br/>
 
-        <!-- 印字１　＞　機能 -->
+        <!-- 印字１ -->
         <printing-making
-            ref="printing1Ref"
-            :printing1SourceTilemapCoordination="printing1SourceTilemapCoordination"
-            :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard">
-        </printing-making>
+            v-model:printing1SourceTilemapCoordination="printing1SourceTilemapCoordination"
+            v-model:printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard"
+        ></printing-making>
+        <!--
+            :board1SquareWidth="board1SquareWidth"
+            :board1SquareHeight="board1SquareHeight"
+            v-model:board1FileNum="board1FileNum"
+            :board1FloorTilemapTileNum="board1FloorTilemapTileNum"
+
+            :printing1FileMax="printing1FileMax"
+            :printing1RankMax="printing1RankMax"
+            v-model:printing1FileNum="printing1FileNum"
+            v-model:printing1RankNum="printing1RankNum"
+            v-model:printing1Left="printing1Left"
+            v-model:printing1Top="printing1Top"
+            v-model:printing1Input="printing1Input"
+            v-model:printing1Motion="printing1Motion"
+            v-model:printing1MotionSpeed="printing1MotionSpeed"
+            v-model:printing1MotionWait="printing1MotionWait"
+            v-model:printing1MotionWalkingFrames="printing1MotionWalkingFrames"
+            v-model:printing1OutOfSightIsLock="printing1OutOfSightIsLock"
+            v-model:printing1IsLooping="printing1IsLooping"
+        -->
 
         <!-- 盤領域 -->
         <div
@@ -436,7 +455,7 @@
     // from の階層が上の順、アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
     import OutOfSightMaking from '../../components/OutOfSightMaking.vue';
-    import PrintingMaking from '../../components/PrintingMaking.vue';
+    //import PrintingMaking from '../../components/PrintingMarking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
@@ -452,13 +471,14 @@
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
         printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
-    import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
+    import type { PlayerInput, PlayerMotion, PrintingInput, PrintingMotion } from '../../composables/player-controller';
 
     // ********************
     // * インターフェース *
     // ********************
 
     import type Rectangle from '../../interfaces/Rectangle';
+    import PrintingMaking from '../../components/PrintingMaking.vue';
 
 
     // ############################
@@ -561,12 +581,6 @@
         };
     });
     const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
-    interface SourceTile {
-        left: number,
-        top: number,
-        width: number,
-        height: number,
-    }
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -576,24 +590,23 @@
     //
 
     const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
-    // const outOfSight1WithMaskSizeSquare = computed({
-    //     get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
-    //     set: (value) => {
-    //         if (outOfSight1Ref.value) {
-    //             outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
-    //         }
-    //     }
-    // });
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
+    // const printing1OutOfSightIsLock = computed<boolean>({
+    //     get: () => printing1Ref.value?.printing1OutOfSightIsLock ?? false,
+    //     set: (value) => { if (printing1Ref.value) { printing1Ref.value.printing1OutOfSightIsLock = value; }}
+    // });
+    // watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
+    //     player1CanBoardEdgeWalkingIsEnabled.value = newValue;
+    // });
     const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
-    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
-    const printing1RankMax = 10;
+    const printing1FileMax: number = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
+    const printing1RankMax: number = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
-    const printing1FileNum = ref<number>(printing1FileMax);   // 列数
-    const printing1RankNum = ref<number>(printing1RankMax);   // 行数
+    const printing1FileNum = ref<number>(printing1FileMax); // 列数
+    const printing1RankNum = ref<number>(printing1RankMax); // 行数
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
@@ -605,7 +618,7 @@
         printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
     }
     const printing1Input = {  // 入力
-        " ": false,
+        " ": false, // ホームに戻る
     } as PrintingInput;
     const printing1Motion = ref<PrintingMotion>({   // 印字への入力
         goToHome: false,    // ホームに戻る
@@ -615,55 +628,17 @@
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const printing1SourceTilemapCoordination : SourceTile[] = [];
+    const printing1SourceTilemapCoordination : Rectangle[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
-        printing1SourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+        printing1SourceTilemapCoordination.push({
+            top: ranks * board1SquareHeight,
+            left: files * board1SquareWidth,
+            width: board1SquareWidth,
+            height: board1SquareHeight
+        });
     }
-
-
-    // /**
-    //  * マスの印字。ソース・タイルマップのタイルのインデックス x の文字列。
-    //  * @returns 該当なしのとき "-"
-    //  */
-    // const getPrintingStringFromPrintingIndex = computed<
-    //     (printingIndex: number) => string
-    // >(() => {
-    //     return (printingIndex: number) => {
-
-    //         if (printingIndex == -1) {
-    //             return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-    //         }
-
-    //         const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-    //         return `${sourceTileIndex}`;
-    //     };
-    // });
-
-
-    // /**
-    //  * 印字表のインデックスを渡すことで、そこに印字するタイルの、ソースタイルの left を返す。
-    //  */
-    // const getSourceTileLeftFromPrintingIndex = computed<
-    //     (printingIndex:number) => number
-    // >(() => {
-    //     return (printingIndex: number) => {
-
-    //         if (printingIndex == -1) {
-    //             return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
-    //         }
-
-    //         const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-
-    //         try {
-    //             return printing1SourceTilemapCoordination[sourceTileIndex]["left"];
-    //         } catch(error) {
-    //             console.error(`ERROR: ${error} | printingIndex=${printingIndex}`);
-    //             return 0;
-    //         }
-    //     };
-    // });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
