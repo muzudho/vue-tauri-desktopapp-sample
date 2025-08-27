@@ -73,58 +73,7 @@
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/tilemap-floor-20250826.png">
 
-                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">fix[{{
-                    getFixedSquareIndexFromTileIndex(
-                        i - 1,
-                        board1SquareWidth,
-                        board1SquareHeight,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left,
-                        printing1Top,
-                    )
-                }}]</span>
-                <span class="board-printing-index">print[{{
-                    getPrintingIndexFromFixedSquareIndex(
-                        getFixedSquareIndexFromTileIndex(
-                            i - 1,
-                            board1SquareWidth,
-                            board1SquareHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
-                        -Math.floor(printing1Left / board1SquareWidth),
-                        -Math.floor(printing1Top / board1SquareHeight),
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1IsLooping,
-                    )
-                }}]</span>
-                <span class="board-square-printing-string">{{
-                    printing1Ref?.getPrintingStringFromPrintingIndex(
-                        getPrintingIndexFromFixedSquareIndex(
-                            getFixedSquareIndexFromTileIndex(
-                                i - 1,
-                                board1SquareWidth,
-                                board1SquareHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
-                            -Math.floor(printing1Left / board1SquareWidth),
-                            -Math.floor(printing1Top / board1SquareHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
-                        )
-                    ) ?? 0
-                }}</span>
+                <span class="board-slidable-tile-index">{{ (i - 1) }}</span>
 
             </tile>
 
@@ -161,6 +110,23 @@
         >{{ problem1IsShowing ? '⚙️問題設定を終わる' : '⚙️問題設定を表示' }}</v-btn>
         <section v-if="problem1IsShowing" class="sec-1">
             <br/>
+            <!-- 盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない： -->
+            <v-slider
+                label="盤の筋の数"
+                v-model="board1FileNum"
+                :min="board1FileMin"
+                :max="board1FileMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="盤の段の数"
+                v-model="board1RankNum"
+                :min="board1RankMin"
+                :max="board1RankMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <br/>
         </section>
 
@@ -312,8 +278,10 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1FileMax = 6;
-    const board1RankMax = 6;
+    const board1FileMin = 3;
+    const board1RankMin = 3;
+    const board1FileMax = 10;
+    const board1RankMax = 10;
     const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(5);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
@@ -670,35 +638,8 @@
         position: absolute;
         width: 100%;
         text-align: center;
-        font-size: 6px;
-    }
-    span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
-        position: absolute;
-        top: 6px;
-        width: 100%;
-        text-align: center;
-        font-size: 6px;
-    }
-    span.board-square-printing-string {   /* マスの印字 */
-        position: absolute;
-        top: 12px;
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
-    }
-    span.board-printing-index {
-        position: absolute;
-        top: 12px;
-        width: 100%;
-        text-align: center;
-        font-size: 6px;
-    }
-    span.board-square-printing-string {   /* マスの印字 */
-        position: absolute;
-        top: 16px;
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
+        padding-top: 4px;
+        font-size: 16px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;
