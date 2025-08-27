@@ -322,6 +322,148 @@
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
+
+    // ##########
+    // # 開始時 #
+    // ##########
+
+    onMounted(() => {
+        // キーボードイベント
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // ［↑］［↓］キーの場合
+            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
+            if (isPlayerInputKey(e.key)) {  // 型ガード
+                player1Input[e.key] = true; // 型チェック済み（文字列→キー名）
+            }
+        });
+        window.addEventListener('keyup', (e: KeyboardEvent) => {
+            if (isPlayerInputKey(e.key)) {  // 型ガード
+                player1Input[e.key] = false;    // 型チェック済み（文字列→キー名）
+            }
+        });
+
+        gameLoopStart();
+        stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+    });
+
+    
+    // ################
+    // # サブルーチン #
+    // ################
+
+    /**
+     * ゲームのメインループ開始
+     */
+    function gameLoopStart() : void {
+        const update = () => {
+
+            // ++++++++++++++++++++++++
+            // + モーション・タイマー +
+            // ++++++++++++++++++++++++
+
+            printingMotionCountDown(
+                printing1MotionWait,
+            );
+            playerMotionCountDown(
+                player1MotionWait,
+            );
+
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // + モーション・ウェイトが０のとき、モーションのクリアー +
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            printingMotionClearIfCountZero(
+                printing1Motion,
+                printing1MotionWait.value,
+            );
+            playerMotionClearIfCountZero(
+                player1Motion,
+                player1MotionWait.value,
+            );
+
+            // ++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換 +
+            // ++++++++++++++++++++++++++++++
+
+            printingMotionUpdateByInputWithWrapAround(
+                printing1OutOfSightIsLock.value,
+                board1SquareWidth,
+                board1SquareHeight,
+                board1FileNum.value,
+                board1RankNum.value,
+                outOfSight1WithMaskSizeSquare.value,
+                printing1FileNum.value,
+                printing1RankNum.value,
+                printing1Left.value,
+                printing1Top.value,
+                printing1Input,
+                printing1Motion,
+                printing1MotionWait.value,
+                playerHome1File.value,
+                playerHome1Rank.value,
+                player1Left.value,
+                player1Top.value,
+                player1Input,
+            );
+            playerMotionUpdateByInputWithWrapAround(
+                printing1OutOfSightIsLock.value,
+                board1SquareWidth,
+                board1SquareHeight,
+                board1FileNum.value,
+                board1RankNum.value,
+                outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
+                printing1FileNum.value,
+                printing1RankNum.value,
+                printing1Left.value,
+                printing1Top.value,
+                playerHome1File.value,
+                playerHome1Rank.value,
+                player1Left.value,
+                player1Top.value,
+                player1Input,
+                player1Motion,
+                player1MotionWait.value,
+                player1CanBoardEdgeWalking.value,
+            );
+
+            // ++++++++++++++++++++++++++++++
+            // + 向き・移動・ウェイトを更新 +
+            // ++++++++++++++++++++++++++++++
+
+            printingImageAndPositionAndWaitUpdate(
+                printing1Left,
+                printing1Top,
+                printing1Motion.value,
+                printing1MotionSpeed.value,
+                printing1MotionWait,
+                printing1MotionWalkingFrames,
+            );
+            playerImageAndPositionAndWaitUpdate(
+                playerHome1Left.value,
+                playerHome1Top.value,
+                player1Left,
+                player1Top,
+                player1Motion.value,
+                player1MotionSpeed.value,
+                player1MotionWait,
+                player1SourceFrames,
+                player1Frames,
+                player1MotionFacingFrames,
+                player1MotionWalkingFrames,
+            );
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
+
 </script>
 
 <style scoped>
