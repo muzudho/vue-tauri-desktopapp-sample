@@ -33,13 +33,6 @@
             </div>
 
             <!-- スクウェアのグリッド -->
-            <!--
-            <div
-                v-for="i in board1Area"
-                :key="i"
-                class="square"
-                :style="getSquareStyleFromTileIndex(i - 1)">
-            -->
             <tile
                 v-for="i in board1Area"
                 :key="i"
@@ -122,9 +115,6 @@
                     )
                 }}</span>
 
-            <!--
-            </div>
-            -->
             </tile>
 
             <!-- 自機１ -->
@@ -435,6 +425,7 @@
     // from の階層が上の順、アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
     import OutOfSightMaking from '../../components/OutOfSightMaking.vue';
+    //import PrintingMaking from '../../components/PrintingMarking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
@@ -457,6 +448,7 @@
     // ********************
 
     import type Rectangle from '../../interfaces/Rectangle';
+import PrintingMaking from '../../components/PrintingMaking.vue';
 
 
     // ############################
@@ -493,7 +485,6 @@
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
-    
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -573,7 +564,22 @@
     //
     // 盤上に表示される数字柄、絵柄など。
     //
+    // ++++++++++++++++++++++++++
+    // + オブジェクト　＞　印字 +
+    // ++++++++++++++++++++++++**
+    //
+    // 盤上に表示される数字柄、絵柄など。
+    //
 
+    //const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
+    // const outOfSight1WithMaskSizeSquare = computed({
+    //     get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
+    //     set: (value) => {
+    //         if (outOfSight1Ref.value) {
+    //             outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
+    //         }
+    //     }
+    // });
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
@@ -605,7 +611,6 @@
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    //const printing1MotionWalkingFrames = 1000*16;       // 歩行フレーム数
     const printing1SourceTilemapCoordination : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
