@@ -5,6 +5,9 @@
 <template>
     <the-header/>
 
+    <!-- ボタン機能拡張 -->
+    <button-20250822 ref="button1Ref"/>
+
     <h3>王の間のタイルを市松模様にしようぜ！</h3>
     <section class="sec-3">
         <br/>
@@ -144,6 +147,30 @@
                 :board1RankNum="board1RankNum">
             </out-of-sight-making>
         </div>
+
+        <!-- 設定 -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="appConfigIsShowing" class="sec-1">
+            <br/>
+            <v-slider
+                label="ズーム"
+                v-model="appZoom"
+                :min="0.5"
+                :max="4"
+                step="0.5"
+                showTicks="always"
+                thumbLabel="always" />
+            <br/>
+        </section>
     </section>
 
 
@@ -217,13 +244,19 @@
     //
 
     // const appDebugInfoIsShowing = ref<boolean>(false);  // デバッグ情報を表示中
-    // const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
+    const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
     const appZoom = ref<number>(4);    // ズーム
 
 
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ボタン機能拡張 +
+    // ++++++++++++++++++++++++++++++++++++
+
+    const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ +
@@ -577,6 +610,14 @@
 
         // 初回呼び出し
         requestAnimationFrame(update);
+    }
+
+
+    /**
+     * 設定ボタン。
+     */
+    function onConfigButtonPressed() : void {
+        appConfigIsShowing.value = !appConfigIsShowing.value;
     }
 
 </script>
