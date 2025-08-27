@@ -71,7 +71,7 @@
                 :srcTop="0"
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
-                tilemapUrl="/img/making/tilemap-floor-20250826.png">
+                tilemapUrl="/img/quiz/kings-room-tiles.png">
 
                 <span class="board-slidable-tile-index">{{ (i - 1) }}</span>
 
@@ -225,7 +225,6 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    // const appDebugInfoIsShowing = ref<boolean>(false);  // デバッグ情報を表示中
     const appZoom = ref<number>(4);    // ズーム
 
 
@@ -300,8 +299,6 @@
         (tileIndex:number)=>CompatibleStyleValue
     >(() => {
         return (tileIndex:number)=>{
-            // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
-
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
             const homeLeft = tileFile * board1SquareWidth;
@@ -324,7 +321,7 @@
             };
         };
     });
-    const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
+    const board1FloorTilemapTileNum = 3;  // 床のタイルマップの、左上隅から数えたタイル数
     interface SourceTile {
         left: number,
         top: number,
@@ -340,14 +337,6 @@
     //
 
     const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
-    // const outOfSight1WithMaskSizeSquare = computed({
-    //     get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
-    //     set: (value) => {
-    //         if (outOfSight1Ref.value) {
-    //             outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
-    //         }
-    //     }
-    // });
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
@@ -364,8 +353,10 @@
     const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // ランダムなマップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
-        // 左上のタイルは画面外の黒なので、それを避けて設定。
-        const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
+        // 0: 画面外の黒
+        // 1: 白い床
+        // 2: 赤い床
+        const sourceTileIndex = i % (board1FloorTilemapTileNum - 1) + 1;
         printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
     }
     const printing1Input : PrintingInput = printingInputCreate();
@@ -377,7 +368,12 @@
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
-        printing1SourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+        printing1SourceTilemapCoordination.push({
+            top: ranks * board1SquareHeight,
+            left: files * board1SquareWidth,
+            width: board1SquareWidth,
+            height: board1SquareHeight
+        });
     }
 
     // ++++++++++++++++++++++++++++++++++++
