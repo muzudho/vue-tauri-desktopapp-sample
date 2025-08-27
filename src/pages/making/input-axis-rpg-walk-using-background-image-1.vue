@@ -33,12 +33,13 @@
             </div>
 
             <!-- スクウェアのグリッド -->
+            <!--
             <div
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)">
-            <!--
+            -->
             <tile
                 v-for="i in board1Area"
                 :key="i"
@@ -67,7 +68,6 @@
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/tilemap-floor-20250826.png">
-            -->
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -122,10 +122,10 @@
                     )
                 }}</span>
 
-            </div>
             <!--
-            </tile>
+            </div>
             -->
+            </tile>
 
             <!-- 自機１ -->
             <tile-animation
@@ -524,7 +524,7 @@
         (tileIndex:number)=>CompatibleStyleValue
     >(() => {
         return (tileIndex:number)=>{
-            if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
+            //if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
 
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
@@ -617,8 +617,11 @@
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-            return `${printingIndex}`
-            //return `${sourceTileIndex}`;
+            if (!Number.isInteger(sourceTileIndex)) {
+                alert(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex}`);
+                //throw new Error(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex}`);
+            }
+            return `${sourceTileIndex}`;
         };
     });
 
