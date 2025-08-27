@@ -137,10 +137,16 @@
                 :style="player1Style" />
             
             <!-- 視界の外１ -->
+            <out-of-sight-making
+                ref="outOfSight1">
+
+            </out-of-sight-making>
+            <!--
             <div
                 class="out-of-sight"
                 :style="outOfSight1Style">
             </div>
+            -->
         </div>
 
         <div>
@@ -304,7 +310,7 @@
             <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
             <v-slider
                 label="マスクの枠の幅"
-                v-model="board1WithMaskSizeSquare"
+                v-model="outOfSight1Ref?.outOfSight1WithMaskSizeSquare"
                 :min="0"
                 :max="2"
                 step="1"
@@ -433,6 +439,7 @@
 
     // from の階層が上の順、アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
+    import OutOfSightMaking from '../../components/OutOfSightMaking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
@@ -489,8 +496,9 @@
     // + オブジェクト　＞　ストップウォッチ +
     // ++++++++++++++++++++++++++++++++++++++
 
-    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
+    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
+    
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -506,18 +514,11 @@
         return board1FileNum.value * board1RankNum.value;
     });
     // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が大きく移動することはありません。
-    const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
-    const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
-    const board1WithMaskFileNum = computed<number>(()=>{
-        return board1FileNum.value + board1WithMaskBottomRightMargin;
-    });
-    const board1WithMaskRankNum = computed<number>(()=>{
-        return board1RankNum.value + board1WithMaskBottomRightMargin;
-    });
+
     const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
-            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
-            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
+            width: `${outOfSight1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${outOfSight1WithMaskRankNum.value * board1SquareHeight}px`,
             zoom: appZoom.value,
         };
     });
@@ -743,16 +744,18 @@
     // + オブジェクト　＞　視界の外１ +
     // ++++++++++++++++++++++++++++++++
 
-    const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
-        return {
-            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
-            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
-            borderTop: `solid ${board1WithMaskSizeSquare.value * board1SquareHeight}px rgba(0,0,0,0.5)`,
-            borderRight: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
-            borderBottom: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
-            borderLeft: `solid ${board1WithMaskSizeSquare.value * board1SquareWidth}px rgba(0,0,0,0.5)`,
-        };
+    const outOfSight1Ref = ref<InstanceType<typeof OutOfSightMaking> | null>(null);
+
+    //*
+    //const outOfSight1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
+    const outOfSight1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
+    const outOfSight1WithMaskFileNum = computed<number>(()=>{
+        return board1FileNum.value + outOfSight1WithMaskBottomRightMargin;
     });
+    const outOfSight1WithMaskRankNum = computed<number>(()=>{
+        return board1RankNum.value + outOfSight1WithMaskBottomRightMargin;
+    });
+    // */
 
 
     // ##########
@@ -827,7 +830,7 @@
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                board1WithMaskSizeSquare.value,
+                outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
                 printing1FileNum.value,
                 printing1RankNum.value,
                 printing1Left.value,
@@ -847,7 +850,7 @@
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                board1WithMaskSizeSquare.value,
+                outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
                 printing1FileNum.value,
                 printing1RankNum.value,
                 printing1Left.value,
@@ -1031,9 +1034,12 @@
         image-rendering: pixelated;
         z-index: 20;
     }
-    div.out-of-sight {  /* 視界の外１ */
+    /* 視界の外１ */
+    /*
+    div.out-of-sight {
         position: absolute;
         image-rendering: pixelated;
     }
+    */
 
 </style>
