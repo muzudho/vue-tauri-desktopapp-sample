@@ -125,6 +125,18 @@ function getPlayer1Rank(
 
 
 /**
+ * カウント・ダウン
+ */
+export function motionCountDown(
+    printing1MotionWait: Ref<number>,
+    player1MotionWait: Ref<number>,
+) : void {
+    printing1MotionWait.value -= 1; // 印字１
+    player1MotionWait.value -= 1;   // 自機１
+}
+
+
+/**
  * モーション・ウェイトが０のとき、モーションのクリアー
  * @param player1Motion 
  * @param player1MotionWait 

@@ -332,7 +332,7 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { handlePlayerControllerWithWrapAround, isPlayerInputKey, motionClearIfCountZero, processingMoveAndWait } from '../../composables/player-controller';
+    import { handlePlayerControllerWithWrapAround, isPlayerInputKey, motionClearIfCountZero, motionCountDown, processingMoveAndWait } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -651,8 +651,10 @@
             // + モーション・タイマー +
             // ++++++++++++++++++++++++
 
-            printing1MotionWait.value -= 1; // 印字１
-            player1MotionWait.value -= 1;   // 自機１
+            motionCountDown(
+                printing1MotionWait,
+                player1MotionWait,
+            );
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // + モーション・ウェイトが０のとき、モーションのクリアー +
