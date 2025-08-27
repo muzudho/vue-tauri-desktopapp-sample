@@ -236,7 +236,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value.wrapAroundRight = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1File(player1Left, board1SquareWidth) > 0 + board1WithMaskSizeSquare) {
@@ -300,13 +300,11 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value["wrapAroundRight"] = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
-                } else {
-                    if (player1CanBoardEdgeWalking) {
-                        // ［盤の端まで歩ける］
-                        if (getPlayer1File(player1Left, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
-                            player1Motion.value.goToRight = commonSpriteMotionRight;
-                        }
+                    printing1Motion.value.wrapAroundRight = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
+                } else if (player1CanBoardEdgeWalking) {
+                    // ［盤の端まで歩ける］
+                    if (getPlayer1File(player1Left, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
+                        player1Motion.value.goToRight = commonSpriteMotionRight;
                     }
                 }
             }
@@ -361,7 +359,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1Rank(player1Top, board1SquareHeight) > 0 + board1WithMaskSizeSquare) {
@@ -429,7 +427,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value["wrapAroundBottom"] = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
+                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1Rank(player1Top, board1SquareHeight) < board1RankNum - board1WithMaskSizeSquare - 1) {
@@ -461,15 +459,15 @@ export function processingMoveAndWait(
 ) : void {
 
     // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
-    if (printing1Motion["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
+    if (printing1Motion.wrapAroundRight == commonSpriteMotionLeft) {  // 左
         printing1Left.value -= printing1Speed;
-    } else if (printing1Motion["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
+    } else if (printing1Motion.wrapAroundRight == commonSpriteMotionRight) {   // 右
         printing1Left.value += printing1Speed;
     }
 
-    if (printing1Motion["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
+    if (printing1Motion.wrapAroundBottom == commonSpriteMotionUp) {  // 上
         printing1Top.value -= printing1Speed;
-    } else if (printing1Motion["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
+    } else if (printing1Motion.wrapAroundBottom == commonSpriteMotionDown) {   // 下
         printing1Top.value += printing1Speed;
     }
 
@@ -490,20 +488,20 @@ export function processingMoveAndWait(
 
         // 自機の向き（単位：ピクセル）を更新、上下左右の複数同時入力の場合、左、上、右、下の順で優先：
         if (player1Motion.lookRight == commonSpriteMotionLeft) {    // 左
-            player1Frames.value = player1SourceFrames["left"]
+            player1Frames.value = player1SourceFrames.left;
         } else if (player1Motion.lookBottom == commonSpriteMotionUp) {   // 上
-            player1Frames.value = player1SourceFrames["up"]
+            player1Frames.value = player1SourceFrames.up;
         } else if (player1Motion.lookRight == commonSpriteMotionRight) {  // 右
-            player1Frames.value = player1SourceFrames["right"]
+            player1Frames.value = player1SourceFrames.right;
         } else if (player1Motion.lookBottom == commonSpriteMotionDown) { // 下
-            player1Frames.value = player1SourceFrames["down"]
+            player1Frames.value = player1SourceFrames.down;
         }
 
         // ++++++++++++++++
         // + ウェイト設定 +
         // ++++++++++++++++
 
-        if (printing1Motion["wrapAroundRight"]!=0 || printing1Motion["wrapAroundBottom"]!=0 || player1Motion.goToRight != 0 || player1Motion.goToBottom != 0) {
+        if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0 || player1Motion.goToRight != 0 || player1Motion.goToBottom != 0) {
             player1MotionWait.value = player1AnimationWalkingFrames;
         } else if (player1Motion.lookRight != 0 || player1Motion.lookBottom != 0) {
             player1MotionWait.value = player1AnimationFacingFrames;
