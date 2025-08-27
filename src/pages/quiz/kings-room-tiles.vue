@@ -73,7 +73,62 @@
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/quiz/kings-room-tiles.png">
 
-                <span class="board-slidable-tile-index">{{ (i - 1) }}</span>
+                <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
+
+                <!--
+                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">fix[{{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }}]</span>
+                <span class="board-printing-index">print[{{
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                }}]</span>
+                <span class="board-square-printing-string">{{
+                    printing1Ref?.getPrintingStringFromPrintingIndex(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    )
+                }}</span>
+                -->
 
             </tile>
 
@@ -351,14 +406,52 @@
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
     const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
-    // ランダムなマップデータを生成
-    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
-        // 0: 画面外の黒
-        // 1: 白い床
-        // 2: 赤い床
-        const sourceTileIndex = i % (board1FloorTilemapTileNum - 1) + 1;
-        printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
-    }
+    // マップデータを生成
+    // for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
+    //     // 0: 画面外の黒
+    //     // 1: 白い床
+    //     // 2: 赤い床
+    //     const sourceTileIndex = i % (board1FloorTilemapTileNum - 1) + 1;
+    //     printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
+    // }
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
+    printing1SourceTileIndexesBoard.value.push(2);
+    printing1SourceTileIndexesBoard.value.push(1);
     const printing1Input : PrintingInput = printingInputCreate();
     const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
@@ -630,12 +723,39 @@
         position: absolute;
         image-rendering: pixelated;
     }
-    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
+    span.board-slidable-tile-index-large {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
         position: absolute;
         width: 100%;
         text-align: center;
         padding-top: 4px;
         font-size: 16px;
+    }
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
+        position: absolute;
+        top: 6px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-printing-index {
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-square-printing-string {   /* マスの印字 */
+        position: absolute;
+        top: 16px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
     }
     div.playerHome {    /* 自機のホーム１ */
         position: absolute;

@@ -970,13 +970,6 @@
         text-align: center;
         font-size: 6px;
     }
-    span.board-square-printing-string {   /* マスの印字 */
-        position: absolute;
-        top: 12px;
-        width: 100%;
-        text-align: center;
-        font-size: 12px;
-    }
     span.board-printing-index {
         position: absolute;
         top: 12px;
