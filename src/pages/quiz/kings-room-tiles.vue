@@ -7,7 +7,10 @@
 
     <h3>王の間のタイルを市松模様にしようぜ！</h3>
     <section class="sec-3">
-        <p>作成中だぜ（＾▽＾）！</p>
+        <br/>
+        
+        <!-- 免責 -->
+        <v-alert type="warning" title="免責！" text="画面は開発中のものだぜ（＾▽＾）！" closable />
         <br/>
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
@@ -16,6 +19,15 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
+        <p>
+            隣の国の王様は困っていました。<br/>
+            勇者　キフワラニャン　は呼び出された。<br/>
+            <br/>
+            パペポ一世　「　謁見の間の床タイルを市松模様にしたいのだが、<br/>
+            市松模様になることもあれば、ストライプになることもあるんじゃ。<br/>
+            下の［設定を表示］ボタンをクリックして、出てくるスライダーバーを動かしてみてくれ」<br/>
+        </p>
+        <br/>
         <!-- 印字１　＞　機能 -->
         <printing-making
             ref="printing1Ref"
