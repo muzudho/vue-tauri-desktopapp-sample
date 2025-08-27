@@ -28,7 +28,7 @@
             <br/>
             パペポ一世　「　謁見の間の床タイルを市松模様にしたいのだが、<br/>
             市松模様になることもあれば、ストライプになることもあるんじゃ。<br/>
-            下の［設定を表示］ボタンをクリックして、出てくるスライダーバーを動かしてみてくれ」<br/>
+            下の［問題設定を表示］ボタンをクリックして、出てくるスライダーバーを動かしてみてくれ」<br/>
         </p>
         <br/>
         <!-- 印字１　＞　機能 -->
@@ -148,23 +148,23 @@
             </out-of-sight-making>
         </div>
 
-        <!-- 設定パネル１ -->
+        <!-- 問題設定パネル１ -->
         <v-btn
             class="code-key"
-            @touchstart.prevent="button1Ref?.press($event, onConfig1ButtonPressed);"
+            @touchstart.prevent="button1Ref?.press($event, onProblem1ButtonPressed);"
             @touchend="button1Ref?.release();"
             @touchcancel="button1Ref?.release();"
             @touchleave="button1Ref?.release();"
-            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfig1ButtonPressed)"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onProblem1ButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        >{{ config1IsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
-        <section v-if="config1IsShowing" class="sec-1">
+        >{{ problem1IsShowing ? '⚙️問題設定を終わる' : '⚙️問題設定を表示' }}</v-btn>
+        <section v-if="problem1IsShowing" class="sec-1">
             <br/>
             <br/>
         </section>
 
-        <!-- カスタマイズ -->
+        <!-- お好み設定パネル１ -->
         <v-btn
             class="code-key"
             @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
@@ -174,7 +174,7 @@
             @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        >{{ preferences1IsShowing ? '⚙️カスタマイズを終わる' : '⚙️カスタマイズする' }}</v-btn>
+        >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
         <section v-if="preferences1IsShowing" class="sec-1">
             <br/>
             <v-slider
@@ -284,7 +284,7 @@
     // + オブジェクト　＞　設定パネル１ +
     // ++++++++++++++++++++++++++++++++++
 
-    const config1IsShowing = ref<boolean>(false);    // 設定を表示中
+    const problem1IsShowing = ref<boolean>(false);    // 設定を表示中
 
     // ++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　お好み設定１ +
@@ -641,10 +641,10 @@
 
 
     /**
-     * ［設定パネル１］を開くボタン。
+     * ［問題設定パネル１］を開くボタン。
      */
-    function onConfig1ButtonPressed() : void {
-        config1IsShowing.value = !config1IsShowing.value;
+    function onProblem1ButtonPressed() : void {
+        problem1IsShowing.value = !problem1IsShowing.value;
     }
 
 
