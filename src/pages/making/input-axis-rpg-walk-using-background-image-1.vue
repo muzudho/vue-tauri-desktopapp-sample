@@ -33,6 +33,12 @@
             </div>
 
             <!-- スクウェアのグリッド -->
+            <div
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
+                :style="getSquareStyleFromTileIndex(i - 1)">
+            <!--
             <tile
                 v-for="i in board1Area"
                 :key="i"
@@ -61,6 +67,7 @@
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/tilemap-floor-20250826.png">
+            -->
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -114,7 +121,11 @@
                         )
                     )
                 }}</span>
+
+            </div>
+            <!--
             </tile>
+            -->
 
             <!-- 自機１ -->
             <tile-animation
