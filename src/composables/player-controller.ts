@@ -442,6 +442,7 @@ export function handlePlayerControllerWithWrapAround(
 
 /**
  * 向き・移動・ウェイトを処理
+ * @param printing1Speed 移動速度（ピクセル単位）
  */
 export function processingMoveAndWait(
     player1Left: Ref<number>,
@@ -484,7 +485,7 @@ export function processingMoveAndWait(
         player1Top.value += printing1Speed;
     }
 
-    if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
+    if (player1MotionWait.value <= 0) { // モーション・ウェイトが０以下のときだけ実行される
 
         // 自機の向き（単位：ピクセル）を更新、上下左右の複数同時入力の場合、左、上、右、下の順で優先：
         if (player1Motion.lookRight == commonSpriteMotionLeft) {    // 左

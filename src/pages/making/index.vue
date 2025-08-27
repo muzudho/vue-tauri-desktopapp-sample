@@ -29,6 +29,9 @@
             </li>
             <li>📖 <router-link to="/making/tile-count-up-rpg-walk" :style="getPreviousLinkHighlight('/making/tile-count-up-rpg-walk')">タイル　＞　でカウントアップのアニメーションするぜ！　＞　ＲＰＧの歩行グラフィック</router-link></li>
             <li>📖 <router-link to="/making/input-axis" :style="getPreviousLinkHighlight('/making/input-axis')">ＲＰＧの歩行グラフィックを表示して、上下左右に移動しようぜ！</router-link></li>
+
+            <li>📖 <router-link to="/making/input-axis-rpg-walk-using-background-image-1" :style="getPreviousLinkHighlight('/making/input-axis-rpg-walk-using-background-image-1')">🌟テスト：　盤の回り込みスクロール、数字柄の原始的シフト、自機の端歩き</router-link></li>
+
             <li>📖 <router-link to="/making/sprite-routine" :style="getPreviousLinkHighlight('/making/sprite-routine')">スプライト　＞　ルーチン</router-link></li>
         </ul>
     </section>

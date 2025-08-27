@@ -477,12 +477,13 @@
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1Speed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1StringData = ref<string[]>([]);
     // マップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
+    const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
+    const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1Motion = ref<MotionInput>({  // 印字への入力
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
@@ -580,7 +581,7 @@
         ],
     };
     const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
-    const player1MotionWait = ref<number>(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1MotionWait = ref<number>(0);  // // 排他的モーション時間。
     const player1Motion = ref<PlayerMotion>({   // モーションへの入力
         lookRight: 0,   // 向きを変える
         lookBottom: 0,
@@ -697,7 +698,7 @@
                 printing1Left,
                 printing1Top,
                 printing1Motion.value,
-                printing1Speed.value,
+                printing1MotionSpeed.value,
                 player1AnimationFacingFrames,
                 player1AnimationWalkingFrames,
             );

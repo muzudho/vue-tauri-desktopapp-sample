@@ -486,7 +486,7 @@
         ],
     };
     const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
-    const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
         goToRight: 0,   // 負なら左、正なら右
         goToBottom: 0,   // 負なら上、正なら下

@@ -341,11 +341,11 @@
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1Speed = ref<number>(2);        // 移動速度（単位：ピクセル）
     const printing1Motion = ref<Record<string, number>>({  // 印字への入力
         wrapAroundRight: 0,   // 負なら左、正なら右
         wrapAroundBottom: 0,   // 負なら上、正なら下
     });
+    const printing1MotionSpeed = ref<number>(2);        // 移動速度（単位：ピクセル）
     const printingMapData = computed(() => {    // ランダムなマップデータを生成
         const data = [];
         for (let i = 0; i < board1MapArea; i++) {
@@ -401,7 +401,7 @@
         ],
     };
     const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
-    const player1MotionWait = ref(0);  // TODO: モーション入力拒否時間。入力キーごとに用意したい。
+    const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const player1Motion = ref<Record<string, number>>({  // モーションへの入力
         lookRight: 0,     // 向きを変える
         lookBottom: 0,
@@ -495,29 +495,16 @@
 
             // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
             if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionLeft) {  // 左
-                printing1Left.value -= printing1Speed.value;
+                printing1Left.value -= printing1MotionSpeed.value;
             } else if (printing1Motion.value["wrapAroundRight"] == commonSpriteMotionRight) {   // 右
-                printing1Left.value += printing1Speed.value;
+                printing1Left.value += printing1MotionSpeed.value;
             }
 
             if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionUp) {  // 上
-                printing1Top.value -= printing1Speed.value;
+                printing1Top.value -= printing1MotionSpeed.value;
             } else if (printing1Motion.value["wrapAroundBottom"] == commonSpriteMotionDown) {   // 下
-                printing1Top.value += printing1Speed.value;
+                printing1Top.value += printing1MotionSpeed.value;
             }
-
-            // // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。タテヨコ同時入力の場合、上下で上書きする：
-            // if (player1Motion.value["goToRight"] == commonSpriteMotionLeft) {    // 左
-            //     player1Left.value -= printing1Speed.value;
-            // } else if (player1Motion.value["goToRight"] == commonSpriteMotionRight) {  // 右
-            //     player1Left.value += printing1Speed.value;
-            // }
-
-            // if (player1Motion.value["goToBottom"] == commonSpriteMotionUp) {   // 上
-            //     player1Top.value -= printing1Speed.value;
-            // } else if (player1Motion.value["goToBottom"] == commonSpriteMotionBottom) { // 下
-            //     player1Top.value += printing1Speed.value;
-            // }
 
             if (player1MotionWait.value <= 0) { // モーション開始時に１回だけ実行される
                 // 自機の向きを更新、タテヨコ同時入力の場合、上下を優先する：
