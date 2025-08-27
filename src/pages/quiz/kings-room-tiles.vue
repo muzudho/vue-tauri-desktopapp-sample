@@ -1,3 +1,7 @@
+<!--
+    クイズ：　王の間のタイルを市松模様にしようぜ！
+-->
+
 <template>
     <the-header/>
 
@@ -12,13 +16,102 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
+        <!-- 印字１　＞　機能 -->
+        <printing-making
+            ref="printing1Ref"
+            :printing1SourceTilemapCoordination="printing1SourceTilemapCoordination"
+            :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard">
+        </printing-making>
+
         <!-- 盤領域 -->
         <div
             class="board"
-            >
-            <!--
-            :style="board1Style"
-            -->
+            :style="board1Style">
+
+            <!-- スクウェアのグリッド -->
+            <tile
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
+                :style="getSquareStyleFromTileIndex(i - 1)"
+                :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                ) ?? 0"
+                :srcTop="0"
+                :srcWidth="board1SquareWidth"
+                :srcHeight="board1SquareHeight"
+                tilemapUrl="/img/making/tilemap-floor-20250826.png">
+
+                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
+                <span class="board-fixed-square-index">fix[{{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }}]</span>
+                <span class="board-printing-index">print[{{
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                }}]</span>
+                <span class="board-square-printing-string">{{
+                    printing1Ref?.getPrintingStringFromPrintingIndex(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    ) ?? 0
+                }}</span>
+
+            </tile>
 
             <!-- 自機１ -->
             <tile-animation
@@ -28,6 +121,16 @@
                 :time="stopwatch1Count"
                 class="player"
                 :style="player1Style" />
+
+            
+            <!-- 視界の外１ -->
+            <out-of-sight-making
+                ref="outOfSight1Ref"
+                :board1SquareWidth="board1SquareWidth"
+                :board1SquareHeight="board1SquareHeight"
+                :board1FileNum="board1FileNum"
+                :board1RankNum="board1RankNum">
+            </out-of-sight-making>
         </div>
     </section>
 
@@ -350,7 +453,7 @@
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
 
-    
+
     // ################
     // # サブルーチン #
     // ################
@@ -469,6 +572,49 @@
 <style scoped>
     div.board { /* 盤１ */
         position: relative;
+    }
+    div.square {    /* マス */
+        position: absolute;
+        image-rendering: pixelated;
+    }
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
+        position: absolute;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-fixed-square-index { /* マスの画面上の見た目の位置に付いている番号 */
+        position: absolute;
+        top: 6px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-square-printing-string {   /* マスの印字 */
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+    }
+    span.board-printing-index {
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 6px;
+    }
+    span.board-square-printing-string {   /* マスの印字 */
+        position: absolute;
+        top: 16px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
+    }
+    div.playerHome {    /* 自機のホーム１ */
+        position: absolute;
+        border: dashed 4px lightpink;
+        z-index: 10;
     }
     div.player {    /* 自機１ */
         position: absolute;
