@@ -366,7 +366,7 @@
     const player1Input = <Record<string, boolean>>{             // 入力
         ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     };
-    const player1AnimationSlow = ref<number>(8);    // アニメーションのスローモーションの倍率の初期値
+    const player1AnimationSlow = ref<number>(8);    // アニメーションを何倍遅くするか
     const player1AnimationFacingFrames = 1;         // 振り向くフレーム数
     const player1AnimationWalkingFrames = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
