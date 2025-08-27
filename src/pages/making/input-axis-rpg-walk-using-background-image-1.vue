@@ -138,24 +138,9 @@
             
             <!-- 視界の外１ -->
             <out-of-sight-making
-                ref="outOfSight1">
-
+                ref="outOfSight1Ref">
             </out-of-sight-making>
-            <!--
-            <div
-                class="out-of-sight"
-                :style="outOfSight1Style">
-            </div>
-            -->
         </div>
-
-        <div>
-            印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
-            印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
-            人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
-            印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
-        </div>
-        <br/>
 
         <p>
             👆 半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！<br/>
@@ -310,7 +295,7 @@
             <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
             <v-slider
                 label="マスクの枠の幅"
-                v-model="outOfSight1Ref?.outOfSight1WithMaskSizeSquare"
+                v-model="outOfSight1WithMaskSizeSquare"
                 :min="0"
                 :max="2"
                 step="1"
@@ -402,6 +387,16 @@
             :style="`width: ${8 * board1SquareWidth}px; height:${4 * board1SquareHeight}px;`"
             style="image-rendering: pixelated; margin:0; padding:0; border:dashed 4px gray;"/>
         <p>：ここまで。</p>
+        <br/>
+
+        <div style="z-index: 10;">
+            印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
+            印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
+            人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
+            印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
+            outOfSight1WithMaskSizeSquare={{ outOfSight1WithMaskSizeSquare }}<br/>
+        </div>
+        <br/>
     </section>
 
     <br/>
@@ -500,6 +495,20 @@
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
     
 
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　視界の外１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const outOfSight1Ref = ref<InstanceType<typeof OutOfSightMaking> | null>(null);
+    const outOfSight1WithMaskSizeSquare = computed({
+        get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
+        set: (value) => {
+            if (outOfSight1Ref.value) {
+                outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
+            }
+        }
+    });
+
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
@@ -517,8 +526,8 @@
 
     const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
-            width: `${outOfSight1WithMaskFileNum.value * board1SquareWidth}px`,
-            height: `${outOfSight1WithMaskRankNum.value * board1SquareHeight}px`,
+            width: `${(board1FileNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareWidth}px`,
+            height: `${(board1RankNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareHeight}px`,
             zoom: appZoom.value,
         };
     });
@@ -619,14 +628,6 @@
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-            // if (!Number.isInteger(printingIndex)) {
-            //     //alert(`Assertion failed: "printingIndex" must be an integer, got ${printingIndex}`);
-            //     throw new Error(`Assertion failed: "printingIndex" must be an integer, got ${printingIndex}`);
-            // }
-            // if (!Number.isInteger(sourceTileIndex)) {
-            //     alert(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex} | printingIndex=${printingIndex}`);
-            //     //throw new Error(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex}`);
-            // }
             return `${sourceTileIndex}`;
         };
     });
@@ -740,22 +741,6 @@
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　視界の外１ +
-    // ++++++++++++++++++++++++++++++++
-
-    const outOfSight1Ref = ref<InstanceType<typeof OutOfSightMaking> | null>(null);
-
-    //*
-    const outOfSight1WithMaskFileNum = computed<number>(()=>{
-        return board1FileNum.value + (outOfSight1Ref.value?.outOfSight1WithMaskBottomRightMargin ?? 1);
-    });
-    const outOfSight1WithMaskRankNum = computed<number>(()=>{
-        return board1RankNum.value + (outOfSight1Ref.value?.outOfSight1WithMaskBottomRightMargin ?? 1);
-    });
-    // */
-
-
     // ##########
     // # 開始時 #
     // ##########
@@ -828,7 +813,7 @@
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
+                outOfSight1WithMaskSizeSquare.value,
                 printing1FileNum.value,
                 printing1RankNum.value,
                 printing1Left.value,

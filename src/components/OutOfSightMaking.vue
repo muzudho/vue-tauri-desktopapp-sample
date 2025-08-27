@@ -15,7 +15,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref, watch } from 'vue';
+    import { computed, ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
     // ++++++++++++++
@@ -69,6 +69,8 @@
     defineExpose({
         outOfSight1WithMaskSizeSquare,
         outOfSight1WithMaskBottomRightMargin,
+        outOfSight1WithMaskFileNum,
+        outOfSight1WithMaskRankNum,
     });
 
 </script>
