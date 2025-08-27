@@ -208,6 +208,23 @@
                 thumbLabel="always" />
             <br/>
         </section>
+        <br/>
+        <br/>
+
+        <p>
+            キフワラニャン　「フーム……、ストライプになってしまう……<br/>
+            これはバグだぜ！」<br/>
+        </p>
+        <br/>
+
+        <p>
+            ※ここに選択肢を出す。<br/>
+            （１）<br/>
+            （２）<br/>
+            （３）<br/>
+            （４）<br/>
+        </p>
+
     </section>
 
 
@@ -392,7 +409,7 @@
     //
 
     const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
-    const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
+    const printing1OutOfSightIsLock = ref<boolean>(true);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
