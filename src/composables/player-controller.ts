@@ -217,6 +217,7 @@ export function handlePlayerControllerWithWrapAround(
                     // +<--m-->*-------------+
                     //         0
                     // c<------+
+                    // pd
                     //
                     // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
                     // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
@@ -276,6 +277,7 @@ export function handlePlayerControllerWithWrapAround(
                     // |                                |
                     // +--------------------------+<-m->+
                     // c<------+
+                    // pd
                     //
                     // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
                     // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
@@ -287,7 +289,7 @@ export function handlePlayerControllerWithWrapAround(
                     // m = cw + c - bw
                     //
 
-                    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth);
+                    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1;  // まだ 1 （右へ移動）されていないので、1 しておく。
                     const cw = printing1FileNum; // 例えば 10
                     const bw = board1FileNum;
                     const m = cw + pd - bw;
@@ -325,7 +327,7 @@ export function handlePlayerControllerWithWrapAround(
                     // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                     //
                     // Printing
-                    // +-------------------->+     c
+                    // +-------------------->+     c  pd
                     // |                     |     ^
                     // |       Board         |     |
                     // |       +-------+     |     +
@@ -384,7 +386,7 @@ export function handlePlayerControllerWithWrapAround(
                     // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
                     //
                     // Printing
-                    // +------------------------------->+     c
+                    // +------------------------------->+     c  pd
                     // ^                                |     ^
                     // |       Board                    |     |
                     // |       +------------------+     | 0   +
