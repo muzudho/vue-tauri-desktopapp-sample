@@ -68,6 +68,7 @@
 
     defineExpose({
         outOfSight1WithMaskSizeSquare,
+        outOfSight1WithMaskBottomRightMargin,
     });
 
 </script>

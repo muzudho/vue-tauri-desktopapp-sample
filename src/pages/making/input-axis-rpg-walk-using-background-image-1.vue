@@ -747,13 +747,11 @@
     const outOfSight1Ref = ref<InstanceType<typeof OutOfSightMaking> | null>(null);
 
     //*
-    //const outOfSight1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
-    const outOfSight1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
     const outOfSight1WithMaskFileNum = computed<number>(()=>{
-        return board1FileNum.value + outOfSight1WithMaskBottomRightMargin;
+        return board1FileNum.value + (outOfSight1Ref.value?.outOfSight1WithMaskBottomRightMargin ?? 1);
     });
     const outOfSight1WithMaskRankNum = computed<number>(()=>{
-        return board1RankNum.value + outOfSight1WithMaskBottomRightMargin;
+        return board1RankNum.value + (outOfSight1Ref.value?.outOfSight1WithMaskBottomRightMargin ?? 1);
     });
     // */
 
