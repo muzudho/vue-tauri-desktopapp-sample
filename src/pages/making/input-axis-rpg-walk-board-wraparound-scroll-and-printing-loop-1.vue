@@ -330,10 +330,11 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { isPlayerInputKey, imageAndPositionAndWaitUpdate,
-        playerMotionUpdateByInputWithWrapAround, playerMotionClearIfCountZero, playerMotionCountDown,
-        printingMotionUpdateByInputWithWrapAround, printingMotionClearIfCountZero, printingMotionCountDown,
+    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import {
+        isPlayerInputKey,
+        playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
+        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
@@ -408,8 +409,11 @@
     >(() => {
         return (tileIndex:number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
-            const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
-            const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
+            const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
+            const homeLeft = tileFile * board1SquareWidth;
+            const homeTop = tileRank * board1SquareHeight;
+            //const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
+            //const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
 
             const [offsetLeftLoop, offsetTopLoop] = wrapAround(
                 homeLeft,
@@ -476,19 +480,21 @@
     >(() => {
         return (printingIndex: number) => {
 
-            if (printingIndex < 0) {
-                return "-";
+            if (printingIndex == -1) {
+                return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             }
 
-            return  printing1StringData.value[printingIndex];
+            return printing1StringData.value[printingIndex];
         };
     });
 
+
     // ++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　自機１のホーム +
+    // + オブジェクト　＞　自機のホーム１ +
     // ++++++++++++++++++++++++++++++++++++
     //
     // このサンプルでは、ピンク色に着色しているマスです。
+    // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
     const playerHome1File = ref<number>(2);    // ホーム
@@ -514,6 +520,7 @@
 
     const player1Width = board1SquareWidth;
     const player1Height = board1SquareHeight;
+    // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1Left = ref<number>(playerHome1Left.value);    // スプライトの位置
     const player1Top = ref<number>(playerHome1Top.value);
     const player1Input = {  // 入力
@@ -525,7 +532,6 @@
         top: `${player1Top.value}px`,
         width: `${player1Width}px`,
         height: `${player1Height}px`,
-        // 親要素で zoom を設定しているので、ここで zoom は不要です。
     }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
@@ -563,8 +569,8 @@
     });
     const player1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    const player1MotionFacingFrames = 1;    // 振り向きフレーム数
-    const player1MotionWalkingFrames = 16;  // 歩行フレーム数
+    const player1MotionFacingFrames: number = 1;    // 振り向くフレーム数
+    const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true); // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
@@ -630,7 +636,7 @@
                 printing1MotionWait,
             );
             playerMotionCountDown(
-                printing1MotionWait,
+                player1MotionWait,
             );
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -645,7 +651,7 @@
                 player1Motion,
                 player1MotionWait.value,
             );
-            
+
             // ++++++++++++++++++++++++++++++
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
@@ -691,11 +697,19 @@
                 player1CanBoardEdgeWalking.value,
             );
 
-            // ++++++++++++++++++++
-            // + 向き、移動を処理 +
-            // ++++++++++++++++++++
+            // ++++++++++++++++++++++++++++++
+            // + 向き・移動・ウェイトを更新 +
+            // ++++++++++++++++++++++++++++++
 
-            imageAndPositionAndWaitUpdate(
+            printingImageAndPositionAndWaitUpdate(
+                printing1Left,
+                printing1Top,
+                printing1Motion.value,
+                printing1MotionSpeed.value,
+                printing1MotionWait,
+                printing1MotionWalkingFrames,
+            );
+            playerImageAndPositionAndWaitUpdate(
                 playerHome1Left.value,
                 playerHome1Top.value,
                 player1Left,
@@ -707,12 +721,6 @@
                 player1Frames,
                 player1MotionFacingFrames,
                 player1MotionWalkingFrames,
-                printing1Left,
-                printing1Top,
-                printing1Motion.value,
-                printing1MotionSpeed.value,
-                printing1MotionWait,
-                printing1MotionWalkingFrames,
             );
 
             // 次のフレーム
@@ -805,7 +813,7 @@
     div.square {    /* マス */
         position: absolute;
     }
-    span.board-slidable-tile-index {  /* マスの物自体に付いている番号 */
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
         position: absolute;
         width: 100%;
         text-align: center;
@@ -851,4 +859,5 @@
         position: absolute;
         image-rendering: pixelated;
     }
+
 </style>

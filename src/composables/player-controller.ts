@@ -715,18 +715,18 @@ export function playerMotionUpdateByInputWithWrapAround(
  * 向き・移動・ウェイトを処理
  * @param printing1MotionSpeed 移動速度（ピクセル単位）
  */
-export function imageAndPositionAndWaitUpdate(
-    playerHome1Left: number,
-    playerHome1Top: number,
-    player1Left: Ref<number>,
-    player1Top: Ref<number>,
-    player1Motion: PlayerMotion,
-    player1MotionSpeed: number,
-    player1MotionWait: Ref<number>,
-    player1SourceFrames: RpgWalkingImagePosition,
-    player1Frames: Ref<Rectangle[]>,
-    player1MotionFacingFrames: number,
-    player1MotionWalkingFrames: number,
+export function printingImageAndPositionAndWaitUpdate(
+    // playerHome1Left: number,
+    // playerHome1Top: number,
+    // player1Left: Ref<number>,
+    // player1Top: Ref<number>,
+    // player1Motion: PlayerMotion,
+    // player1MotionSpeed: number,
+    // player1MotionWait: Ref<number>,
+    // player1SourceFrames: RpgWalkingImagePosition,
+    // player1Frames: Ref<Rectangle[]>,
+    // player1MotionFacingFrames: number,
+    // player1MotionWalkingFrames: number,
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
     printing1Motion: PrintingMotion,
@@ -757,14 +757,56 @@ export function imageAndPositionAndWaitUpdate(
         printing1Top.value += printing1MotionSpeed;
     }
 
-    if (player1Motion.goToHome) {
-        player1Left.value = playerHome1Left;
-        player1Top.value = playerHome1Top;
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + モーション・ウェイトが０以下のときだけ実行される処理 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    if (printing1MotionWait.value <= 0) {
+
+        // ................
+        // . ウェイト設定 .
+        // ................
+
+        // goToHome はウェイト無し
+
+        if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0) {
+            printing1MotionWait.value = printing1MotionWalkingFrames;
+        }
     }
+}
+
+/**
+ * 向き・移動・ウェイトを処理
+ * @param printing1MotionSpeed 移動速度（ピクセル単位）
+ */
+export function playerImageAndPositionAndWaitUpdate(
+    playerHome1Left: number,
+    playerHome1Top: number,
+    player1Left: Ref<number>,
+    player1Top: Ref<number>,
+    player1Motion: PlayerMotion,
+    player1MotionSpeed: number,
+    player1MotionWait: Ref<number>,
+    player1SourceFrames: RpgWalkingImagePosition,
+    player1Frames: Ref<Rectangle[]>,
+    player1MotionFacingFrames: number,
+    player1MotionWalkingFrames: number,
+    // printing1Left: Ref<number>,
+    // printing1Top: Ref<number>,
+    // printing1Motion: PrintingMotion,
+    // printing1MotionSpeed: number,
+    // printing1MotionWait: Ref<number>,
+    // printing1MotionWalkingFrames: number,
+) : void {
 
     // ++++++++++
     // + 自機１ +
     // ++++++++++
+
+    if (player1Motion.goToHome) {
+        player1Left.value = playerHome1Left;
+        player1Top.value = playerHome1Top;
+    }
 
     // 移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (player1Motion.goToRight == commonSpriteMotionLeft) {    // 左
@@ -782,27 +824,6 @@ export function imageAndPositionAndWaitUpdate(
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + モーション・ウェイトが０以下のときだけ実行される処理 +
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    // --------------------------------------------------------------------
-    // - モーション・ウェイトが０以下のときだけ実行される処理　＞　印字１ -
-    // --------------------------------------------------------------------
-
-    if (printing1MotionWait.value <= 0) {
-
-        // ................
-        // . ウェイト設定 .
-        // ................
-
-        // goToHome はウェイト無し
-
-        if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0) {
-            printing1MotionWait.value = printing1MotionWalkingFrames;
-        }
-    }
-
-    // --------------------------------------------------------------------
-    // - モーション・ウェイトが０以下のときだけ実行される処理　＞　自機１ -
-    // --------------------------------------------------------------------
 
     if (player1MotionWait.value <= 0) {
 

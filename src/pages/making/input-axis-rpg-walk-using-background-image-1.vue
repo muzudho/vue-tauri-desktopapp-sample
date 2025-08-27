@@ -431,9 +431,9 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { isPlayerInputKey, imageAndPositionAndWaitUpdate,
-        playerMotionUpdateByInputWithWrapAround, playerMotionClearIfCountZero, playerMotionCountDown,
-        printingMotionUpdateByInputWithWrapAround, printingMotionClearIfCountZero, printingMotionCountDown,
+    import { isPlayerInputKey,
+        playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
+        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
@@ -836,7 +836,15 @@
             // + 向き・移動・ウェイトを処理 +
             // ++++++++++++++++++++++++++++++
 
-            imageAndPositionAndWaitUpdate(
+            printingImageAndPositionAndWaitUpdate(
+                printing1Left,
+                printing1Top,
+                printing1Motion.value,
+                printing1MotionSpeed.value,
+                printing1MotionWait,
+                printing1MotionWalkingFrames,
+            );
+            playerImageAndPositionAndWaitUpdate(
                 playerHome1Left.value,
                 playerHome1Top.value,
                 player1Left,
@@ -848,12 +856,6 @@
                 player1Frames,
                 player1MotionFacingFrames,
                 player1MotionWalkingFrames,
-                printing1Left,
-                printing1Top,
-                printing1Motion.value,
-                printing1MotionSpeed.value,
-                printing1MotionWait,
-                printing1MotionWalkingFrames,
             );
 
             // 次のフレーム

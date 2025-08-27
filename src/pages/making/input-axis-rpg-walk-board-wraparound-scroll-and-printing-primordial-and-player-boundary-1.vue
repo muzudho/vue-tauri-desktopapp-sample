@@ -259,7 +259,6 @@
                 color="green"
                 :hideDetails="true"
                 inset />
-            <br/>
             <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
             <v-slider
                 label="マスクの枠の幅"
@@ -333,9 +332,9 @@
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
     import {
-        isPlayerInputKey, imageAndPositionAndWaitUpdate,
-        playerMotionUpdateByInputWithWrapAround, playerMotionClearIfCountZero, playerMotionCountDown,
-        printingMotionUpdateByInputWithWrapAround, printingMotionClearIfCountZero, printingMotionCountDown,
+        isPlayerInputKey,
+        playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
+        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
@@ -344,21 +343,6 @@
     // ********************
 
     import type Rectangle from '../../interfaces/Rectangle';
-
-
-    // ##########
-    // # コモン #
-    // ##########
-    //
-    // よく使う設定をまとめたもの。特に不変のもの。
-    //
-
-    /*
-    const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-    const commonSpriteMotionUp = -1;
-    const commonSpriteMotionRight = 1;
-    const commonSpriteMotionDown = 1;
-    */
 
 
     // ############################
@@ -588,8 +572,6 @@
         ],
     };
     const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
-    const player1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const player1MotionWait = ref<number>(0);  // // 排他的モーション時間。
     const player1Motion = ref<PlayerMotion>({   // モーションへの入力
         lookRight: 0,   // 向きを変える
         lookBottom: 0,
@@ -597,6 +579,8 @@
         goToRight: 0,   // 負なら左、正なら右へ移動する
         goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
+    const player1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
+    const player1MotionWait = ref<number>(0);  // 排他的モーション時間。
     const player1MotionFacingFrames: number = 1;         // 振り向くフレーム数
     const player1MotionWalkingFrames: number = 16;       // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(true);  // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
@@ -726,10 +710,18 @@
             );
 
             // ++++++++++++++++++++++++++++++
-            // + 向き・移動・ウェイトを処理 +
+            // + 向き・移動・ウェイトを更新 +
             // ++++++++++++++++++++++++++++++
 
-            imageAndPositionAndWaitUpdate(
+            printingImageAndPositionAndWaitUpdate(
+                printing1Left,
+                printing1Top,
+                printing1Motion.value,
+                printing1MotionSpeed.value,
+                printing1MotionWait,
+                printing1MotionWalkingFrames,
+            );
+            playerImageAndPositionAndWaitUpdate(
                 playerHome1Left.value,
                 playerHome1Top.value,
                 player1Left,
@@ -741,12 +733,6 @@
                 player1Frames,
                 player1MotionFacingFrames,
                 player1MotionWalkingFrames,
-                printing1Left,
-                printing1Top,
-                printing1Motion.value,
-                printing1MotionSpeed.value,
-                printing1MotionWait,
-                printing1MotionWalkingFrames,
             );
 
             // 次のフレーム
