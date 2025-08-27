@@ -128,7 +128,11 @@
             
             <!-- 視界の外１ -->
             <out-of-sight-making
-                ref="outOfSight1Ref">
+                ref="outOfSight1Ref"
+                :board1SquareWidth="board1SquareWidth"
+                :board1SquareHeight="board1SquareHeight"
+                :board1FileNum="board1FileNum"
+                :board1RankNum="board1RankNum">
             </out-of-sight-making>
         </div>
 
