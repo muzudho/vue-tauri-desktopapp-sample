@@ -442,7 +442,8 @@
     // ++++++++++++++++++
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-    import { isPlayerInputKey,
+    import {
+        isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
         printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
@@ -545,7 +546,7 @@
             };
         };
     });
-    const board1FloorTilemapTileNum = 4;  // 床のタイルマップ。ただし、左上隅は画面外の黒なのでそれを除く。
+    const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
     interface SourceTile {
         left: number,
         top: number,
@@ -577,7 +578,7 @@
     // ランダムなマップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         // 左上のタイルは画面外の黒なので、それを避けて設定。
-        const sourceTileIndex = Math.floor(Math.random() * board1FloorTilemapTileNum) + 1;
+        const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
         printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
     }
     const printing1Input = {  // 入力
@@ -590,7 +591,8 @@
     });
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
+    //const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
+    const printing1MotionWalkingFrames = 1000*16;       // 歩行フレーム数
     const printing1SourceTilemapCoordination : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
@@ -613,7 +615,8 @@
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-            return `${sourceTileIndex}`;
+            return `${printingIndex}`
+            //return `${sourceTileIndex}`;
         };
     });
 
@@ -706,7 +709,7 @@
         ],
     };
     const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
-    const player1Motion = ref<PlayerMotion>({  // モーションへの入力
+    const player1Motion = ref<PlayerMotion>({   // モーションへの入力
         lookRight: 0,   // 向きを変える
         lookBottom: 0,
         goToHome: false,    // ホームに戻る
@@ -715,8 +718,8 @@
     });
     const player1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    const player1MotionFacingFrames = 1;    // 振り向くフレーム数
-    const player1MotionWalkingFrames = 16;  // 歩行フレーム数
+    const player1MotionFacingFrames: number = 1;    // 振り向くフレーム数
+    const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
@@ -755,7 +758,7 @@
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = false; // 型チェック済み（文字列→キー名）
+                player1Input[e.key] = false;    // 型チェック済み（文字列→キー名）
             }
         });
 
@@ -844,7 +847,7 @@
             );
 
             // ++++++++++++++++++++++++++++++
-            // + 向き・移動・ウェイトを処理 +
+            // + 向き・移動・ウェイトを更新 +
             // ++++++++++++++++++++++++++++++
 
             printingImageAndPositionAndWaitUpdate(

@@ -473,13 +473,13 @@
     const printing1Input = {  // 入力
         " ": false,
     } as PrintingInput;
-    const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1Motion = ref<PrintingMotion>({  // 印字への入力
         goToHome: false,    // ホームに戻る
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
+    const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
+    const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames: number = 16;       // 歩行フレーム数
 
 
@@ -580,9 +580,9 @@
         goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
     const player1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const player1MotionWait = ref<number>(0);  // 排他的モーション時間。
-    const player1MotionFacingFrames: number = 1;         // 振り向くフレーム数
-    const player1MotionWalkingFrames: number = 16;       // 歩行フレーム数
+    const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
+    const player1MotionFacingFrames: number = 1;    // 振り向くフレーム数
+    const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(true);  // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true); // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
@@ -837,6 +837,13 @@
         width: 100%;
         text-align: center;
         font-size: 6px;
+    }
+    span.board-square-printing-string {   /* マスの印字 */
+        position: absolute;
+        top: 12px;
+        width: 100%;
+        text-align: center;
+        font-size: 12px;
     }
     span.board-printing-index {
         position: absolute;
