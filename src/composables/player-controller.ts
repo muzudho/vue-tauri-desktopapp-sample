@@ -442,7 +442,7 @@ export function handlePlayerControllerWithWrapAround(
 
 /**
  * 向き・移動・ウェイトを処理
- * @param printing1Speed 移動速度（ピクセル単位）
+ * @param printing1MotionSpeed 移動速度（ピクセル単位）
  */
 export function processingMoveAndWait(
     player1Left: Ref<number>,
@@ -454,35 +454,35 @@ export function processingMoveAndWait(
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
     printing1Motion: MotionInput,
-    printing1Speed: number,
+    printing1MotionSpeed: number,
     player1AnimationFacingFrames: number,
     player1AnimationWalkingFrames: number,
 ) : void {
 
     // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (printing1Motion.wrapAroundRight == commonSpriteMotionLeft) {  // 左
-        printing1Left.value -= printing1Speed;
+        printing1Left.value -= printing1MotionSpeed;
     } else if (printing1Motion.wrapAroundRight == commonSpriteMotionRight) {   // 右
-        printing1Left.value += printing1Speed;
+        printing1Left.value += printing1MotionSpeed;
     }
 
     if (printing1Motion.wrapAroundBottom == commonSpriteMotionUp) {  // 上
-        printing1Top.value -= printing1Speed;
+        printing1Top.value -= printing1MotionSpeed;
     } else if (printing1Motion.wrapAroundBottom == commonSpriteMotionDown) {   // 下
-        printing1Top.value += printing1Speed;
+        printing1Top.value += printing1MotionSpeed;
     }
 
     // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (player1Motion.goToRight == commonSpriteMotionLeft) {    // 左
-        player1Left.value -= printing1Speed;
+        player1Left.value -= printing1MotionSpeed;
     } else if (player1Motion.goToRight == commonSpriteMotionRight) {  // 右
-        player1Left.value += printing1Speed;
+        player1Left.value += printing1MotionSpeed;
     }
 
     if (player1Motion.goToBottom == commonSpriteMotionUp) {   // 上
-        player1Top.value -= printing1Speed;
+        player1Top.value -= printing1MotionSpeed;
     } else if (player1Motion.goToBottom == commonSpriteMotionDown) { // 下
-        player1Top.value += printing1Speed;
+        player1Top.value += printing1MotionSpeed;
     }
 
     if (player1MotionWait.value <= 0) { // モーション・ウェイトが０以下のときだけ実行される
