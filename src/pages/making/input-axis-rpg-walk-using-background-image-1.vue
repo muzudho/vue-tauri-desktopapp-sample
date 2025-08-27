@@ -1029,6 +1029,7 @@
     div.player {    /* 自機１ */
         position: absolute;
         image-rendering: pixelated;
+        z-index: 20;
     }
     div.out-of-sight {  /* 視界の外１ */
         position: absolute;
