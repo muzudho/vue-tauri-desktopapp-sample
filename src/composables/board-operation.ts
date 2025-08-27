@@ -174,9 +174,8 @@ export function getPrintingIndexFromFixedSquareIndex(
         }
     }
 
-    const subprintingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum);
-
-    return subprintingIndex;
+    const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum);
+    return printingIndex;
 }
 
 
