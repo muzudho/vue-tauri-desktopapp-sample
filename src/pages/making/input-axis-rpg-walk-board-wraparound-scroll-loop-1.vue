@@ -333,7 +333,11 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-   import { motionUpdateByInputWithWrapAround, isPlayerInputKey, motionClearIfCountZero, motionCountDown, imageAndPositionAndWaitUpdate } from '../../composables/player-controller';
+    import {
+        isPlayerInputKey, imageAndPositionAndWaitUpdate,
+        playerMotionUpdateByInputWithWrapAround, playerMotionClearIfCountZero, playerMotionCountDown,
+        printingMotionUpdateByInputWithWrapAround, printingMotionClearIfCountZero, printingMotionCountDown,
+    } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -615,8 +619,10 @@
             // + モーション・タイマー +
             // ++++++++++++++++++++++++
 
-            motionCountDown(
+            printingMotionCountDown(
                 printing1MotionWait,
+            );
+            playerMotionCountDown(
                 player1MotionWait,
             );
 
@@ -624,9 +630,11 @@
             // + モーション・ウェイトが０のとき、モーションのクリアー +
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-            motionClearIfCountZero(
+            printingMotionClearIfCountZero(
                 printing1Motion,
                 printing1MotionWait.value,
+            );
+            playerMotionClearIfCountZero(
                 player1Motion,
                 player1MotionWait.value,
             );
@@ -635,7 +643,7 @@
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
 
-            motionUpdateByInputWithWrapAround(
+            printingMotionUpdateByInputWithWrapAround(
                 printing1OutOfSightIsLock.value,
                 board1SquareWidth,
                 board1SquareHeight,
@@ -649,6 +657,23 @@
                 printing1Input,
                 printing1Motion,
                 printing1MotionWait.value,
+                playerHome1File.value,
+                playerHome1Rank.value,
+                player1Left.value,
+                player1Top.value,
+                player1Input,
+            );
+            playerMotionUpdateByInputWithWrapAround(
+                printing1OutOfSightIsLock.value,
+                board1SquareWidth,
+                board1SquareHeight,
+                board1FileNum.value,
+                board1RankNum.value,
+                board1WithMaskSizeSquare.value,
+                printing1FileNum.value,
+                printing1RankNum.value,
+                printing1Left.value,
+                printing1Top.value,
                 playerHome1File.value,
                 playerHome1Rank.value,
                 player1Left.value,

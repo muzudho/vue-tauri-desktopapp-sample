@@ -143,12 +143,37 @@ function getPlayer1Rank(
 /**
  * カウント・ダウン
  */
-export function motionCountDown(
+export function printingMotionCountDown(
     printing1MotionWait: Ref<number>,
-    player1MotionWait: Ref<number>,
 ) : void {
     printing1MotionWait.value -= 1; // 印字１
+}
+
+
+/**
+ * カウント・ダウン
+ */
+export function playerMotionCountDown(
+    player1MotionWait: Ref<number>,
+) : void {
     player1MotionWait.value -= 1;   // 自機１
+}
+
+
+/**
+ * モーション・ウェイトが０のとき、モーションのクリアー
+ * @param printing1Motion 
+ * @param printing1MotionWait 
+ */
+export function printingMotionClearIfCountZero(
+    printing1Motion: Ref<PrintingMotion>,
+    printing1MotionWait: number,
+) : void {
+    if (printing1MotionWait==0) {   // 印字
+        printing1Motion.value.goToHome = false;
+        printing1Motion.value.wrapAroundRight = 0;
+        printing1Motion.value.wrapAroundBottom = 0;
+    }
 }
 
 
@@ -156,20 +181,11 @@ export function motionCountDown(
  * モーション・ウェイトが０のとき、モーションのクリアー
  * @param player1Motion 
  * @param player1MotionWait 
- * @param printing1Motion 
  */
-export function motionClearIfCountZero(
-    printing1Motion: Ref<PrintingMotion>,
-    printing1MotionWait: number,
+export function playerMotionClearIfCountZero(
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
 ) : void {
-    if (printing1MotionWait==0) {   // 印字
-        printing1Motion.value.goToHome = false;
-        printing1Motion.value.wrapAroundRight = 0;
-        printing1Motion.value.wrapAroundBottom = 0;
-    }
-
     if (player1MotionWait==0) { // 自機
         player1Motion.value.goToHome = false;
         player1Motion.value.lookRight = 0;
@@ -386,7 +402,7 @@ function checkOutOfSightBottomIsLook(
  * 
  * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
  */
-export function motionUpdateByInputWithWrapAround(
+export function printingMotionUpdateByInputWithWrapAround(
     printingOutOfSightIsLock: boolean,
     board1SquareWidth: number,
     board1SquareHeight: number,
@@ -405,9 +421,9 @@ export function motionUpdateByInputWithWrapAround(
     player1Left: number,
     player1Top: number,
     player1Input: PlayerInput,
-    player1Motion: Ref<PlayerMotion>,
-    player1MotionWait: number,
-    player1CanBoardEdgeWalking: boolean,
+    // player1Motion: Ref<PlayerMotion>,
+    // player1MotionWait: number,
+    // player1CanBoardEdgeWalking: boolean,
 ) : void {
 
     // ++++++++++++++++++++++++++++++++++++++++
@@ -444,8 +460,6 @@ export function motionUpdateByInputWithWrapAround(
 
                 if (willShift) {
                     printing1Motion.value.wrapAroundRight = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
-                } else if (player1CanBoardEdgeWalking) {
-                    // pass
                 }
             }
         }
@@ -470,8 +484,6 @@ export function motionUpdateByInputWithWrapAround(
 
                 if (willShift) {
                     printing1Motion.value.wrapAroundRight = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
-                } else if (player1CanBoardEdgeWalking) {
-                    // pass
                 }
             }
         }
@@ -479,7 +491,7 @@ export function motionUpdateByInputWithWrapAround(
         if (player1Input.ArrowUp) {    // 上
             // ホーム・ポジションより下に居ればホームに近づける。
             if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
-                player1Motion.value.goToBottom = commonSpriteMotionUp;
+                // pass
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
@@ -494,8 +506,6 @@ export function motionUpdateByInputWithWrapAround(
 
                 if (willShift) {
                     printing1Motion.value.wrapAroundBottom = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
-                } else if (player1CanBoardEdgeWalking) {
-                    // pass
                 }
             }
         }
@@ -520,12 +530,50 @@ export function motionUpdateByInputWithWrapAround(
 
                 if (willShift) {
                     printing1Motion.value.wrapAroundBottom = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
-                } else if (player1CanBoardEdgeWalking) {
-                    // pass
                 }
             }
         }
     }
+}
+
+
+/**
+ * キー入力を、モーションに変換します。
+ * 
+ * ［ラップ・アラウンド］するタイプです。十字キー入力とは逆方向に盤を動かします。ラップ・アラウンドしたタイルの印字は差し変わります。
+ * 
+ * 十字方向の入力をした場合、player1Motion の ["lookRight"], ["lookBottom"] （自機の向き）を更新。
+ * また、自機の移動を伴うケースでは、十字方向の入力をした場合、player1Motion の ["goToRight"], ["goToBottom"] （自機の位置）を更新。
+ * 
+ * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
+ */
+export function playerMotionUpdateByInputWithWrapAround(
+    printingOutOfSightIsLock: boolean,
+    board1SquareWidth: number,
+    board1SquareHeight: number,
+    board1FileNum: number,
+    board1RankNum: number,
+    board1WithMaskSizeSquare: number,
+    printing1FileNum: number,
+    printing1RankNum: number,
+    printing1Left: number,
+    printing1Top: number,
+    // printing1Input: PrintingInput,
+    // printing1Motion: Ref<PrintingMotion>,
+    // printing1MotionWait: number,
+    playerHome1File: number,
+    playerHome1Rank: number,
+    player1Left: number,
+    player1Top: number,
+    player1Input: PlayerInput,
+    player1Motion: Ref<PlayerMotion>,
+    player1MotionWait: number,
+    player1CanBoardEdgeWalking: boolean,
+) : void {
+
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + ウェイトが無ければ、入力を受け付ける +
+    // ++++++++++++++++++++++++++++++++++++++++
 
     // ----------------------------------------------------
     // - ウェイトが無ければ、入力を受け付ける　＞　自機１ -
