@@ -450,7 +450,7 @@
     import {
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
+        printingInputCreate, printingMotionClearIfCountZero, printingMotionCreate, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
@@ -604,14 +604,8 @@
         const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
         printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
     }
-    const printing1Input = {  // 入力
-        " ": false,
-    } as PrintingInput;
-    const printing1Motion = ref<PrintingMotion>({   // 印字への入力
-        goToHome: false,    // ホームに戻る
-        wrapAroundRight: 0, // 負なら左、正なら右
-        wrapAroundBottom: 0,    // 負なら上、正なら下
-    });
+    const printing1Input : PrintingInput = printingInputCreate();
+    const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
@@ -622,48 +616,6 @@
         printing1SourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
 
-
-    // /**
-    //  * マスの印字。ソース・タイルマップのタイルのインデックス x の文字列。
-    //  * @returns 該当なしのとき "-"
-    //  */
-    // const getPrintingStringFromPrintingIndex = computed<
-    //     (printingIndex: number) => string
-    // >(() => {
-    //     return (printingIndex: number) => {
-
-    //         if (printingIndex == -1) {
-    //             return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-    //         }
-
-    //         const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-    //         return `${sourceTileIndex}`;
-    //     };
-    // });
-
-
-    // /**
-    //  * 印字表のインデックスを渡すことで、そこに印字するタイルの、ソースタイルの left を返す。
-    //  */
-    // const getSourceTileLeftFromPrintingIndex = computed<
-    //     (printingIndex:number) => number
-    // >(() => {
-    //     return (printingIndex: number) => {
-
-    //         if (printingIndex == -1) {
-    //             return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
-    //         }
-
-    //         const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-
-    //         try {
-    //             return printing1SourceTilemapCoordination[sourceTileIndex]["left"];
-    //         } catch(error) {
-    //             console.error(`ERROR: ${error} | printingIndex=${printingIndex}`);
-    //             return 0;
-    //         }
-    //     };
-    // });
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
