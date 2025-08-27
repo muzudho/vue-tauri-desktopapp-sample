@@ -179,9 +179,9 @@ const routes = [
     },
 
 
-    // ++++++++++
-    // + その他 +
-    // ++++++++++
+    // ++++++++++++++
+    // + ミニゲーム +
+    // ++++++++++++++
 
     {
         name: 'MiniGames',
@@ -203,6 +203,27 @@ const routes = [
         path: '/minigames/maze',
         component: () => import('../pages/minigames/maze.vue'),
     },
+
+
+    // ++++++++++
+    // + クイズ +
+    // ++++++++++
+
+    {
+        name: 'Quiz',
+        path: '/quiz',
+        component: () => import('../pages/quiz/index.vue'),
+    },
+    {
+        name: 'KingsRoomTiles',
+        path: '/quiz/kings-room-tiles',
+        component: () => import('../pages/quiz/kings-room-tiles.vue'),
+    },
+
+
+    // ++++++++++
+    // + その他 +
+    // ++++++++++
 
     {
         name: 'About',
