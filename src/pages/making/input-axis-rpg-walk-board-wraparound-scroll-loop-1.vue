@@ -333,7 +333,7 @@
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
-   import { handlePlayerControllerWithWrapAround, isPlayerInputKey, motionClearIfCountZero, motionCountDown, processingMoveAndWait } from '../../composables/player-controller';
+   import { motionUpdateByInputWithWrapAround, isPlayerInputKey, motionClearIfCountZero, motionCountDown, imageAndPositionAndWaitUpdate } from '../../composables/player-controller';
     import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -544,6 +544,7 @@
     const player1Motion = ref<PlayerMotion>({   // モーションへの入力
         lookRight: 0,     // 向きを変える
         lookBottom: 0,
+        goToHome: false,    // ホームに戻る
         goToRight: 0,   // 負なら左、正なら右へ移動する
         goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
@@ -630,7 +631,7 @@
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
 
-            handlePlayerControllerWithWrapAround(
+            motionUpdateByInputWithWrapAround(
                 printing1OutOfSightIsLock.value,
                 board1SquareWidth,
                 board1SquareHeight,
@@ -645,8 +646,6 @@
                 printing1MotionWait.value,
                 playerHome1File.value,
                 playerHome1Rank.value,
-                playerHome1Left.value,
-                playerHome1Top.value,
                 player1Left,
                 player1Top,
                 player1Input,
@@ -659,7 +658,9 @@
             // + 向き・移動・ウェイトを処理 +
             // ++++++++++++++++++++++++++++++
 
-            processingMoveAndWait(
+            imageAndPositionAndWaitUpdate(
+                playerHome1Left.value,
+                playerHome1Top.value,
                 player1Left,
                 player1Top,
                 player1Motion.value,

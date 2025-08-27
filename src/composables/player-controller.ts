@@ -90,6 +90,7 @@ export function isPlayerInputKey(key: string): key is keyof PlayerInput {
 export interface PlayerMotion {
     lookRight: number,  // 向きを変える
     lookBottom: number,
+    goToHome: boolean,  // ホームに戻る
     goToRight: number,  // 負なら左、正なら右へ移動する
     goToBottom: number, // 負なら上、正なら下へ移動する
 }
@@ -148,13 +149,14 @@ export function motionClearIfCountZero(
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
 ) : void {
-    if (printing1MotionWait==0) {
-        printing1Motion.value.wrapAroundRight = 0;  // 印字
+    if (printing1MotionWait==0) {   // 印字
+        printing1Motion.value.wrapAroundRight = 0;
         printing1Motion.value.wrapAroundBottom = 0;
     }
 
-    if (player1MotionWait==0) {
-        player1Motion.value.lookRight = 0;  // 自機
+    if (player1MotionWait==0) { // 自機
+        player1Motion.value.goToHome = false;
+        player1Motion.value.lookRight = 0;
         player1Motion.value.lookBottom = 0;
         player1Motion.value.goToRight = 0;
         player1Motion.value.goToBottom = 0;
@@ -368,7 +370,7 @@ function checkOutOfSightBottomIsLook(
  * 
  * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
  */
-export function handlePlayerControllerWithWrapAround(
+export function motionUpdateByInputWithWrapAround(
     printingOutOfSightIsLock: boolean,
     board1SquareWidth: number,
     board1SquareHeight: number,
@@ -383,8 +385,6 @@ export function handlePlayerControllerWithWrapAround(
     printing1MotionWait: number,
     playerHome1File: number,
     playerHome1Rank: number,
-    playerHome1Left: number,
-    playerHome1Top: number,
     player1Left: Ref<number>,
     player1Top: Ref<number>,
     player1Input: PlayerInput,
@@ -405,7 +405,7 @@ export function handlePlayerControllerWithWrapAround(
 
         // 位置のリセット
         if (player1Input[" "]) {
-            printing1Left.value = 0;    // 印字
+            printing1Left.value = 0;
             printing1Top.value = 0;
         }
 
@@ -519,8 +519,7 @@ export function handlePlayerControllerWithWrapAround(
 
         // 位置のリセット
         if (player1Input[" "]) {
-            player1Left.value = playerHome1Left;  // 自機
-            player1Top.value = playerHome1Top;
+            player1Motion.value.goToHome = true;
         }
 
         // 移動関連（単発）
@@ -652,7 +651,9 @@ export function handlePlayerControllerWithWrapAround(
  * 向き・移動・ウェイトを処理
  * @param printing1MotionSpeed 移動速度（ピクセル単位）
  */
-export function processingMoveAndWait(
+export function imageAndPositionAndWaitUpdate(
+    playerHome1Left: number,
+    playerHome1Top: number,
     player1Left: Ref<number>,
     player1Top: Ref<number>,
     player1Motion: PlayerMotion,
@@ -683,6 +684,11 @@ export function processingMoveAndWait(
         printing1Top.value += printing1MotionSpeed;
     }
 
+    if (player1Motion.goToHome) {
+        player1Left.value = playerHome1Left;
+        player1Top.value = playerHome1Top;
+    }
+
     // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (player1Motion.goToRight == commonSpriteMotionLeft) {    // 左
         player1Left.value -= player1MotionSpeed;
@@ -709,6 +715,8 @@ export function processingMoveAndWait(
         // ................
         // . ウェイト設定 .
         // ................
+
+        // goToHome はウェイト無し
 
         if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0) {
             printing1MotionWait.value = printing1MotionWalkingFrames;
