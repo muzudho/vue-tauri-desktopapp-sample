@@ -77,13 +77,16 @@ export const getFixedSquareIndexFromTileIndex = computed<
         // if (!Number.isInteger(printing1Left)) { throw new Error(`Assertion failed: "printing1Left" must be an integer, got ${printing1Left}`); }
         // if (!Number.isInteger(printing1Top)) { throw new Error(`Assertion failed: "printing1Top" must be an integer, got ${printing1Top}`); }
 
-        return getIndexWhenAddUpFileAndRankOnPeriodicTable(
+        const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
             tileIndex,
             board1FileNum,
             board1RankNum,
-            printing1Left / board1SquareWidth,
-            printing1Top / board1SquareHeight
+            Math.floor(printing1Left / board1SquareWidth),
+            Math.floor(printing1Top / board1SquareHeight),
         );
+        if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+
+        return fixedSquareIndex;
     };
 });
 
@@ -112,7 +115,7 @@ export const getPrintingSquareIndexFromTileIndexOLD = computed<
         offsetFile: number,
         offsetRank: number,
     ) => {
-        // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+        if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
         // if (!Number.isInteger(board1FileNum)) { throw new Error(`Assertion failed: "board1FileNum" must be an integer, got ${board1FileNum}`); }
         // if (!Number.isInteger(printing1FileNum)) { throw new Error(`Assertion failed: "printing1FileNum" must be an integer, got ${printing1FileNum}`); }
         // if (!Number.isInteger(printing1RankNum)) { throw new Error(`Assertion failed: "printing1RankNum" must be an integer, got ${printing1RankNum}`); }
@@ -147,7 +150,7 @@ export function getPrintingIndexFromFixedSquareIndex(
     printing1RankNum: number,
     printing1IsLooping: boolean
 ) : number {
-    // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+    if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
     // if (!Number.isInteger(offsetFile)) { throw new Error(`Assertion failed: "offsetFile" must be an integer, got ${offsetFile}`); }
     // if (!Number.isInteger(offsetRank)) { throw new Error(`Assertion failed: "offsetRank" must be an integer, got ${offsetRank}`); }
     // if (!Number.isInteger(width)) { throw new Error(`Assertion failed: "width" must be an integer, got ${width}`); }

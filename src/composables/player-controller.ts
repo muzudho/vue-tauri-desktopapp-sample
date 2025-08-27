@@ -421,9 +421,6 @@ export function printingMotionUpdateByInputWithWrapAround(
     player1Left: number,
     player1Top: number,
     player1Input: PlayerInput,
-    // player1Motion: Ref<PlayerMotion>,
-    // player1MotionWait: number,
-    // player1CanBoardEdgeWalking: boolean,
 ) : void {
 
     // ++++++++++++++++++++++++++++++++++++++++
@@ -558,9 +555,6 @@ export function playerMotionUpdateByInputWithWrapAround(
     printing1RankNum: number,
     printing1Left: number,
     printing1Top: number,
-    // printing1Input: PrintingInput,
-    // printing1Motion: Ref<PrintingMotion>,
-    // printing1MotionWait: number,
     playerHome1File: number,
     playerHome1Rank: number,
     player1Left: number,
@@ -716,17 +710,6 @@ export function playerMotionUpdateByInputWithWrapAround(
  * @param printing1MotionSpeed 移動速度（ピクセル単位）
  */
 export function printingImageAndPositionAndWaitUpdate(
-    // playerHome1Left: number,
-    // playerHome1Top: number,
-    // player1Left: Ref<number>,
-    // player1Top: Ref<number>,
-    // player1Motion: PlayerMotion,
-    // player1MotionSpeed: number,
-    // player1MotionWait: Ref<number>,
-    // player1SourceFrames: RpgWalkingImagePosition,
-    // player1Frames: Ref<Rectangle[]>,
-    // player1MotionFacingFrames: number,
-    // player1MotionWalkingFrames: number,
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
     printing1Motion: PrintingMotion,
@@ -791,12 +774,6 @@ export function playerImageAndPositionAndWaitUpdate(
     player1Frames: Ref<Rectangle[]>,
     player1MotionFacingFrames: number,
     player1MotionWalkingFrames: number,
-    // printing1Left: Ref<number>,
-    // printing1Top: Ref<number>,
-    // printing1Motion: PrintingMotion,
-    // printing1MotionSpeed: number,
-    // printing1MotionWait: Ref<number>,
-    // printing1MotionWalkingFrames: number,
 ) : void {
 
     // ++++++++++

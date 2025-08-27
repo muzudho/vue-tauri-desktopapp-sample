@@ -30,3 +30,19 @@
 ## コピー貼り付けミス
 
 これで、 true, false が逆になるパターン。  
+
+
+## 整数型に実数を入れてしまう
+
+割り算して Math.floor() で囲んでないとそうなることがある：  
+
+```ts
+        const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
+            tileIndex,
+            board1FileNum,
+            board1RankNum,
+            printing1Left / board1SquareWidth,
+            printing1Top / board1SquareHeight
+        );
+        if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+```
