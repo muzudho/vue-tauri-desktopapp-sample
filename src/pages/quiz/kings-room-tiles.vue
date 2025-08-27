@@ -161,6 +161,22 @@
         >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
         <section v-if="appConfigIsShowing" class="sec-1">
             <br/>
+            <br/>
+        </section>
+
+        <!-- カスタマイズ -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onCustomizeButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onCustomizeButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ customize1IsShowing ? '⚙️カスタマイズを終わる' : '⚙️カスタマイズする' }}</v-btn>
+        <section v-if="customize1IsShowing" class="sec-1">
+            <br/>
             <v-slider
                 label="ズーム"
                 v-model="appZoom"
@@ -264,6 +280,13 @@
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
+
+
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　カスタマイズ +
+    // ++++++++++++++++++++++++++++++++++
+
+    const customize1IsShowing = ref<boolean>(false);    // カスタマイズを表示中
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -619,6 +642,15 @@
     function onConfigButtonPressed() : void {
         appConfigIsShowing.value = !appConfigIsShowing.value;
     }
+
+
+    /**
+     * カスタマイズ・ボタン。
+     */
+    function onCustomizeButtonPressed() : void {
+        customize1IsShowing.value = !customize1IsShowing.value;
+    }
+
 
 </script>
 
