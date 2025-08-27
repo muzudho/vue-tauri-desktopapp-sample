@@ -21,7 +21,7 @@ import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from "./per
  * @returns [筋番号, 段番号]
  */
 export function getFileAndRankFromIndex(index: number, width: number) : [number, number] {
-    //if (!Number.isInteger(index)) { throw new Error(`Assertion failed: "index" must be an integer, got ${index}`); }
+    // if (!Number.isInteger(index)) { throw new Error(`Assertion failed: "index" must be an integer, got ${index}`); }
     // if (!Number.isInteger(width)) { throw new Error(`Assertion failed: "width" must be an integer, got ${width}`); }
 
     const file = index % width;
@@ -84,7 +84,7 @@ export const getFixedSquareIndexFromTileIndex = computed<
             Math.floor(printing1Left / board1SquareWidth),
             Math.floor(printing1Top / board1SquareHeight),
         );
-        //if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+        // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
 
         return fixedSquareIndex;
     };
@@ -115,7 +115,7 @@ export const getPrintingSquareIndexFromTileIndexOLD = computed<
         offsetFile: number,
         offsetRank: number,
     ) => {
-        //if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+        // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
         // if (!Number.isInteger(board1FileNum)) { throw new Error(`Assertion failed: "board1FileNum" must be an integer, got ${board1FileNum}`); }
         // if (!Number.isInteger(printing1FileNum)) { throw new Error(`Assertion failed: "printing1FileNum" must be an integer, got ${printing1FileNum}`); }
         // if (!Number.isInteger(printing1RankNum)) { throw new Error(`Assertion failed: "printing1RankNum" must be an integer, got ${printing1RankNum}`); }
@@ -150,7 +150,7 @@ export function getPrintingIndexFromFixedSquareIndex(
     printing1RankNum: number,
     printing1IsLooping: boolean
 ) : number {
-    //if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+    // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
     // if (!Number.isInteger(offsetFile)) { throw new Error(`Assertion failed: "offsetFile" must be an integer, got ${offsetFile}`); }
     // if (!Number.isInteger(offsetRank)) { throw new Error(`Assertion failed: "offsetRank" must be an integer, got ${offsetRank}`); }
     // if (!Number.isInteger(width)) { throw new Error(`Assertion failed: "width" must be an integer, got ${width}`); }
@@ -160,21 +160,22 @@ export function getPrintingIndexFromFixedSquareIndex(
     let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, width);
 
     // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-    let subprintingFile = squareFile + offsetFile;
-    let subprintingRank = squareRank + offsetRank;
+    let printingFile = squareFile + offsetFile;
+    let printingRank = squareRank + offsetRank;
 
     if (printing1IsLooping) {
         // 端でループする
-        subprintingFile = euclideanMod(subprintingFile, printing1FileNum);
-        subprintingRank = euclideanMod(subprintingRank, printing1RankNum);
+        printingFile = euclideanMod(printingFile, printing1FileNum);
+        printingRank = euclideanMod(printingRank, printing1RankNum);
     } else {
         // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-        if (subprintingFile < 0 || printing1FileNum <= subprintingFile || subprintingRank < 0 || printing1RankNum <= subprintingRank) {
+        if (printingFile < 0 || printing1FileNum <= printingFile || printingRank < 0 || printing1RankNum <= printingRank) {
             return -1;
         }
     }
 
-    const subprintingIndex = getIndexFromFileAndRank(subprintingFile, subprintingRank, printing1FileNum);
+    const subprintingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum);
+
     return subprintingIndex;
 }
 

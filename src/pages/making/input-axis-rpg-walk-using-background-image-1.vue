@@ -56,8 +56,8 @@
                             printing1Left,
                             printing1Top,
                         ),
-                        -printing1Left / board1SquareWidth,
-                        -printing1Top / board1SquareHeight,
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
                         board1FileNum,
                         printing1FileNum,
                         printing1RankNum,
@@ -92,8 +92,8 @@
                             printing1Left,
                             printing1Top,
                         ),
-                        -printing1Left / board1SquareWidth,
-                        -printing1Top / board1SquareHeight,
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
                         board1FileNum,
                         printing1FileNum,
                         printing1RankNum,
@@ -112,8 +112,8 @@
                                 printing1Left,
                                 printing1Top,
                             ),
-                            -printing1Left / board1SquareWidth,
-                            -printing1Top / board1SquareHeight,
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
                             board1FileNum,
                             printing1FileNum,
                             printing1RankNum,
@@ -376,8 +376,8 @@
                             printing1Left,
                             printing1Top,
                         ),
-                        -printing1Left / board1SquareWidth,
-                        -printing1Top / board1SquareHeight,
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
                         board1FileNum,
                         printing1FileNum,
                         printing1RankNum,
@@ -524,7 +524,7 @@
         (tileIndex:number)=>CompatibleStyleValue
     >(() => {
         return (tileIndex:number)=>{
-            //if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
+            // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
 
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
@@ -617,10 +617,14 @@
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-            if (!Number.isInteger(sourceTileIndex)) {
-                alert(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex}`);
-                //throw new Error(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex}`);
-            }
+            // if (!Number.isInteger(printingIndex)) {
+            //     //alert(`Assertion failed: "printingIndex" must be an integer, got ${printingIndex}`);
+            //     throw new Error(`Assertion failed: "printingIndex" must be an integer, got ${printingIndex}`);
+            // }
+            // if (!Number.isInteger(sourceTileIndex)) {
+            //     alert(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex} | printingIndex=${printingIndex}`);
+            //     //throw new Error(`Assertion failed: "sourceTileIndex" must be an integer, got ${sourceTileIndex}`);
+            // }
             return `${sourceTileIndex}`;
         };
     });
@@ -639,7 +643,13 @@
             }
 
             const sourceTileIndex = printing1SourceTileIndexesBoard.value[printingIndex];
-            return printing1SourceTilemapCoordination[sourceTileIndex]["left"];
+
+            try {
+                return printing1SourceTilemapCoordination[sourceTileIndex]["left"];
+            } catch(error) {
+                console.error(`ERROR: ${error} | printingIndex=${printingIndex}`);
+                return 0;
+            }
         };
     });
 
