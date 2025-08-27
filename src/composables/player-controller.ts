@@ -131,17 +131,21 @@ function getPlayer1Rank(
  * @param printing1Motion 
  */
 export function motionClearIfCountZero(
+    printing1Motion: Ref<MotionInput>,
+    printing1MotionWait: number,
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
-    printing1Motion: Ref<MotionInput>,
 ) : void {
+    if (printing1MotionWait==0) {
+        printing1Motion.value.wrapAroundRight = 0;  // 印字
+        printing1Motion.value.wrapAroundBottom = 0;
+    }
+
     if (player1MotionWait==0) {
         player1Motion.value.lookRight = 0;  // 自機
         player1Motion.value.lookBottom = 0;
         player1Motion.value.goToRight = 0;
         player1Motion.value.goToBottom = 0;
-        printing1Motion.value.wrapAroundRight = 0;  // 印字
-        printing1Motion.value.wrapAroundBottom = 0;
     }
 }
 
@@ -162,6 +166,12 @@ export function handlePlayerControllerWithWrapAround(
     board1FileNum: number,
     board1RankNum: number,
     board1WithMaskSizeSquare: number,
+    printing1FileNum: number,
+    printing1RankNum: number,
+    printing1Left: Ref<number>,
+    printing1Top: Ref<number>,
+    printing1Motion: Ref<MotionInput>,
+    printing1MotionWait: number,
     playerHome1File: number,
     playerHome1Rank: number,
     playerHome1Left: number,
@@ -172,20 +182,263 @@ export function handlePlayerControllerWithWrapAround(
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
     player1CanBoardEdgeWalking: boolean,
-    printing1FileNum: number,
-    printing1RankNum: number,
-    printing1Left: Ref<number>,
-    printing1Top: Ref<number>,
-    printing1Motion: Ref<MotionInput>,
 ) : void {
-    if (player1MotionWait <= 0) {   // ウェイトが無ければ、入力を受け付ける。
+
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + ウェイトが無ければ、入力を受け付ける +
+    // ++++++++++++++++++++++++++++++++++++++++
+
+    // ----------------------------------------------------
+    // - ウェイトが無ければ、入力を受け付ける　＞　印字１ -
+    // ----------------------------------------------------
+    
+    if (printing1MotionWait <= 0) {
+
+        // 位置のリセット
+        if (player1Input[" "]) {
+            printing1Left.value = 0;    // 印字
+            printing1Top.value = 0;
+        }
+
+        // 移動関連（単発）
+        // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
+        if (player1Input.ArrowLeft) { // 左
+            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    // - 印字は動かない、プレイヤーの移動量を見ること。
+                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+                    //
+                    // Printing
+                    // +---------------------+
+                    // |                     |
+                    // |       Board         |
+                    // |       +-------+     |
+                    // |       |       |     |
+                    // |       |   *   |     |
+                    // |       |       |     |
+                    // |       +-------+     |
+                    // |                     |
+                    // +<--m-->*-------------+
+                    //         0
+                    // c<------+
+                    // pd
+                    //
+                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                    // m は、 pd の正負を反転したもの。
+                    // m が、マスク幅より大きいなら、それ以上左に行くことはできない。
+                    //
+                    // m = c
+                    //
+
+                    const pd = getPrinting1FileDelta(printing1Left, board1SquareWidth) - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
+                    const m = - pd;
+
+                    if (board1WithMaskSizeSquare < m) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundRight = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
+                } else if (player1CanBoardEdgeWalking) {
+                    // pass
+                }
+            }
+        }
+
+        if (player1Input.ArrowRight) {  // 右
+            // ホーム・ポジションより左に居ればホームに近づける。
+            if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    // - 印字は動かない、プレイヤーの移動量を見ること。
+                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+                    //
+                    // Printing
+                    // +<---------cw------------------->+
+                    // |                                |
+                    // |       Board                    |
+                    // |       +<------bw-------->+     |
+                    // |       |//////////////////|     |
+                    // |       |///+-------+//////|     |
+                    // |       |///|       |//////|     |
+                    // |       |///|   *   |//////|     |
+                    // |       |///|       |//////|     |
+                    // |       |///+-------+//////|     |
+                    // |       |//////////////////|     |
+                    // |       |//////////////////|     |
+                    // |       +------------------+     |
+                    // |                                |
+                    // +--------------------------+<-m->+
+                    // c<------+
+                    // pd
+                    //
+                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                    // bw は、盤の列数。
+                    // cw は、印字の列数。
+                    // m は、右側番外の余白。
+                    // m が、マスクの横幅（右側の多めの１を含まない）以下なら、それ以上右に行くことはできない。
+                    //
+                    // m = cw + c - bw
+                    //
+
+                    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1;  // まだ 1 （右へ移動）されていないので、1 しておく。
+                    const cw = printing1FileNum; // 例えば 10
+                    const bw = board1FileNum;
+                    const m = cw + pd - bw;
+
+                    if (m <= -board1WithMaskSizeSquare) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundRight = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
+                } else if (player1CanBoardEdgeWalking) {
+                    // pass
+                }
+            }
+        }
+
+        if (player1Input.ArrowUp) {    // 上
+            // ホーム・ポジションより下に居ればホームに近づける。
+            if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
+                player1Motion.value.goToBottom = commonSpriteMotionUp;
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    // - 印字は動かない、プレイヤーの移動量を見ること。
+                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+                    //
+                    // Printing
+                    // +-------------------->+     c  pd
+                    // |                     |     ^
+                    // |       Board         |     |
+                    // |       +-------+     |     +
+                    // |       |       |     |
+                    // |       |       |     |
+                    // |       |   *   |     |
+                    // |       |       |     |
+                    // |       |       |     |
+                    // |       +-------+     +
+                    // |                     ^
+                    // |                     |
+                    // |                     m
+                    // |                     |
+                    // |                     v
+                    // +---------------------+
+                    //
+                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                    // m は、 pd の正負を反転したもの。
+                    // m が、マスク幅より大きいなら、それ以上上に行くことはできない。
+                    //
+                    // m = c
+                    //
+
+                    const pd = getPrinting1RankDelta(printing1Top, board1SquareHeight) - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
+                    const m = - pd;
+
+                    if (board1WithMaskSizeSquare < m) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
+                } else if (player1CanBoardEdgeWalking) {
+                    // pass
+                }
+            }
+        }
+
+        if (player1Input.ArrowDown) {   // 下
+            // ホーム・ポジションより上に居ればホームに近づける。
+            if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    // 見えている画面外が広がるような移動は禁止する：
+                    //
+                    // - 印字は動かない、プレイヤーの移動量を見ること。
+                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+                    //
+                    // Printing
+                    // +------------------------------->+     c  pd
+                    // ^                                |     ^
+                    // |       Board                    |     |
+                    // |       +------------------+     | 0   +
+                    // |       ^//////////////////|     |
+                    // |       |///+-------+//////|     |
+                    // |       |///|       |//////|     |
+                    // |       |///|       |//////|     |
+                    // ch      bh//|   *   |//////|     |
+                    // |       |///|       |//////|     |
+                    // |       |///|       |//////|     |
+                    // |       |///+-------+//////|     |
+                    // |       |//////////////////|     |
+                    // |       v//////////////////|     |
+                    // |       +------------------+     +
+                    // |                                ^
+                    // |                                |
+                    // |                                m
+                    // |                                |
+                    // v                                v
+                    // +--------------------------------+
+                    //
+                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+                    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+                    // bh は、盤の行数。
+                    // ch は、印字の行数。
+                    // m が、マスクの横幅（下側の多めの１を含まない）より小さいなら、それ以上下に行くことはできない。
+                    //
+                    // m = ch + c - bh
+                    //
+
+                    const pd = -(getPrinting1RankDelta(printing1Top, board1SquareHeight)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
+                    const ch = printing1RankNum; // 例えば 10
+                    const bh = board1RankNum;
+                    const m = ch + pd - bh;
+                    //console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare}`);
+
+                    if (m < -board1WithMaskSizeSquare) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
+                } else if (player1CanBoardEdgeWalking) {
+                    // pass
+                }
+            }
+        }
+    }
+
+    // ----------------------------------------------------
+    // - ウェイトが無ければ、入力を受け付ける　＞　自機１ -
+    // ----------------------------------------------------
+
+    if (player1MotionWait <= 0) {
 
         // 位置のリセット
         if (player1Input[" "]) {
             player1Left.value = playerHome1Left;  // 自機
             player1Top.value = playerHome1Top;
-            printing1Left.value = 0;    // 印字
-            printing1Top.value = 0;
         }
 
         // 移動関連（単発）
@@ -236,7 +489,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value.wrapAroundRight = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
+                    // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1File(player1Left, board1SquareWidth) > 0 + board1WithMaskSizeSquare) {
@@ -300,7 +553,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value.wrapAroundRight = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
+                    // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1File(player1Left, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
@@ -359,7 +612,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
+                    // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1Rank(player1Top, board1SquareHeight) > 0 + board1WithMaskSizeSquare) {
@@ -427,7 +680,7 @@ export function handlePlayerControllerWithWrapAround(
                 }
 
                 if (willShift) {
-                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
+                    // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
                     if (getPlayer1Rank(player1Top, board1SquareHeight) < board1RankNum - board1WithMaskSizeSquare - 1) {
@@ -448,15 +701,18 @@ export function processingMoveAndWait(
     player1Left: Ref<number>,
     player1Top: Ref<number>,
     player1Motion: PlayerMotion,
+    player1MotionSpeed: number,
     player1MotionWait: Ref<number>,
     player1SourceFrames: RpgWalkingImagePosition,
     player1Frames: Ref<Rectangle[]>,
+    player1MotionFacingFrames: number,
+    player1MotionWalkingFrames: number,
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
     printing1Motion: MotionInput,
     printing1MotionSpeed: number,
-    player1AnimationFacingFrames: number,
-    player1AnimationWalkingFrames: number,
+    printing1MotionWait: Ref<number>,
+    printing1MotionWalkingFrames: number,
 ) : void {
 
     // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
@@ -474,18 +730,41 @@ export function processingMoveAndWait(
 
     // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (player1Motion.goToRight == commonSpriteMotionLeft) {    // 左
-        player1Left.value -= printing1MotionSpeed;
+        player1Left.value -= player1MotionSpeed;
     } else if (player1Motion.goToRight == commonSpriteMotionRight) {  // 右
-        player1Left.value += printing1MotionSpeed;
+        player1Left.value += player1MotionSpeed;
     }
 
     if (player1Motion.goToBottom == commonSpriteMotionUp) {   // 上
-        player1Top.value -= printing1MotionSpeed;
+        player1Top.value -= player1MotionSpeed;
     } else if (player1Motion.goToBottom == commonSpriteMotionDown) { // 下
-        player1Top.value += printing1MotionSpeed;
+        player1Top.value += player1MotionSpeed;
     }
 
-    if (player1MotionWait.value <= 0) { // モーション・ウェイトが０以下のときだけ実行される
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + モーション・ウェイトが０以下のときだけ実行される処理 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    // --------------------------------------------------------------------
+    // - モーション・ウェイトが０以下のときだけ実行される処理　＞　印字１ -
+    // --------------------------------------------------------------------
+
+    if (printing1MotionWait.value <= 0) {
+
+        // ................
+        // . ウェイト設定 .
+        // ................
+
+        if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0) {
+            printing1MotionWait.value = printing1MotionWalkingFrames;
+        }
+    }
+
+    // --------------------------------------------------------------------
+    // - モーション・ウェイトが０以下のときだけ実行される処理　＞　自機１ -
+    // --------------------------------------------------------------------
+
+    if (player1MotionWait.value <= 0) {
 
         // 自機の向き（単位：ピクセル）を更新、上下左右の複数同時入力の場合、左、上、右、下の順で優先：
         if (player1Motion.lookRight == commonSpriteMotionLeft) {    // 左
@@ -498,14 +777,14 @@ export function processingMoveAndWait(
             player1Frames.value = player1SourceFrames.down;
         }
 
-        // ++++++++++++++++
-        // + ウェイト設定 +
-        // ++++++++++++++++
+        // ................
+        // . ウェイト設定 .
+        // ................
 
-        if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0 || player1Motion.goToRight != 0 || player1Motion.goToBottom != 0) {
-            player1MotionWait.value = player1AnimationWalkingFrames;
+        if (player1Motion.goToRight != 0 || player1Motion.goToBottom != 0) {
+            player1MotionWait.value = player1MotionWalkingFrames;
         } else if (player1Motion.lookRight != 0 || player1Motion.lookBottom != 0) {
-            player1MotionWait.value = player1AnimationFacingFrames;
+            player1MotionWait.value = player1MotionFacingFrames;
         }
     }
 }

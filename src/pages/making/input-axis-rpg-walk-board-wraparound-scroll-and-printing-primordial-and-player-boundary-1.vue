@@ -488,6 +488,7 @@
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
+    const printing1MotionWalkingFrames: number = 16;       // 歩行フレーム数
 
 
     /**
@@ -546,8 +547,6 @@
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     } as PlayerInput;
     const player1AnimationSlow = ref<number>(8);    // アニメーションを何倍遅くするか
-    const player1AnimationFacingFrames: number = 1;         // 振り向くフレーム数
-    const player1AnimationWalkingFrames: number = 16;       // 歩行フレーム数
     const player1Style = computed<CompatibleStyleValue>(() => ({
         left: `${player1Left.value}px`,
         top: `${player1Top.value}px`,
@@ -581,6 +580,7 @@
         ],
     };
     const player1Frames : Ref<Rectangle[]> = ref(player1SourceFrames["down"]);
+    const player1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const player1MotionWait = ref<number>(0);  // // 排他的モーション時間。
     const player1Motion = ref<PlayerMotion>({   // モーションへの入力
         lookRight: 0,   // 向きを変える
@@ -588,6 +588,8 @@
         goToRight: 0,   // 負なら左、正なら右へ移動する
         goToBottom: 0,  // 負なら上、正なら下へ移動する
     });
+    const player1MotionFacingFrames: number = 1;         // 振り向くフレーム数
+    const player1MotionWalkingFrames: number = 16;       // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(true);  // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(true); // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
@@ -644,16 +646,23 @@
      */
     function gameLoopStart() : void {
         const update = () => {
-            player1MotionWait.value -= 1;   // モーション・タイマー
+
+            // ++++++++++++++++++++++++
+            // + モーション・タイマー +
+            // ++++++++++++++++++++++++
+
+            printing1MotionWait.value -= 1; // 印字１
+            player1MotionWait.value -= 1;   // 自機１
 
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             // + モーション・ウェイトが０のとき、モーションのクリアー +
             // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
             motionClearIfCountZero(
+                printing1Motion,
+                printing1MotionWait.value,
                 player1Motion,
                 player1MotionWait.value,
-                printing1Motion
             );
 
             // ++++++++++++++++++++++++++++++
@@ -667,6 +676,12 @@
                 board1FileNum.value,
                 board1RankNum.value,
                 board1WithMaskSizeSquare.value,
+                printing1FileNum.value,
+                printing1RankNum.value,
+                printing1Left,
+                printing1Top,
+                printing1Motion,
+                printing1MotionWait.value,
                 playerHome1File.value,
                 playerHome1Rank.value,
                 playerHome1Left.value,
@@ -677,11 +692,6 @@
                 player1Motion,
                 player1MotionWait.value,
                 player1CanBoardEdgeWalking.value,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1Left,
-                printing1Top,
-                printing1Motion,
             );
 
             // ++++++++++++++++++++++++++++++
@@ -692,15 +702,18 @@
                 player1Left,
                 player1Top,
                 player1Motion.value,
+                player1MotionSpeed.value,
                 player1MotionWait,
                 player1SourceFrames,
                 player1Frames,
+                player1MotionFacingFrames,
+                player1MotionWalkingFrames,
                 printing1Left,
                 printing1Top,
                 printing1Motion.value,
                 printing1MotionSpeed.value,
-                player1AnimationFacingFrames,
-                player1AnimationWalkingFrames,
+                printing1MotionWait,
+                printing1MotionWalkingFrames,
             );
 
             // 次のフレーム
