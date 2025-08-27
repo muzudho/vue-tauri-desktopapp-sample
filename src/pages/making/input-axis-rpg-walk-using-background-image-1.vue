@@ -157,14 +157,6 @@
         </p>
         <br/>
 
-        <p>元画像のタイルマップを表示：</p>
-        <v-img
-            src="/img/making/tilemap_floor.png"
-            :style="`zoom: ${appZoom}; width: ${board1SquareWidth}px; height:${board1SquareHeight}px;`"
-            style="image-rendering: pixelated; border:dashed gray 1px;"/>
-        <p>：ここまで。</p>
-
-
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -395,6 +387,15 @@
             </div>
             <br/>
         </section>
+        <br/>
+        <br/>
+
+        <p>元画像のタイルマップを表示：</p>
+        <v-img
+            src="/img/making/tilemap-floor-20250826.png"
+            :style="`width: ${8 * board1SquareWidth}px; height:${4 * board1SquareHeight}px;`"
+            style="image-rendering: pixelated; margin:0; padding:0; border:dashed 4px gray;"/>
+        <p>：ここまで。</p>
     </section>
 
     <br/>
