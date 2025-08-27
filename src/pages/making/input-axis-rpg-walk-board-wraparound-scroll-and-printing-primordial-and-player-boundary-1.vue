@@ -333,7 +333,7 @@
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
     import { motionUpdateByInputWithWrapAround, isPlayerInputKey, motionClearIfCountZero, motionCountDown, imageAndPositionAndWaitUpdate } from '../../composables/player-controller';
-    import type { MotionInput, PlayerInput, PlayerMotion } from '../../composables/player-controller';
+    import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
     // * インターフェース *
@@ -482,9 +482,13 @@
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
+    const printing1Input = {  // 入力
+        " ": false,
+    } as PrintingInput;
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    const printing1Motion = ref<MotionInput>({  // 印字への入力
+    const printing1Motion = ref<PrintingMotion>({  // 印字への入力
+        goToHome: false,    // ホームに戻る
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
@@ -681,14 +685,15 @@
                 board1WithMaskSizeSquare.value,
                 printing1FileNum.value,
                 printing1RankNum.value,
-                printing1Left,
-                printing1Top,
+                printing1Left.value,
+                printing1Top.value,
+                printing1Input,
                 printing1Motion,
                 printing1MotionWait.value,
                 playerHome1File.value,
                 playerHome1Rank.value,
-                player1Left,
-                player1Top,
+                player1Left.value,
+                player1Top.value,
                 player1Input,
                 player1Motion,
                 player1MotionWait.value,

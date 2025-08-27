@@ -57,7 +57,19 @@ export interface RpgWalkingImagePosition {
 /**
  * 印字への入力
  */
-export interface MotionInput {
+export interface PrintingInput {
+    " ": boolean,
+    // ArrowUp: boolean,
+    // ArrowRight: boolean,
+    // ArrowDown: boolean,
+    // ArrowLeft: boolean,
+}
+
+/**
+ * 印字のモーション
+ */
+export interface PrintingMotion {
+    goToHome: boolean,  // ホームに戻る
     wrapAroundRight: number,    // 負なら左、正なら右
     wrapAroundBottom: number,   // 負なら上、正なら下
 }
@@ -87,6 +99,9 @@ export function isPlayerInputKey(key: string): key is keyof PlayerInput {
 //     }
 // }
 
+/**
+ * プレイヤーのモーション
+ */
 export interface PlayerMotion {
     lookRight: number,  // 向きを変える
     lookBottom: number,
@@ -144,12 +159,13 @@ export function motionCountDown(
  * @param printing1Motion 
  */
 export function motionClearIfCountZero(
-    printing1Motion: Ref<MotionInput>,
+    printing1Motion: Ref<PrintingMotion>,
     printing1MotionWait: number,
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
 ) : void {
     if (printing1MotionWait==0) {   // 印字
+        printing1Motion.value.goToHome = false;
         printing1Motion.value.wrapAroundRight = 0;
         printing1Motion.value.wrapAroundBottom = 0;
     }
@@ -296,11 +312,11 @@ function checkOutOfSightRightIsLook(
     // m = cw + c - bw
     //
 
-    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1;  // まだ 1 （右へ移動）されていないので、1 しておく。
+    const pd = -(getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1);  // まだ 1 （右へ移動）されていないので、1 しておく。
     const cw = printing1FileNum; // 例えば 10
     const bw = board1FileNum;
     const m = cw + pd - bw;
-    return m <= -board1WithMaskSizeSquare;
+    return m < -board1WithMaskSizeSquare;
 }
 
 
@@ -351,7 +367,7 @@ function checkOutOfSightBottomIsLook(
     // m = ch + c - bh
     //
 
-    const pd = -(getPrinting1RankDelta(printing1Top, board1SquareHeight)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
+    const pd = -(getPrinting1RankDelta(printing1Top, board1SquareHeight) + 1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
     const ch = printing1RankNum; // 例えば 10
     const bh = board1RankNum;
     const m = ch + pd - bh;
@@ -379,14 +395,15 @@ export function motionUpdateByInputWithWrapAround(
     board1WithMaskSizeSquare: number,
     printing1FileNum: number,
     printing1RankNum: number,
-    printing1Left: Ref<number>,
-    printing1Top: Ref<number>,
-    printing1Motion: Ref<MotionInput>,
+    printing1Left: number,
+    printing1Top: number,
+    printing1Input: PrintingInput,
+    printing1Motion: Ref<PrintingMotion>,
     printing1MotionWait: number,
     playerHome1File: number,
     playerHome1Rank: number,
-    player1Left: Ref<number>,
-    player1Top: Ref<number>,
+    player1Left: number,
+    player1Top: number,
     player1Input: PlayerInput,
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
@@ -404,15 +421,14 @@ export function motionUpdateByInputWithWrapAround(
     if (printing1MotionWait <= 0) {
 
         // 位置のリセット
-        if (player1Input[" "]) {
-            printing1Left.value = 0;
-            printing1Top.value = 0;
+        if (printing1Input[" "]) {
+            printing1Motion.value.goToHome = true;
         }
 
         // 移動関連（単発）
         // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
         if (player1Input.ArrowLeft) { // 左
-            if (getPlayer1File(player1Left.value, board1SquareWidth) > playerHome1File) {
+            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
                 // pass
             } else {
                 let willShift: boolean = true;
@@ -420,7 +436,7 @@ export function motionUpdateByInputWithWrapAround(
                     if (checkOutOfSightLeftIsLook(
                         board1SquareWidth,
                         board1WithMaskSizeSquare,
-                        printing1Left.value
+                        printing1Left
                     )) {
                         willShift = false;
                     }
@@ -436,7 +452,7 @@ export function motionUpdateByInputWithWrapAround(
 
         if (player1Input.ArrowRight) {  // 右
             // ホーム・ポジションより左に居ればホームに近づける。
-            if (getPlayer1File(player1Left.value, board1SquareWidth) < playerHome1File) {
+            if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
                 // pass
             } else {
                 let willShift: boolean = true;
@@ -446,7 +462,7 @@ export function motionUpdateByInputWithWrapAround(
                         board1WithMaskSizeSquare,
                         board1FileNum,
                         printing1FileNum,
-                        printing1Left.value
+                        printing1Left
                     )) {
                         willShift = false;
                     }
@@ -462,15 +478,15 @@ export function motionUpdateByInputWithWrapAround(
 
         if (player1Input.ArrowUp) {    // 上
             // ホーム・ポジションより下に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top.value, board1SquareHeight) > playerHome1Rank) {
+            if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
                     if (checkOutOfSightTopIsLook(
-                        board1SquareWidth,
+                        board1SquareHeight,
                         board1WithMaskSizeSquare,
-                        printing1Left.value
+                        printing1Top
                     )) {
                         willShift = false;
                     }
@@ -486,7 +502,7 @@ export function motionUpdateByInputWithWrapAround(
 
         if (player1Input.ArrowDown) {   // 下
             // ホーム・ポジションより上に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top.value, board1SquareHeight) < playerHome1Rank) {
+            if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
                 // pass
             } else {
                 let willShift: boolean = true;
@@ -496,7 +512,7 @@ export function motionUpdateByInputWithWrapAround(
                         board1WithMaskSizeSquare,
                         board1RankNum,
                         printing1RankNum,
-                        printing1Top.value
+                        printing1Top
                     )) {
                         willShift = false;
                     }
@@ -527,7 +543,7 @@ export function motionUpdateByInputWithWrapAround(
         if (player1Input.ArrowLeft) { // 左
             player1Motion.value.lookRight = commonSpriteMotionLeft;
 
-            if (getPlayer1File(player1Left.value, board1SquareWidth) > playerHome1File) {
+            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
                 // ホーム・ポジションより右に居ればホームに近づける。
                 player1Motion.value.goToRight = commonSpriteMotionLeft;
             } else {
@@ -536,7 +552,7 @@ export function motionUpdateByInputWithWrapAround(
                     if (checkOutOfSightLeftIsLook(
                         board1SquareWidth,
                         board1WithMaskSizeSquare,
-                        printing1Left.value
+                        printing1Left
                     )) {
                         willShift = false;
                     }
@@ -546,7 +562,7 @@ export function motionUpdateByInputWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1File(player1Left.value, board1SquareWidth) > 0 + board1WithMaskSizeSquare) {
+                    if (getPlayer1File(player1Left, board1SquareWidth) > 0 + board1WithMaskSizeSquare) {
                         player1Motion.value.goToRight = commonSpriteMotionLeft;
                     }
                 }
@@ -557,7 +573,7 @@ export function motionUpdateByInputWithWrapAround(
             player1Motion.value.lookRight = commonSpriteMotionRight;
 
             // ホーム・ポジションより左に居ればホームに近づける。
-            if (getPlayer1File(player1Left.value, board1SquareWidth) < playerHome1File) {
+            if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
                 player1Motion.value.goToRight = commonSpriteMotionRight;
             } else {
                 let willShift: boolean = true;
@@ -567,7 +583,7 @@ export function motionUpdateByInputWithWrapAround(
                         board1WithMaskSizeSquare,
                         board1FileNum,
                         printing1FileNum,
-                        printing1Left.value
+                        printing1Left
                     )) {
                         willShift = false;
                     }
@@ -577,7 +593,7 @@ export function motionUpdateByInputWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1File(player1Left.value, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
+                    if (getPlayer1File(player1Left, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
                         player1Motion.value.goToRight = commonSpriteMotionRight;
                     }
                 }
@@ -588,15 +604,15 @@ export function motionUpdateByInputWithWrapAround(
             player1Motion.value.lookBottom = commonSpriteMotionUp;
 
             // ホーム・ポジションより下に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top.value, board1SquareHeight) > playerHome1Rank) {
+            if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
                     if (checkOutOfSightTopIsLook(
-                        board1SquareWidth,
+                        board1SquareHeight,
                         board1WithMaskSizeSquare,
-                        printing1Left.value
+                        printing1Top
                     )) {
                         willShift = false;
                     }
@@ -606,7 +622,7 @@ export function motionUpdateByInputWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1Rank(player1Top.value, board1SquareHeight) > 0 + board1WithMaskSizeSquare) {
+                    if (getPlayer1Rank(player1Top, board1SquareHeight) > 0 + board1WithMaskSizeSquare) {
                         player1Motion.value.goToBottom = commonSpriteMotionUp;
                     }
                 }
@@ -617,7 +633,7 @@ export function motionUpdateByInputWithWrapAround(
             player1Motion.value.lookBottom = commonSpriteMotionDown;
 
             // ホーム・ポジションより上に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top.value, board1SquareHeight) < playerHome1Rank) {
+            if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionDown;
             } else {
                 let willShift: boolean = true;
@@ -627,7 +643,7 @@ export function motionUpdateByInputWithWrapAround(
                         board1WithMaskSizeSquare,
                         board1RankNum,
                         printing1RankNum,
-                        printing1Top.value
+                        printing1Top
                     )) {
                         willShift = false;
                     }
@@ -637,7 +653,7 @@ export function motionUpdateByInputWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1Rank(player1Top.value, board1SquareHeight) < board1RankNum - board1WithMaskSizeSquare - 1) {
+                    if (getPlayer1Rank(player1Top, board1SquareHeight) < board1RankNum - board1WithMaskSizeSquare - 1) {
                         player1Motion.value.goToBottom = commonSpriteMotionDown;
                     }
                 }
@@ -665,13 +681,22 @@ export function imageAndPositionAndWaitUpdate(
     player1MotionWalkingFrames: number,
     printing1Left: Ref<number>,
     printing1Top: Ref<number>,
-    printing1Motion: MotionInput,
+    printing1Motion: PrintingMotion,
     printing1MotionSpeed: number,
     printing1MotionWait: Ref<number>,
     printing1MotionWalkingFrames: number,
 ) : void {
 
-    // 印字の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
+    // ++++++++++
+    // + 印字１ +
+    // ++++++++++
+
+    if (printing1Motion.goToHome) {
+            printing1Left.value = 0;
+            printing1Top.value = 0;
+    }
+
+    // 移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (printing1Motion.wrapAroundRight == commonSpriteMotionLeft) {  // 左
         printing1Left.value -= printing1MotionSpeed;
     } else if (printing1Motion.wrapAroundRight == commonSpriteMotionRight) {   // 右
@@ -689,7 +714,11 @@ export function imageAndPositionAndWaitUpdate(
         player1Top.value = playerHome1Top;
     }
 
-    // 自機の移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
+    // ++++++++++
+    // + 自機１ +
+    // ++++++++++
+
+    // 移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
     if (player1Motion.goToRight == commonSpriteMotionLeft) {    // 左
         player1Left.value -= player1MotionSpeed;
     } else if (player1Motion.goToRight == commonSpriteMotionRight) {  // 右
@@ -743,6 +772,8 @@ export function imageAndPositionAndWaitUpdate(
         // ................
         // . ウェイト設定 .
         // ................
+
+        // goToHome はウェイト無し
 
         if (player1Motion.goToRight != 0 || player1Motion.goToBottom != 0) {
             player1MotionWait.value = player1MotionWalkingFrames;
