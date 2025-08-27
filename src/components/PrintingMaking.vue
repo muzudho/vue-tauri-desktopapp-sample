@@ -23,6 +23,25 @@
     import type Rectangle from '../interfaces/Rectangle';
 
 
+    // ####################################
+    // # このコンポーネントが受け取る引数 #
+    // ####################################
+    
+    interface Props {
+        // ++++++++++++++++++++++++
+        // + オブジェクト　＞　盤 +
+        // ++++++++++++++++++++++++
+
+        board1SquareWidth: number,
+        board1SquareHeight: number,
+        board1FileNum: number,  // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+        //board1RankNum: number,  // 段の数
+        board1FloorTilemapTileNum: number,  // 床のタイルマップの、左上隅から数えたタイル数
+    }
+    // デフォルト値を設定
+    const props = defineProps<Props>();
+
+
     // ################
     // # オブジェクト #
     // ################
@@ -31,10 +50,6 @@
     // + オブジェクト　＞　盤 +
     // ++++++++++++++++++++++++
 
-    const board1SquareWidth = 32;
-    const board1SquareHeight = 32;
-    const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
-    //const board1RankNum = ref<number>(5);   // 段の数
     const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
 
     // ++++++++++++++++++++++++++
@@ -77,9 +92,14 @@
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
     const printing1SourceTilemapCoordination : Rectangle[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
-        const files = i % board1FileNum.value;
-        const ranks = Math.floor(i / board1FileNum.value);
-        printing1SourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+        const files = i % props.board1FileNum;
+        const ranks = Math.floor(i / props.board1FileNum);
+        printing1SourceTilemapCoordination.push({
+            top: ranks * props.board1SquareHeight,
+            left: files * props.board1SquareWidth,
+            width: props.board1SquareWidth,
+            height: props.board1SquareHeight
+        });
     }
 </script>
 
