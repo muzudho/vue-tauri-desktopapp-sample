@@ -591,8 +591,8 @@
     });
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    //const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const printing1MotionWalkingFrames = 1000*16;       // 歩行フレーム数
+    const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
+    //const printing1MotionWalkingFrames = 1000*16;       // 歩行フレーム数
     const printing1SourceTilemapCoordination : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
