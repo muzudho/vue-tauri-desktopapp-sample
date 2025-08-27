@@ -239,9 +239,9 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
-    // ++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ストップウォッチ +
-    // ++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ストップウォッチ１ +
+    // ++++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
     const stopwatch1Count = ref<number>(0);   // カウントの初期値

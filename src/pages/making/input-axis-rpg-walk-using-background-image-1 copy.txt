@@ -244,7 +244,7 @@
         </ul>
         <br/>
 
-        <!-- 設定 -->
+        <!-- 設定パネル１ -->
         <v-btn
             class="code-key"
             @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
@@ -509,9 +509,9 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
-    // ++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ストップウォッチ +
-    // ++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ストップウォッチ１ +
+    // ++++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
@@ -941,7 +941,7 @@
 
 
     /**
-     * ［設定を表示］ボタン。
+     * ［設定パネル１］を開くボタン。
      */
     function onConfigButtonPressed() : void {
         appConfigIsShowing.value = !appConfigIsShowing.value;

@@ -148,18 +148,18 @@
             </out-of-sight-making>
         </div>
 
-        <!-- 設定 -->
+        <!-- 設定パネル１ -->
         <v-btn
             class="code-key"
-            @touchstart.prevent="button1Ref?.press($event, onConfigButtonPressed);"
+            @touchstart.prevent="button1Ref?.press($event, onConfig1ButtonPressed);"
             @touchend="button1Ref?.release();"
             @touchcancel="button1Ref?.release();"
             @touchleave="button1Ref?.release();"
-            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfigButtonPressed)"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfig1ButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        >{{ appConfigIsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
-        <section v-if="appConfigIsShowing" class="sec-1">
+        >{{ config1IsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+        <section v-if="config1IsShowing" class="sec-1">
             <br/>
             <br/>
         </section>
@@ -167,15 +167,15 @@
         <!-- カスタマイズ -->
         <v-btn
             class="code-key"
-            @touchstart.prevent="button1Ref?.press($event, onCustomizeButtonPressed);"
+            @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
             @touchend="button1Ref?.release();"
             @touchcancel="button1Ref?.release();"
             @touchleave="button1Ref?.release();"
-            @mousedown.prevent="button1Ref?.handleMouseDown($event, onCustomizeButtonPressed)"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        >{{ customize1IsShowing ? '⚙️カスタマイズを終わる' : '⚙️カスタマイズする' }}</v-btn>
-        <section v-if="customize1IsShowing" class="sec-1">
+        >{{ preferences1IsShowing ? '⚙️カスタマイズを終わる' : '⚙️カスタマイズする' }}</v-btn>
+        <section v-if="preferences1IsShowing" class="sec-1">
             <br/>
             <v-slider
                 label="ズーム"
@@ -260,7 +260,6 @@
     //
 
     // const appDebugInfoIsShowing = ref<boolean>(false);  // デバッグ情報を表示中
-    const appConfigIsShowing = ref<boolean>(false);    // 設定を表示中
     const appZoom = ref<number>(4);    // ズーム
 
 
@@ -274,19 +273,24 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
-    // ++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ストップウォッチ +
-    // ++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ストップウォッチ１ +
+    // ++++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
 
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　設定パネル１ +
+    // ++++++++++++++++++++++++++++++++++
+
+    const config1IsShowing = ref<boolean>(false);    // 設定を表示中
 
     // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　カスタマイズ +
-    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　お好み設定１ +
+    // ++++++++++++++++++++++++++++++++**
 
-    const customize1IsShowing = ref<boolean>(false);    // カスタマイズを表示中
+    const preferences1IsShowing = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -637,18 +641,18 @@
 
 
     /**
-     * 設定ボタン。
+     * ［設定パネル１］を開くボタン。
      */
-    function onConfigButtonPressed() : void {
-        appConfigIsShowing.value = !appConfigIsShowing.value;
+    function onConfig1ButtonPressed() : void {
+        config1IsShowing.value = !config1IsShowing.value;
     }
 
 
     /**
-     * カスタマイズ・ボタン。
+     * ［お好み設定パネル１］を開くボタン。
      */
-    function onCustomizeButtonPressed() : void {
-        customize1IsShowing.value = !customize1IsShowing.value;
+    function onPreferences1ButtonPressed() : void {
+        preferences1IsShowing.value = !preferences1IsShowing.value;
     }
 
 
