@@ -99,28 +99,28 @@ export interface PlayerMotion {
  * @returns 
  */
 function getPrinting1FileDelta(
-    printing1Left: Ref<number>,
+    printing1Left: number,
     board1SquareWidth: number,
 ) : number {
-    return Math.round(-printing1Left.value / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
+    return Math.round(-printing1Left / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
 }
 function getPrinting1RankDelta(
-    printing1Top: Ref<number>,
+    printing1Top: number,
     board1SquareHeight: number,
 ) : number {
-    return Math.round(-printing1Top.value / board1SquareHeight);
+    return Math.round(-printing1Top / board1SquareHeight);
 }
 function getPlayer1File(
-    player1Left: Ref<number>,
+    player1Left: number,
     board1SquareWidth: number,
 ) : number {
-    return Math.round(player1Left.value / board1SquareWidth);
+    return Math.round(player1Left / board1SquareWidth);
 }
 function getPlayer1Rank(
-    player1Top: Ref<number>,
+    player1Top: number,
     board1SquareHeight: number,
 ) : number {
-    return Math.round(player1Top.value / board1SquareHeight);
+    return Math.round(player1Top / board1SquareHeight);
 }
 
 
@@ -160,6 +160,203 @@ export function motionClearIfCountZero(
         player1Motion.value.goToBottom = 0;
     }
 }
+
+
+/**
+ * 画面端が見えるような動きかをチェックします。
+ */
+function checkOutOfSightLeftIsLook(
+    board1SquareWidth: number,
+    board1WithMaskSizeSquare: number,
+    printing1Left: number,
+) : boolean {
+    // 見えている画面外が広がるような移動は禁止する：
+    //
+    // - 印字は動かない、プレイヤーの移動量を見ること。
+    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+    //
+    // Printing
+    // +---------------------+
+    // |                     |
+    // |       Board         |
+    // |       +-------+     |
+    // |       |       |     |
+    // |       |   *   |     |
+    // |       |       |     |
+    // |       +-------+     |
+    // |                     |
+    // +<--m-->*-------------+
+    //         0
+    // c<------+
+    // pd
+    //
+    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+    // m は、 pd の正負を反転したもの。
+    // m が、マスク幅より大きいなら、それ以上左に行くことはできない。
+    //
+    // m = c
+    //
+
+    const pd = getPrinting1FileDelta(printing1Left, board1SquareWidth) - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
+    const m = - pd;
+
+    return board1WithMaskSizeSquare < m;
+}
+
+
+/**
+ * 画面端が見えるような動きかをチェックします。
+ */
+function checkOutOfSightTopIsLook(
+    board1SquareHeight: number,
+    board1WithMaskSizeSquare: number,
+    printing1Top: number,
+) : boolean {
+    // 見えている画面外が広がるような移動は禁止する：
+    //
+    // - 印字は動かない、プレイヤーの移動量を見ること。
+    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+    //
+    // Printing
+    // +-------------------->+     c  pd
+    // |                     |     ^
+    // |       Board         |     |
+    // |       +-------+     |     +
+    // |       |       |     |
+    // |       |       |     |
+    // |       |   *   |     |
+    // |       |       |     |
+    // |       |       |     |
+    // |       +-------+     +
+    // |                     ^
+    // |                     |
+    // |                     m
+    // |                     |
+    // |                     v
+    // +---------------------+
+    //
+    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+    // m は、 pd の正負を反転したもの。
+    // m が、マスク幅より大きいなら、それ以上上に行くことはできない。
+    //
+    // m = c
+    //
+
+    const pd = getPrinting1RankDelta(printing1Top, board1SquareHeight) - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
+    const m = - pd;
+    return board1WithMaskSizeSquare < m;
+}
+
+
+/**
+ * 画面端が見えるような動きかをチェックします。
+ */
+function checkOutOfSightRightIsLook(
+    board1SquareWidth: number,
+    board1WithMaskSizeSquare: number,
+    board1FileNum: number,
+    printing1FileNum: number,
+    printing1Left: number,
+) : boolean {
+    // 見えている画面外が広がるような移動は禁止する：
+    //
+    // - 印字は動かない、プレイヤーの移動量を見ること。
+    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+    //
+    // Printing
+    // +<---------cw------------------->+
+    // |                                |
+    // |       Board                    |
+    // |       +<------bw-------->+     |
+    // |       |//////////////////|     |
+    // |       |///+-------+//////|     |
+    // |       |///|       |//////|     |
+    // |       |///|   *   |//////|     |
+    // |       |///|       |//////|     |
+    // |       |///+-------+//////|     |
+    // |       |//////////////////|     |
+    // |       |//////////////////|     |
+    // |       +------------------+     |
+    // |                                |
+    // +--------------------------+<-m->+
+    // c<------+
+    // pd
+    //
+    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+    // bw は、盤の列数。
+    // cw は、印字の列数。
+    // m は、右側番外の余白。
+    // m が、マスクの横幅（右側の多めの１を含まない）以下なら、それ以上右に行くことはできない。
+    //
+    // m = cw + c - bw
+    //
+
+    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1;  // まだ 1 （右へ移動）されていないので、1 しておく。
+    const cw = printing1FileNum; // 例えば 10
+    const bw = board1FileNum;
+    const m = cw + pd - bw;
+    return m <= -board1WithMaskSizeSquare;
+}
+
+
+/**
+ * 画面端が見えるような動きかをチェックします。
+ */
+function checkOutOfSightBottomIsLook(
+    board1SquareHeight: number,
+    board1WithMaskSizeSquare: number,
+    board1RankNum: number,
+    printing1RankNum: number,
+    printing1Top: number,
+) : boolean {
+    // 見えている画面外が広がるような移動は禁止する：
+    //
+    // - 印字は動かない、プレイヤーの移動量を見ること。
+    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
+    //
+    // Printing
+    // +------------------------------->+     c  pd
+    // ^                                |     ^
+    // |       Board                    |     |
+    // |       +------------------+     | 0   +
+    // |       ^//////////////////|     |
+    // |       |///+-------+//////|     |
+    // |       |///|       |//////|     |
+    // |       |///|       |//////|     |
+    // ch      bh//|   *   |//////|     |
+    // |       |///|       |//////|     |
+    // |       |///|       |//////|     |
+    // |       |///+-------+//////|     |
+    // |       |//////////////////|     |
+    // |       v//////////////////|     |
+    // |       +------------------+     +
+    // |                                ^
+    // |                                |
+    // |                                m
+    // |                                |
+    // v                                v
+    // +--------------------------------+
+    //
+    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
+    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
+    // bh は、盤の行数。
+    // ch は、印字の行数。
+    // m が、マスクの横幅（下側の多めの１を含まない）より小さいなら、それ以上下に行くことはできない。
+    //
+    // m = ch + c - bh
+    //
+
+    const pd = -(getPrinting1RankDelta(printing1Top, board1SquareHeight)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
+    const ch = printing1RankNum; // 例えば 10
+    const bh = board1RankNum;
+    const m = ch + pd - bh;
+    //console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare}`);
+    return m < -board1WithMaskSizeSquare;
+}
+
 
 /**
  * キー入力を、モーションに変換します。
@@ -215,43 +412,16 @@ export function handlePlayerControllerWithWrapAround(
         // 移動関連（単発）
         // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
         if (player1Input.ArrowLeft) { // 左
-            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
+            if (getPlayer1File(player1Left.value, board1SquareWidth) > playerHome1File) {
                 // pass
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +---------------------+
-                    // |                     |
-                    // |       Board         |
-                    // |       +-------+     |
-                    // |       |       |     |
-                    // |       |   *   |     |
-                    // |       |       |     |
-                    // |       +-------+     |
-                    // |                     |
-                    // +<--m-->*-------------+
-                    //         0
-                    // c<------+
-                    // pd
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // m は、 pd の正負を反転したもの。
-                    // m が、マスク幅より大きいなら、それ以上左に行くことはできない。
-                    //
-                    // m = c
-                    //
-
-                    const pd = getPrinting1FileDelta(printing1Left, board1SquareWidth) - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
-                    const m = - pd;
-
-                    if (board1WithMaskSizeSquare < m) {
+                    if (checkOutOfSightLeftIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        printing1Left.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -266,51 +436,18 @@ export function handlePlayerControllerWithWrapAround(
 
         if (player1Input.ArrowRight) {  // 右
             // ホーム・ポジションより左に居ればホームに近づける。
-            if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
+            if (getPlayer1File(player1Left.value, board1SquareWidth) < playerHome1File) {
                 // pass
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +<---------cw------------------->+
-                    // |                                |
-                    // |       Board                    |
-                    // |       +<------bw-------->+     |
-                    // |       |//////////////////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///|   *   |//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |//////////////////|     |
-                    // |       |//////////////////|     |
-                    // |       +------------------+     |
-                    // |                                |
-                    // +--------------------------+<-m->+
-                    // c<------+
-                    // pd
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // bw は、盤の列数。
-                    // cw は、印字の列数。
-                    // m は、右側番外の余白。
-                    // m が、マスクの横幅（右側の多めの１を含まない）以下なら、それ以上右に行くことはできない。
-                    //
-                    // m = cw + c - bw
-                    //
-
-                    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1;  // まだ 1 （右へ移動）されていないので、1 しておく。
-                    const cw = printing1FileNum; // 例えば 10
-                    const bw = board1FileNum;
-                    const m = cw + pd - bw;
-
-                    if (m <= -board1WithMaskSizeSquare) {
+                    if (checkOutOfSightRightIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1Left.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -325,46 +462,16 @@ export function handlePlayerControllerWithWrapAround(
 
         if (player1Input.ArrowUp) {    // 上
             // ホーム・ポジションより下に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
+            if (getPlayer1Rank(player1Top.value, board1SquareHeight) > playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +-------------------->+     c  pd
-                    // |                     |     ^
-                    // |       Board         |     |
-                    // |       +-------+     |     +
-                    // |       |       |     |
-                    // |       |       |     |
-                    // |       |   *   |     |
-                    // |       |       |     |
-                    // |       |       |     |
-                    // |       +-------+     +
-                    // |                     ^
-                    // |                     |
-                    // |                     m
-                    // |                     |
-                    // |                     v
-                    // +---------------------+
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // m は、 pd の正負を反転したもの。
-                    // m が、マスク幅より大きいなら、それ以上上に行くことはできない。
-                    //
-                    // m = c
-                    //
-
-                    const pd = getPrinting1RankDelta(printing1Top, board1SquareHeight) - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
-                    const m = - pd;
-
-                    if (board1WithMaskSizeSquare < m) {
+                    if (checkOutOfSightTopIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        printing1Left.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -379,55 +486,18 @@ export function handlePlayerControllerWithWrapAround(
 
         if (player1Input.ArrowDown) {   // 下
             // ホーム・ポジションより上に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
+            if (getPlayer1Rank(player1Top.value, board1SquareHeight) < playerHome1Rank) {
                 // pass
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +------------------------------->+     c  pd
-                    // ^                                |     ^
-                    // |       Board                    |     |
-                    // |       +------------------+     | 0   +
-                    // |       ^//////////////////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///|       |//////|     |
-                    // ch      bh//|   *   |//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |//////////////////|     |
-                    // |       v//////////////////|     |
-                    // |       +------------------+     +
-                    // |                                ^
-                    // |                                |
-                    // |                                m
-                    // |                                |
-                    // v                                v
-                    // +--------------------------------+
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // bh は、盤の行数。
-                    // ch は、印字の行数。
-                    // m が、マスクの横幅（下側の多めの１を含まない）より小さいなら、それ以上下に行くことはできない。
-                    //
-                    // m = ch + c - bh
-                    //
-
-                    const pd = -(getPrinting1RankDelta(printing1Top, board1SquareHeight)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
-                    const ch = printing1RankNum; // 例えば 10
-                    const bh = board1RankNum;
-                    const m = ch + pd - bh;
-                    //console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare}`);
-
-                    if (m < -board1WithMaskSizeSquare) {
+                    if (checkOutOfSightBottomIsLook(
+                        board1SquareHeight,
+                        board1WithMaskSizeSquare,
+                        board1RankNum,
+                        printing1RankNum,
+                        printing1Top.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -458,44 +528,17 @@ export function handlePlayerControllerWithWrapAround(
         if (player1Input.ArrowLeft) { // 左
             player1Motion.value.lookRight = commonSpriteMotionLeft;
 
-            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
+            if (getPlayer1File(player1Left.value, board1SquareWidth) > playerHome1File) {
                 // ホーム・ポジションより右に居ればホームに近づける。
                 player1Motion.value.goToRight = commonSpriteMotionLeft;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +---------------------+
-                    // |                     |
-                    // |       Board         |
-                    // |       +-------+     |
-                    // |       |       |     |
-                    // |       |   *   |     |
-                    // |       |       |     |
-                    // |       +-------+     |
-                    // |                     |
-                    // +<--m-->*-------------+
-                    //         0
-                    // c<------+
-                    // pd
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // m は、 pd の正負を反転したもの。
-                    // m が、マスク幅より大きいなら、それ以上左に行くことはできない。
-                    //
-                    // m = c
-                    //
-
-                    const pd = getPrinting1FileDelta(printing1Left, board1SquareWidth) - 1;  // まだ -1 （左へ移動）されていないので、-1 しておく。
-                    const m = - pd;
-
-                    if (board1WithMaskSizeSquare < m) {
+                    if (checkOutOfSightLeftIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        printing1Left.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -504,7 +547,7 @@ export function handlePlayerControllerWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1File(player1Left, board1SquareWidth) > 0 + board1WithMaskSizeSquare) {
+                    if (getPlayer1File(player1Left.value, board1SquareWidth) > 0 + board1WithMaskSizeSquare) {
                         player1Motion.value.goToRight = commonSpriteMotionLeft;
                     }
                 }
@@ -515,51 +558,18 @@ export function handlePlayerControllerWithWrapAround(
             player1Motion.value.lookRight = commonSpriteMotionRight;
 
             // ホーム・ポジションより左に居ればホームに近づける。
-            if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
+            if (getPlayer1File(player1Left.value, board1SquareWidth) < playerHome1File) {
                 player1Motion.value.goToRight = commonSpriteMotionRight;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +<---------cw------------------->+
-                    // |                                |
-                    // |       Board                    |
-                    // |       +<------bw-------->+     |
-                    // |       |//////////////////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///|   *   |//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |//////////////////|     |
-                    // |       |//////////////////|     |
-                    // |       +------------------+     |
-                    // |                                |
-                    // +--------------------------+<-m->+
-                    // c<------+
-                    // pd
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の左隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // bw は、盤の列数。
-                    // cw は、印字の列数。
-                    // m は、右側番外の余白。
-                    // m が、マスクの横幅（右側の多めの１を含まない）以下なら、それ以上右に行くことはできない。
-                    //
-                    // m = cw + c - bw
-                    //
-
-                    const pd = -getPrinting1FileDelta(printing1Left, board1SquareWidth) + 1;  // まだ 1 （右へ移動）されていないので、1 しておく。
-                    const cw = printing1FileNum; // 例えば 10
-                    const bw = board1FileNum;
-                    const m = cw + pd - bw;
-
-                    if (m <= -board1WithMaskSizeSquare) {
+                    if (checkOutOfSightRightIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1Left.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -568,7 +578,7 @@ export function handlePlayerControllerWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1File(player1Left, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
+                    if (getPlayer1File(player1Left.value, board1SquareWidth) < board1FileNum - board1WithMaskSizeSquare - 1) {
                         player1Motion.value.goToRight = commonSpriteMotionRight;
                     }
                 }
@@ -579,46 +589,16 @@ export function handlePlayerControllerWithWrapAround(
             player1Motion.value.lookBottom = commonSpriteMotionUp;
 
             // ホーム・ポジションより下に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
+            if (getPlayer1Rank(player1Top.value, board1SquareHeight) > playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +-------------------->+     c  pd
-                    // |                     |     ^
-                    // |       Board         |     |
-                    // |       +-------+     |     +
-                    // |       |       |     |
-                    // |       |       |     |
-                    // |       |   *   |     |
-                    // |       |       |     |
-                    // |       |       |     |
-                    // |       +-------+     +
-                    // |                     ^
-                    // |                     |
-                    // |                     m
-                    // |                     |
-                    // |                     v
-                    // +---------------------+
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // m は、 pd の正負を反転したもの。
-                    // m が、マスク幅より大きいなら、それ以上上に行くことはできない。
-                    //
-                    // m = c
-                    //
-
-                    const pd = getPrinting1RankDelta(printing1Top, board1SquareHeight) - 1;  // まだ -1 （上へ移動）されていないので、-1 しておく。
-                    const m = - pd;
-
-                    if (board1WithMaskSizeSquare < m) {
+                    if (checkOutOfSightTopIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        printing1Left.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -627,7 +607,7 @@ export function handlePlayerControllerWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1Rank(player1Top, board1SquareHeight) > 0 + board1WithMaskSizeSquare) {
+                    if (getPlayer1Rank(player1Top.value, board1SquareHeight) > 0 + board1WithMaskSizeSquare) {
                         player1Motion.value.goToBottom = commonSpriteMotionUp;
                     }
                 }
@@ -638,55 +618,18 @@ export function handlePlayerControllerWithWrapAround(
             player1Motion.value.lookBottom = commonSpriteMotionDown;
 
             // ホーム・ポジションより上に居ればホームに近づける。
-            if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
+            if (getPlayer1Rank(player1Top.value, board1SquareHeight) < playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionDown;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    // 見えている画面外が広がるような移動は禁止する：
-                    //
-                    // - 印字は動かない、プレイヤーの移動量を見ること。
-                    // TODO: プレイヤーの移動量と、印字の移動量を分けれないか？
-                    //
-                    // Printing
-                    // +------------------------------->+     c  pd
-                    // ^                                |     ^
-                    // |       Board                    |     |
-                    // |       +------------------+     | 0   +
-                    // |       ^//////////////////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///|       |//////|     |
-                    // ch      bh//|   *   |//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///|       |//////|     |
-                    // |       |///+-------+//////|     |
-                    // |       |//////////////////|     |
-                    // |       v//////////////////|     |
-                    // |       +------------------+     +
-                    // |                                ^
-                    // |                                |
-                    // |                                m
-                    // |                                |
-                    // v                                v
-                    // +--------------------------------+
-                    //
-                    // 0 は、盤の初期位置からの移動量。盤は移動しないので常に 0。
-                    // c は、0 からみた、印字の上隅位置。 初期値は習慣的に、 0 以下にするものと思われる。
-                    // bh は、盤の行数。
-                    // ch は、印字の行数。
-                    // m が、マスクの横幅（下側の多めの１を含まない）より小さいなら、それ以上下に行くことはできない。
-                    //
-                    // m = ch + c - bh
-                    //
-
-                    const pd = -(getPrinting1RankDelta(printing1Top, board1SquareHeight)+1);  // まだ +1 （下へ移動）されていないので、+1 しておく。
-                    const ch = printing1RankNum; // 例えば 10
-                    const bh = board1RankNum;
-                    const m = ch + pd - bh;
-                    //console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare}`);
-
-                    if (m < -board1WithMaskSizeSquare) {
+                    if (checkOutOfSightBottomIsLook(
+                        board1SquareHeight,
+                        board1WithMaskSizeSquare,
+                        board1RankNum,
+                        printing1RankNum,
+                        printing1Top.value
+                    )) {
                         willShift = false;
                     }
                 }
@@ -695,7 +638,7 @@ export function handlePlayerControllerWithWrapAround(
                     // pass
                 } else if (player1CanBoardEdgeWalking) {
                     // ［盤の端まで歩ける］
-                    if (getPlayer1Rank(player1Top, board1SquareHeight) < board1RankNum - board1WithMaskSizeSquare - 1) {
+                    if (getPlayer1Rank(player1Top.value, board1SquareHeight) < board1RankNum - board1WithMaskSizeSquare - 1) {
                         player1Motion.value.goToBottom = commonSpriteMotionDown;
                     }
                 }
