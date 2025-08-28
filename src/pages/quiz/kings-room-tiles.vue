@@ -26,9 +26,11 @@
             隣の国の王様は困っていました。<br/>
             勇者　キフワラニャン　は呼び出された。<br/>
             <br/>
-            パペポ一世　「　謁見の間の床タイルを市松模様にしたいのだが、<br/>
-            市松模様になることもあれば、ストライプになることもあるんじゃ。<br/>
-            下の［問題設定を表示］ボタンをクリックして、出てくるスライダーバーを動かしてみてくれ」<br/>
+            パペポ一世　「　謁見の間の床タイルを市松模様にしろと床大臣に命じたのだが、<br/>
+            部屋によっては、<br/>
+            市松模様になる部屋もあれば、ストライプになる部屋もあるんじゃ。<br/>
+            なんでこんなことになるのかのう。<br/>
+            試しに、下の［問題設定を表示］ボタンをクリックして、出てくるスライダーバーを動かして、部屋のサイズを変えてみてくれ」<br/>
         </p>
         <br/>
         <!-- 印字１　＞　機能 -->
@@ -300,7 +302,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = ref<number>(4);    // ズーム
+    const appZoom = ref<number>(2);    // ズーム
 
 
     // ################
@@ -352,12 +354,12 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1FileMin = 3;
-    const board1RankMin = 3;
-    const board1FileMax = 10;
-    const board1RankMax = 10;
-    const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
-    const board1RankNum = ref<number>(5);   // 段の数
+    const board1FileMin = 6;
+    const board1RankMin = 6;
+    const board1FileMax = 20;
+    const board1RankMax = 20;
+    const board1FileNum = ref<number>(9);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+    const board1RankNum = ref<number>(9);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
@@ -475,8 +477,8 @@
     // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
-    const playerHome1File = ref<number>(2);    // ホーム
-    const playerHome1Rank = ref<number>(2);
+    const playerHome1File = ref<number>(4);    // ホーム
+    const playerHome1Rank = ref<number>(4);
     const playerHome1Left = computed(()=>{
         return playerHome1File.value * board1SquareWidth;
     });
@@ -549,7 +551,7 @@
     const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const player1MotionFacingFrames: number = 1;    // 振り向くフレーム数
     const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
-    const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
+    const player1CanBoardEdgeWalking = ref<boolean>(true); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
 
