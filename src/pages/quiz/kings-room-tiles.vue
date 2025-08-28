@@ -417,8 +417,14 @@
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
-    const printing1FileNum = ref<number>(printing1FileMax);   // 列数
-    const printing1RankNum = ref<number>(printing1RankMax);   // 行数
+    const printing1FileNum = computed<number>({ // 列数。印字表のサイズを、盤と同期。
+        get: () => { return board1FileNum.value; },
+        set: (value) => { board1FileNum.value = value; }
+    });
+    const printing1RankNum = computed<number>({ // 行数。印字表のサイズを、盤と同期。
+        get: () => { return board1RankNum.value; },
+        set: (value) => { board1RankNum.value = value; }
+    });
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
