@@ -8,16 +8,6 @@
         class="mask"
         v-bind="$attrs">
     </div>
-
-    <!-- テスト -->
-    <br/><br/><br/><br/><br/><br/><br/>
-    <div
-        class="child-test-2"
-        style="
-            z-index: 100;
-            font-size: 20px;
-        "
-        v-bind="$attrs">あいうえおか</div>
 </template>
 
 <script setup lang="ts">

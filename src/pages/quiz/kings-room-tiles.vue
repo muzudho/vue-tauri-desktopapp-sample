@@ -714,94 +714,13 @@
 </script>
 
 <style scoped>
-/*
-    div.test-1 {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: green;
+    /* 
+     * マスクの暗さを濃くします。
+     * NOTE: セレクターは、ブラウザーの開発者モードでコピーして持ってくるのが確実。
+     */
+    section.sec-3 > div.board > :deep(.mask) {
+        border-color: rgba(32, 32, 32, 0.9) !important;
     }
-    section.sec-3 div.board div.test-1 {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: green;
-    }
-    section.sec-3 div.board .parent-mask {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: blue;
-    }
-    :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: blue;
-    }
-    .parent-mask, :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: blue;
-    }
-    :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        color:red;
-        background-color: blue;
-    }
-    #app > div > div > main > nuxtlayout > section:nth-child(5) > div.board > :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: green;
-    }
-    section.sec-3 > div.board > :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: green;
-    }
-*/
-
-    /* ブラウザーの開発者モードでセレクターをコピーするのが確実 */
-    section.sec-3 > div.board > :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: green;
-    }
-
-    /*
-    section.sec-3 div.board out-of-sight.parent-mask :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        color:red;
-        background-color: blue;
-    }
-    out-of-sight.parent-mask {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: blue !important;
-    }
-    out-of-sight.parent-mask :deep(.child-test-2) {
-        position: absolute;
-        width: 100px;
-        height: 100px;
-        background-color: blue;
-    }
-    */
-
-    /*
-    section.sec-3 div.board parent-mask.dark :deep(div.mask) {
-        border-color: rgba(255, 32, 32, 0.9) !important;
-        border:solid 10px yellow;
-    }
-    */
 
     div.board { /* 盤１ */
         position: relative;
