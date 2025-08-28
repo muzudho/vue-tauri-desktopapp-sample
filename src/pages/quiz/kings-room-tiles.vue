@@ -141,15 +141,18 @@
                 class="player"
                 :style="player1Style" />
 
-            
+            <!-- スタイルシートのテスト -->
+            <div class="test-1" ></div>
+
             <!-- 視界の外１ -->
-            <out-of-sight-making
+            <out-of-sight
                 ref="outOfSight1Ref"
                 :board1SquareWidth="board1SquareWidth"
                 :board1SquareHeight="board1SquareHeight"
                 :board1FileNum="board1FileNum"
-                :board1RankNum="board1RankNum">
-            </out-of-sight-making>
+                :board1RankNum="board1RankNum"
+                class="parent-mask">
+            </out-of-sight>
         </div>
 
         <!-- 問題設定パネル１ -->
@@ -264,7 +267,7 @@
 
     // from の階層が上の順、アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
-    import OutOfSightMaking from '../../components/OutOfSightMaking.vue';
+    import OutOfSight from '../../components/OutOfSightMaking.vue';
     import PrintingMaking from '../../components/PrintingMaking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
@@ -333,7 +336,7 @@
     // + オブジェクト　＞　視界の外１ +
     // ++++++++++++++++++++++++++++++++
 
-    const outOfSight1Ref = ref<InstanceType<typeof OutOfSightMaking> | null>(null);
+    const outOfSight1Ref = ref<InstanceType<typeof OutOfSight> | null>(null);
     const outOfSight1WithMaskSizeSquare = computed({
         get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
         set: (value) => {
@@ -409,11 +412,11 @@
     //
 
     const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
+    const printing1IsLooping = ref<boolean>(false);  // ループ状態を管理（true: ループする, false: ループしない）
     const printing1OutOfSightIsLock = ref<boolean>(true);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
-    const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
@@ -711,6 +714,95 @@
 </script>
 
 <style scoped>
+/*
+    div.test-1 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+    }
+    section.sec-3 div.board div.test-1 {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+    }
+    section.sec-3 div.board .parent-mask {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+    }
+    :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+    }
+    .parent-mask, :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+    }
+    :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        color:red;
+        background-color: blue;
+    }
+    #app > div > div > main > nuxtlayout > section:nth-child(5) > div.board > :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+    }
+    section.sec-3 > div.board > :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+    }
+*/
+
+    /* ブラウザーの開発者モードでセレクターをコピーするのが確実 */
+    section.sec-3 > div.board > :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: green;
+    }
+
+    /*
+    section.sec-3 div.board out-of-sight.parent-mask :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        color:red;
+        background-color: blue;
+    }
+    out-of-sight.parent-mask {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: blue !important;
+    }
+    out-of-sight.parent-mask :deep(.child-test-2) {
+        position: absolute;
+        width: 100px;
+        height: 100px;
+        background-color: blue;
+    }
+    */
+
+    /*
+    section.sec-3 div.board parent-mask.dark :deep(div.mask) {
+        border-color: rgba(255, 32, 32, 0.9) !important;
+        border:solid 10px yellow;
+    }
+    */
+
     div.board { /* 盤１ */
         position: relative;
     }

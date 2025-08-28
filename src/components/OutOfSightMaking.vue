@@ -4,9 +4,20 @@
 
 <template>
     <div
-        class="out-of-sight"
-        :style="outOfSight1Style">
+        :style="outOfSight1Style"
+        class="mask"
+        v-bind="$attrs">
     </div>
+
+    <!-- テスト -->
+    <br/><br/><br/><br/><br/><br/><br/>
+    <div
+        class="child-test-2"
+        style="
+            z-index: 100;
+            font-size: 20px;
+        "
+        v-bind="$attrs">あいうえおか</div>
 </template>
 
 <script setup lang="ts">
@@ -60,6 +71,7 @@
         return props.board1RankNum + outOfSight1WithMaskBottomRightMargin;
     });
     const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
+        // ボーダーを使って色を塗っています。
         return {
             width: `${outOfSight1WithMaskFileNum.value * props.board1SquareWidth}px`,
             height: `${outOfSight1WithMaskRankNum.value * props.board1SquareHeight}px`,
@@ -85,7 +97,7 @@
 </script>
 
 <style scoped>
-    div.out-of-sight {  /* 視界の外１ */
+    div.mask {  /* 視界の外１ */
         position: absolute;
         image-rendering: pixelated;
     }
