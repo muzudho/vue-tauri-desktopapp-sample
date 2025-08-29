@@ -465,3 +465,10 @@ VSCode の `.vscode/settings.json` を新規作成:
 ```
 
 効果なかった。ダメだった。  
+
+
+## [2025-08-30_Sat]
+
+Tauri では、 Vuetify の v-checkbox が不可視の場合、設定が要るようだ？  
+
+📖 [[Bug Report] Checkboxes are invisible #7356](https://github.com/vuetifyjs/vuetify/issues/7356)  

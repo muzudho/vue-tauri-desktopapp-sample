@@ -330,7 +330,7 @@ const tileNo = color + 1;
 
         <p>
             ※ここに選択肢を出す。<br/>
-            （１）盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。<br/>
+            <v-checkbox style="opacity: 1.0 !important;"></v-checkbox>（１）盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。<br/>
             （２）盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。<br/>
             （３）盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。<br/>
             （４）盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。<br/>
@@ -381,6 +381,8 @@ const tileNo = color + 1;
     import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
+    import TheFooter from './the-footer.vue';
+    import TheHeader from './the-header.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +
