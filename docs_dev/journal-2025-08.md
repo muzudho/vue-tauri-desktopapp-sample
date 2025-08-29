@@ -472,3 +472,17 @@ VSCode の `.vscode/settings.json` を新規作成:
 Tauri では、 Vuetify の v-checkbox が不可視の場合、設定が要るようだ？  
 
 📖 [[Bug Report] Checkboxes are invisible #7356](https://github.com/vuetifyjs/vuetify/issues/7356)  
+
+📄 plugins/vuetify.ts: 追加部分抜粋  
+
+```ts
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
+
+export default createVuetify({
+    icons: {
+        defaultSet: 'mdi',  // <v-checkbox> の四角い部分を描画するのに必要
+        aliases,    // <v-checkbox> の四角い部分を描画するのに必要
+        sets: { mdi },  // <v-checkbox> の四角い部分を描画するのに必要
+    },
+});
+```

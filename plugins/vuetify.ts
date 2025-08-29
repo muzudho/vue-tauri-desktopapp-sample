@@ -7,7 +7,7 @@ import 'vuetify/styles'; // Vuetifyの基本スタイルをインポート
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
-
+import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
 // ################
 // # スタイル設定 #
@@ -60,6 +60,11 @@ const myCustomLightTheme = {
 export default createVuetify({
     components,
     directives,
+    icons: {
+        defaultSet: 'mdi',  // <v-checkbox> の四角い部分を描画するのに必要
+        aliases,    // <v-checkbox> の四角い部分を描画するのに必要
+        sets: { mdi },  // <v-checkbox> の四角い部分を描画するのに必要
+    },
     theme: {
         defaultTheme: 'myCustomLightTheme',
         themes: {
