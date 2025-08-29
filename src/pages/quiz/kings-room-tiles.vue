@@ -410,14 +410,23 @@ const tileNo = color + 1;
             @mouseleave="button1Ref?.release();"
         ><span class="font-x2">{{ answer1IsShowing ? '' : '🆗' }}</span>{{ answer1IsShowing ? '答えをやり直す' : 'この答えで確定する' }}</v-btn>
         <section v-if="answer1IsShowing" class="sec-1">
+            <section v-if="choices1Num==0">
+                <br/>
+                <span class="font-x2">😑</span>答えを選べだぜ<br/>
+                <br/>
+            </section>
             <section v-if="choices1Num==1 || choices1Num==2">
                 <br/>
                 <span class="font-x2">😄</span>正解<br/>
                 <br/>
+                パペポ王　「おお、さすがキフワラニャン　床が市松模様になったわい」<br/>
+                <br/>
             </section>
-            <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
+            <section v-if="choices1Num==3 || choices1Num==4">
                 <br/>
                 <span class="font-x2">😭</span>間違い<br/>
+                <br/>
+                パペポ王　「ストライプになってしまったのう」<br/>
                 <br/>
             </section>
         </section>
