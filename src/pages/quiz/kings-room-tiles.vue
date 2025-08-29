@@ -75,10 +75,9 @@
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/quiz/kings-room-tiles.png">
 
-                <!--
                 <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
-                -->
 
+                <!--
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
@@ -131,6 +130,7 @@
                         )
                     )
                 }}</span>
+                -->
 
             </tile>
 
@@ -302,10 +302,31 @@
         <br/>
 
         <p>
-            キフワラニャン　「フーム……、ストライプになってしまう……<br/>
+            キフワラニャン　「フーム……、筋の数が偶数のとき、ストライプになってしまう……<br/>
             これはバグだぜ！」<br/>
+            <br/>
+            パペポ王　「床のタイルの色を決めている数式は以下の通りじゃ」<br/>
+            <br/>
         </p>
         <br/>
+        <br/>
+
+        <pre>
+// i: タイル番号。左上から右に向かって 0, 1, 2 ...
+// color = 0: 白い床
+// color = 1: 赤い床
+// とする。
+
+// 計算式：　タイルの偶数盤を白い床、奇数盤を赤い床にする。
+// % は、割った余りを求める。 例） 3 % 2 なら 1。
+const color = i % 2;
+
+// 次に、色をタイルマップ上のタイル番号に変換する。
+// tileNo = 0: 画面外の黒
+// tileNo = 1: 白い床
+// tileNo = 2: 赤い床
+const tileNo = color + 1;
+        </pre>
 
         <p>
             ※ここに選択肢を出す。<br/>
@@ -447,8 +468,8 @@
     const board1SquareHeight = 32;
     const board1FileMin = 6;
     const board1RankMin = 6;
-    const board1FileMax = 20;
-    const board1RankMax = 20;
+    const board1FileMax = 16;
+    const board1RankMax = 16;
     const board1FileNum = ref<number>(9);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(9);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
@@ -510,8 +531,8 @@
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
-    const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
-    const printing1RankMax = 10;
+    const printing1FileMax = board1FileMax;
+    const printing1RankMax = board1RankMax;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
     const printing1FileNum = computed<number>({ // 列数。印字表のサイズを、盤と同期。
         get: () => { return board1FileNum.value; },
@@ -526,6 +547,7 @@
     const printing1Top = ref<number>(0);
     const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // マップデータを生成
+    // TODO 盤サイズが変わるたび更新
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         // i: タイル番号。左上から右に向かって 0, 1, 2 ...
         // color = 0: 白い床
@@ -534,6 +556,9 @@
 
         // 計算式：　タイルの偶数盤を白い床、奇数盤を赤い床にする。
         const color = i % 2;
+
+        // 盤の筋の数が偶数のとき、偶数段は color + 1 するようにすればよい。
+        // 
 
         // 次に、色をタイルマップ上のタイル番号に変換する。
         // tileNo = 0: 画面外の黒
@@ -817,11 +842,10 @@
     /* 
      * マスクの暗さを濃くします。
      * NOTE: セレクターは、ブラウザーの開発者モードでコピーして持ってくるのが確実。
+     */
     section.sec-3 > div.board > :deep(.mask) {
         border-color: rgba(32, 32, 32, 0.9) !important;
     }
-     */
-
     div.board { /* 盤１ */
         position: relative;
     }
