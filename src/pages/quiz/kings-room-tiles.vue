@@ -361,6 +361,12 @@ const tileNo = color + 1;
             <v-radio-group
                 v-model="choices1Num">
                 <v-radio
+                    :value="0">
+                    <template v-slot:label>
+                        <span style="margin-right: 16px;">（０）</span>未選択
+                    </template>
+                </v-radio>
+                <v-radio
                     :value="1">
                     <template v-slot:label>
                         <span style="margin-right: 16px;">（１）</span>盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
@@ -617,10 +623,34 @@ const tileNo = color + 1;
             let color = i % 2;
 
             // ここから　クイズの答え：
-            // 盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
-            const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
-            if (width % 2 == 0) {
-                color = (color + 1 * ((rank) % 2)) % 2;
+            if (choices1Num.value == 1) {
+                // これは正解。
+                // 盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
+                if (width % 2 == 0) {
+                    color = (color + 1 * ((rank) % 2)) % 2;
+                }
+            } else if (choices1Num.value == 2) {
+                // これも正解。
+                // 盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                const rank = Math.floor(i / width);
+                if (width % 2 == 0) {
+                    color = (color + 1 * ((rank + 1) % 2)) % 2;
+                }
+            } else if (choices1Num.value == 3) {
+                // 間違い。常にストライプになる。
+                // 盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
+                if (width % 2 == 1) {
+                    color = (color + 1 * ((rank) % 2)) % 2;
+                }
+            } else if (choices1Num.value == 4) {
+                // 間違い。常にストライプになる。
+                // 盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
+                if (width % 2 == 1) {
+                    color = (color + 1 * ((rank + 1) % 2)) % 2;
+                }
             }
             // ：ここまで　クイズの答え
 
