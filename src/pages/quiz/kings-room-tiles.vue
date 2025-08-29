@@ -156,6 +156,85 @@
                 class="parent-mask">
             </out-of-sight>
         </div>
+        <br/>
+
+        <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
+        <p>キーボード操作方法</p>
+        <ul>
+            <li>
+                <v-btn class="code-key hidden"/>
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onUpButtonReleased);"
+                    @touchcancel="button1Ref?.release(onUpButtonReleased);"
+                    @touchleave="button1Ref?.release(onUpButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onUpButtonReleased);"
+                    @mouseleave="button1Ref?.release(onUpButtonReleased);"
+                >↑</v-btn>
+                <br/>
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onLeftButtonReleased);"
+                    @touchcancel="button1Ref?.release(onLeftButtonReleased);"
+                    @touchleave="button1Ref?.release(onLeftButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onLeftButtonReleased);"
+                    @mouseleave="button1Ref?.release(onLeftButtonReleased);"
+                >←</v-btn>
+                <v-btn class="code-key hidden"/>
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onRightButtonReleased);"
+                    @touchcancel="button1Ref?.release(onRightButtonReleased);"
+                    @touchleave="button1Ref?.release(onRightButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onRightButtonReleased);"
+                    @mouseleave="button1Ref?.release(onRightButtonReleased);"
+                >→</v-btn>
+                <br/>
+                <v-btn class="code-key hidden"/>
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onDownButtonReleased);"
+                    @touchcancel="button1Ref?.release(onDownButtonReleased);"
+                    @touchleave="button1Ref?.release(onDownButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onDownButtonReleased);"
+                    @mouseleave="button1Ref?.release(onDownButtonReleased);"
+                >↓</v-btn>
+                　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
+                <br/>
+            </li>
+            <!--
+            <li>
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onSpaceButtonReleased);"
+                    @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
+                    @touchleave="button1Ref?.release(onSpaceButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onSpaceButtonReleased);"
+                    @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
+                >（スペース）</v-btn>
+                　…　自機、印字の位置を最初に有ったところに戻すぜ。
+            </li>
+            -->
+            <li>
+                <!-- フォーカスを外すためのダミー・ボタンです -->
+                <v-btn
+                    class="noop-key"
+                    ref="noopButton"
+                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
+                >何もしないボタン</v-btn><br/>
+            </li>
+        </ul>
+        <br/>
 
         <!-- 問題設定パネル１ -->
         <v-btn
@@ -306,29 +385,40 @@
         <p>
             キフワラニャン　「フーム……、筋の数が偶数のとき、ストライプになってしまう……<br/>
             これはバグだぜ！」<br/>
-            <br/>
-            パペポ王　「床のタイルの色を決めているプログラムの疑似コードは以下の通りじゃ」<br/>
-            <br/>
+            <!--
+            <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
+            </section>
+            <section v-if="choices1Num==1 || choices1Num==2">
+                キフワラニャン　「おお……、市松模様になっているような……」<br/>
+            </section>
+            -->
         </p>
         <br/>
+
+        <p>
+            パペポ王　「床のタイルの色を決めているプログラムの疑似コードは以下の通りじゃ」<br/>
+        </p>
         <br/>
 
         <pre>
 // i: タイル番号。左上から右に向かって 0, 1, 2 ...
+
+// そして、
 // color = 0: 白い床
 // color = 1: 赤い床
-// とする。
+// とするとき、
 
-// 計算式：　タイルの偶数盤を白い床、奇数盤を赤い床にする。
-// % は、割った余りを求める。 例） 3 % 2 なら 1。
-const color = i % 2;
-
-// 次に、色をタイルマップ上のタイル番号に変換する。
-// tileNo = 0: 画面外の黒
-// tileNo = 1: 白い床
-// tileNo = 2: 赤い床
-const tileNo = color + 1;
+// 以下の計算式でタイルの色を決める。
+// = 記号は、この記号の右側の計算結果を、左側へ入れる。
+// % 記号は、この記号の左側の数を、右側の数で割った余りを求める。 例） 3 % 2 なら 1。
+color = i % 2;
         </pre>
+        <br/>
+
+        <p>
+            キフワラニャン　「どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
+        </p>
+        <br/>
 
         <p>
             <!--
@@ -362,12 +452,14 @@ const tileNo = color + 1;
             -->
             <v-radio-group
                 v-model="choices1Num">
+                <!--
                 <v-radio
                     :value="0">
                     <template v-slot:label>
                         <span style="margin-right: 16px;">（０）</span>未選択
                     </template>
                 </v-radio>
+                -->
                 <v-radio
                     :value="1">
                     <template v-slot:label>
@@ -393,7 +485,18 @@ const tileNo = color + 1;
                     </template>
                 </v-radio>
             </v-radio-group>
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onUnchoice1ButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onUnchoice1ButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >未選択にする</v-btn>
         </p>
+        <br/>
 
         <p>
             キフワラニャン　「👆上の選択肢を選んだら、ゲーム画面を確認して、これで合ってると思ったら、<br/>
@@ -410,7 +513,7 @@ const tileNo = color + 1;
             @mousedown.prevent="button1Ref?.handleMouseDown($event, onAnswer1ButtonPressed)"
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
-        ><span class="font-x2">{{ answer1IsShowing ? '' : '🆗' }}</span>{{ answer1IsShowing ? '答えをやり直す' : 'この答えで確定する' }}</v-btn>
+        ><span class="font-x2">{{ answer1IsShowing ? '' : '🆗' }}</span>{{ answer1IsShowing ? '答えを隠す' : 'この答えで確定する' }}</v-btn>
         <section v-if="answer1IsShowing" class="sec-1">
             <section v-if="choices1Num==0">
                 <br/>
@@ -964,6 +1067,58 @@ const tileNo = color + 1;
 
 
     /**
+     * 左。
+     */
+    function onLeftButtonPressed() : void {
+        player1Input.ArrowLeft = true;
+    }
+
+
+    function onLeftButtonReleased() : void {
+        player1Input.ArrowLeft = false;
+    }
+
+
+    /**
+     * 上。
+     */
+    function onUpButtonPressed() : void {
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        player1Input.ArrowUp = false;
+    }
+
+
+    /**
+     * 右。
+     */
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    /**
+     * 下。
+     */
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    /**
      * ［問題設定パネル１］を開くボタン。
      */
     function onProblem1ButtonPressed() : void {
@@ -985,6 +1140,14 @@ const tileNo = color + 1;
         debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
     }
      */
+
+
+    /**
+     * ［未選択にする］ボタン。
+     */
+    function onUnchoice1ButtonPressed() : void {
+        choices1Num.value = 0;
+    }
 
 
     /**
