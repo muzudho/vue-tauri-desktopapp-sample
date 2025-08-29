@@ -213,6 +213,67 @@
                 thumbLabel="always" />
             <br/>
         </section>
+
+        <!-- デバッグ情報パネル１ -->
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
+        <section v-if="debugInfo1IsShowing" class="sec-1">
+            <br/>
+            <p>👇 盤の各マス</p>
+            <div
+                v-for="i in board1Area"
+                :key="i">
+                tile-index: {{ i - 1 }} | 
+                fix-index: {{
+                    getFixedSquareIndexFromTileIndex(
+                        i - 1,
+                        board1SquareWidth,
+                        board1SquareHeight,
+                        board1FileNum,
+                        board1RankNum,
+                        printing1Left,
+                        printing1Top,
+                    )
+                }} | 
+                printing: {{
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                }}<br/>
+            </div>
+            <br/>
+            <p>👇 印字表の各マス</p>
+            <div
+                v-for="j in printing1AreaMax"
+                :key="j">
+                printing-index: {{ j - 1 }} | 
+                source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
+            </div>
+            <br/>
+        </section>
+
         <br/>
         <br/>
 
@@ -333,6 +394,12 @@
     // ++++++++++++++++++++++++++++++++**
 
     const preferences1IsShowing = ref<boolean>(false);
+
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　デバッグ情報パネル１ +
+    // ++++++++++++++++++++++++++++++++++++++++++
+
+    const debugInfo1IsShowing = ref<boolean>(false);  // デバッグ情報を表示中
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -712,6 +779,13 @@
         preferences1IsShowing.value = !preferences1IsShowing.value;
     }
 
+
+    /**
+     * ［デバッグ情報を表示］ボタン。
+     */
+    function onDebugInfoButtonPressed() : void {
+        debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
+    }
 
 </script>
 

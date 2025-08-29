@@ -921,18 +921,18 @@
 
 
     /**
-     * ［デバッグ情報を表示］ボタン。
-     */
-    function onDebugInfoButtonPressed() : void {
-        debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
-    }
-
-
-    /**
      * ［設定パネル１］を開くボタン。
      */
     function onConfig1ButtonPressed() : void {
         config1IsShowing.value = !config1IsShowing.value;
+    }
+
+
+    /**
+     * ［デバッグ情報を表示］ボタン。
+     */
+    function onDebugInfoButtonPressed() : void {
+        debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
     }
 
 </script>
