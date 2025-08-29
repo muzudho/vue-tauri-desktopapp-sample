@@ -393,6 +393,36 @@ const tileNo = color + 1;
             </v-radio-group>
         </p>
 
+        <p>
+            キフワラニャン　「👆上の選択肢を選んだら、ゲーム画面を確認して、これで合ってると思ったら、<br/>
+            👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
+        </p>
+        <br/>
+
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onAnswer1ButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onAnswer1ButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        ><span class="font-x2">{{ answer1IsShowing ? '' : '🆗' }}</span>{{ answer1IsShowing ? '答えをやり直す' : 'この答えで確定する' }}</v-btn>
+        <section v-if="answer1IsShowing" class="sec-1">
+            <section v-if="choices1Num==1 || choices1Num==2">
+                <br/>
+                <span class="font-x2">😄</span>正解<br/>
+                <br/>
+            </section>
+            <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
+                <br/>
+                <span class="font-x2">😭</span>間違い<br/>
+                <br/>
+            </section>
+        </section>
+        <br/>
+
     </section>
 
 
@@ -802,6 +832,11 @@ const tileNo = color + 1;
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　この答えで確定するボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++
+
+    const answer1IsShowing = ref<boolean>(false);
 
     // ################
     // # サブルーチン #
@@ -938,6 +973,14 @@ const tileNo = color + 1;
      */
     function onDebugInfoButtonPressed() : void {
         debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
+    }
+
+
+    /**
+     * ［この答えで確定する］ボタン。
+     */
+    function onAnswer1ButtonPressed() : void {
+        answer1IsShowing.value = !answer1IsShowing.value;
     }
 
 </script>
