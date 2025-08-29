@@ -329,11 +329,30 @@ const tileNo = color + 1;
         </pre>
 
         <p>
-            ※ここに選択肢を出す。<br/>
-            <v-checkbox style="opacity: 1.0 !important;"></v-checkbox>（１）盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。<br/>
-            （２）盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。<br/>
-            （３）盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。<br/>
-            （４）盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。<br/>
+            <v-checkbox
+                :hideDetails="true">
+                <template v-slot:label>
+                    <span style="margin-right: 16px;">（１）</span>盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                </template>
+            </v-checkbox>
+            <v-checkbox
+                :hideDetails="true">
+                <template v-slot:label>
+                    <span style="margin-right: 16px;">（２）</span>盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                </template>
+            </v-checkbox>
+            <v-checkbox
+                :hideDetails="true">
+                <template v-slot:label>
+                    <span style="margin-right: 16px;">（３）</span>盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                </template>
+            </v-checkbox>
+            <v-checkbox
+                :hideDetails="true">
+                <template v-slot:label>
+                    <span style="margin-right: 16px;">（４）</span>盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                </template>
+            </v-checkbox>
         </p>
 
     </section>
