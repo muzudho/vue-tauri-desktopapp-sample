@@ -215,6 +215,7 @@
         </section>
 
         <!-- デバッグ情報パネル１ -->
+        <!--
         <v-btn
             class="code-key"
             @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
@@ -297,6 +298,7 @@
             </div>
             <br/>
         </section>
+        -->
 
         <br/>
         <br/>
@@ -542,7 +544,7 @@ const tileNo = color + 1;
     // + オブジェクト　＞　デバッグ情報パネル１ +
     // ++++++++++++++++++++++++++++++++++++++++++
 
-    const debugInfo1IsShowing = ref<boolean>(false);  // デバッグ情報を表示中
+    //const debugInfo1IsShowing = ref<boolean>(false);  // デバッグ情報を表示中
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -979,10 +981,10 @@ const tileNo = color + 1;
 
     /**
      * ［デバッグ情報を表示］ボタン。
-     */
     function onDebugInfoButtonPressed() : void {
         debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
     }
+     */
 
 
     /**
