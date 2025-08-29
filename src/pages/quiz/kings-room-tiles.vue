@@ -75,9 +75,10 @@
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/quiz/kings-room-tiles.png">
 
-                <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
-
                 <!--
+                <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
+                -->
+
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
                     getFixedSquareIndexFromTileIndex(
@@ -130,7 +131,6 @@
                         )
                     )
                 }}</span>
-                -->
 
             </tile>
 
@@ -227,6 +227,30 @@
         >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
         <section v-if="debugInfo1IsShowing" class="sec-1">
             <br/>
+            <p>👇 設定：</p>
+            <p>
+                board1SquareWidth={{ board1SquareWidth }}<br/>
+                board1SquareHeight={{ board1SquareHeight }}<br/>
+                board1FileNum={{ board1FileNum }}<br/>
+                board1RankNum={{ board1RankNum }}<br/>
+                printing1Left={{ printing1Left }}<br/>
+                printing1Top={{ printing1Top }}<br/>
+                printing1FileNum={{ printing1FileNum }}<br/>
+                printing1RankNum={{ printing1RankNum }}<br/>
+                offsetFile={{ -Math.floor(printing1Left / board1SquareWidth) }}<br/>
+                offsetRank={{ -Math.floor(printing1Top / board1SquareHeight) }}<br/>
+                width={{ board1FileNum }}<br/>
+                width={{ printing1FileNum }}<br/>
+                printing1IsLooping={{ printing1IsLooping }}<br/>
+            </p>
+            <br/>
+
+            <p>
+                tileIndex が 18 のとき、<br/>
+
+            </p>
+            <br/>
+
             <p>👇 盤の各マス</p>
             <div
                 v-for="i in board1Area"
@@ -793,10 +817,10 @@
     /* 
      * マスクの暗さを濃くします。
      * NOTE: セレクターは、ブラウザーの開発者モードでコピーして持ってくるのが確実。
-     */
     section.sec-3 > div.board > :deep(.mask) {
         border-color: rgba(32, 32, 32, 0.9) !important;
     }
+     */
 
     div.board { /* 盤１ */
         position: relative;

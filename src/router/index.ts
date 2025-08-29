@@ -26,6 +26,20 @@ const routes = [
     },
 
     // ++++++++++++++++++++
+    // + デバッグ・ルーム +
+    // ++++++++++++++++++++
+    {
+        name: 'DebugRoom',
+        path: '/debug-room',
+        component: () => import('../pages/debug-room/index.vue'),
+    },
+    {
+        name: 'DebugRoomBoardOperation',
+        path: '/debug-room/board-operation',
+        component: () => import('../pages/debug-room/board-operation.vue'),
+    },
+
+    // ++++++++++++++++++++
     // + Making / Desktop +
     // ++++++++++++++++++++
     {
