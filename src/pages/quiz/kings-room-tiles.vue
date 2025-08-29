@@ -329,6 +329,7 @@ const tileNo = color + 1;
         </pre>
 
         <p>
+            <!--
             <v-checkbox
                 :hideDetails="true">
                 <template v-slot:label>
@@ -353,6 +354,37 @@ const tileNo = color + 1;
                     <span style="margin-right: 16px;">（４）</span>盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                 </template>
             </v-checkbox>
+            -->
+            <!--
+            {{ choices1Num }}
+            -->
+            <v-radio-group
+                v-model="choices1Num">
+                <v-radio
+                    :value="1">
+                    <template v-slot:label>
+                        <span style="margin-right: 16px;">（１）</span>盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                    </template>
+                </v-radio>
+                <v-radio
+                    :value="2">
+                    <template v-slot:label>
+                        <span style="margin-right: 16px;">（２）</span>盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                    </template>
+                </v-radio>
+                <v-radio
+                    :value="3">
+                    <template v-slot:label>
+                        <span style="margin-right: 16px;">（３）</span>盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                    </template>
+                </v-radio>
+                <v-radio
+                    :value="4">
+                    <template v-slot:label>
+                        <span style="margin-right: 16px;">（４）</span>盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                    </template>
+                </v-radio>
+            </v-radio-group>
         </p>
 
     </section>
@@ -705,6 +737,12 @@ const tileNo = color + 1;
     const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(true); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
+
+    // ++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　選択肢１ +
+    // ++++++++++++++++++++++++++++++
+
+    const choices1Num = ref<number>(0);
 
 
     // ##########
