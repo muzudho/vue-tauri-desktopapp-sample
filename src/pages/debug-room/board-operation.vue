@@ -3,6 +3,33 @@
 
     <h3>盤操作のデバッグだぜ！</h3>
     <section class="sec-3">
+        tileIndex = {{ tileIndex }}<br/>
+        board1FileNum = {{ board1FileNum }}<br/>
+        board1RankNum = {{ board1RankNum }}<br/>
+        offsetPrintingFile = {{ Math.floor(printing1Left / board1SquareWidth) }}<br/>
+        offsetPrintingRank = {{ Math.floor(printing1Top / board1SquareHeight) }}<br/>
+        <br/>
+
+        <pre>
+const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
+    tileIndex,
+    board1FileNum,
+    board1RankNum,
+    Math.floor(printing1Left / board1SquareWidth),
+    Math.floor(printing1Top / board1SquareHeight),
+)</pre>
+        = {{
+            getIndexWhenAddUpFileAndRankOnPeriodicTable(
+                tileIndex,
+                board1FileNum,
+                board1RankNum,
+                Math.floor(printing1Left / board1SquareWidth),
+                Math.floor(printing1Top / board1SquareHeight),
+            )
+        }}
+        <br/>
+        <br/>
+
         <pre>
 getFixedSquareIndexFromTileIndex(
     tileIndex,
@@ -62,6 +89,7 @@ getFixedSquareIndexFromTileIndex(
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex } from '../../composables/board-operation';
+    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
 
 
     // ################

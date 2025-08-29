@@ -118,7 +118,8 @@ export function getIndexWhenAddUpFileAndRankOnPeriodicTable(
     // if (!Number.isInteger(offsetRank)) { throw new Error(`Assertion failed: "offsetRank" must be an integer, got ${offsetRank}`); }
 
     const fixTileFile = getGroupWhenAddUpColumnNumbersOnPeriodicTable(baseIndex, offsetPrintingFile, boardFileNum);    // 丁寧に書くと［fileIndex = tileIndex % boardFileNum］だが、結局あとで、ユークリッド剰余するので、省いて tileIndex としている。
-    const rankIndex = Math.floor(baseIndex / boardRankNum);
+    //const rankIndex = Math.floor(baseIndex / boardRankNum);
+    const rankIndex = Math.floor(baseIndex / boardFileNum);
     const fixTileRank = getGroupWhenAddUpColumnNumbersOnPeriodicTable(rankIndex, offsetPrintingRank, boardRankNum);    // 筋方向だけでなく、段方向にも同じ関数が使える。
 
     // 列と行を、インデックスに変換します。
