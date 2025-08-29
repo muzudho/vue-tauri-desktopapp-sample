@@ -510,7 +510,7 @@ const tileNo = color + 1;
             };
         };
     });
-    const board1FloorTilemapTileNum = 3;  // 床のタイルマップの、左上隅から数えたタイル数
+    //const board1FloorTilemapTileNum = 3;  // 床のタイルマップの、左上隅から数えたタイル数
     interface SourceTile {
         left: number,
         top: number,
@@ -545,29 +545,37 @@ const tileNo = color + 1;
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
-    // マップデータを生成
-    // TODO 盤サイズが変わるたび更新
-    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
-        // i: タイル番号。左上から右に向かって 0, 1, 2 ...
-        // color = 0: 白い床
-        // color = 1: 赤い床
-        // とする。
+    
+    const printing1SourceTileIndexesBoard = computed<
+        number[]
+    >(() => {
+        const array: number[] = [];   // ソース・タイルのインデックスが入っている盤
+        // マップデータを生成
+        // TODO 盤サイズが変わるたび更新
+        for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
+            // i: タイル番号。左上から右に向かって 0, 1, 2 ...
+            // color = 0: 白い床
+            // color = 1: 赤い床
+            // とする。
 
-        // 計算式：　タイルの偶数盤を白い床、奇数盤を赤い床にする。
-        const color = i % 2;
+            // 計算式：　タイルの偶数盤を白い床、奇数盤を赤い床にする。
+            const color = i % 2;
 
-        // 盤の筋の数が偶数のとき、偶数段は color + 1 するようにすればよい。
-        // 
+            // 盤の筋の数が偶数のとき、偶数段は color + 1 するようにすればよい。
+            // 
 
-        // 次に、色をタイルマップ上のタイル番号に変換する。
-        // tileNo = 0: 画面外の黒
-        // tileNo = 1: 白い床
-        // tileNo = 2: 赤い床
-        const tileNo = color + 1;
+            // 次に、色をタイルマップ上のタイル番号に変換する。
+            // tileNo = 0: 画面外の黒
+            // tileNo = 1: 白い床
+            // tileNo = 2: 赤い床
+            const tileNo = color + 1;
 
-        printing1SourceTileIndexesBoard.value.push(tileNo);
-    }
+            array.push(tileNo);
+        }
+
+        return array;
+    });
+
     const printing1Input : PrintingInput = printingInputCreate();
     const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
@@ -601,14 +609,14 @@ const tileNo = color + 1;
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
-    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
-        return {
-            left: `${playerHome1Left.value}px`,
-            top: `${playerHome1Top.value}px`,
-            width: `${board1SquareWidth}px`,
-            height: `${board1SquareHeight}px`,
-        };
-    });
+    // const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+    //     return {
+    //         left: `${playerHome1Left.value}px`,
+    //         top: `${playerHome1Top.value}px`,
+    //         width: `${board1SquareWidth}px`,
+    //         height: `${board1SquareHeight}px`,
+    //     };
+    // });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
