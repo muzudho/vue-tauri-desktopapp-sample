@@ -165,16 +165,6 @@ function getPlayer1Rank(
 /**
  * カウント・ダウン
  */
-export function printingMotionCountDown(
-    printing1MotionWait: Ref<number>,
-) : void {
-    printing1MotionWait.value -= 1; // 印字１
-}
-
-
-/**
- * カウント・ダウン
- */
 export function playerMotionCountDown(
     player1MotionWait: Ref<number>,
 ) : void {

@@ -486,3 +486,7 @@ export default createVuetify({
     },
 });
 ```
+
+### 画像生成
+
+📖 [Gemini 2.5 Flush Image](https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-flash-image-preview)  

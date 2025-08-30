@@ -30,13 +30,24 @@
 
         <p>
             <!-- ../../../public は省いて、publicフォルダー下からのパスにすること -->
-            <img src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png" alt="パペポ王"></img><br/>
-            パペポ一世　「　謁見の間の床タイルを市松模様にしろと床大臣に命じたのだが、<br/>
-            部屋によっては、<br/>
-            市松模様になる部屋もあれば、ストライプになる部屋もあるんじゃ。<br/>
-            なんでこんなことになるのかのう。<br/>
-            試しに、下の［問題設定を表示］ボタンをクリックして、出てくるスライダーバーを動かして、部屋のサイズを変えてみてくれ」<br/>
+            <img src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png" alt="パペポ王" style="height:362px;"></img><br/>
         </p>
+        <v-row>
+            <v-col cols="2">パペポ一世</v-col>
+            <v-col>
+                「　謁見の間の床タイルを市松模様にしろと<br/>
+                　　床大臣に命じたのだが、<br/>
+                    <br/>
+                　　部屋によっては、<br/>
+                　　市松模様になる部屋もあれば、<br/>
+                　　ストライプになる部屋もあるんじゃ。<br/>
+                　　なんでこんなことになるのかのう。<br/>
+                    <br/>
+                　　試しに、下の［問題設定を表示］ボタンをクリックして、<br/>
+                　　出てくるスライダーバーを動かして、<br/>
+                　　部屋のサイズを変えてみてくれ」<br/>
+            </v-col>
+        </v-row>
         <br/>
         <!-- 印字１　＞　機能 -->
         <printing-making
@@ -598,8 +609,11 @@ color = i % 2;
     import {
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-        printingInputCreate, printingMotionClearIfCountZero, printingMotionCreate, printingImageAndPositionAndWaitUpdate, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
+        printingInputCreate, printingMotionClearIfCountZero, printingMotionCreate, printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
+    import {
+        printingMotionCountDown,
+    } from '../../composables/printing-controller'
     import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
 
     // ********************
@@ -848,14 +862,6 @@ color = i % 2;
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
-    // const playerHome1Style = computed<CompatibleStyleValue>(()=>{
-    //     return {
-    //         left: `${playerHome1Left.value}px`,
-    //         top: `${playerHome1Top.value}px`,
-    //         width: `${board1SquareWidth}px`,
-    //         height: `${board1SquareHeight}px`,
-    //     };
-    // });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -923,6 +929,12 @@ color = i % 2;
 
     const choices1Num = ref<number>(0);
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　この答えで確定するボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++
+
+    const answer1IsShowing = ref<boolean>(false);
+
 
     // ##########
     // # 開始時 #
@@ -950,12 +962,6 @@ color = i % 2;
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　この答えで確定するボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++
-
-    const answer1IsShowing = ref<boolean>(false);
 
     // ################
     // # サブルーチン #
