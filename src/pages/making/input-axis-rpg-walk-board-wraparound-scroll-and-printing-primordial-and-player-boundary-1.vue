@@ -334,10 +334,10 @@
     import {
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
+        printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import {
-        printingMotionCountDown,
+        printingMotionClearIfCountZero, printingMotionCountDown,
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';

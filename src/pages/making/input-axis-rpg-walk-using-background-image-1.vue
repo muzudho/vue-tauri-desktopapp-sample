@@ -450,10 +450,10 @@
     import {
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
+        printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import {
-        printingInputCreate, printingMotionCountDown, printingMotionCreate,
+        printingMotionClearIfCountZero, printingInputCreate, printingMotionCountDown, printingMotionCreate,
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';

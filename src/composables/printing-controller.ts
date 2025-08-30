@@ -64,3 +64,37 @@ export function printingMotionCreate() : PrintingMotion {
         wrapAroundBottom: 0,    // 負なら上、正なら下
     } as PrintingMotion;
 }
+
+/**
+ * 印字盤の移動量（単位：マス）
+ * @returns 
+ */
+export function getPrinting1FileDelta(
+    printing1Left: number,
+    board1SquareWidth: number,
+) : number {
+    return Math.round(-printing1Left / board1SquareWidth);    // 印字盤が左に行くほど、盤上のキャラクターが右に動いたように見える。
+}
+export function getPrinting1RankDelta(
+    printing1Top: number,
+    board1SquareHeight: number,
+) : number {
+    return Math.round(-printing1Top / board1SquareHeight);
+}
+
+
+/**
+ * モーション・ウェイトが０のとき、モーションのクリアー
+ * @param printing1Motion 
+ * @param printing1MotionWait 
+ */
+export function printingMotionClearIfCountZero(
+    printing1Motion: Ref<PrintingMotion>,
+    printing1MotionWait: number,
+) : void {
+    if (printing1MotionWait==0) {   // 印字
+        printing1Motion.value.goToHome = false;
+        printing1Motion.value.wrapAroundRight = 0;
+        printing1Motion.value.wrapAroundBottom = 0;
+    }
+}
