@@ -233,6 +233,11 @@ const routes = [
         path: '/quiz/kings-room-tiles',
         component: () => import('../pages/quiz/kings-room-tiles.vue'),
     },
+    {
+        name: 'OperatingInstructions',
+        path: '/quiz/operating-instructions',
+        component: () => import('../pages/quiz/operating-instructions.vue'),
+    },
 
 
     // ++++++++++

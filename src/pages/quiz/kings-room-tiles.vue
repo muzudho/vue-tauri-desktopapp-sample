@@ -5,6 +5,9 @@
 <template>
     <the-header/>
 
+    <!-- 実行環境互換 -->
+    <compatible-runtime-environment ref="compatibleRuntimeEnvironment1Ref"/>
+
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
@@ -22,25 +25,74 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
+        <img
+            src="/img/quiz/by-grok/202508__grok__30-1751-papepoKingdom-o2o0.png"
+            alt="パペポ王国"
+            :style="illustration1Style">
+        </img>
+        <p
+            :style="illustration1CaptionStyle"
+            style="font-size: small; color: gray; text-align: right;">グラフィッカー：　Grok</p>
+        <br/>
+
         <p>
-            隣の国の王様は困っていました。<br/>
+            ここはパペポ王国。<br/>
+            王様はある悩みを持っていました。<br/>
             勇者　キフワラニャン　は呼び出された。<br/>
         </p>
         <br/>
 
-        <p>
-            <!-- ../../../public は省いて、publicフォルダー下からのパスにすること -->
-            <img src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png" alt="パペポ王" style="height:362px;"></img><br/>
-        </p>
+         <!-- キフワラニャン
+            ../../../public は省いて、publicフォルダー下からのパスにすること
+        -->
+        <img
+            src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyan-o2o0.png"
+            alt="勇者キフワラニャン"
+            :style="illustration1Style">
+        </img>
+        <v-row>
+            <v-col cols="2">勇者キフワラニャン</v-col>
+            <v-col>
+                「　わたしは勇者キフワラニャン、<br/>
+                　　顔はコロコロ変わるかもしれないが、<br/>
+                　　気にしないでくれだぜ」<br/>
+            </v-col>
+        </v-row>
+        <br/>
+
+        <!-- パペポ王１
+        -->
+        <img
+            src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png"
+            alt="パペポ王"
+            :style="illustration1Style">
+        </img>
+        <br/>
+
         <v-row>
             <v-col cols="2">パペポ一世</v-col>
             <v-col>
-                「　謁見の間の床タイルを市松模様にしろと<br/>
-                　　床大臣に命じたのだが、<br/>
+                「　おお、よく来た勇者キフワラニャン！<br/>
+                　　<br/>
+                　　悩みというのは他の何物でもない、<br/>
+                　　床のことじゃ」<br/>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="2">キフワラニャン</v-col>
+            <v-col>
+                「　床」<br/>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="2">パペポ一世</v-col>
+            <v-col>
+                「　我が城の床タイルを市松模様にしろと<br/>
+                　　リフォーム会社に命じたのだが、<br/>
                     <br/>
                 　　部屋によっては、<br/>
-                　　市松模様になる部屋もあれば、<br/>
-                　　ストライプになる部屋もあるんじゃ。<br/>
+                　　市松模様になってる部屋もあれば、<br/>
+                　　ストライプになっている部屋もあるんじゃ。<br/>
                 　　なんでこんなことになるのかのう。<br/>
                     <br/>
                 　　試しに、下の［問題設定を表示］ボタンをクリックして、<br/>
@@ -582,6 +634,7 @@ color = i % 2;
     // ++++++++++++++
 
     import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
+    import CompatibleRuntimeEnvironment from '../../components/CompatibleRuntimeEnvironment.vue';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -637,6 +690,12 @@ color = i % 2;
     // ################
     // # オブジェクト #
     // ################
+
+    // ++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　実行環境 +
+    // ++++++++++++++++++++++++++++++
+
+    const compatibleRuntimeEnvironment1Ref = ref<InstanceType<typeof CompatibleRuntimeEnvironment> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ボタン機能拡張 +
@@ -923,6 +982,33 @@ color = i % 2;
     const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(true); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
+
+    // ++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　挿絵全般 +
+    // ++++++++++++++++++++++++++++++
+
+    const illustration1Style = computed<CompatibleStyleValue>(()=>{ /* 挿絵 */
+        if (compatibleRuntimeEnvironment1Ref?.value?.isMobileMaybe) {
+            return {
+                width: `256px`,
+            };
+        }
+
+        return {
+            width: `384px`,
+        };
+    });
+    const illustration1CaptionStyle = computed<CompatibleStyleValue>(()=>{  /* 画像の下に付けるキャプション用 */
+        if (compatibleRuntimeEnvironment1Ref?.value?.isMobileMaybe) {
+            return {
+                width: `256px`,
+            };
+        }
+
+        return {
+            width: `384px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++++
     // + オブジェクト　＞　選択肢１ +
