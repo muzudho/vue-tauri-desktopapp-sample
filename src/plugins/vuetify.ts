@@ -7,6 +7,11 @@ import 'vuetify/styles'; // Vuetifyの基本スタイルをインポート
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
+
+// ++++++++++++
+// + Tauri 用 +
+// ++++++++++++
+
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
 // ################

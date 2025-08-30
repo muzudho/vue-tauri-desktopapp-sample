@@ -352,7 +352,7 @@
             <v-col>
                 ＰＣであればキーボード入力を、<br/>
                 スマホであれば👆上のボタンをタップすることで、<br/>
-                歩くことができるんじゃ。<br/>
+                自機を歩かせることができるんじゃ。<br/>
                 <br/>
                 盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして
                 出てくる［ズーム］スライダーボックスを左右に動かして盤の大きさを調整してほしい。<br/>
@@ -1536,17 +1536,40 @@ color = i % 2;
         image-rendering: pixelated;
         z-index: 20;
     }
+
+/* スマホ向けスタイル (画面幅が768px以下) */
+@media screen and (max-width: 768px) {
     div.talk-name { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
+        max-width: 96px;
     }
     div.talk-name-small { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
         font-size: small;
+        max-width: 96px;
     }
+}
+/* パソコン向けスタイル (画面幅が769px以上) */
+@media screen and (min-width: 769px) {
+    div.talk-name { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
+        max-width: 128px;
+    }
+    div.talk-name-small { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
+        font-size: small;
+        max-width: 128px;
+    }
+}
+
     div.talk-quot { /* 鍵かっこ */
         max-width: 16px;
         padding-left: 0;
