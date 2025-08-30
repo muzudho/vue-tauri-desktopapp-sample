@@ -448,6 +448,7 @@
 
     import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
     import {
+        getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
         printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
@@ -803,6 +804,7 @@
                 playerHome1Rank.value,
                 player1Left.value,
                 player1Top.value,
+                ()=>{ return getPlayer1File(player1Left.value, board1SquareWidth) > playerHome1File.value; }, // 自機がホーム・ポジションより右に居る
             );
             playerMotionUpdateByInputWithWrapAround(
                 printing1OutOfSightIsLock.value,

@@ -90,13 +90,13 @@ export interface PlayerMotion {
     goToBottom: number, // 負なら上、正なら下へ移動する
 }
 
-function getPlayer1File(
+export function getPlayer1File(
     player1Left: number,
     board1SquareWidth: number,
 ) : number {
     return Math.round(player1Left / board1SquareWidth);
 }
-function getPlayer1Rank(
+export function getPlayer1Rank(
     player1Top: number,
     board1SquareHeight: number,
 ) : number {
@@ -161,6 +161,7 @@ export function printingMotionUpdateByInputWithWrapAround(
     playerHome1Rank: number,
     player1Left: number,
     player1Top: number,
+    playerIsToRightOfHome: ()=>boolean,  // 自機がホーム・ポジションより右に居る
 ) : void {
 
     // ++++++++++++++++++++++++++++++++++++++++
@@ -181,7 +182,10 @@ export function printingMotionUpdateByInputWithWrapAround(
         // 移動関連（単発）
         // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
         if (printing1Input.ArrowLeft) { // 左
-            if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
+            // 自機がホーム・ポジションより右に居れば、自機が左に寄るので、印字盤は動かない。
+            // playerIsToRightOfHome()  // 自機がホーム・ポジションより右に居る
+            //if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
+            if (playerIsToRightOfHome()) {
                 // pass
             } else {
                 let willShift: boolean = true;
@@ -202,7 +206,7 @@ export function printingMotionUpdateByInputWithWrapAround(
         }
 
         if (printing1Input.ArrowRight) {  // 右
-            // ホーム・ポジションより左に居ればホームに近づける。
+            // 自機がホーム・ポジションより左に居れば、自機が右に寄るので、印字盤は動かない。
             if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
                 // pass
             } else {
@@ -226,7 +230,7 @@ export function printingMotionUpdateByInputWithWrapAround(
         }
 
         if (printing1Input.ArrowUp) {    // 上
-            // ホーム・ポジションより下に居ればホームに近づける。
+            // 自機がホーム・ポジションより下に居れば、自機が上に寄るので、印字盤は動かない。
             if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
                 // pass
             } else {
@@ -248,7 +252,7 @@ export function printingMotionUpdateByInputWithWrapAround(
         }
 
         if (printing1Input.ArrowDown) {   // 下
-            // ホーム・ポジションより上に居ればホームに近づける。
+            // 自機がホーム・ポジションより上に居れば、自機が下に寄るので、印字盤は動かない。
             if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
                 // pass
             } else {
