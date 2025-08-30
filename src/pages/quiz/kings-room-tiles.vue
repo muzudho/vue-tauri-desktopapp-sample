@@ -610,10 +610,9 @@ color = i % 2;
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-        printingImageAndPositionAndWaitUpdate,
     } from '../../composables/player-controller';
     import {
-        printingMotionClearIfCountZero, printingInputCreate, printingMotionCountDown, printingMotionCreate, printingMotionUpdateByInputWithWrapAround,
+        printingImageAndPositionAndWaitUpdate, printingMotionClearIfCountZero, printingInputCreate, printingMotionCountDown, printingMotionCreate, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';

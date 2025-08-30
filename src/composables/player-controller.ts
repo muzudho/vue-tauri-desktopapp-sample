@@ -9,7 +9,6 @@ import type { Ref } from 'vue';
 // ******************
 
 import { checkOutOfSightBottomIsLook, checkOutOfSightLeftIsLook, checkOutOfSightRightIsLook, checkOutOfSightTopIsLook } from './printing-controller';
-import type { PrintingMotion } from './printing-controller';
 import { commonSpriteMotionDown, commonSpriteMotionLeft, commonSpriteMotionRight, commonSpriteMotionUp } from './common';
 
 // ********************
@@ -291,59 +290,6 @@ export function playerMotionUpdateByInputWithWrapAround(
     }
 }
 
-
-/**
- * 向き・移動・ウェイトを処理
- * @param printing1MotionSpeed 移動速度（ピクセル単位）
- */
-export function printingImageAndPositionAndWaitUpdate(
-    printing1Left: Ref<number>,
-    printing1Top: Ref<number>,
-    printing1Motion: PrintingMotion,
-    printing1MotionSpeed: number,
-    printing1MotionWait: Ref<number>,
-    printing1MotionWalkingFrames: number,
-) : void {
-
-    // ++++++++++
-    // + 印字１ +
-    // ++++++++++
-
-    if (printing1Motion.goToHome) {
-            printing1Left.value = 0;
-            printing1Top.value = 0;
-    }
-
-    // 移動量（単位：ピクセル）を更新、ピクセル単位。通常あり得ないことだが、左右同時入力の場合左優先。上下同時入力の場合上優先：
-    if (printing1Motion.wrapAroundRight == commonSpriteMotionLeft) {  // 左
-        printing1Left.value -= printing1MotionSpeed;
-    } else if (printing1Motion.wrapAroundRight == commonSpriteMotionRight) {   // 右
-        printing1Left.value += printing1MotionSpeed;
-    }
-
-    if (printing1Motion.wrapAroundBottom == commonSpriteMotionUp) {  // 上
-        printing1Top.value -= printing1MotionSpeed;
-    } else if (printing1Motion.wrapAroundBottom == commonSpriteMotionDown) {   // 下
-        printing1Top.value += printing1MotionSpeed;
-    }
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + モーション・ウェイトが０以下のときだけ実行される処理 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    if (printing1MotionWait.value <= 0) {
-
-        // ................
-        // . ウェイト設定 .
-        // ................
-
-        // goToHome はウェイト無し
-
-        if (printing1Motion.wrapAroundRight != 0 || printing1Motion.wrapAroundBottom != 0) {
-            printing1MotionWait.value = printing1MotionWalkingFrames;
-        }
-    }
-}
 
 /**
  * 向き・移動・ウェイトを処理
