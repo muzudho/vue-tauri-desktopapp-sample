@@ -29,7 +29,8 @@
         <br/>
 
         <p>
-            <img src="../../../public/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png" alt="パペポ王"></img><br/>
+            <!-- ../../../public は省いて、publicフォルダー下からのパスにすること -->
+            <img src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png" alt="パペポ王"></img><br/>
             パペポ一世　「　謁見の間の床タイルを市松模様にしろと床大臣に命じたのだが、<br/>
             部屋によっては、<br/>
             市松模様になる部屋もあれば、ストライプになる部屋もあるんじゃ。<br/>
