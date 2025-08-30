@@ -256,13 +256,6 @@ export function playerMotionUpdateByInputWithWrapAround(
                 if (printingOutOfSightIsLock) {
                     // ここで進むと、下側に外側が見えるなら。
                     if (outsideIsVisibleOnBottom()) {
-                    // if (checkOutOfSightBottomIsLook(
-                    //     board1SquareHeight,
-                    //     board1WithMaskSizeSquare,
-                    //     board1RankNum,
-                    //     printing1RankNum,
-                    //     printing1Top
-                    // )) {
                         willShift = false;
                     }
                 }

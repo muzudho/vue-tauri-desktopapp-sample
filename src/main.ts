@@ -2,7 +2,7 @@ import { createApp } from "vue";
 import App from "./app.vue";
 
 import 'vuetify/styles'; // VuetifyのCSSをインポート
-import pluginsVuetify from '../plugins/vuetify'; // さっきのプラグインファイルをインポート
+import pluginsVuetify from './plugins/vuetify'; // さっきのプラグインファイルをインポート
 
 import router from './router';  // ルーター
 

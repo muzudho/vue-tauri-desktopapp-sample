@@ -61,9 +61,9 @@ export default createVuetify({
     components,
     directives,
     icons: {
-        defaultSet: 'mdi',  // <v-checkbox> の四角い部分を描画するのに必要
-        aliases,    // <v-checkbox> の四角い部分を描画するのに必要
-        sets: { mdi },  // <v-checkbox> の四角い部分を描画するのに必要
+        defaultSet: 'mdi',  // Tauri では、 <v-checkbox> の四角い部分を描画するのに必要
+        aliases,    // Tauri では、 <v-checkbox> の四角い部分を描画するのに必要
+        sets: { mdi },  // Tauri では、 <v-checkbox> の四角い部分を描画するのに必要
     },
     theme: {
         defaultTheme: 'myCustomLightTheme',
