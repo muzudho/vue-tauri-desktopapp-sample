@@ -13,6 +13,12 @@
 
 構築：  
 
-```
+```shell
 pnpm install
+```
+
+実行：  
+
+```shell
+pnpm tauri dev
 ```
