@@ -8,7 +8,6 @@ import type { Ref } from 'vue';
 // * コンポーザブル *
 // ******************
 
-import { checkOutOfSightBottomIsLook, checkOutOfSightLeftIsLook, checkOutOfSightRightIsLook, checkOutOfSightTopIsLook } from './printing-controller';
 import { commonSpriteMotionDown, commonSpriteMotionLeft, commonSpriteMotionRight, commonSpriteMotionUp } from './common';
 
 // ********************
@@ -137,10 +136,6 @@ export function playerMotionUpdateByInputWithWrapAround(
     board1FileNum: number,
     board1RankNum: number,
     board1WithMaskSizeSquare: number,
-    printing1FileNum: number,
-    printing1RankNum: number,
-    printing1Left: number,
-    printing1Top: number,
     playerHome1File: number,
     playerHome1Rank: number,
     player1Left: number,
@@ -149,6 +144,10 @@ export function playerMotionUpdateByInputWithWrapAround(
     player1Motion: Ref<PlayerMotion>,
     player1MotionWait: number,
     player1CanBoardEdgeWalking: boolean,
+    outsideIsVisibleOnLeft: ()=>boolean,    // ここで進むと、左側に外側が見える
+    outsideIsVisibleOnRight: ()=>boolean,   // ここで進むと、右側の画面外が見える
+    outsideIsVisibleOnTop: ()=>boolean, // ここで進むと、上側に外側が見えるなら。
+    outsideIsVisibleOnBottom: ()=>boolean,  // ここで進むと、下側に外側が見えるなら。
 ) : void {
 
     // ++++++++++++++++++++++++++++++++++++++++
@@ -171,17 +170,14 @@ export function playerMotionUpdateByInputWithWrapAround(
         if (player1Input.ArrowLeft) { // 左
             player1Motion.value.lookRight = commonSpriteMotionLeft;
 
+            // 自機がホーム・ポジションより右に居れば、自機を左に寄せる。
             if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
-                // ホーム・ポジションより右に居ればホームに近づける。
                 player1Motion.value.goToRight = commonSpriteMotionLeft;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    if (checkOutOfSightLeftIsLook(
-                        board1SquareWidth,
-                        board1WithMaskSizeSquare,
-                        printing1Left
-                    )) {
+                    // ここで進むと、左側に外側が見えるなら。
+                    if (outsideIsVisibleOnLeft()) {
                         willShift = false;
                     }
                 }
@@ -200,19 +196,14 @@ export function playerMotionUpdateByInputWithWrapAround(
         if (player1Input.ArrowRight) {  // 右
             player1Motion.value.lookRight = commonSpriteMotionRight;
 
-            // ホーム・ポジションより左に居ればホームに近づける。
+            // 自機がホーム・ポジションより左に居れば、自機を右に寄せる。
             if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
                 player1Motion.value.goToRight = commonSpriteMotionRight;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    if (checkOutOfSightRightIsLook(
-                        board1SquareWidth,
-                        board1WithMaskSizeSquare,
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1Left
-                    )) {
+                    // ここで進むと、右側の画面外が見えるなら。
+                    if (outsideIsVisibleOnRight()) {
                         willShift = false;
                     }
                 }
@@ -231,17 +222,14 @@ export function playerMotionUpdateByInputWithWrapAround(
         if (player1Input.ArrowUp) {    // 上
             player1Motion.value.lookBottom = commonSpriteMotionUp;
 
-            // ホーム・ポジションより下に居ればホームに近づける。
+            // 自機がホーム・ポジションより下に居れば、自機を上に寄せる。
             if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionUp;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    if (checkOutOfSightTopIsLook(
-                        board1SquareHeight,
-                        board1WithMaskSizeSquare,
-                        printing1Top
-                    )) {
+                    // ここで進むと、上側に外側が見えるなら。
+                    if (outsideIsVisibleOnTop()) {
                         willShift = false;
                     }
                 }
@@ -260,19 +248,21 @@ export function playerMotionUpdateByInputWithWrapAround(
         if (player1Input.ArrowDown) {   // 下
             player1Motion.value.lookBottom = commonSpriteMotionDown;
 
-            // ホーム・ポジションより上に居ればホームに近づける。
+            // 自機がホーム・ポジションより上に居れば、自機を下に寄せる。
             if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
                 player1Motion.value.goToBottom = commonSpriteMotionDown;
             } else {
                 let willShift: boolean = true;
                 if (printingOutOfSightIsLock) {
-                    if (checkOutOfSightBottomIsLook(
-                        board1SquareHeight,
-                        board1WithMaskSizeSquare,
-                        board1RankNum,
-                        printing1RankNum,
-                        printing1Top
-                    )) {
+                    // ここで進むと、下側に外側が見えるなら。
+                    if (outsideIsVisibleOnBottom()) {
+                    // if (checkOutOfSightBottomIsLook(
+                    //     board1SquareHeight,
+                    //     board1WithMaskSizeSquare,
+                    //     board1RankNum,
+                    //     printing1RankNum,
+                    //     printing1Top
+                    // )) {
                         willShift = false;
                     }
                 }

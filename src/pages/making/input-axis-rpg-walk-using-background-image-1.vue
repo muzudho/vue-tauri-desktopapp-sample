@@ -453,7 +453,7 @@
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import {
-        printingImageAndPositionAndWaitUpdate, printingMotionClearIfCountZero, printingInputCreate, printingMotionCountDown, printingMotionCreate, printingMotionUpdateByInputWithWrapAround,
+        checkOutOfSightBottomIsLook, checkOutOfSightLeftIsLook, checkOutOfSightRightIsLook, checkOutOfSightTopIsLook, printingImageAndPositionAndWaitUpdate, printingMotionClearIfCountZero, printingInputCreate, printingMotionCountDown, printingMotionCreate, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
@@ -537,8 +537,8 @@
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
-    // ※　盤およびその各タイルは、決まりきった位置でオーバーラッピングを繰り返すだけです。座標が大きく移動することはありません。
-
+    // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
+    const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
             width: `${(board1FileNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareWidth}px`,
@@ -811,10 +811,6 @@
                 board1FileNum.value,
                 board1RankNum.value,
                 outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
-                printing1FileNum.value,
-                printing1RankNum.value,
-                printing1Left.value,
-                printing1Top.value,
                 playerHome1File.value,
                 playerHome1Rank.value,
                 player1Left.value,
@@ -823,6 +819,10 @@
                 player1Motion,
                 player1MotionWait.value,
                 player1CanBoardEdgeWalking.value,
+                ()=>{ return checkOutOfSightLeftIsLook(board1SquareWidth, board1WithMaskSizeSquare.value, printing1Left.value); },  // ここで進むと、左側に外側が見えるなら。
+                ()=>{ return checkOutOfSightRightIsLook(board1SquareWidth, board1WithMaskSizeSquare.value, board1FileNum.value, printing1FileNum.value, printing1Left.value); },    // ここで進むと、右側に外側が見えるなら。
+                ()=>{ return checkOutOfSightTopIsLook(board1SquareHeight, board1WithMaskSizeSquare.value, printing1Top.value); },    // ここで進むと、上側に外側が見えるなら。
+                ()=>{ return checkOutOfSightBottomIsLook(board1SquareHeight, board1WithMaskSizeSquare.value, board1RankNum.value, printing1RankNum.value, printing1Top.value); },   // ここで進むと、下側に外側が見えるなら。
             );
 
             // ++++++++++++++++++++++++++++++
@@ -950,7 +950,7 @@
         position: absolute;
         image-rendering: pixelated;
     }
-    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、オーバーラッピングしてすり替わることがある。 */
+    span.board-slidable-tile-index {  /* マスの物自体に付いている番号。その場所は、ラップアラウンドしてすり替わることがある。 */
         position: absolute;
         width: 100%;
         text-align: center;
