@@ -10,25 +10,13 @@ import type { Ref } from 'vue';
 
 import { checkOutOfSightBottomIsLook, checkOutOfSightLeftIsLook, checkOutOfSightRightIsLook, checkOutOfSightTopIsLook } from './printing-controller';
 import type { PrintingMotion } from './printing-controller';
+import { commonSpriteMotionDown, commonSpriteMotionLeft, commonSpriteMotionRight, commonSpriteMotionUp } from './common';
 
 // ********************
 // * インターフェース *
 // ********************
 
 import type Rectangle from '../interfaces/Rectangle';
-
-
-// ##########
-// # コモン #
-// ##########
-//
-// よく使う設定をまとめたもの。特に不変のもの。
-//
-
-const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-const commonSpriteMotionUp = -1;
-const commonSpriteMotionRight = 1;
-const commonSpriteMotionDown = 1;
 
 
 // ################

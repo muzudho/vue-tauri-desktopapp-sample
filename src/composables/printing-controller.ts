@@ -4,18 +4,11 @@
 
 import type { Ref } from 'vue';
 
+// ******************
+// * コンポーザブル *
+// ******************
 
-// ##########
-// # コモン #
-// ##########
-//
-// よく使う設定をまとめたもの。特に不変のもの。
-//
-
-const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
-const commonSpriteMotionUp = -1;
-const commonSpriteMotionRight = 1;
-const commonSpriteMotionDown = 1;
+import { commonSpriteMotionDown, commonSpriteMotionLeft, commonSpriteMotionRight, commonSpriteMotionUp } from './common';
 
 
 // ################
