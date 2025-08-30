@@ -30,10 +30,10 @@ export function printingMotionCountDown(
  */
 export interface PrintingInput {
     " ": boolean,
-    // ArrowUp: boolean,
-    // ArrowRight: boolean,
-    // ArrowDown: boolean,
-    // ArrowLeft: boolean,
+    ArrowUp: boolean,
+    ArrowRight: boolean,
+    ArrowDown: boolean,
+    ArrowLeft: boolean,
 }
 
 /**

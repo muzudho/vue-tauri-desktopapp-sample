@@ -952,11 +952,13 @@ color = i % 2;
 
             if (isPlayerInputKey(e.key)) {  // 型ガード
                 player1Input[e.key] = true; // 型チェック済み（文字列→キー名）
+                printing1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e: KeyboardEvent) => {
             if (isPlayerInputKey(e.key)) {  // 型ガード
                 player1Input[e.key] = false;    // 型チェック済み（文字列→キー名）
+                printing1Input[e.key] = false;
             }
         });
 
@@ -1020,7 +1022,6 @@ color = i % 2;
                 playerHome1Rank.value,
                 player1Left.value,
                 player1Top.value,
-                player1Input,
             );
             playerMotionUpdateByInputWithWrapAround(
                 printing1OutOfSightIsLock.value,

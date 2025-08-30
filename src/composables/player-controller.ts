@@ -161,7 +161,6 @@ export function printingMotionUpdateByInputWithWrapAround(
     playerHome1Rank: number,
     player1Left: number,
     player1Top: number,
-    player1Input: PlayerInput,
 ) : void {
 
     // ++++++++++++++++++++++++++++++++++++++++
@@ -181,7 +180,7 @@ export function printingMotionUpdateByInputWithWrapAround(
 
         // 移動関連（単発）
         // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
-        if (player1Input.ArrowLeft) { // 左
+        if (printing1Input.ArrowLeft) { // 左
             if (getPlayer1File(player1Left, board1SquareWidth) > playerHome1File) {
                 // pass
             } else {
@@ -202,7 +201,7 @@ export function printingMotionUpdateByInputWithWrapAround(
             }
         }
 
-        if (player1Input.ArrowRight) {  // 右
+        if (printing1Input.ArrowRight) {  // 右
             // ホーム・ポジションより左に居ればホームに近づける。
             if (getPlayer1File(player1Left, board1SquareWidth) < playerHome1File) {
                 // pass
@@ -226,7 +225,7 @@ export function printingMotionUpdateByInputWithWrapAround(
             }
         }
 
-        if (player1Input.ArrowUp) {    // 上
+        if (printing1Input.ArrowUp) {    // 上
             // ホーム・ポジションより下に居ればホームに近づける。
             if (getPlayer1Rank(player1Top, board1SquareHeight) > playerHome1Rank) {
                 // pass
@@ -248,7 +247,7 @@ export function printingMotionUpdateByInputWithWrapAround(
             }
         }
 
-        if (player1Input.ArrowDown) {   // 下
+        if (printing1Input.ArrowDown) {   // 下
             // ホーム・ポジションより上に居ればホームに近づける。
             if (getPlayer1Rank(player1Top, board1SquareHeight) < playerHome1Rank) {
                 // pass
