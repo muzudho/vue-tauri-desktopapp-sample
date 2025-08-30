@@ -546,7 +546,7 @@
             </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
-                フーム……、筋の数が偶数のとき、ストライプになってしまう……<br/>
+                フーム……、床がストライプになっている……<br/>
                 <br/>
                 これはバグだぜ！」<br/>
             </v-col>
@@ -578,7 +578,7 @@
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
-                これじゃ」<br/>
+                👇これじゃ」<br/>
             </v-col>
         </v-row>
         <br/>
@@ -606,6 +606,20 @@ color = i % 2;
         <v-row>
             <v-col cols="2" class="talk-name-small">
                 <img
+                    src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                    alt="パペポ王"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                パペポ王
+            </v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
+            <v-col>
+                この呪文を、チョチョイと直してほしい！」<br/>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="2" class="talk-name-small">
+                <img
                     src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
                     alt="キフワラニャン"
                     :style="illustration1FaceStyle">
@@ -614,6 +628,8 @@ color = i % 2;
             </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
+                おー、お安い御用だぜ。<br/>
+                <br/>
                 どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
             </v-col>
         </v-row>
