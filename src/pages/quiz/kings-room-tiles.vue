@@ -52,10 +52,11 @@
         </img>
         <v-row>
             <v-col cols="2">勇者キフワラニャン</v-col>
+            <v-col cols="1">「</v-col>
             <v-col>
-                「　わたしは勇者キフワラニャン、<br/>
-                　　顔はコロコロ変わるかもしれないが、<br/>
-                　　気にしないでくれだぜ」<br/>
+                わたしは勇者キフワラニャン、<br/>
+                顔はコロコロ変わるかもしれないが、<br/>
+                気にしないでくれだぜ」<br/>
             </v-col>
         </v-row>
         <br/>
@@ -71,36 +72,31 @@
 
         <v-row>
             <v-col cols="2">パペポ一世</v-col>
+            <v-col cols="1">「</v-col>
             <v-col>
-                「　おお、よく来た勇者キフワラニャン！<br/>
-                　　<br/>
-                　　悩みというのは他の何物でもない、<br/>
-                　　床のことじゃ」<br/>
+                おお、よく来た勇者キフワラニャン！<br/>
+                <br/>
+                悩みというのは他の何物でもない、<br/>
+                床のことじゃ」<br/>
             </v-col>
         </v-row>
         <v-row>
             <v-col cols="2">キフワラニャン</v-col>
+            <v-col cols="1">「</v-col>
             <v-col>
-                「　床」<br/>
+                床」<br/>
             </v-col>
         </v-row>
         <v-row>
             <v-col cols="2">パペポ一世</v-col>
+            <v-col cols="1">「</v-col>
             <v-col>
-                「　我が城の床タイルを市松模様にしろと<br/>
-                　　リフォーム会社に命じたのだが、<br/>
-                    <br/>
-                　　部屋によっては、<br/>
-                　　市松模様になってる部屋もあれば、<br/>
-                　　ストライプになっている部屋もあるんじゃ。<br/>
-                　　なんでこんなことになるのかのう。<br/>
-                    <br/>
-                　　試しに、下の［問題設定を表示］ボタンをクリックして、<br/>
-                　　出てくるスライダーバーを動かして、<br/>
-                　　部屋のサイズを変えてみてくれ」<br/>
+                我が城の床タイルを市松模様にしろと<br/>
+                リフォーム会社に命じたのだが……」<br/>
             </v-col>
         </v-row>
         <br/>
+
         <!-- 印字１　＞　機能 -->
         <printing-making
             ref="printing1Ref"
@@ -301,7 +297,71 @@
                     v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
                 >何もしないボタン</v-btn><br/>
             </li>
+            <li>
+                <!-- お好み設定パネル１ -->
+                <v-btn
+                    class="code-key"
+                    @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
+                    @touchend="button1Ref?.release();"
+                    @touchcancel="button1Ref?.release();"
+                    @touchleave="button1Ref?.release();"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
+                    @mouseup="button1Ref?.release();"
+                    @mouseleave="button1Ref?.release();"
+                >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
+                <section v-if="preferences1IsShowing" class="sec-1">
+                    <br/>
+                    <v-slider
+                        label="ズーム"
+                        v-model="appZoom"
+                        :min="0.5"
+                        :max="4"
+                        step="0.5"
+                        showTicks="always"
+                        thumbLabel="always" />
+                    <br/>
+                </section>
+            </li>
         </ul>
+        <br/>
+
+        <v-row>
+            <v-col cols="2">パペポ一世</v-col>
+            <v-col cols="1">「</v-col>
+            <v-col>
+                ＰＣであればキーボード入力を、<br/>
+                スマホであれば👆上のボタンをタップすることで、<br/>
+                歩くことができるんじゃ。<br/>
+                <br/>
+                盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして
+                出てくる［ズーム］スライダーボックスを左右に動かして盤の大きさを調整してほしい。<br/>
+                <br/>
+                もしＰＣ版で例えばスライダーバーにフォーカスが残ってしまい、
+                左右キーを入力したら自機ではなくスライダーバーが動いてしまい腹が立ったときは
+                ［何もしないボタン］を押せ」<br/>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="2">キフワラニャン</v-col>
+            <v-col cols="1">「</v-col>
+            <v-col>
+                なってるなってる、市松模様になってる」<br/>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="2">パペポ一世</v-col>
+            <v-col cols="1">「</v-col>
+            <v-col>
+                部屋によっては、<br/>
+                市松模様になってる部屋もあれば、<br/>
+                ストライプになっている部屋もあるんじゃ。<br/>
+                なんでこんなことになるのかのう。<br/>
+                <br/>
+                試しに、下の［問題設定を表示］ボタンをクリックして、<br/>
+                出てくるスライダーバーを動かして、<br/>
+                部屋のサイズを変えてみてくれ」<br/>
+            </v-col>
+        </v-row>
         <br/>
 
         <!-- 問題設定パネル１ -->
@@ -332,30 +392,6 @@
                 :min="board1RankMin"
                 :max="board1RankMax"
                 step="1"
-                showTicks="always"
-                thumbLabel="always" />
-            <br/>
-        </section>
-
-        <!-- お好み設定パネル１ -->
-        <v-btn
-            class="code-key"
-            @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
-            @touchend="button1Ref?.release();"
-            @touchcancel="button1Ref?.release();"
-            @touchleave="button1Ref?.release();"
-            @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
-            @mouseup="button1Ref?.release();"
-            @mouseleave="button1Ref?.release();"
-        >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
-        <section v-if="preferences1IsShowing" class="sec-1">
-            <br/>
-            <v-slider
-                label="ズーム"
-                v-model="appZoom"
-                :min="0.5"
-                :max="4"
-                step="0.5"
                 showTicks="always"
                 thumbLabel="always" />
             <br/>
@@ -1170,11 +1206,13 @@ color = i % 2;
      */
     function onLeftButtonPressed() : void {
         player1Input.ArrowLeft = true;
+        printing1Input.ArrowLeft = true;
     }
 
 
     function onLeftButtonReleased() : void {
         player1Input.ArrowLeft = false;
+        printing1Input.ArrowLeft = false;
     }
 
 
@@ -1183,11 +1221,13 @@ color = i % 2;
      */
     function onUpButtonPressed() : void {
         player1Input.ArrowUp = true;
+        printing1Input.ArrowUp = true;
     }
 
 
     function onUpButtonReleased() : void {
         player1Input.ArrowUp = false;
+        printing1Input.ArrowUp = false;
     }
 
 
@@ -1196,11 +1236,13 @@ color = i % 2;
      */
     function onRightButtonPressed() : void {
         player1Input.ArrowRight = true;
+        printing1Input.ArrowRight = true;
     }
 
 
     function onRightButtonReleased() : void {
         player1Input.ArrowRight = false;
+        printing1Input.ArrowRight = false;
     }
 
 
@@ -1209,11 +1251,13 @@ color = i % 2;
      */
     function onDownButtonPressed() : void {
         player1Input.ArrowDown = true;
+        printing1Input.ArrowDown = true;
     }
 
 
     function onDownButtonReleased() : void {
         player1Input.ArrowDown = false;
+        printing1Input.ArrowDown = false;
     }
 
 
