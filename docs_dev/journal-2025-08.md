@@ -490,3 +490,20 @@ export default createVuetify({
 ### 画像生成
 
 📖 [Gemini 2.5 Flush Image](https://aistudio.google.com/prompts/new_chat?model=gemini-2.5-flash-image-preview)  
+
+
+### window
+
+以下のような window オブジェクトを使った処理は、（window はブラウザーのことだから）さくらのVPSのようなサーバーサイドではエラーになる。  
+onMounted() などを使う必要がある。 onMounted() はクライアント・サイドでしか呼ばれない。  
+
+```ts
+    // イベントハンドラーの定義
+    function onWindowResized(): void {
+        isMobileMaybe.value = window.innerWidth <= 768;   // ウィンドウの横幅が 768px以下ならスマホとみなします。
+        console.log(`onWindowResized: window.innerWidth=${window.innerWidth} isMobileMaybe.value=${isMobileMaybe.value}`);
+    }
+
+    // イベントハンドラーを追加
+    window.addEventListener('resize', onWindowResized);
+```
