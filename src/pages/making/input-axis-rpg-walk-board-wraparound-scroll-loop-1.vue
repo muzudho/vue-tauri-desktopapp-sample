@@ -341,7 +341,8 @@
     import {
         printingMotionCountDown,
     } from '../../composables/printing-controller'
-    import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
+    import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
+    import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
 
     // ********************
     // * インターフェース *

@@ -609,12 +609,13 @@ color = i % 2;
     import {
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-        printingInputCreate, printingMotionClearIfCountZero, printingMotionCreate, printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
+        printingMotionClearIfCountZero, printingImageAndPositionAndWaitUpdate, printingMotionUpdateByInputWithWrapAround,
     } from '../../composables/player-controller';
     import {
-        printingMotionCountDown,
+        printingInputCreate, printingMotionCountDown, printingMotionCreate,
     } from '../../composables/printing-controller'
-    import type { PrintingInput, PrintingMotion, PlayerInput, PlayerMotion } from '../../composables/player-controller';
+    import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
+    import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
 
     // ********************
     // * インターフェース *
