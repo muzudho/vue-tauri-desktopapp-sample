@@ -5,6 +5,19 @@
 import type { Ref } from 'vue';
 
 
+// ##########
+// # コモン #
+// ##########
+//
+// よく使う設定をまとめたもの。特に不変のもの。
+//
+
+const commonSpriteMotionLeft = -1;  // モーション（motion）定数。左。
+const commonSpriteMotionUp = -1;
+const commonSpriteMotionRight = 1;
+const commonSpriteMotionDown = 1;
+
+
 // ################
 // # オブジェクト #
 // ################
@@ -293,4 +306,146 @@ export function checkOutOfSightBottomIsLook(
     const m = ch + pd - bh;
     //console.log(`[m=${m}] = [ch=${ch}] + [pd=${pd}] - [bh=${bh}].  m <= -board1WithMaskHeight:${m <= -board1WithMaskSizeSquare}`);
     return m < -board1WithMaskSizeSquare;
+}
+
+
+/**
+ * キー入力を、モーションに変換します。
+ * 
+ * ［ラップ・アラウンド］するタイプです。十字キー入力とは逆方向に盤を動かします。ラップ・アラウンドしたタイルの印字は差し変わります。
+ * 
+ * 十字方向の入力をした場合、player1Motion の ["lookRight"], ["lookBottom"] （自機の向き）を更新。
+ * また、自機の移動を伴うケースでは、十字方向の入力をした場合、player1Motion の ["goToRight"], ["goToBottom"] （自機の位置）を更新。
+ * 
+ * 通常、自機は移動せず、 printing1Motion の ["wrapAroundRight"], ["wrapAroundBottom"] （印字表）を更新。
+ */
+export function printingMotionUpdateByInputWithWrapAround(
+    printingOutOfSightIsLock: boolean,
+    board1SquareWidth: number,
+    board1SquareHeight: number,
+    board1FileNum: number,
+    board1RankNum: number,
+    board1WithMaskSizeSquare: number,
+    printing1FileNum: number,
+    printing1RankNum: number,
+    printing1Left: number,
+    printing1Top: number,
+    printing1Input: PrintingInput,
+    printing1Motion: Ref<PrintingMotion>,
+    printing1MotionWait: number,
+    playerIsToRightOfHome: ()=>boolean,  // 自機がホーム・ポジションより右に居る
+    playerIsToLeftOfHome: ()=>boolean,  // 自機がホーム・ポジションより左に居る
+    playerIsToBottomOfHome: ()=>boolean,    // 自機がホーム・ポジションより下に居る
+    playerIsToTopOfHome: ()=>boolean,   // 自機がホーム・ポジションより上に居る
+) : void {
+
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + ウェイトが無ければ、入力を受け付ける +
+    // ++++++++++++++++++++++++++++++++++++++++
+
+    // ----------------------------------------------------
+    // - ウェイトが無ければ、入力を受け付ける　＞　印字１ -
+    // ----------------------------------------------------
+    
+    if (printing1MotionWait <= 0) {
+
+        // 位置のリセット
+        if (printing1Input[" "]) {
+            printing1Motion.value.goToHome = true;
+        }
+
+        // 移動関連（単発）
+        // 斜め方向の場合、左右を上下で上書きする。（左、右）→（上、下）の順。
+        if (printing1Input.ArrowLeft) { // 左
+            // 自機がホーム・ポジションより右に居れば、自機が左に寄るので、印字盤は動かない。
+            if (playerIsToRightOfHome()) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    if (checkOutOfSightLeftIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        printing1Left
+                    )) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundRight = commonSpriteMotionRight;   // 印字は、キー入力とは逆向きへ進める
+                }
+            }
+        }
+
+        if (printing1Input.ArrowRight) {  // 右
+            // 自機がホーム・ポジションより左に居れば、自機が右に寄るので、印字盤は動かない。
+            if (playerIsToLeftOfHome()) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    if (checkOutOfSightRightIsLook(
+                        board1SquareWidth,
+                        board1WithMaskSizeSquare,
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1Left
+                    )) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundRight = commonSpriteMotionLeft;    // 印字は、キー入力とは逆向きへ進める
+                }
+            }
+        }
+
+        if (printing1Input.ArrowUp) {    // 上
+            // 自機がホーム・ポジションより下に居れば、自機が上に寄るので、印字盤は動かない。
+            if (playerIsToBottomOfHome()) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    if (checkOutOfSightTopIsLook(
+                        board1SquareHeight,
+                        board1WithMaskSizeSquare,
+                        printing1Top
+                    )) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionDown;     // 印字は、キー入力とは逆向きへ進める
+                }
+            }
+        }
+
+        if (printing1Input.ArrowDown) {   // 下
+            // 自機がホーム・ポジションより上に居れば、自機が下に寄るので、印字盤は動かない。
+            if (playerIsToTopOfHome()) {
+                // pass
+            } else {
+                let willShift: boolean = true;
+                if (printingOutOfSightIsLock) {
+                    if (checkOutOfSightBottomIsLook(
+                        board1SquareHeight,
+                        board1WithMaskSizeSquare,
+                        board1RankNum,
+                        printing1RankNum,
+                        printing1Top
+                    )) {
+                        willShift = false;
+                    }
+                }
+
+                if (willShift) {
+                    printing1Motion.value.wrapAroundBottom = commonSpriteMotionUp;    // 印字は、キー入力とは逆向きへ進める
+                }
+            }
+        }
+    }
 }
