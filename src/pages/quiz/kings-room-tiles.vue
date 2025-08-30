@@ -38,7 +38,7 @@
         <p>
             ここはパペポ王国。<br/>
             王様はある悩みを持っていました。<br/>
-            勇者　キフワラニャン　は呼び出された。<br/>
+            勇者　キフワラニャン　は呼び出されました。<br/>
         </p>
         <br/>
 
@@ -51,11 +51,12 @@
             :style="illustration1Style">
         </img>
         <v-row>
-            <v-col cols="2">勇者キフワラニャン</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">勇者キフワラニャン</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 わたしは勇者キフワラニャン、<br/>
-                顔はコロコロ変わるかもしれないが、<br/>
+                <br/>
+                顔や背景がコロコロ変わるかもしれないが、<br/>
                 気にしないでくれだぜ」<br/>
             </v-col>
         </v-row>
@@ -71,8 +72,8 @@
         <br/>
 
         <v-row>
-            <v-col cols="2">パペポ一世</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 おお、よく来た勇者キフワラニャン！<br/>
                 <br/>
@@ -81,15 +82,15 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2">キフワラニャン</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 床」<br/>
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2">パペポ一世</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 我が城の床タイルを市松模様にしろと<br/>
                 リフォーム会社に命じたのだが……」<br/>
@@ -326,8 +327,8 @@
         <br/>
 
         <v-row>
-            <v-col cols="2">パペポ一世</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 ＰＣであればキーボード入力を、<br/>
                 スマホであれば👆上のボタンをタップすることで、<br/>
@@ -342,15 +343,17 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2">キフワラニャン</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
-                なってるなってる、市松模様になってる」<br/>
+                おおー、説明的なセリフありがとうございますだぜ。<br/>
+                <br/>
+                なってるなってる、王よ、床、市松模様になってる」<br/>
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2">パペポ一世</v-col>
-            <v-col cols="1">「</v-col>
+            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 部屋によっては、<br/>
                 市松模様になってる部屋もあれば、<br/>
@@ -486,22 +489,32 @@
         <br/>
         <br/>
 
-        <p>
-            キフワラニャン　「フーム……、筋の数が偶数のとき、ストライプになってしまう……<br/>
-            これはバグだぜ！」<br/>
-            <!--
-            <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
-            </section>
-            <section v-if="choices1Num==1 || choices1Num==2">
-                キフワラニャン　「おお……、市松模様になっているような……」<br/>
-            </section>
-            -->
-        </p>
-        <br/>
-
-        <p>
-            パペポ王　「床のタイルの色を決めているプログラムの疑似コードは以下の通りじゃ」<br/>
-        </p>
+        <v-row>
+            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
+            <v-col>
+                フーム……、筋の数が偶数のとき、ストライプになってしまう……<br/>
+                <br/>
+                これはバグだぜ！」<br/>
+            </v-col>
+        </v-row>
+        <!--
+            <p>
+                <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
+                </section>
+                <section v-if="choices1Num==1 || choices1Num==2">
+                    キフワラニャン　「おお……、市松模様になっているような……」<br/>
+                </section>
+            </p>
+            <br/>
+        -->
+        <v-row>
+            <v-col cols="2" class="talk-name">パペポ王</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
+            <v-col>
+                床のタイルの色を決めているプログラムの疑似コードは以下の通りじゃ」<br/>
+            </v-col>
+        </v-row>
         <br/>
 
         <pre>
@@ -519,9 +532,13 @@ color = i % 2;
         </pre>
         <br/>
 
-        <p>
-            キフワラニャン　「どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
-        </p>
+        <v-row>
+            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
+            <v-col>
+                どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
+            </v-col>
+        </v-row>
         <br/>
 
         <p>
@@ -602,10 +619,14 @@ color = i % 2;
         </p>
         <br/>
 
-        <p>
-            キフワラニャン　「👆上の選択肢を選んだら、ゲーム画面を確認して、これで合ってると思ったら、<br/>
-            👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
-        </p>
+        <v-row>
+            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
+            <v-col>
+                👆上の選択肢を選んだら、ゲーム画面を確認して、これで合ってると思ったら、<br/>
+                👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
+            </v-col>
+        </v-row>
         <br/>
 
         <v-btn
@@ -628,14 +649,28 @@ color = i % 2;
                 <br/>
                 <span class="font-x2">😄</span>正解<br/>
                 <br/>
-                パペポ王　「おお、さすがキフワラニャン　床が市松模様になったわい」<br/>
+
+                <v-row>
+                    <v-col cols="2" class="talk-name">パペポ王</v-col>
+                    <v-col cols="1" class="talk-quot">「</v-col>
+                    <v-col>
+                        おお、さすがキフワラニャン　床が市松模様になったわい」<br/>
+                    </v-col>
+                </v-row>
                 <br/>
             </section>
             <section v-if="choices1Num==3 || choices1Num==4">
                 <br/>
                 <span class="font-x2">😭</span>間違い<br/>
                 <br/>
-                パペポ王　「ストライプになってしまったのう」<br/>
+
+                <v-row>
+                    <v-col cols="2" class="talk-name">パペポ王</v-col>
+                    <v-col cols="1" class="talk-quot">「</v-col>
+                    <v-col>
+                        ストライプになってしまったのう」<br/>
+                    </v-col>
+                </v-row>
                 <br/>
             </section>
         </section>
@@ -1360,5 +1395,15 @@ color = i % 2;
         position: absolute;
         image-rendering: pixelated;
         z-index: 20;
+    }
+    div.talk-name { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+    }
+    div.talk-quot { /* 鍵かっこ */
+        max-width: 16px;
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
     }
 </style>
