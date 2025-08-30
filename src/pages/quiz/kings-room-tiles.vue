@@ -62,8 +62,7 @@
         </v-row>
         <br/>
 
-        <!-- パペポ王１
-        -->
+        <!-- パペポ王１ -->
         <img
             src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png"
             alt="パペポ王"
@@ -327,7 +326,14 @@
         <br/>
 
         <v-row>
-            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                    alt="パペポ王"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                パペポ王
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 ＰＣであればキーボード入力を、<br/>
@@ -343,7 +349,14 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                    alt="キフワラニャン"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                キフワラニャン
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 おおー、説明的なセリフありがとうございますだぜ。<br/>
@@ -352,19 +365,22 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="2" class="talk-name">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                    alt="パペポ王"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                パペポ一世
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
-                部屋によっては、<br/>
-                市松模様になってる部屋もあれば、<br/>
-                ストライプになっている部屋もあるんじゃ。<br/>
-                なんでこんなことになるのかのう。<br/>
-                <br/>
-                試しに、下の［問題設定を表示］ボタンをクリックして、<br/>
-                出てくるスライダーバーを動かして、<br/>
-                部屋のサイズを変えてみてくれ」<br/>
+                では、👇下の［⚙問題設定を表示］ボタンをクリックして、<br/>
+                出てくる［盤の筋の全数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
+                もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……」<br/>
             </v-col>
         </v-row>
+        <br/>
         <br/>
 
         <!-- 問題設定パネル１ -->
@@ -399,6 +415,7 @@
                 thumbLabel="always" />
             <br/>
         </section>
+        <br/>
 
         <!-- デバッグ情報パネル１ -->
         <!--
@@ -490,7 +507,29 @@
         <br/>
 
         <v-row>
-            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="2" class="talk-name">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                    alt="パペポ王"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                パペポ一世
+            </v-col>
+            <v-col cols="1" class="talk-quot">「</v-col>
+            <v-col>
+                そして一度画面を👆上にスクロールし、先ほどの床を見てから<br/>
+                ここに戻ってきてほしい」<br/>
+            </v-col>
+        </v-row>
+        <v-row>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                    alt="キフワラニャン"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                キフワラニャン
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 フーム……、筋の数が偶数のとき、ストライプになってしまう……<br/>
@@ -508,28 +547,46 @@
             </p>
             <br/>
         -->
+        <img
+            src="/img/quiz/by-grok/202508__grok__30-2023-spellScroll-o1o0.png"
+            alt="床のタイルの色を決める呪文"
+            :style="illustration1Style">
+        </img>
         <v-row>
-            <v-col cols="2" class="talk-name">パペポ王</v-col>
+            <v-col cols="2" class="talk-name">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                    alt="パペポ王"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                パペポ一世
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
-                床のタイルの色を決めているプログラムの疑似コードは以下の通りじゃ」<br/>
+                リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
+                これじゃ」<br/>
             </v-col>
         </v-row>
         <br/>
 
-        <pre>
-// i: タイル番号。左上から右に向かって 0, 1, 2 ...
-
+        <pre
+            class="coding-example">
+// i はタイル番号。左上から右に向かって 0, 1, 2 ... 右端から１段下の左端に続く。
+//
 // そして、
-// color = 0: 白い床
-// color = 1: 赤い床
+// color が 0 なら白い床、
+// color が 1 なら赤い床
 // とするとき、
-
+//
 // 以下の計算式でタイルの色を決める。
+//
 // = 記号は、この記号の右側の計算結果を、左側へ入れる。
 // % 記号は、この記号の左側の数を、右側の数で割った余りを求める。 例） 3 % 2 なら 1。
+//
+
 color = i % 2;
         </pre>
+        <br/>
         <br/>
 
         <v-row>
@@ -1080,6 +1137,17 @@ color = i % 2;
             width: `384px`,
         };
     });
+    const illustration1FaceStyle = computed<CompatibleStyleValue>(()=>{  /* 画像の下に付けるキャプション用 */
+        if (compatibleRuntimeEnvironment1Ref?.value?.isMobileMaybe) {
+            return {
+                width: `80px`,
+            };
+        }
+
+        return {
+            width: `96px`,
+        };
+    });
 
     // ++++++++++++++++++++++++++++++
     // + オブジェクト　＞　選択肢１ +
@@ -1399,11 +1467,27 @@ color = i % 2;
     div.talk-name { /* 名前 */
         padding-left: 0;
         padding-right: 0;
+        text-align: right;
+    }
+    div.talk-name-small { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
+        font-size: small;
     }
     div.talk-quot { /* 鍵かっこ */
         max-width: 16px;
         padding-left: 0;
         padding-right: 0;
         text-align: right;
+    }
+    pre.coding-example {    /* ソースコード例 */
+        display: inline-block;
+        border: dashed 4px gray;
+        color: #303030;
+        background-color: #f0f0f0;
+        padding-left: 24px;
+        padding-top: 16px;
+        padding-right: 24px;
     }
 </style>
