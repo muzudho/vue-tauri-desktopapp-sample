@@ -81,14 +81,28 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                    alt="キフワラニャン"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                キフワラニャン
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 床」<br/>
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2" class="talk-name">パペポ一世</v-col>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                    alt="パペポ王"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                パペポ王
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 我が城の床タイルを市松模様にしろと<br/>
@@ -365,13 +379,13 @@
             </v-col>
         </v-row>
         <v-row>
-            <v-col cols="2" class="talk-name">
+            <v-col cols="2" class="talk-name-small">
                 <img
                     src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
                     alt="パペポ王"
                     :style="illustration1FaceStyle">
                 </img><br/>
-                パペポ一世
+                パペポ王
             </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
@@ -507,13 +521,13 @@
         <br/>
 
         <v-row>
-            <v-col cols="2" class="talk-name">
+            <v-col cols="2" class="talk-name-small">
                 <img
                     src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
                     alt="パペポ王"
                     :style="illustration1FaceStyle">
                 </img><br/>
-                パペポ一世
+                パペポ王
             </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
@@ -553,13 +567,13 @@
             :style="illustration1Style">
         </img>
         <v-row>
-            <v-col cols="2" class="talk-name">
+            <v-col cols="2" class="talk-name-small">
                 <img
                     src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
                     alt="パペポ王"
                     :style="illustration1FaceStyle">
                 </img><br/>
-                パペポ一世
+                パペポ王
             </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
@@ -590,7 +604,14 @@ color = i % 2;
         <br/>
 
         <v-row>
-            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                    alt="キフワラニャン"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                キフワラニャン
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
                 どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
@@ -675,12 +696,21 @@ color = i % 2;
             >未選択にする</v-btn>
         </p>
         <br/>
+        <br/>
 
         <v-row>
-            <v-col cols="2" class="talk-name">キフワラニャン</v-col>
+            <v-col cols="2" class="talk-name-small">
+                <img
+                    src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                    alt="キフワラニャン"
+                    :style="illustration1FaceStyle">
+                </img><br/>
+                キフワラニャン
+            </v-col>
             <v-col cols="1" class="talk-quot">「</v-col>
             <v-col>
-                👆上の選択肢を選んだら、ゲーム画面を確認して、これで合ってると思ったら、<br/>
+                上の選択肢を選んだら、<br/>
+                画面を👆上にスクロールしてさっきの床を確認して、これで合ってると思ったら、<br/>
                 👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
             </v-col>
         </v-row>
@@ -708,10 +738,31 @@ color = i % 2;
                 <br/>
 
                 <v-row>
-                    <v-col cols="2" class="talk-name">パペポ王</v-col>
+                    <v-col cols="2" class="talk-name-small">
+                        <img
+                            src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                            alt="パペポ王"
+                            :style="illustration1FaceStyle">
+                        </img><br/>
+                        パペポ王
+                    </v-col>
                     <v-col cols="1" class="talk-quot">「</v-col>
                     <v-col>
                         おお、さすがキフワラニャン　床が市松模様になったわい」<br/>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="2" class="talk-name-small">
+                        <img
+                            src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                            alt="キフワラニャン"
+                            :style="illustration1FaceStyle">
+                        </img><br/>
+                        キフワラニャン
+                    </v-col>
+                    <v-col cols="1" class="talk-quot">「</v-col>
+                    <v-col>
+                        やったぜ！」<br/>
                     </v-col>
                 </v-row>
                 <br/>
@@ -722,10 +773,31 @@ color = i % 2;
                 <br/>
 
                 <v-row>
-                    <v-col cols="2" class="talk-name">パペポ王</v-col>
+                    <v-col cols="2" class="talk-name-small">
+                        <img
+                            src="/img/quiz/by-grok/202508__grok__30-0826-kingFace-o3o0.png"
+                            alt="パペポ王"
+                            :style="illustration1FaceStyle">
+                        </img><br/>
+                        パペポ王
+                    </v-col>
                     <v-col cols="1" class="talk-quot">「</v-col>
                     <v-col>
-                        ストライプになってしまったのう」<br/>
+                        全ての部屋の床がストライプになってしまったのう」<br/>
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col cols="2" class="talk-name-small">
+                        <img
+                            src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyanFace-o3o0.png"
+                            alt="キフワラニャン"
+                            :style="illustration1FaceStyle">
+                        </img><br/>
+                        キフワラニャン
+                    </v-col>
+                    <v-col cols="1" class="talk-quot">「</v-col>
+                    <v-col>
+                        なんということだぜ……」<br/>
                     </v-col>
                 </v-row>
                 <br/>
