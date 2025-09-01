@@ -5,9 +5,6 @@
 <template>
     <the-header/>
 
-    <!-- 実行環境互換 -->
-    <compatible-runtime-environment ref="compatibleRuntimeEnvironment1Ref"/>
-
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
@@ -79,21 +76,23 @@
                 床のことじゃ」<br/>
             </v-col>
         </v-row>
-        <talker
+
+        <talker-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :isMobileMaybeOption="isMobileMaybeOption">
-            床」<br/>
-        </talker>
-        <talker
+            :device="compatibleDevice1Ref?.device">
+            床。<br/>
+        </talker-balloon>
+
+        <talker-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             我が城の床タイルを市松模様にしろと<br/>
-            リフォーム会社に命じたのだが……」<br/>
-        </talker>
+            リフォーム会社に命じたのだが……<br/>
+        </talker-balloon>
         <br/>
 
         <!-- 印字１　＞　機能 -->
@@ -324,40 +323,51 @@
         </ul>
         <br/>
 
-        <talker
+        <talker-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             ＰＣであればキーボード入力を、<br/>
             スマホであれば👆上のボタンをタップすることで、<br/>
             自機を歩かせることができるんじゃ。<br/>
-            <br/>
-            盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして
-            出てくる［ズーム］スライダーボックスを左右に動かして盤の大きさを調整してほしい。<br/>
-            <br/>
-            もしＰＣ版で例えばスライダーバーにフォーカスが残ってしまい、
-            左右キーを入力したら自機ではなくスライダーバーが動いてしまい腹が立ったときは
-            ［何もしないボタン］を押せ」<br/>
-        </talker>
-        <talker
-            :src="commonKifuwaranyanSrc"
-            :alt="commonKifuwaranyanAlt"
-            :name="commonKifuwaranyanName"
-            :isMobileMaybeOption="isMobileMaybeOption">
-            おおー、説明的なセリフありがとうございますだぜ。<br/>
-            <br/>
-            なってるなってる、王よ、床、市松模様になってる」<br/>
-        </talker>
-        <talker
+        </talker-balloon>
+        <talker-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
+            盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして<br/>
+            出てくる［ズーム］スライダーボックスを左右に動かして<br/>
+            盤の大きさを調整してほしい。<br/>
+        </talker-balloon>
+        <talker-balloon
+            :src="commonPapepoKingSrc"
+            :alt="commonPapepoKingAlt"
+            :name="commonPapepoKingName"
+            :device="compatibleDevice1Ref?.device">
+            もしＰＣ版で例えばスライダーバーにフォーカスが残ってしまい、<br/>
+            左右キーを入力したら自機ではなくスライダーバーが動いてしまい腹が立ったときは<br/>
+            ［何もしないボタン］を押せ。<br/>
+        </talker-balloon>
+        <talker-balloon
+            :src="commonKifuwaranyanSrc"
+            :alt="commonKifuwaranyanAlt"
+            :name="commonKifuwaranyanName"
+            :device="compatibleDevice1Ref?.device">
+            おおー、説明的なセリフありがとうございますだぜ。<br/>
+            <br/>
+            なってるなってる、王よ、床、市松模様になってる。<br/>
+        </talker-balloon>
+        <talker-balloon
+            :src="commonPapepoKingSrc"
+            :alt="commonPapepoKingAlt"
+            :name="commonPapepoKingName"
+            :device="compatibleDevice1Ref?.device">
             では、👇下の［⚙問題設定を表示］ボタンをクリックして、<br/>
             出てくる［盤の筋の全数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
-            もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……」<br/>
-        </talker>
+            もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……<br/>
+        </talker-balloon>
         <br/>
         <br/>
 
@@ -484,23 +494,23 @@
         <br/>
         <br/>
 
-        <talker
+        <talker-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             そして一度画面を👆上にスクロールし、先ほどの床を見てから<br/>
-            ここに戻ってきてほしい」<br/>
-        </talker>
-        <talker
+            ここに戻ってきてほしい。<br/>
+        </talker-balloon>
+        <talker-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             フーム……、床がストライプになっている……<br/>
             <br/>
-            これはバグだぜ！」<br/>
-        </talker>
+            これはバグだぜ！<br/>
+        </talker-balloon>
         <!--
             <p>
                 <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
@@ -516,14 +526,14 @@
             alt="床のタイルの色を決める呪文"
             :style="illustration1Style">
         </img>
-        <talker
+        <talker-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
             👇これじゃ」<br/>
-        </talker>
+        </talker-balloon>
         <br/>
 
         <pre
@@ -546,22 +556,22 @@ color = i % 2;
         <br/>
         <br/>
 
-        <talker
+        <talker-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             この呪文を、チョチョイと直してほしい！」<br/>
-        </talker>
-        <talker
+        </talker-balloon>
+        <talker-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             おー、お安い御用だぜ。<br/>
             <br/>
             どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
-        </talker>
+        </talker-balloon>
         <br/>
 
         <p>
@@ -649,15 +659,15 @@ color = i % 2;
         <br/>
         <br/>
 
-        <talker
+        <talker-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :isMobileMaybeOption="isMobileMaybeOption">
+            :device="compatibleDevice1Ref?.device">
             上の選択肢を選んだら、<br/>
             画面を👆上にスクロールしてさっきの床を確認して、これで合ってると思ったら、<br/>
             👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
-        </talker>
+        </talker-balloon>
         <br/>
 
         <v-btn
@@ -681,20 +691,20 @@ color = i % 2;
                 <span class="font-x2">😄</span>正解<br/>
                 <br/>
 
-                <talker
+                <talker-balloon
                     :src="commonPapepoKingSrc"
                     :alt="commonPapepoKingAlt"
                     :name="commonPapepoKingName"
-                    :isMobileMaybeOption="isMobileMaybeOption">
-                    おお、さすがキフワラニャン　床が市松模様になったわい」<br/>
-                </talker>
-                <talker
+                    :device="compatibleDevice1Ref?.device">
+                    おお、さすがキフワラニャン　床が市松模様になったわい。<br/>
+                </talker-balloon>
+                <talker-balloon
                     :src="commonKifuwaranyanSrc"
                     :alt="commonKifuwaranyanAlt"
                     :name="commonKifuwaranyanName"
-                    :isMobileMaybeOption="isMobileMaybeOption">
-                    やったぜ！」<br/>
-                </talker>
+                    :device="compatibleDevice1Ref?.device">
+                    やったぜ！<br/>
+                </talker-balloon>
                 <br/>
             </section>
             <section v-if="choices1Num==3 || choices1Num==4">
@@ -702,20 +712,20 @@ color = i % 2;
                 <span class="font-x2">😭</span>間違い<br/>
                 <br/>
 
-                <talker
+                <talker-balloon
                     :src="commonPapepoKingSrc"
                     :alt="commonPapepoKingAlt"
                     :name="commonPapepoKingName"
-                    :isMobileMaybeOption="isMobileMaybeOption">
-                    全ての部屋の床がストライプになってしまったのう」<br/>
-                </talker>
-                <talker
+                    :device="compatibleDevice1Ref?.device">
+                    全ての部屋の床がストライプになってしまったのう。<br/>
+                </talker-balloon>
+                <talker-balloon
                     :src="commonKifuwaranyanSrc"
                     :alt="commonKifuwaranyanAlt"
                     :name="commonKifuwaranyanName"
-                    :isMobileMaybeOption="isMobileMaybeOption">
-                    なんということだぜ……」<br/>
-                </talker>
+                    :device="compatibleDevice1Ref?.device">
+                    なんということだぜ……。<br/>
+                </talker-balloon>
                 <br/>
             </section>
         </section>
@@ -764,6 +774,7 @@ color = i % 2;
     import PrintingMaking from '../../components/PrintingMaking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
+    import TalkerBalloon from '../../components/TalkerBalloon.vue';
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
     import TheFooter from './the-footer.vue';
@@ -773,13 +784,7 @@ color = i % 2;
     // + コンポーネント　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++++++
 
-    import CompatibleRuntimeEnvironment from '../../components/CompatibleRuntimeEnvironment.vue';
-
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
-
-    import Talker from './Talker.vue';
+    import CompatibleDevice from '../../components/CompatibleDevice.vue'
 
     // ++++++++++++++++++
     // + コンポーザブル +
@@ -833,16 +838,11 @@ color = i % 2;
     // # オブジェクト #
     // ################
 
-    // ++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　実行環境 +
-    // ++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　装置の互換性 +
+    // ++++++++++++++++++++++++++++++++++
 
-    const compatibleRuntimeEnvironment1Ref = ref<InstanceType<typeof CompatibleRuntimeEnvironment> | null>(null);
-    const isMobileMaybeOption = computed<
-        boolean | null
-    >(()=>{
-        return compatibleRuntimeEnvironment1Ref.value?.isMobileMaybe ?? null;
-    });
+    const compatibleDevice1Ref = ref<InstanceType<typeof CompatibleDevice> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ボタン機能拡張 +
@@ -1135,7 +1135,7 @@ color = i % 2;
     // ++++++++++++++++++++++++++++++
 
     const illustration1Style = computed<CompatibleStyleValue>(()=>{ /* 挿絵 */
-        if (compatibleRuntimeEnvironment1Ref?.value?.isMobileMaybe) {
+        if (compatibleDevice1Ref.value?.device == 'Mobile') {
             return {
                 width: `256px`,
             };
@@ -1146,7 +1146,7 @@ color = i % 2;
         };
     });
     const illustration1CaptionStyle = computed<CompatibleStyleValue>(()=>{  /* 画像の下に付けるキャプション用 */
-        if (compatibleRuntimeEnvironment1Ref?.value?.isMobileMaybe) {
+        if (compatibleDevice1Ref.value?.device == 'Mobile') {
             return {
                 width: `256px`,
             };
@@ -1154,17 +1154,6 @@ color = i % 2;
 
         return {
             width: `384px`,
-        };
-    });
-    const illustration1FaceStyle = computed<CompatibleStyleValue>(()=>{  /* 画像の下に付けるキャプション用 */
-        if (compatibleRuntimeEnvironment1Ref?.value?.isMobileMaybe) {
-            return {
-                width: `80px`,
-            };
-        }
-
-        return {
-            width: `96px`,
         };
     });
 
@@ -1426,7 +1415,7 @@ color = i % 2;
 
 <style scoped>
 
-    @import './talk-scene.css';
+    @import '../../styles/talk-scene.css';
 
     /* 
      * マスクの暗さを濃くします。

@@ -38,7 +38,9 @@
 </template>
 
 <style>
+    @import '@/styles/talk-scene.css';
+    @import '@/styles/warabenture.css';
 
-    @import './styles/warabenture.css';
+   /* @import './styles/warabenture.css'; */
 
 </style>
