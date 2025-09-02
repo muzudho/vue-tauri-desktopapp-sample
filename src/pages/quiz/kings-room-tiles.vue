@@ -22,15 +22,11 @@
             v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
-        <img
+        <!-- 挿絵 -->
+        <talk-illustration
             src="/img/quiz/by-grok/202508__grok__30-1751-papepoKingdom-o2o0.png"
             alt="パペポ王国"
-            :style="illustration1Style">
-        </img>
-        <p
-            :style="illustration1CaptionStyle"
-            style="font-size: small; color: gray; text-align: right;">グラフィッカー：　Grok</p>
-        <br/>
+            caption="グラフィッカー：　Grok" />
 
         <p>
             ここはパペポ王国。<br/>
@@ -39,12 +35,11 @@
         </p>
         <br/>
 
-        <img
+        <talk-illustration
             src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyan-o2o0.png"
-            alt="勇者キフワラニャン"
-            :style="illustration1Style">
-        </img>
-        <talker-novel
+            alt="勇者キフワラニャン" />
+        
+        <talk-novel
             name="キフワラニャン"
             :device="compatibleDevice1Ref?.device">
             わたしは勇者キフワラニャン、<br/>
@@ -53,48 +48,46 @@
             <br/>
             顔や背景がコロコロ変わるかもしれないが、<br/>
             気にしないでくれだぜ
-        </talker-novel>
+        </talk-novel>
         <br/>
 
         <!-- パペポ王１ -->
-        <img
+        <talk-illustration
             src="/img/quiz/by-grok/202508__grok__30-0826-king-o2o1o0.png"
-            alt="パペポ王"
-            :style="illustration1Style">
-        </img>
-        <talker-novel
+            alt="パペポ王" />
+
+        <talk-novel
             name="パペポ一世"
             :device="compatibleDevice1Ref?.device">
                 おお、よく来た勇者キフワラニャン！<br/>
                 <br/>
                 悩みというのは他の何物でもない、<br/>
                 床のことじゃ
-        </talker-novel>
+        </talk-novel>
 
-        <talker-balloon
+        <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
             :device="compatibleDevice1Ref?.device">
             床。<br/>
-        </talker-balloon>
+        </talk-balloon>
 
-        <talker-balloon
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device">
             我が城の床タイルを市松模様にしろと<br/>
             リフォーム会社に命じたのだが……<br/>
-        </talker-balloon>
+        </talk-balloon>
         <br/>
 
         <!-- 印字１　＞　機能 -->
         <printing-making
             ref="printing1Ref"
             :printing1SourceTilemapCoordination="printing1SourceTilemapCoordination"
-            :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard">
-        </printing-making>
+            :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard" />
 
         <!-- 盤領域 -->
         <div
@@ -199,9 +192,6 @@
                 class="player"
                 :style="player1Style" />
 
-            <!-- スタイルシートのテスト -->
-            <div class="test-1" ></div>
-
             <!-- 視界の外１ -->
             <out-of-sight
                 ref="outOfSight1Ref"
@@ -209,8 +199,7 @@
                 :board1SquareHeight="board1SquareHeight"
                 :board1FileNum="board1FileNum"
                 :board1RankNum="board1RankNum"
-                class="parent-mask">
-            </out-of-sight>
+                class="parent-mask" />
         </div>
         <br/>
 
@@ -317,7 +306,7 @@
         </ul>
         <br/>
 
-        <talker-balloon
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
@@ -325,8 +314,8 @@
             ＰＣであればキーボード入力を、<br/>
             スマホであれば👆上のボタンをタップすることで、<br/>
             自機を歩かせることができるんじゃ。<br/>
-        </talker-balloon>
-        <talker-balloon
+        </talk-balloon>
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
@@ -334,8 +323,8 @@
             盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして<br/>
             出てくる［ズーム］スライダーボックスを左右に動かして<br/>
             盤の大きさを調整してほしい。<br/>
-        </talker-balloon>
-        <talker-balloon
+        </talk-balloon>
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
@@ -343,8 +332,8 @@
             もしＰＣ版で例えばスライダーバーにフォーカスが残ってしまい、<br/>
             左右キーを入力したら自機ではなくスライダーバーが動いてしまい腹が立ったときは<br/>
             ［何もしないボタン］を押せ。<br/>
-        </talker-balloon>
-        <talker-balloon
+        </talk-balloon>
+        <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
@@ -352,8 +341,8 @@
             おおー、説明的なセリフありがとうございますだぜ。<br/>
             <br/>
             なってるなってる、王よ、床、市松模様になってる。<br/>
-        </talker-balloon>
-        <talker-balloon
+        </talk-balloon>
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
@@ -361,7 +350,7 @@
             では、👇下の［⚙問題設定を表示］ボタンをクリックして、<br/>
             出てくる［盤の筋の全数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
             もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……<br/>
-        </talker-balloon>
+        </talk-balloon>
         <br/>
         <br/>
 
@@ -488,15 +477,15 @@
         <br/>
         <br/>
 
-        <talker-balloon
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device">
             そして一度画面を👆上にスクロールし、先ほどの床を見てから<br/>
             ここに戻ってきてほしい。<br/>
-        </talker-balloon>
-        <talker-balloon
+        </talk-balloon>
+        <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
@@ -504,7 +493,7 @@
             フーム……、床がストライプになっている……<br/>
             <br/>
             これはバグだぜ！<br/>
-        </talker-balloon>
+        </talk-balloon>
         <!--
             <p>
                 <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
@@ -515,19 +504,19 @@
             </p>
             <br/>
         -->
-        <img
+
+        <talk-illustration
             src="/img/quiz/by-grok/202508__grok__30-2023-spellScroll-o1o0.png"
-            alt="床のタイルの色を決める呪文"
-            :style="illustration1Style">
-        </img>
-        <talker-balloon
+            alt="床のタイルの色を決める呪文" />
+
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device">
             リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
             👇これじゃ」<br/>
-        </talker-balloon>
+        </talk-balloon>
         <br/>
 
         <pre
@@ -550,14 +539,14 @@ color = i % 2;
         <br/>
         <br/>
 
-        <talker-balloon
+        <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device">
             この呪文を、チョチョイと直してほしい！」<br/>
-        </talker-balloon>
-        <talker-balloon
+        </talk-balloon>
+        <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
@@ -565,7 +554,7 @@ color = i % 2;
             おー、お安い御用だぜ。<br/>
             <br/>
             どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
-        </talker-balloon>
+        </talk-balloon>
         <br/>
 
         <p>
@@ -653,7 +642,7 @@ color = i % 2;
         <br/>
         <br/>
 
-        <talker-balloon
+        <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
@@ -661,7 +650,7 @@ color = i % 2;
             上の選択肢を選んだら、<br/>
             画面を👆上にスクロールしてさっきの床を確認して、これで合ってると思ったら、<br/>
             👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
-        </talker-balloon>
+        </talk-balloon>
         <br/>
 
         <v-btn
@@ -685,20 +674,20 @@ color = i % 2;
                 <span class="font-x2">😄</span>正解<br/>
                 <br/>
 
-                <talker-balloon
+                <talk-balloon
                     :src="commonPapepoKingSrc"
                     :alt="commonPapepoKingAlt"
                     :name="commonPapepoKingName"
                     :device="compatibleDevice1Ref?.device">
                     おお、さすがキフワラニャン　床が市松模様になったわい。<br/>
-                </talker-balloon>
-                <talker-balloon
+                </talk-balloon>
+                <talk-balloon
                     :src="commonKifuwaranyanSrc"
                     :alt="commonKifuwaranyanAlt"
                     :name="commonKifuwaranyanName"
                     :device="compatibleDevice1Ref?.device">
                     やったぜ！<br/>
-                </talker-balloon>
+                </talk-balloon>
                 <br/>
             </section>
             <section v-if="choices1Num==3 || choices1Num==4">
@@ -706,20 +695,20 @@ color = i % 2;
                 <span class="font-x2">😭</span>間違い<br/>
                 <br/>
 
-                <talker-balloon
+                <talk-balloon
                     :src="commonPapepoKingSrc"
                     :alt="commonPapepoKingAlt"
                     :name="commonPapepoKingName"
                     :device="compatibleDevice1Ref?.device">
                     全ての部屋の床がストライプになってしまったのう。<br/>
-                </talker-balloon>
-                <talker-balloon
+                </talk-balloon>
+                <talk-balloon
                     :src="commonKifuwaranyanSrc"
                     :alt="commonKifuwaranyanAlt"
                     :name="commonKifuwaranyanName"
                     :device="compatibleDevice1Ref?.device">
                     なんということだぜ……。<br/>
-                </talker-balloon>
+                </talk-balloon>
                 <br/>
             </section>
         </section>
@@ -768,8 +757,9 @@ color = i % 2;
     import PrintingMaking from '../../components/PrintingMaking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
-    import TalkerBalloon from '../../components/TalkerBalloon.vue';
-    import TalkerNovel from '../../components/TalkerNovel.vue';
+    import TalkBalloon from '../../components/TalkBalloon.vue';
+    import TalkIllustration from '../../components/TalkIllustration.vue';
+    import TalkNovel from '../../components/TalkNovel.vue';
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
     import TheFooter from './the-footer.vue';
