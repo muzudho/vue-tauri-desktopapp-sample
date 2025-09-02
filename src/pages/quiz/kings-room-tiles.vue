@@ -44,18 +44,16 @@
             alt="勇者キフワラニャン"
             :style="illustration1Style">
         </img>
-        <v-row>
-            <v-col cols="2" class="talk-name">勇者キフワラニャン</v-col>
-            <v-col cols="1" class="talk-quot">「</v-col>
-            <v-col>
-                わたしは勇者キフワラニャン、<br/>
-                この世界の神がブラウザーで動くフリーゲームを<br/>
-                作ろうとしていると聞いて馳せ参じたぜ。<br/>
-                <br/>
-                顔や背景がコロコロ変わるかもしれないが、<br/>
-                気にしないでくれだぜ」<br/>
-            </v-col>
-        </v-row>
+        <talker-novel
+            name="キフワラニャン"
+            :device="compatibleDevice1Ref?.device">
+            わたしは勇者キフワラニャン、<br/>
+            この世界の神がブラウザーで動くフリーゲームを<br/>
+            作ろうとしていると聞いて馳せ参じたぜ。<br/>
+            <br/>
+            顔や背景がコロコロ変わるかもしれないが、<br/>
+            気にしないでくれだぜ
+        </talker-novel>
         <br/>
 
         <!-- パペポ王１ -->
@@ -64,18 +62,14 @@
             alt="パペポ王"
             :style="illustration1Style">
         </img>
-        <br/>
-
-        <v-row>
-            <v-col cols="2" class="talk-name">パペポ一世</v-col>
-            <v-col cols="1" class="talk-quot">「</v-col>
-            <v-col>
+        <talker-novel
+            name="パペポ一世"
+            :device="compatibleDevice1Ref?.device">
                 おお、よく来た勇者キフワラニャン！<br/>
                 <br/>
                 悩みというのは他の何物でもない、<br/>
-                床のことじゃ」<br/>
-            </v-col>
-        </v-row>
+                床のことじゃ
+        </talker-novel>
 
         <talker-balloon
             :src="commonKifuwaranyanSrc"
@@ -775,6 +769,7 @@ color = i % 2;
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import TalkerBalloon from '../../components/TalkerBalloon.vue';
+    import TalkerNovel from '../../components/TalkerNovel.vue';
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
     import TheFooter from './the-footer.vue';

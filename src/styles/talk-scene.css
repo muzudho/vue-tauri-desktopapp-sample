@@ -1,42 +1,73 @@
 /* スマホ向けスタイル (画面幅が768px以下) */
 @media screen and (max-width: 768px) {
-    div.talk-name { /* 名前 */
+    div.talk-face-container-2{
+        width: 96px;
+        height: 128px;
+        margin-right: 8px;
+    }
+    div.talk-name-balloon { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
         max-width: 96px;
+        font-size: small;
+        color: rgb(var(--v-theme-surface-light));
     }
-    div.talk-name-small { /* 名前 */
+    div.talk-name-novel { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
-        font-size: small;
         max-width: 96px;
     }
 }
 /* パソコン向けスタイル (画面幅が769px以上) */
 @media screen and (min-width: 769px) {
-    div.talk-name { /* 名前 */
-        padding-left: 0;
-        padding-right: 0;
-        text-align: right;
-        max-width: 128px;
+    div.talk-face-container-2{
+        width: 96px;
+        height: 128px;
+        margin-right: 16px;
     }
-    div.talk-name-small { /* 名前 */
+    div.talk-name-balloon { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
+        max-width: 96px;
         font-size: small;
+        color: rgb(var(--v-theme-surface-light));
+    }
+    div.talk-name-novel { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
         max-width: 128px;
     }
 }
 
-div.talk-quot { /* 鍵かっこ */
-    max-width: 16px;
+div.talk-quot-open-novel { /* 鍵かっこ開く */
+    margin-left: 8px;
     padding-left: 0;
     padding-right: 0;
-    text-align: right;
+    max-width: 8px;
 }
+/* 鍵かっこ閉じる
+div.talk-quot-close-novel {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding-left: 0;
+    padding-right: 0;
+    max-width: 32px;
+    max-height: 100%;
+}
+*/
+/* 本文
+div.talk-body-novel {
+    display: flex;
+    padding-left: 0;
+    padding-right: 0;
+    max-width:fit-content;
+}
+*/
 
 div.talk{
     display: flex;
@@ -50,28 +81,28 @@ div.face-container{
     width:100px;
 }
 
-div.baloon{
+div.baloon-body{
+    position: relative;
+    left: -1px; /* 吹き出しの尻尾との隙間を 1px 詰めたい */
     padding-left:16px;
     padding-top: 12px;
     padding-bottom:16px;
     padding-right:16px;
-    background-color: #FFF0C0;
-    /* background-color: #F8F8F8; */
+    background-color: #F8F8F8;
     border-radius: 16px;
 }
 
 /**
-*       | 0%   100%
-*   ----+----------
-*     0%|         2
-*    50%|  1
-*   100%|         3
+*   clip-path:
+*           | 0%   100%
+*       ----+----------
+*         0%|         2
+*        50%|  1
+*       100%|         3
 */
 div.baloon-tail {
-    width: 19px;
+    width: 21px;    /* 右端の 1px は欠けることがあるから、 1px 長めに指定 */
     height: 15px;
-    background-color: #FFF0C0;
-    /* background-color: #F8F8F8; */
+    background-color: #F8F8F8; /* 白い背景 */
     clip-path: polygon(0% 50%, 100% 0%, 100% 100%); /* 上頂点、下底の三角形 */
 }
-
