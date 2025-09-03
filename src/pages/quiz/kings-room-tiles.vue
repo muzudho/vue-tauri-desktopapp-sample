@@ -769,7 +769,7 @@ color = i % 2;
     // + コンポーネント　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++++++
 
-    import CompatibleDevice from '../../components/CompatibleDevice.vue'
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
 
     // ++++++++++++++++++
     // + コンポーザブル +
@@ -1119,28 +1119,28 @@ color = i % 2;
     // + オブジェクト　＞　挿絵全般 +
     // ++++++++++++++++++++++++++++++
 
-    const illustration1Style = computed<CompatibleStyleValue>(()=>{ /* 挿絵 */
-        if (compatibleDevice1Ref.value?.device == 'Mobile') {
-            return {
-                width: `256px`,
-            };
-        }
+    // const illustration1Style = computed<CompatibleStyleValue>(()=>{ /* 挿絵 */
+    //     if (compatibleDevice1Ref.value?.device == 'Mobile') {
+    //         return {
+    //             width: `256px`,
+    //         };
+    //     }
 
-        return {
-            width: `384px`,
-        };
-    });
-    const illustration1CaptionStyle = computed<CompatibleStyleValue>(()=>{  /* 画像の下に付けるキャプション用 */
-        if (compatibleDevice1Ref.value?.device == 'Mobile') {
-            return {
-                width: `256px`,
-            };
-        }
+    //     return {
+    //         width: `384px`,
+    //     };
+    // });
+    // const illustration1CaptionStyle = computed<CompatibleStyleValue>(()=>{  /* 画像の下に付けるキャプション用 */
+    //     if (compatibleDevice1Ref.value?.device == 'Mobile') {
+    //         return {
+    //             width: `256px`,
+    //         };
+    //     }
 
-        return {
-            width: `384px`,
-        };
-    });
+    //     return {
+    //         width: `384px`,
+    //     };
+    // });
 
     // ++++++++++++++++++++++++++++++
     // + オブジェクト　＞　選択肢１ +

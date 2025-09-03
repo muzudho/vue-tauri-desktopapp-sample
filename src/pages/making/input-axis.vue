@@ -5,9 +5,36 @@
     <section class="sec-3">
         <p>カーソルキーでオブジェクトが動いてしまっていることがあるから、そのときはスペースキーを押して元の位置に戻してくれだぜ（＾▽＾）！</p>
         <br/>
+
+        <talk-balloon
+            :src="commonKifuwaranyanSrc"
+            :alt="commonKifuwaranyanAlt"
+            :name="commonKifuwaranyanName"
+            :device="compatibleDevice1Ref?.device">
+            お父んに変わって、わたしが説明するぜ。<br/>
+            <br/>
+            この記事では、ゲームパッドの十字キーを使って動かせるオブジェクトをいろいろ並べていくぜ。
+        </talk-balloon>
     </section>
 
     <input-axis-target-scroll-moveaway-1/><br/>
+
+    <section class="sec-3">
+        <talk-balloon
+            :src="commonKifuwaranyanSrc"
+            :alt="commonKifuwaranyanAlt"
+            :name="commonKifuwaranyanName"
+            :device="compatibleDevice1Ref?.device">
+            おっと、動かしたあとは［スペース・キー］を押して、オブジェクトを元の位置に戻してくれだぜ。<br/>
+            <br/>
+            ［遠ざかる］というのは、［十字キー］を押しっぱにしたらどこまでも行ってしまうということだぜ。<br/>
+            <br/>
+            スクロールというのは、数ドットずつ動くことだぜ。<br/>
+        </talk-balloon>
+        <br/>
+    </section>
+
+    
     <input-axis-rpg-walk-player-scroll-moveaway-1/><br/>
     <input-axis-rpg-walk-player-scroll-moveaway-grid-1/><br/>
     <input-axis-rpg-walk-player-scroll-bounded-1/><br/>
@@ -36,6 +63,8 @@
     // # インポート #
     // ##############
 
+    import { ref } from 'vue';
+
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
@@ -57,10 +86,43 @@
     import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';
     import InputAxisRpgWalkPrintingShiftLoop1 from './input-axis-rpg-walk-printing-shift-loop-1.vue';
     import InputAxisTargetScrollMoveaway1 from './input-axis/target-scroll-moveaway-1.vue';
+    import TalkBalloon from '../../components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
+
+    // ++++++++++++++++++++++++++++++++++
+    // + コンポーネント　＞　互換性対応 +
+    // ++++++++++++++++++++++++++++++++++
+
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
+
+
+    // ##########
+    // # コモン #
+    // ##########
+    //
+    // よく使う設定をまとめたもの。特に不変のもの。
+    //    
+
+    import commonKifuwaranyanSrc from "@/assets/img/talk/202506__character__01-2013-kifuwarabe-o1o1o0.png";
+    const commonKifuwaranyanAlt = "きふわらべ";
+    const commonKifuwaranyanName = "きふわらべ";
+
+
+    // ################
+    // # オブジェクト #
+    // ################
+
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　装置の互換性 +
+    // ++++++++++++++++++++++++++++++++++
+
+    const compatibleDevice1Ref = ref<InstanceType<typeof CompatibleDevice> | null>(null);
 
 </script>
 
 <style scoped>
+
+    @import '../../styles/talk-scene.css';
+
 </style>
