@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>自機の境界のあるウォーキング</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>自機の遠ざかるスクロール・ウォーキング・グリッド吸着</h4>
     <section class="sec-4">
         <br/>
 
@@ -94,7 +94,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
-                　…　自機を上下左右に動かすぜ！
+                　…　上下左右に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -116,11 +116,11 @@
                     class="noop-key"
                     ref="noopButton"
                     v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                >何もしないボタン</v-btn>
+                >何もしないボタン</v-btn><br/>
             </li>
         </ul>
-        <br/>
 
+        <br/>
         <!-- 設定パネル１ -->
         <v-btn
             class="code-key"
@@ -187,10 +187,10 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機の境界のあるウォーキング　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機の遠ざかるスクロール・ウォーキング・グリッド吸着　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-player-boundary-check-1"/>
+            pagePath="/making/input-axis-rpg-walk-player-primordial-grid-1"/>
     </section>
 </template>
 
@@ -282,8 +282,8 @@
 
     const board1SquareWidth = 32;
     const board1SquareHeight = 32;
-    const board1FileNum = ref<number>(3);   // 筋の数
-    const board1RankNum = ref<number>(3);   // 段の数
+    const board1FileNum = ref<number>(3);    // 筋の数
+    const board1RankNum = ref<number>(3);    // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });
@@ -305,8 +305,8 @@
     >(() => {
         return (i:number)=>{
             return {
-                top: `${Math.floor(i / board1FileNum.value) * board1SquareHeight}px`,
                 left: `${(i % board1FileNum.value) * board1SquareWidth}px`,
+                top: `${Math.floor(i / board1FileNum.value) * board1SquareHeight}px`,
                 width: `${board1SquareWidth}px`,
                 height: `${board1SquareHeight}px`,
                 border: `solid 1px ${i % 2 == 0 ? 'darkgray' : 'lightgray'}`,
@@ -319,7 +319,6 @@
     // ++++++++++++++++++++++++++++++++++++
     //
     // このサンプルでは、ピンク色に着色しているマスです。
-    // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
     const playerHome1File = ref<number>(1);    // ホーム
@@ -330,7 +329,7 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
-    const playerHome1Style = computed<CompatibleStyleValue>(() => {
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
         return {
             left: `${playerHome1Left.value}px`,
             top: `${playerHome1Top.value}px`,
@@ -433,8 +432,7 @@
             player1MotionWait.value -= 1;    // モーション・タイマー
 
             if (player1MotionWait.value==0) {
-                // モーションのクリアー
-                player1Motion.value["goToRight"] = 0;   // 自機
+                player1Motion.value["goToRight"] = 0;    // クリアー
                 player1Motion.value["goToBottom"] = 0;
             }
 
@@ -445,28 +443,27 @@
 
                 // 位置のリセット
                 if (player1Input[" "]) {
-                    player1Top.value = 1 * board1SquareHeight;  // 自機
+                    player1Top.value = 1 * board1SquareHeight;
                     player1Left.value = 1 * board1SquareWidth;
                 }
 
-                // 方向キー
-                if (player1Input.ArrowLeft) {    // 左
-                    player1Motion.value["goToRight"] = commonSpriteMotionLeft;
+                // 移動
+                if (player1Input.ArrowLeft) {
+                    player1Motion.value["goToRight"] = commonSpriteMotionLeft; // 左
                 }
 
-                if (player1Input.ArrowRight) {    // 右
-                    player1Motion.value["goToRight"] = commonSpriteMotionRight;
+                if (player1Input.ArrowRight) {
+                    player1Motion.value["goToRight"] = commonSpriteMotionRight;  // 右
                 }
 
-                if (player1Input.ArrowUp) {    // 上
-                    player1Motion.value["goToBottom"] = commonSpriteMotionUp;
+                if (player1Input.ArrowUp) {
+                    player1Motion.value["goToBottom"] = commonSpriteMotionUp;   // 上
                 }
 
-                if (player1Input.ArrowDown) {    // 下
-                    player1Motion.value["goToBottom"] = commonSpriteMotionDown;
+                if (player1Input.ArrowDown) {
+                    player1Motion.value["goToBottom"] = commonSpriteMotionDown;   // 下
                 }
 
-                // モーションの入力があれば、ウェイトを入れる。
                 if (player1Motion.value["goToRight"]!=0 || player1Motion.value["goToBottom"]!=0) {
                     player1MotionWait.value = player1AnimationWalkingFrames;
                 }
@@ -478,34 +475,19 @@
 
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["goToRight"]==1) {    // 右
-                player1Frames.value = player1SourceFrames["right"]    // 画像の向きを更新
-
-                if (player1Left.value < (board1FileNum.value - 1) * board1SquareWidth) {    // 境界チェック
-                    player1Left.value += player1Speed.value;
-                }
-
+                player1Frames.value = player1SourceFrames["right"]    // 向きを変える
+                player1Left.value += player1Speed.value;
             } else if (player1Motion.value["goToRight"]==-1) {    // 左
                 player1Frames.value = player1SourceFrames["left"]
-
-                if (0 < player1Left.value) {
-                    player1Left.value -= player1Speed.value;
-                }
-
+                player1Left.value -= player1Speed.value;
             }
 
             if (player1Motion.value["goToBottom"]==-1) {    // 上
                 player1Frames.value = player1SourceFrames["up"]
-
-                if (0 < player1Top.value) {
-                    player1Top.value -= player1Speed.value;
-                }
-
+                player1Top.value -= player1Speed.value;
             } else if (player1Motion.value["goToBottom"]==1) {    // 下
                 player1Frames.value = player1SourceFrames["down"]
-
-                if (player1Top.value < (board1RankNum.value - 1) * board1SquareHeight) {
-                    player1Top.value += player1Speed.value;
-                }
+                player1Top.value += player1Speed.value;
             }
 
             // 次のフレーム
@@ -595,7 +577,7 @@
     div.board { /* 盤１ */
         position: relative;
     }
-    div.square {    /* マス */
+    div.square {    /* スクウェア */
         position: absolute;
     }
     div.playerHome {    /* 自機のホーム１ */

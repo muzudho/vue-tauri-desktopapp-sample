@@ -73,8 +73,8 @@ const routes = [
     },
     {
         name: 'InputAxisRpgWalkBoardScrollPrimordialGrid1',
-        path: '/making/input-axis-rpg-walk-board-scroll-primordial-grid-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-scroll-primordial-grid-1.vue'),
+        path: '/making/input-axis/rpg-walk-board-scroll-moveaway-grid-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-board-scroll-moveaway-grid-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkBoardWraparoundLoopScroll1',
@@ -92,19 +92,19 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerBounded1',
-        path: '/making/input-axis/rpg-walk-player-bounded-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-bounded-1.vue'),
+        name: 'InputAxisRpgWalkPlayerScrollBounded1',
+        path: '/making/input-axis/rpg-walk-player-scroll-bounded-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-scroll-bounded-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerMoveaway1',
-        path: '/making/input-axis/rpg-walk-player-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-moveaway-1.vue'),
+        name: 'InputAxisRpgWalkPlayerScrollMoveaway1',
+        path: '/making/input-axis/rpg-walk-player-scroll-moveaway-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-scroll-moveaway-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerMoveawayGrid1',
-        path: '/making/input-axis/rpg-walk-player-moveaway-grid-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-moveaway-grid-1.vue'),
+        name: 'InputAxisRpgWalkPlayerScrollMoveawayGrid1',
+        path: '/making/input-axis/rpg-walk-player-scroll-moveaway-grid-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-scroll-moveaway-grid-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkFaceShiftBoundary1',
