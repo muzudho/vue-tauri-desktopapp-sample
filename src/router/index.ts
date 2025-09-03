@@ -103,8 +103,8 @@ const routes = [
     },
     {
         name: 'InputAxisRpgWalkPlayerPrimordialGrid1',
-        path: '/making/input-axis-rpg-walk-player-primordial-grid-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-primordial-grid-1.vue'),
+        path: '/making/input-axis/rpg-walk-player-primordial-grid-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-primordial-grid-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkFaceShiftBoundary1',
