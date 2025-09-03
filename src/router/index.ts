@@ -93,8 +93,8 @@ const routes = [
     },
     {
         name: 'InputAxisRpgWalkPlayerBoundaryCheck1',
-        path: '/making/input-axis-rpg-walk-player-boundary-check-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-player-boundary-check-1.vue'),
+        path: '/making/input-axis/rpg-walk-player-boundary-check-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-boundary-check-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkPlayerPrimordial1',
