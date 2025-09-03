@@ -147,6 +147,11 @@ const routes = [
         component: () => import('../pages/making/mount-practice.vue'),
     },
     {
+        name: 'NpcWalk',
+        path: '/making/npc-walk',
+        component: () => import('../pages/making/npc-walk.vue'),
+    },
+    {
         name: 'PageLayout',
         path: '/making/page-layout',
         component: () => import('../pages/making/page-layout.vue'),
