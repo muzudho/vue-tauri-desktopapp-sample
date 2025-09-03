@@ -7,7 +7,7 @@
         <br/>
     </section>
 
-    <input-axis-target-1/><br/>
+    <input-axis-target-scroll-moveaway-1/><br/>
     <input-axis-rpg-walk-player-scroll-moveaway-1/><br/>
     <input-axis-rpg-walk-player-scroll-moveaway-grid-1/><br/>
     <input-axis-rpg-walk-player-scroll-bounded-1/><br/>
@@ -56,7 +56,7 @@
     import InputAxisRpgWalkPrintingShiftBoundary1 from './input-axis-rpg-walk-printing-shift-boundary-1.vue';
     import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';
     import InputAxisRpgWalkPrintingShiftLoop1 from './input-axis-rpg-walk-printing-shift-loop-1.vue';
-    import InputAxisTarget1 from './input-axis/target-1.vue';
+    import InputAxisTargetScrollMoveaway1 from './input-axis/target-scroll-moveaway-1.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
