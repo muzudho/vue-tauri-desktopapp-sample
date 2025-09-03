@@ -11,6 +11,8 @@
             :name="commonOton2Name"
             :device="compatibleDevice1Ref?.device">
             こんなホームページ見てる読者、座学嫌いだろ、<br/>
+            動いてるもの見ないとなんも分かんないだろ。<br/>
+            <br/>
             コントローラーを触らせながら覚えていってもらおうぜ？
         </talk-balloon>
         <talk-balloon
@@ -18,7 +20,7 @@
             :alt="commonKifuwarabe2Alt"
             :name="commonKifuwarabe2Name"
             :device="compatibleDevice1Ref?.device">
-            この記事では、ゲームパッドの十字キーを使って<br/>
+            そこで、この記事では、ゲームパッドの十字キーを使って<br/>
             オブジェクトを動かせる例をいろいろ並べていくぜ。
         </talk-balloon>
     </section>
@@ -63,9 +65,54 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-player-scroll-moveaway-grid-1/><br/>
-    <input-axis-rpg-walk-player-scroll-bounded-1/><br/>
-    <input-axis-rpg-walk-board-scroll-moveaway-grid-1/><br/>
+    <input-axis-rpg-walk-player-grid-moveaway-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　上記は、［累積］から［グリッド吸着］へ変わっているぜ。<br/>
+            <br/>
+            キーをちょいっと押しても、次のグリッドまで残っている分を勝手に動いてくれるのが違いだな。
+        </talk-balloon>
+    </section>
+
+    <input-axis-rpg-walk-player-grid-bounded-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　上記は、［遠ざかる］から［境界のある］へ変わっているぜ。<br/>
+            <br/>
+            盤の端っこから先には、出ていけなくなっているのが違いだぜ。
+        </talk-balloon>
+    </section>
+
+    <input-axis-rpg-walk-board-grid-moveaway-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　上記は、動くのが［自機］から［盤］へ変わっているぜ。<br/>
+            <br/>
+            自機が動いてなくても、盤が動いていると、自機が前に進んでいる感じがするだろ。
+        </talk-balloon>
+    </section>
+
     <input-axis-rpg-walk-printing-shift-primordial-1/><br/>
     <input-axis-rpg-walk-printing-shift-boundary-1/><br/>
     <input-axis-rpg-walk-printing-shift-loop-1/><br/>
@@ -101,13 +148,13 @@
 
     import SourceLink from '../../components/SourceLink.vue';
     import InputAxisRpgWalkUsingBackgroundImage1 from './input-axis-rpg-walk-using-background-image-1.vue';
-    import InputAxisRpgWalkBoardScrollMoveawayGrid1 from './input-axis/rpg-walk-board-scroll-moveaway-grid-1.vue';
+    import InputAxisRpgWalkBoardGridMoveaway1 from './input-axis/rpg-walk-board-grid-moveaway-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingPrimordialAndPlayerBoundary1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollLoop1 from './input-axis-rpg-walk-board-wraparound-scroll-loop-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingLoop1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1.vue';
     import InputAxisRpgWalkPlayerAccumulateMoveaway1 from './input-axis/rpg-walk-player-accumulate-moveaway-1.vue';
-    import InputAxisRpgWalkPlayerScrollBounded1 from './input-axis/rpg-walk-player-scroll-bounded-1.vue';
-    import InputAxisRpgWalkPlayerScrollMoveawayGrid1 from './input-axis/rpg-walk-player-scroll-moveaway-grid-1.vue';
+    import InputAxisRpgWalkPlayerGridBounded1 from './input-axis/rpg-walk-player-grid-bounded-1.vue';
+    import InputAxisRpgWalkPlayerGridMoveaway1 from './input-axis/rpg-walk-player-grid-moveaway-1.vue';
     import InputAxisRpgWalkPrintingShiftPrimordial1 from './input-axis-rpg-walk-printing-shift-primordial-1.vue';
     import InputAxisRpgWalkPrintingShiftBoundary1 from './input-axis-rpg-walk-printing-shift-boundary-1.vue';
     import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';

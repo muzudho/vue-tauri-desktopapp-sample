@@ -163,8 +163,8 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機ウォーキング・遠ざかる累積</span>　＞　ソースコード</h4>
-    <section class="sec-4">
+    <h5><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機ウォーキング・遠ざかる累積</span>　＞　ソースコード</h5>
+    <section class="sec-5">
         <source-link
             pagePath="/making/input-axis-rpg-walk-player-primordial-1"/>
     </section>

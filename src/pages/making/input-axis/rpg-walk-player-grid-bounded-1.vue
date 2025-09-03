@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>自機の境界のあるスクロール・ウォーキング</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>自機ウォーキング・境界のあるグリッド吸着</h4>
     <section class="sec-4">
         <br/>
 
@@ -187,8 +187,8 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機の境界のあるスクロール・ウォーキング　＞　</span>ソースコード</h4>
-    <section class="sec-4">
+    <h5><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機ウォーキング・境界のあるグリッド吸着　＞　</span>ソースコード</h5>
+    <section class="sec-5">
         <source-link
             pagePath="/making/input-axis-rpg-walk-player-boundary-check-1"/>
     </section>
