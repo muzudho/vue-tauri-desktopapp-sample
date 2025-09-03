@@ -92,19 +92,19 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerBoundaryCheck1',
-        path: '/making/input-axis/rpg-walk-player-boundary-check-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-boundary-check-1.vue'),
+        name: 'InputAxisRpgWalkPlayerBounded1',
+        path: '/making/input-axis/rpg-walk-player-bounded-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-bounded-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerPrimordial1',
-        path: '/making/input-axis/rpg-walk-player-primordial-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-primordial-1.vue'),
+        name: 'InputAxisRpgWalkPlayerMoveaway1',
+        path: '/making/input-axis/rpg-walk-player-moveaway-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-moveaway-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkPlayerPrimordialGrid1',
-        path: '/making/input-axis/rpg-walk-player-primordial-grid-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-primordial-grid-1.vue'),
+        name: 'InputAxisRpgWalkPlayerMoveawayGrid1',
+        path: '/making/input-axis/rpg-walk-player-moveaway-grid-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-moveaway-grid-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkFaceShiftBoundary1',
