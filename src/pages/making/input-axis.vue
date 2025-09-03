@@ -56,7 +56,7 @@
     import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';
     import InputAxisRpgWalkPrintingShiftLoop1 from './input-axis-rpg-walk-printing-shift-loop-1.vue';
     import InputAxisRpgWalkBoardScrollPrimordialGrid1 from './input-axis-rpg-walk-board-scroll-primordial-grid-1.vue';
-    import InputAxisTarget1 from './input-axis-target-1.vue';
+    import InputAxisTarget1 from './input-axis/target-1.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 

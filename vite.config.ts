@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
+import path from 'path';
 
-// @ts-expect-error process is a nodejs global
 const host = process.env.TAURI_DEV_HOST;
 
 // https://vitejs.dev/config/
@@ -12,7 +12,8 @@ export default defineConfig(async () => ({
             // [2025-07-29_Tue] import 文で、.vue ファイルへのパスに @ エイリアスを使えるようにするための設定。
             // 設定前： import Tile from '../components/Tile.vue';  // @のエイリアスが使えない
             // 設定後： import Tile from '@/components/Tile.vue';   // @のエイリアスが使える
-            '@': '/src',  // ここで@をルート・ディレクトリにマッピング
+            //'@': '/src',  // ここで@をルート・ディレクトリにマッピング
+            '@': path.resolve(__dirname, './src'),  // @エイリアス
         },
     },
 

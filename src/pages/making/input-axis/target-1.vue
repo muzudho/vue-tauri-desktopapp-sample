@@ -153,7 +153,9 @@
     // + 互換性対応 +
     // ++++++++++++++
 
-    import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
+    import type { CompatibleStyleValue }  from '../../../compatibles/compatible-style-value';
+    // Tauri ではこう書けなかった：
+    //import type { CompatibleStyleValue }  from '@/compatibles/compatible-style-value.ts';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -164,8 +166,8 @@
 
 
     // from の階層が上の順、アルファベット順
-    import Button20250822 from '../../components/Button20250822.vue';
-    import SourceLink from '../../components/SourceLink.vue';
+    import Button20250822 from '@/components/Button20250822.vue';
+    import SourceLink from '@/components/SourceLink.vue';
 
 
     // ############################
