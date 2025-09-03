@@ -122,9 +122,9 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
     },
     {
-        name: 'InputAxisTargetScrollMoveaway1',
-        path: '/making/input-axis/target-scroll-moveaway-1',
-        component: () => import('../pages/making/input-axis/target-scroll-moveaway-1.vue'),
+        name: 'InputAxisTargetAccumulateMoveaway1',
+        path: '/making/input-axis/target-accumulate-moveaway-1',
+        component: () => import('../pages/making/input-axis/target-accumulate-moveaway-1.vue'),
     },
     {
         name: 'InputAxis',

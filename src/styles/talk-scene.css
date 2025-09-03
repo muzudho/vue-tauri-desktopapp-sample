@@ -69,11 +69,11 @@ div.talk-body-novel {
 }
 */
 
-div.talk{
+div.talk-container {
     display: flex;
     align-items: center;
     margin-top: 1px;
-    margin-bottom: 1px;
+    margin-bottom: 16px;
     color: #101010;
 }
 

@@ -17,7 +17,7 @@
         </talk-balloon>
     </section>
 
-    <input-axis-target-scroll-moveaway-1/><br/>
+    <input-axis-target-accumulate-moveaway-1/><br/>
 
     <section class="sec-3">
         <talk-balloon
@@ -29,9 +29,8 @@
             <br/>
             ［遠ざかる］というのは、［十字キー］を押しっぱにしたらどこまでも行ってしまうということだぜ。<br/>
             <br/>
-            スクロールというのは、数ドットずつ動くことだぜ。<br/>
+            ［累積］というのは、キーを押している間、数ドットずつ動くことだぜ。<br/>
         </talk-balloon>
-        <br/>
     </section>
 
     
@@ -85,7 +84,7 @@
     import InputAxisRpgWalkPrintingShiftBoundary1 from './input-axis-rpg-walk-printing-shift-boundary-1.vue';
     import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';
     import InputAxisRpgWalkPrintingShiftLoop1 from './input-axis-rpg-walk-printing-shift-loop-1.vue';
-    import InputAxisTargetScrollMoveaway1 from './input-axis/target-scroll-moveaway-1.vue';
+    import InputAxisTargetAccumulateMoveaway1 from './input-axis/target-accumulate-moveaway-1.vue';
     import TalkBalloon from '../../components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
