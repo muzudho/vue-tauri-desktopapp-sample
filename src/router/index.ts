@@ -92,14 +92,14 @@ const routes = [
         component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue'),
     },
     {
+        name: 'InputAxisRpgWalkPlayerAccumulateMoveaway1',
+        path: '/making/input-axis/rpg-walk-player-accumulate-moveaway-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-player-accumulate-moveaway-1.vue'),
+    },
+    {
         name: 'InputAxisRpgWalkPlayerScrollBounded1',
         path: '/making/input-axis/rpg-walk-player-scroll-bounded-1',
         component: () => import('../pages/making/input-axis/rpg-walk-player-scroll-bounded-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkPlayerScrollMoveaway1',
-        path: '/making/input-axis/rpg-walk-player-scroll-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-scroll-moveaway-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkPlayerScrollMoveawayGrid1',

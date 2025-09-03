@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4>標的の遠ざかる累積</h4>
+    <h4>標的・遠ざかる累積</h4>
     <section class="sec-4">
         <br/>
 
@@ -130,7 +130,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">標的の遠ざかる累積　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">標的・遠ざかる累積　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-target-1"/>

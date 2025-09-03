@@ -3,17 +3,23 @@
 
     <h3>上下左右に移動しようぜ！</h3>
     <section class="sec-3">
-        <p>カーソルキーでオブジェクトが動いてしまっていることがあるから、そのときはスペースキーを押して元の位置に戻してくれだぜ（＾▽＾）！</p>
         <br/>
 
         <talk-balloon
-            :src="commonKifuwaranyanSrc"
-            :alt="commonKifuwaranyanAlt"
-            :name="commonKifuwaranyanName"
+            :src="commonOton2Src"
+            :alt="commonOton2Alt"
+            :name="commonOton2Name"
             :device="compatibleDevice1Ref?.device">
-            お父んに変わって、わたしが説明するぜ。<br/>
-            <br/>
-            この記事では、ゲームパッドの十字キーを使って動かせるオブジェクトをいろいろ並べていくぜ。
+            こんなホームページ見てる読者、座学嫌いだろ、<br/>
+            コントローラーを触らせながら覚えていってもらおうぜ？
+        </talk-balloon>
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            この記事では、ゲームパッドの十字キーを使って<br/>
+            オブジェクトを動かせる例をいろいろ並べていくぜ。
         </talk-balloon>
     </section>
 
@@ -21,9 +27,9 @@
 
     <section class="sec-3">
         <talk-balloon
-            :src="commonKifuwaranyanSrc"
-            :alt="commonKifuwaranyanAlt"
-            :name="commonKifuwaranyanName"
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
             :device="compatibleDevice1Ref?.device">
             おっと、動かしたあとは［スペース・キー］を押して、オブジェクトを元の位置に戻してくれだぜ。<br/>
             <br/>
@@ -32,9 +38,31 @@
             ［累積］というのは、キーを押している間、数ドットずつ動くことだぜ。<br/>
         </talk-balloon>
     </section>
+    <section class="sec-3">
+        <talk-balloon
+            :src="commonHiyoko2Src"
+            :alt="commonHiyoko2Alt"
+            :name="commonHiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+            でも［累積］ってあんま使わないから覚えなくていいわよね。<br/>
+        </talk-balloon>
+    </section>
 
-    
-    <input-axis-rpg-walk-player-scroll-moveaway-1/><br/>
+    <input-axis-rpg-walk-player-accumulate-moveaway-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　上記は、表的をキャラクターに変えただけだな。<br/>
+            歩行のアニメをしてたり、向きが変わるだけで雰囲気出るだろ。
+        </talk-balloon>
+    </section>
+
     <input-axis-rpg-walk-player-scroll-moveaway-grid-1/><br/>
     <input-axis-rpg-walk-player-scroll-bounded-1/><br/>
     <input-axis-rpg-walk-board-scroll-moveaway-grid-1/><br/>
@@ -77,8 +105,8 @@
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingPrimordialAndPlayerBoundary1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollLoop1 from './input-axis-rpg-walk-board-wraparound-scroll-loop-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingLoop1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1.vue';
+    import InputAxisRpgWalkPlayerAccumulateMoveaway1 from './input-axis/rpg-walk-player-accumulate-moveaway-1.vue';
     import InputAxisRpgWalkPlayerScrollBounded1 from './input-axis/rpg-walk-player-scroll-bounded-1.vue';
-    import InputAxisRpgWalkPlayerScrollMoveaway1 from './input-axis/rpg-walk-player-scroll-moveaway-1.vue';
     import InputAxisRpgWalkPlayerScrollMoveawayGrid1 from './input-axis/rpg-walk-player-scroll-moveaway-grid-1.vue';
     import InputAxisRpgWalkPrintingShiftPrimordial1 from './input-axis-rpg-walk-printing-shift-primordial-1.vue';
     import InputAxisRpgWalkPrintingShiftBoundary1 from './input-axis-rpg-walk-printing-shift-boundary-1.vue';
@@ -103,9 +131,15 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //    
 
-    import commonKifuwaranyanSrc from "@/assets/img/talk/202506__character__01-2013-kifuwarabe-o1o1o0.png";
-    const commonKifuwaranyanAlt = "きふわらべ";
-    const commonKifuwaranyanName = "きふわらべ";
+    import commonOton2Src from "@/assets/img/talk/202506__character__01-1951-kifuwarabeNoOton-o1o2o0.png";
+    const commonOton2Alt = "お父ん";
+    const commonOton2Name = "お父ん";
+    import commonKifuwarabe2Src from "@/assets/img/talk/202506__character__01-2013-kifuwarabe-o1o1o0.png";
+    const commonKifuwarabe2Alt = "きふわらべ";
+    const commonKifuwarabe2Name = "きふわらべ";
+    import commonHiyoko2Src from "@/assets/img/talk/202506__character__01-2025-hiyoko-o1o1o0.png";
+    const commonHiyoko2Alt = "ひよこ";
+    const commonHiyoko2Name = "ひよこ";
 
 
     // ################

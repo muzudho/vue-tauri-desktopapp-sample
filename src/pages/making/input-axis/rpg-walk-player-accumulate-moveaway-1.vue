@@ -3,7 +3,7 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4>ＲＰＧの歩行グラフィック　＞　自機の遠ざかるスクロール・ウォーキング</h4>
+    <h4>ＲＰＧの歩行グラフィック　＞　自機ウォーキング・遠ざかる累積</h4>
     <section class="sec-4">
         <br/>
 
@@ -163,7 +163,7 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機の遠ざかるスクロール・ウォーキング</span>　＞　ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">自機ウォーキング・遠ざかる累積</span>　＞　ソースコード</h4>
     <section class="sec-4">
         <source-link
             pagePath="/making/input-axis-rpg-walk-player-primordial-1"/>
