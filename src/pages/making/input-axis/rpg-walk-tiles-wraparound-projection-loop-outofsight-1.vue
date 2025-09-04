@@ -118,6 +118,9 @@
             ３段目の大きな数字は、印字だぜ（＾▽＾）！<br/>
             <br/>
             タイルはスワップ（塗り替え）ではなく、スクロールしているぜ。スクロールってのは、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
+            <br/>
+        	👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
+        	盤より大きな数字柄がシフトしているのを見てくれだぜ（＾▽＾）！<br/>
         </p>
         <br/>
 
@@ -290,6 +293,21 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-switch
+                v-model="printing1OutOfSightIsLock"
+                :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
+                color="green"
+                :hideDetails="true"
+                inset />
+                <section class="sec-1">
+                    <v-switch
+                        v-model="player1CanBoardEdgeWalking"
+                        :disabled="!player1CanBoardEdgeWalkingIsEnabled"
+                        :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
+                        color="green"
+                        :hideDetails="true"
+                        inset />
+                </section>
             <br/>
         </section>
     </section>

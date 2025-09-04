@@ -223,9 +223,14 @@
             :device="compatibleDevice1Ref?.device">
             裏画面でこっそり描いてるというやつだな。
         </talk-balloon>
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            ［設定を表示］ボタンから、スライダーバーを動かして、像を広げたり狭めたり、いろいろ試してみてくれだぜ。<br/>
+        </talk-balloon>
     </section>
-
-    <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-2/><br/>
 
     <input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1/><br/>
     <input-axis-rpg-walk-using-background-image-1/><br/>
@@ -259,7 +264,6 @@
     import InputAxisRpgWalkBoardGridMoveaway1 from './input-axis/rpg-walk-board-grid-moveaway-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingPrimordialAndPlayerBoundary1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue';
     import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsight1 from './input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue';
-    import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsight2 from './input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-2.vue';
     import InputAxisRpgWalkPlayerAccumulateMoveaway1 from './input-axis/rpg-walk-player-accumulate-moveaway-1.vue';
     import InputAxisRpgWalkPlayerGridBounded1 from './input-axis/rpg-walk-player-grid-bounded-1.vue';
     import InputAxisRpgWalkPlayerGridMoveaway1 from './input-axis/rpg-walk-player-grid-moveaway-1.vue';
