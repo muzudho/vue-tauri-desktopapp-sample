@@ -229,10 +229,10 @@
             :name="commonKifuwarabe2Name"
             :device="compatibleDevice1Ref?.device">
             ［設定を表示］ボタンから、スライダーバーを動かして、像を広げたり狭めたり、いろいろ試してみてくれだぜ。<br/>
+            ループのチェックを外して、盤の端を歩いてみるのもいいな。<br/>
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1/><br/>
     <input-axis-rpg-walk-using-background-image-1/><br/>
 
     <br/>
@@ -262,7 +262,6 @@
     import SourceLink from '../../components/SourceLink.vue';
     import InputAxisRpgWalkUsingBackgroundImage1 from './input-axis-rpg-walk-using-background-image-1.vue';
     import InputAxisRpgWalkBoardGridMoveaway1 from './input-axis/rpg-walk-board-grid-moveaway-1.vue';
-    import InputAxisRpgWalkBoardWraparoundScrollAndPrintingPrimordialAndPlayerBoundary1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue';
     import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsight1 from './input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue';
     import InputAxisRpgWalkPlayerAccumulateMoveaway1 from './input-axis/rpg-walk-player-accumulate-moveaway-1.vue';
     import InputAxisRpgWalkPlayerGridBounded1 from './input-axis/rpg-walk-player-grid-bounded-1.vue';

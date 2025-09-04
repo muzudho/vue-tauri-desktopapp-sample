@@ -119,8 +119,11 @@
             <br/>
             タイルはスワップ（塗り替え）ではなく、スクロールしているぜ。スクロールってのは、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
             <br/>
-        	👆 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
+        	👆　［設定を表示］から設定をいじって、 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
         	盤より大きな数字柄がシフトしているのを見てくれだぜ（＾▽＾）！<br/>
+            <br/>
+            👆　［設定を表示］から設定をいじって、フィールドの端まで歩いてみてくれだぜ（＾▽＾）！<br/>
+            上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！<br/>
         </p>
         <br/>
 
@@ -173,7 +176,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
-                　…　タイルを、上下左右キーの入力とは逆方向に動かすぜ！
+                　…　自機を上下左右へ、タイルと印字は、上下左右キーの入力とは逆方向に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -187,7 +190,7 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　タイルの位置を最初に有った並びに戻すぜ。
+                　…　自機をホームへ、タイルと印字の位置を最初に有った並びに戻すぜ。
             </li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
@@ -429,12 +432,30 @@
     // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
-    const board1WithMaskFileNum = board1FileNum.value + board1WithMaskBottomRightMargin   // マスク付きの場合の列数。右側の多めの１マスを含む。
-    const board1WithMaskRankNum = board1RankNum.value + board1WithMaskBottomRightMargin
+    const bothSide = 2;     // 左と右とか、上と下とか、対。
+    const board1WithMaskFileNum = computed<number>(()=>{        // マスク付きの場合の列数。右側の多めの１マスを含む。
+
+        // 盤の端歩き対応：
+        const minWidth = bothSide * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;  // マスクの横幅より小さくはなりません。
+        if (board1FileNum.value < minWidth) {
+            return minWidth;
+        }
+
+        return board1FileNum.value + board1WithMaskBottomRightMargin;
+    });
+    const board1WithMaskRankNum = computed<number>(()=>{
+
+        const minHeight = bothSide * board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin;
+        if (board1RankNum.value < minHeight) {
+            return minHeight;
+        }
+
+        return board1RankNum.value + board1WithMaskBottomRightMargin;
+    });
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
-            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
-            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
             zoom: appZoom.value,
         };
     });
@@ -503,11 +524,12 @@
     });
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    const printing1MotionWalkingFrames = 16;    // 歩行フレーム数
+    const printing1MotionWalkingFrames: number = 16;       // 歩行フレーム数
 
 
     /**
      * マスの印字。
+     * @returns 該当なしのとき "-"
      */
     const getPrintingStringFromPrintingIndex = computed<
         (printingIndex: number) => string
@@ -613,8 +635,8 @@
 
     const outOfSight1Style = computed<CompatibleStyleValue>(()=>{
         return {
-            width: `${board1WithMaskFileNum * board1SquareWidth}px`,
-            height: `${board1WithMaskRankNum * board1SquareHeight}px`,
+            width: `${board1WithMaskFileNum.value * board1SquareWidth}px`,
+            height: `${board1WithMaskRankNum.value * board1SquareHeight}px`,
             borderTop: `solid ${board1WithMaskSizeSquare.value * board1SquareHeight}px rgba(0,0,0,0.5)`,
             borderRight: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareWidth}px rgba(0,0,0,0.5)`,
             borderBottom: `solid ${(board1WithMaskSizeSquare.value + board1WithMaskBottomRightMargin) * board1SquareHeight}px rgba(0,0,0,0.5)`,
