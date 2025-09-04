@@ -117,9 +117,9 @@ const routes = [
         component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkUsingBackgroundImage1',
-        path: '/making/input-axis-rpg-walk-using-background-image-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-using-background-image-1.vue'),
+        name: 'InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
+        path: '/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
     },
     {
         name: 'InputAxisTargetAccumulateMoveaway1',
