@@ -113,12 +113,16 @@ const routes = [
     },
 
     // input-axis-rpg-walk-printing-shift-contents-size-variable-1
-    // input-axis-rpg-walk-printing-shift-loop-1
 
     {
         name: 'InputAxisRpgWalkTilesImmovableProjectionBoundary1',
         path: '/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1',
         component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkTilesImmovableProjectionLoop1',
+        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkUsingBackgroundImage1',
