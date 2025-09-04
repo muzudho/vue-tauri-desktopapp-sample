@@ -82,12 +82,12 @@ const routes = [
         path: '/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1',
         component: () => import('../pages/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue'),
     },
-
     {
-        name: 'InputAxisRpgWalkBoardWraparoundScrollAndPrintingLoop1',
-        path: '/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1.vue'),
+        name: 'RpgWalkTilesWraparoundProjectionLoopOutofsight2',
+        path: '/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-2',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-2.vue'),
     },
+    
     {
         name: 'InputAxisRpgWalkBoardWraparoundLoopAndPrintingPrimordialAndPlayerBoundary1',
         path: '/making/input-axis-rpg-walk-board-wraparound-loop-and-printing-primordial-and-player-boundary-1',

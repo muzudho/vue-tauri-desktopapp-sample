@@ -10,7 +10,7 @@
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
             ref="stopwatch1Ref"
-            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
         <!-- 盤領域 -->
@@ -164,7 +164,7 @@
                     @mouseup="button1Ref?.release(onDownButtonReleased);"
                     @mouseleave="button1Ref?.release(onDownButtonReleased);"
                 >↓</v-btn>
-                　…　印字を、上下左右キーの入力とは逆方向に動かすぜ！
+                　…　タイルを、上下左右キーの入力とは逆方向に動かすぜ！
                 <br/>
             </li>
             <li>
@@ -178,7 +178,7 @@
                     @mouseup="button1Ref?.release(onSpaceButtonReleased);"
                     @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
                 >（スペース）</v-btn>
-                　…　印字の位置を最初に有ったところに戻すぜ。
+                　…　タイルの位置を最初に有った並びに戻すぜ。
             </li>
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
@@ -253,6 +253,22 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+            <v-slider
+                label="印字　＞　筋の数"
+                v-model="printing1FileNum"
+                :min="printing1FileMin"
+                :max="printing1FileMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
+            <v-slider
+                label="印字　＞　段の数"
+                v-model="printing1RankNum"
+                :min="printing1RankMin"
+                :max="printing1RankMax"
+                step="1"
+                showTicks="always"
+                thumbLabel="always" />
             <v-switch
                 v-model="printing1IsLooping"
                 :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
@@ -288,10 +304,10 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の回り込みスクロール、印字の両端つながり、数字柄の原始的シフト　＞　</span>ソースコード</h4>
-    <section class="sec-4">
+    <h5><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">盤の回り込みスクロール、印字の両端つながり、数字柄の原始的シフト　＞　</span>ソースコード</h5>
+    <section class="sec-5">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1"/>
+            pagePath="/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1"/>
     </section>
 </template>
 
@@ -311,7 +327,7 @@
     // + 互換性対応 +
     // ++++++++++++++
 
-    import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
+    import type { CompatibleStyleValue }  from '../../../compatibles/compatible-style-value';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -321,32 +337,32 @@
     //
 
     // from の階層が上の順、アルファベット順
-    import Button20250822 from '../../components/Button20250822.vue';
-    import SourceLink from '../../components/SourceLink.vue';
-    import Stopwatch from '../../components/Stopwatch.vue';
-    import TileAnimation from '../../components/TileAnimation.vue';
+    import Button20250822 from '@/components/Button20250822.vue';
+    import SourceLink from '@/components/SourceLink.vue';
+    import Stopwatch from '@/components/Stopwatch.vue';
+    import TileAnimation from '@/components/TileAnimation.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-    } from '../../composables/player-controller';
+    } from '../../../composables/player-controller';
     import {
         checkOutOfSightBottomIsLook, checkOutOfSightLeftIsLook, checkOutOfSightRightIsLook, checkOutOfSightTopIsLook, printingImageAndPositionAndWaitUpdate, printingMotionClearIfCountZero, printingMotionCountDown, printingMotionUpdateByInputWithWrapAround,
-    } from '../../composables/printing-controller'
-    import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
-    import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
+    } from '../../../composables/printing-controller'
+    import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
+    import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
 
     // ********************
     // * インターフェース *
     // ********************
 
-    import type Rectangle from '../../interfaces/Rectangle';
+    import type Rectangle from '../../../interfaces/Rectangle';
 
 
     // ############################
@@ -403,7 +419,7 @@
     });
     // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
-    const board1WithMaskBottomRightMargin: number = 1;          // マスクは右下に１マス分多く作ります。
+    const board1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
     const board1WithMaskFileNum = board1FileNum.value + board1WithMaskBottomRightMargin   // マスク付きの場合の列数。右側の多めの１マスを含む。
     const board1WithMaskRankNum = board1RankNum.value + board1WithMaskBottomRightMargin
     const board1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
@@ -414,15 +430,13 @@
         };
     });
     const getSquareStyleFromTileIndex = computed<
-        (tileIndex:number)=>CompatibleStyleValue
+        (tileIndex: number)=>CompatibleStyleValue
     >(() => {
-        return (tileIndex:number)=>{
+        return (tileIndex: number)=>{
             // プレイヤーが初期位置にいる場合の、マスの位置。
             const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
             const homeLeft = tileFile * board1SquareWidth;
             const homeTop = tileRank * board1SquareHeight;
-            //const homeLeft = (tileIndex % board1FileNum.value) * board1SquareWidth;
-            //const homeTop = Math.floor(tileIndex / board1FileNum.value) * board1SquareHeight;
 
             const [offsetLeftLoop, offsetTopLoop] = wrapAround(
                 homeLeft,
@@ -455,6 +469,8 @@
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
     const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
+    const printing1FileMin = 0;
+    const printing1RankMin = 0;
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
@@ -465,19 +481,19 @@
     const printing1Top = ref<number>(0);
     const printing1StringData = ref<string[]>([]);
     // マップデータを生成
-    for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
+    for (let i=0; i<printing1AreaMax; i++) {    // 印字データは最初から最大サイズで用意します。
         printing1StringData.value.push(i.toString().padStart(2, "0"));
     }
     const printing1Input = {  // 入力
         " ": false,
     } as PrintingInput;
-    const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
-    const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
-    const printing1Motion = ref<PrintingMotion>({   // 印字への入力
+    const printing1Motion = ref<PrintingMotion>({  // 印字への入力
         goToHome: false,    // ホームに戻る
         wrapAroundRight: 0, // 負なら左、正なら右
         wrapAroundBottom: 0,    // 負なら上、正なら下
     });
+    const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
+    const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;    // 歩行フレーム数
 
 
@@ -497,7 +513,6 @@
         };
     });
 
-
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
     // ++++++++++++++++++++++++++++++++++++
@@ -514,7 +529,7 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * board1SquareHeight;
     });
-    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
+    const playerHome1Style = computed<CompatibleStyleValue>(()=>{ // ボードとマスクを含んでいる領域のスタイル
         return {
             left: `${playerHome1Left.value}px`,
             top: `${playerHome1Top.value}px`,
