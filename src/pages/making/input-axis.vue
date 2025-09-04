@@ -182,7 +182,20 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-printing-shift-contents-size-variable-1/><br/>
+    <input-axis-rpg-walk-tiles-immovable-projection-moveaway-size-variable-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　上記は、盤より狭い像、広い像を扱えるという例だぜ。<br/>
+        </talk-balloon>
+    </section>
+
     <input-axis-rpg-walk-board-wraparound-scroll-loop-1/><br/>
     <input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1/><br/>
     <input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1/><br/>
@@ -224,7 +237,7 @@
     import InputAxisRpgWalkTilesImmovableProjectionBoundary1 from './input-axis/rpg-walk-tiles-immovable-projection-boundary-1.vue';
     import InputAxisRpgWalkTilesImmovableProjectionLoop1 from './input-axis/rpg-walk-tiles-immovable-projection-loop-1.vue';
     import InputAxisRpgWalkTilesImmovableProjectionMoveaway1 from './input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue';
-    import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';
+    import InputAxisRpgWalkTilesImmovableProjectionMoveawaySizeVariable1 from './input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1.vue';
     import InputAxisTargetAccumulateMoveaway1 from './input-axis/target-accumulate-moveaway-1.vue';
     import TalkBalloon from '../../components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';

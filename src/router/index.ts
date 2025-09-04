@@ -107,14 +107,6 @@ const routes = [
         component: () => import('../pages/making/input-axis/rpg-walk-player-grid-bounded-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkTilesImmovableProjectionMoveaway1',
-        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue'),
-    },
-
-    // input-axis-rpg-walk-printing-shift-contents-size-variable-1
-
-    {
         name: 'InputAxisRpgWalkTilesImmovableProjectionBoundary1',
         path: '/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1',
         component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1.vue'),
@@ -123,6 +115,16 @@ const routes = [
         name: 'InputAxisRpgWalkTilesImmovableProjectionLoop1',
         path: '/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1',
         component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkTilesImmovableProjectionMoveaway1',
+        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue'),
+    },
+    {
+        name: 'InputAxisRpgWalkTilesImmovableProjectionMoveawaySizeVariable1',
+        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1.vue'),
     },
     {
         name: 'InputAxisRpgWalkUsingBackgroundImage1',

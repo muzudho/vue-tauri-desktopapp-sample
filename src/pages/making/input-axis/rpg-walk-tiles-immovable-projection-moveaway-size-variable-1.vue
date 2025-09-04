@@ -3,14 +3,14 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>数字柄のシフト、数字柄のサイズ可変</h4>
+    <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>不動タイルへ投影・遠ざかる像・像サイズ可変</h4>
     <section class="sec-4">
         <br/>
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
             ref="stopwatch1Ref"
-            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
             style="display: none;" />
 
         <!-- 盤領域 -->
@@ -42,7 +42,7 @@
                 :style="player1Style" />
         </div>
         <p>
-            👆 上にあるスライダーバーを動かして、タイルに表示される数字を広げたり縮めたりしてみようぜ（＾▽＾）！<br/>
+            👆 設定にあるスライダーバーを動かして、タイルに表示される数字を広げたり縮めたりしてみようぜ（＾▽＾）！<br/>
         </p>
         <br/>
 
@@ -208,10 +208,10 @@
     </section>
 
     <br/>
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">数字柄のシフト、数字柄のサイズ可変　＞　</span>ソースコード</h4>
+    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">不動タイルへ投影・遠ざかる像・像サイズ可変　＞　</span>ソースコード</h4>
     <section class="sec-4">
         <source-link
-            pagePath="/making/input-axis-rpg-walk-printing-shift-contents-size-variable-1"/>
+            pagePath="/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1"/>
     </section>
 </template>
 
@@ -231,7 +231,7 @@
     // + 互換性対応 +
     // ++++++++++++++
 
-    import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
+    import type { CompatibleStyleValue }  from '../../../compatibles/compatible-style-value';
 
     // ++++++++++++++++++
     // + コンポーネント +
@@ -241,22 +241,22 @@
     //
 
     // from の階層が上の順、アルファベット順
-    import Button20250822 from '../../components/Button20250822.vue';
-    import SourceLink from '../../components/SourceLink.vue';
-    import Stopwatch from '../../components/Stopwatch.vue';
-    import TileAnimation from '../../components/TileAnimation.vue';
+    import Button20250822 from '@/components/Button20250822.vue';
+    import SourceLink from '@/components/SourceLink.vue';
+    import Stopwatch from '@/components/Stopwatch.vue';
+    import TileAnimation from '@/components/TileAnimation.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { euclideanMod } from '../../composables/periodic-table-operation';
+    import { euclideanMod } from '../../../composables/periodic-table-operation';
 
     // ********************
     // * インターフェース *
     // ********************
 
-    import type Rectangle from '../../interfaces/Rectangle';
+    import type Rectangle from '../../../interfaces/Rectangle';
 
 
     // ##########
