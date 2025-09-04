@@ -76,11 +76,13 @@ const routes = [
         path: '/making/input-axis/rpg-walk-board-grid-moveaway-1',
         component: () => import('../pages/making/input-axis/rpg-walk-board-grid-moveaway-1.vue'),
     },
+
     {
-        name: 'InputAxisRpgWalkBoardWraparoundLoopScroll1',
-        path: '/making/input-axis-rpg-walk-board-wraparound-scroll-loop-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-board-wraparound-scroll-loop-1.vue'),
+        name: 'RpgWalkTilesWraparoundProjectionLoopOutofsight1',
+        path: '/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue'),
     },
+
     {
         name: 'InputAxisRpgWalkBoardWraparoundScrollAndPrintingLoop1',
         path: '/making/input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1',

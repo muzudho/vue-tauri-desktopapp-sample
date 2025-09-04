@@ -196,7 +196,35 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-board-wraparound-scroll-loop-1/><br/>
+    <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　今度のタイルはスライドするぜ。<br/>
+            溢れ出たタイルは反対側へ回り込み（ラップアラウンド）をするぜ。<br/>
+        </talk-balloon>
+        <talk-balloon
+            :src="commonHiyoko2Src"
+            :alt="commonHiyoko2Alt"
+            :name="commonHiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+            回り込んでいるところを隠せば、無限にタイルがスライドしているように見えるわねぇ。<br/>
+        </talk-balloon>
+        <talk-balloon
+            :src="commonOton2Src"
+            :alt="commonOton2Alt"
+            :name="commonOton2Name"
+            :device="compatibleDevice1Ref?.device">
+            裏画面でこっそり描いてるというやつだな。
+        </talk-balloon>
+    </section>
+
     <input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1/><br/>
     <input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1/><br/>
     <input-axis-rpg-walk-using-background-image-1/><br/>
@@ -229,7 +257,7 @@
     import InputAxisRpgWalkUsingBackgroundImage1 from './input-axis-rpg-walk-using-background-image-1.vue';
     import InputAxisRpgWalkBoardGridMoveaway1 from './input-axis/rpg-walk-board-grid-moveaway-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingPrimordialAndPlayerBoundary1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-primordial-and-player-boundary-1.vue';
-    import InputAxisRpgWalkBoardWraparoundScrollLoop1 from './input-axis-rpg-walk-board-wraparound-scroll-loop-1.vue';
+    import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsight1 from './input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue';
     import InputAxisRpgWalkBoardWraparoundScrollAndPrintingLoop1 from './input-axis-rpg-walk-board-wraparound-scroll-and-printing-loop-1.vue';
     import InputAxisRpgWalkPlayerAccumulateMoveaway1 from './input-axis/rpg-walk-player-accumulate-moveaway-1.vue';
     import InputAxisRpgWalkPlayerGridBounded1 from './input-axis/rpg-walk-player-grid-bounded-1.vue';
