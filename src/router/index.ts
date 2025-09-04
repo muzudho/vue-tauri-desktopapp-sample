@@ -107,9 +107,9 @@ const routes = [
         component: () => import('../pages/making/input-axis/rpg-walk-player-grid-bounded-1.vue'),
     },
     {
-        name: 'InputAxisRpgWalkFaceShiftBoundary1',
-        path: '/making/input-axis-rpg-walk-printing-shift-boundary-1',
-        component: () => import('../pages/making/input-axis-rpg-walk-printing-shift-boundary-1.vue'),
+        name: 'InputAxisRpgWalkTilesImmovableProjectionMoveaway1',
+        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1',
+        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue'),
     },
 
     // input-axis-rpg-walk-printing-shift-contents-size-variable-1

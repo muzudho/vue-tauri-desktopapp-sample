@@ -113,7 +113,46 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-printing-shift-primordial-1/><br/>
+    <input-axis-rpg-walk-tiles-immovable-projection-moveaway-1/><br/>
+
+    <section class="sec-3">
+        <br/>
+        
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            👆　上記は、何にも動いてないぜ。<br/>
+            <br/>
+            タイルが並べてあって、そのタイルに何か表示されてるだけだぜ。<br/>
+        </talk-balloon>
+        <talk-balloon
+            :src="commonHiyoko2Src"
+            :alt="commonHiyoko2Alt"
+            :name="commonHiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+            それでも盤上を動いてるように見えるわよね。<br/>
+        </talk-balloon>
+        <talk-balloon
+            :src="commonKifuwarabe2Src"
+            :alt="commonKifuwarabe2Alt"
+            :name="commonKifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+            タイルは動いてないから［不動タイル］、<br/>
+            どこに保存されてるのか、数字の並びが、まるで本当に有るみたいにタイルに映ってるの、［像］だぜ。<br/>
+            ［像］はどっかに本体のデータが保存されてるのな、その本体のデータは［実物］。<br/>
+            実物をタイルに［投影］して、［像］を見てるわけだぜ。<br/>
+        </talk-balloon>
+        <talk-balloon
+            :src="commonOton2Src"
+            :alt="commonOton2Alt"
+            :name="commonOton2Name"
+            :device="compatibleDevice1Ref?.device">
+            何言ってるか分かんないよな。
+        </talk-balloon>
+    </section>
+    
     <input-axis-rpg-walk-printing-shift-boundary-1/><br/>
     <input-axis-rpg-walk-printing-shift-loop-1/><br/>
     <input-axis-rpg-walk-printing-shift-contents-size-variable-1/><br/>
@@ -155,7 +194,7 @@
     import InputAxisRpgWalkPlayerAccumulateMoveaway1 from './input-axis/rpg-walk-player-accumulate-moveaway-1.vue';
     import InputAxisRpgWalkPlayerGridBounded1 from './input-axis/rpg-walk-player-grid-bounded-1.vue';
     import InputAxisRpgWalkPlayerGridMoveaway1 from './input-axis/rpg-walk-player-grid-moveaway-1.vue';
-    import InputAxisRpgWalkPrintingShiftPrimordial1 from './input-axis-rpg-walk-printing-shift-primordial-1.vue';
+    import InputAxisRpgWalkTilesImmovableProjectionMoveaway1 from './input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue';
     import InputAxisRpgWalkPrintingShiftBoundary1 from './input-axis-rpg-walk-printing-shift-boundary-1.vue';
     import InputAxisRpgWalkPrintingShiftContentsSizeVariable1 from './input-axis-rpg-walk-printing-shift-contents-size-variable-1.vue';
     import InputAxisRpgWalkPrintingShiftLoop1 from './input-axis-rpg-walk-printing-shift-loop-1.vue';
