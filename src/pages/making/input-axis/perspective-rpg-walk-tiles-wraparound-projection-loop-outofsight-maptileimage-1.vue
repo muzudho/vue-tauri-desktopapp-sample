@@ -24,6 +24,13 @@
         <v-row
             no-gutters
             class="pane-3-top"
+            :style="{
+                position: 'fixed',
+                top: 0,
+                bottom: '67vh',
+                left: 0,
+                right: 0,
+            }"
         >
             <v-col cols="12">
 
@@ -67,68 +74,40 @@
         </v-row>
 
         <!-- 中段の画像エリア（固定） -->
-        <v-row
+        <div
             no-gutters
             class="pane-3-middle"
-            style="
-                background-color: skyblue;
-            ">
-            <!--
             :style="{
                 position: 'fixed',
-                top: '15vh',
-                bottom: `calc(100vh - ${5 * controllerSquareUnit}px)`,
+                top: '33vh',
+                bottom: `calc(${5 * controllerSquareUnit}px)`,
                 left: 0,
                 right: 0,
-                backgroundColor: 'green',
-                zIndex: 100,
             }"
-            -->
-            <v-col cols="12">
+            style="
+                background-color: skyblue;
+            "
+        >
 
-                <!-- 盤領域 -->
+            <!-- 盤領域 -->
+            <div
+                class="board"
+                :style="board1Style">
+
+                <!-- 自機のホーム１ -->
                 <div
-                    class="board"
-                    :style="board1Style">
+                    class="playerHome"
+                    :style="playerHome1Style">
+                </div>
 
-                    <!-- 自機のホーム１ -->
-                    <div
-                        class="playerHome"
-                        :style="playerHome1Style">
-                    </div>
-
-                    <!-- スクウェアのグリッド -->
-                    <tile
-                        v-for="i in board1Area"
-                        :key="i"
-                        class="square"
-                        :style="getSquareStyleFromTileIndex(i - 1)"
-                        :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
-                            getPrintingIndexFromFixedSquareIndex(
-                                getFixedSquareIndexFromTileIndex(
-                                    i - 1,
-                                    board1SquareWidth,
-                                    board1SquareHeight,
-                                    board1FileNum,
-                                    board1RankNum,
-                                    printing1Left,
-                                    printing1Top,
-                                ),
-                                -Math.floor(printing1Left / board1SquareWidth),
-                                -Math.floor(printing1Top / board1SquareHeight),
-                                board1FileNum,
-                                printing1FileNum,
-                                printing1RankNum,
-                                printing1IsLooping,
-                            )
-                        ) ?? 0"
-                        :srcTop="0"
-                        :srcWidth="board1SquareWidth"
-                        :srcHeight="board1SquareHeight"
-                        tilemapUrl="/img/making/tilemap-floor-20250826.png">
-
-                        <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
-                        <span class="board-fixed-square-index">fix[{{
+                <!-- スクウェアのグリッド -->
+                <tile
+                    v-for="i in board1Area"
+                    :key="i"
+                    class="square"
+                    :style="getSquareStyleFromTileIndex(i - 1)"
+                    :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
+                        getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
                                 board1SquareWidth,
@@ -137,9 +116,53 @@
                                 board1RankNum,
                                 printing1Left,
                                 printing1Top,
-                            )
-                        }}]</span>
-                        <span class="board-printing-index">print[{{
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    ) ?? 0"
+                    :srcTop="0"
+                    :srcWidth="board1SquareWidth"
+                    :srcHeight="board1SquareHeight"
+                    tilemapUrl="/img/making/tilemap-floor-20250826.png">
+
+                    <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
+                    <span class="board-fixed-square-index">fix[{{
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        )
+                    }}]</span>
+                    <span class="board-printing-index">print[{{
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    }}]</span>
+                    <span class="board-square-printing-string">{{
+                        printing1Ref?.getPrintingStringFromPrintingIndex(
                             getPrintingIndexFromFixedSquareIndex(
                                 getFixedSquareIndexFromTileIndex(
                                     i - 1,
@@ -157,61 +180,38 @@
                                 printing1RankNum,
                                 printing1IsLooping,
                             )
-                        }}]</span>
-                        <span class="board-square-printing-string">{{
-                            printing1Ref?.getPrintingStringFromPrintingIndex(
-                                getPrintingIndexFromFixedSquareIndex(
-                                    getFixedSquareIndexFromTileIndex(
-                                        i - 1,
-                                        board1SquareWidth,
-                                        board1SquareHeight,
-                                        board1FileNum,
-                                        board1RankNum,
-                                        printing1Left,
-                                        printing1Top,
-                                    ),
-                                    -Math.floor(printing1Left / board1SquareWidth),
-                                    -Math.floor(printing1Top / board1SquareHeight),
-                                    board1FileNum,
-                                    printing1FileNum,
-                                    printing1RankNum,
-                                    printing1IsLooping,
-                                )
-                            ) ?? 0
-                        }}</span>
+                        ) ?? 0
+                    }}</span>
 
-                    </tile>
+                </tile>
 
-                    <!-- 自機１ -->
-                    <tile-animation
-                        :frames="player1Frames"
-                        tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                        :slow="player1AnimationSlow"
-                        :time="stopwatch1Count"
-                        class="player"
-                        :style="player1Style" />
-                    
-                    <!-- 視界の外１ -->
-                    <out-of-sight-making
-                        ref="outOfSight1Ref"
-                        :board1SquareWidth="board1SquareWidth"
-                        :board1SquareHeight="board1SquareHeight"
-                        :board1FileNum="board1FileNum"
-                        :board1RankNum="board1RankNum">
-                    </out-of-sight-making>
-                </div>
+                <!-- 自機１ -->
+                <tile-animation
+                    :frames="player1Frames"
+                    tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                    :slow="player1AnimationSlow"
+                    :time="stopwatch1Count"
+                    class="player"
+                    :style="player1Style" />
+                
+                <!-- 視界の外１ -->
+                <out-of-sight-making
+                    ref="outOfSight1Ref"
+                    :board1SquareWidth="board1SquareWidth"
+                    :board1SquareHeight="board1SquareHeight"
+                    :board1FileNum="board1FileNum"
+                    :board1RankNum="board1RankNum">
+                </out-of-sight-making>
+            </div>
 
-                <div style="z-index: 10;">
-                    印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
-                    印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
-                    人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
-                    印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
-                    outOfSight1WithMaskSizeSquare={{ outOfSight1WithMaskSizeSquare }}<br/>
-                </div>
-                <br/>
-
-            </v-col>
-        </v-row>
+            <div style="z-index: 10;">
+                印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
+                印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
+                人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
+                印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
+                outOfSight1WithMaskSizeSquare={{ outOfSight1WithMaskSizeSquare }}<br/>
+            </div>
+        </div>
 
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
         <!--
