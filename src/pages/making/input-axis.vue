@@ -261,7 +261,7 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import SourceLink from '../../components/SourceLink.vue';
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1 from './input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue';
     import InputAxisRpgWalkBoardGridMoveaway1 from './input-axis/rpg-walk-board-grid-moveaway-1.vue';
     import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsight1 from './input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue';
@@ -273,15 +273,10 @@
     import InputAxisRpgWalkTilesImmovableProjectionMoveaway1 from './input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue';
     import InputAxisRpgWalkTilesImmovableProjectionMoveawaySizeVariable1 from './input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1.vue';
     import InputAxisTargetAccumulateMoveaway1 from './input-axis/target-accumulate-moveaway-1.vue';
+    import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーネント　＞　互換性対応 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    import CompatibleDevice from '@/components/CompatibleDevice.vue'
 
 
     // ##########
