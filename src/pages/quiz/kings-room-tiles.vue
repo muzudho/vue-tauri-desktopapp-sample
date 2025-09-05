@@ -8,6 +8,8 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
+    <compatible-device ref="compatibleDevice1Ref"/>
+
     <h3>王の間のタイルを市松模様にしようぜ！</h3>
     <section class="sec-3">
         <br/>

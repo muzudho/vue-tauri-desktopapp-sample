@@ -7,6 +7,8 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
+    <compatible-device ref="compatibleDevice1Ref"/>
+
     <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
     <stopwatch
         ref="stopwatch1Ref"
@@ -170,121 +172,7 @@
             <h4>［設定］説明</h4>
             <section class="sec-4">
                 <br/>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［ズーム］ってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ゲーム画面を拡大縮小させるぜ。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［スローモーション］ってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ゲーム内の時計を遅くするぜ。これも好みで。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［自機のホーム］ってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    画面上で、自機がずっと守ってる位置だな。<br/>
-                    画面端になると、自機はホームから離れるよう設定することもできるぜ。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［水平（垂直）方向のタイル数］ってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    盤のヨコ（タテ）サイズだな。<br/>
-                    画面で見えてないところも含めたサイズだぜ。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［マスク枠の幅］ってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    盤の端っこを隠している黒い半透明のやつの幅だな。<br/>
-                    右側と下側は、１マス余分に多めに付くぜ。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［像の端と端がつながって（ループして）］いますってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    例えば、右へ歩いて行ったら、盤の左から出てくる、みたいなやつだぜ。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［画面外を見せない］をしていませんってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    像がないところまでは歩いていけないようなガードは、掛けていません、ってことだぜ。
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonHiyoko2Src"
-                    :alt="commonHiyoko2Alt"
-                    :name="commonHiyoko2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    ［盤の端まで歩ける］を可能にしていませんってのは？<br/>
-                </talk-balloon>
-                <talk-balloon
-                    :src="commonOton2Src"
-                    :alt="commonOton2Alt"
-                    :name="commonOton2Name"
-                    :device="compatibleDevice1Ref?.device">
-                    像の端っこが見えたとき、自機がホームポジションを離れて画面端まで歩くような動きを、やらせていませんってことだぜ。
-                </talk-balloon>
+                <preferences-explanation/>
             </section>
             <br/>
 
@@ -782,6 +670,12 @@
     // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント　＞　設定の説明 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
