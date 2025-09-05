@@ -1,5 +1,5 @@
 <template>
-    <the-parent-header/>
+    <the-header/>
 
     <h2>Welcome to Tauri + Vue の部だぜ！</h2>
 
@@ -25,7 +25,7 @@
 
     <p>{{ greetMsg }}</p>
 
-    <the-parent-footer/>
+    <the-footer/>
 </template>
 
 <script setup lang="ts">
@@ -41,8 +41,8 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheParentHeader from '../the-header.vue';
-    import TheParentFooter from '../the-footer.vue';
+    import TheHeader from './the-header.vue';
+    import TheFooter from './the-footer.vue';
 
 
     // ##############

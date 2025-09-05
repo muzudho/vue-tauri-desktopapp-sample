@@ -1,5 +1,5 @@
 <template>
-    <the-grand-parent-header/>
+    <the-parent-header/>
 
     <h2>コーディング・スタイルの部だぜ！</h2>
     <section class="sec-2">
@@ -11,7 +11,7 @@
         </ul>
     </section>
 
-    <the-grand-parent-footer/>
+    <the-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -24,8 +24,8 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheGrandParentFooter from '../../the-footer.vue';
-    import TheGrandParentHeader from '../../the-header.vue';
+    import TheParentFooter from '../the-footer.vue';
+    import TheParentHeader from '../the-header.vue';
 
 
     // ++++++++++++++++++

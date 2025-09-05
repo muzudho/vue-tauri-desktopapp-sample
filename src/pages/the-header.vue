@@ -1,9 +1,6 @@
 <template>
     <section class="sec-1">
-        <v-btn @click="goToHome" v-tooltip="'下の部を閉じる'">❌</v-btn>
-        <!--
-            <router-link to="/">このサイトのホームへ戻る</router-link>
-        -->
+        <v-btn @click="goBack" v-tooltip="'下の部を閉じる'">❌</v-btn>
     </section>
 </template>
 
@@ -22,7 +19,7 @@
 
     const router = useRouter();
 
-    function goToHome() : void {
+    function goBack() : void {
         router.push('/');
     }
 
