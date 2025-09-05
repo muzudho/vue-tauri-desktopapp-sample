@@ -152,7 +152,7 @@
             何言ってるか分かんないよな。
         </talk-balloon>
     </section>
-    
+
     <input-axis-rpg-walk-tiles-immovable-projection-boundary-1/><br/>
 
     <section class="sec-3">

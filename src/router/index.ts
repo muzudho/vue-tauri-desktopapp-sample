@@ -196,6 +196,11 @@ const routes = [
         path: '/making/tile-crop',
         component: () => import('../pages/making/tile-crop.vue'),
     },
+    {
+        name: 'TwoPanes',
+        path: '/making/two-panes',
+        component: () => import('../pages/making/two-panes.vue'),
+    },
 
 
     // ++++++++++++++
