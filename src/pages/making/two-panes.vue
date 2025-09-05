@@ -1,5 +1,5 @@
 <template>
-    <v-container fluid class="pa-0 full-height">
+    <v-container fluid class="two-panes-container">
         <!-- 上半分の画像エリア（固定） -->
         <v-row no-gutters class="top-pane">
             <v-col cols="12">
@@ -41,7 +41,8 @@
 </script>
 
 <style scoped>
-    .full-height {
+    .two-panes-container {
+        padding: 0;
         top: 0;
         bottom: 0;  /* height: 100vh; では無駄な垂直スクロールバーが出ることがある。 bottom: 0; にすると垂直スクロールバーが出ない */
         display: flex;
