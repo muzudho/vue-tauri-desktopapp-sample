@@ -152,14 +152,14 @@ const routes = [
         component: () => import('../pages/making/npc-walk.vue'),
     },
     {
-        name: 'Panes2',
-        path: '/making/panes-2',
-        component: () => import('../pages/making/panes-2.vue'),
+        name: 'PerspectiveVertical2Panes',
+        path: '/making/perspective-vertical-2-panes',
+        component: () => import('../pages/making/perspective-vertical-2-panes.vue'),
     },
     {
-        name: 'Panes3',
-        path: '/making/panes-3',
-        component: () => import('../pages/making/panes-3.vue'),
+        name: 'PerspectiveVertical3Panes',
+        path: '/making/perspective-vertical-3-panes',
+        component: () => import('../pages/making/perspective-vertical-3-panes.vue'),
     },
     {
         name: 'PageLayout',

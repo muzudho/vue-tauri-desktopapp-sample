@@ -8,8 +8,8 @@
 
         <ul>
             <li>📖 <router-link to="/making/page-layout" :style="getPreviousLinkHighlight('/making/page-layout')">説明を始める前に、説明ページのレイアウトを決めておこうぜ！</router-link></li>
-            <li>📖 <router-link to="/making/panes-2" :style="getPreviousLinkHighlight('/making/panes-2')">画面を上下に分けようぜ！</router-link></li>
-            <li>📖 <router-link to="/making/panes-3" :style="getPreviousLinkHighlight('/making/panes-3')">画面を３段に分けようぜ！</router-link></li>
+            <li>📖 <router-link to="/making/perspective-vertical-2-panes" :style="getPreviousLinkHighlight('/making/perspective-vertical-2-panes')">画面を上下に分けようぜ！</router-link></li>
+            <li>📖 <router-link to="/making/perspective-vertical-3-panes" :style="getPreviousLinkHighlight('/making/perspective-vertical-3-panes')">画面を３段に分けようぜ！</router-link></li>
 
             <li>📖 <router-link to="/making/svg-arrow" :style="getPreviousLinkHighlight('/making/svg-arrow')">グラフを描こうぜ！</router-link></li>
             <li>📖 <router-link to="/making/skill-tree-layout" :style="getPreviousLinkHighlight('/making/skill-tree-layout')">説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！</router-link></li>
