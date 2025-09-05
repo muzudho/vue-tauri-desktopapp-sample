@@ -1,7 +1,8 @@
 <template>
-    <v-container fluid class="two-panes-container">
-        <!-- 上半分の画像エリア（固定） -->
-        <v-row no-gutters class="top-pane">
+    <v-container fluid class="vertical-panes-container">
+        <!-- 上段の画像エリア（固定） -->
+        <v-row no-gutters class="pane-3-top">
+            <!--  -->
             <v-col cols="12">
                 <v-img
                     src="https://picsum.photos/1920/1080"
@@ -20,8 +21,15 @@
             </v-col>
         </v-row>
 
-        <!-- 下半分のスクロール可能なテキストエリア -->
-        <v-row no-gutters class="bottom-pane">
+        <!-- 中段の画像エリア（固定） -->
+        <v-row no-gutters class="pane-3-middle" style="background-color: skyblue;">
+            <v-col cols="12">
+                中段
+            </v-col>
+        </v-row>
+
+        <!-- 下段のスクロール可能なテキストエリア -->
+        <v-row no-gutters class="pane-3-bottom">
             <v-col cols="12">
                 <v-card class="pa-4 scrollable-content">
                     <v-card-title>Scrollable Text Content</v-card-title>
@@ -42,6 +50,6 @@
 
 <style scoped>
 
-    @import '@/styles/two-panes.css';
+    @import '@/styles/perspective.css';
 
 </style>

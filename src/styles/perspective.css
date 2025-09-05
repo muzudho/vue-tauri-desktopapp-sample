@@ -1,4 +1,4 @@
-.two-panes-container {
+.vertical-panes-container {
     padding: 0;
     top: 0;
     bottom: 0;  /* height: 100vh; では無駄な垂直スクロールバーが出ることがある。 bottom: 0; にすると垂直スクロールバーが出ない */
@@ -7,11 +7,16 @@
     overflow-y: hidden; /* 垂直スクロールを禁止するだけで、スクロールバーが非表示になるわけではない */
     scrollbar-width: none;  /* Firefox でスクロールバーを非表示にする */
 }
-.two-panes-container::-webkit-scrollbar {
+.vertical-panes-container::-webkit-scrollbar {
     display: none;  /* WebKitでスクロールバーを非表示にする */
 }
 
-.top-pane {
+.scrollable-content {
+    min-height: 100%; /* コンテンツが少ない場合でもスクロールエリアを確保 */
+}
+
+/* ２段組みの上段 */
+.pane-2-top {
     height: 50vh;
     position: fixed;
     top: 0;
@@ -20,13 +25,40 @@
     z-index: 1;
 }
 
-.bottom-pane {
+/* ２段組みの下段 */
+.pane-2-bottom {
     position: fixed;
     top: 50vh;
     bottom: 0;
     overflow-y: auto; /* スクロール可能にする */
 }
 
-.scrollable-content {
-    min-height: 100%; /* コンテンツが少ない場合でもスクロールエリアを確保 */
+/* ３段組みの上段 */
+.pane-3-top {
+    position: fixed;
+    top: 0;
+    bottom: 66vh;
+    left: 0;
+    right: 0;
+    z-index: 1;
+}
+
+/* ３段組みの中段 */
+.pane-3-middle {
+    position: fixed;
+    top: 33vh;
+    bottom: 33vh;
+    left: 0;
+    right: 0;
+    z-index: 2;
+}
+
+/* ３段組みの下段 */
+.pane-3-bottom {
+    position: fixed;
+    top: 66vh;
+    bottom: 0vh;
+    left: 0;
+    right: 0;
+    z-index: 3;
 }

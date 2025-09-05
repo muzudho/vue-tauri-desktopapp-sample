@@ -152,6 +152,16 @@ const routes = [
         component: () => import('../pages/making/npc-walk.vue'),
     },
     {
+        name: 'Panes2',
+        path: '/making/panes-2',
+        component: () => import('../pages/making/panes-2.vue'),
+    },
+    {
+        name: 'Panes3',
+        path: '/making/panes-3',
+        component: () => import('../pages/making/panes-3.vue'),
+    },
+    {
         name: 'PageLayout',
         path: '/making/page-layout',
         component: () => import('../pages/making/page-layout.vue'),
@@ -195,11 +205,6 @@ const routes = [
         name: 'TileCrop',
         path: '/making/tile-crop',
         component: () => import('../pages/making/tile-crop.vue'),
-    },
-    {
-        name: 'TwoPanes',
-        path: '/making/two-panes',
-        component: () => import('../pages/making/two-panes.vue'),
     },
 
 
