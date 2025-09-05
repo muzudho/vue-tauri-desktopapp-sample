@@ -272,7 +272,7 @@ const routes = [
     {
         name: 'WelcomeToTauriAndVue',
         path: '/welcome-to-tauri-and-vue',
-        component: () => import('../pages/welcome-to-tauri-and-vue.vue'),
+        component: () => import('../pages/welcome-to-tauri-and-vue/index.vue'),
     },
 ] as const;
 

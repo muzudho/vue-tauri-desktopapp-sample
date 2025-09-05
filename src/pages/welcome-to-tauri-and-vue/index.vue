@@ -1,6 +1,6 @@
 <template>
     <the-grand-parent-header/>
-    <the-header/>
+    <the-parent-header/>
 
     <h2>Welcome to Tauri + Vue だぜ！　の部</h2>
 
@@ -26,7 +26,7 @@
 
     <p>{{ greetMsg }}</p>
 
-    <the-footer/>
+    <the-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -42,9 +42,9 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheGrandParentHeader from '../the-header.vue';
-    import TheHeader from './the-header.vue';
-    import TheFooter from './the-footer.vue';
+    import TheGrandParentHeader from '../../the-header.vue';
+    import TheParentHeader from '../the-header.vue';
+    import TheParentFooter from '../the-footer.vue';
 
 
     // ##############
@@ -52,7 +52,7 @@
     // ##############
 
     // 画像パス
-    import AssetsVueLogoSvg from '../assets/vue.svg';
+    import AssetsVueLogoSvg from '@/assets/vue.svg';
 
     const greetMsg = ref("");
     const name = ref("");
