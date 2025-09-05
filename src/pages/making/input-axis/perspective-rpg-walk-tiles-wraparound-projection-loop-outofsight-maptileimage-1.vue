@@ -656,6 +656,7 @@
     // from の階層が上の順、アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
+    import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
     import PrintingMaking from '@/components/PrintingMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
@@ -670,12 +671,6 @@
     // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーネント　＞　設定の説明 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +

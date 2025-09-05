@@ -135,13 +135,8 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import TalkBalloon from '@/components/TalkBalloon.vue';
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーネント　＞　互換性対応 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
+    import TalkBalloon from '@/components/TalkBalloon.vue';
 
 
     // ##########
