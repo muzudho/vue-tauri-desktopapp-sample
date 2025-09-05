@@ -6,8 +6,6 @@
             </NuxtLayout>
             -->
 
-            <the-header></the-header>
-
             <!-- このビューにコンポーネントがレンダリングされる。 -->
             <router-view />
 
@@ -16,23 +14,9 @@
 </template>
 
 <script setup lang="ts">
-
-    // ##############
-    // # インポート #
-    // ##############
-
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
-
-    import TheHeader from './the-header.vue';
-
 </script>
 
 <style>
     @import '@/styles/talk-scene.css';
     @import '@/styles/warabenture.css';
-
-   /* @import './styles/warabenture.css'; */
-
 </style>

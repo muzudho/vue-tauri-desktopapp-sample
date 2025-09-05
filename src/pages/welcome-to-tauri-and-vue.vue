@@ -1,4 +1,5 @@
 <template>
+    <the-grand-parent-header/>
     <the-header/>
 
     <h2>Welcome to Tauri + Vue の部だぜ！</h2>
@@ -41,6 +42,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import TheGrandParentHeader from '../the-header.vue';
     import TheHeader from './the-header.vue';
     import TheFooter from './the-footer.vue';
 

@@ -1,4 +1,5 @@
 <template>
+    <the-grand-parent-header/>
     <the-parent-header/>
 
     <h2>クイズの部だぜ！</h2>
@@ -25,6 +26,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import TheGrandParentHeader from '../../the-header.vue';
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';
 

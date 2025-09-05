@@ -1,4 +1,6 @@
 <template>
+    <the-grand-parent-header/>
+    
     <!-- ホームに閉じるボタンはありません。 -->
 
     <section class="sec-1">
@@ -37,7 +39,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    // ホームに閉じるボタンはありません。
+    import TheGrandParentHeader from '../the-header.vue';
 
 
     // ##############

@@ -1,4 +1,5 @@
 <template>
+    <the-grand-parent-header/>
     <the-parent-header/>
 
     <h2>ブログの部だぜ！</h2>
@@ -23,6 +24,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
+    import TheGrandParentHeader from '../../the-header.vue';
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';
     import Blog20250809SatSample from './2025-08/09-sat-sample.vue';
