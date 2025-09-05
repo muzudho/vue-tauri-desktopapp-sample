@@ -35,8 +35,8 @@
             <the-header/>
 
             <!-- ブログ領域 -->
-            <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h4>
-            <section class="sec-4">
+            <h3><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h3>
+            <section class="sec-3">
                 <br/>
 
                 <!-- 免責 -->
@@ -53,20 +53,117 @@
                     うわっ、狭。画面を３分割してんのか。<br/>
                     スクロールバーを使って下まで読んでくれだぜ。<br/>
                 </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    じゃあ１個１個説明していくかだぜ。<br/>
+                    <br/>
+                    画面の上段、つまりここは、引き続きブログになっているのでスクロールバーを下げて読んでいってくれだぜ。<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    画面の中段は、ゲーム画面を置いているぜ。<br/>
+                    クリックしても何も起こらない。<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    画面の下段は、コントローラーになっているぜ。<br/>
+                    ＰＣならクリックするか、キーボード入力を。スマホならタッチをしてくれだぜ。<br/>
+                </talk-balloon>
+            </section>
 
-                <p>
-                    👆 半透明の黒いマスクのところは画面に映らないようにすればＯｋだぜ（＾～＾）！<br/>
-                    マスの中の４段目の数字は、ソース・タイルのインデックスだぜ（＾～＾）！<br/>
-                </p>
+            <h4>ゲーム画面説明</h4>
+            <section class="sec-4">
                 <br/>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ゲーム画面にかかっている半透明の黒いのは何なの？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    その部分は、ゲーム画面では見えないところだと思ってくれだぜ。<br/>
+                    見えないところで隠れてなんか処理してると思ってくれだぜ。
+                </talk-balloon>
+            </section>
 
-                <p>元画像のタイルマップを表示：</p>
+            <h4>コントローラー説明</h4>
+            <section class="sec-4">
+                <br/>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［↑］［→］［↓］［←］キーで自機を上下左右に移動させるぜ。<br/>
+                    ［（スペース）］キーは、リセットボタンだな。<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［何もしないボタン］って何なの？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ＰＣで、例えばスライダーバーを触ったあとに自機を左右に動かそうとしたら、<br/>
+                    自機ではなくてスライダーバーのボックスが左右に動くことがある。<br/>
+                    邪魔なんで［何もしないボタン］を押すことでスライダーバーからフォーカスを外す、といった用途で使う。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［設定を表示］ボタンの中には、いろいろ設定が入っているので、いじってみてくれだぜ。<br/>
+                    あとで説明しよう。
+                </talk-balloon>
+            </section>
+
+            <h4>裏情報</h4>
+            <section class="sec-4">
+                <br/>
+                <talk-balloon
+                    :src="commonKifuwarabe2Src"
+                    :alt="commonKifuwarabe2Alt"
+                    :name="commonKifuwarabe2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    おっと、ここで裏情報だぜ。<br/>
+                    👇 何だぜ、これは？<br/>
+                </talk-balloon>
+
+                <p>床タイルマップ：</p>
                 <v-img
                     src="/img/making/tilemap-floor-20250826.png"
                     :style="`width: ${8 * board1SquareWidth}px; height:${4 * board1SquareHeight}px;`"
                     style="image-rendering: pixelated; margin:0; padding:0; border:dashed 4px gray;"/>
-                <p>：ここまで。</p>
                 <br/>
+
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    画像ファイルだぜ。<br/>
+                    ここからタイルを切り取って、ゲーム画面へペタペタ貼り付けてるわけだな。
+                </talk-balloon>
 
             </section>
 
@@ -136,6 +233,7 @@
                     :srcHeight="board1SquareHeight"
                     tilemapUrl="/img/making/tilemap-floor-20250826.png">
 
+                    <!--
                     <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                     <span class="board-fixed-square-index">fix[{{
                         getFixedSquareIndexFromTileIndex(
@@ -188,6 +286,7 @@
                             )
                         ) ?? 0
                     }}</span>
+                    -->
 
                 </tile>
 
@@ -370,7 +469,6 @@
                 @mouseleave="button1Ref?.release();"
             >{{ config1IsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
             <section v-if="config1IsShowing" class="sec-1">
-                <br/>
                 <v-slider
                     label="ズーム"
                     v-model="appZoom"
@@ -615,7 +713,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = ref<number>(2);    // ズーム
+    const appZoom = ref<number>(3);    // ズーム
 
 
     // ################
