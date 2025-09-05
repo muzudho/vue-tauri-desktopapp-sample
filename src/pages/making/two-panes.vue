@@ -42,10 +42,15 @@
 
 <style scoped>
     .full-height {
-        height: 100vh;
+        top: 0;
+        bottom: 0;  /* height: 100vh; では無駄な垂直スクロールバーが出ることがある。 bottom: 0; にすると垂直スクロールバーが出ない */
         display: flex;
         flex-direction: column;
-        overflow-y: hidden; /* 垂直スクロールバーを非表示 */
+        overflow-y: hidden; /* 垂直スクロールを禁止するだけで、スクロールバーが非表示になるわけではない */
+        scrollbar-width: none;  /* Firefox でスクロールバーを非表示にする */
+    }
+    .full-height::-webkit-scrollbar {
+        display: none;  /* WebKitでスクロールバーを非表示にする */
     }
 
     .top-pane {
@@ -60,7 +65,7 @@
     .bottom-pane {
         position: fixed;
         top: 50vh;
-        height: 50vh;
+        bottom: 0;
         overflow-y: auto; /* スクロール可能にする */
     }
 
