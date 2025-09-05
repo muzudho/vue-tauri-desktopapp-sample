@@ -109,24 +109,6 @@
         </div>
         <br/>
 
-        <p>
-            👆　自機が動く代わりに、盤の方がスクロールして、そして画面外に出た端のタイルが、反対側の端に回り込み（ラップアラウンド）しているぜ（＾▽＾）<br/>
-            端はちらつくから、ゲームで使うときは、半透明の黒いマスクが掛かっているところは画面に映らないようにしてくれだぜ（＾～＾）！<br/>
-            <br/>
-            マスの中の１段目の数字は、タイルに付いている番号だぜ（＾▽＾）！<br/>
-            ２段目の数字は、スタビライザーだぜ、つまり、見た目上、左上から 0, 1, 2 ... となるように画面に固定（Fix）した番号だぜ（＾▽＾）！<br/>
-            ３段目の大きな数字は、印字だぜ（＾▽＾）！<br/>
-            <br/>
-            タイルはスワップ（塗り替え）ではなく、スクロールしているぜ。スクロールってのは、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
-            <br/>
-        	👆　［設定を表示］から設定をいじって、 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
-        	盤より大きな数字柄がシフトしているのを見てくれだぜ（＾▽＾）！<br/>
-            <br/>
-            👆　［設定を表示］から設定をいじって、フィールドの端まで歩いてみてくれだぜ（＾▽＾）！<br/>
-            上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！<br/>
-        </p>
-        <br/>
-
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -313,6 +295,25 @@
                 </section>
             <br/>
         </section>
+
+        <p>
+            👆　自機が動く代わりに、盤の方がスクロールして、そして画面外に出た端のタイルが、反対側の端に回り込み（ラップアラウンド）しているぜ（＾▽＾）<br/>
+            端はちらつくから、ゲームで使うときは、半透明の黒いマスクが掛かっているところは画面に映らないようにしてくれだぜ（＾～＾）！<br/>
+            <br/>
+            マスの中の１段目の数字は、タイルに付いている番号だぜ（＾▽＾）！<br/>
+            ２段目の数字は、スタビライザーだぜ、つまり、見た目上、左上から 0, 1, 2 ... となるように画面に固定（Fix）した番号だぜ（＾▽＾）！<br/>
+            ３段目の大きな数字は、印字だぜ（＾▽＾）！<br/>
+            <br/>
+            タイルはスワップ（塗り替え）ではなく、スクロールしているぜ。スクロールってのは、数ドットずつ流れるように動いていくことだぜ（＾～＾）<br/>
+            <br/>
+        	👆　［設定を表示］から設定をいじって、 ヨコ：１０、タテ：１０のサイズのフィールドを歩いてみてくれだぜ（＾▽＾）！<br/>
+        	盤より大きな数字柄がシフトしているのを見てくれだぜ（＾▽＾）！<br/>
+            <br/>
+            👆　［設定を表示］から設定をいじって、フィールドの端まで歩いてみてくれだぜ（＾▽＾）！<br/>
+            上下左右の端に画面外が見えないようにロックがかかるか、また、盤の端まで歩けるか、試してみてくれだぜ（＾▽＾）！<br/>
+        </p>
+        <br/>
+
     </section>
 
     <br/>
@@ -793,11 +794,13 @@
      */
     function onLeftButtonPressed() : void {
         player1Input.ArrowLeft = true;
+        printing1Input.ArrowLeft = true;
     }
 
 
     function onLeftButtonReleased() : void {
         player1Input.ArrowLeft = false;
+        printing1Input.ArrowLeft = false;
     }
 
 
@@ -806,11 +809,13 @@
      */
     function onUpButtonPressed() : void {
         player1Input.ArrowUp = true;
+        printing1Input.ArrowUp = true;
     }
 
 
     function onUpButtonReleased() : void {
         player1Input.ArrowUp = false;
+        printing1Input.ArrowUp = false;
     }
 
 
@@ -819,11 +824,13 @@
      */
     function onRightButtonPressed() : void {
         player1Input.ArrowRight = true;
+        printing1Input.ArrowRight = true;
     }
 
 
     function onRightButtonReleased() : void {
         player1Input.ArrowRight = false;
+        printing1Input.ArrowRight = false;
     }
 
 
@@ -832,11 +839,13 @@
      */
     function onDownButtonPressed() : void {
         player1Input.ArrowDown = true;
+        printing1Input.ArrowDown = true;
     }
 
 
     function onDownButtonReleased() : void {
         player1Input.ArrowDown = false;
+        printing1Input.ArrowDown = false;
     }
 
 
@@ -845,11 +854,13 @@
      */
     function onSpaceButtonPressed() : void {
         player1Input[" "] = true;
+        printing1Input[" "] = true;
     }
 
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+        printing1Input[" "] = false;
     }
 
 

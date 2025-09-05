@@ -865,11 +865,13 @@
      */
     function onLeftButtonPressed() : void {
         player1Input.ArrowLeft = true;
+        printing1Input.ArrowLeft = true;
     }
 
 
     function onLeftButtonReleased() : void {
         player1Input.ArrowLeft = false;
+        printing1Input.ArrowLeft = false;
     }
 
 
@@ -878,11 +880,13 @@
      */
     function onUpButtonPressed() : void {
         player1Input.ArrowUp = true;
+        printing1Input.ArrowUp = true;
     }
 
 
     function onUpButtonReleased() : void {
         player1Input.ArrowUp = false;
+        printing1Input.ArrowUp = false;
     }
 
 
@@ -891,11 +895,13 @@
      */
     function onRightButtonPressed() : void {
         player1Input.ArrowRight = true;
+        printing1Input.ArrowRight = true;
     }
 
 
     function onRightButtonReleased() : void {
         player1Input.ArrowRight = false;
+        printing1Input.ArrowRight = false;
     }
 
 
@@ -904,11 +910,13 @@
      */
     function onDownButtonPressed() : void {
         player1Input.ArrowDown = true;
+        printing1Input.ArrowDown = true;
     }
 
 
     function onDownButtonReleased() : void {
         player1Input.ArrowDown = false;
+        printing1Input.ArrowDown = false;
     }
 
 
@@ -917,11 +925,13 @@
      */
     function onSpaceButtonPressed() : void {
         player1Input[" "] = true;
+        printing1Input[" "] = true;
     }
 
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+        printing1Input[" "] = false;
     }
 
 
