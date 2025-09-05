@@ -73,6 +73,17 @@
             style="
                 background-color: skyblue;
             ">
+            <!--
+            :style="{
+                position: 'fixed',
+                top: '15vh',
+                bottom: `calc(100vh - ${5 * controllerSquareUnit}px)`,
+                left: 0,
+                right: 0,
+                backgroundColor: 'green',
+                zIndex: 100,
+            }"
+            -->
             <v-col cols="12">
 
                 <!-- 盤領域 -->
@@ -203,295 +214,304 @@
         </v-row>
 
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
-        <v-row no-gutters class="pane-3-bottom">
-            <v-col cols="12">
+        <!--
+            class="pane-3-bottom"
                 <v-card class="pa-4 scrollable-content">
+        -->
+        <div
+            :style="{
+                position: 'fixed',
+                top: `calc(100vh - ${5 * controllerSquareUnit}px)`,
+                bottom: 0,
+                left: 0,
+                right: 0,
+            }"
+        >
+            <!--
+                backgroundColor: 'green',
+            -->
 
-                    <!-- スペース・キー -->
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${0 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onSpaceButtonReleased);"
-                        @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
-                        @touchleave="button1Ref?.release(onSpaceButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onSpaceButtonReleased);"
-                        @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
-                        v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
-                    >（スペース）</v-btn>
+            <!-- スペース・キー -->
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${1 * controllerSquareUnit}px;
+                    left: ${0 * controllerSquareUnit}px;
+                    width: ${3 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
+                @touchend="button1Ref?.release(onSpaceButtonReleased);"
+                @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
+                @touchleave="button1Ref?.release(onSpaceButtonReleased);"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
+                @mouseup="button1Ref?.release(onSpaceButtonReleased);"
+                @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
+                v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
+            >（スペース）</v-btn>
 
-                    <!-- 十字キー -->
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${0 * controllerSquareUnit}px;
-                            left: ${6 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onUpButtonReleased);"
-                        @touchcancel="button1Ref?.release(onUpButtonReleased);"
-                        @touchleave="button1Ref?.release(onUpButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onUpButtonReleased);"
-                        @mouseleave="button1Ref?.release(onUpButtonReleased);"
-                        v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
-                    >↑</v-btn>
+            <!-- 十字キー -->
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${0 * controllerSquareUnit}px;
+                    left: ${6 * controllerSquareUnit}px;
+                    width: ${3 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
+                @touchend="button1Ref?.release(onUpButtonReleased);"
+                @touchcancel="button1Ref?.release(onUpButtonReleased);"
+                @touchleave="button1Ref?.release(onUpButtonReleased);"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
+                @mouseup="button1Ref?.release(onUpButtonReleased);"
+                @mouseleave="button1Ref?.release(onUpButtonReleased);"
+                v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
+            >↑</v-btn>
 
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${4 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onLeftButtonReleased);"
-                        @touchcancel="button1Ref?.release(onLeftButtonReleased);"
-                        @touchleave="button1Ref?.release(onLeftButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onLeftButtonReleased);"
-                        @mouseleave="button1Ref?.release(onLeftButtonReleased);"
-                        v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
-                    >←</v-btn>
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${1 * controllerSquareUnit}px;
+                    left: ${4 * controllerSquareUnit}px;
+                    width: ${3 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
+                @touchend="button1Ref?.release(onLeftButtonReleased);"
+                @touchcancel="button1Ref?.release(onLeftButtonReleased);"
+                @touchleave="button1Ref?.release(onLeftButtonReleased);"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
+                @mouseup="button1Ref?.release(onLeftButtonReleased);"
+                @mouseleave="button1Ref?.release(onLeftButtonReleased);"
+                v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
+            >←</v-btn>
 
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${8 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onRightButtonReleased);"
-                        @touchcancel="button1Ref?.release(onRightButtonReleased);"
-                        @touchleave="button1Ref?.release(onRightButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onRightButtonReleased);"
-                        @mouseleave="button1Ref?.release(onRightButtonReleased);"
-                        v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
-                    >→</v-btn>
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${1 * controllerSquareUnit}px;
+                    left: ${8 * controllerSquareUnit}px;
+                    width: ${3 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
+                @touchend="button1Ref?.release(onRightButtonReleased);"
+                @touchcancel="button1Ref?.release(onRightButtonReleased);"
+                @touchleave="button1Ref?.release(onRightButtonReleased);"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
+                @mouseup="button1Ref?.release(onRightButtonReleased);"
+                @mouseleave="button1Ref?.release(onRightButtonReleased);"
+                v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
+            >→</v-btn>
 
-                    <v-btn class="code-key hidden"/>
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${2 * controllerSquareUnit}px;
-                            left: ${6 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onDownButtonReleased);"
-                        @touchcancel="button1Ref?.release(onDownButtonReleased);"
-                        @touchleave="button1Ref?.release(onDownButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onDownButtonReleased);"
-                        @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                        v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
-                    >↓</v-btn>
+            <v-btn class="code-key hidden"/>
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${2 * controllerSquareUnit}px;
+                    left: ${6 * controllerSquareUnit}px;
+                    width: ${3 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
+                @touchend="button1Ref?.release(onDownButtonReleased);"
+                @touchcancel="button1Ref?.release(onDownButtonReleased);"
+                @touchleave="button1Ref?.release(onDownButtonReleased);"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
+                @mouseup="button1Ref?.release(onDownButtonReleased);"
+                @mouseleave="button1Ref?.release(onDownButtonReleased);"
+                v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
+            >↓</v-btn>
 
-                    <!-- フォーカスを外すためのダミー・ボタンです -->
-                    <v-btn
-                        class="noop-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${12 * controllerSquareUnit}px;
-                            width: ${5 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        ref="noopButton"
-                        v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                    >何もしないボタン</v-btn>
+            <!-- フォーカスを外すためのダミー・ボタンです -->
+            <v-btn
+                class="noop-key"
+                :style="`
+                    top: ${1 * controllerSquareUnit}px;
+                    left: ${12 * controllerSquareUnit}px;
+                    width: ${5 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                ref="noopButton"
+                v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
+            >何もしないボタン</v-btn>
 
-                    <!-- 設定パネル１ -->
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${3 * controllerSquareUnit}px;
-                            left: ${0 * controllerSquareUnit}px;
-                            width: ${4 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onConfig1ButtonPressed);"
-                        @touchend="button1Ref?.release();"
-                        @touchcancel="button1Ref?.release();"
-                        @touchleave="button1Ref?.release();"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfig1ButtonPressed)"
-                        @mouseup="button1Ref?.release();"
-                        @mouseleave="button1Ref?.release();"
-                    >{{ config1IsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
-                    <section v-if="config1IsShowing" class="sec-1">
-                        <br/>
-                        <v-slider
-                            label="ズーム"
-                            v-model="appZoom"
-                            :min="0.5"
-                            :max="4"
-                            step="0.5"
-                            showTicks="always"
-                            thumbLabel="always" />
-                        <v-slider
-                            label="アニメーションの遅さ"
-                            v-model="player1AnimationSlow"
-                            :min="1"
-                            :max="16"
-                            step="1"
-                            showTicks="always"
-                            thumbLabel="always" />
-                        <v-slider
-                            label="自機のホーム　＞　筋"
-                            v-model="playerHome1File"
-                            :min="0"
-                            :max="4"
-                            step="1"
-                            showTicks="always"
-                            thumbLabel="always" />
-                        <v-slider
-                            label="自機のホーム　＞　段"
-                            v-model="playerHome1Rank"
-                            :min="0"
-                            :max="4"
-                            step="1"
-                            showTicks="always"
-                            thumbLabel="always" />
-                        <p>盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
-                        <v-slider
-                            label="盤の筋の全数"
-                            v-model="board1FileNum"
-                            :min="0"
-                            :max="board1FileMax"
-                            step="1"
-                            showTicks="always"
-                            thumbLabel="always" />
-                        <v-slider
-                            label="盤の段の全数"
-                            v-model="board1RankNum"
-                            :min="0"
-                            :max="board1RankMax"
-                            step="1"
-                            showTicks="always"
-                            thumbLabel="always" />
+            <!-- 設定パネル１ -->
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${3 * controllerSquareUnit}px;
+                    left: ${0 * controllerSquareUnit}px;
+                    width: ${4 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onConfig1ButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfig1ButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ config1IsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
+            <section v-if="config1IsShowing" class="sec-1">
+                <br/>
+                <v-slider
+                    label="ズーム"
+                    v-model="appZoom"
+                    :min="0.5"
+                    :max="4"
+                    step="0.5"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-slider
+                    label="アニメーションの遅さ"
+                    v-model="player1AnimationSlow"
+                    :min="1"
+                    :max="16"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-slider
+                    label="自機のホーム　＞　筋"
+                    v-model="playerHome1File"
+                    :min="0"
+                    :max="4"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-slider
+                    label="自機のホーム　＞　段"
+                    v-model="playerHome1Rank"
+                    :min="0"
+                    :max="4"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <p>盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
+                <v-slider
+                    label="盤の筋の全数"
+                    v-model="board1FileNum"
+                    :min="0"
+                    :max="board1FileMax"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-slider
+                    label="盤の段の全数"
+                    v-model="board1RankNum"
+                    :min="0"
+                    :max="board1RankMax"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-switch
+                    v-model="printing1IsLooping"
+                    :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
+                    color="green"
+                    :hideDetails="true"
+                    inset />
+                <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
+                <v-slider
+                    label="マスクの枠の幅"
+                    v-model="outOfSight1WithMaskSizeSquare"
+                    :min="0"
+                    :max="2"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+                <v-switch
+                    v-model="printing1OutOfSightIsLock"
+                    :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
+                    color="green"
+                    :hideDetails="true"
+                    inset />
+                    <section class="sec-1">
                         <v-switch
-                            v-model="printing1IsLooping"
-                            :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
+                            v-model="player1CanBoardEdgeWalking"
+                            :disabled="!player1CanBoardEdgeWalkingIsEnabled"
+                            :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
                             color="green"
                             :hideDetails="true"
                             inset />
-                        <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
-                        <v-slider
-                            label="マスクの枠の幅"
-                            v-model="outOfSight1WithMaskSizeSquare"
-                            :min="0"
-                            :max="2"
-                            step="1"
-                            showTicks="always"
-                            thumbLabel="always" />
-                        <v-switch
-                            v-model="printing1OutOfSightIsLock"
-                            :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
-                            color="green"
-                            :hideDetails="true"
-                            inset />
-                            <section class="sec-1">
-                                <v-switch
-                                    v-model="player1CanBoardEdgeWalking"
-                                    :disabled="!player1CanBoardEdgeWalkingIsEnabled"
-                                    :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
-                                    color="green"
-                                    :hideDetails="true"
-                                    inset />
-                            </section>
-                        <br/>
                     </section>
+                <br/>
+            </section>
 
-                    <!-- デバッグ情報パネル１ -->
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${4 * controllerSquareUnit}px;
-                            left: ${0 * controllerSquareUnit}px;
-                            width: ${5 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
-                        @touchend="button1Ref?.release();"
-                        @touchcancel="button1Ref?.release();"
-                        @touchleave="button1Ref?.release();"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
-                        @mouseup="button1Ref?.release();"
-                        @mouseleave="button1Ref?.release();"
-                    >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
-                    <section v-if="debugInfo1IsShowing" class="sec-1">
-                        <br/>
-                        <p>👇 盤の各マス</p>
-                        <div
-                            v-for="i in board1Area"
-                            :key="i">
-                            tile-index: {{ i - 1 }} | 
-                            fix-index: {{
-                                getFixedSquareIndexFromTileIndex(
-                                    i - 1,
-                                    board1SquareWidth,
-                                    board1SquareHeight,
-                                    board1FileNum,
-                                    board1RankNum,
-                                    printing1Left,
-                                    printing1Top,
-                                )
-                            }} | 
-                            printing: {{
-                                getPrintingIndexFromFixedSquareIndex(
-                                    getFixedSquareIndexFromTileIndex(
-                                        i - 1,
-                                        board1SquareWidth,
-                                        board1SquareHeight,
-                                        board1FileNum,
-                                        board1RankNum,
-                                        printing1Left,
-                                        printing1Top,
-                                    ),
-                                    -Math.floor(printing1Left / board1SquareWidth),
-                                    -Math.floor(printing1Top / board1SquareHeight),
-                                    board1FileNum,
-                                    printing1FileNum,
-                                    printing1RankNum,
-                                    printing1IsLooping,
-                                )
-                            }}<br/>
-                        </div>
-                        <br/>
-                        <p>👇 印字表の各マス</p>
-                        <div
-                            v-for="j in printing1AreaMax"
-                            :key="j">
-                            printing-index: {{ j - 1 }} | 
-                            source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
-                        </div>
-                        <br/>
-                    </section>
-                    <br/>
-
-                </v-card>
-            </v-col>
-        </v-row>
+            <!-- デバッグ情報パネル１ -->
+            <v-btn
+                class="code-key"
+                :style="`
+                    top: ${4 * controllerSquareUnit}px;
+                    left: ${0 * controllerSquareUnit}px;
+                    width: ${5 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit - 4}px;
+                `"
+                style="position: absolute;"
+                @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
+            <section v-if="debugInfo1IsShowing" class="sec-1">
+                <br/>
+                <p>👇 盤の各マス</p>
+                <div
+                    v-for="i in board1Area"
+                    :key="i">
+                    tile-index: {{ i - 1 }} | 
+                    fix-index: {{
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        )
+                    }} | 
+                    printing: {{
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    }}<br/>
+                </div>
+                <br/>
+                <p>👇 印字表の各マス</p>
+                <div
+                    v-for="j in printing1AreaMax"
+                    :key="j">
+                    printing-index: {{ j - 1 }} | 
+                    source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
+                </div>
+                <br/>
+            </section>
+        </div>
     </v-container>
 
 </template>
