@@ -41,36 +41,7 @@
 </script>
 
 <style scoped>
-    .two-panes-container {
-        padding: 0;
-        top: 0;
-        bottom: 0;  /* height: 100vh; では無駄な垂直スクロールバーが出ることがある。 bottom: 0; にすると垂直スクロールバーが出ない */
-        display: flex;
-        flex-direction: column;
-        overflow-y: hidden; /* 垂直スクロールを禁止するだけで、スクロールバーが非表示になるわけではない */
-        scrollbar-width: none;  /* Firefox でスクロールバーを非表示にする */
-    }
-    .full-height::-webkit-scrollbar {
-        display: none;  /* WebKitでスクロールバーを非表示にする */
-    }
 
-    .top-pane {
-        height: 50vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 1;
-    }
+    @import '@/styles/two-panes.css';
 
-    .bottom-pane {
-        position: fixed;
-        top: 50vh;
-        bottom: 0;
-        overflow-y: auto; /* スクロール可能にする */
-    }
-
-    .scrollable-content {
-        min-height: 100%; /* コンテンツが少ない場合でもスクロールエリアを確保 */
-    }
 </style>
