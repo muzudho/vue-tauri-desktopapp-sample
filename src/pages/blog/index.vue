@@ -2,7 +2,7 @@
     <the-grand-parent-header/>
     <the-parent-header/>
 
-    <h2>ブログの部だぜ！</h2>
+    <h2>ブログだぜ！　の部</h2>
     <section class="sec-2">
         上の方の記事が新しいぜ（＾▽＾）！<br/>
     </section>
