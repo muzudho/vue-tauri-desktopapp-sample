@@ -1,6 +1,6 @@
 <template>
     <the-grand-parent-header/>
-    <the-header/>
+    <the-parent-header/>
 
     <h2>このサイトについてだぜ！　の部</h2>
     <section class="sec-2">
@@ -10,7 +10,7 @@
         <p>なるべく Tauri 3 と Nuxt 3 の機能は、必要になるまで使わないようにしているぜ（＾～＾）</p>
     </section>
 
-    <the-footer/>
+    <the-parent-footer/>
 </template>
 
 <script setup lang="ts">
@@ -23,8 +23,8 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheGrandParentHeader from '../the-header.vue';
-    import TheHeader from './the-header.vue';
-    import TheFooter from './the-footer.vue';
+    import TheGrandParentHeader from '../../the-header.vue';
+    import TheParentHeader from '../the-header.vue';
+    import TheParentFooter from '../the-footer.vue';
 
 </script>
