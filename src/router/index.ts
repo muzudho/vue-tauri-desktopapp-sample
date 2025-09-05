@@ -266,8 +266,8 @@ const routes = [
     },
     {
         name: 'Home',
-        path: '/',          
-        component: () => import('../pages/home.vue'),
+        path: '/',
+        component: () => import('../pages/home/index.vue'),
     },
     {
         name: 'WelcomeToTauriAndVue',

@@ -8,7 +8,7 @@
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
     </section>
 
-    <h2>ホームだぜ！　の部</h2>
+    <h2>ホームだぜ！　の部　インデックス</h2>
     <section class="sec-2">
         デスクトップ・アプリケーションのホームページだぜ（＾▽＾）！<br/>
     </section>
@@ -39,7 +39,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheGrandParentHeader from '../the-header.vue';
+    import TheGrandParentHeader from '../../the-header.vue';
 
 
     // ##############

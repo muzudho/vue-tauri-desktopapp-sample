@@ -2,7 +2,7 @@
     <the-grand-parent-header/>
     <the-parent-header/>
 
-    <h2>Welcome to Tauri + Vue だぜ！　の部</h2>
+    <h2>Welcome to Tauri + Vue だぜ！　の部　インデックス</h2>
 
     <v-container class="row">
         <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->

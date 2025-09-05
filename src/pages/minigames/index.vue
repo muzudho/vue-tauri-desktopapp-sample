@@ -2,7 +2,7 @@
     <the-grand-parent-header/>
     <the-parent-header/>
 
-    <h2>ミニゲームだぜ！　の部</h2>
+    <h2>ミニゲームだぜ！　の部　インデックス</h2>
     <section class="sec-2">
         ミニゲームだぜ（＾▽＾）！<v-btn style="visibility: hidden;"></v-btn><br/>
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
