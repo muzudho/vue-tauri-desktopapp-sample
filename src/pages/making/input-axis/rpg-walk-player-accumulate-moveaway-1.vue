@@ -135,7 +135,7 @@
                 showTicks="always"
                 thumbLabel="always" />
             <v-slider
-                label="アニメーションの遅さ"
+                label="スローモーション"
                 v-model="player1AnimationSlow"
                 :min="1"
                 :max="16"

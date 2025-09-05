@@ -167,7 +167,70 @@
 
             </section>
 
+            <h4>［設定］説明</h4>
+            <section class="sec-4">
+                <br/>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［ズーム］ってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ゲーム画面を拡大縮小させるぜ。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［スローモーション］ってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ゲーム内の時計を遅くするぜ。これも好みで。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［自機のホーム］ってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    画面上で、自機がずっと守ってる位置だな。<br/>
+                    画面端になると、自機はホームから離れるよう設定することもできるぜ。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［水平（垂直）方向のタイル数］ってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    盤のヨコ（タテ）サイズだな。<br/>
+                    画面で見えてないところも含めたサイズだぜ。
+                </talk-balloon>
+            </section>
             <br/>
+
             <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き　＞　</span>ソースコード</h4>
             <section class="sec-4">
                 <source-link
@@ -478,7 +541,7 @@
                     showTicks="always"
                     thumbLabel="always" />
                 <v-slider
-                    label="アニメーションの遅さ"
+                    label="スローモーション"
                     v-model="player1AnimationSlow"
                     :min="1"
                     :max="16"
@@ -501,9 +564,9 @@
                     step="1"
                     showTicks="always"
                     thumbLabel="always" />
-                <p>盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない：</p>
+                <p>マスクが被っているところも含めた盤のサイズ：</p>
                 <v-slider
-                    label="盤の筋の全数"
+                    label="水平方向のタイル数"
                     v-model="board1FileNum"
                     :min="0"
                     :max="board1FileMax"
@@ -511,7 +574,7 @@
                     showTicks="always"
                     thumbLabel="always" />
                 <v-slider
-                    label="盤の段の全数"
+                    label="垂直方向のタイル数"
                     v-model="board1RankNum"
                     :min="0"
                     :max="board1RankMax"

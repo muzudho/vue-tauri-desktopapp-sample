@@ -348,7 +348,7 @@
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device">
             では、👇下の［⚙問題設定を表示］ボタンをクリックして、<br/>
-            出てくる［盤の筋の全数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
+            出てくる［水平方向のタイル数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
             もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……<br/>
         </talk-balloon>
         <br/>
@@ -367,9 +367,9 @@
         >{{ problem1IsShowing ? '⚙️問題設定を終わる' : '⚙️問題設定を表示' }}</v-btn>
         <section v-if="problem1IsShowing" class="sec-1">
             <br/>
-            <!-- 盤はマスクを含む。ただし右側と下側に余分に１マス付いたマスクは含まない： -->
+            <!-- マスクが被っているところも含めた盤のサイズ： -->
             <v-slider
-                label="盤の筋の全数"
+                label="水平方向のタイル数"
                 v-model="board1FileNum"
                 :min="board1FileMin"
                 :max="board1FileMax"
@@ -377,7 +377,7 @@
                 showTicks="always"
                 thumbLabel="always" />
             <v-slider
-                label="盤の段の全数"
+                label="垂直方向のタイル数"
                 v-model="board1RankNum"
                 :min="board1RankMin"
                 :max="board1RankMax"
@@ -562,25 +562,25 @@ color = i % 2;
             <v-checkbox
                 :hideDetails="true">
                 <template v-slot:label>
-                    <span style="margin-right: 16px;">（１）</span>盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                    <span style="margin-right: 16px;">（１）</span>水平方向のタイル数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
                 </template>
             </v-checkbox>
             <v-checkbox
                 :hideDetails="true">
                 <template v-slot:label>
-                    <span style="margin-right: 16px;">（２）</span>盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                    <span style="margin-right: 16px;">（２）</span>水平方向のタイル数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                 </template>
             </v-checkbox>
             <v-checkbox
                 :hideDetails="true">
                 <template v-slot:label>
-                    <span style="margin-right: 16px;">（３）</span>盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                    <span style="margin-right: 16px;">（３）</span>水平方向のタイル数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
                 </template>
             </v-checkbox>
             <v-checkbox
                 :hideDetails="true">
                 <template v-slot:label>
-                    <span style="margin-right: 16px;">（４）</span>盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                    <span style="margin-right: 16px;">（４）</span>水平方向のタイル数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                 </template>
             </v-checkbox>
             -->
@@ -600,25 +600,25 @@ color = i % 2;
                 <v-radio
                     :value="1">
                     <template v-slot:label>
-                        <span style="margin-right: 16px;">（１）</span>盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                        <span style="margin-right: 16px;">（１）</span>水平方向のタイル数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
                     </template>
                 </v-radio>
                 <v-radio
                     :value="2">
                     <template v-slot:label>
-                        <span style="margin-right: 16px;">（２）</span>盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                        <span style="margin-right: 16px;">（２）</span>水平方向のタイル数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                     </template>
                 </v-radio>
                 <v-radio
                     :value="3">
                     <template v-slot:label>
-                        <span style="margin-right: 16px;">（３）</span>盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                        <span style="margin-right: 16px;">（３）</span>水平方向のタイル数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
                     </template>
                 </v-radio>
                 <v-radio
                     :value="4">
                     <template v-slot:label>
-                        <span style="margin-right: 16px;">（４）</span>盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                        <span style="margin-right: 16px;">（４）</span>水平方向のタイル数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                     </template>
                 </v-radio>
             </v-radio-group>
@@ -980,28 +980,28 @@ color = i % 2;
             // ここから　クイズの答え：
             if (choices1Num.value == 1) {
                 // これは正解。
-                // 盤の筋の全数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                // 水平方向のタイル数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
                 const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
                 if (width % 2 == 0) {
                     color = (color + 1 * ((rank) % 2)) % 2;
                 }
             } else if (choices1Num.value == 2) {
                 // これも正解。
-                // 盤の筋の全数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                // 水平方向のタイル数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                 const rank = Math.floor(i / width);
                 if (width % 2 == 0) {
                     color = (color + 1 * ((rank + 1) % 2)) % 2;
                 }
             } else if (choices1Num.value == 3) {
                 // 間違い。常にストライプになる。
-                // 盤の筋の全数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
+                // 水平方向のタイル数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
                 const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
                 if (width % 2 == 1) {
                     color = (color + 1 * ((rank) % 2)) % 2;
                 }
             } else if (choices1Num.value == 4) {
                 // 間違い。常にストライプになる。
-                // 盤の筋の全数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                // 水平方向のタイル数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
                 const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
                 if (width % 2 == 1) {
                     color = (color + 1 * ((rank + 1) % 2)) % 2;
