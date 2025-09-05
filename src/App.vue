@@ -13,9 +13,6 @@
     </v-app>
 </template>
 
-<script setup lang="ts">
-</script>
-
 <style>
     @import '@/styles/talk-scene.css';
     @import '@/styles/warabenture.css';

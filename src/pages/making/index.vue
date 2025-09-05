@@ -26,7 +26,7 @@
             <li>📖 <router-link to="/making/count-up" :style="getPreviousLinkHighlight('/making/count-up')">カウントアップするぜ！　の章</router-link></li>
             <li>📖 <router-link to="/making/input-key" :style="getPreviousLinkHighlight('/making/input-key')">キーボードのキー入力を受け取ろうぜ！　の章</router-link></li>
             <li>📖 <router-link to="/making/sfx-practice" :style="getPreviousLinkHighlight('/making/sfx-practice')">効果音を鳴らそうぜ！　の章</router-link></li>
-            <li>タイル　＞　でカウントアップのアニメーションするぜ！
+            <li>タイル　＞　でカウントアップのアニメーションするぜ！　の章
                 <ul>
                     <li>📖 <router-link to="/making/tile-count-up-naive" :style="getPreviousLinkHighlight('/making/tile-count-up-naive')">ソースコードが初級者向け版</router-link></li>
                     <li>📖 <router-link to="/making/tile-count-up" :style="getPreviousLinkHighlight('/making/tile-count-up')">ソースコードが上級者向け版</router-link></li>

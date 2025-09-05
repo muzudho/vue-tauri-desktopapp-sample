@@ -10,11 +10,14 @@
 
     <h2>ホームだぜ！　の部　インデックス</h2>
     <section class="sec-2">
-        デスクトップ・アプリケーションのホームページだぜ（＾▽＾）！<br/>
+        デスクトップ・アプリケーションのホームだぜ（＾▽＾）！<br/>
     </section>
 
-    <h3>ホームページ内容の割合</h3>
-    <canvas id="pieChart" class="pieChartStyle"></canvas>
+    <h3>ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合</h3>
+    <section class="sec-3">
+        以下の円グラフをクリックするとそのページへ飛べるぜ（＾▽＾）！<br/>
+	    <canvas id="pieChart" class="pieChartStyle"></canvas>
+    </section>
 
     <br/>
     <section class="sec-1">
@@ -101,7 +104,7 @@
                         'rgb(255, 206, 86)',
                         'rgb(75, 192, 192)'
                     ],
-                    borderWidth: 1
+                    borderWidth: 2
                 }]
             },
             options: {
@@ -112,7 +115,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'ホームページ内容の割合'
+                        text: 'このホームページの内容の気分的な割合'
                     }
                 },
                 onClick: (_e, elements) => {
@@ -137,7 +140,10 @@
 
 <style scoped>
     canvas.pieChartStyle {
-        max-width: 400px;
+        min-width: 400px;
+        min-height: 400px;
+        width: 400px;
+        height: 400px;
         margin: 0 auto;
     }
 </style>

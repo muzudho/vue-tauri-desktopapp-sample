@@ -11,7 +11,7 @@
         text-align: right;
         max-width: 96px;
         font-size: small;
-        color: rgb(var(--v-theme-text-light));
+        color: rgb(var(--v-theme-text-light));  /* Tauri, Nuxt サンプル用 */
     }
     div.talk-name-novel { /* 名前 */
         padding-left: 0;
@@ -33,7 +33,7 @@
         text-align: right;
         max-width: 96px;
         font-size: small;
-        color: rgb(var(--v-theme-text-light));
+        color: rgb(var(--v-theme-text-light));  /* Tauri, Nuxt サンプル用 */
     }
     div.talk-name-novel { /* 名前 */
         padding-left: 0;
@@ -88,7 +88,7 @@ div.baloon-body{
     padding-top: 12px;
     padding-bottom:16px;
     padding-right:16px;
-    background-color: #F8F0C0;  /* Tauri, Nuxt Sample 用 */
+    background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
     border-radius: 16px;
 }
 
@@ -103,6 +103,6 @@ div.baloon-body{
 div.baloon-tail {
     width: 21px;    /* 右端の 1px は欠けることがあるから、 1px 長めに指定 */
     height: 15px;
-    background-color: #F8F0C0;  /* Tauri, Nuxt Sample 用 */
+    background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
     clip-path: polygon(0% 50%, 100% 0%, 100% 100%); /* 上頂点、下底の三角形 */
 }
