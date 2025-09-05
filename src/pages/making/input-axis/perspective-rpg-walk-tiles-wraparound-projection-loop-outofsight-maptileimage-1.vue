@@ -133,7 +133,7 @@
                     :name="commonOton2Name"
                     :device="compatibleDevice1Ref?.device">
                     ［設定を表示］ボタンの中には、いろいろ設定が入っているので、いじってみてくれだぜ。<br/>
-                    あとで説明しよう。
+                    長くなるから、あとで説明するぜ。
                 </talk-balloon>
             </section>
 
@@ -227,6 +227,63 @@
                     :device="compatibleDevice1Ref?.device">
                     盤のヨコ（タテ）サイズだな。<br/>
                     画面で見えてないところも含めたサイズだぜ。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［マスク枠の幅］ってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    盤の端っこを隠している黒い半透明のやつの幅だな。<br/>
+                    右側と下側は、１マス余分に多めに付くぜ。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［像の端と端がつながって（ループして）］いますってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    例えば、右へ歩いて行ったら、盤の左から出てくる、みたいなやつだぜ。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［画面外を見せない］をしていませんってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    像がないところまでは歩いていけないようなガードは、掛けていません、ってことだぜ。
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonHiyoko2Src"
+                    :alt="commonHiyoko2Alt"
+                    :name="commonHiyoko2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    ［盤の端まで歩ける］を可能にしていませんってのは？<br/>
+                </talk-balloon>
+                <talk-balloon
+                    :src="commonOton2Src"
+                    :alt="commonOton2Alt"
+                    :name="commonOton2Name"
+                    :device="compatibleDevice1Ref?.device">
+                    像の端っこが見えたとき、自機がホームポジションを離れて画面端まで歩くような動きを、やらせていませんってことだぜ。
                 </talk-balloon>
             </section>
             <br/>
@@ -581,21 +638,21 @@
                     step="1"
                     showTicks="always"
                     thumbLabel="always" />
-                <v-switch
-                    v-model="printing1IsLooping"
-                    :label="printing1IsLooping ? '［印字の端と端がつながって（ループして）］います' : '［印字の端と端がつながって（ループして）］いません'"
-                    color="green"
-                    :hideDetails="true"
-                    inset />
-                <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
+                <p>マスク枠の幅。右側と下側は、１マス多めに付きます：</p>
                 <v-slider
-                    label="マスクの枠の幅"
+                    label="マスク枠の幅"
                     v-model="outOfSight1WithMaskSizeSquare"
                     :min="0"
                     :max="2"
                     step="1"
                     showTicks="always"
                     thumbLabel="always" />
+                <v-switch
+                    v-model="printing1IsLooping"
+                    :label="printing1IsLooping ? '［像の端と端がつながって（ループして）］います' : '［像の端と端がつながって（ループして）］いません'"
+                    color="green"
+                    :hideDetails="true"
+                    inset />
                 <v-switch
                     v-model="printing1OutOfSightIsLock"
                     :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
