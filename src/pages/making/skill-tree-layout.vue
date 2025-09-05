@@ -1,7 +1,7 @@
 <template>
     <the-header/>
 
-    <h3>説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！</h3>
+    <h3>説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！　の章</h3>
     <section
         class="sec-3"
         :style="`height: ${8 * cellHeight}px;`"

@@ -1,9 +1,13 @@
 <template>
     <the-grand-parent-header/>
 
+    <section class="sec-1">
+        <v-btn @click="goBackTo1" v-tooltip="'下の部を閉じる'">❌</v-btn>
+    </section>
+
     <h2>メイキングの部だぜ！</h2>
     <section class="sec-2">
-        <v-btn @click="goBack" v-tooltip="'下の節を閉じる'">❌</v-btn>
+        <v-btn @click="goBackTo2" v-tooltip="'下の章を閉じる'">❌</v-btn>
     </section>
 </template>
 
@@ -28,7 +32,11 @@
     
     const router = useRouter();
 
-    function goBack() : void {
+    function goBackTo1() : void {
+        router.push('/');
+    }
+
+    function goBackTo2() : void {
         router.push('/making');
     }
 
