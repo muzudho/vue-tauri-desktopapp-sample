@@ -3,6 +3,24 @@
         v-for="i in props.board1Area"
         :key="i"
         class="square"
+        :style="{
+            left: `0px`,
+            top: `0px`,
+            width: `32px`,
+            height: `32px`,
+        }"
+        :srcLeft="32"
+        :srcTop="0"
+        :srcWidth="32"
+        :srcHeight="32"
+        tilemapUrl="/img/making/tilemap-floor-20250826.png"
+    >
+
+    <!--
+    <tile
+        v-for="i in props.board1Area"
+        :key="i"
+        class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
         :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
             getPrintingIndexFromFixedSquareIndex(
@@ -26,7 +44,9 @@
         :srcTop="0"
         :srcWidth="props.board1SquareWidth"
         :srcHeight="props.board1SquareHeight"
-        tilemapUrl="/img/making/tilemap-floor-20250826.png">
+        tilemapUrl="/img/making/tilemap-floor-20250826.png"
+    >
+    -->
 
         <!--
         <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
@@ -114,6 +134,7 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
     import PrintingMaking from '@/components/PrintingMaking.vue';
+    import Tile from '@/components/Tile.vue';
 
 
     // ####################################
@@ -132,7 +153,7 @@
         printing1RankNum: number;
         printing1IsLooping: boolean;
         getSquareStyleFromTileIndex: (tileIndex: number)=>CompatibleStyleValue;
-        getSourceTileLeftFromPrintingIndex: (printingIndex: number)=>number;
+        printing1Ref: typeof PrintingMaking;
     }
     const props = defineProps<Props>();
 

@@ -230,7 +230,7 @@
                     :printing1RankNum="printing1RankNum"
                     :printing1IsLooping="printing1IsLooping"
                     :getSquareStyleFromTileIndex="getSquareStyleFromTileIndex"
-                    :getSourceTileLeftFromPrintingIndex="printing1Ref?.getSourceTileLeftFromPrintingIndex"
+                    :printing1Ref="printing1Ref"
                 >
 
                 </tile-board>
@@ -619,7 +619,6 @@
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import Tile from '@/components/Tile.vue';
     import TileBoard from '@/components/TileBoard.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
     import TheFooter from '../the-footer.vue';
