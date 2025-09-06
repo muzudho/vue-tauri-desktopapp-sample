@@ -867,11 +867,11 @@ color = i % 2;
     // ++++++++++++++++++++++++++++++++
 
     const outOfSight1Ref = ref<InstanceType<typeof OutOfSight> | null>(null);
-    const outOfSight1WithMaskSizeSquare = computed({
-        get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
+    const outOfSight1WithMaskSquareCount = computed({
+        get: () => outOfSight1Ref.value?.outOfSight1WithMaskSquareCount ?? 0, // nullの場合はデフォルト値（例: 0）
         set: (value) => {
             if (outOfSight1Ref.value) {
-                outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
+                outOfSight1Ref.value.outOfSight1WithMaskSquareCount = value; // appleを更新
             }
         }
     });
@@ -895,8 +895,8 @@ color = i % 2;
     const board1WithMaskSizeSquare: number = 1; // マスクの幅（単位：マス）
     const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
-            width: `${(board1FileNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareWidth}px`,
-            height: `${(board1RankNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareHeight}px`,
+            width: `${(board1FileNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareWidth}px`,
+            height: `${(board1RankNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareHeight}px`,
             zoom: appZoom.value,
         };
     });
@@ -1203,7 +1203,7 @@ color = i % 2;
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                outOfSight1WithMaskSizeSquare.value,
+                outOfSight1WithMaskSquareCount.value,
                 printing1FileNum.value,
                 printing1RankNum.value,
                 printing1Left.value,
@@ -1222,7 +1222,7 @@ color = i % 2;
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
+                outOfSight1Ref.value?.outOfSight1WithMaskSquareCount ?? 1,
                 playerHome1File.value,
                 playerHome1Rank.value,
                 player1Left.value,

@@ -296,7 +296,7 @@
             <p>マスクの枠の幅。右側と下側は、１マス多めに付きます：</p>
             <v-slider
                 label="マスクの枠の幅"
-                v-model="outOfSight1WithMaskSizeSquare"
+                v-model="outOfSight1WithMaskSquareCount"
                 :min="0"
                 :max="2"
                 step="1"
@@ -395,7 +395,7 @@
             印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
             人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
             印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
-            outOfSight1WithMaskSizeSquare={{ outOfSight1WithMaskSizeSquare }}<br/>
+            outOfSight1WithMaskSquareCount={{ outOfSight1WithMaskSquareCount }}<br/>
         </div>
         <br/>
     </section>
@@ -515,11 +515,11 @@
     // ++++++++++++++++++++++++++++++++
 
     const outOfSight1Ref = ref<InstanceType<typeof OutOfSightMaking> | null>(null);
-    const outOfSight1WithMaskSizeSquare = computed({
-        get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
+    const outOfSight1WithMaskSquareCount = computed({
+        get: () => outOfSight1Ref.value?.outOfSight1WithMaskSquareCount ?? 0, // nullの場合はデフォルト値（例: 0）
         set: (value) => {
             if (outOfSight1Ref.value) {
-                outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
+                outOfSight1Ref.value.outOfSight1WithMaskSquareCount = value; // appleを更新
             }
         }
     });
@@ -541,8 +541,8 @@
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
     const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
         return {
-            width: `${(board1FileNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareWidth}px`,
-            height: `${(board1RankNum.value + outOfSight1WithMaskSizeSquare.value) * board1SquareHeight}px`,
+            width: `${(board1FileNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareWidth}px`,
+            height: `${(board1RankNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareHeight}px`,
             zoom: appZoom.value,
         };
     });
@@ -590,14 +590,6 @@
     //
 
     const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
-    // const outOfSight1WithMaskSizeSquare = computed({
-    //     get: () => outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 0, // nullの場合はデフォルト値（例: 0）
-    //     set: (value) => {
-    //         if (outOfSight1Ref.value) {
-    //             outOfSight1Ref.value.outOfSight1WithMaskSizeSquare = value; // appleを更新
-    //         }
-    //     }
-    // });
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
@@ -791,7 +783,7 @@
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                outOfSight1WithMaskSizeSquare.value,
+                outOfSight1WithMaskSquareCount.value,
                 printing1FileNum.value,
                 printing1RankNum.value,
                 printing1Left.value,
@@ -810,7 +802,7 @@
                 board1SquareHeight,
                 board1FileNum.value,
                 board1RankNum.value,
-                outOfSight1Ref.value?.outOfSight1WithMaskSizeSquare ?? 1,
+                outOfSight1Ref.value?.outOfSight1WithMaskSquareCount ?? 1,
                 playerHome1File.value,
                 playerHome1Rank.value,
                 player1Left.value,

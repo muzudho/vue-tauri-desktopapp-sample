@@ -52,7 +52,7 @@
     // + オブジェクト　＞　視界の外１ +
     // ++++++++++++++++++++++++++++++++
 
-    const outOfSight1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
+    const outOfSight1WithMaskSquareCount = ref<number>(1);    // マスクの幅（単位：マス）
     const outOfSight1WithMaskBottomRightMargin: number = 1;  // マスクは右下に１マス分多く作ります。
     const outOfSight1WithMaskFileNum = computed<number>(()=>{
         return props.board1FileNum + outOfSight1WithMaskBottomRightMargin;
@@ -65,10 +65,10 @@
         return {
             width: `${outOfSight1WithMaskFileNum.value * props.board1SquareWidth}px`,
             height: `${outOfSight1WithMaskRankNum.value * props.board1SquareHeight}px`,
-            borderTop: `solid ${outOfSight1WithMaskSizeSquare.value * props.board1SquareHeight}px rgba(0,0,0,0.5)`,
-            borderRight: `solid ${(outOfSight1WithMaskSizeSquare.value + outOfSight1WithMaskBottomRightMargin) * props.board1SquareWidth}px rgba(0,0,0,0.5)`,
-            borderBottom: `solid ${(outOfSight1WithMaskSizeSquare.value + outOfSight1WithMaskBottomRightMargin) * props.board1SquareHeight}px rgba(0,0,0,0.5)`,
-            borderLeft: `solid ${outOfSight1WithMaskSizeSquare.value * props.board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderTop: `solid ${outOfSight1WithMaskSquareCount.value * props.board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderRight: `solid ${(outOfSight1WithMaskSquareCount.value + outOfSight1WithMaskBottomRightMargin) * props.board1SquareWidth}px rgba(0,0,0,0.5)`,
+            borderBottom: `solid ${(outOfSight1WithMaskSquareCount.value + outOfSight1WithMaskBottomRightMargin) * props.board1SquareHeight}px rgba(0,0,0,0.5)`,
+            borderLeft: `solid ${outOfSight1WithMaskSquareCount.value * props.board1SquareWidth}px rgba(0,0,0,0.5)`,
         };
     });
 
@@ -78,7 +78,7 @@
     // ################
 
     defineExpose({
-        outOfSight1WithMaskSizeSquare,
+        outOfSight1WithMaskSquareCount,
         outOfSight1WithMaskBottomRightMargin,
         outOfSight1WithMaskFileNum,
         outOfSight1WithMaskRankNum,
