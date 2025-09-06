@@ -15,12 +15,6 @@
         v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
         style="display: none;" />
 
-    <!-- 印字１　＞　機能 -->
-    <printing-making
-        ref="printing1Ref"
-        :sourceTilemapRectangles="sourceTilemapRectangles"
-        :imageBoard1Data="imageBoard1Data"/>
-
     <!-- ブログ領域 -->
     <div
         :style="{
@@ -313,7 +307,7 @@
                         )
                     }}]</span>
                     <span class="board-square-printing-string">{{
-                        printing1Ref?.getSourceTileSqStringByImageBoardSq(
+                        //printing1Ref?.getSourceTileSqStringByImageBoardSq(
                             getPrintingIndexFromFixedSquareIndex(
                                 getFixedSquareIndexFromTileIndex(
                                     i - 1,
@@ -716,7 +710,6 @@
     import Button20250822 from '@/components/Button20250822.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
-    import PrintingMaking from '@/components/PrintingMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
@@ -901,7 +894,6 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;

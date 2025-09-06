@@ -15,12 +15,6 @@
         v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
         style="display: none;" />
 
-    <!-- 印字１　＞　機能 -->
-    <printing-making
-        ref="printing1Ref"
-        :sourceTilemapRectangles="sourceTilemapRectangles"
-        :imageBoard1Data="imageBoard1Data"/>
-
     <!-- ブログ領域 -->
     <div
         :style="{
@@ -229,8 +223,9 @@
                     :printing1FileNum="printing1FileNum"
                     :printing1RankNum="printing1RankNum"
                     :printing1IsLooping="printing1IsLooping"
+                    :computedImageBoard1Data="computedImageBoard1Data"
+                    :sourceTilemapRectangles="sourceTilemapRectangles"
                     :getSquareStyleFromTileIndex="getSquareStyleFromTileIndex"
-                    :printing99Ref="printing1Ref"
                 >
 
                 </tile-board>
@@ -615,7 +610,6 @@
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
-    import PrintingMaking from '@/components/PrintingMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
@@ -793,7 +787,6 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
@@ -814,6 +807,7 @@
         const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
         imageBoard1Data.value.push(sourceTileIndex);
     }
+    const computedImageBoard1Data = computed<number[]>(()=>imageBoard1Data.value);
     const printing1Input : PrintingInput = printingInputCreate();
     const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
@@ -825,7 +819,6 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
-
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +

@@ -7,13 +7,6 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
-    <!-- 印字１　＞　機能 -->
-    <printing-making
-        ref="printing1Ref"
-        :sourceTilemapRectangles="sourceTilemapRectangles"
-        :imageBoard1Data="imageBoard1Data">
-    </printing-making>
-
     <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h4>
     <section class="sec-4">
         <br/>
@@ -156,7 +149,7 @@
                     printing1GetSourceTileSqStringByImageBoardSq
 
                 <span class="board-square-printing-string">{{
-                    printing1Ref?.getSourceTileSqStringByImageBoardSq(
+                    //printing1Ref?.getSourceTileSqStringByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
@@ -492,7 +485,6 @@
     // from の階層が上の順、アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
-    import PrintingMaking from '@/components/PrintingMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import Tile from '@/components/Tile.vue';
@@ -640,7 +632,6 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
     const printing1OutOfSightIsLock = ref<boolean>(false);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
@@ -672,8 +663,7 @@
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
-    }
-    
+    }    
     const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
         computedImageBoard1Data,
     );

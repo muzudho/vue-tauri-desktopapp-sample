@@ -63,7 +63,7 @@
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
-                    getSourceTileSqStringByImageBoardSq(
+                    getSourceTileStringByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
@@ -526,13 +526,16 @@
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames: number = 16;       // 歩行フレーム数
+    // const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
+    //     computedImageBoard1Data,
+    // );
 
 
     /**
-     * マスの印字。
+     * マスの任意の印字。
      * @returns 該当なしのとき "-"
      */
-    const getSourceTileSqStringByImageBoardSq = computed<
+    const getSourceTileStringByImageBoardSq = computed<
         (printingIndex: number) => string
     >(() => {
         return (printingIndex: number) => {

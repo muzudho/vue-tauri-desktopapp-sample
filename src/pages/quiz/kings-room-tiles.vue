@@ -10,12 +10,6 @@
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
-    <!-- 印字１　＞　機能 -->
-    <printing-making
-        ref="printing1Ref"
-        :sourceTilemapRectangles="sourceTilemapRectangles"
-        :imageBoard1Data="computedImageBoard1Data" />
-
     <h3>王の間のタイルを市松模様にしようぜ！</h3>
     <section class="sec-3">
         <br/>
@@ -789,7 +783,6 @@ color = i % 2;
     // from の階層が上の順、アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
     import OutOfSight from '../../components/OutOfSightMaking.vue';
-    import PrintingMaking from '../../components/PrintingMaking.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import TalkBalloon from '../../components/TalkBalloon.vue';
@@ -969,7 +962,6 @@ color = i % 2;
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
     const printing1IsLooping = ref<boolean>(false);  // ループ状態を管理（true: ループする, false: ループしない）
     const printing1OutOfSightIsLock = ref<boolean>(true);   // ［画面外隠し］を管理（true: ロックする, false: ロックしない）
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
@@ -1068,12 +1060,10 @@ color = i % 2;
             height: board1SquareHeight
         });
     }
-    //*
     const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
-    // */
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +

@@ -4,7 +4,7 @@
         :key="i"
         class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
+        :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
             1
         ) ?? 0"
         :srcTop="0"
@@ -23,7 +23,7 @@
         v-for="i in props.board1Area"
         :key="i"
         class="square"
-        :style="getSquareStyleFromTileIndex(i - 1)"
+        //:style="getSquareStyleFromTileIndex(i - 1)"
         :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
             getPrintingIndexFromFixedSquareIndex(
                 getFixedSquareIndexFromTileIndex(
@@ -83,7 +83,7 @@
             )
         }}]</span>
         <span class="board-square-printing-string">{{
-            printing99Ref?.getSourceTileSqStringByImageBoardSq(
+            //printing99Ref?.getSourceTileSqStringByImageBoardSq(
                 getPrintingIndexFromFixedSquareIndex(
                     getFixedSquareIndexFromTileIndex(
                         i - 1,
@@ -114,8 +114,7 @@
     // # インポート #
     // ##############
     
-    import { ref } from 'vue';
-    import type { Ref } from 'vue';
+    import type { ComputedRef } from 'vue';
 
     // ++++++++++++++++++++++++++++++
     // + インポート　＞　互換性対応 +
@@ -127,8 +126,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    //import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../composables/board-operation';
-    // getFileAndRankFromIndex, wrapAround
+    import { createGetSourceTileLeftByImageBoardSq } from '../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -136,8 +134,13 @@
     //
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
-    import PrintingMaking from '@/components/PrintingMaking.vue';
     import Tile from '@/components/Tile.vue';
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
+
+    import type Rectangle from '../interfaces/Rectangle';
 
 
     // ####################################
@@ -155,8 +158,9 @@
         printing1FileNum: number;
         printing1RankNum: number;
         printing1IsLooping: boolean;
+        computedImageBoard1Data: ComputedRef<number[]>;
+        sourceTilemapRectangles: Rectangle[];
         getSquareStyleFromTileIndex: (tileIndex: number)=>CompatibleStyleValue;
-        printing99Ref: Ref<InstanceType<typeof PrintingMaking> | null>;
     }
     const props = defineProps<Props>();
 
@@ -172,7 +176,10 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing99Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
+    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+        props.computedImageBoard1Data,
+        props.sourceTilemapRectangles,
+    );
 
 </script>
 
