@@ -28,12 +28,12 @@
     // ####################################
     
     interface Props {
-        // ++++++++++++++++++++++++
-        // + オブジェクト　＞　盤 +
-        // ++++++++++++++++++++++++
+        // ++++++++++++++++++++++++++++++++
+        // + オブジェクト　＞　タイル盤１ +
+        // ++++++++++++++++++++++++++++++++
 
-        board1SquareWidth: number,
-        board1SquareHeight: number,
+        tileBoard1TileWidth: number,
+        tileBoard1TileHeight: number,
         board1FileNum: number,  // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
         //board1RankNum: number,  // 段の数
         board1FloorTilemapTileNum: number,  // 床のタイルマップの、左上隅から数えたタイル数
@@ -46,9 +46,9 @@
     // # オブジェクト #
     // ################
 
-    // ++++++++++++++++++++++++
-    // + オブジェクト　＞　盤 +
-    // ++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　タイル盤１ +
+    // ++++++++++++++++++++++++++++++++
 
     const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
 
@@ -95,10 +95,10 @@
         const files = i % props.board1FileNum;
         const ranks = Math.floor(i / props.board1FileNum);
         sourceTilemapRectangles.push({
-            top: ranks * props.board1SquareHeight,
-            left: files * props.board1SquareWidth,
-            width: props.board1SquareWidth,
-            height: props.board1SquareHeight
+            top: ranks * props.tileBoard1TileHeight,
+            left: files * props.tileBoard1TileWidth,
+            width: props.tileBoard1TileWidth,
+            height: props.tileBoard1TileHeight
         });
     }
 </script>

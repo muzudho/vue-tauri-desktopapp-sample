@@ -59,8 +59,8 @@ export function getIndexFromFileAndRank(file: number, rank: number, width: numbe
 export const getFixedTileSqFromTileSq = computed<
     (
         tileIndex: number,
-        board1SquareWidth: number,
-        board1SquareHeight: number,
+        tileBoard1TileWidth: number,
+        tileBoard1TileHeight: number,
         board1FileNum: number,
         board1RankNum: number,
         printing1Left: number,
@@ -69,16 +69,16 @@ export const getFixedTileSqFromTileSq = computed<
 >(() => {
     return (
         tileIndex: number,
-        board1SquareWidth: number,
-        board1SquareHeight: number,
+        tileBoard1TileWidth: number,
+        tileBoard1TileHeight: number,
         board1FileNum: number,
         board1RankNum: number,
         printing1Left: number,
         printing1Top: number,
     ) => {
         // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
-        // if (!Number.isInteger(board1SquareWidth)) { throw new Error(`Assertion failed: "board1SquareWidth" must be an integer, got ${board1SquareWidth}`); }
-        // if (!Number.isInteger(board1SquareHeight)) { throw new Error(`Assertion failed: "board1SquareHeight" must be an integer, got ${board1SquareHeight}`); }
+        // if (!Number.isInteger(tileBoard1TileWidth)) { throw new Error(`Assertion failed: "tileBoard1TileWidth" must be an integer, got ${tileBoard1TileWidth}`); }
+        // if (!Number.isInteger(tileBoard1TileHeight)) { throw new Error(`Assertion failed: "tileBoard1TileHeight" must be an integer, got ${tileBoard1TileHeight}`); }
         // if (!Number.isInteger(board1FileNum)) { throw new Error(`Assertion failed: "board1FileNum" must be an integer, got ${board1FileNum}`); }
         // if (!Number.isInteger(board1RankNum)) { throw new Error(`Assertion failed: "board1RankNum" must be an integer, got ${board1RankNum}`); }
         // if (!Number.isInteger(printing1Left)) { throw new Error(`Assertion failed: "printing1Left" must be an integer, got ${printing1Left}`); }
@@ -88,8 +88,8 @@ export const getFixedTileSqFromTileSq = computed<
             tileIndex,
             board1FileNum,
             board1RankNum,
-            Math.floor(printing1Left / board1SquareWidth),
-            Math.floor(printing1Top / board1SquareHeight),
+            Math.floor(printing1Left / tileBoard1TileWidth),
+            Math.floor(printing1Top / tileBoard1TileHeight),
         );
         // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
 
@@ -102,8 +102,8 @@ export const getFixedTileSqFromTileSq = computed<
  * 見た目のマスのインデックス（固定インデックス）を取得します。
  */
 export function createGetFixedTileSqFromTileSq(
-    board1SquareWidth: number,
-    board1SquareHeight: number,
+    tileBoard1TileWidth: number,
+    tileBoard1TileHeight: number,
     board1FileNum: Ref<number>,
     board1RankNum: Ref<number>,
     printing1Left: Ref<number>,
@@ -116,8 +116,8 @@ export function createGetFixedTileSqFromTileSq(
         tileSq: number,
     ) => {
         // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
-        // if (!Number.isInteger(board1SquareWidth)) { throw new Error(`Assertion failed: "board1SquareWidth" must be an integer, got ${board1SquareWidth}`); }
-        // if (!Number.isInteger(board1SquareHeight)) { throw new Error(`Assertion failed: "board1SquareHeight" must be an integer, got ${board1SquareHeight}`); }
+        // if (!Number.isInteger(tileBoard1TileWidth)) { throw new Error(`Assertion failed: "tileBoard1TileWidth" must be an integer, got ${tileBoard1TileWidth}`); }
+        // if (!Number.isInteger(tileBoard1TileHeight)) { throw new Error(`Assertion failed: "tileBoard1TileHeight" must be an integer, got ${tileBoard1TileHeight}`); }
         // if (!Number.isInteger(board1FileNum)) { throw new Error(`Assertion failed: "board1FileNum" must be an integer, got ${board1FileNum}`); }
         // if (!Number.isInteger(board1RankNum)) { throw new Error(`Assertion failed: "board1RankNum" must be an integer, got ${board1RankNum}`); }
         // if (!Number.isInteger(printing1Left)) { throw new Error(`Assertion failed: "printing1Left" must be an integer, got ${printing1Left}`); }
@@ -127,8 +127,8 @@ export function createGetFixedTileSqFromTileSq(
             tileSq,
             board1FileNum.value,
             board1RankNum.value,
-            Math.floor(printing1Left.value / board1SquareWidth),
-            Math.floor(printing1Top.value / board1SquareHeight),
+            Math.floor(printing1Left.value / tileBoard1TileWidth),
+            Math.floor(printing1Top.value / tileBoard1TileHeight),
         );
         // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
 
@@ -303,8 +303,8 @@ export function wrapAround(
 
 
 export function createGetSquareStyleFromTileIndex(
-    board1SquareWidth: number,
-    board1SquareHeight: number,
+    tileBoard1TileWidth: number,
+    tileBoard1TileHeight: number,
     board1FileNum: Ref<number>,
     board1RankNum: Ref<number>,
     printing1Left: Ref<number>,
@@ -316,23 +316,23 @@ export function createGetSquareStyleFromTileIndex(
 
         // プレイヤーが初期位置にいる場合の、マスの位置。
         const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
-        const homeLeft = tileFile * board1SquareWidth;
-        const homeTop = tileRank * board1SquareHeight;
+        const homeLeft = tileFile * tileBoard1TileWidth;
+        const homeTop = tileRank * tileBoard1TileHeight;
 
         const [offsetLeftLoop, offsetTopLoop] = wrapAround(
             homeLeft,
             homeTop,
             printing1Left.value,
             printing1Top.value,
-            board1FileNum.value * board1SquareWidth,
-            board1RankNum.value * board1SquareHeight,
+            board1FileNum.value * tileBoard1TileWidth,
+            board1RankNum.value * tileBoard1TileHeight,
         );
 
         return {
             left: `${homeLeft + offsetLeftLoop}px`,
             top: `${homeTop + offsetTopLoop}px`,
-            width: `${board1SquareWidth}px`,
-            height: `${board1SquareHeight}px`,
+            width: `${tileBoard1TileWidth}px`,
+            height: `${tileBoard1TileHeight}px`,
         };
     };
 }

@@ -33,8 +33,8 @@
         // + オブジェクト　＞　盤１ +
         // ++++++++++++++++++++++++++
 
-        // board1SquareWidth: number,
-        // board1SquareHeight: number,
+        // tileBoard1TileWidth: number,
+        // tileBoard1TileHeight: number,
         // board1FileNum: number,  // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
         // board1FloorTilemapTileNum: number,  // 床のタイルマップの、左上隅から数えたタイル数
 

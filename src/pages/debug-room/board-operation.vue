@@ -6,8 +6,8 @@
         tileIndex = {{ tileIndex }}<br/>
         board1FileNum = {{ board1FileNum }}<br/>
         board1RankNum = {{ board1RankNum }}<br/>
-        offsetPrintingFile = {{ Math.floor(printing1Left / board1SquareWidth) }}<br/>
-        offsetPrintingRank = {{ Math.floor(printing1Top / board1SquareHeight) }}<br/>
+        offsetPrintingFile = {{ Math.floor(printing1Left / tileBoard1TileWidth) }}<br/>
+        offsetPrintingRank = {{ Math.floor(printing1Top / tileBoard1TileHeight) }}<br/>
         <br/>
 
         <pre>
@@ -15,16 +15,16 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     tileIndex,
     board1FileNum,
     board1RankNum,
-    Math.floor(printing1Left / board1SquareWidth),
-    Math.floor(printing1Top / board1SquareHeight),
+    Math.floor(printing1Left / tileBoard1TileWidth),
+    Math.floor(printing1Top / tileBoard1TileHeight),
 )</pre>
         = {{
             getIndexWhenAddUpFileAndRankOnPeriodicTable(
                 tileIndex,
                 board1FileNum,
                 board1RankNum,
-                Math.floor(printing1Left / board1SquareWidth),
-                Math.floor(printing1Top / board1SquareHeight),
+                Math.floor(printing1Left / tileBoard1TileWidth),
+                Math.floor(printing1Top / tileBoard1TileHeight),
             )
         }}
         <br/>
@@ -33,8 +33,8 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
         <pre>
 getFixedTileSqFromTileSq(
     tileIndex,
-    board1SquareWidth,
-    board1SquareHeight,
+    tileBoard1TileWidth,
+    tileBoard1TileHeight,
     board1FileNum,
     board1RankNum,
     printing1Left,
@@ -43,8 +43,8 @@ getFixedTileSqFromTileSq(
         = {{ 
             getFixedTileSqFromTileSq(
                 tileIndex,
-                board1SquareWidth,
-                board1SquareHeight,
+                tileBoard1TileWidth,
+                tileBoard1TileHeight,
                 board1FileNum,
                 board1RankNum,
                 printing1Left,
@@ -103,12 +103,12 @@ getFixedTileSqFromTileSq(
 
     const tileIndex = 18;
 
-    // ++++++++++++++++++++++++
-    // + オブジェクト　＞　盤 +
-    // ++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　タイル盤１ +
+    // ++++++++++++++++++++++++++++++++
 
-    const board1SquareWidth = 32;
-    const board1SquareHeight = 32;
+    const tileBoard1TileWidth = 32;
+    const tileBoard1TileHeight = 32;
     const board1FileNum = ref<number>(9);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(9);   // 段の数
 
