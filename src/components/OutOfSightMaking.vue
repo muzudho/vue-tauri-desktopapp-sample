@@ -6,8 +6,7 @@
     <div
         :style="outOfSight1Style"
         class="mask"
-        v-bind="$attrs">
-    </div>
+        v-bind="$attrs" />
 </template>
 
 <script setup lang="ts">

@@ -191,19 +191,14 @@
 
         <!-- 中段の画像エリア（固定） -->
         <div
-            :style="{
-                position: 'fixed',
-                top: '33vh',
-                bottom: `calc(${5 * controllerSquareUnit}px)`,
-                left: 0,
-                right: 0,
-            }"
+            :style="perspectiveMiddle1Style"
             style="
+                position: fixed;
+                left: 0;
+                right: 0;
                 text-align: center;
             "
         >
-        <!-- overflowY: 'auto', /* 内容物が収まらないならスクロールバーを出す */ -->
-
             <!-- 盤領域 -->
             <div
                 class="board"
@@ -321,8 +316,7 @@
                     :board1SquareWidth="board1SquareWidth"
                     :board1SquareHeight="board1SquareHeight"
                     :board1FileNum="board1FileNum"
-                    :board1RankNum="board1RankNum">
-                </out-of-sight-making>
+                    :board1RankNum="board1RankNum" />
             </div>
         </div>
 
@@ -602,6 +596,10 @@
                 </div>
                 <br/>
 
+                <p>
+                    controllerSquareUnit: {{ controllerSquareUnit }}<br/>
+                </p>
+
                 <p>👇 盤の各マス</p>
                 <div
                     v-for="i in board1Area"
@@ -747,7 +745,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = ref<number>(2.25);    // ズーム
+    const appZoom = ref<number>(1.5);   // ズーム
 
 
     // ################
@@ -990,7 +988,22 @@
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
 
-    
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　画面中段１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const perspectiveMiddle1Style = computed<CompatibleStyleValue>(()=>{
+        return {
+            top: `calc(
+                100vh - ${5 * controllerSquareUnit}px -
+                ${appZoom.value * (
+                    (board1RankNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareHeight
+                )}px
+            )`,
+            bottom: `calc(${5 * controllerSquareUnit}px)`,
+        } as CompatibleStyleValue;
+    });
+
     // ##########
     // # 開始時 #
     // ##########
