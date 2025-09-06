@@ -84,9 +84,9 @@
 
                 <!-- スクウェアのグリッド -->
                 <tile-board
-                    :board1Area="board1Area"
-                    :board1SquareWidth="board1SquareWidth"
-                    :board1SquareHeight="board1SquareHeight"
+                    :tileBoardArea="board1Area"
+                    :tileWidth="board1SquareWidth"
+                    :tileHeight="board1SquareHeight"
                     :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
                     :getSquareStyleFromTileSq="printing1GetSquareStyleFromTileIndex"
