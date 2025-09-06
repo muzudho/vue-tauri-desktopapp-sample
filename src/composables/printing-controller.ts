@@ -111,7 +111,7 @@ export function printingMotionClearIfCountZero(
  */
 export function checkOutOfSightLeftIsLook(
     board1SquareWidth: number,
-    board1WithMaskSizeSquare: number,
+    board1WithMaskSizeSquare: number,   // 見えないところを含んだ盤サイズ
     printing1Left: number,
 ) : boolean {
     // 見えている画面外が広がるような移動は禁止する：
