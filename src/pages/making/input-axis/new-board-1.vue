@@ -96,8 +96,9 @@
                     :printing1IsLooping="printing1IsLooping"
                     :computedImageBoard1Data="computedImageBoard1Data"
                     :sourceTilemapRectangles="sourceTilemapRectangles"
-                    :getSquareStyleFromTileIndex="printing1GetSquareStyleFromTileIndex"
-                    :getSourceTileLeftByImageBoardSq="printing1GetSourceTileLeftByImageBoardSq"
+                    :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
+                    :getSquareStyleFromTileSq="printing1GetSquareStyleFromTileIndex"
+                    :getSourceTileLeftByImageSq="printing1GetSourceTileLeftByImageBoardSq"
                 >
 
                 </tile-board>
@@ -418,7 +419,7 @@
                         )
                     }} | 
                     printing: {{
-                        getPrintingIndexFromFixedSquareIndex(
+                        getImageSqByFixedTileSq(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
                                 board1SquareWidth,
@@ -492,7 +493,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,

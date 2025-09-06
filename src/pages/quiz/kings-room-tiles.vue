@@ -97,7 +97,7 @@
                 class="square"
                 :style="printing1GetSquareStyleFromTileIndex(i - 1)"
                 :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
-                    getPrintingIndexFromFixedSquareIndex(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -127,9 +127,9 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                //:style="getSquareStyleFromTileIndex(i - 1)"
-                //:srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
-                    getPrintingIndexFromFixedSquareIndex(
+                //:style="getSquareStyleFromTileSq(i - 1)"
+                //:srcLeft="printing1Ref?.getSourceTileLeftByImageSq(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -169,7 +169,7 @@
                     )
                 }}]</span>
                 <span class="board-printing-index">print[{{
-                    getPrintingIndexFromFixedSquareIndex(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -189,7 +189,7 @@
                 }}]</span>
                 <span class="board-square-printing-string">{{
                     //printing1Ref?.getSourceTileSqStringByImageBoardSq(
-                        getPrintingIndexFromFixedSquareIndex(
+                        getImageSqByFixedTileSq(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
                                 board1SquareWidth,
@@ -472,7 +472,7 @@
                     )
                 }} | 
                 printing: {{
-                    getPrintingIndexFromFixedSquareIndex(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -803,7 +803,7 @@ color = i % 2;
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getImageSqByFixedTileSq } from '../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,

@@ -131,7 +131,7 @@ export const getPrintingSquareIndexFromTileIndexOLD = computed<
 
         let [fixedSquareFile, fixedSquareRank] = getFileAndRankFromIndex(fixedSquareIndex, board1FileNum);
 
-        return getPrintingIndexFromFixedSquareIndex(  // 範囲外なら -1 を返します。
+        return getImageSqByFixedTileSq(  // 範囲外なら -1 を返します。
             fixedSquareIndex,
             fixedSquareFile + offsetFile,
             fixedSquareRank + offsetRank,
@@ -148,7 +148,7 @@ export const getPrintingSquareIndexFromTileIndexOLD = computed<
  * @param fixedSquareIndex 
  * @returns 整数。該当なしのとき -1
  */
-export function getPrintingIndexFromFixedSquareIndex(
+export function getImageSqByFixedTileSq(
     fixedSquareIndex: number,
     offsetPrintingFile: number,
     offsetPrintingRank: number,

@@ -63,9 +63,9 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyleFromTileIndex(i - 1)"
-                :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
-                    getPrintingIndexFromFixedSquareIndex(
+                :style="getSquareStyleFromTileSq(i - 1)"
+                :srcLeft="printing1Ref?.getSourceTileLeftByImageSq(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -101,7 +101,7 @@
                     )
                 }}]</span>
                 <span class="board-printing-index">print[{{
-                    getPrintingIndexFromFixedSquareIndex(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -121,7 +121,7 @@
                 }}]</span>
                 <span class="board-square-printing-string">{{
                     printing1Ref?.getSourceTileSqStringByImageBoardSq(
-                        getPrintingIndexFromFixedSquareIndex(
+                        getImageSqByFixedTileSq(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
                                 board1SquareWidth,
@@ -369,7 +369,7 @@
                     )
                 }} | 
                 printing: {{
-                    getPrintingIndexFromFixedSquareIndex(
+                    getImageSqByFixedTileSq(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
                             board1SquareWidth,
@@ -465,7 +465,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../composables/board-operation';
+    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getImageSqByFixedTileSq, wrapAround } from '../../composables/board-operation';
     import {
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
@@ -552,7 +552,7 @@
             zoom: appZoom.value,
         };
     });
-    const getSquareStyleFromTileIndex = computed<
+    const getSquareStyleFromTileSq = computed<
         (tileIndex:number)=>CompatibleStyleValue
     >(() => {
         return (tileIndex:number)=>{

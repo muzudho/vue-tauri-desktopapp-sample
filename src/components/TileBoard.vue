@@ -3,9 +3,17 @@
         v-for="i in props.board1Area"
         :key="i"
         class="square"
-        :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="getSourceTileLeftByImageBoardSq(
-            1
+        :style="getSquareStyleFromTileSq(i - 1)"
+        :srcLeft="getSourceTileLeftByImageSq(
+            getImageSqByFixedTileSq(
+                0,
+                -Math.floor(props.printing1Left / props.board1SquareWidth),
+                -Math.floor(props.printing1Top / props.board1SquareHeight),
+                props.board1FileNum,
+                props.printing1FileNum,
+                props.printing1RankNum,
+                props.printing1IsLooping,
+            )
         ) ?? 0"
         :srcTop="0"
         :srcWidth="props.board1SquareWidth"
@@ -62,8 +70,17 @@
         printing1IsLooping: boolean;
         computedImageBoard1Data: ComputedRef<number[]>;
         sourceTilemapRectangles: Rectangle[];
-        getSquareStyleFromTileIndex: (tileIndex: number)=>CompatibleStyleValue;
-        getSourceTileLeftByImageBoardSq: (sq: number) => number;
+        getImageSqByFixedTileSq: (
+            fixedSquareIndex: number,
+            offsetPrintingFile: number,
+            offsetPrintingRank: number,
+            boardFileNum: number,
+            printing1FileNum: number,
+            printing1RankNum: number,
+            printing1IsLooping: boolean
+        ) => number;
+        getSquareStyleFromTileSq: (tileIndex: number)=>CompatibleStyleValue;
+        getSourceTileLeftByImageSq: (sq: number) => number;
     }
     const props = defineProps<Props>();
 
