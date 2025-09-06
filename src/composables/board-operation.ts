@@ -220,6 +220,8 @@ export function createGetSquareStyleFromTileIndex(
 ) : (tileIndex:number)=>CompatibleStyleValue
 {
     return (tileIndex:number)=>{
+        // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
+
         // プレイヤーが初期位置にいる場合の、マスの位置。
         const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
         const homeLeft = tileFile * board1SquareWidth;

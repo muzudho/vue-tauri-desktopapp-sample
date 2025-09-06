@@ -95,7 +95,7 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyleFromTileIndex(i - 1)"
+                :style="printing1GetSquareStyleFromTileIndex(i - 1)"
                 :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
@@ -927,32 +927,6 @@ color = i % 2;
             zoom: appZoom.value,
         };
     });
-    // const getSquareStyleFromTileIndex = computed<
-    //     (tileIndex:number)=>CompatibleStyleValue
-    // >(() => {
-    //     return (tileIndex:number)=>{
-    //         // プレイヤーが初期位置にいる場合の、マスの位置。
-    //         const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
-    //         const homeLeft = tileFile * board1SquareWidth;
-    //         const homeTop = tileRank * board1SquareHeight;
-
-    //         const [offsetLeftLoop, offsetTopLoop] = wrapAround(
-    //             homeLeft,
-    //             homeTop,
-    //             printing1Left.value,
-    //             printing1Top.value,
-    //             board1FileNum.value * board1SquareWidth,
-    //             board1RankNum.value * board1SquareHeight,
-    //         );
-
-    //         return {
-    //             left: `${homeLeft + offsetLeftLoop}px`,
-    //             top: `${homeTop + offsetTopLoop}px`,
-    //             width: `${board1SquareWidth}px`,
-    //             height: `${board1SquareHeight}px`,
-    //         };
-    //     };
-    // });
     //const board1FloorTilemapTileNum = 3;  // 床のタイルマップの、左上隅から数えたタイル数
 
     // ++++++++++++++++++++++++++
@@ -1064,7 +1038,7 @@ color = i % 2;
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
-    const getSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
         board1SquareWidth,
         board1SquareHeight,
         board1FileNum,
