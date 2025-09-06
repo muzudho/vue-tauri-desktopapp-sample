@@ -102,6 +102,16 @@
                 :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
             >
                 <!--
+                <template v-slot:default>
+                    <span style="font-size:8px;">ち</span>
+                </template>
+                <template v-slot:apple>
+                    <span style="font-size:8px;">よ</span>
+                </template>
+                <template v-slot:banana>
+                </template>
+                -->
+                <!--
                 <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
                 -->
 
@@ -758,7 +768,6 @@ color = i % 2;
     import TalkBalloon from '../../components/TalkBalloon.vue';
     import TalkIllustration from '../../components/TalkIllustration.vue';
     import TalkNovel from '../../components/TalkNovel.vue';
-    import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
     import TileBoard from '@/components/TileBoard.vue';
     import TheFooter from './the-footer.vue';

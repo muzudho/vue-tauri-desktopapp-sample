@@ -14,7 +14,17 @@
         :srcHeight="props.tileHeight"
         :tilemapUrl="props.tilemapUrl"
     >
-        <slot></slot>
+        <!--
+        <slot>
+            <span style="font-size:8px;">砂</span>
+        </slot>
+        <slot name="apple">
+            <span style="font-size:8px;">風</span>
+        </slot>
+        <slot name="banana">
+            <span style="font-size:8px;">ほ</span>
+        </slot>
+        -->
     </tile>
 </template>
 
