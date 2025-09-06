@@ -10,6 +10,12 @@
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
+    <!-- 印字１　＞　機能 -->
+    <printing-making
+        ref="printing1Ref"
+        :sourceTilemapRectangles="sourceTilemapRectangles"
+        :imageBoard1Data="imageBoard1Data" />
+
     <h3>王の間のタイルを市松模様にしようぜ！</h3>
     <section class="sec-3">
         <br/>
@@ -85,12 +91,6 @@
         </talk-balloon>
         <br/>
 
-        <!-- 印字１　＞　機能 -->
-        <printing-making
-            ref="printing1Ref"
-            :sourceTilemapRectangles="sourceTilemapRectangles"
-            :imageBoard1Data="imageBoard1Data" />
-
         <!-- 盤領域 -->
         <div
             class="board"
@@ -125,6 +125,39 @@
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/quiz/kings-room-tiles.png">
+
+                <!--
+                    getSquareStyleFromTileIndex
+
+            <tile
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
+                :style="getSquareStyleFromTileIndex(i - 1)"
+                :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                ) ?? 0"
+                :srcTop="0"
+                :srcWidth="board1SquareWidth"
+                :srcHeight="board1SquareHeight"
+                tilemapUrl="/img/quiz/kings-room-tiles.png">
+                -->
 
                 <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
 
@@ -788,6 +821,7 @@ color = i % 2;
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
+    //import { createGetSourceTileLeftByImageBoardSq } from '../../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++++
     // + インポート　＞　インターフェース +
@@ -927,12 +961,6 @@ color = i % 2;
         };
     });
     //const board1FloorTilemapTileNum = 3;  // 床のタイルマップの、左上隅から数えたタイル数
-    interface SourceTile {
-        left: number,
-        top: number,
-        width: number,
-        height: number,
-    }
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -1028,7 +1056,7 @@ color = i % 2;
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const sourceTilemapRectangles : SourceTile[] = [];
+    const sourceTilemapRectangles : Rectangle[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
@@ -1039,6 +1067,12 @@ color = i % 2;
             height: board1SquareHeight
         });
     }
+    /*
+    const printing1GetSourceTileLeftByImageBoardSq = createGetSourceTileLeftByImageBoardSq(
+        imageBoard1Data.value,
+        sourceTilemapRectangles,
+    );
+    */
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +

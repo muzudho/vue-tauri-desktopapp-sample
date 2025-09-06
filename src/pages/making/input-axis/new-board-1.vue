@@ -785,12 +785,6 @@
         };
     });
     const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
-    interface SourceTile {
-        left: number,
-        top: number,
-        width: number,
-        height: number,
-    }
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -825,7 +819,7 @@
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const sourceTilemapRectangles : SourceTile[] = [];
+    const sourceTilemapRectangles : Rectangle[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
