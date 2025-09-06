@@ -412,15 +412,7 @@
                         getFixedTileSqFromTileSq(i - 1)
                     }} | 
                     printing: {{
-                        getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(i - 1),
-                            -Math.floor(printing1Left / board1SquareWidth),
-                            -Math.floor(printing1Top / board1SquareHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
-                        )
+                        getImageSqByFixedTileSq(getFixedTileSqFromTileSq(i - 1))
                     }}<br/>
                 </div>
                 <br/>
@@ -478,7 +470,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetFixedTileSqFromTileSq, createGetSquareStyleFromTileIndex, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetSquareStyleFromTileIndex } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -661,6 +653,16 @@
         board1RankNum,
         printing1Left,
         printing1Top,
+    );
+    const getImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
+        board1SquareWidth,
+        board1SquareHeight,
+        board1FileNum,
+        printing1Left,
+        printing1Top,
+        printing1FileNum,
+        printing1RankNum,
+        printing1IsLooping,
     );
 
     // ++++++++++++++++++++++++++++++++++++

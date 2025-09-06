@@ -184,17 +184,17 @@ export const getPrintingSquareIndexFromTileIndexOLD = computed<
 
 /**
  * 見た目のマスのインデックス（固定インデックス）を、サブ印字表インデックスへ変換します。
- * @param fixedSquareIndex 
+ * @param fixedTileSq 
  * @returns 整数。該当なしのとき -1
  */
 export function getImageSqByFixedTileSq(
-    fixedSquareIndex: number,
-    offsetPrintingFile: number,
-    offsetPrintingRank: number,
-    boardFileNum: number,
-    printing1FileNum: number,
-    printing1RankNum: number,
-    printing1IsLooping: boolean
+    fixedTileSq: number,
+    offsetImageFile: number,
+    offsetImageRank: number,
+    tileFileNum: number,
+    imageFileNum: number,
+    imageRankNum: number,
+    imageIsLooping: boolean
 ) : number {
     // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
     // if (!Number.isInteger(offsetFile)) { throw new Error(`Assertion failed: "offsetFile" must be an integer, got ${offsetFile}`); }
@@ -203,25 +203,78 @@ export function getImageSqByFixedTileSq(
     // if (!Number.isInteger(printing1FileNum)) { throw new Error(`Assertion failed: "printing1FileNum" must be an integer, got ${printing1FileNum}`); }
     // if (!Number.isInteger(printing1RankNum)) { throw new Error(`Assertion failed: "printing1RankNum" must be an integer, got ${printing1RankNum}`); }
 
-    let [squareFile, squareRank] = getFileAndRankFromIndex(fixedSquareIndex, boardFileNum);
+    let [tileFile, tileRank] = getFileAndRankFromIndex(fixedTileSq, tileFileNum);
 
-    // 盤上の筋、段を、サブ印字表の筋、段へ変換：
-    let printingFile = squareFile + offsetPrintingFile;
-    let printingRank = squareRank + offsetPrintingRank;
+    // タイルの筋、段を、像の筋、段へ変換：
+    let imageFile = tileFile + offsetImageFile;
+    let imageRank = tileRank + offsetImageRank;
 
-    if (printing1IsLooping) {
+    if (imageIsLooping) {
         // 端でループする
-        printingFile = euclideanMod(printingFile, printing1FileNum);
-        printingRank = euclideanMod(printingRank, printing1RankNum);
+        imageFile = euclideanMod(imageFile, imageFileNum);
+        imageRank = euclideanMod(imageRank, imageRankNum);
     } else {
         // 印字のサイズの範囲外になるところには、"-" でも表示しておく
-        if (printingFile < 0 || printing1FileNum <= printingFile || printingRank < 0 || printing1RankNum <= printingRank) {
+        if (imageFile < 0 || imageFileNum <= imageFile || imageRank < 0 || imageRankNum <= imageRank) {
             return -1;
         }
     }
 
-    const printingIndex = getIndexFromFileAndRank(printingFile, printingRank, printing1FileNum);
-    return printingIndex;
+    const imageSq = getIndexFromFileAndRank(imageFile, imageRank, imageFileNum);
+    return imageSq;
+}
+
+
+/**
+ * 見た目のマスのインデックス（固定インデックス）を、サブ印字表インデックスへ変換します。
+ * @param fixedTileSq 
+ * @returns 整数。該当なしのとき -1
+ */
+export function createGetImageSqByFixedTileSq(
+    tileWidth: number,
+    tileHeight: number,
+    tileFileNum: Ref<number>,
+    imageLeft: Ref<number>,
+    imageTop: Ref<number>,
+    imageFileNum: Ref<number>,
+    imageRankNum: Ref<number>,
+    imageIsLooping: Ref<boolean>,
+) : (
+    fixedTileSq: number,
+) => number
+{
+    return (fixedTileSq: number) =>
+    {
+        // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+        // if (!Number.isInteger(offsetFile)) { throw new Error(`Assertion failed: "offsetFile" must be an integer, got ${offsetFile}`); }
+        // if (!Number.isInteger(offsetRank)) { throw new Error(`Assertion failed: "offsetRank" must be an integer, got ${offsetRank}`); }
+        // if (!Number.isInteger(width)) { throw new Error(`Assertion failed: "width" must be an integer, got ${width}`); }
+        // if (!Number.isInteger(printing1FileNum)) { throw new Error(`Assertion failed: "printing1FileNum" must be an integer, got ${printing1FileNum}`); }
+        // if (!Number.isInteger(printing1RankNum)) { throw new Error(`Assertion failed: "printing1RankNum" must be an integer, got ${printing1RankNum}`); }
+
+        const offsetImageFile: number = -Math.floor(imageLeft.value / tileWidth);
+        const offsetImageRank: number = -Math.floor(imageTop.value / tileHeight);
+
+        let [tileFile, tileRank] = getFileAndRankFromIndex(fixedTileSq, tileFileNum.value);
+
+        // タイルの筋、段を、像の筋、段へ変換：
+        let imageFile = tileFile + offsetImageFile;
+        let imageRank = tileRank + offsetImageRank;
+
+        if (imageIsLooping) {
+            // 端でループする
+            imageFile = euclideanMod(imageFile, imageFileNum.value);
+            imageRank = euclideanMod(imageRank, imageRankNum.value);
+        } else {
+            // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+            if (imageFile < 0 || imageFileNum.value <= imageFile || imageRank < 0 || imageRankNum.value <= imageRank) {
+                return -1;
+            }
+        }
+
+        const imageSq = getIndexFromFileAndRank(imageFile, imageRank, imageFileNum.value);
+        return imageSq;
+    };
 }
 
 

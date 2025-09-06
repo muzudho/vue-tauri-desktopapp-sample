@@ -5,15 +5,7 @@
         class="square"
         :style="getSquareStyleFromTileSq(tileSqPlus1 - 1)"
         :srcLeft="getSourceTileLeftByImageSq(
-            getImageSqByFixedTileSq(
-                getFixedTileSqFromTileSq(tileSqPlus1 - 1),
-                -Math.floor(props.printing1Left / props.board1SquareWidth),
-                -Math.floor(props.printing1Top / props.board1SquareHeight),
-                props.board1FileNum,
-                props.printing1FileNum,
-                props.printing1RankNum,
-                props.printing1IsLooping,
-            )
+            getImageSqByFixedTileSq(getFixedTileSqFromTileSq(tileSqPlus1 - 1))
         ) ?? 0"
         :srcTop="0"
         :srcWidth="props.board1SquareWidth"
@@ -71,6 +63,8 @@
         computedImageBoard1Data: ComputedRef<number[]>;
         sourceTilemapRectangles: Rectangle[];
         getFixedTileSqFromTileSq: (tileSq: number) => number;
+        getImageSqByFixedTileSq: (fixedTileSq: number) => number;
+        /*
         getImageSqByFixedTileSq: (
             fixedSquareIndex: number,
             offsetPrintingFile: number,
@@ -80,6 +74,7 @@
             printing1RankNum: number,
             printing1IsLooping: boolean
         ) => number;
+        */
         getSquareStyleFromTileSq: (tileIndex: number)=>CompatibleStyleValue;
         getSourceTileLeftByImageSq: (sq: number) => number;
     }
