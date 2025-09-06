@@ -1,3 +1,7 @@
+<!--
+    像
+-->
+
 <template>
 </template>
 
@@ -72,6 +76,7 @@
         (printingIndex:number) => number
     >(() => {
         return (printingIndex: number) => {
+            console.log(`printingIndex=${printingIndex}`)
 
             if (printingIndex == -1) {
                 return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
@@ -79,9 +84,12 @@
 
             const sourceTileIndex = props.printing1SourceTileIndexesBoard[printingIndex];
             const rectangle = props.printing1SourceTilemapCoordination[sourceTileIndex];
+            console.log(`sourceTileIndex=${sourceTileIndex}`)
 
             try {
                 if (rectangle) {
+                    console.log(`rectangle["left"]=${rectangle["left"]}`)
+
                     return rectangle["left"];
                 }
 

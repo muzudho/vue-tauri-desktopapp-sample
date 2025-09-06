@@ -230,7 +230,7 @@
                     :printing1RankNum="printing1RankNum"
                     :printing1IsLooping="printing1IsLooping"
                     :getSquareStyleFromTileIndex="getSquareStyleFromTileIndex"
-                    :printing1Ref="printing1Ref"
+                    :printing99Ref="printing1Ref"
                 >
 
                 </tile-board>

@@ -4,20 +4,27 @@
         :key="i"
         class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="32"
+        :srcLeft="printing99Ref?.getSourceTileLeftFromPrintingIndex(
+            1
+        ) ?? 0"
         :srcTop="0"
-        :srcWidth="32"
-        :srcHeight="32"
+        :srcWidth="props.board1SquareWidth"
+        :srcHeight="props.board1SquareHeight"
         tilemapUrl="/img/making/tilemap-floor-20250826.png"
     >
 
     <!--
+        :srcLeft="32"
+        :srcLeft="printing99Ref?.getSourceTileLeftFromPrintingIndex(
+            1
+        )"
+
     <tile
         v-for="i in props.board1Area"
         :key="i"
         class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
+        :srcLeft="printing99Ref?.getSourceTileLeftFromPrintingIndex(
             getPrintingIndexFromFixedSquareIndex(
                 getFixedSquareIndexFromTileIndex(
                     i - 1,
@@ -76,7 +83,7 @@
             )
         }}]</span>
         <span class="board-square-printing-string">{{
-            printing1Ref?.getPrintingStringFromPrintingIndex(
+            printing99Ref?.getPrintingStringFromPrintingIndex(
                 getPrintingIndexFromFixedSquareIndex(
                     getFixedSquareIndexFromTileIndex(
                         i - 1,
@@ -108,6 +115,7 @@
     // ##############
     
     import { ref } from 'vue';
+    import type { Ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++
     // + インポート　＞　互換性対応 +
@@ -119,7 +127,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../composables/board-operation';
+    //import { getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../composables/board-operation';
     // getFileAndRankFromIndex, wrapAround
 
     // ++++++++++++++++++++++++++++++++++
@@ -148,7 +156,7 @@
         printing1RankNum: number;
         printing1IsLooping: boolean;
         getSquareStyleFromTileIndex: (tileIndex: number)=>CompatibleStyleValue;
-        printing1Ref: typeof PrintingMaking;
+        printing99Ref: Ref<InstanceType<typeof PrintingMaking> | null>;
     }
     const props = defineProps<Props>();
 
@@ -164,7 +172,7 @@
     // 盤上に表示される数字柄、絵柄など。
     //
 
-    const printing1Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
+    const printing99Ref = ref<InstanceType<typeof PrintingMaking> | null>(null);
 
 </script>
 
