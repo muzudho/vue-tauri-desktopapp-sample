@@ -18,8 +18,8 @@
     <!-- 印字１　＞　機能 -->
     <printing-making
         ref="printing1Ref"
-        :printing1SourceTilemapCoordination="printing1SourceTilemapCoordination"
-        :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard"/>
+        :sourceTilemapCoordination="sourceTilemapCoordination"
+        :imageBoard1Data="imageBoard1Data"/>
 
     <!-- ブログ領域 -->
     <div
@@ -576,7 +576,7 @@
                     v-for="j in printing1AreaMax"
                     :key="j">
                     printing-index: {{ j - 1 }} | 
-                    source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
+                    source-tile-index: {{ imageBoard1Data[j - 1] }}<br/>
                 </div>
                 <br/>
             </section>
@@ -813,23 +813,23 @@
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
-    const printing1SourceTileIndexesBoard = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
+    const imageBoard1Data = ref<number[]>([]);   // ソース・タイルのインデックスが入っている盤
     // ランダムなマップデータを生成
     for (let i=0; i<printing1AreaMax; i++) {    // 最初から最大サイズで用意します。
         // 左上のタイルは画面外の黒なので、それを避けて設定。
         const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
-        printing1SourceTileIndexesBoard.value.push(sourceTileIndex);
+        imageBoard1Data.value.push(sourceTileIndex);
     }
     const printing1Input : PrintingInput = printingInputCreate();
     const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const printing1SourceTilemapCoordination : SourceTile[] = [];
+    const sourceTilemapCoordination : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
-        printing1SourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+        sourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
 
 

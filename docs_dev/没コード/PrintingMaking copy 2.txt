@@ -53,10 +53,10 @@
         // printing1MotionSpeed: number,
         // printing1MotionWait: number,
         // printing1MotionWalkingFrames: number,
-        printing1SourceTilemapCoordination: Rectangle[],
+        sourceTilemapCoordination: Rectangle[],
         // printing1OutOfSightIsLock: boolean,
         // printing1IsLooping: boolean,
-        printing1SourceTileIndexesBoard: number[],
+        imageBoard1Data: number[],
 
     }
     // デフォルト値を設定
@@ -83,10 +83,10 @@
         // 'update:printing1MotionSpeed': [value: number];
         // 'update:printing1MotionWait': [value: number];
         // 'update:printing1MotionWalkingFrames': [value: number];
-        'update:printing1SourceTilemapCoordination': [value: Rectangle[]];
+        'update:sourceTilemapCoordination': [value: Rectangle[]];
         // 'update:printing1OutOfSightIsLock': [value: boolean];
         // 'update:printing1IsLooping': [value: boolean];
-        'update:printing1SourceTileIndexesBoard': [value: number[]];
+        'update:imageBoard1Data': [value: number[]];
     }>();
 
     // ################
@@ -113,7 +113,7 @@
                 return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             }
 
-            const sourceTileIndex = props.printing1SourceTileIndexesBoard[printingIndex];
+            const sourceTileIndex = props.imageBoard1Data[printingIndex];
             return `${sourceTileIndex}`;
         };
     });
@@ -131,10 +131,10 @@
                 return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
             }
 
-            const sourceTileIndex = props.printing1SourceTileIndexesBoard[printingIndex];
+            const sourceTileIndex = props.imageBoard1Data[printingIndex];
 
             try {
-                return props.printing1SourceTilemapCoordination[sourceTileIndex]["left"];
+                return props.sourceTilemapCoordination[sourceTileIndex]["left"];
             } catch(error) {
                 console.error(`ERROR: ${error} | printingIndex=${printingIndex}`);
                 return 0;

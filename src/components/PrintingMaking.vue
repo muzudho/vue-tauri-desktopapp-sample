@@ -31,8 +31,8 @@
         // + オブジェクト　＞　印字１ +
         // ++++++++++++++++++++++++++++
 
-        printing1SourceTilemapCoordination: Rectangle[],
-        printing1SourceTileIndexesBoard: number[],
+        sourceTilemapCoordination: Rectangle[],
+        imageBoard1Data: number[],
 
     }
     // デフォルト値を設定
@@ -63,7 +63,7 @@
                 return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
             }
 
-            const sourceTileIndex = props.printing1SourceTileIndexesBoard[printingIndex];
+            const sourceTileIndex = props.imageBoard1Data[printingIndex];
             return `${sourceTileIndex}`;
         };
     });
@@ -82,8 +82,8 @@
                 return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
             }
 
-            const sourceTileIndex = props.printing1SourceTileIndexesBoard[printingIndex];
-            const rectangle = props.printing1SourceTilemapCoordination[sourceTileIndex];
+            const sourceTileIndex = props.imageBoard1Data[printingIndex];
+            const rectangle = props.sourceTilemapCoordination[sourceTileIndex];
             console.log(`sourceTileIndex=${sourceTileIndex}`)
 
             try {

@@ -88,8 +88,8 @@
         <!-- 印字１　＞　機能 -->
         <printing-making
             ref="printing1Ref"
-            :printing1SourceTilemapCoordination="printing1SourceTilemapCoordination"
-            :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard" />
+            :sourceTilemapCoordination="sourceTilemapCoordination"
+            :imageBoard1Data="imageBoard1Data" />
 
         <!-- 盤領域 -->
         <div
@@ -470,7 +470,7 @@
                 v-for="j in printing1AreaMax"
                 :key="j">
                 printing-index: {{ j - 1 }} | 
-                source-tile-index: {{ printing1SourceTileIndexesBoard[j - 1] }}<br/>
+                source-tile-index: {{ imageBoard1Data[j - 1] }}<br/>
             </div>
             <br/>
         </section>
@@ -962,7 +962,7 @@ color = i % 2;
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
     
-    const printing1SourceTileIndexesBoard = computed<
+    const imageBoard1Data = computed<
         number[]
     >(() => {
         const array: number[] = [];   // ソース・タイルのインデックスが入っている盤
@@ -1028,11 +1028,11 @@ color = i % 2;
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const printing1SourceTilemapCoordination : SourceTile[] = [];
+    const sourceTilemapCoordination : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
-        printing1SourceTilemapCoordination.push({
+        sourceTilemapCoordination.push({
             top: ranks * board1SquareHeight,
             left: files * board1SquareWidth,
             width: board1SquareWidth,
