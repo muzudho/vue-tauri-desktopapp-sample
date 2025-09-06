@@ -1,4 +1,19 @@
 <template>
+    ★タイルボード２★
+    <tile
+        v-for="i in props.board1Area"
+        :key="i"
+        class="square"
+        :style="getSquareStyleFromTileIndex(i - 1)"
+        :srcLeft="32"
+        :srcTop="0"
+        :srcWidth="props.board1SquareWidth"
+        :srcHeight="props.board1SquareHeight"
+        tilemapUrl="/img/making/tilemap-floor-20250826.png"
+    >
+
+    </tile>
+    <!--
     <tile
         v-for="i in props.board1Area"
         :key="i"
@@ -13,99 +28,8 @@
         tilemapUrl="/img/making/tilemap-floor-20250826.png"
     >
 
-    <!--
-        :srcLeft="32"
-        :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
-            1
-        )"
-
-    <tile
-        v-for="i in props.board1Area"
-        :key="i"
-        class="square"
-        //:style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
-            getPrintingIndexFromFixedSquareIndex(
-                getFixedSquareIndexFromTileIndex(
-                    i - 1,
-                    props.board1SquareWidth,
-                    props.board1SquareHeight,
-                    props.board1FileNum,
-                    props.board1RankNum,
-                    props.printing1Left,
-                    props.printing1Top,
-                ),
-                -Math.floor(props.printing1Left / props.board1SquareWidth),
-                -Math.floor(props.printing1Top / props.board1SquareHeight),
-                props.board1FileNum,
-                props.printing1FileNum,
-                props.printing1RankNum,
-                props.printing1IsLooping,
-            )
-        ) ?? 0"
-        :srcTop="0"
-        :srcWidth="props.board1SquareWidth"
-        :srcHeight="props.board1SquareHeight"
-        tilemapUrl="/img/making/tilemap-floor-20250826.png"
-    >
-    -->
-
-        <!--
-        <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
-        <span class="board-fixed-square-index">fix[{{
-            getFixedSquareIndexFromTileIndex(
-                i - 1,
-                board1SquareWidth,
-                board1SquareHeight,
-                board1FileNum,
-                board1RankNum,
-                printing1Left,
-                printing1Top,
-            )
-        }}]</span>
-        <span class="board-printing-index">print[{{
-            getPrintingIndexFromFixedSquareIndex(
-                getFixedSquareIndexFromTileIndex(
-                    i - 1,
-                    board1SquareWidth,
-                    board1SquareHeight,
-                    board1FileNum,
-                    board1RankNum,
-                    printing1Left,
-                    printing1Top,
-                ),
-                -Math.floor(printing1Left / board1SquareWidth),
-                -Math.floor(printing1Top / board1SquareHeight),
-                board1FileNum,
-                printing1FileNum,
-                printing1RankNum,
-                printing1IsLooping,
-            )
-        }}]</span>
-        <span class="board-square-printing-string">{{
-            //printing99Ref?.getSourceTileSqStringByImageBoardSq(
-                getPrintingIndexFromFixedSquareIndex(
-                    getFixedSquareIndexFromTileIndex(
-                        i - 1,
-                        board1SquareWidth,
-                        board1SquareHeight,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left,
-                        printing1Top,
-                    ),
-                    -Math.floor(printing1Left / board1SquareWidth),
-                    -Math.floor(printing1Top / board1SquareHeight),
-                    board1FileNum,
-                    printing1FileNum,
-                    printing1RankNum,
-                    printing1IsLooping,
-                )
-            ) ?? 0
-        }}</span>
-        -->
-
     </tile>
+    -->
 </template>
 
 <script setup lang="ts">

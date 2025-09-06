@@ -45,7 +45,7 @@ export function createGetSourceTileLeftByImageBoardSq(
 ) : (sq: number) => number
 {
     return (sq: number) => {
-        console.log(`sq=${sq}`)
+        //console.log(`sq=${sq}`)
 
         if (sq == -1) {
             return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
@@ -53,11 +53,11 @@ export function createGetSourceTileLeftByImageBoardSq(
 
         const sourceTileIndex = imageBoard1Data.value[sq];
         const rectangle = sourceTilemapRectangles[sourceTileIndex];
-        console.log(`sourceTileIndex=${sourceTileIndex}`)
+        //console.log(`sourceTileIndex=${sourceTileIndex}`)
 
         try {
             if (rectangle) {
-                console.log(`rectangle["left"]=${rectangle["left"]}`)
+                //console.log(`rectangle["left"]=${rectangle["left"]}`)
 
                 return rectangle["left"];
             }
