@@ -132,7 +132,7 @@
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
-                    printing1Ref?.getPrintingStringFromPrintingIndex(
+                    printing1GetSourceTileSqStringByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
@@ -152,6 +152,31 @@
                         )
                     ) ?? 0
                 }}</span>
+                <!--
+                    printing1GetSourceTileSqStringByImageBoardSq
+
+                <span class="board-square-printing-string">{{
+                    printing1Ref?.getSourceTileSqStringByImageBoardSq(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    ) ?? 0
+                }}</span>
+                -->
 
             </tile>
 
@@ -488,7 +513,7 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
-    import { createGetSourceTileLeftByImageBoardSq } from '../../../composables/image-board';
+    import { createGetSourceTileLeftByImageBoardSq, createGetSourceTileSqStringByImageBoardSq } from '../../../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++++
     // + インポート　＞　インターフェース +
@@ -636,6 +661,7 @@
         const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
         imageBoard1Data.value.push(sourceTileIndex);
     }
+    const computedImageBoard1Data = computed<number[]>(()=>imageBoard1Data.value);
     const printing1Input : PrintingInput = printingInputCreate();
     const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
@@ -647,8 +673,12 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
+    
+    const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
+        computedImageBoard1Data,
+    );
     const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
-        computed<number[]>(()=>imageBoard1Data.value),
+        computedImageBoard1Data,
         sourceTilemapRectangles,
     );
 

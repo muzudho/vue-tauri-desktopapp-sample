@@ -104,7 +104,7 @@
      * マスの印字。ソース・タイルマップのタイルのインデックス x の文字列。
      * @returns 該当なしのとき "-"
      */
-    const getPrintingStringFromPrintingIndex = computed<
+    const getSourceTileSqStringByImageBoardSq = computed<
         (printingIndex: number) => string
     >(() => {
         return (printingIndex: number) => {
@@ -148,7 +148,7 @@
     // ################
 
     defineExpose({
-        getPrintingStringFromPrintingIndex,
+        getSourceTileSqStringByImageBoardSq,
         getSourceTileLeftByImageBoardSq,
     });
 

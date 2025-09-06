@@ -249,7 +249,7 @@
 
                     <!--
                     printing1GetSourceTileLeftByImageBoardSq
-                    
+
                 <tile
                     v-for="i in board1Area"
                     :key="i"
@@ -313,7 +313,7 @@
                         )
                     }}]</span>
                     <span class="board-square-printing-string">{{
-                        printing1Ref?.getPrintingStringFromPrintingIndex(
+                        printing1Ref?.getSourceTileSqStringByImageBoardSq(
                             getPrintingIndexFromFixedSquareIndex(
                                 getFixedSquareIndexFromTileIndex(
                                     i - 1,

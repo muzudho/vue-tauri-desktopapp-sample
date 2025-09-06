@@ -15,6 +15,26 @@ import type { ComputedRef } from 'vue';
 import type Rectangle from '../interfaces/Rectangle';
 
 
+    /**
+     * マスの印字。ソース・タイルマップのタイル番号（0から始まる。文字列型）
+     * @returns 該当なしのとき "-"
+     */
+export function createGetSourceTileSqStringByImageBoardSq(
+    imageBoard1Data: ComputedRef<number[]>,
+) : (imageBoardSq: number) => string
+{
+    return (imageBoardSq: number) => {
+
+        if (imageBoardSq == -1) {
+            return "-"; // 印字のサイズの範囲外になるところには、"-" でも表示しておく
+        }
+
+        const sourceTileSq = imageBoard1Data.value[imageBoardSq];
+        return `${sourceTileSq}`;
+    };
+}
+
+
 /**
  * 以下のようなラムダ関数を作ります：
  *      像盤のマス番号（0から始まる）を渡すと、ソースのタイルタイルマップ上の left を返す。

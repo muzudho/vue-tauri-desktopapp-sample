@@ -54,7 +54,7 @@
      * マスの印字。ソース・タイルマップのタイルのインデックス x の文字列。
      * @returns 該当なしのとき "-"
      */
-    const getPrintingStringFromPrintingIndex = computed<
+    const getSourceTileSqStringByImageBoardSq = computed<
         (printingIndex: number) => string
     >(() => {
         return (printingIndex: number) => {
@@ -69,49 +69,12 @@
     });
 
 
-    /**
-     * 印字表のインデックスを渡すことで、そこに印字するタイルの、ソースタイルの left を返す。
-     */
-    const getSourceTileLeftByImageBoardSq = computed<
-        (printingIndex:number) => number
-    >(() => {
-        return (printingIndex: number) => {
-            console.log(`printingIndex=${printingIndex}`)
-
-            if (printingIndex == -1) {
-                return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
-            }
-
-            const sourceTileIndex = props.imageBoard1Data[printingIndex];
-            const rectangle = props.sourceTilemapRectangles[sourceTileIndex];
-            console.log(`sourceTileIndex=${sourceTileIndex}`)
-
-            try {
-                if (rectangle) {
-                    console.log(`rectangle["left"]=${rectangle["left"]}`)
-
-                    return rectangle["left"];
-                }
-
-                // sourceTileIndex に対応するタイルがなかったとき、仕方ないので 0 を返す。
-                // 印字盤のサイズが小さくなったとき、インデックス・アクセスが範囲外エラーになる？
-                return 0;
-
-            } catch(error) {
-                console.error(`ERROR: ${error} | printingIndex=${printingIndex}`);
-                return 0;
-            }
-        };
-    });
-
-
     // ################
     // # エクスポーズ #
     // ################
 
     defineExpose({
-        getPrintingStringFromPrintingIndex,
-        getSourceTileLeftByImageBoardSq,
+        getSourceTileSqStringByImageBoardSq: getSourceTileSqStringByImageBoardSq,
     });
 
 </script>

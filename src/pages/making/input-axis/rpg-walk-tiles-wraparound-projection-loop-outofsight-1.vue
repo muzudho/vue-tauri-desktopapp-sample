@@ -63,7 +63,7 @@
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
-                    getPrintingStringFromPrintingIndex(
+                    getSourceTileSqStringByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
@@ -532,7 +532,7 @@
      * マスの印字。
      * @returns 該当なしのとき "-"
      */
-    const getPrintingStringFromPrintingIndex = computed<
+    const getSourceTileSqStringByImageBoardSq = computed<
         (printingIndex: number) => string
     >(() => {
         return (printingIndex: number) => {

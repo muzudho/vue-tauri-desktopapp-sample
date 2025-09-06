@@ -194,7 +194,7 @@
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
-                    printing1Ref?.getPrintingStringFromPrintingIndex(
+                    //printing1Ref?.getSourceTileSqStringByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
