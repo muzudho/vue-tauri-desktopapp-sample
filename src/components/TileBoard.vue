@@ -3,12 +3,7 @@
         v-for="i in props.board1Area"
         :key="i"
         class="square"
-        :style="{
-            left: `0px`,
-            top: `0px`,
-            width: `32px`,
-            height: `32px`,
-        }"
+        :style="getSquareStyleFromTileIndex(i - 1)"
         :srcLeft="32"
         :srcTop="0"
         :srcWidth="32"
@@ -174,4 +169,8 @@
 </script>
 
 <style lang="css" scoped>
+    div.square {    /* マス */
+        position: absolute;
+        image-rendering: pixelated;
+    }
 </style>
