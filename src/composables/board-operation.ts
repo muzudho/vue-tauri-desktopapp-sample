@@ -3,6 +3,13 @@
 // ##############
 
 import { computed } from "vue";
+import type { Ref } from "vue";
+
+// ++++++++++++++++++++++++++++++
+// + インポート　＞　互換性対応 +
+// ++++++++++++++++++++++++++++++
+
+import type { CompatibleStyleValue }  from '../compatibles/compatible-style-value';
 
 // ++++++++++++++++++
 // + コンポーザブル +
@@ -12,7 +19,7 @@ import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from "./per
 
 
 // ################
-// # ライブラリー #
+// # サブルーチン #
 // ################
 
 /**
@@ -200,4 +207,38 @@ export function wrapAround(
     const offsetTopLoop = euclideanMod(homeTop + printingTopDelta, boardHeightPixels) - homeTop;
 
     return [offsetLeftLoop, offsetTopLoop];
+}
+
+
+export function createGetSquareStyleFromTileIndex(
+    board1SquareWidth: number,
+    board1SquareHeight: number,
+    board1FileNum: Ref<number>,
+    board1RankNum: Ref<number>,
+    printing1Left: Ref<number>,
+    printing1Top: Ref<number>,
+) : (tileIndex:number)=>CompatibleStyleValue
+{
+    return (tileIndex:number)=>{
+        // プレイヤーが初期位置にいる場合の、マスの位置。
+        const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
+        const homeLeft = tileFile * board1SquareWidth;
+        const homeTop = tileRank * board1SquareHeight;
+
+        const [offsetLeftLoop, offsetTopLoop] = wrapAround(
+            homeLeft,
+            homeTop,
+            printing1Left.value,
+            printing1Top.value,
+            board1FileNum.value * board1SquareWidth,
+            board1RankNum.value * board1SquareHeight,
+        );
+
+        return {
+            left: `${homeLeft + offsetLeftLoop}px`,
+            top: `${homeTop + offsetTopLoop}px`,
+            width: `${board1SquareWidth}px`,
+            height: `${board1SquareHeight}px`,
+        };
+    };
 }
