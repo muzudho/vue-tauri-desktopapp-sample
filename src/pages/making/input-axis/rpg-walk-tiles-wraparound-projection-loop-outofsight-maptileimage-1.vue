@@ -648,7 +648,7 @@
         sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
     const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
-        imageBoard1Data.value,
+        computed<number[]>(()=>imageBoard1Data.value),
         sourceTilemapRectangles,
     );
 

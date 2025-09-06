@@ -14,7 +14,7 @@
     <printing-making
         ref="printing1Ref"
         :sourceTilemapRectangles="sourceTilemapRectangles"
-        :imageBoard1Data="imageBoard1Data" />
+        :imageBoard1Data="computedImageBoard1Data" />
 
     <h3>王の間のタイルを市松模様にしようぜ！</h3>
     <section class="sec-3">
@@ -102,7 +102,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)"
-                :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
+                :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
@@ -990,7 +990,8 @@ color = i % 2;
     const printing1Left = ref<number>(0);
     const printing1Top = ref<number>(0);
     
-    const imageBoard1Data = computed<
+    // FIXME: これは computed にする必要があるか？ 動的に盤サイズが変わるから？
+    const computedImageBoard1Data = computed<
         number[]
     >(() => {
         const array: number[] = [];   // ソース・タイルのインデックスが入っている盤
@@ -1067,12 +1068,12 @@ color = i % 2;
             height: board1SquareHeight
         });
     }
-    /*
+    //*
     const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
-        imageBoard1Data.value,
+        computedImageBoard1Data,
         sourceTilemapRectangles,
     );
-    */
+    // */
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +

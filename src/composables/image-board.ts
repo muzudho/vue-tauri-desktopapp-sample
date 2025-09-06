@@ -6,6 +6,8 @@
 // # インポート #
 // ##############
 
+import type { ComputedRef } from 'vue';
+
 // ++++++++++++++++++++++++++++++++++++
 // + インポート　＞　インターフェース +
 // ++++++++++++++++++++++++++++++++++++
@@ -18,7 +20,7 @@ import type Rectangle from '../interfaces/Rectangle';
  *      像盤のマス番号（0から始まる）を渡すと、ソースのタイルタイルマップ上の left を返す。
  */
 export function createGetSourceTileLeftByImageBoardSq(
-    imageBoard1Data: number[],
+    imageBoard1Data: ComputedRef<number[]>,
     sourceTilemapRectangles: Rectangle[],
 ) : (sq: number) => number
 {
@@ -29,7 +31,7 @@ export function createGetSourceTileLeftByImageBoardSq(
             return 0;   // 印字のサイズの範囲外になるところには、とりあえず 0 を返す。左上のタイルが選ばれる。
         }
 
-        const sourceTileIndex = imageBoard1Data[sq];
+        const sourceTileIndex = imageBoard1Data.value[sq];
         const rectangle = sourceTilemapRectangles[sourceTileIndex];
         console.log(`sourceTileIndex=${sourceTileIndex}`)
 
