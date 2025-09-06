@@ -1,13 +1,13 @@
 <template>
     <tile
-        v-for="i in props.board1Area"
-        :key="i"
+        v-for="tileSqPlus1 in props.board1Area"
+        :key="tileSqPlus1"
         class="square"
-        :style="getSquareStyleFromTileSq(i - 1)"
+        :style="getSquareStyleFromTileSq(tileSqPlus1 - 1)"
         :srcLeft="getSourceTileLeftByImageSq(
             getImageSqByFixedTileSq(
                 getFixedTileSqFromTileSq(
-                    i - 1,
+                    tileSqPlus1 - 1,
                     board1SquareWidth,
                     board1SquareHeight,
                     board1FileNum,
