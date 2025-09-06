@@ -82,11 +82,12 @@
                     :style="playerHome1Style">
                 </div>
 
-                <!-- スクウェアのグリッド -->
+                <!-- タイル盤１ -->
                 <tile-board
                     :tileBoardArea="board1Area"
                     :tileWidth="tileBoard1TileWidth"
                     :tileHeight="tileBoard1TileHeight"
+                    :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
                     :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
                     :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"

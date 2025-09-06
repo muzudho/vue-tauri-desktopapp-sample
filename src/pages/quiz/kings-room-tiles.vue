@@ -90,23 +90,20 @@
             class="board"
             :style="board1Style">
 
-            <!-- スクウェアのグリッド -->
-            <tile
-                v-for="i in board1Area"
-                :key="i"
-                class="square"
-                :style="imageBoard1GetTileStyleByTileSq(i - 1)"
-                :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
-                    getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(i - 1)
-                    )
-                ) ?? 0"
-                :srcTop="0"
-                :srcWidth="tileBoard1TileWidth"
-                :srcHeight="tileBoard1TileHeight"
-                tilemapUrl="/img/quiz/kings-room-tiles.png">
-
+            <!-- 新・タイル盤１ -->
+            <tile-board
+                :tileBoardArea="board1Area"
+                :tileWidth="tileBoard1TileWidth"
+                :tileHeight="tileBoard1TileHeight"
+                :tilemapUrl="'/img/quiz/kings-room-tiles.png'"
+                :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
+                :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
+                :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"
+                :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+            >
+                <!--
                 <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
+                -->
 
                 <!--
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
@@ -163,7 +160,27 @@
                 }}</span>
                 -->
 
+            </tile-board>
+
+            <!-- 旧・タイル盤１ -->
+            <!--
+            <tile
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
+                :style="imageBoard1GetTileStyleByTileSq(i - 1)"
+                :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
+                    getImageSqByFixedTileSq(
+                        getFixedTileSqFromTileSq(i - 1)
+                    )
+                ) ?? 0"
+                :srcTop="0"
+                :srcWidth="tileBoard1TileWidth"
+                :srcHeight="tileBoard1TileHeight"
+                tilemapUrl="/img/quiz/kings-room-tiles.png">
+
             </tile>
+            -->
 
             <!-- 自機１ -->
             <tile-animation
@@ -743,6 +760,7 @@ color = i % 2;
     import TalkNovel from '../../components/TalkNovel.vue';
     import Tile from '../../components/Tile.vue';
     import TileAnimation from '../../components/TileAnimation.vue';
+    import TileBoard from '@/components/TileBoard.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 

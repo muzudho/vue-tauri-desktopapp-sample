@@ -12,9 +12,9 @@
         :srcTop="0"
         :srcWidth="props.tileWidth"
         :srcHeight="props.tileHeight"
-        tilemapUrl="/img/making/tilemap-floor-20250826.png"
+        :tilemapUrl="props.tilemapUrl"
     >
-
+        <slot></slot>
     </tile>
 </template>
 
@@ -46,6 +46,7 @@
         tileBoardArea: number; // 盤のマス数
         tileWidth: number;
         tileHeight: number;
+        tilemapUrl: string;
         getFixedTileSqFromTileSq: (tileSq: number) => number;
         getImageSqByFixedTileSq: (fixedTileSq: number) => number;
         getSquareStyleFromTileSq: (tileIndex: number) => CompatibleStyleValue;
