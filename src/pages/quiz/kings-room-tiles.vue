@@ -134,7 +134,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)"
-                :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
+                //:srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,

@@ -223,6 +223,38 @@
                     :key="i"
                     class="square"
                     :style="getSquareStyleFromTileIndex(i - 1)"
+                    :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
+                        getPrintingIndexFromFixedSquareIndex(
+                            getFixedSquareIndexFromTileIndex(
+                                i - 1,
+                                board1SquareWidth,
+                                board1SquareHeight,
+                                board1FileNum,
+                                board1RankNum,
+                                printing1Left,
+                                printing1Top,
+                            ),
+                            -Math.floor(printing1Left / board1SquareWidth),
+                            -Math.floor(printing1Top / board1SquareHeight),
+                            board1FileNum,
+                            printing1FileNum,
+                            printing1RankNum,
+                            printing1IsLooping,
+                        )
+                    ) ?? 0"
+                    :srcTop="0"
+                    :srcWidth="board1SquareWidth"
+                    :srcHeight="board1SquareHeight"
+                    tilemapUrl="/img/making/tilemap-floor-20250826.png">
+
+                    <!--
+                    printing1GetSourceTileLeftByImageBoardSq
+                    
+                <tile
+                    v-for="i in board1Area"
+                    :key="i"
+                    class="square"
+                    :style="getSquareStyleFromTileIndex(i - 1)"
                     :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
@@ -246,6 +278,7 @@
                     :srcWidth="board1SquareWidth"
                     :srcHeight="board1SquareHeight"
                     tilemapUrl="/img/making/tilemap-floor-20250826.png">
+                    -->
 
                     <!--
                     <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
@@ -713,6 +746,7 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
+    import { createGetSourceTileLeftByImageBoardSq } from '../../../composables/image-board';
 
     // +++++++++++++++++++++++++++++++++++
     // + インポート ＞　インターフェース +
@@ -899,6 +933,10 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
+    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+        computed<number[]>(()=>imageBoard1Data.value),
+        sourceTilemapRectangles,
+    );
 
 
     // ++++++++++++++++++++++++++++++++++++
