@@ -89,7 +89,8 @@ getFixedSquareIndexFromTileIndex(
     // ++++++++++++++++++
 
     import { getFixedSquareIndexFromTileIndex } from '../../composables/board-operation';
-    import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
+    import { getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
+    // euclideanMod
 
 
     // ################

@@ -218,12 +218,6 @@
                 </div>
 
                 <!-- スクウェアのグリッド -->
-                <tile-board
-                    :board1Area="board1Area"
-                    :board1SquareWidth="board1SquareWidth"
-                >
-
-                </tile-board>
                 <tile
                     v-for="i in board1Area"
                     :key="i"
@@ -687,7 +681,6 @@
 
     // from の階層が上の順、アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
-    import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
     import PrintingMaking from '@/components/PrintingMaking.vue';
@@ -695,10 +688,15 @@
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import Tile from '@/components/Tile.vue';
-    import TileBoard from '@/components/TileBoard.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
     import TheFooter from '../the-footer.vue';
     import TheHeader from '../the-header.vue';
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント　＞　互換性対応 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
