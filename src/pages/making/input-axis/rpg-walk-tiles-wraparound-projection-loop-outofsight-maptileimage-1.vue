@@ -40,7 +40,7 @@
                 :style="printing1GetSquareStyleFromTileIndex(i - 1)"
                 :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
                     getImageSqByFixedTileSq(
-                        getFixedSquareIndexFromTileIndex(
+                        getFixedTileSqFromTileSq(
                             i - 1,
                             board1SquareWidth,
                             board1SquareHeight,
@@ -70,7 +70,7 @@
                 //:style="getSquareStyleFromTileSq(i - 1)"
                 :srcLeft="printing1Ref?.getSourceTileLeftByImageSq(
                     getImageSqByFixedTileSq(
-                        getFixedSquareIndexFromTileIndex(
+                        getFixedTileSqFromTileSq(
                             i - 1,
                             board1SquareWidth,
                             board1SquareHeight,
@@ -95,7 +95,7 @@
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
-                    getFixedSquareIndexFromTileIndex(
+                    getFixedTileSqFromTileSq(
                         i - 1,
                         board1SquareWidth,
                         board1SquareHeight,
@@ -107,7 +107,7 @@
                 }}]</span>
                 <span class="board-printing-index">print[{{
                     getImageSqByFixedTileSq(
-                        getFixedSquareIndexFromTileIndex(
+                        getFixedTileSqFromTileSq(
                             i - 1,
                             board1SquareWidth,
                             board1SquareHeight,
@@ -127,7 +127,7 @@
                 <span class="board-square-printing-string">{{
                     printing1GetSourceTileSqStringByImageBoardSq(
                         getImageSqByFixedTileSq(
-                            getFixedSquareIndexFromTileIndex(
+                            getFixedTileSqFromTileSq(
                                 i - 1,
                                 board1SquareWidth,
                                 board1SquareHeight,
@@ -151,7 +151,7 @@
                 <span class="board-square-printing-string">{{
                     //printing1Ref?.getSourceTileSqStringByImageBoardSq(
                         getImageSqByFixedTileSq(
-                            getFixedSquareIndexFromTileIndex(
+                            getFixedTileSqFromTileSq(
                                 i - 1,
                                 board1SquareWidth,
                                 board1SquareHeight,
@@ -388,7 +388,7 @@
                 :key="i">
                 tile-index: {{ i - 1 }} | 
                 fix-index: {{
-                    getFixedSquareIndexFromTileIndex(
+                    getFixedTileSqFromTileSq(
                         i - 1,
                         board1SquareWidth,
                         board1SquareHeight,
@@ -400,7 +400,7 @@
                 }} | 
                 printing: {{
                     getImageSqByFixedTileSq(
-                        getFixedSquareIndexFromTileIndex(
+                        getFixedTileSqFromTileSq(
                             i - 1,
                             board1SquareWidth,
                             board1SquareHeight,
@@ -494,7 +494,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,

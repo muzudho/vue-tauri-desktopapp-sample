@@ -31,7 +31,7 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
         <br/>
 
         <pre>
-getFixedSquareIndexFromTileIndex(
+getFixedTileSqFromTileSq(
     tileIndex,
     board1SquareWidth,
     board1SquareHeight,
@@ -41,7 +41,7 @@ getFixedSquareIndexFromTileIndex(
     printing1Top,
 )</pre>
         = {{ 
-            getFixedSquareIndexFromTileIndex(
+            getFixedTileSqFromTileSq(
                 tileIndex,
                 board1SquareWidth,
                 board1SquareHeight,
@@ -88,7 +88,7 @@ getFixedSquareIndexFromTileIndex(
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFixedSquareIndexFromTileIndex } from '../../composables/board-operation';
+    import { getFixedTileSqFromTileSq } from '../../composables/board-operation';
     import { getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
     // euclideanMod
 

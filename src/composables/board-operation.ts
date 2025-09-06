@@ -56,7 +56,7 @@ export function getIndexFromFileAndRank(file: number, rank: number, width: numbe
 /**
  * 見た目のマスのインデックス（固定インデックス）を取得します。
  */
-export const getFixedSquareIndexFromTileIndex = computed<
+export const getFixedTileSqFromTileSq = computed<
     (
         tileIndex: number,
         board1SquareWidth: number,

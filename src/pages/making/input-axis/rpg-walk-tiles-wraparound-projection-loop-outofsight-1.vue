@@ -36,7 +36,7 @@
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
-                    getFixedSquareIndexFromTileIndex(
+                    getFixedTileSqFromTileSq(
                         i - 1,
                         board1SquareWidth,
                         board1SquareHeight,
@@ -48,7 +48,7 @@
                 }}]</span>
                 <span class="board-printing-index">print[{{
                     getImageSqByFixedTileSq(
-                        getFixedSquareIndexFromTileIndex(
+                        getFixedTileSqFromTileSq(
                             i - 1,
                             board1SquareWidth,
                             board1SquareHeight,
@@ -68,7 +68,7 @@
                 <span class="board-square-printing-string">{{
                     getSourceTileStringByImageBoardSq(
                         getImageSqByFixedTileSq(
-                            getFixedSquareIndexFromTileIndex(
+                            getFixedTileSqFromTileSq(
                                 i - 1,
                                 board1SquareWidth,
                                 board1SquareHeight,
@@ -362,7 +362,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,

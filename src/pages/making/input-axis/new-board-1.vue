@@ -96,7 +96,7 @@
                     :printing1IsLooping="printing1IsLooping"
                     :computedImageBoard1Data="computedImageBoard1Data"
                     :sourceTilemapRectangles="sourceTilemapRectangles"
-                    :getFixedSquareIndexFromTileIndex="getFixedSquareIndexFromTileIndex"
+                    :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
                     :getSquareStyleFromTileSq="printing1GetSquareStyleFromTileIndex"
                     :getSourceTileLeftByImageSq="printing1GetSourceTileLeftByImageBoardSq"
@@ -409,7 +409,7 @@
                     :key="i">
                     tile-index: {{ i - 1 }} | 
                     fix-index: {{
-                        getFixedSquareIndexFromTileIndex(
+                        getFixedTileSqFromTileSq(
                             i - 1,
                             board1SquareWidth,
                             board1SquareHeight,
@@ -421,7 +421,7 @@
                     }} | 
                     printing: {{
                         getImageSqByFixedTileSq(
-                            getFixedSquareIndexFromTileIndex(
+                            getFixedTileSqFromTileSq(
                                 i - 1,
                                 board1SquareWidth,
                                 board1SquareHeight,
@@ -494,7 +494,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,

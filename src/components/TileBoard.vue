@@ -6,7 +6,7 @@
         :style="getSquareStyleFromTileSq(i - 1)"
         :srcLeft="getSourceTileLeftByImageSq(
             getImageSqByFixedTileSq(
-                getFixedSquareIndexFromTileIndex(
+                getFixedTileSqFromTileSq(
                     i - 1,
                     board1SquareWidth,
                     board1SquareHeight,
@@ -78,7 +78,7 @@
         printing1IsLooping: boolean;
         computedImageBoard1Data: ComputedRef<number[]>;
         sourceTilemapRectangles: Rectangle[];
-        getFixedSquareIndexFromTileIndex: (
+        getFixedTileSqFromTileSq: (
             tileIndex: number,
             board1SquareWidth: number,
             board1SquareHeight: number,
