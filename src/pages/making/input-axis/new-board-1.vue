@@ -218,91 +218,22 @@
                 </div>
 
                 <!-- スクウェアのグリッド -->
-                <tile
-                    v-for="i in board1Area"
-                    :key="i"
-                    class="square"
-                    :style="getSquareStyleFromTileIndex(i - 1)"
-                    :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
-                        getPrintingIndexFromFixedSquareIndex(
-                            getFixedSquareIndexFromTileIndex(
-                                i - 1,
-                                board1SquareWidth,
-                                board1SquareHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
-                            -Math.floor(printing1Left / board1SquareWidth),
-                            -Math.floor(printing1Top / board1SquareHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
-                        )
-                    ) ?? 0"
-                    :srcTop="0"
-                    :srcWidth="board1SquareWidth"
-                    :srcHeight="board1SquareHeight"
-                    tilemapUrl="/img/making/tilemap-floor-20250826.png">
+                <tile-board
+                    :board1Area="board1Area"
+                    :board1SquareWidth="board1SquareWidth"
+                    :board1SquareHeight="board1SquareHeight"
+                    :board1FileNum="board1FileNum"
+                    :board1RankNum="board1RankNum"
+                    :printing1Left="printing1Left"
+                    :printing1Top="printing1Top"
+                    :printing1FileNum="printing1FileNum"
+                    :printing1RankNum="printing1RankNum"
+                    :printing1IsLooping="printing1IsLooping"
+                    :getSquareStyleFromTileIndex="getSquareStyleFromTileIndex"
+                    :getSourceTileLeftFromPrintingIndex="printing1Ref?.getSourceTileLeftFromPrintingIndex"
+                >
 
-                    <!--
-                    <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
-                    <span class="board-fixed-square-index">fix[{{
-                        getFixedSquareIndexFromTileIndex(
-                            i - 1,
-                            board1SquareWidth,
-                            board1SquareHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        )
-                    }}]</span>
-                    <span class="board-printing-index">print[{{
-                        getPrintingIndexFromFixedSquareIndex(
-                            getFixedSquareIndexFromTileIndex(
-                                i - 1,
-                                board1SquareWidth,
-                                board1SquareHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
-                            -Math.floor(printing1Left / board1SquareWidth),
-                            -Math.floor(printing1Top / board1SquareHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
-                        )
-                    }}]</span>
-                    <span class="board-square-printing-string">{{
-                        printing1Ref?.getPrintingStringFromPrintingIndex(
-                            getPrintingIndexFromFixedSquareIndex(
-                                getFixedSquareIndexFromTileIndex(
-                                    i - 1,
-                                    board1SquareWidth,
-                                    board1SquareHeight,
-                                    board1FileNum,
-                                    board1RankNum,
-                                    printing1Left,
-                                    printing1Top,
-                                ),
-                                -Math.floor(printing1Left / board1SquareWidth),
-                                -Math.floor(printing1Top / board1SquareHeight),
-                                board1FileNum,
-                                printing1FileNum,
-                                printing1RankNum,
-                                printing1IsLooping,
-                            )
-                        ) ?? 0
-                    }}</span>
-                    -->
-
-                </tile>
+                </tile-board>
 
                 <!-- 自機１ -->
                 <tile-animation
@@ -681,6 +612,7 @@
 
     // from の階層が上の順、アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
     import PrintingMaking from '@/components/PrintingMaking.vue';
@@ -688,15 +620,10 @@
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import Tile from '@/components/Tile.vue';
+    import TileBoard from '@/components/TileBoard.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
     import TheFooter from '../the-footer.vue';
     import TheHeader from '../the-header.vue';
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーネント　＞　互換性対応 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    import CompatibleDevice from '@/components/CompatibleDevice.vue'
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +

@@ -72,6 +72,11 @@ const routes = [
         component: () => import('@/pages/making/index.vue'),
     },
     {
+        name: 'InputAxisNewBoard',
+        path: '/making/input-axis/new-board-1',
+        component: () => import('../pages/making/input-axis/new-board-1.vue'),
+    },
+    {
         name: 'InputAxisPerspectiveRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
         path: '/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
         component: () => import('../pages/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
