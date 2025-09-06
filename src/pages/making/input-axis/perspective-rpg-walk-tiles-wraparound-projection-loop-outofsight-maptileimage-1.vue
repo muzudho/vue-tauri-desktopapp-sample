@@ -200,9 +200,6 @@
             :style="perspectiveMiddle1Style"
             style="
                 position: fixed;
-                left: 0;
-                right: 0;
-                text-align: center;
             "
         >
             <!-- 盤領域 -->
@@ -808,6 +805,7 @@
             }
         }
     });
+    const oneForMask = 1;   // マスクが１マス分食み出ていることを示す定数。
 
     // ++++++++++++++++++++++++
     // + オブジェクト　＞　盤 +
@@ -829,7 +827,6 @@
             width: `${(board1FileNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareWidth}px`,
             height: `${(board1RankNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareHeight}px`,
             zoom: appZoom.value,
-            marginLeft: `${outOfSight1WithMaskSquareCount.value * board1SquareWidth}px`, /* 食み出たマスクの幅の分、右へずらす */
         };
     });
     const getSquareStyleFromTileIndex = computed<
@@ -999,14 +996,17 @@
     // ++++++++++++++++++++++++++++++++
 
     const perspectiveMiddle1Style = computed<CompatibleStyleValue>(()=>{
+        const boardWidthPixelsWithMask = appZoom.value *(board1FileNum.value + oneForMask) * board1SquareWidth;
+        const boardHeightPixelsWithMask = appZoom.value *(board1RankNum.value + oneForMask) * board1SquareHeight;
+
         return {
             top: `calc(
                 100vh - ${5 * controllerSquareUnit}px -
-                ${appZoom.value * (
-                    (board1RankNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareHeight
-                )}px
+                ${boardHeightPixelsWithMask}px
             )`,
             bottom: `calc(${5 * controllerSquareUnit}px)`,
+            marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
+            marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
         } as CompatibleStyleValue;
     });
 
