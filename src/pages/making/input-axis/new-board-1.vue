@@ -96,6 +96,7 @@
                     :printing1IsLooping="printing1IsLooping"
                     :computedImageBoard1Data="computedImageBoard1Data"
                     :sourceTilemapRectangles="sourceTilemapRectangles"
+                    :getFixedSquareIndexFromTileIndex="getFixedSquareIndexFromTileIndex"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
                     :getSquareStyleFromTileSq="printing1GetSquareStyleFromTileIndex"
                     :getSourceTileLeftByImageSq="printing1GetSourceTileLeftByImageBoardSq"
