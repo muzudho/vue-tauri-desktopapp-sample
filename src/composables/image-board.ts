@@ -39,7 +39,7 @@ export function createGetSourceTileSqStringByImageBoardSq(
  * 以下のようなラムダ関数を作ります：
  *      像盤のマス番号（0から始まる）を渡すと、ソースのタイルタイルマップ上の left を返す。
  */
-export function createGetSourceTileLeftByImageBoardSq(
+export function createGetResourceTileLeftByImageSq(
     imageBoard1Data: ComputedRef<number[]>,
     sourceTilemapRectangles: Rectangle[],
 ) : (sq: number) => number

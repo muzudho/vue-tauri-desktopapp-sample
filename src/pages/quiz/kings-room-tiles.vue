@@ -96,15 +96,9 @@
                 :key="i"
                 class="square"
                 :style="imageBoard1GetTileStyleByTileSq(i - 1)"
-                :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
+                :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
                     getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(i - 1),
-                        -Math.floor(printing1Left / tileBoard1TileWidth),
-                        -Math.floor(printing1Top / tileBoard1TileHeight),
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1IsLooping,
+                        getFixedTileSqFromTileSq(i - 1)
                     )
                 ) ?? 0"
                 :srcTop="0"
@@ -762,7 +756,7 @@ color = i % 2;
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetFixedTileSqFromTileSq, createGetTileStyleByTileSq, getImageSqByFixedTileSq } from '../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -773,7 +767,7 @@ color = i % 2;
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
-    import { createGetSourceTileLeftByImageBoardSq } from '../../composables/image-board';
+    import { createGetResourceTileLeftByImageSq } from '../../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++++
     // + インポート　＞　インターフェース +
@@ -1001,7 +995,7 @@ color = i % 2;
         printing1Left,
         printing1Top,
     );
-    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+    const imageBoard1GetResourceTileLeftByImageSq: (sq: number) => number = createGetResourceTileLeftByImageSq(
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
@@ -1012,6 +1006,16 @@ color = i % 2;
         board1RankNum,
         printing1Left,
         printing1Top,
+    );
+    const getImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        printing1Left,
+        printing1Top,
+        printing1FileNum,
+        printing1RankNum,
+        printing1IsLooping,
     );
 
     // ++++++++++++++++++++++++++++++++++++

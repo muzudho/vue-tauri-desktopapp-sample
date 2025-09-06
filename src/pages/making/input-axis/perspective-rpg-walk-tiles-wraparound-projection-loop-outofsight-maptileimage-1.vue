@@ -217,7 +217,7 @@
                     :key="i"
                     class="square"
                     :style="imageBoard1GetTileStyleByTileSq(i - 1)"
-                    :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
+                    :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
                         getImageSqByFixedTileSq(
                             getFixedTileSqFromTileSq(
                                 i - 1,
@@ -242,7 +242,7 @@
                     tilemapUrl="/img/making/tilemap-floor-20250826.png">
 
                     <!--
-                    printing1GetSourceTileLeftByImageBoardSq
+                    imageBoard1GetResourceTileLeftByImageSq
 
                 <tile
                     v-for="i in board1Area"
@@ -739,7 +739,7 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
-    import { createGetSourceTileLeftByImageBoardSq } from '../../../composables/image-board';
+    import { createGetResourceTileLeftByImageSq } from '../../../composables/image-board';
 
     // +++++++++++++++++++++++++++++++++++
     // + インポート ＞　インターフェース +
@@ -897,7 +897,7 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * tileBoard1TileHeight, left: files * tileBoard1TileWidth, width: tileBoard1TileWidth, height: tileBoard1TileHeight });
     }
-    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+    const imageBoard1GetResourceTileLeftByImageSq: (sq: number) => number = createGetResourceTileLeftByImageSq(
         computed<number[]>(()=>imageBoard1Data.value),
         sourceTilemapRectangles,
     );

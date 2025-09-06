@@ -90,7 +90,7 @@
                     :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
                     :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"
-                    :getSourceTileLeftByImageSq="printing1GetSourceTileLeftByImageBoardSq"
+                    :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
                 >
 
                 </tile-board>
@@ -472,7 +472,7 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
-    import { createGetSourceTileLeftByImageBoardSq } from '../../../composables/image-board';
+    import { createGetResourceTileLeftByImageSq } from '../../../composables/image-board';
 
     // +++++++++++++++++++++++++++++++++++
     // + インポート ＞　インターフェース +
@@ -633,7 +633,7 @@
         printing1Left,
         printing1Top,
     );
-    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+    const imageBoard1GetResourceTileLeftByImageSq: (sq: number) => number = createGetResourceTileLeftByImageSq(
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );

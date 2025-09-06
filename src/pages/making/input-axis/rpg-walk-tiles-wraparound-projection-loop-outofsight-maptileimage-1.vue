@@ -38,7 +38,7 @@
                 :key="i"
                 class="square"
                 :style="imageBoard1GetTileStyleByTileSq(i - 1)"
-                :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
+                :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
                     getImageSqByFixedTileSq(
                         getFixedTileSqFromTileSq(
                             i - 1,
@@ -505,7 +505,7 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
-    import { createGetSourceTileLeftByImageBoardSq, createGetSourceTileSqStringByImageBoardSq } from '../../../composables/image-board';
+    import { createGetResourceTileLeftByImageSq, createGetSourceTileSqStringByImageBoardSq } from '../../../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++++
     // + インポート　＞　インターフェース +
@@ -639,7 +639,7 @@
     const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
         computedImageBoard1Data,
     );
-    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+    const imageBoard1GetResourceTileLeftByImageSq: (sq: number) => number = createGetResourceTileLeftByImageSq(
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
