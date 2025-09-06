@@ -491,6 +491,7 @@
     // ##########
 
     onMounted(() => {
+        // window オブジェクトはブラウザー専用。サーバー側ではプリレンダリングできないので、マウント後に書く。
         // キーボードイベント
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             // ［↑］［↓］キーの場合

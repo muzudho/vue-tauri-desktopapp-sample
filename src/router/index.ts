@@ -134,7 +134,7 @@ const routes = [
     {
         name: 'InputAxis',
         path: '/making/input-axis',
-        component: () => import('../pages/making/input-axis.vue'),
+        component: () => import('../pages/making/input-axis/index.vue'),
     },
     {
         name: 'InputKey',

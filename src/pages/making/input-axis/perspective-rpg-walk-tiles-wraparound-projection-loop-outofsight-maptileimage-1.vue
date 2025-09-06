@@ -197,12 +197,12 @@
                 bottom: `calc(${5 * controllerSquareUnit}px)`,
                 left: 0,
                 right: 0,
-                overflowY: 'auto', /* 内容物が収まらないならスクロールバーを出す */
             }"
             style="
                 text-align: center;
             "
         >
+        <!-- overflowY: 'auto', /* 内容物が収まらないならスクロールバーを出す */ -->
 
             <!-- 盤領域 -->
             <div
@@ -497,7 +497,7 @@
                     v-model="appZoom"
                     :min="0.5"
                     :max="4"
-                    step="0.5"
+                    step="0.25"
                     showTicks="always"
                     thumbLabel="always" />
                 <v-slider
@@ -747,7 +747,7 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = ref<number>(2.5);    // ズーム
+    const appZoom = ref<number>(2.25);    // ズーム
 
 
     // ################
@@ -996,6 +996,7 @@
     // ##########
 
     onMounted(() => {
+        // window オブジェクトはブラウザー専用。サーバー側ではプリレンダリングできないので、マウント後に書く。
         // キーボードイベント
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             // ［↑］［↓］キーの場合

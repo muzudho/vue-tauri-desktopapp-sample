@@ -68,16 +68,15 @@
     // ############
 
     onMounted(() => {
-        initChart();
+        clientsideChartInit();
     });
 
     onUnmounted(() => {
         destroyChart(); // チャートの破棄処理
     });
 
-    function initChart() {
-        //const baseUrl = window.location.origin;
-        //alert(`baseUrl=${baseUrl}`);
+    function clientsideChartInit() {
+        // window オブジェクトはブラウザー専用。サーバー側ではプリレンダリングできないので、マウント後に書く。
         const ctx : HTMLCanvasElement = window.document.getElementById('pieChart') as HTMLCanvasElement;
 
         if (ctx == null){
@@ -104,7 +103,7 @@
                         'rgb(255, 206, 86)',
                         'rgb(75, 192, 192)'
                     ],
-                    borderWidth: 2
+                    borderWidth: 2,
                 }]
             },
             options: {
@@ -115,7 +114,7 @@
                     },
                     title: {
                         display: true,
-                        text: 'このホームページの内容の気分的な割合'
+                        text: 'ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合'
                     }
                 },
                 onClick: (_e, elements) => {
