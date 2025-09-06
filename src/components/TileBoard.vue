@@ -79,7 +79,7 @@
         computedImageBoard1Data: ComputedRef<number[]>;
         sourceTilemapRectangles: Rectangle[];
         getFixedTileSqFromTileSq: (
-            tileIndex: number,
+            tileSq: number,
             board1SquareWidth: number,
             board1SquareHeight: number,
             board1FileNum: number,

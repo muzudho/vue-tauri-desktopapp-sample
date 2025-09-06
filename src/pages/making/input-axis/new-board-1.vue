@@ -409,27 +409,11 @@
                     :key="i">
                     tile-index: {{ i - 1 }} | 
                     fix-index: {{
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            board1SquareWidth,
-                            board1SquareHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        )
+                        getFixedTileSqFromTileSq(i - 1)
                     }} | 
                     printing: {{
                         getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(
-                                i - 1,
-                                board1SquareWidth,
-                                board1SquareHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
+                            getFixedTileSqFromTileSq(i - 1),
                             -Math.floor(printing1Left / board1SquareWidth),
                             -Math.floor(printing1Top / board1SquareHeight),
                             board1FileNum,
@@ -494,7 +478,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetSquareStyleFromTileIndex, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -669,6 +653,14 @@
     const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
         computedImageBoard1Data,
         sourceTilemapRectangles,
+    );
+    const getFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
+        board1SquareWidth,
+        board1SquareHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
     );
 
     // ++++++++++++++++++++++++++++++++++++

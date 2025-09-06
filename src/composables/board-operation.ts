@@ -99,6 +99,45 @@ export const getFixedTileSqFromTileSq = computed<
 
 
 /**
+ * 見た目のマスのインデックス（固定インデックス）を取得します。
+ */
+export function createGetFixedTileSqFromTileSq(
+    board1SquareWidth: number,
+    board1SquareHeight: number,
+    board1FileNum: Ref<number>,
+    board1RankNum: Ref<number>,
+    printing1Left: Ref<number>,
+    printing1Top: Ref<number>,
+) : (
+    tileSq: number,
+) => number
+{
+    return (
+        tileSq: number,
+    ) => {
+        // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
+        // if (!Number.isInteger(board1SquareWidth)) { throw new Error(`Assertion failed: "board1SquareWidth" must be an integer, got ${board1SquareWidth}`); }
+        // if (!Number.isInteger(board1SquareHeight)) { throw new Error(`Assertion failed: "board1SquareHeight" must be an integer, got ${board1SquareHeight}`); }
+        // if (!Number.isInteger(board1FileNum)) { throw new Error(`Assertion failed: "board1FileNum" must be an integer, got ${board1FileNum}`); }
+        // if (!Number.isInteger(board1RankNum)) { throw new Error(`Assertion failed: "board1RankNum" must be an integer, got ${board1RankNum}`); }
+        // if (!Number.isInteger(printing1Left)) { throw new Error(`Assertion failed: "printing1Left" must be an integer, got ${printing1Left}`); }
+        // if (!Number.isInteger(printing1Top)) { throw new Error(`Assertion failed: "printing1Top" must be an integer, got ${printing1Top}`); }
+
+        const fixedTileSq = getIndexWhenAddUpFileAndRankOnPeriodicTable(
+            tileSq,
+            board1FileNum.value,
+            board1RankNum.value,
+            Math.floor(printing1Left.value / board1SquareWidth),
+            Math.floor(printing1Top.value / board1SquareHeight),
+        );
+        // if (!Number.isInteger(fixedSquareIndex)) { throw new Error(`Assertion failed: "fixedSquareIndex" must be an integer, got ${fixedSquareIndex}`); }
+
+        return fixedTileSq;
+    };
+}
+
+
+/**
  * 印字盤のマスのインデックスを取得します。
  * @returns 範囲外なら -1 を返します。
  */
