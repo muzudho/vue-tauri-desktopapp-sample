@@ -827,6 +827,7 @@
             width: `${(board1FileNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareWidth}px`,
             height: `${(board1RankNum.value + outOfSight1WithMaskSquareCount.value) * board1SquareHeight}px`,
             zoom: appZoom.value,
+            pointerEvents: 'auto',  /* 親要素がクリックの透過を設定しているはずなので、それを解除します */
         };
     });
     const getSquareStyleFromTileIndex = computed<
@@ -1029,7 +1030,8 @@
             bottom: `calc(${5 * controllerSquareUnit}px)`,
             marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
             marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
-            backgroundColor: `rgba(0,0,0,0.25)`,
+            backgroundColor: `rgba(0,0,0,0.1)`,
+            pointerEvents: 'none',  /* クリックを透過させます */
         } as CompatibleStyleValue;
     });
 
