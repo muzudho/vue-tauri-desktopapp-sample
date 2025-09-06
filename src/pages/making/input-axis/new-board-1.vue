@@ -96,7 +96,7 @@
                     :printing1IsLooping="printing1IsLooping"
                     :computedImageBoard1Data="computedImageBoard1Data"
                     :sourceTilemapRectangles="sourceTilemapRectangles"
-                    :getSquareStyleFromTileIndex="getSquareStyleFromTileIndex"
+                    :getSquareStyleFromTileIndex="printing1GetSquareStyleFromTileIndex"
                 >
 
                 </tile-board>
@@ -491,7 +491,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -613,34 +613,6 @@
             pointerEvents: 'auto',  /* 親要素がクリックの透過を設定しているはずなので、それを解除します */
         };
     });
-    const getSquareStyleFromTileIndex = computed<
-        (tileIndex:number)=>CompatibleStyleValue
-    >(() => {
-        return (tileIndex:number)=>{
-            // if (!Number.isInteger(tileIndex)) { throw new Error(`Assertion failed: "tileIndex" must be an integer, got ${tileIndex}`); }
-
-            // プレイヤーが初期位置にいる場合の、マスの位置。
-            const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
-            const homeLeft = tileFile * board1SquareWidth;
-            const homeTop = tileRank * board1SquareHeight;
-
-            const [offsetLeftLoop, offsetTopLoop] = wrapAround(
-                homeLeft,
-                homeTop,
-                printing1Left.value,
-                printing1Top.value,
-                board1FileNum.value * board1SquareWidth,
-                board1RankNum.value * board1SquareHeight,
-            );
-
-            return {
-                left: `${homeLeft + offsetLeftLoop}px`,
-                top: `${homeTop + offsetTopLoop}px`,
-                width: `${board1SquareWidth}px`,
-                height: `${board1SquareHeight}px`,
-            };
-        };
-    });
     const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
 
     // ++++++++++++++++++++++++++
@@ -682,6 +654,14 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
+    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+        board1SquareWidth,
+        board1SquareHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
+    );
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
