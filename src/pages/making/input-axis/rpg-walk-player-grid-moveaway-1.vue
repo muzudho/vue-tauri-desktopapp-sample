@@ -223,9 +223,9 @@
     import Stopwatch from '@/components/Stopwatch.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
 
-    // ********************
-    // * インターフェース *
-    // ********************
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../../../interfaces/Rectangle';
 

@@ -240,9 +240,9 @@
 
     import type { RpgWalkingImagePosition } from '../../../composables/player-controller';
 
-    // ********************
-    // * インターフェース *
-    // ********************
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../../../interfaces/Rectangle';
 

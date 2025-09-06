@@ -7,6 +7,13 @@
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
 
+    <!-- 印字１　＞　機能 -->
+    <printing-making
+        ref="printing1Ref"
+        :sourceTilemapRectangles="sourceTilemapRectangles"
+        :imageBoard1Data="imageBoard1Data">
+    </printing-making>
+
     <h4><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h4>
     <section class="sec-4">
         <br/>
@@ -20,13 +27,6 @@
         <!-- 免責 -->
         <v-alert type="warning" title="免責！" text="処理堕ちしていたら、［設定を表示］ボタンから盤のサイズを小さくしてください。" closable />
         <br/>
-
-        <!-- 印字１　＞　機能 -->
-        <printing-making
-            ref="printing1Ref"
-            :sourceTilemapCoordination="sourceTilemapCoordination"
-            :imageBoard1Data="imageBoard1Data">
-        </printing-making>
 
         <!-- 盤領域 -->
         <div
@@ -45,7 +45,7 @@
                 :key="i"
                 class="square"
                 :style="getSquareStyleFromTileIndex(i - 1)"
-                :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
+                :srcLeft="getSourceTileLeftByImageBoardSq(
                     getPrintingIndexFromFixedSquareIndex(
                         getFixedSquareIndexFromTileIndex(
                             i - 1,
@@ -68,6 +68,37 @@
                 :srcWidth="board1SquareWidth"
                 :srcHeight="board1SquareHeight"
                 tilemapUrl="/img/making/tilemap-floor-20250826.png">
+
+                <!--
+            <tile
+                v-for="i in board1Area"
+                :key="i"
+                class="square"
+                :style="getSquareStyleFromTileIndex(i - 1)"
+                :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
+                    getPrintingIndexFromFixedSquareIndex(
+                        getFixedSquareIndexFromTileIndex(
+                            i - 1,
+                            board1SquareWidth,
+                            board1SquareHeight,
+                            board1FileNum,
+                            board1RankNum,
+                            printing1Left,
+                            printing1Top,
+                        ),
+                        -Math.floor(printing1Left / board1SquareWidth),
+                        -Math.floor(printing1Top / board1SquareHeight),
+                        board1FileNum,
+                        printing1FileNum,
+                        printing1RankNum,
+                        printing1IsLooping,
+                    )
+                ) ?? 0"
+                :srcTop="0"
+                :srcWidth="board1SquareWidth"
+                :srcHeight="board1SquareHeight"
+                tilemapUrl="/img/making/tilemap-floor-20250826.png">
+                -->
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -457,10 +488,11 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
+    import { createGetSourceTileLeftByImageBoardSq } from '../../../composables/image-board';
 
-    // ********************
-    // * インターフェース *
-    // ********************
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../../../interfaces/Rectangle';
 
@@ -615,13 +647,16 @@
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const sourceTilemapCoordination : SourceTile[] = [];
+    const sourceTilemapRectangles : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
-        sourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+        sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
-
+    const getSourceTileLeftByImageBoardSq = createGetSourceTileLeftByImageBoardSq(
+        imageBoard1Data.value,
+        sourceTilemapRectangles,
+    );
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +

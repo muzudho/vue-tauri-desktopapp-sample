@@ -10,9 +10,9 @@ import type { Ref } from 'vue';
 
 import { commonSpriteMotionDown, commonSpriteMotionLeft, commonSpriteMotionRight, commonSpriteMotionUp } from './common';
 
-// ********************
-// * インターフェース *
-// ********************
+// ++++++++++++++++++++++++++++++++++++
+// + インポート　＞　インターフェース +
+// ++++++++++++++++++++++++++++++++++++
 
 import type Rectangle from '../interfaces/Rectangle';
 

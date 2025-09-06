@@ -16,9 +16,9 @@
 
     // import type { PrintingInput, PrintingMotion } from '../composables/player-controller';
 
-    // ********************
-    // * インターフェース *
-    // ********************
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../interfaces/Rectangle';
 
@@ -53,7 +53,7 @@
         // printing1MotionSpeed: number,
         // printing1MotionWait: number,
         // printing1MotionWalkingFrames: number,
-        sourceTilemapCoordination: Rectangle[],
+        sourceTilemapRectangles: Rectangle[],
         // printing1OutOfSightIsLock: boolean,
         // printing1IsLooping: boolean,
         imageBoard1Data: number[],
@@ -83,7 +83,7 @@
         // 'update:printing1MotionSpeed': [value: number];
         // 'update:printing1MotionWait': [value: number];
         // 'update:printing1MotionWalkingFrames': [value: number];
-        'update:sourceTilemapCoordination': [value: Rectangle[]];
+        'update:sourceTilemapRectangles': [value: Rectangle[]];
         // 'update:printing1OutOfSightIsLock': [value: boolean];
         // 'update:printing1IsLooping': [value: boolean];
         'update:imageBoard1Data': [value: number[]];
@@ -122,7 +122,7 @@
     /**
      * 印字表のインデックスを渡すことで、そこに印字するタイルの、ソースタイルの left を返す。
      */
-    const getSourceTileLeftFromPrintingIndex = computed<
+    const getSourceTileLeftByImageBoardSq = computed<
         (printingIndex:number) => number
     >(() => {
         return (printingIndex: number) => {
@@ -134,7 +134,7 @@
             const sourceTileIndex = props.imageBoard1Data[printingIndex];
 
             try {
-                return props.sourceTilemapCoordination[sourceTileIndex]["left"];
+                return props.sourceTilemapRectangles[sourceTileIndex]["left"];
             } catch(error) {
                 console.error(`ERROR: ${error} | printingIndex=${printingIndex}`);
                 return 0;
@@ -149,7 +149,7 @@
 
     defineExpose({
         getPrintingStringFromPrintingIndex,
-        getSourceTileLeftFromPrintingIndex,
+        getSourceTileLeftByImageBoardSq,
     });
 
 </script>

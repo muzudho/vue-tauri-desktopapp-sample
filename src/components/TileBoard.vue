@@ -4,7 +4,7 @@
         :key="i"
         class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="printing99Ref?.getSourceTileLeftFromPrintingIndex(
+        :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
             1
         ) ?? 0"
         :srcTop="0"
@@ -15,7 +15,7 @@
 
     <!--
         :srcLeft="32"
-        :srcLeft="printing99Ref?.getSourceTileLeftFromPrintingIndex(
+        :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
             1
         )"
 
@@ -24,7 +24,7 @@
         :key="i"
         class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="printing99Ref?.getSourceTileLeftFromPrintingIndex(
+        :srcLeft="printing99Ref?.getSourceTileLeftByImageBoardSq(
             getPrintingIndexFromFixedSquareIndex(
                 getFixedSquareIndexFromTileIndex(
                     i - 1,

@@ -202,9 +202,9 @@
 
     import { wrapAround } from '../../composables/board-operation';
 
-    // ********************
-    // * インターフェース *
-    // ********************
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../../interfaces/Rectangle';
 

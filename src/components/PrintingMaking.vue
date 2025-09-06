@@ -14,9 +14,9 @@
     import { computed } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
-    // ********************
-    // * インターフェース *
-    // ********************
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../interfaces/Rectangle';
 
@@ -31,7 +31,7 @@
         // + オブジェクト　＞　印字１ +
         // ++++++++++++++++++++++++++++
 
-        sourceTilemapCoordination: Rectangle[],
+        sourceTilemapRectangles: Rectangle[],
         imageBoard1Data: number[],
 
     }
@@ -72,7 +72,7 @@
     /**
      * 印字表のインデックスを渡すことで、そこに印字するタイルの、ソースタイルの left を返す。
      */
-    const getSourceTileLeftFromPrintingIndex = computed<
+    const getSourceTileLeftByImageBoardSq = computed<
         (printingIndex:number) => number
     >(() => {
         return (printingIndex: number) => {
@@ -83,7 +83,7 @@
             }
 
             const sourceTileIndex = props.imageBoard1Data[printingIndex];
-            const rectangle = props.sourceTilemapCoordination[sourceTileIndex];
+            const rectangle = props.sourceTilemapRectangles[sourceTileIndex];
             console.log(`sourceTileIndex=${sourceTileIndex}`)
 
             try {
@@ -111,7 +111,7 @@
 
     defineExpose({
         getPrintingStringFromPrintingIndex,
-        getSourceTileLeftFromPrintingIndex,
+        getSourceTileLeftByImageBoardSq,
     });
 
 </script>

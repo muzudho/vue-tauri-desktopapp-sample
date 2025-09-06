@@ -18,7 +18,7 @@
     <!-- 印字１　＞　機能 -->
     <printing-making
         ref="printing1Ref"
-        :sourceTilemapCoordination="sourceTilemapCoordination"
+        :sourceTilemapRectangles="sourceTilemapRectangles"
         :imageBoard1Data="imageBoard1Data"/>
 
     <!-- ブログ領域 -->
@@ -223,7 +223,7 @@
                     :key="i"
                     class="square"
                     :style="getSquareStyleFromTileIndex(i - 1)"
-                    :srcLeft="printing1Ref?.getSourceTileLeftFromPrintingIndex(
+                    :srcLeft="printing1Ref?.getSourceTileLeftByImageBoardSq(
                         getPrintingIndexFromFixedSquareIndex(
                             getFixedSquareIndexFromTileIndex(
                                 i - 1,
@@ -899,11 +899,11 @@
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
-    const sourceTilemapCoordination : SourceTile[] = [];
+    const sourceTilemapRectangles : SourceTile[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
         const files = i % board1FileNum.value;
         const ranks = Math.floor(i / board1FileNum.value);
-        sourceTilemapCoordination.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
+        sourceTilemapRectangles.push({ top: ranks * board1SquareHeight, left: files * board1SquareWidth, width: board1SquareWidth, height: board1SquareHeight });
     }
 
 
