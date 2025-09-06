@@ -302,7 +302,7 @@ export function wrapAround(
 }
 
 
-export function createGetSquareStyleFromTileIndex(
+export function createGetTileStyleByTileSq(
     tileBoard1TileWidth: number,
     tileBoard1TileHeight: number,
     board1FileNum: Ref<number>,

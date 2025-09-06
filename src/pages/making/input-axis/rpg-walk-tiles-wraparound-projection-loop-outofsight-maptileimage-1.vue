@@ -37,7 +37,7 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="printing1GetSquareStyleFromTileIndex(i - 1)"
+                :style="imageBoard1GetTileStyleByTileSq(i - 1)"
                 :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
                     getImageSqByFixedTileSq(
                         getFixedTileSqFromTileSq(
@@ -494,7 +494,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetTileStyleByTileSq, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -643,7 +643,7 @@
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
-    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+    const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,

@@ -30,7 +30,7 @@
                 :key="i"
                 class="square"
                 :style="[
-                    printing1GetSquareStyleFromTileIndex(i - 1),
+                    imageBoard1GetTileStyleByTileSq(i - 1),
                     getSquareBorderStyleFromTileIndex(i - 1),
                 ]">
 
@@ -362,7 +362,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetTileStyleByTileSq, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -505,7 +505,7 @@
     // const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
     //     computedImageBoard1Data,
     // );
-    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+    const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,

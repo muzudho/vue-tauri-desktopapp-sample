@@ -89,7 +89,7 @@
                     :tileHeight="tileBoard1TileHeight"
                     :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
-                    :getSquareStyleFromTileSq="printing1GetSquareStyleFromTileIndex"
+                    :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"
                     :getSourceTileLeftByImageSq="printing1GetSourceTileLeftByImageBoardSq"
                 >
 
@@ -461,7 +461,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetSquareStyleFromTileIndex } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -625,7 +625,7 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * tileBoard1TileHeight, left: files * tileBoard1TileWidth, width: tileBoard1TileWidth, height: tileBoard1TileHeight });
     }
-    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+    const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,

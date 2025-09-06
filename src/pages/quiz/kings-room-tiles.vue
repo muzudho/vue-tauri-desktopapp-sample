@@ -95,18 +95,10 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="printing1GetSquareStyleFromTileIndex(i - 1)"
+                :style="imageBoard1GetTileStyleByTileSq(i - 1)"
                 :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
                     getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
+                        getFixedTileSqFromTileSq(i - 1),
                         -Math.floor(printing1Left / tileBoard1TileWidth),
                         -Math.floor(printing1Top / tileBoard1TileHeight),
                         board1FileNum,
@@ -119,39 +111,6 @@
                 :srcWidth="tileBoard1TileWidth"
                 :srcHeight="tileBoard1TileHeight"
                 tilemapUrl="/img/quiz/kings-room-tiles.png">
-
-                <!--
-                    printing1GetSourceTileLeftByImageBoardSq
-
-            <tile
-                v-for="i in board1Area"
-                :key="i"
-                class="square"
-                //:style="getSquareStyleFromTileSq(i - 1)"
-                //:srcLeft="printing1Ref?.getSourceTileLeftByImageSq(
-                    getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
-                        -Math.floor(printing1Left / tileBoard1TileWidth),
-                        -Math.floor(printing1Top / tileBoard1TileHeight),
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1IsLooping,
-                    )
-                ) ?? 0"
-                :srcTop="0"
-                :srcWidth="tileBoard1TileWidth"
-                :srcHeight="tileBoard1TileHeight"
-                tilemapUrl="/img/quiz/kings-room-tiles.png">
-                -->
 
                 <span class="board-slidable-tile-index-large">{{ (i - 1) }}</span>
 
@@ -803,7 +762,7 @@ color = i % 2;
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetSquareStyleFromTileIndex, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetTileStyleByTileSq, getImageSqByFixedTileSq } from '../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -1034,11 +993,19 @@ color = i % 2;
             height: tileBoard1TileHeight
         });
     }
+    const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
+    );
     const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
-    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+    const getFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,
