@@ -28,7 +28,7 @@
             :style="{
                 position: 'fixed',
                 top: 0,
-                bottom: '67vh',
+                bottom: 0, /* '67vh', */
                 left: 0,
                 right: 0,
                 overflowY: 'auto', /* 内容物が収まらないならスクロールバーを出す */
@@ -211,10 +211,10 @@
                 overflowY: 'auto', /* 内容物が収まらないならスクロールバーを出す */
             }"
             style="
-                background-color: skyblue;
                 text-align: center;
             "
         >
+            <!-- background-color: skyblue; -->
 
             <!-- 盤領域 -->
             <div
@@ -349,13 +349,16 @@
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
         <div
             :style="{
-                position: 'fixed',
                 top: `calc(100vh - ${5 * controllerSquareUnit}px)`,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                overflowY: 'auto', /* 内容物が収まらないならスクロールバーを出す */
             }"
+            style="
+                position: 'fixed';
+                bottom: 0;
+                left: 0;
+                right: 0;
+                overflow-y: 'auto'; /* 内容物が収まらないならスクロールバーを出す */
+                background-color: rgba(0,0,0,0.5);
+            "
         >
             <!-- ボタン絶対位置領域 -->
             <div
