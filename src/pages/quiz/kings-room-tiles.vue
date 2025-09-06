@@ -127,7 +127,7 @@
                 tilemapUrl="/img/quiz/kings-room-tiles.png">
 
                 <!--
-                    getSquareStyleFromTileIndex
+                    printing1GetSourceTileLeftByImageBoardSq
 
             <tile
                 v-for="i in board1Area"
@@ -821,7 +821,7 @@ color = i % 2;
     } from '../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../composables/printing-controller';
-    //import { createGetSourceTileLeftByImageBoardSq } from '../../composables/image-board';
+    import { createGetSourceTileLeftByImageBoardSq } from '../../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++++
     // + インポート　＞　インターフェース +
@@ -1068,7 +1068,7 @@ color = i % 2;
         });
     }
     /*
-    const printing1GetSourceTileLeftByImageBoardSq = createGetSourceTileLeftByImageBoardSq(
+    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
         imageBoard1Data.value,
         sourceTilemapRectangles,
     );
