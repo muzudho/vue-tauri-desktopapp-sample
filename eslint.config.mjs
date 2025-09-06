@@ -37,6 +37,7 @@ export default defineConfig([{
     },
 
     rules: {
+        'vue/valid-v-slot': 'error', // v-slotの構文チェック
         "vue/multi-word-component-names": "off",
         "vue/valid-v-slot": "error",
     },
