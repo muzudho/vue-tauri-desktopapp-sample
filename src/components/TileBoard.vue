@@ -1,15 +1,17 @@
 <template>
     <tile
-        v-for="tileSqPlus1 in props.board1Area"
+        v-for="tileSqPlus1 in props.tileBoardArea"
         :key="tileSqPlus1"
         class="square"
         :style="getSquareStyleFromTileSq(tileSqPlus1 - 1)"
         :srcLeft="getSourceTileLeftByImageSq(
-            getImageSqByFixedTileSq(getFixedTileSqFromTileSq(tileSqPlus1 - 1))
+            getImageSqByFixedTileSq(
+                getFixedTileSqFromTileSq(tileSqPlus1 - 1)
+            )
         ) ?? 0"
         :srcTop="0"
-        :srcWidth="props.board1SquareWidth"
-        :srcHeight="props.board1SquareHeight"
+        :srcWidth="props.tileWidth"
+        :srcHeight="props.tileHeight"
         tilemapUrl="/img/making/tilemap-floor-20250826.png"
     >
 
@@ -21,8 +23,6 @@
     // ##############
     // # インポート #
     // ##############
-    
-    import type { ComputedRef } from 'vue';
 
     // ++++++++++++++++++++++++++++++
     // + インポート　＞　互換性対応 +
@@ -38,45 +38,18 @@
     //
     import Tile from '@/components/Tile.vue';
 
-    // ++++++++++++++++++++++++++++++++++++
-    // + インポート　＞　インターフェース +
-    // ++++++++++++++++++++++++++++++++++++
-
-    import type Rectangle from '../interfaces/Rectangle';
-
-
     // ####################################
     // # このコンポーネントが受け取る引数 #
     // ####################################
     
     interface Props {
-        board1Area: number; // 盤のマス数
-        board1SquareWidth: number;
-        board1SquareHeight: number;
-        board1FileNum: number;
-        board1RankNum: number;
-        printing1Left: number;
-        printing1Top: number;
-        printing1FileNum: number;
-        printing1RankNum: number;
-        printing1IsLooping: boolean;
-        computedImageBoard1Data: ComputedRef<number[]>;
-        sourceTilemapRectangles: Rectangle[];
+        tileBoardArea: number; // 盤のマス数
+        tileWidth: number;
+        tileHeight: number;
         getFixedTileSqFromTileSq: (tileSq: number) => number;
         getImageSqByFixedTileSq: (fixedTileSq: number) => number;
-        /*
-        getImageSqByFixedTileSq: (
-            fixedSquareIndex: number,
-            offsetPrintingFile: number,
-            offsetPrintingRank: number,
-            boardFileNum: number,
-            printing1FileNum: number,
-            printing1RankNum: number,
-            printing1IsLooping: boolean
-        ) => number;
-        */
-        getSquareStyleFromTileSq: (tileIndex: number)=>CompatibleStyleValue;
-        getSourceTileLeftByImageSq: (sq: number) => number;
+        getSquareStyleFromTileSq: (tileIndex: number) => CompatibleStyleValue;
+        getSourceTileLeftByImageSq: (imageSq: number) => number;
     }
     const props = defineProps<Props>();
 
