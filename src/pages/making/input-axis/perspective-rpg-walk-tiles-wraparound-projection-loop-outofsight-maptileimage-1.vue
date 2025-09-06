@@ -22,169 +22,175 @@
         :printing1SourceTileIndexesBoard="printing1SourceTileIndexesBoard"/>
 
     <!-- ブログ領域 -->
-    <the-header/>
+    <div
+        :style="{
+            marginBottom: `calc(${5 * controllerSquareUnit}px)`,
+        }"
+    >
+        <the-header/>
 
-    <h3><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h3>
-    <section class="sec-3">
-        <br/>
-
-        <!-- 免責 -->
-        <!--
-        <v-alert type="warning" title="免責！" text="処理堕ちしていたら、［設定を表示］ボタンから盤のサイズを小さくしてください。" closable />
-        <br/>
-        -->
-
-        <talk-balloon
-            :src="commonKifuwarabe2Src"
-            :alt="commonKifuwarabe2Alt"
-            :name="commonKifuwarabe2Name"
-            :device="compatibleDevice1Ref?.device">
-            うわっ、狭。なんか画面をオーバーラップさせてんのか。<br/>
-            スクロールバーを使って、隙間からブログをよんでくれだぜ。<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            じゃあ１個１個説明していくかだぜ。<br/>
+        <h3><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h3>
+        <section class="sec-3">
             <br/>
-            画面の上段、つまりここは、引き続きブログになっているのでスクロールバーを下げて読んでいってくれだぜ。<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            画面の中段は、ゲーム画面を置いているぜ。<br/>
-            クリックしても何も起こらない。<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            画面の下段は、コントローラーになっているぜ。<br/>
-            ＰＣならクリックするか、キーボード入力を。スマホならタッチをしてくれだぜ。<br/>
-        </talk-balloon>
-    </section>
 
-    <h4>ゲーム画面説明</h4>
-    <section class="sec-4">
+            <!-- 免責 -->
+            <!--
+            <v-alert type="warning" title="免責！" text="処理堕ちしていたら、［設定を表示］ボタンから盤のサイズを小さくしてください。" closable />
+            <br/>
+            -->
+
+            <talk-balloon
+                :src="commonKifuwarabe2Src"
+                :alt="commonKifuwarabe2Alt"
+                :name="commonKifuwarabe2Name"
+                :device="compatibleDevice1Ref?.device">
+                うわっ、狭。なんか画面をオーバーラップさせてんのか。<br/>
+                スクロールバーを使って、隙間からブログをよんでくれだぜ。<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                じゃあ１個１個説明していくかだぜ。<br/>
+                <br/>
+                画面の上段、つまりここは、引き続きブログになっているのでスクロールバーを下げて読んでいってくれだぜ。<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                画面の中段は、ゲーム画面を置いているぜ。<br/>
+                クリックしても何も起こらない。<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                画面の下段は、コントローラーになっているぜ。<br/>
+                ＰＣならクリックするか、キーボード入力を。スマホならタッチをしてくれだぜ。<br/>
+            </talk-balloon>
+        </section>
+
+        <h4>ゲーム画面説明</h4>
+        <section class="sec-4">
+            <br/>
+            <talk-balloon
+                :src="commonHiyoko2Src"
+                :alt="commonHiyoko2Alt"
+                :name="commonHiyoko2Name"
+                :device="compatibleDevice1Ref?.device">
+                盤上の桃色の点線の枠は何なの？<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                自機がずっと守ってる位置と思ってくれだぜ。<br/>
+                設定によっては、自機はこの位置から離れることもできるぜ。
+            </talk-balloon>
+            <talk-balloon
+                :src="commonHiyoko2Src"
+                :alt="commonHiyoko2Alt"
+                :name="commonHiyoko2Name"
+                :device="compatibleDevice1Ref?.device">
+                ゲーム画面にかかっている半透明の黒いのは何なの？<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                その部分は、ゲーム画面では見えないところだと思ってくれだぜ。<br/>
+                見えないところで隠れてなんか処理してると思ってくれだぜ。
+            </talk-balloon>
+        </section>
+
+        <h4>コントローラー説明</h4>
+        <section class="sec-4">
+            <br/>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                ［↑］［→］［↓］［←］キーで自機を上下左右に移動させるぜ。<br/>
+                ［（スペース）］キーは、リセットボタンだな。<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonHiyoko2Src"
+                :alt="commonHiyoko2Alt"
+                :name="commonHiyoko2Name"
+                :device="compatibleDevice1Ref?.device">
+                ［何もしないボタン］って何なの？<br/>
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                ＰＣで、例えばスライダーバーを触ったあとに自機を左右に動かそうとしたら、<br/>
+                自機ではなくてスライダーバーのボックスが左右に動くことがある。<br/>
+                邪魔なんで［何もしないボタン］を押すことでスライダーバーからフォーカスを外す、といった用途で使う。
+            </talk-balloon>
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                ［設定を表示］ボタンの中には、いろいろ設定が入っているので、いじってみてくれだぜ。<br/>
+                長くなるから、あとで説明するぜ。
+            </talk-balloon>
+        </section>
+
+        <h4>裏情報</h4>
+        <section class="sec-4">
+            <br/>
+            <talk-balloon
+                :src="commonKifuwarabe2Src"
+                :alt="commonKifuwarabe2Alt"
+                :name="commonKifuwarabe2Name"
+                :device="compatibleDevice1Ref?.device">
+                おっと、ここで裏情報だぜ。<br/>
+                👇 何だぜ、これは？<br/>
+            </talk-balloon>
+
+            <p>床タイルマップ：</p>
+            <v-img
+                src="/img/making/tilemap-floor-20250826.png"
+                :style="`width: ${8 * board1SquareWidth}px; height:${4 * board1SquareHeight}px;`"
+                style="image-rendering: pixelated; margin:0; padding:0; border:dashed 4px gray;"/>
+            <br/>
+
+            <talk-balloon
+                :src="commonOton2Src"
+                :alt="commonOton2Alt"
+                :name="commonOton2Name"
+                :device="compatibleDevice1Ref?.device">
+                画像ファイルだぜ。<br/>
+                ここからタイルを切り取って、ゲーム画面へペタペタ貼り付けてるわけだな。
+            </talk-balloon>
+
+        </section>
+
+        <h4>［設定］説明</h4>
+        <section class="sec-4">
+            <br/>
+            <preferences-explanation/>
+        </section>
         <br/>
-        <talk-balloon
-            :src="commonHiyoko2Src"
-            :alt="commonHiyoko2Alt"
-            :name="commonHiyoko2Name"
-            :device="compatibleDevice1Ref?.device">
-            盤上の桃色の点線の枠は何なの？<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            自機がずっと守ってる位置と思ってくれだぜ。<br/>
-            設定によっては、自機はこの位置から離れることもできるぜ。
-        </talk-balloon>
-        <talk-balloon
-            :src="commonHiyoko2Src"
-            :alt="commonHiyoko2Alt"
-            :name="commonHiyoko2Name"
-            :device="compatibleDevice1Ref?.device">
-            ゲーム画面にかかっている半透明の黒いのは何なの？<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            その部分は、ゲーム画面では見えないところだと思ってくれだぜ。<br/>
-            見えないところで隠れてなんか処理してると思ってくれだぜ。
-        </talk-balloon>
-    </section>
 
-    <h4>コントローラー説明</h4>
-    <section class="sec-4">
-        <br/>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            ［↑］［→］［↓］［←］キーで自機を上下左右に移動させるぜ。<br/>
-            ［（スペース）］キーは、リセットボタンだな。<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonHiyoko2Src"
-            :alt="commonHiyoko2Alt"
-            :name="commonHiyoko2Name"
-            :device="compatibleDevice1Ref?.device">
-            ［何もしないボタン］って何なの？<br/>
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            ＰＣで、例えばスライダーバーを触ったあとに自機を左右に動かそうとしたら、<br/>
-            自機ではなくてスライダーバーのボックスが左右に動くことがある。<br/>
-            邪魔なんで［何もしないボタン］を押すことでスライダーバーからフォーカスを外す、といった用途で使う。
-        </talk-balloon>
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            ［設定を表示］ボタンの中には、いろいろ設定が入っているので、いじってみてくれだぜ。<br/>
-            長くなるから、あとで説明するぜ。
-        </talk-balloon>
-    </section>
+        <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き　＞　</span>ソースコード</h4>
+        <section class="sec-4">
+            <source-link
+                pagePath="/making/input-axis-rpg-walk-using-background-image-1"/>
+        </section>
 
-    <h4>裏情報</h4>
-    <section class="sec-4">
-        <br/>
-        <talk-balloon
-            :src="commonKifuwarabe2Src"
-            :alt="commonKifuwarabe2Alt"
-            :name="commonKifuwarabe2Name"
-            :device="compatibleDevice1Ref?.device">
-            おっと、ここで裏情報だぜ。<br/>
-            👇 何だぜ、これは？<br/>
-        </talk-balloon>
-
-        <p>床タイルマップ：</p>
-        <v-img
-            src="/img/making/tilemap-floor-20250826.png"
-            :style="`width: ${8 * board1SquareWidth}px; height:${4 * board1SquareHeight}px;`"
-            style="image-rendering: pixelated; margin:0; padding:0; border:dashed 4px gray;"/>
-        <br/>
-
-        <talk-balloon
-            :src="commonOton2Src"
-            :alt="commonOton2Alt"
-            :name="commonOton2Name"
-            :device="compatibleDevice1Ref?.device">
-            画像ファイルだぜ。<br/>
-            ここからタイルを切り取って、ゲーム画面へペタペタ貼り付けてるわけだな。
-        </talk-balloon>
-
-    </section>
-
-    <h4>［設定］説明</h4>
-    <section class="sec-4">
-        <br/>
-        <preferences-explanation/>
-    </section>
-    <br/>
-
-    <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き　＞　</span>ソースコード</h4>
-    <section class="sec-4">
-        <source-link
-            pagePath="/making/input-axis-rpg-walk-using-background-image-1"/>
-    </section>
-
-    <the-footer/>
+        <the-footer/>
+    </div>
 
     <!-- オーバーラップ画面 -->
     <v-container fluid class="vertical-panes-container">
@@ -1009,8 +1015,10 @@
     // ##########
 
     onMounted(() => {
-        // window オブジェクトはブラウザー専用。サーバー側ではプリレンダリングできないので、マウント後に書く。
-        // キーボードイベント
+        // キーボード操作の設定
+        //
+        //      window はブラウザーのオブジェクトなので、（サーバー側ではプリレンダリングできないので）マウント後にアクセスします。
+        //
         window.addEventListener('keydown', (e: KeyboardEvent) => {
             // ［↑］［↓］キーの場合
             if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
