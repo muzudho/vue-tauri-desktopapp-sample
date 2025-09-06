@@ -29,7 +29,10 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
-                :style="getSquareStyleFromTileIndex(i - 1)">
+                :style="[
+                    printing1GetSquareStyleFromTileIndex(i - 1),
+                    getSquareBorderStyleFromTileIndex(i - 1),
+                ]">
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -359,7 +362,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getFileAndRankFromIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex, wrapAround } from '../../../composables/board-operation';
+    import { createGetSquareStyleFromTileIndex, getFixedSquareIndexFromTileIndex, getPrintingIndexFromFixedSquareIndex } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -460,33 +463,6 @@
             zoom: appZoom.value,
         };
     });
-    const getSquareStyleFromTileIndex = computed<
-        (tileIndex: number)=>CompatibleStyleValue
-    >(() => {
-        return (tileIndex: number)=>{
-            // プレイヤーが初期位置にいる場合の、マスの位置。
-            const [tileFile, tileRank] = getFileAndRankFromIndex(tileIndex, board1FileNum.value);
-            const homeLeft = tileFile * board1SquareWidth;
-            const homeTop = tileRank * board1SquareHeight;
-
-            const [offsetLeftLoop, offsetTopLoop] = wrapAround(
-                homeLeft,
-                homeTop,
-                printing1Left.value,
-                printing1Top.value,
-                board1FileNum.value * board1SquareWidth,
-                board1RankNum.value * board1SquareHeight,
-            );
-
-            return {
-                left: `${homeLeft + offsetLeftLoop}px`,
-                top: `${homeTop + offsetTopLoop}px`,
-                width: `${board1SquareWidth}px`,
-                height: `${board1SquareHeight}px`,
-                border: `solid 1px ${tileIndex % 2 == 0 ? 'darkgray' : 'lightgray'}`,
-            };
-        };
-    });
 
     // ++++++++++++++++++++++++++
     // + オブジェクト　＞　印字 +
@@ -529,6 +505,23 @@
     // const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
     //     computedImageBoard1Data,
     // );
+    const printing1GetSquareStyleFromTileIndex = createGetSquareStyleFromTileIndex(
+        board1SquareWidth,
+        board1SquareHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
+    );
+    const getSquareBorderStyleFromTileIndex = computed<
+        (tileIndex: number)=>CompatibleStyleValue
+    >(() => {
+        return (tileIndex: number)=>{
+            return {
+                border: `solid 1px ${tileIndex % 2 == 0 ? 'darkgray' : 'lightgray'}`,
+            };
+        };
+    });
 
 
     /**
