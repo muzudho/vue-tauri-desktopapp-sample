@@ -1,25 +1,10 @@
 <template>
-    ★タイルボード２★
     <tile
         v-for="i in props.board1Area"
         :key="i"
         class="square"
         :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="32"
-        :srcTop="0"
-        :srcWidth="props.board1SquareWidth"
-        :srcHeight="props.board1SquareHeight"
-        tilemapUrl="/img/making/tilemap-floor-20250826.png"
-    >
-
-    </tile>
-    <!--
-    <tile
-        v-for="i in props.board1Area"
-        :key="i"
-        class="square"
-        :style="getSquareStyleFromTileIndex(i - 1)"
-        :srcLeft="printing1GetSourceTileLeftByImageBoardSq(
+        :srcLeft="getSourceTileLeftByImageBoardSq(
             1
         ) ?? 0"
         :srcTop="0"
@@ -29,7 +14,6 @@
     >
 
     </tile>
-    -->
 </template>
 
 <script setup lang="ts">
@@ -45,12 +29,6 @@
     // ++++++++++++++++++++++++++++++
 
     import type { CompatibleStyleValue }  from '../compatibles/compatible-style-value';
-
-    // ++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーザブル +
-    // ++++++++++++++++++++++++++++++++++
-
-    import { createGetSourceTileLeftByImageBoardSq } from '../composables/image-board';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -85,25 +63,9 @@
         computedImageBoard1Data: ComputedRef<number[]>;
         sourceTilemapRectangles: Rectangle[];
         getSquareStyleFromTileIndex: (tileIndex: number)=>CompatibleStyleValue;
+        getSourceTileLeftByImageBoardSq: (sq: number) => number;
     }
     const props = defineProps<Props>();
-
-
-    // ################
-    // # オブジェクト #
-    // ################
-
-    // ++++++++++++++++++++++++++
-    // + オブジェクト　＞　印字 +
-    // ++++++++++++++++++++++++++
-    //
-    // 盤上に表示される数字柄、絵柄など。
-    //
-
-    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
-        props.computedImageBoard1Data,
-        props.sourceTilemapRectangles,
-    );
 
 </script>
 

@@ -97,6 +97,7 @@
                     :computedImageBoard1Data="computedImageBoard1Data"
                     :sourceTilemapRectangles="sourceTilemapRectangles"
                     :getSquareStyleFromTileIndex="printing1GetSquareStyleFromTileIndex"
+                    :getSourceTileLeftByImageBoardSq="printing1GetSourceTileLeftByImageBoardSq"
                 >
 
                 </tile-board>
@@ -502,6 +503,7 @@
     } from '../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
+    import { createGetSourceTileLeftByImageBoardSq } from '../../../composables/image-board';
 
     // +++++++++++++++++++++++++++++++++++
     // + インポート ＞　インターフェース +
@@ -661,6 +663,10 @@
         board1RankNum,
         printing1Left,
         printing1Top,
+    );
+    const printing1GetSourceTileLeftByImageBoardSq: (sq: number) => number = createGetSourceTileLeftByImageBoardSq(
+        computedImageBoard1Data,
+        sourceTilemapRectangles,
     );
 
     // ++++++++++++++++++++++++++++++++++++
