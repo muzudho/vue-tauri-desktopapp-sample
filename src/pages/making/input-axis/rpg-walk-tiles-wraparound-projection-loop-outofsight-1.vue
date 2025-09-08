@@ -39,26 +39,14 @@
                     imageBoard1GetFixedTileSqFromTileSq(i - 1)
                 }}]</span>
                 <span class="board-printing-index">print[{{
-                    getImageSqByFixedTileSq(
-                        imageBoard1GetFixedTileSqFromTileSq(i - 1),
-                        -Math.floor(printing1Left / tileBoard1TileWidth),
-                        -Math.floor(printing1Top / tileBoard1TileHeight),
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1IsLooping,
+                    imageBoard1GetImageSqByFixedTileSq(
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
                     )
                 }}]</span>
                 <span class="board-square-printing-string">{{
                     getSourceTileStringByImageBoardSq(
-                        getImageSqByFixedTileSq(
-                            imageBoard1GetFixedTileSqFromTileSq(i - 1),
-                            -Math.floor(printing1Left / tileBoard1TileWidth),
-                            -Math.floor(printing1Top / tileBoard1TileHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
+                        imageBoard1GetImageSqByFixedTileSq(
+                            imageBoard1GetFixedTileSqFromTileSq(i - 1)
                         )
                     )
                 }}</span>
@@ -338,7 +326,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetFixedTileSqFromTileSq, createGetTileStyleByTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -505,6 +493,16 @@
         board1RankNum,
         printing1Left,
         printing1Top,
+    );
+    const imageBoard1GetImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        printing1Left,
+        printing1Top,
+        printing1FileNum,
+        printing1RankNum,
+        printing1IsLooping,
     );
 
 
