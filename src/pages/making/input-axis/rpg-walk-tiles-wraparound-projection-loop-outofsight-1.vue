@@ -24,18 +24,14 @@
                 :style="playerHome1Style">
             </div>
 
-            <!-- スクウェアのグリッド -->
+            <!-- div のグリッド
+                TODO: div のグリッドは廃止して、タイルのグリッドにしたい。
+            -->
             <div
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
                 :style="imageBoard1GetTileStyleByTileSq(i - 1)">
-                <!--
-                :style="[
-                    imageBoard1GetTileStyleByTileSq(i - 1),
-                    getSquareBorderStyleFromTileIndex(i - 1),
-                ]">
-                -->
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -325,7 +321,7 @@
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TileBoard from '@/components/TileBoard.vue';
+    //import TileBoard from '@/components/TileBoard.vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
