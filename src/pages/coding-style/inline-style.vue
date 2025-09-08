@@ -187,6 +187,14 @@
         <br/>
 
         <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                👆 書いたとおりに利いたことないんで、使ってないぜ。
+        </talk-balloon>
+
+        <talk-balloon
             :src="hiyoko2Src"
             :alt="hiyoko2Alt"
             :name="hiyoko2Name"
@@ -417,7 +425,10 @@
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
-                まあ、これが簡単に読み書きできるようになれば、関数型プログラマーの素質があるな。
+                だから毎回、真似して書けだぜ。<br/>
+                <br/>
+                こんなのがすらすら読み書きできるようになれば、関数型プログラマーの素質があるな。<br/>
+                わたしはラムダ計算が好きなんですらすら書けるけど。
         </talk-balloon>
 
         <talk-balloon

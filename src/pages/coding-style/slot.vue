@@ -346,7 +346,10 @@
                     alt="なんか画像"
                     style="width: 64px; height: 64px;"
                 />
+
+                <!-- eslint-disable -->
                 <template #author>
+                <!-- eslint-enable -->
                     大好物はラーメン。<br/>
                     <v-img
                         src="https://picsum.photos/64/64"
