@@ -172,7 +172,7 @@
         </talk-balloon>
         <br/>
 
-        📄 child.vue ：<br/>
+        📄 no-1-child.vue ：<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;div style="background-color: skyblue;"&gt;
@@ -193,6 +193,49 @@
             :device="compatibleDevice1Ref?.device">
                 要は HTML をぶっこめる穴よねえ。
         </talk-balloon>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                で、この作ったテンプレートは、他のテンプレートから呼び出せるんだぜ。<br/>
+                <br/>
+                呼び出される方を子、呼び出す方を親とするとき、<br/>
+                👇 親の方で以下のように書けば……。
+        </talk-balloon>
+        <br/>
+
+        📄 parent vue file:<br/>
+        <pre class="coding-example">
+&lt;template&gt;
+    &lt;no-1-child&gt;
+        わたしはオークです。よろしくねえ。
+    &lt;/no-1-child&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+    import No1Child from '@/components/no-1-child.vue';
+&lt;/script&gt;
+        </pre>
+        <br/>
+        <br/>
+
+        <talk-balloon
+            :src="hiyoko2Src"
+            :alt="hiyoko2Alt"
+            :name="hiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+                👆 No1Child は、タグ名にするとき kebab-case にできるのよね。"&lt;No1Child&gt;" とも書けるし、 "&lt;no-1-child&gt;" とも書ける。
+        </talk-balloon>
+
+        <div class="markup-example">
+            <no-1-child>
+                わたしはオークです。よろしくねえ。
+            </no-1-child>
+        </div>
+        <br/>
+        <br/>
 
     </section>
 
@@ -221,6 +264,7 @@
     //
 
     import CompatibleDevice from '../../../components/CompatibleDevice.vue'
+    import No1Child from '@/components/coding-style/no-1-child.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import TalkBalloon from '../../components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';
