@@ -40,15 +40,7 @@
                 :style="imageBoard1GetTileStyleByTileSq(i - 1)"
                 :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
                     getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1),
                         -Math.floor(printing1Left / tileBoard1TileWidth),
                         -Math.floor(printing1Top / tileBoard1TileHeight),
                         board1FileNum,
@@ -64,27 +56,11 @@
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
-                    getFixedTileSqFromTileSq(
-                        i - 1,
-                        tileBoard1TileWidth,
-                        tileBoard1TileHeight,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left,
-                        printing1Top,
-                    )
+                    imageBoard1GetFixedTileSqFromTileSq(i - 1)
                 }}]</span>
                 <span class="board-printing-index">print[{{
                     getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1),
                         -Math.floor(printing1Left / tileBoard1TileWidth),
                         -Math.floor(printing1Top / tileBoard1TileHeight),
                         board1FileNum,
@@ -96,15 +72,7 @@
                 <span class="board-square-printing-string">{{
                     printing1GetSourceTileSqStringByImageBoardSq(
                         getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(
-                                i - 1,
-                                tileBoard1TileWidth,
-                                tileBoard1TileHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
+                            imageBoard1GetFixedTileSqFromTileSq(i - 1),
                             -Math.floor(printing1Left / tileBoard1TileWidth),
                             -Math.floor(printing1Top / tileBoard1TileHeight),
                             board1FileNum,
@@ -332,27 +300,11 @@
                 :key="i">
                 tile-index: {{ i - 1 }} | 
                 fix-index: {{
-                    getFixedTileSqFromTileSq(
-                        i - 1,
-                        tileBoard1TileWidth,
-                        tileBoard1TileHeight,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left,
-                        printing1Top,
-                    )
+                    imageBoard1GetFixedTileSqFromTileSq(i - 1)
                 }} | 
                 printing: {{
                     getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1),
                         -Math.floor(printing1Left / tileBoard1TileWidth),
                         -Math.floor(printing1Top / tileBoard1TileHeight),
                         board1FileNum,
@@ -433,12 +385,13 @@
     import Stopwatch from '@/components/Stopwatch.vue';
     import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
+    import TileBoard from '@/components/TileBoard.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetTileStyleByTileSq, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetTileStyleByTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -588,6 +541,14 @@
         sourceTilemapRectangles,
     );
     const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
+    );
+    const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,

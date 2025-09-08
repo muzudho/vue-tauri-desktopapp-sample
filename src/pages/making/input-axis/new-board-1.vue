@@ -88,7 +88,7 @@
                     :tileWidth="tileBoard1TileWidth"
                     :tileHeight="tileBoard1TileHeight"
                     :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
-                    :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
+                    :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
                     :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
                     :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
@@ -404,10 +404,10 @@
                     :key="i">
                     tile-index: {{ i - 1 }} | 
                     fix-index: {{
-                        getFixedTileSqFromTileSq(i - 1)
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
                     }} | 
                     printing: {{
-                        getImageSqByFixedTileSq(getFixedTileSqFromTileSq(i - 1))
+                        getImageSqByFixedTileSq(imageBoard1GetFixedTileSqFromTileSq(i - 1))
                     }}<br/>
                 </div>
                 <br/>
@@ -456,8 +456,8 @@
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TileBoard from '@/components/TileBoard.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
+    import TileBoard from '@/components/TileBoard.vue';
     import TheFooter from '../the-footer.vue';
     import TheHeader from '../the-header.vue';
 
@@ -641,7 +641,7 @@
         computedImageBoard1Data,
         sourceTilemapRectangles,
     );
-    const getFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
+    const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,
