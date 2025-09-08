@@ -89,7 +89,7 @@
                     :tileHeight="tileBoard1TileHeight"
                     :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
                     :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
-                    :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
+                    :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
                     :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
                     :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
                 >
@@ -407,7 +407,7 @@
                         imageBoard1GetFixedTileSqFromTileSq(i - 1)
                     }} | 
                     printing: {{
-                        getImageSqByFixedTileSq(imageBoard1GetFixedTileSqFromTileSq(i - 1))
+                        imageBoard1GetImageSqByFixedTileSq(imageBoard1GetFixedTileSqFromTileSq(i - 1))
                     }}<br/>
                 </div>
                 <br/>
@@ -649,7 +649,7 @@
         printing1Left,
         printing1Top,
     );
-    const getImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
+    const imageBoard1GetImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
         board1FileNum,
