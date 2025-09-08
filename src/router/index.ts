@@ -11,18 +11,18 @@ const routes = [
         component: () => import('../pages/blog/index.vue'),  // importした Vue ファイル
     },
 
-    // +++++++++++++++++
-    // + Coding styles +
-    // +++++++++++++++++
+    // ++++++++++++++++++++++++++
+    // + コーディング・スタイル +
+    // ++++++++++++++++++++++++++
     {
         name: 'CodingStyles',
         path: '/coding-style',
         component: () => import('../pages/coding-style/index.vue'),
     },
     {
-        name: 'CodingStylesStyle',
-        path: '/coding-style/style',
-        component: () => import('../pages/coding-style/style.vue'),
+        name: 'CodingStylesInlineStyle',
+        path: '/coding-style/inline-style',
+        component: () => import('../pages/coding-style/inline-style.vue'),
     },
     {
         name: 'CodingStylesSlot',

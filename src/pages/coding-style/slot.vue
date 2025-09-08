@@ -33,7 +33,7 @@
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
-                👇 こういうデータが載ってる本を作ろうとしてるとするだろ。
+                👇 こういうデータが載ってる本を作りたいとするだろ。
         </talk-balloon>
         <br/>
 
@@ -62,7 +62,7 @@
         </talk-balloon>
         <br/>
 
-        📄 child.vue ：<br/>
+        📄 a child .vue file:<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;div style="background-color: skyblue;"&gt;
@@ -115,7 +115,7 @@
         </talk-balloon>
         <br/>
 
-        📄 child.vue ：<br/>
+        📄 a child .vue file:<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;div style="background-color: skyblue;"&gt;
@@ -172,7 +172,7 @@
         </talk-balloon>
         <br/>
 
-        📄 no-1-child.vue ：<br/>
+        📄 no-1-child.vue:<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;div style="background-color: skyblue;"&gt;
@@ -206,7 +206,7 @@
         </talk-balloon>
         <br/>
 
-        📄 parent vue file:<br/>
+        📄 a parent .vue file:<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;no-1-child&gt;
@@ -286,7 +286,7 @@
         </talk-balloon>
         <br/>
 
-        📄 no-1-2-child.vue ：<br/>
+        📄 no-1-2-child.vue:<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;div style="background-color: skyblue;"&gt;
@@ -301,7 +301,7 @@
         <br/>
         <br/>
 
-        📄 parent vue file:<br/>
+        📄 a parent vue file:<br/>
         <pre class="coding-example">
 &lt;template&gt;
     &lt;no-2-child&gt;
