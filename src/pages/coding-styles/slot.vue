@@ -62,6 +62,7 @@
         </talk-balloon>
         <br/>
 
+        📄 child.vue ：<br/>
         <pre class="coding-example">
 &lt;div style="background-color: skyblue;"&gt;
     名前：　すっぽん&lt;br/&gt;
@@ -78,13 +79,63 @@
         <br/>
         <br/>
 
-
         <talk-balloon
             :src="oton2Src"
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
                 ひとまず、以下の黄緑色の部分を穴埋めの穴にしたいと思ってくれだぜ。
+        </talk-balloon>
+        <br/>
+
+        <div class="markup-example">
+            <div style="background-color: skyblue;">
+                名前：　<span style="background-color: yellowgreen;">ここを穴にしたい</span><br/>
+                体力：　100<br/>
+                魔力：　50<br/>
+                紹介文：　私は勇者です。よろしくお願いします。<br/>
+                <v-img
+                    src="https://picsum.photos/64/64"
+                    alt="なんか画像"
+                    style="width: 64px; height: 64px;"
+                />
+            </div>
+        </div>
+        <br/>
+        <br/>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                👇 じゃあ、HTML では以下の黄緑色の部分のように、&#123;&#123; ハンドルバー &#125;&#125; を使うかな。
+        </talk-balloon>
+        <br/>
+
+        📄 child.vue ：<br/>
+        <pre class="coding-example">
+&lt;div style="background-color: skyblue;"&gt;
+    名前：　<span style="background-color: yellowgreen;">&#123;&#123; name &#125;&#125;</span>&lt;br/&gt;
+    体力：　100&lt;br/&gt;
+    魔力：　50&lt;br/&gt;
+    紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
+    &lt;v-img
+        src="https://picsum.photos/64/64"
+        alt="なんか画像"
+        style="width: 64px; height: 64px;"
+    /&gt;
+&lt;/div&gt;
+        </pre>
+        <br/>
+        <br/>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                では、以下のような、テキストとか画像とかもある部分を穴埋めの穴にしたいと思ったときどうするかだぜ。
         </talk-balloon>
         <br/>
 
@@ -105,10 +156,11 @@
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
-                👇 じゃあ、スロットを使ってこう書くんだぜ。
+                👇 そんなとき、スロットを使ってこう書くんだぜ。
         </talk-balloon>
         <br/>
 
+        📄 child.vue ：<br/>
         <pre class="coding-example">
 &lt;div style="background-color: skyblue;"&gt;
     名前：　すっぽん&lt;br/&gt;
@@ -126,7 +178,7 @@
             :alt="hiyoko2Alt"
             :name="hiyoko2Name"
             :device="compatibleDevice1Ref?.device">
-                スロットは穴よねえ。
+                要は HTML をぶっこめる穴よねえ。
         </talk-balloon>
 
     </section>
