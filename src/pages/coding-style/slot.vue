@@ -179,7 +179,7 @@
         名前：　すっぽん&lt;br/&gt;
         体力：　100&lt;br/&gt;
         魔力：　50&lt;br/&gt;
-        紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
+        紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>&lt;br/&gt;
     &lt;/div&gt;
 &lt;/template&gt;
         </pre>
@@ -211,6 +211,11 @@
 &lt;template&gt;
     &lt;no-1-child&gt;
         わたしはオークです。よろしくねえ。
+        &lt;v-img
+            src="https://picsum.photos/64/64"
+            alt="なんか画像"
+            style="width: 64px; height: 64px;"
+        /&gt;
     &lt;/no-1-child&gt;
 &lt;/template&gt;
 
@@ -232,6 +237,11 @@
         <div class="markup-example">
             <no-1-child>
                 わたしはオークです。よろしくねえ。
+                <v-img
+                    src="https://picsum.photos/64/64"
+                    alt="なんか画像"
+                    style="width: 64px; height: 64px;"
+                />
             </no-1-child>
         </div>
         <br/>
@@ -272,7 +282,7 @@
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
-                例えば、次のように書けるぜ。
+                👇 例えば、次のように書けるぜ。
         </talk-balloon>
         <br/>
 
@@ -283,11 +293,69 @@
         名前：　すっぽん&lt;br/&gt;
         体力：　100&lt;br/&gt;
         魔力：　50&lt;br/&gt;
-        紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
-        制作者近影：　<span style="background-color: lightpink;">&lt;slot name="author"&gt;&lt;/slot&gt;</span>
+        紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>&lt;br/&gt;
+        制作者近影：　<span style="background-color: lightpink;">&lt;slot name="author"&gt;&lt;/slot&gt;</span>&lt;br/&gt;
     &lt;/div&gt;
 &lt;/template&gt;
         </pre>
+        <br/>
+        <br/>
+
+        📄 parent vue file:<br/>
+        <pre class="coding-example">
+&lt;template&gt;
+    &lt;no-2-child&gt;
+        わたしはオークです。よろしくねえ。
+        &lt;v-img
+            src="https://picsum.photos/64/64"
+            alt="なんか画像"
+            style="width: 64px; height: 64px;"
+        /&gt;
+        <span style="background-color: lightpink;">&lt;template #author&gt;</span>
+            大好物はラーメン。&lt;br/&gt;
+            &lt;v-img
+                src="https://picsum.photos/64/64"
+                alt="なんか画像"
+                style="width: 64px; height: 64px;"
+            /&gt;
+        <span style="background-color: lightpink;">&lt;/template&gt;</span>
+    &lt;/no-2-child&gt;
+&lt;/template&gt;
+
+&lt;script setup lang="ts"&gt;
+    import No2Child from '@/components/no-2-child.vue';
+&lt;/script&gt;
+        </pre>
+        <br/>
+        <br/>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                👇 するとこうなる。
+        </talk-balloon>
+        <br/>
+
+        <div class="markup-example">
+            <no-2-child>
+                わたしはオークです。よろしくねえ。
+                <v-img
+                    src="https://picsum.photos/64/64"
+                    alt="なんか画像"
+                    style="width: 64px; height: 64px;"
+                />
+                <template #author>
+                    大好物はラーメン。<br/>
+                    <v-img
+                        src="https://picsum.photos/64/64"
+                        alt="なんか画像"
+                        style="width: 64px; height: 64px;"
+                    />
+                </template>
+            </no-2-child>
+        </div>
         <br/>
         <br/>
 
@@ -308,7 +376,7 @@
     // # インポート #
     // ##############
 
-    import { computed, ref } from "vue";
+    import { ref } from "vue";
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -319,6 +387,7 @@
 
     import CompatibleDevice from '../../../components/CompatibleDevice.vue'
     import No1Child from '@/components/coding-style/no-1-child.vue';
+    import No2Child from '@/components/coding-style/no-2-child.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import TalkBalloon from '../../components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';
@@ -353,46 +422,6 @@
     // ++++++++++++++++++++++++++++++++++
 
     const compatibleDevice1Ref = ref<InstanceType<typeof CompatibleDevice> | null>(null);
-
-
-    // ##########
-    // # その他 #
-    // ##########
-
-    const apple: number = 250;
-
-
-    function getRectangle4() : any {
-        return {
-            width: `${apple}px`,
-            height: "100px",
-            backgroundColor: "blue",
-        }
-    }
-
-
-    const getRectangle5 = computed<
-        any
-    >(() => {
-        return {
-            width: `${apple}px`,
-            height: "100px",
-            backgroundColor: "blue",
-        };
-    });
-
-
-    const getRectangle6 = computed<
-        (banana: number) => any
-    >(() => {
-        return (banana: number)=>{
-            return {
-                width: `${apple}px`,
-                height: `${banana}px`,
-                backgroundColor: "blue",
-            }
-        };
-    });
 
 </script>
 
@@ -455,15 +484,4 @@
         font-weight: bolder;
     }
 
-    div.blue-rectangle-1 {    /* 青い長方形１ */
-        width: 200px;
-        height: 100px;
-        background-color: blue;
-    }
-
-    div.blue-rectangle-2 {    /* 青い長方形２ */
-        width: v-bind(apple)px;
-        height: 100px;
-        background-color: blue;
-    }
 </style>
