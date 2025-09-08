@@ -57,7 +57,7 @@
         "/minigames",                   // ミニゲーム
         "/about",                       // ［このサイトについて］のURL
         "/welcome-to-tauri-and-vue",    // Tauri のウェルカムページ
-        "/coding-styles",               // コーディング・スタイル
+        "/coding-style",                // コーディング・スタイル
     ];
 
     let chart: Chart | null = null;

@@ -16,18 +16,18 @@ const routes = [
     // +++++++++++++++++
     {
         name: 'CodingStyles',
-        path: '/coding-styles',
-        component: () => import('../pages/coding-styles/index.vue'),
+        path: '/coding-style',
+        component: () => import('../pages/coding-style/index.vue'),
     },
     {
         name: 'CodingStylesStyle',
-        path: '/coding-styles/style',
-        component: () => import('../pages/coding-styles/style.vue'),
+        path: '/coding-style/style',
+        component: () => import('../pages/coding-style/style.vue'),
     },
     {
         name: 'CodingStylesSlot',
-        path: '/coding-styles/slot',
-        component: () => import('../pages/coding-styles/slot.vue'),
+        path: '/coding-style/slot',
+        component: () => import('../pages/coding-style/slot.vue'),
     },
 
     // ++++++++++++++++++++
