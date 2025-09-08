@@ -41,7 +41,8 @@
             style="
                 width: 200px;
                 height: 100px;
-                background-color: blue;
+                background-color: skyblue;
+                border: solid 4px blue;
             ">
         </div>
         <br/>
@@ -58,7 +59,7 @@
         <pre class="coding-example">
 &lt;template&gt;
     &lt;div
-        style=<span class="green-marker">"width: 100px; height: 200px; background-color: blue;"</span>&gt;
+        style=<span class="green-marker">"width: 100px; height: 200px; background-color: skyblue; border: solid 4px blue;"</span>&gt;
     &lt;/div&gt;
 &lt;/template&gt;
         </pre>
@@ -88,7 +89,8 @@
         style=<span class="green-marker">"
             width: 100px;
             height: 200px;
-            background-color: blue;
+            background-color: skyblue;
+            border: solid 4px blue;
         "</span>&gt;
     &lt;/div&gt;
 &lt;/template&gt;
@@ -102,11 +104,19 @@
             :name="hiyoko2Name"
             :device="compatibleDevice1Ref?.device">
                 👆 １回や２回書くぐらいならインライン・スタイルでもいいんだけど、<br/>
-                ４回同じの書くようになると嫌になってくるんで、<br/>
+                もう５回も同じの書くようになると嫌になってくるんで、<br/>
                 <br/>
                 👇 そういうときはスタイル・シートに切り出すのよ。
         </talk-balloon>
 
+        <div class="blue-rectangle-1">
+        </div>
+        <div class="blue-rectangle-1">
+        </div>
+        <div class="blue-rectangle-1">
+        </div>
+        <div class="blue-rectangle-1">
+        </div>
         <div class="blue-rectangle-1">
         </div>
         <br/>
@@ -114,6 +124,14 @@
         📄 example.vue ：<br/>
         <pre class="coding-example-good">
 &lt;template&gt;
+    &lt;div <span class="green-marker">class="blue-rectangle-1"</span>&gt;
+    &lt;/div&gt;
+    &lt;div <span class="green-marker">class="blue-rectangle-1"</span>&gt;
+    &lt;/div&gt;
+    &lt;div <span class="green-marker">class="blue-rectangle-1"</span>&gt;
+    &lt;/div&gt;
+    &lt;div <span class="green-marker">class="blue-rectangle-1"</span>&gt;
+    &lt;/div&gt;
     &lt;div <span class="green-marker">class="blue-rectangle-1"</span>&gt;
     &lt;/div&gt;
 &lt;/template&gt;
@@ -189,7 +207,8 @@
             :style="`
                 width: ${apple}px;
                 height: 100px;
-                background-color: blue;
+                background-color: skyblue;
+                border: solid 4px blue;
             `">
         </div>
         <br/>
@@ -201,7 +220,8 @@
         <span class="green-marker">:style="`
             width: ${apple}px;
             height: 100px;
-            background-color: blue;
+            background-color: skyblue;
+            border: solid 4px blue;
         `"</span>&gt;
     &lt;/div&gt;
 &lt;/template&gt;
@@ -251,8 +271,9 @@
     <span class="green-marker">function getRectangle4() : any {
         return {
             width: `${apple}px`,
-            height: "100px",
-            backgroundColor: "blue",
+            height: '100px',
+            backgroundColor: 'skyblue',
+            border: 'solid 4px blue',
         }
     }</span>
 &lt;/script&gt;
@@ -300,8 +321,9 @@
     &gt;</span>(<span class="green-marker">() => {
         return <span class="red-marker">{
             width: `${apple}px`,
-            height: "100px",
-            backgroundColor: "blue",
+            height: '100px',
+            backgroundColor: 'skyblue',
+            border: 'solid 4px blue',
         }</span>;
     }</span>);</span>
 &lt;/script&gt;
@@ -362,7 +384,8 @@
             return <span class="green-marker">{
                 width: `${apple}px`,
                 height: `${banana}px`,
-                backgroundColor: "blue",
+                backgroundColor: 'skyblue',
+                border: 'solid 4px blue',
             }</span></span>
         }</span>;
     }</span>);</span>
@@ -478,8 +501,9 @@
     function getRectangle4() : any {
         return {
             width: `${apple}px`,
-            height: "100px",
-            backgroundColor: "blue",
+            height: '100px',
+            backgroundColor: 'skyblue',
+            border: 'solid 4px blue',
         }
     }
 
@@ -584,12 +608,14 @@
     div.blue-rectangle-1 {    /* 青い長方形１ */
         width: 200px;
         height: 100px;
-        background-color: blue;
+        background-color: skyblue;
+        border: solid 4px blue;
     }
 
     div.blue-rectangle-2 {    /* 青い長方形２ */
         width: v-bind(apple)px;
         height: 100px;
-        background-color: blue;
+        background-color: skyblue;
+        border: solid 4px blue;
     }
 </style>
