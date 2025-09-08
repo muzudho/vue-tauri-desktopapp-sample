@@ -38,15 +38,17 @@
         <br/>
 
         <div class="markup-example">
-            名前：　すっぽん<br/>
-            体力：　100<br/>
-            魔力：　50<br/>
-            紹介文：　私は勇者です。よろしくお願いします。<br/>
-            <v-img
-                src="https://picsum.photos/64/64"
-                alt="なんか画像"
-                style="width: 64px; height: 64px;"
-            />
+            <div style="background-color: skyblue;">
+                名前：　すっぽん<br/>
+                体力：　100<br/>
+                魔力：　50<br/>
+                紹介文：　私は勇者です。よろしくお願いします。<br/>
+                <v-img
+                    src="https://picsum.photos/64/64"
+                    alt="なんか画像"
+                    style="width: 64px; height: 64px;"
+                />
+            </div>
         </div>
         <br/>
         <br/>
@@ -61,15 +63,17 @@
         <br/>
 
         <pre class="coding-example">
-名前：　すっぽん&lt;br/&gt;
-体力：　100&lt;br/&gt;
-魔力：　50&lt;br/&gt;
-紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
-&lt;v-img
-    src="https://picsum.photos/64/64"
-    alt="なんか画像"
-    style="width: 64px; height: 64px;"
-/&gt;
+&lt;div style="background-color: skyblue;"&gt;
+    名前：　すっぽん&lt;br/&gt;
+    体力：　100&lt;br/&gt;
+    魔力：　50&lt;br/&gt;
+    紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
+    &lt;v-img
+        src="https://picsum.photos/64/64"
+        alt="なんか画像"
+        style="width: 64px; height: 64px;"
+    /&gt;
+&lt;/div&gt;
         </pre>
         <br/>
         <br/>
@@ -85,11 +89,13 @@
         <br/>
 
         <div class="markup-example">
-            名前：　すっぽん<br/>
-            体力：　100<br/>
-            魔力：　50<br/>
-            紹介文：　<span style="background-color: yellowgreen;">ここらへんを<br/>
-            穴にしたい</span>
+            <div style="background-color: skyblue;">
+                名前：　すっぽん<br/>
+                体力：　100<br/>
+                魔力：　50<br/>
+                紹介文：　<span style="background-color: yellowgreen;">ここらへんを<br/>
+                穴にしたい</span>
+            </div>
         </div>
         <br/>
         <br/>
@@ -104,10 +110,12 @@
         <br/>
 
         <pre class="coding-example">
-名前：　すっぽん&lt;br/&gt;
-体力：　100&lt;br/&gt;
-魔力：　50&lt;br/&gt;
-紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
+&lt;div style="background-color: skyblue;"&gt;
+    名前：　すっぽん&lt;br/&gt;
+    体力：　100&lt;br/&gt;
+    魔力：　50&lt;br/&gt;
+    紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
+&lt;/div&gt;
         </pre>
         <br/>
         <br/>
