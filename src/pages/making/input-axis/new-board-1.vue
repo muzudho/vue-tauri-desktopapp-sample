@@ -93,6 +93,9 @@
                     :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"
                     :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
                 >
+                    <template #default="{ tileSq }">
+                        {{ tileSq }}
+                    </template>
 
                 </tile-board>
 
