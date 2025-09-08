@@ -397,6 +397,70 @@ Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]
                 Grok は知ったかだからな。
         </talk-balloon>
 
+        <talk-balloon
+            :src="hiyoko2Src"
+            :alt="hiyoko2Alt"
+            :name="hiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+                問題の切り分けをしましょう。<br/>
+                <br/>
+                Tauri + Vue3 の環境でエラーが出るんだけど、<br/>
+                Nuxt + Vue3 の環境ではこのエラーは出ないわよ？
+        </talk-balloon>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                えっ、じゃあ Tauri 側の不具合かだぜ？<br/>
+                <br/>
+                tauri-cli のバージョンは 2.0.4、<br/>
+                今は 2.8.x まで出てるらしいんで、アップデートしてみるか……
+        </talk-balloon>
+        <br/>
+
+        <pre class="terminal-example">
+pnpm add -D @tauri-apps/cli@latest
+        </pre>
+        <br/>
+        <br/>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                あれっ、 @tauri-apps/cli が 2.8.3 から 2.8.4 に更新されて、<br/>
+                tauri-cli のバージョンは 2.0.4 のままだ……、どういうこっちゃ。
+        </talk-balloon>
+
+        <talk-balloon
+            :src="kifuwarabe2Src"
+            :alt="kifuwarabe2Alt"
+            :name="kifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+                Tauri とか 2020年に出てきた技術だからな。<br/>
+                まだまだ不具合が多いんじゃないか？
+        </talk-balloon>
+
+        <talk-balloon
+            :src="hiyoko2Src"
+            :alt="hiyoko2Alt"
+            :name="hiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+                べつに Vue3 専用のフレームワークでもないですしね
+        </talk-balloon>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                じゃあ、VSCode の PROBLEMS ペーンが ❌ 印でまっかっかでも気にしないでおくか……。<br/>
+                利用人口が増えたら誰かが不具合を直してくれるだろ……
+        </talk-balloon>
+
     </section>
 
     <br/>
