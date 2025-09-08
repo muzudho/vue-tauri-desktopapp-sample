@@ -303,28 +303,29 @@
 
     import { VBtn } from 'vuetify/components';
 
-    // ++++++++++++++
-    // + 互換性対応 +
-    // ++++++++++++++
+    // ++++++++++++++++++++++++++++++
+    // + インポート　＞　互換性対応 +
+    // ++++++++++++++++++++++++++++++
 
     import type { CompatibleStyleValue }  from '../../../compatibles/compatible-style-value';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
     //
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    // from の階層が上の順、アルファベット順
+    // アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
+    import TileBoard from '@/components/TileBoard.vue';
 
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーザブル +
+    // ++++++++++++++++++++++++++++++++++
 
     import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../composables/board-operation';
     import {
