@@ -423,11 +423,11 @@ Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import CompatibleDevice from '../../../components/CompatibleDevice.vue'
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import No1Child from '@/components/coding-style/no-1-child.vue';
     import No2Child from '@/components/coding-style/no-2-child.vue';
-    import SourceLink from '../../components/SourceLink.vue';
-    import TalkBalloon from '../../components/TalkBalloon.vue';
+    import SourceLink from '@/components/SourceLink.vue';
+    import TalkBalloon from '@/components/TalkBalloon.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
@@ -439,7 +439,7 @@ Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]
     // よく使う設定をまとめたもの。特に不変のもの。
     //    
 
-    import assetsVueLogoSvg from '@/assets/vue.svg';
+    import assetsVueLogoSvg from '@/assets/img/vue.svg';
     import oton2Src from "@/assets/img/talk/202506__character__01-1951-kifuwarabeNoOton-o1o2o0.png";
     const oton2Alt = "きふわらべのお父ん２";
     const oton2Name = "きふわらべのお父ん";

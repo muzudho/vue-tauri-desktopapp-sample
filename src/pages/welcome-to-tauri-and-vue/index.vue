@@ -55,7 +55,7 @@
     //    
 
     // 画像パス
-    import assetsVueLogoSvg from '@/assets/vue.svg';
+    import assetsVueLogoSvg from '@/assets/img/vue.svg';
 
 
     // ##############
