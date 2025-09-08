@@ -237,6 +237,60 @@
         <br/>
         <br/>
 
+        <talk-balloon
+            :src="kifuwarabe2Src"
+            :alt="kifuwarabe2Alt"
+            :name="kifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+                以下のように、スロットを２か所作りたいときはどうするんだぜ？
+        </talk-balloon>
+
+        <div class="markup-example">
+            <div style="background-color: skyblue;">
+                名前：　すっぽん<br/>
+                体力：　100<br/>
+                魔力：　50<br/>
+                紹介文：　<span style="background-color: yellowgreen;">私は勇者です。よろしくお願いします。<br/>
+                <v-img
+                    src="https://picsum.photos/64/64"
+                    alt="なんか画像"
+                    style="width: 64px; height: 64px;"
+                /></span><br/>
+                制作者近影：　<span style="background-color: lightpink;">大好物はラーメン。<br/>
+                <v-img
+                    src="https://picsum.photos/64/64"
+                    alt="なんか画像"
+                    style="width: 64px; height: 64px;"
+                /></span>
+            </div>
+        </div>
+        <br/>
+        <br/>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                例えば、次のように書けるぜ。
+        </talk-balloon>
+        <br/>
+
+        📄 no-1-2-child.vue ：<br/>
+        <pre class="coding-example">
+&lt;template&gt;
+    &lt;div style="background-color: skyblue;"&gt;
+        名前：　すっぽん&lt;br/&gt;
+        体力：　100&lt;br/&gt;
+        魔力：　50&lt;br/&gt;
+        紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
+        制作者近影：　<span style="background-color: lightpink;">&lt;slot name="author"&gt;&lt;/slot&gt;</span>
+    &lt;/div&gt;
+&lt;/template&gt;
+        </pre>
+        <br/>
+        <br/>
+
     </section>
 
     <br/>
