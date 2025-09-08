@@ -374,15 +374,28 @@
         <pre class="terminal-example">
 Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]
         </pre>
+        <br/>
+        <br/>
 
         <talk-balloon
             :src="oton2Src"
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
-                VSCode の Vue公式エクステンションの不具合なんじゃないかな。
+                VSCode の Vue公式エクステンションの不具合なんじゃないかな。<br/>
+                <br/>
+                Grok に聞いたら、なんかあれしろ、これしろというのでやっては動かず、<br/>
+                聞き返しては次にあれしろというからやってみたが動かず、というのを４回ぐらいやったが、解決しなかったぜ。
         </talk-balloon>
         <br/>
+
+        <talk-balloon
+            :src="kifuwarabe2Src"
+            :alt="kifuwarabe2Alt"
+            :name="kifuwarabe2Name"
+            :device="compatibleDevice1Ref?.device">
+                Grok は知ったかだからな。
+        </talk-balloon>
 
     </section>
 
