@@ -26,7 +26,7 @@
 
             <!-- div のグリッド -->
             <board-made-of-div
-                :tileBoardArea="board1Area"
+                :boardArea="board1Area"
                 :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
             >
                 <template #default="{ tileSq }">

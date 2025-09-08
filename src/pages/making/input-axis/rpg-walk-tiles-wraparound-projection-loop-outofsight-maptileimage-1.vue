@@ -33,8 +33,8 @@
             </div>
 
             <!-- タイル盤１ -->
-            <tile-board
-                :tileBoardArea="board1Area"
+            <board-made-of-tile
+                :boardArea="board1Area"
                 :tileWidth="tileBoard1TileWidth"
                 :tileHeight="tileBoard1TileHeight"
                 :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
@@ -62,7 +62,7 @@
                     }}</span>
                 </template>
 
-            </tile-board>
+            </board-made-of-tile>
 
             <!-- 自機１ -->
             <tile-animation
@@ -352,12 +352,12 @@
     //
 
     // from の階層が上の順、アルファベット順
+    import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TileBoard from '@/components/TileBoard.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +

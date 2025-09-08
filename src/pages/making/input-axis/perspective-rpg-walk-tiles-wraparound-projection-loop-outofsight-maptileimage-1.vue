@@ -212,8 +212,8 @@
                 </div>
 
                 <!-- タイル盤１ -->
-                <tile-board
-                    :tileBoardArea="board1Area"
+                <board-made-of-tile
+                    :boardArea="board1Area"
                     :tileWidth="tileBoard1TileWidth"
                     :tileHeight="tileBoard1TileHeight"
                     :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
@@ -222,7 +222,7 @@
                     :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
                     :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
                 >
-                </tile-board>
+                </board-made-of-tile>
 
                 <!-- 自機１ -->
                 <tile-animation
@@ -578,6 +578,7 @@
     //
 
     // アルファベット順
+    import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
@@ -586,7 +587,6 @@
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TileBoard from '@/components/TileBoard.vue';
     import TheFooter from '../the-footer.vue';
     import TheHeader from '../the-header.vue';
 

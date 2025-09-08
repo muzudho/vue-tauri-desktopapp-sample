@@ -91,8 +91,8 @@
             :style="board1Style">
 
             <!-- 新・タイル盤１ -->
-            <tile-board
-                :tileBoardArea="board1Area"
+            <board-made-of-tile
+                :boardArea="board1Area"
                 :tileWidth="tileBoard1TileWidth"
                 :tileHeight="tileBoard1TileHeight"
                 :tilemapUrl="'/img/quiz/kings-room-tiles.png'"
@@ -170,7 +170,7 @@
                 }}</span>
                 -->
 
-            </tile-board>
+            </board-made-of-tile
 
             <!-- 旧・タイル盤１ -->
             <!--
@@ -761,15 +761,15 @@ color = i % 2;
     //
 
     // from の階層が上の順、アルファベット順
-    import Button20250822 from '../../components/Button20250822.vue';
-    import OutOfSight from '../../components/OutOfSightMaking.vue';
-    import SourceLink from '../../components/SourceLink.vue';
-    import Stopwatch from '../../components/Stopwatch.vue';
-    import TalkBalloon from '../../components/TalkBalloon.vue';
-    import TalkIllustration from '../../components/TalkIllustration.vue';
-    import TalkNovel from '../../components/TalkNovel.vue';
-    import TileAnimation from '../../components/TileAnimation.vue';
-    import TileBoard from '@/components/TileBoard.vue';
+    import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
+    import Button20250822 from '@/components/Button20250822.vue';
+    import OutOfSight from '@/components/OutOfSightMaking.vue';
+    import SourceLink from '@/components/SourceLink.vue';
+    import Stopwatch from '@/components/Stopwatch.vue';
+    import TalkBalloon from '@/components/TalkBalloon.vue';
+    import TalkIllustration from '@/components/TalkIllustration.vue';
+    import TalkNovel from '@/components/TalkNovel.vue';
+    import TileAnimation from '@/components/TileAnimation.vue';
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 

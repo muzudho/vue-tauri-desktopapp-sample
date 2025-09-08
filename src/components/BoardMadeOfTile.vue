@@ -1,6 +1,6 @@
 <template>
     <tile
-        v-for="tileSqPlus1 in props.tileBoardArea"
+        v-for="tileSqPlus1 in props.boardArea"
         :key="tileSqPlus1"
         class="square"
         :style="getTileStyleByTileSq(tileSqPlus1 - 1)"
@@ -44,7 +44,7 @@
     // ####################################
     
     interface Props {
-        tileBoardArea: number; // 盤のマス数
+        boardArea: number; // 盤のマス数
         tileWidth: number;
         tileHeight: number;
         tilemapUrl: string;
