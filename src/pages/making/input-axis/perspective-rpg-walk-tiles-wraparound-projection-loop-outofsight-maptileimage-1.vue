@@ -211,36 +211,18 @@
                     :style="playerHome1Style">
                 </div>
 
-                <!-- スクウェアのグリッド -->
-                <tile
-                    v-for="i in board1Area"
-                    :key="i"
-                    class="square"
-                    :style="imageBoard1GetTileStyleByTileSq(i - 1)"
-                    :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
-                        getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(
-                                i - 1,
-                                tileBoard1TileWidth,
-                                tileBoard1TileHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
-                            -Math.floor(printing1Left / tileBoard1TileWidth),
-                            -Math.floor(printing1Top / tileBoard1TileHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
-                        )
-                    ) ?? 0"
-                    :srcTop="0"
-                    :srcWidth="tileBoard1TileWidth"
-                    :srcHeight="tileBoard1TileHeight"
-                    tilemapUrl="/img/making/tilemap-floor-20250826.png">
-                </tile>
+                <!-- タイル盤１ -->
+                <tile-board
+                    :tileBoardArea="board1Area"
+                    :tileWidth="tileBoard1TileWidth"
+                    :tileHeight="tileBoard1TileHeight"
+                    :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
+                    :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
+                    :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
+                    :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+                    :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+                >
+                </tile-board>
 
                 <!-- 自機１ -->
                 <tile-animation
@@ -547,33 +529,11 @@
                     :key="i">
                     tile-index: {{ i - 1 }} | 
                     fix-index: {{
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        )
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
                     }} | 
                     printing: {{
-                        getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(
-                                i - 1,
-                                tileBoard1TileWidth,
-                                tileBoard1TileHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
-                            -Math.floor(printing1Left / tileBoard1TileWidth),
-                            -Math.floor(printing1Top / tileBoard1TileHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
+                        imageBoard1GetImageSqByFixedTileSq(
+                            imageBoard1GetFixedTileSqFromTileSq(i - 1)
                         )
                     }}<br/>
                 </div>
@@ -617,8 +577,9 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    // from の階層が上の順、アルファベット順
+    // アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
+    import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
     import SourceLink from '@/components/SourceLink.vue';
@@ -626,20 +587,15 @@
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
+    import TileBoard from '@/components/TileBoard.vue';
     import TheFooter from '../the-footer.vue';
     import TheHeader from '../the-header.vue';
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーネント　＞　互換性対応 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    import CompatibleDevice from '@/components/CompatibleDevice.vue'
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetTileStyleByTileSq, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -820,7 +776,24 @@
         printing1Left,
         printing1Top,
     );
-
+    const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
+    );
+    const imageBoard1GetImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        printing1Left,
+        printing1Top,
+        printing1FileNum,
+        printing1RankNum,
+        printing1IsLooping,
+    );
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
