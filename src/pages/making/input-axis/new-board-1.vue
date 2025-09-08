@@ -90,7 +90,7 @@
                     :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
                     :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                     :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
-                    :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"
+                    :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
                     :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
                 >
                     <template #default="{ tileSq }">
@@ -450,7 +450,7 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    // from の階層が上の順、アルファベット順
+    // アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';

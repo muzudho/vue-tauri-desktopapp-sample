@@ -98,7 +98,7 @@
                 :tilemapUrl="'/img/quiz/kings-room-tiles.png'"
                 :getFixedTileSqFromTileSq="getFixedTileSqFromTileSq"
                 :getImageSqByFixedTileSq="getImageSqByFixedTileSq"
-                :getSquareStyleFromTileSq="imageBoard1GetTileStyleByTileSq"
+                :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
                 :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
             >
                 <!--

@@ -248,7 +248,7 @@
                     v-for="i in board1Area"
                     :key="i"
                     class="square"
-                    //:style="getSquareStyleFromTileSq(i - 1)"
+                    //:style="getTileStyleByTileSq(i - 1)"
                     :srcLeft="printing1Ref?.getSourceTileLeftByImageSq(
                         getImageSqByFixedTileSq(
                             getFixedTileSqFromTileSq(

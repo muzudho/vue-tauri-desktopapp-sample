@@ -32,7 +32,7 @@
                 :style="playerHome1Style">
             </div>
 
-            <!-- スクウェアのグリッド -->
+            <!-- タイル盤１ -->
             <tile
                 v-for="i in board1Area"
                 :key="i"
@@ -61,37 +61,6 @@
                 :srcWidth="tileBoard1TileWidth"
                 :srcHeight="tileBoard1TileHeight"
                 tilemapUrl="/img/making/tilemap-floor-20250826.png">
-
-                <!--
-            <tile
-                v-for="i in board1Area"
-                :key="i"
-                class="square"
-                //:style="getSquareStyleFromTileSq(i - 1)"
-                :srcLeft="printing1Ref?.getSourceTileLeftByImageSq(
-                    getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
-                        -Math.floor(printing1Left / tileBoard1TileWidth),
-                        -Math.floor(printing1Top / tileBoard1TileHeight),
-                        board1FileNum,
-                        printing1FileNum,
-                        printing1RankNum,
-                        printing1IsLooping,
-                    )
-                ) ?? 0"
-                :srcTop="0"
-                :srcWidth="tileBoard1TileWidth"
-                :srcHeight="tileBoard1TileHeight"
-                tilemapUrl="/img/making/tilemap-floor-20250826.png">
-                -->
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -145,31 +114,6 @@
                         )
                     ) ?? 0
                 }}</span>
-                <!--
-                    printing1GetSourceTileSqStringByImageBoardSq
-
-                <span class="board-square-printing-string">{{
-                    //printing1Ref?.getSourceTileSqStringByImageBoardSq(
-                        getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(
-                                i - 1,
-                                tileBoard1TileWidth,
-                                tileBoard1TileHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
-                            -Math.floor(printing1Left / tileBoard1TileWidth),
-                            -Math.floor(printing1Top / tileBoard1TileHeight),
-                            board1FileNum,
-                            printing1FileNum,
-                            printing1RankNum,
-                            printing1IsLooping,
-                        )
-                    ) ?? 0
-                }}</span>
-                -->
 
             </tile>
 

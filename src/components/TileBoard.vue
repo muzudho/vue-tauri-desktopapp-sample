@@ -3,7 +3,7 @@
         v-for="tileSqPlus1 in props.tileBoardArea"
         :key="tileSqPlus1"
         class="square"
-        :style="getSquareStyleFromTileSq(tileSqPlus1 - 1)"
+        :style="getTileStyleByTileSq(tileSqPlus1 - 1)"
         :srcLeft="getSourceTileLeftByImageSq(
             getImageSqByFixedTileSq(
                 getFixedTileSqFromTileSq(tileSqPlus1 - 1)
@@ -50,7 +50,7 @@
         tilemapUrl: string;
         getFixedTileSqFromTileSq: (tileSq: number) => number;
         getImageSqByFixedTileSq: (fixedTileSq: number) => number;
-        getSquareStyleFromTileSq: (tileIndex: number) => CompatibleStyleValue;
+        getTileStyleByTileSq: (tileIndex: number) => CompatibleStyleValue;
         getSourceTileLeftByImageSq: (imageSq: number) => number;
     }
     const props = defineProps<Props>();
