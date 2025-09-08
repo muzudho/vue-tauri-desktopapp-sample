@@ -24,6 +24,11 @@ const routes = [
         path: '/coding-styles/style',
         component: () => import('../pages/coding-styles/style.vue'),
     },
+    {
+        name: 'CodingStylesSlot',
+        path: '/coding-styles/slot',
+        component: () => import('../pages/coding-styles/slot.vue'),
+    },
 
     // ++++++++++++++++++++
     // + デバッグ・ルーム +

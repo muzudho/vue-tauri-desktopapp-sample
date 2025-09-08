@@ -9,6 +9,7 @@
 
         <ul>
             <li>📖 <router-link to="/coding-styles/style" :style="getPreviousLinkHighlight('/coding-styles/style')">スタイルの書き方を決めておこうぜの章だぜ！</router-link></li>
+            <li>📖 <router-link to="/coding-styles/slot" :style="getPreviousLinkHighlight('/coding-styles/slot')">スロットの書き方を決めておこうぜの章だぜ！</router-link></li>
         </ul>
     </section>
 

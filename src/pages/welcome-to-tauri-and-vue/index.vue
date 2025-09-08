@@ -7,13 +7,13 @@
     <v-container class="row">
         <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
         <v-btn icon href="https://vitejs.dev" target="_blank">
-            <v-img src="/vite.svg" class="logo vite" alt="Vite logo" />
+            <v-img src="/vite.svg" class="logo vite" style="top: -20px;" alt="Vite logo" />
         </v-btn>
         <v-btn icon href="https://tauri.app" target="_blank">
-            <v-img src="/tauri.svg" class="logo tauri" alt="Tauri logo" />
+            <v-img src="/tauri.svg" class="logo tauri" style="top: -20px;" alt="Tauri logo" />
         </v-btn>
         <v-btn icon href="https://vuejs.org/" target="_blank">
-            <v-img :src="AssetsVueLogoSvg" class="logo vue" alt="Vue logo" />
+            <v-img :src="assetsVueLogoSvg" class="logo vue" style="top: -20px;" alt="Vue logo" />
         </v-btn>
     </v-container>
 
@@ -38,21 +38,29 @@
     import { ref } from 'vue';
     import { invoke } from "@tauri-apps/api/core";
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
     import TheGrandParentHeader from '../../the-header.vue';
     import TheParentHeader from '../the-header.vue';
     import TheParentFooter from '../the-footer.vue';
 
 
+    // ##########
+    // # コモン #
+    // ##########
+    //
+    // よく使う設定をまとめたもの。特に不変のもの。
+    //    
+
+    // 画像パス
+    import assetsVueLogoSvg from '@/assets/vue.svg';
+
+
     // ##############
     // # 共有データ #
     // ##############
-
-    // 画像パス
-    import AssetsVueLogoSvg from '@/assets/vue.svg';
 
     const greetMsg = ref("");
     const name = ref("");
