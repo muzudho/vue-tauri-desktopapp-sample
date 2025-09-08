@@ -58,23 +58,25 @@
             :alt="oton2Alt"
             :name="oton2Name"
             :device="compatibleDevice1Ref?.device">
-                👇 HTML ではこんな感じに書くかな。
+                👇 Vue3 では HTML をこんな感じに書くかな。
         </talk-balloon>
         <br/>
 
         📄 child.vue ：<br/>
         <pre class="coding-example">
-&lt;div style="background-color: skyblue;"&gt;
-    名前：　すっぽん&lt;br/&gt;
-    体力：　100&lt;br/&gt;
-    魔力：　50&lt;br/&gt;
-    紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
-    &lt;v-img
-        src="https://picsum.photos/64/64"
-        alt="なんか画像"
-        style="width: 64px; height: 64px;"
-    /&gt;
-&lt;/div&gt;
+&lt;template&gt;
+    &lt;div style="background-color: skyblue;"&gt;
+        名前：　すっぽん&lt;br/&gt;
+        体力：　100&lt;br/&gt;
+        魔力：　50&lt;br/&gt;
+        紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
+        &lt;v-img
+            src="https://picsum.photos/64/64"
+            alt="なんか画像"
+            style="width: 64px; height: 64px;"
+        /&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
         </pre>
         <br/>
         <br/>
@@ -115,20 +117,30 @@
 
         📄 child.vue ：<br/>
         <pre class="coding-example">
-&lt;div style="background-color: skyblue;"&gt;
-    名前：　<span style="background-color: yellowgreen;">&#123;&#123; name &#125;&#125;</span>&lt;br/&gt;
-    体力：　100&lt;br/&gt;
-    魔力：　50&lt;br/&gt;
-    紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
-    &lt;v-img
-        src="https://picsum.photos/64/64"
-        alt="なんか画像"
-        style="width: 64px; height: 64px;"
-    /&gt;
-&lt;/div&gt;
+&lt;template&gt;
+    &lt;div style="background-color: skyblue;"&gt;
+        名前：　<span style="background-color: yellowgreen;">&#123;&#123; name &#125;&#125;</span>&lt;br/&gt;
+        体力：　100&lt;br/&gt;
+        魔力：　50&lt;br/&gt;
+        紹介文：　私は勇者です。よろしくお願いします。&lt;br/&gt;
+        &lt;v-img
+            src="https://picsum.photos/64/64"
+            alt="なんか画像"
+            style="width: 64px; height: 64px;"
+        /&gt;
+    &lt;/div&gt;
+&lt;/template&gt;
         </pre>
         <br/>
         <br/>
+
+        <talk-balloon
+            :src="hiyoko2Src"
+            :alt="hiyoko2Alt"
+            :name="hiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+                name 変数は、説明すると横道に逸れるから省略ねえ。
+        </talk-balloon>
 
         <talk-balloon
             :src="oton2Src"
@@ -162,16 +174,17 @@
 
         📄 child.vue ：<br/>
         <pre class="coding-example">
-&lt;div style="background-color: skyblue;"&gt;
-    名前：　すっぽん&lt;br/&gt;
-    体力：　100&lt;br/&gt;
-    魔力：　50&lt;br/&gt;
-    紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
-&lt;/div&gt;
+&lt;template&gt;
+    &lt;div style="background-color: skyblue;"&gt;
+        名前：　すっぽん&lt;br/&gt;
+        体力：　100&lt;br/&gt;
+        魔力：　50&lt;br/&gt;
+        紹介文：　<span style="background-color: yellowgreen;">&lt;slot&gt;&lt;/slot&gt;</span>
+    &lt;/div&gt;
+&lt;/template&gt;
         </pre>
         <br/>
         <br/>
-        
         
         <talk-balloon
             :src="hiyoko2Src"
