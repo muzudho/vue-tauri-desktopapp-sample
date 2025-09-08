@@ -4,11 +4,18 @@
         体力：　100<br/>
         魔力：　50<br/>
         紹介文：　<slot></slot><br/>
-        制作者近影：　<slot name="author" phone="090-1234-5678"></slot><br/>
+        制作者近影：　<slot name="author"></slot><br/>
     </div>
 </template>
 
 <script setup lang="ts">
+    // Grok に聞いた書き方：
+    const slots = defineSlots<{
+        default(): any;
+        author(): any;
+    }>();
+
+
     /*
     const slots = defineSlots<{
         default: (props: {}) => any,

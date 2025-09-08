@@ -367,6 +367,10 @@
                 👆 Visual Studio Code （略称：VSCode）を使ってると、以下のようなエラーメッセージが出るんだけど？<br/>
         </talk-balloon>
 
+        <a target="_blank" href="/img/coding-style/202509__warabenture__08-2136-slotError-o1o0.jpg">
+            <img class="scr-shot" src="/img/coding-style/202509__warabenture__08-2136-slotError-o1o0.jpg">
+        </a><br/>
+
         <pre class="terminal-example">
 Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]
         </pre>

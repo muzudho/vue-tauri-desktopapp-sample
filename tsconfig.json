@@ -1,13 +1,13 @@
 {
     "compilerOptions": {
-        "target": "ES2020",
+        "target": "ES2020", /* ES2020 か、 ESNext かで違う？ */
         "useDefineForClassFields": true,
         "module": "ESNext", /* ESNext か、 CommonJS かで大きく違う */
         "lib": ["ES2020", "DOM", "DOM.Iterable"],
         "skipLibCheck": true,
 
         /* Bundler mode */
-        "moduleResolution": "bundler",
+        "moduleResolution": "bundler",  /* "bundler" と "node" を選べるが、Vite で動かすなら bundler が良いらしい */
         "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
@@ -19,6 +19,14 @@
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noFallthroughCasesInSwitch": true,
+
+        /* Grok に聞いてみた */
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "/*": ["src/*"]
+        },
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
     "references": [{ "path": "./tsconfig.node.json" }]
