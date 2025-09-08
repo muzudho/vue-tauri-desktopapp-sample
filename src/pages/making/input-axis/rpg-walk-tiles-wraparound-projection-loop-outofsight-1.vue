@@ -36,27 +36,11 @@
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
-                    getFixedTileSqFromTileSq(
-                        i - 1,
-                        tileBoard1TileWidth,
-                        tileBoard1TileHeight,
-                        board1FileNum,
-                        board1RankNum,
-                        printing1Left,
-                        printing1Top,
-                    )
+                    imageBoard1GetFixedTileSqFromTileSq(i - 1)
                 }}]</span>
                 <span class="board-printing-index">print[{{
                     getImageSqByFixedTileSq(
-                        getFixedTileSqFromTileSq(
-                            i - 1,
-                            tileBoard1TileWidth,
-                            tileBoard1TileHeight,
-                            board1FileNum,
-                            board1RankNum,
-                            printing1Left,
-                            printing1Top,
-                        ),
+                        imageBoard1GetFixedTileSqFromTileSq(i - 1),
                         -Math.floor(printing1Left / tileBoard1TileWidth),
                         -Math.floor(printing1Top / tileBoard1TileHeight),
                         board1FileNum,
@@ -68,15 +52,7 @@
                 <span class="board-square-printing-string">{{
                     getSourceTileStringByImageBoardSq(
                         getImageSqByFixedTileSq(
-                            getFixedTileSqFromTileSq(
-                                i - 1,
-                                tileBoard1TileWidth,
-                                tileBoard1TileHeight,
-                                board1FileNum,
-                                board1RankNum,
-                                printing1Left,
-                                printing1Top,
-                            ),
+                            imageBoard1GetFixedTileSqFromTileSq(i - 1),
                             -Math.floor(printing1Left / tileBoard1TileWidth),
                             -Math.floor(printing1Top / tileBoard1TileHeight),
                             board1FileNum,
@@ -362,7 +338,7 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { createGetTileStyleByTileSq, getFixedTileSqFromTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetTileStyleByTileSq, getImageSqByFixedTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -522,6 +498,14 @@
             };
         };
     });
+    const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
+        tileBoard1TileWidth,
+        tileBoard1TileHeight,
+        board1FileNum,
+        board1RankNum,
+        printing1Left,
+        printing1Top,
+    );
 
 
     /**

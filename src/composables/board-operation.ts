@@ -25,7 +25,7 @@ import { euclideanMod, getIndexWhenAddUpFileAndRankOnPeriodicTable } from "./per
 /**
  * 見た目のマスのインデックス（固定インデックス）を取得します。
  */
-export const getFixedTileSqFromTileSq = computed<
+export const getOLDFixedTileSqFromTileSq = computed<
     (
         tileIndex: number,
         tileBoard1TileWidth: number,

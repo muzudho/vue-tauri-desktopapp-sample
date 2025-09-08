@@ -30,29 +30,6 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
         <br/>
         <br/>
 
-        <pre>
-getFixedTileSqFromTileSq(
-    tileIndex,
-    tileBoard1TileWidth,
-    tileBoard1TileHeight,
-    board1FileNum,
-    board1RankNum,
-    printing1Left,
-    printing1Top,
-)</pre>
-        = {{ 
-            getFixedTileSqFromTileSq(
-                tileIndex,
-                tileBoard1TileWidth,
-                tileBoard1TileHeight,
-                board1FileNum,
-                board1RankNum,
-                printing1Left,
-                printing1Top,
-            )
-        }}
-
-
     </section>
 
     <br/>
@@ -73,9 +50,9 @@ getFixedTileSqFromTileSq(
     import { ref } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
     //
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
@@ -84,13 +61,11 @@ getFixedTileSqFromTileSq(
     import TheFooter from './the-footer.vue';
     import TheHeader from './the-header.vue';
 
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーザブル +
+    // ++++++++++++++++++++++++++++++++++
 
-    import { getFixedTileSqFromTileSq } from '../../composables/board-operation';
     import { getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
-    // euclideanMod
 
 
     // ################
