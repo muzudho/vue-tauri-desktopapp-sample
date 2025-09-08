@@ -29,10 +29,13 @@
                 v-for="i in board1Area"
                 :key="i"
                 class="square"
+                :style="imageBoard1GetTileStyleByTileSq(i - 1)">
+                <!--
                 :style="[
                     imageBoard1GetTileStyleByTileSq(i - 1),
                     getSquareBorderStyleFromTileIndex(i - 1),
                 ]">
+                -->
 
                 <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
                 <span class="board-fixed-square-index">fix[{{
@@ -307,6 +310,7 @@
     // + インポート　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++
 
+    import { mergeCompatibleStyleValues } from '../../../compatibles/compatible-style-value';
     import type { CompatibleStyleValue }  from '../../../compatibles/compatible-style-value';
 
     // ++++++++++++++++++++++++++++++++++
@@ -470,21 +474,27 @@
     // const printing1GetSourceTileSqStringByImageBoardSq: (imageBoardSq: number) => string = createGetSourceTileSqStringByImageBoardSq(
     //     computedImageBoard1Data,
     // );
-    const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
-        tileBoard1TileWidth,
-        tileBoard1TileHeight,
-        board1FileNum,
-        board1RankNum,
-        printing1Left,
-        printing1Top,
-    );
-    const getSquareBorderStyleFromTileIndex = computed<
-        (tileIndex: number)=>CompatibleStyleValue
+    const imageBoard1GetTileStyleByTileSq = computed<
+        (tileSq: number) => CompatibleStyleValue
     >(() => {
-        return (tileIndex: number)=>{
-            return {
-                border: `solid 1px ${tileIndex % 2 == 0 ? 'darkgray' : 'lightgray'}`,
+        return (tileSq: number)=>{
+            const getTileStyleByTileSq = createGetTileStyleByTileSq(
+                tileBoard1TileWidth,
+                tileBoard1TileHeight,
+                board1FileNum,
+                board1RankNum,
+                printing1Left,
+                printing1Top,
+            );
+            const style2: CompatibleStyleValue = {
+                border: `solid 1px ${tileSq % 2 == 0 ? 'darkgray' : 'lightgray'}`,
             };
+
+            // 2つのスタイルをマージして返す
+            return mergeCompatibleStyleValues(
+                getTileStyleByTileSq(tileSq),
+                style2
+            );
         };
     });
     const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
