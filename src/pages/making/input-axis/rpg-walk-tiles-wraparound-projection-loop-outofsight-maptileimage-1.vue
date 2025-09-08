@@ -33,39 +33,36 @@
             </div>
 
             <!-- タイル盤１ -->
-            <tile
-                v-for="i in board1Area"
-                :key="i"
-                class="square"
-                :style="imageBoard1GetTileStyleByTileSq(i - 1)"
-                :srcLeft="imageBoard1GetResourceTileLeftByImageSq(
-                    imageBoard1GetImageSqByFixedTileSq(
-                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
-                    )
-                ) ?? 0"
-                :srcTop="0"
-                :srcWidth="tileBoard1TileWidth"
-                :srcHeight="tileBoard1TileHeight"
-                tilemapUrl="/img/making/tilemap-floor-20250826.png">
-
-                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">fix[{{
-                    imageBoard1GetFixedTileSqFromTileSq(i - 1)
-                }}]</span>
-                <span class="board-printing-index">print[{{
-                    imageBoard1GetImageSqByFixedTileSq(
-                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
-                    )
-                }}]</span>
-                <span class="board-square-printing-string">{{
-                    printing1GetSourceTileSqStringByImageBoardSq(
+            <tile-board
+                :tileBoardArea="board1Area"
+                :tileWidth="tileBoard1TileWidth"
+                :tileHeight="tileBoard1TileHeight"
+                :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
+                :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
+                :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
+                :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+                :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+            >
+                <template #default="{ tileSq }">
+                    <span class="board-slidable-tile-index">tile[{{ tileSq }}]</span>
+                    <span class="board-fixed-square-index">fix[{{
+                        imageBoard1GetFixedTileSqFromTileSq(tileSq)
+                    }}]</span>
+                    <span class="board-printing-index">print[{{
                         imageBoard1GetImageSqByFixedTileSq(
-                            imageBoard1GetFixedTileSqFromTileSq(i - 1)
+                            imageBoard1GetFixedTileSqFromTileSq(tileSq)
                         )
-                    ) ?? 0
-                }}</span>
+                    }}]</span>
+                    <span class="board-square-printing-string">{{
+                        printing1GetSourceTileSqStringByImageBoardSq(
+                            imageBoard1GetImageSqByFixedTileSq(
+                                imageBoard1GetFixedTileSqFromTileSq(tileSq)
+                            )
+                        ) ?? 0
+                    }}</span>
+                </template>
 
-            </tile>
+            </tile-board>
 
             <!-- 自機１ -->
             <tile-animation
@@ -359,7 +356,6 @@
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
-    import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
     import TileBoard from '@/components/TileBoard.vue';
 
