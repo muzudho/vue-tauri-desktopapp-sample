@@ -86,3 +86,26 @@ pnpm add -D globals @eslint/js @eslint/eslintrc
 関係なかった。
 
 📖 [JavaScriptからTypeScriptへ移行した際に Property does not exist on type '{}'. で怒られた話](https://qiita.com/entaku0818/items/7068cd9c62738d1d3981)  
+
+
+## [2025-09-08_Mon]
+
+エラーが取れない。  
+`<template #author>` と書くと、  
+`Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]` と出る。  
+
+```json
+{
+    "compilerOptions": {
+        /* エラー抑制、効果なし： `Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]` */
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "noImplicitAny": false // 暗黙のanyを許可
+    }
+}
+```
+
+VSCode の Vue公式 エクステンションをアンインストール。  
+当然、エラーは取れるが、何のチェックも行われなくなる。 .vue ファイルはプレーンテキスト同然になる。  
+VSCode の Vue公式 エクステンションを再インストール。  
+また同じエラーが出る。  

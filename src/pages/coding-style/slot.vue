@@ -359,6 +359,27 @@
         <br/>
         <br/>
 
+        <talk-balloon
+            :src="hiyoko2Src"
+            :alt="hiyoko2Alt"
+            :name="hiyoko2Name"
+            :device="compatibleDevice1Ref?.device">
+                👆 Visual Studio Code （略称：VSCode）を使ってると、以下のようなエラーメッセージが出るんだけど？<br/>
+        </talk-balloon>
+
+        <pre class="terminal-example">
+Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]
+        </pre>
+
+        <talk-balloon
+            :src="oton2Src"
+            :alt="oton2Alt"
+            :name="oton2Name"
+            :device="compatibleDevice1Ref?.device">
+                VSCode の Vue公式エクステンションの不具合なんじゃないかな。
+        </talk-balloon>
+        <br/>
+
     </section>
 
     <br/>
@@ -451,6 +472,16 @@
         border: dashed 4px gray;
         color: #303030;
         background-color: #c0f8c0;
+        padding-left: 24px;
+        padding-top: 16px;
+        padding-right: 24px;
+    }
+
+    pre.terminal-example {    /* ターミナル例 */
+        display: inline-block;
+        border: dashed 4px #909090;
+        color: #f0f0f0;
+        background-color: #303030;
         padding-left: 24px;
         padding-top: 16px;
         padding-right: 24px;
