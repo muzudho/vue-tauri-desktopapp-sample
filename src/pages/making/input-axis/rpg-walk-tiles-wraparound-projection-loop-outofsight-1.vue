@@ -24,32 +24,30 @@
                 :style="playerHome1Style">
             </div>
 
-            <!-- div のグリッド
-                TODO: div のグリッドは廃止して、タイルのグリッドにしたい。
-            -->
-            <div
-                v-for="i in board1Area"
-                :key="i"
-                class="square"
-                :style="imageBoard1GetTileStyleByTileSq(i - 1)">
-
-                <span class="board-slidable-tile-index">tile[{{ (i - 1) }}]</span>
-                <span class="board-fixed-square-index">fix[{{
-                    imageBoard1GetFixedTileSqFromTileSq(i - 1)
-                }}]</span>
-                <span class="board-printing-index">print[{{
-                    imageBoard1GetImageSqByFixedTileSq(
-                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
-                    )
-                }}]</span>
-                <span class="board-square-printing-string">{{
-                    getSourceTileStringByImageBoardSq(
+            <!-- div のグリッド -->
+            <board-made-of-div
+                :tileBoardArea="board1Area"
+                :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+            >
+                <template #default="{ tileSq }">
+                    <span class="board-slidable-tile-index">tile[{{ (tileSq) }}]</span>
+                    <span class="board-fixed-square-index">fix[{{
+                        imageBoard1GetFixedTileSqFromTileSq(tileSq)
+                    }}]</span>
+                    <span class="board-printing-index">print[{{
                         imageBoard1GetImageSqByFixedTileSq(
-                            imageBoard1GetFixedTileSqFromTileSq(i - 1)
+                            imageBoard1GetFixedTileSqFromTileSq(tileSq)
                         )
-                    )
-                }}</span>
-            </div>
+                    }}]</span>
+                    <span class="board-square-printing-string">{{
+                        getSourceTileStringByImageBoardSq(
+                            imageBoard1GetImageSqByFixedTileSq(
+                                imageBoard1GetFixedTileSqFromTileSq(tileSq)
+                            )
+                        )
+                    }}</span>
+                </template>
+            </board-made-of-div>
 
             <!-- 自機１ -->
             <tile-animation
@@ -317,11 +315,11 @@
     //
 
     // アルファベット順
+    import BoardMadeOfDiv from '@/components/BoardMadeOfDiv.vue';
     import Button20250822 from '@/components/Button20250822.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    //import TileBoard from '@/components/TileBoard.vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +

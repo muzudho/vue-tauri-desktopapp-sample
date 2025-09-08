@@ -585,7 +585,6 @@
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import Tile from '@/components/Tile.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
     import TileBoard from '@/components/TileBoard.vue';
     import TheFooter from '../the-footer.vue';
