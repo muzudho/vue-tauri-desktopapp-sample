@@ -242,11 +242,11 @@ const routes = [
         path: '/minigames/shooting-star-naive',
         component: () => import('../pages/minigames/shooting-star-naive.vue'),
     },
-    {
-        name: 'Maze',
-        path: '/minigames/maze',
-        component: () => import('../pages/minigames/maze.vue'),
-    },
+    // {
+    //     name: 'Maze',
+    //     path: '/minigames/maze',
+    //     component: () => import('../pages/minigames/maze.vue'),
+    // },
 
 
     // ++++++++++

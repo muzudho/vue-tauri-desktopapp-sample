@@ -12,7 +12,9 @@
             <ul>
                 <li>📖 <router-link to="/minigames/shooting-star-naive" :style="getPreviousLinkHighlight('/minigames/shooting-star-naive')">同上</router-link> - ソースコードが初級者向けの書き方版</li>
             </ul>
+            <!--
             <li>📖 <router-link to="/minigames/maze" :style="getPreviousLinkHighlight('/minigames/maze')">迷路</router-link> - ただ歩くだけ！</li>
+            -->
         </ul>
     </section>
 
