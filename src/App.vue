@@ -27,6 +27,6 @@
 </template>
 
 <style>
+    @import '@/styles/application.css';
     @import '@/styles/talk-scene.css';
-    @import '@/styles/warabenture.css';
 </style>
