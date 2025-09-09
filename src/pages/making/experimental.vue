@@ -51,15 +51,15 @@
         padding-left: 20px;
         line-height: 40px;  /* 目視確認で日本語のベースラインの位置調整 */
         font-size: xx-large;
-        /*
-        color: rgb(var(--v-theme-text-dark));
-        color: skyblue;
-        background-color: white;
-         */
         color: darkorchid;
         background-color: skyblue;
         border-top-left-radius: 25px;
         border-bottom-left-radius: 25px;
         box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.3);
+        /*
+        color: rgb(var(--v-theme-text-dark));
+        color: skyblue;
+        background-color: white;
+         */
     }
 </style>
