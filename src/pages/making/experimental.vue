@@ -39,7 +39,7 @@
         width: 64px;            /* 切り抜く画像のサイズ */
         height: 48px;
         zoom:0.5;               /* なんか２倍角なので、目視確認で合わせる。 font-size: xx-large; だから？ */
-        background-image: var(--warabenture-img-six-sharps, url('/img/warabenture/six-sharps-light.png'));
+        background-image: var(--myapplication-img-six-sharps, url('/img/application/six-sharps-light-white.png'));
         background-position: -160px 0;
     }
 
