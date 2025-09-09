@@ -43,7 +43,10 @@
             </li>
 
             <li>📖 <router-link to="/making/sprite-routine" :style="getPreviousLinkHighlight('/making/sprite-routine')">スプライト　＞　ルーチン　の章</router-link></li>
+
             <li>📖 <router-link to="/making/npc-walk" :style="getPreviousLinkHighlight('/making/npc-walk')">ノン・プレイヤー・キャラクターを動かそうぜ！　の章</router-link></li>
+            <li>📖 <router-link to="/making/experimental" :style="getPreviousLinkHighlight('/making/experimental')">🌟実験場</router-link></li>
+
         </ul>
     </section>
 

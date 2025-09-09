@@ -72,6 +72,11 @@ const routes = [
         component: () => import('../pages/making/count-up.vue'),
     },
     {
+        name: 'Experimental',
+        path: '/making/experimental',
+        component: () => import('../pages/making/experimental.vue'),
+    },
+    {
         name: 'Making',
         path: '/making',
         component: () => import('@/pages/making/index.vue'),
