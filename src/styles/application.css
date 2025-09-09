@@ -3,13 +3,13 @@
  */
 
 h1 {
-    background-color: var(--myapplication-sec-1-header-bgcolor, #101010);
-    color: var(--myapplication-sec-1-header-fgcolor, #F0F0F0);
-    font-size: xx-large;
     padding-left: 4px;
     padding-top: 6px;
     padding-bottom: 2px;
     text-align: left !important;
+    font-size: xx-large;
+    color: var(--myapplication-sec-1-header-fgcolor, #F0F0F0);
+    background-color: var(--myapplication-sec-1-header-bgcolor, #101010);
 }
 
 /* ヘッダーの先頭に # のアイコンを付ける */
