@@ -29,11 +29,11 @@
 
         <!-- 自分自身のページへ飛んでも、キャッシュが働いて画面は更新されない。 -->
         <router-link
-            to="/making/experimental?page=101">/making/experimental?page=101</router-link><br/>
+            to="/experimental?page=101">/experimental?page=101</router-link><br/>
         <router-link
-            to="/making/experimental?page=102">/making/experimental?page=102</router-link><br/>
+            to="/experimental?page=102">/experimental?page=102</router-link><br/>
         <router-link
-            to="/making/experimental?page=103">/making/experimental?page=103</router-link><br/>
+            to="/experimental?page=103">/experimental?page=103</router-link><br/>
         test={{ test }}<br/>
         page={{ page }}<br/>
         
@@ -74,19 +74,9 @@
         '103': defineAsyncComponent(() => import('@/pages/blog/2025-08/11-mon-sample.vue'))
     };
 
-    // 動的にコンポーネントを選択
-    const selectedComponent = computed(() => {
+    const selectedComponent = computed(() => {  // 動的にコンポーネントを選択
         if (page.value in componentMap) {
             return componentMap[page.value];
-        }
-        if (page.value === '101') return defineAsyncComponent(() => import('@/pages/blog/2025-08/09-sat-sample.vue'));
-        if (page.value === '102') return defineAsyncComponent(() => import('@/pages/blog/2025-08/10-sun-sample.vue'));
-        if (page.value === '103'){
-            // const dynamicPath = "2025-08/11-mon-sample";
-            // return defineAsyncComponent(() => import(`@/pages/blog/${dynamicPath}.vue`));
-            const dynamicPath = "@/pages/blog/2025-08/11-mon-sample.vue";
-            return defineAsyncComponent(() => import(dynamicPath));
-            //return defineAsyncComponent(() => import(`@/pages/blog/2025-08/11-mon-sample.vue`));
         }
         return null;
     });

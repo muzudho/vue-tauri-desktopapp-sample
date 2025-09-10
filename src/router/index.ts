@@ -59,6 +59,15 @@ const routes = [
     },
 
     // ++++++++++
+    // + 実験場 +
+    // ++++++++++
+    {
+        name: 'Experimental',
+        path: '/experimental',
+        component: () => import('../pages/experimental/index.vue'),
+    },
+
+    // ++++++++++
     // + Making +
     // ++++++++++
     {
@@ -70,11 +79,6 @@ const routes = [
         name: 'CountUp',
         path: '/making/count-up',
         component: () => import('../pages/making/count-up.vue'),
-    },
-    {
-        name: 'Experimental',
-        path: '/making/experimental',
-        component: () => import('../pages/making/experimental.vue'),
     },
     {
         name: 'Making',
