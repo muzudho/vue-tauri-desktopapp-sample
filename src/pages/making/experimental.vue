@@ -23,13 +23,39 @@
         >
         </div>
 
-        <br/>
-        <h1 class="heading-1-bar">実験場</h1>
-    </div>    
+        <h1 class="heading-1-bar mb-6">実験場</h1>
+
+        <h2>ダイナミック・インポート</h2>
+
+        <router-link
+            class="mb-6"
+            to="/making/experimental?page=101">/making/experimental?page=101</router-link>
+        
+        <section class="sec-2">
+            <component
+                :is="selectedComponent"
+                :is-standalone="true"
+                v-if="selectedComponent"
+            />
+        </section>
+    </div>
+
+    
 </template>
 
 <script setup lang="ts">
-</script>
+    import { computed, defineAsyncComponent } from 'vue';
+    import { useRoute } from 'vue-router';
+
+    const route = useRoute();
+    const page = route.query.page;
+
+    // 動的にコンポーネントを選択
+    const selectedComponent = computed(() => {
+        if (page === '101') return defineAsyncComponent(() => import('@/pages/blog/2025-08/09-sat-sample.vue'));
+        if (page === '102') return defineAsyncComponent(() => import('@/pages/blog/2025-08/10-sun-sample.vue'));
+        return null;
+    });</script>
 
 <style lang="css" scoped>
     /* ヘッダーの先頭に # のアイコンを付ける */
