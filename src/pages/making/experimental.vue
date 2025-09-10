@@ -27,6 +27,7 @@
 
         <h2>ダイナミック・インポート</h2>
 
+        <!-- 自分自身のページへ飛んでも、キャッシュが働いて画面は更新されない。 -->
         <router-link
             to="/making/experimental?page=101">/making/experimental?page=101</router-link><br/>
         <router-link
@@ -35,9 +36,13 @@
         page={{ page }}<br/>
         
         <section class="sec-2">
+            <!--
+                :key="page" は、自分自身のページに飛んだ時にクエリーパラメーター page が変わっていたら、キャッシュをクリアーして画面更新するために付けている。
+            -->
             <component
                 :is="selectedComponent"
                 :is-standalone="true"
+                :key="page"
                 v-if="selectedComponent"
             />
         </section>
@@ -51,13 +56,13 @@
     import { useRoute } from 'vue-router';
 
     const route = useRoute();
-    const page = route.query.page;
+    const page = computed(()=>route.query.page || '');  // クエリー・パラメーター
     const test = "あああ";
 
     // 動的にコンポーネントを選択
     const selectedComponent = computed(() => {
-        if (page === '101') return defineAsyncComponent(() => import('@/pages/blog/2025-08/09-sat-sample.vue'));
-        if (page === '102') return defineAsyncComponent(() => import('@/pages/blog/2025-08/10-sun-sample.vue'));
+        if (page.value === '101') return defineAsyncComponent(() => import('@/pages/blog/2025-08/09-sat-sample.vue'));
+        if (page.value === '102') return defineAsyncComponent(() => import('@/pages/blog/2025-08/10-sun-sample.vue'));
         return null;
     });</script>
 
