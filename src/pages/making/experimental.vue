@@ -32,6 +32,8 @@
             to="/making/experimental?page=101">/making/experimental?page=101</router-link><br/>
         <router-link
             to="/making/experimental?page=102">/making/experimental?page=102</router-link><br/>
+        <router-link
+            to="/making/experimental?page=103">/making/experimental?page=103</router-link><br/>
         test={{ test }}<br/>
         page={{ page }}<br/>
         
@@ -56,15 +58,41 @@
     import { useRoute } from 'vue-router';
 
     const route = useRoute();
-    const page = computed(()=>route.query.page || '');  // クエリー・パラメーター
+    const page = computed(()=>{ // クエリー・パラメーター
+        // Nuxt 3（Vue Router）のuseRoute().queryは、クエリパラメータをRecord<string, string | LocationQueryValue[]>として返す。
+        const queryPage = route.query.page || '';
+
+        // 型ガードでstringに絞り込み
+        return typeof queryPage === 'string' ? queryPage : '';
+    });
     const test = "あああ";
+
+    // import 文のパスは Vite が静的解析するので変数は使えない。そこでマップ形式で予め持っておく。
+    const componentMap : Record<string, any> = {
+        '101': defineAsyncComponent(() => import('@/pages/blog/2025-08/09-sat-sample.vue')),
+        '102': defineAsyncComponent(() => import('@/pages/blog/2025-08/10-sun-sample.vue')),
+        '103': defineAsyncComponent(() => import('@/pages/blog/2025-08/11-mon-sample.vue'))
+    };
 
     // 動的にコンポーネントを選択
     const selectedComponent = computed(() => {
+        if (page.value in componentMap) {
+            return componentMap[page.value];
+        }
         if (page.value === '101') return defineAsyncComponent(() => import('@/pages/blog/2025-08/09-sat-sample.vue'));
         if (page.value === '102') return defineAsyncComponent(() => import('@/pages/blog/2025-08/10-sun-sample.vue'));
+        if (page.value === '103'){
+            // const dynamicPath = "2025-08/11-mon-sample";
+            // return defineAsyncComponent(() => import(`@/pages/blog/${dynamicPath}.vue`));
+            const dynamicPath = "@/pages/blog/2025-08/11-mon-sample.vue";
+            return defineAsyncComponent(() => import(dynamicPath));
+            //return defineAsyncComponent(() => import(`@/pages/blog/2025-08/11-mon-sample.vue`));
+        }
         return null;
-    });</script>
+    });
+    
+
+</script>
 
 <style lang="css" scoped>
     /* ヘッダーの先頭に # のアイコンを付ける */
