@@ -28,8 +28,11 @@
         <h2>ダイナミック・インポート</h2>
 
         <router-link
-            class="mb-6"
-            to="/making/experimental?page=101">/making/experimental?page=101</router-link>
+            to="/making/experimental?page=101">/making/experimental?page=101</router-link><br/>
+        <router-link
+            to="/making/experimental?page=102">/making/experimental?page=102</router-link><br/>
+        test={{ test }}<br/>
+        page={{ page }}<br/>
         
         <section class="sec-2">
             <component
@@ -49,6 +52,7 @@
 
     const route = useRoute();
     const page = route.query.page;
+    const test = "あああ";
 
     // 動的にコンポーネントを選択
     const selectedComponent = computed(() => {
