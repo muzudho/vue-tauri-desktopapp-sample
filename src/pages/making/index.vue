@@ -66,7 +66,6 @@
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';
 
-
     // ++++++++++++++++++
     // + コンポーザブル +
     // ++++++++++++++++++
