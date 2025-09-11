@@ -21,6 +21,7 @@
         </talk-balloon>
     </section>
 
+    <component :is="TheCodingStyleHeader"/>
     <component :is="TheCodingStyleBody"/>
 </template>
 
@@ -44,7 +45,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheCodingStyleBody from '@/pages/reference/coding-style/index-body.vue';
+    import TheCodingStyleHeader from '@/pages/reference/coding-style/the-chapter-header.vue';
+    import TheCodingStyleBody from '@/pages/reference/coding-style/the-chapter-body.vue';
 
 
     // ##########

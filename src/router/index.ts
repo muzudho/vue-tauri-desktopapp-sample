@@ -257,8 +257,8 @@ const routes = [
     },
     {
         name: 'Reference_CodingStyle_IndexBody',
-        path: '/reference/coding-style/index-body',
-        component: () => import('../pages/reference/coding-style/index-body.vue'),
+        path: '/reference/coding-style/the-chapter-body',
+        component: () => import('../pages/reference/coding-style/the-chapter-body.vue'),
     },
     {
         name: 'Reference_CodingStyle_InlineStyle',
