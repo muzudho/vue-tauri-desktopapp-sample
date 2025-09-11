@@ -1,12 +1,9 @@
 <template>
     <the-app-header/>
     <section class="sec-1">
-        先頭ページだぜ（＾▽＾）！<v-btn style="visibility: hidden;"></v-btn><br/>
-        <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
+        <v-btn @click="closePart" v-tooltip="'下の部を閉じる'">❌</v-btn>
     </section>
-
-    <h2>ホームだぜ！　の部　インデックス</h2>
-    <!-- ホームに閉じるボタンはありません。 -->
+    <h2>ブログの部だぜ！</h2>
 </template>
 
 <script setup lang="ts">
@@ -15,10 +12,23 @@
     // # インポート #
     // ##############
 
+    import { useRouter } from 'vue-router';
+
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
     import TheAppHeader from '../the-app-header.vue';
+
+    
+    // ############
+    // # ルーチン #
+    // ############
+
+    const router = useRouter();
+
+    function closePart() : void {
+        router.push('/');
+    }
 
 </script>

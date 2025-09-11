@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChaptersBody from '@/pages/debug-room/the-chapters-body.vue';
-    import TheChaptersFooter from '@/pages/debug-room/the-chapters-footer.vue';
-    import TheChaptersHeader from '@/pages/debug-room/the-chapters-header.vue';
+    import TheChaptersBody from '@/pages/debug-room/the-part-body.vue';
+    import TheChaptersFooter from '@/pages/debug-room/the-part-footer.vue';
+    import TheChaptersHeader from '@/pages/debug-room/the-part-header.vue';
 
 </script>

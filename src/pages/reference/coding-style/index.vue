@@ -21,8 +21,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChaptersFooter from '@/pages/reference/the-chapters-footer.vue';
-    import TheChaptersHeader from '@/pages/reference/the-chapters-header.vue';
+    import TheChaptersFooter from '@/pages/reference/the-part-footer.vue';
+    import TheChaptersHeader from '@/pages/reference/the-part-header.vue';
     import TheSectionIndexBody from '@/pages/reference/coding-style/index-body.vue';
 
 

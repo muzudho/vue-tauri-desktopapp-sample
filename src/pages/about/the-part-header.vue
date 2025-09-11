@@ -1,6 +1,8 @@
 <template>
     <the-app-header/>
-    <the-parts-header/>
+    <section class="sec-1">
+        <v-btn @click="closePart" v-tooltip="'下の部を閉じる'">❌</v-btn>
+    </section>
     <h2>このサイトについての部だぜ！</h2>
 </template>
 
@@ -10,11 +12,23 @@
     // # インポート #
     // ##############
 
+    import { useRouter } from 'vue-router';
+
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
     import TheAppHeader from '../the-app-header.vue';
-    import ThePartsHeader from '../the-parts-header.vue';
+
+    
+    // ############
+    // # ルーチン #
+    // ############
+
+    const router = useRouter();
+
+    function closePart() : void {
+        router.push('/');
+    }
 
 </script>

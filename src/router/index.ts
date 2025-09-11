@@ -21,18 +21,18 @@ const routes = [
     },
     {
         name: 'About_TheChaptersBody',
-        path: '/about/the-chapters-body',
-        component: () => import('../pages/about/the-chapters-body.vue'),
+        path: '/about/the-part-body',
+        component: () => import('../pages/about/the-part-body.vue'),
     },
     {
         name: 'About_TheChaptersFooter',
-        path: '/about/the-chapters-footer',
-        component: () => import('../pages/about/the-chapters-footer.vue'),
+        path: '/about/the-part-footer',
+        component: () => import('../pages/about/the-part-footer.vue'),
     },
     {
         name: 'About_TheChaptersHeader',
-        path: '/about/the-chapters-header',
-        component: () => import('../pages/about/the-chapters-header.vue'),
+        path: '/about/the-part-header',
+        component: () => import('../pages/about/the-part-header.vue'),
     },
 
     // ++++++++++
@@ -79,18 +79,18 @@ const routes = [
     },
     {
         name: 'DebugRoom_TheChaptersBody',
-        path: '/debug-room/the-chapters-body',
-        component: () => import('../pages/debug-room/the-chapters-body.vue'),
+        path: '/debug-room/the-part-body',
+        component: () => import('../pages/debug-room/the-part-body.vue'),
     },
     {
         name: 'DebugRoom_TheChaptersFooter',
-        path: '/debug-room/the-chapters-footer',
-        component: () => import('../pages/debug-room/the-chapters-footer.vue'),
+        path: '/debug-room/the-part-footer',
+        component: () => import('../pages/debug-room/the-part-footer.vue'),
     },
     {
         name: 'DebugRoom_TheChaptersHeader',
-        path: '/debug-room/the-chapters-header',
-        component: () => import('../pages/debug-room/the-chapters-header.vue'),
+        path: '/debug-room/the-part-header',
+        component: () => import('../pages/debug-room/the-part-header.vue'),
     },
     {
         name: 'DebugRoomBoardOperation',
@@ -103,8 +103,8 @@ const routes = [
     // ++++++++++
     {
         name: 'Experimental_TheChaptersBody',
-        path: '/experimental/the-chapters-body',
-        component: () => import('../pages/experimental/the-chapters-body.vue'),
+        path: '/experimental/the-part-body',
+        component: () => import('../pages/experimental/the-part-body.vue'),
     },
     {
         name: 'Experimental',
@@ -113,13 +113,13 @@ const routes = [
     },
     {
         name: 'Experimental_TheChaptersFooter',
-        path: '/experimental/the-chapters-footer',
-        component: () => import('../pages/experimental/the-chapters-footer.vue'),
+        path: '/experimental/the-part-footer',
+        component: () => import('../pages/experimental/the-part-footer.vue'),
     },
     {
         name: 'Experimental_TheChaptersHeader',
-        path: '/experimental/the-chapters-header',
-        component: () => import('../pages/experimental/the-chapters-header.vue'),
+        path: '/experimental/the-part-header',
+        component: () => import('../pages/experimental/the-part-header.vue'),
     },
     {
         name: 'Experimental_Page1',
@@ -137,8 +137,8 @@ const routes = [
     },
     {
         name: 'Home_TheChaptersBody',
-        path: '/home/the-chapters-body',
-        component: () => import('../pages/home/the-chapters-body.vue'),
+        path: '/home/the-part-body',
+        component: () => import('../pages/home/the-part-body.vue'),
     },
 
     // ++++++++++++++++++++++++++++++++
@@ -165,18 +165,18 @@ const routes = [
     },
     {
         name: 'Making_TheChaptersBody',
-        path: '/making/the-chapters-body',
-        component: () => import('@/pages/making/the-chapters-body.vue'),
+        path: '/making/the-part-body',
+        component: () => import('@/pages/making/the-part-body.vue'),
     },
     {
         name: 'Making_TheChaptersFooter',
-        path: '/making/the-chapters-footer',
-        component: () => import('@/pages/making/the-chapters-footer.vue'),
+        path: '/making/the-part-footer',
+        component: () => import('@/pages/making/the-part-footer.vue'),
     },
     {
         name: 'Making_TheChaptersHeader',
-        path: '/making/the-chapters-header',
-        component: () => import('@/pages/making/the-chapters-header.vue'),
+        path: '/making/the-part-header',
+        component: () => import('@/pages/making/the-part-header.vue'),
     },
 
     {
@@ -347,18 +347,18 @@ const routes = [
     },
     {
         name: 'MiniGames_TheChaptersBody',
-        path: '/minigames/the-chapters-body',
-        component: () => import('../pages/minigames/the-chapters-body.vue'),
+        path: '/minigames/the-part-body',
+        component: () => import('../pages/minigames/the-part-body.vue'),
     },
     {
         name: 'MiniGames_TheChaptersFooter',
-        path: '/minigames/the-chapters-footer',
-        component: () => import('../pages/minigames/the-chapters-footer.vue'),
+        path: '/minigames/the-part-footer',
+        component: () => import('../pages/minigames/the-part-footer.vue'),
     },
     {
         name: 'MiniGames_TheChaptersHeader',
-        path: '/minigames/the-chapters-header',
-        component: () => import('../pages/minigames/the-chapters-header.vue'),
+        path: '/minigames/the-part-header',
+        component: () => import('../pages/minigames/the-part-header.vue'),
     },
 
     {
@@ -389,18 +389,18 @@ const routes = [
     },
     {
         name: 'Quiz_TheChaptersBody',
-        path: '/quiz/the-chapters-body',
-        component: () => import('../pages/quiz/the-chapters-body.vue'),
+        path: '/quiz/the-part-body',
+        component: () => import('../pages/quiz/the-part-body.vue'),
     },
     {
         name: 'Quiz_TheChaptersFooter',
-        path: '/quiz/the-chapters-footer',
-        component: () => import('../pages/quiz/the-chapters-footer.vue'),
+        path: '/quiz/the-part-footer',
+        component: () => import('../pages/quiz/the-part-footer.vue'),
     },
     {
         name: 'Quiz_TheChaptersHeader',
-        path: '/quiz/the-chapters-header',
-        component: () => import('../pages/quiz/the-chapters-header.vue'),
+        path: '/quiz/the-part-header',
+        component: () => import('../pages/quiz/the-part-header.vue'),
     },
 
     {
@@ -426,18 +426,18 @@ const routes = [
     },
     {
         name: 'Reference_TheChaptersBody',
-        path: '/reference/the-chapters-body',
-        component: () => import('../pages/reference/the-chapters-body.vue'),
+        path: '/reference/the-part-body',
+        component: () => import('../pages/reference/the-part-body.vue'),
     },
     {
         name: 'Reference_TheChaptersFooter',
-        path: '/reference/the-chapters-footer',
-        component: () => import('../pages/reference/the-chapters-footer.vue'),
+        path: '/reference/the-part-footer',
+        component: () => import('../pages/reference/the-part-footer.vue'),
     },
     {
         name: 'Reference_TheChaptersHeader',
-        path: '/reference/the-chapters-header',
-        component: () => import('../pages/reference/the-chapters-header.vue'),
+        path: '/reference/the-part-header',
+        component: () => import('../pages/reference/the-part-header.vue'),
     },
 
     // ++++++++++++++++++++++++++++++++++++++++++++
@@ -476,18 +476,18 @@ const routes = [
     },
     {
         name: 'WelcomeToTauriAndVue_TheChaptersBody',
-        path: '/welcome-to-tauri-and-vue/the-chapters-body',
-        component: () => import('../pages/welcome-to-tauri-and-vue/the-chapters-body.vue'),
+        path: '/welcome-to-tauri-and-vue/the-part-body',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-part-body.vue'),
     },
     {
         name: 'WelcomeToTauriAndVue_TheChaptersFooter',
-        path: '/welcome-to-tauri-and-vue/the-chapters-footer',
-        component: () => import('../pages/welcome-to-tauri-and-vue/the-chapters-footer.vue'),
+        path: '/welcome-to-tauri-and-vue/the-part-footer',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-part-footer.vue'),
     },
     {
         name: 'WelcomeToTauriAndVue_TheChaptersHeader',
-        path: '/welcome-to-tauri-and-vue/the-chapters-header',
-        component: () => import('../pages/welcome-to-tauri-and-vue/the-chapters-header.vue'),
+        path: '/welcome-to-tauri-and-vue/the-part-header',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-part-header.vue'),
     },
 
 ] as const;

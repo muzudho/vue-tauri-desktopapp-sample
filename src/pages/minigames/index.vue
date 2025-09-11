@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChaptersBody from '@/pages/minigames/the-chapters-body.vue';
-    import TheChaptersFooter from '@/pages/minigames/the-chapters-footer.vue';
-    import TheChaptersHeader from '@/pages/minigames/the-chapters-header.vue';
+    import TheChaptersBody from '@/pages/minigames/the-part-body.vue';
+    import TheChaptersFooter from '@/pages/minigames/the-part-footer.vue';
+    import TheChaptersHeader from '@/pages/minigames/the-part-header.vue';
 
 </script>

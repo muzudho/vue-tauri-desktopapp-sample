@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChaptersBody from '@/pages/welcome-to-tauri-and-vue/the-chapters-body.vue';
-    import TheChaptersFooter from '@/pages/welcome-to-tauri-and-vue/the-chapters-footer.vue';
-    import TheChaptersHeader from '@/pages/welcome-to-tauri-and-vue/the-chapters-header.vue';
+    import TheChaptersBody from '@/pages/welcome-to-tauri-and-vue/the-part-body.vue';
+    import TheChaptersFooter from '@/pages/welcome-to-tauri-and-vue/the-part-footer.vue';
+    import TheChaptersHeader from '@/pages/welcome-to-tauri-and-vue/the-part-header.vue';
 
 </script>
