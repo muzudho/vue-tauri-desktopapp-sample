@@ -297,18 +297,28 @@ const routes = [
     },
     {
         name: 'Reference_Making_TheChaptersBody',
-        path: '/reference/making/the-part-body',
-        component: () => import('@/pages/reference/making/the-part-body.vue'),
+        path: '/reference/making/the-chapter-body',
+        component: () => import('@/pages/reference/making/the-chapter-body.vue'),
     },
     {
         name: 'Reference_Making_TheChaptersFooter',
-        path: '/reference/making/the-part-footer',
-        component: () => import('@/pages/reference/making/the-part-footer.vue'),
+        path: '/reference/making/the-chapter-footer',
+        component: () => import('@/pages/reference/making/the-chapter-footer.vue'),
     },
     {
         name: 'Reference_Making_TheChaptersHeader',
-        path: '/reference/making/the-part-header',
-        component: () => import('@/pages/reference/making/the-part-header.vue'),
+        path: '/reference/making/the-chapter-header',
+        component: () => import('@/pages/reference/making/the-chapter-header.vue'),
+    },
+    {
+        name: 'Reference_Making_TheSectionFooter',
+        path: '/reference/making/the-section-footer',
+        component: () => import('@/pages/reference/making/the-section-footer.vue'),
+    },
+    {
+        name: 'Reference_Making_TheSectionHeader',
+        path: '/reference/making/the-section-header',
+        component: () => import('@/pages/reference/making/the-section-header.vue'),
     },
 
     {
