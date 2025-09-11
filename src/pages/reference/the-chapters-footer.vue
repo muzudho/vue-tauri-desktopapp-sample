@@ -1,5 +1,8 @@
 <template>
-    <the-parent-footer/>
+    <br/>
+    <section class="sec-1">
+        <v-btn @click="goBackToHome" v-tooltip="'上の部を閉じる'">❌</v-btn>
+    </section>
 </template>
 
 <script setup lang="ts">
@@ -8,10 +11,15 @@
     // # インポート #
     // ##############
 
-    // ++++++++++++++++++++++++++
-    // + インポート　＞　ページ +
-    // ++++++++++++++++++++++++++
+    import { useRouter } from 'vue-router';
 
-    import TheParentFooter from '../the-parts-footer.vue';
 
+    // ############
+    // # ルーチン #
+    // ############
+    const router = useRouter();
+
+    function goBackToHome() : void {
+        router.push('/');
+    }
 </script>
