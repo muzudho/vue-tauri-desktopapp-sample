@@ -24,11 +24,11 @@
 
     import { useRouter } from 'vue-router';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
-    import TheAppHeader from '../../../the-app-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
 
 
     // ############
