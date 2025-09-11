@@ -132,9 +132,9 @@ const routes = [
         component: () => import('../pages/home/the-chapters-body.vue'),
     },
 
-    // ++++++++++++++++++++
-    // + Making / Desktop +
-    // ++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++
+    // + メイキング　＞　デスクトップ +
+    // ++++++++++++++++++++++++++++++++
     {
         name: 'BasePaths',
         path: '/making/desktop/base-paths',
@@ -146,9 +146,30 @@ const routes = [
         component: () => import('../pages/making/desktop/bundle-file-loading.vue'),
     },
 
-    // ++++++++++
-    // + Making +
-    // ++++++++++
+    // ++++++++++++++
+    // + メイキング +
+    // ++++++++++++++
+    {
+        name: 'Making',
+        path: '/making',
+        component: () => import('@/pages/making/index.vue'),
+    },
+    {
+        name: 'Making_TheChaptersBody',
+        path: '/making/the-chapters-body',
+        component: () => import('@/pages/making/the-chapters-body.vue'),
+    },
+    {
+        name: 'Making_TheChaptersFooter',
+        path: '/making/the-chapters-footer',
+        component: () => import('@/pages/making/the-chapters-footer.vue'),
+    },
+    {
+        name: 'Making_TheChaptersHeader',
+        path: '/making/the-chapters-header',
+        component: () => import('@/pages/making/the-chapters-header.vue'),
+    },
+
     {
         name: 'ButtonRepeat1',
         path: '/making/button-repeat-1',
@@ -158,11 +179,6 @@ const routes = [
         name: 'CountUp',
         path: '/making/count-up',
         component: () => import('../pages/making/count-up.vue'),
-    },
-    {
-        name: 'Making',
-        path: '/making',
-        component: () => import('@/pages/making/index.vue'),
     },
     {
         name: 'InputAxisNewBoard',
