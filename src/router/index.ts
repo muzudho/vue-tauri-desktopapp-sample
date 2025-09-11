@@ -1,3 +1,4 @@
+// Tauri 用。
 import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
