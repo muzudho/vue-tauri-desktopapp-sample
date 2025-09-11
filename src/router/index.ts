@@ -416,12 +416,17 @@ const routes = [
         component: () => import('../pages/reference/index.vue'),
     },
     {
-        name: 'Reference_ChaptersFooter',
+        name: 'Reference_TheChaptersBody',
+        path: '/reference/the-chapters-body',
+        component: () => import('../pages/reference/the-chapters-body.vue'),
+    },
+    {
+        name: 'Reference_TheChaptersFooter',
         path: '/reference/the-chapters-footer',
         component: () => import('../pages/reference/the-chapters-footer.vue'),
     },
     {
-        name: 'Reference_ChaptersHeader',
+        name: 'Reference_TheChaptersHeader',
         path: '/reference/the-chapters-header',
         component: () => import('../pages/reference/the-chapters-header.vue'),
     },

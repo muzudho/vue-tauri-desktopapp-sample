@@ -1,29 +1,6 @@
 <template>
-
-    <!-- デバイス互換機能 -->
-    <compatible-device ref="compatibleDevice1Ref"/>
-
     <component :is="TheChaptersHeader"/>
-
-    <section class="sec-2">
-        <br/>
-
-        <talk-image
-            :href="reference1Png"
-            alt="書庫"
-        />
-
-        <talk-balloon
-            :src="kifuwarabe2Src"
-            :alt="kifuwarabe2Alt"
-            :name="kifuwarabe2Name"
-            :device="compatibleDevice1Ref?.device">
-                ここは調べものの部屋だぜ。<br/>
-                面白いものは何もないぜ。用が無いなら帰った帰った！
-        </talk-balloon>
-    </section>
-
-    <component :is="TheCodingStyleBody"/>
+    <component :is="TheChaptersBody"/>
     <component :is="TheChaptersFooter"/>
 </template>
 
@@ -33,52 +10,12 @@
     // # インポート #
     // ##############
 
-    import { ref } from 'vue';
-
-    // ++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーネント +
-    // ++++++++++++++++++++++++++++++++++
-
-    import CompatibleDevice from '@/components/CompatibleDevice.vue'
-    import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TalkImage from '@/components/TalkImage.vue';
-
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
+    import TheChaptersBody from '@/pages/reference/the-chapters-body.vue';
     import TheChaptersFooter from '@/pages/reference/the-chapters-footer.vue';
     import TheChaptersHeader from '@/pages/reference/the-chapters-header.vue';
-    import TheCodingStyleBody from '@/pages/reference/coding-style/index-body.vue';
-
-
-    // ##########
-    // # コモン #
-    // ##########
-    //
-    // よく使う設定をまとめたもの。特に不変のもの。
-    //
-
-    import kifuwarabe2Src from "@/assets/img/talk/202506__character__01-2013-kifuwarabe-o1o1o0.png";
-    const kifuwarabe2Alt = "きふわらべ２";
-    const kifuwarabe2Name = "きふわらべ";
-    import reference1Png from "@/assets/img/journal/2025-09/202509__grok__11-1719-reference-o1o0.png";
-
-
-    // ################
-    // # オブジェクト #
-    // ################
-
-    // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　装置の互換性 +
-    // ++++++++++++++++++++++++++++++++++
-
-    const compatibleDevice1Ref = ref<InstanceType<typeof CompatibleDevice> | null>(null);
 
 </script>
-
-<style scoped>
-
-    @import '@/styles/notebook.css';
-
-</style>
