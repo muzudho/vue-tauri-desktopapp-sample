@@ -1,6 +1,6 @@
 <template>
     <the-app-header/>
-    <button-to-close-part/>
+    <button-to-close-below-part/>
     <h2>メイキングだぜ！　の部　インデックス</h2>
 </template>
 
@@ -14,7 +14,7 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import ButtonToClosePart from '@/components/ButtonToClosePart.vue';
+    import ButtonToCloseBelowPart from '@/components/ButtonToCloseBelowPart.vue';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
