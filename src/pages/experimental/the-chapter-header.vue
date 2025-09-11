@@ -1,14 +1,11 @@
 <template>
     <the-app-header/>
-
-    <section class="sec-1">
-        <v-btn @click="goBackToTopOf1" v-tooltip="'下の部を閉じる'">❌</v-btn>
-    </section>
+    <button-to-close-below-part/>
 
     <h2>実験場だぜ！　の部</h2>
-    <section class="sec-2">
-        <v-btn @click="goBackToTopOf2" v-tooltip="'下の節を閉じる'">❌</v-btn>
-    </section>
+    <button-to-close-below-chapter
+        pagePath="/experimental"
+    />
 </template>
 
 <script setup lang="ts">
@@ -17,29 +14,12 @@
     // # インポート #
     // ##############
 
-    import { useRouter } from 'vue-router';
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
-
+    import ButtonToCloseBelowChapter from '@/components/ButtonToCloseBelowChapter.vue';
+    import ButtonToCloseBelowPart from '@/components/ButtonToCloseBelowPart.vue';
     import TheAppHeader from '../the-app-header.vue';
-
-
-    // ############
-    // # ルーチン #
-    // ############
-    
-    const router = useRouter();
-
-    
-    function goBackToTopOf1() : void {
-        router.push('/');
-    }
-
-
-    function goBackToTopOf2() : void {
-        router.push('/experimental');
-    }
 
 </script>

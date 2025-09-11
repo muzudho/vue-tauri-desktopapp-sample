@@ -1,7 +1,7 @@
 <template>
-    <section class="sec-2 mt-6">
-        <v-btn @click="goBack" v-tooltip="'上の章を閉じる'">❌</v-btn>
-    </section>
+    <button-to-close-above-chapter
+        pagePath="/minigames"
+    />
 </template>
 
 <script setup lang="ts">
@@ -10,15 +10,10 @@
     // # インポート #
     // ##############
 
-    import { useRouter } from 'vue-router';
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
+    import ButtonToCloseAboveChapter from '@/components/ButtonToCloseAboveChapter.vue';
 
-    // ############
-    // # ルーチン #
-    // ############
-    const router = useRouter();
-
-    function goBack() : void {
-        router.push('/minigames');
-    }
 </script>
