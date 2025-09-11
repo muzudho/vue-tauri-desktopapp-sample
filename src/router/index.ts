@@ -277,12 +277,12 @@ const routes = [
     // + メイキング　＞　デスクトップ +
     // ++++++++++++++++++++++++++++++++
     {
-        name: 'BasePaths',
+        name: 'Reference_Making_BasePaths',
         path: '/reference/making/desktop/base-paths',
         component: () => import('../pages/reference/making/desktop/base-paths.vue'),
     },
     {
-        name: 'BundleFileLoading',
+        name: 'Reference_Making_BundleFileLoading',
         path: '/reference/making/desktop/bundle-file-loading',
         component: () => import('../pages/reference/making/desktop/bundle-file-loading.vue'),
     },

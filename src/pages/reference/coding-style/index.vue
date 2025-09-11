@@ -1,12 +1,12 @@
 <template>
-    <component :is="TheChaptersHeader"/>
+    <component :is="ThePartHeader"/>
 
     <section class="sec-2">
         <v-btn @click="openAllChapters" v-tooltip="'全章を開く'">🟩</v-btn>
     </section>
 
     <component :is="TheSectionIndexBody" />
-    <component :is="TheChaptersFooter"/>
+    <component :is="ThePartFooter"/>
 </template>
 
 <script setup lang="ts">
@@ -21,8 +21,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChaptersFooter from '@/pages/reference/the-part-footer.vue';
-    import TheChaptersHeader from '@/pages/reference/the-part-header.vue';
+    import ThePartFooter from '@/pages/reference/the-part-footer.vue';
+    import ThePartHeader from '@/pages/reference/the-part-header.vue';
     import TheSectionIndexBody from '@/pages/reference/coding-style/index-body.vue';
 
 
