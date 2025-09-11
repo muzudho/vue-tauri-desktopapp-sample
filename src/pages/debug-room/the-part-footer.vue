@@ -1,7 +1,5 @@
 <template>
-    <section class="sec-1 mt-6">
-        <v-btn @click="goBackToHome" v-tooltip="'上の部を閉じる'">❌</v-btn>
-    </section>
+    <button-to-close-above-part/>
 </template>
 
 <script setup lang="ts">
@@ -10,15 +8,10 @@
     // # インポート #
     // ##############
 
-    import { useRouter } from 'vue-router';
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
+    import ButtonToCloseAbovePart from '@/components/ButtonToCloseAbovePart.vue';
 
-    // ############
-    // # ルーチン #
-    // ############
-    const router = useRouter();
-
-    function goBackToHome() : void {
-        router.push('/');
-    }
 </script>
