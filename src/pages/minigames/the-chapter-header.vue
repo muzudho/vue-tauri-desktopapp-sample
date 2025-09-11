@@ -19,7 +19,7 @@
     // ++++++++++++++++++++++++++++++++++
 
     import ButtonToCloseBelowPart from '@/components/ButtonToCloseBelowPart.vue';
-    import TheAppHeader from '@/the-app-header.vue';
+    import TheAppHeader from '../the-app-header.vue';
 
     
 </script>
