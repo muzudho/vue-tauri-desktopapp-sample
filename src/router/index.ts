@@ -2,6 +2,15 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
 
+    // ++++++++++++++++++++
+    // + アプリケーション +
+    // ++++++++++++++++++++
+    {
+        name: 'TheAppHeader',
+        path: '/the-app-header',
+        component: () => import('../pages/the-app-header.vue'),
+    },
+
     // ++++++++++++++++++++++
     // + このサイトについて +
     // ++++++++++++++++++++++
