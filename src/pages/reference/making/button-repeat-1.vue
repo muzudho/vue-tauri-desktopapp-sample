@@ -4,7 +4,7 @@
 -->
 
 <template>
-    <the-chapter-header/>
+    <the-section-header/>
 
     <h4>ボタンの押しっぱなしが利くようにしようぜ？</h4>
     <section class="sec-4">
@@ -40,12 +40,12 @@
     </section>
 
     <br/>
-    <h4>ソースコード</h4>
-    <section class="sec-4">
+    <h5>ソースコード</h5>
+    <section class="sec-5">
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <the-section-footer/>
 </template>
 
 <script setup lang="ts">
@@ -73,8 +73,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
+    import TheSectionFooter from './the-section-footer.vue';
+    import TheSectionHeader from './the-section-header.vue';
 
 
     // ############################

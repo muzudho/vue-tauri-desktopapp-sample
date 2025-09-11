@@ -1,5 +1,5 @@
 <template>
-    <section class="sec-2">
+    <section class="sec-3">
         アプリケーション製作の練習だぜ（＾▽＾）！
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
         <v-btn style="visibility: hidden;"></v-btn><br/>

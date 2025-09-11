@@ -1,5 +1,7 @@
 <template>
-    <button-to-close-above-part/>
+    <button-to-close-above-chapter
+        pagePath="/reference"
+    />
 </template>
 
 <script setup lang="ts">
@@ -12,6 +14,6 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import ButtonToCloseAbovePart from '@/components/ButtonToCloseAbovePart.vue';
+    import ButtonToCloseAboveChapter from '@/components/ButtonToCloseAboveChapter.vue';
 
 </script>

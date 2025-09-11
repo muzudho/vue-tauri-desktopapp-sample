@@ -1,8 +1,8 @@
 <template>
-    <the-chapter-header/>
+    <the-section-header/>
 
-    <h3>グラフを描こうぜ！　の章</h3>
-    <section class="sec-3">
+    <h4>グラフを描こうぜ！　の章</h4>
+    <section class="sec-4">
         画面上に矢印を描いてみようぜ（＾▽＾）！<br/>
         <br/>
     </section>
@@ -468,12 +468,12 @@
         <br/>
     </section>
 
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h5>ソースコード</h5>
+    <section class="sec-5">
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <the-section-footer/>
 </template>
 
 <script setup lang="ts">
@@ -501,8 +501,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
+    import TheSectionFooter from './the-section-footer.vue';
+    import TheSectionHeader from './the-section-header.vue';
 
 
     // ##############

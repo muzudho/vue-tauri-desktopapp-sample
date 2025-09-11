@@ -7,7 +7,7 @@
         pagePath="/reference"
     />
 
-    <h2>メイキングの章だぜ！</h2>
+    <h3>メイキングの章だぜ！</h3>
     <button-to-close-below-section
         pagePath="/reference/making"
     />

@@ -1,9 +1,9 @@
 <template>
-    <the-chapter-header/>
+    <the-section-header/>
 
-    <h3>説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！　の章</h3>
+    <h4>説明を始める前に、スキル・ツリーのレイアウトを決めておこうぜ！　の章</h4>
     <section
-        class="sec-3"
+        class="sec-4"
         :style="`height: ${8 * cellHeight}px;`"
         style="position: relative;">
 
@@ -164,12 +164,12 @@
     </section>
 
     <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h5>ソースコード</h5>
+    <section class="sec-5">
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <the-section-footer/>
 </template>
 
 <script setup lang="ts">
@@ -192,8 +192,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
+    import TheSectionFooter from './the-section-footer.vue';
+    import TheSectionHeader from './the-section-header.vue';
 
 
     // ##############
