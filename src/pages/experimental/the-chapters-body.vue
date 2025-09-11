@@ -1,5 +1,4 @@
 <template>
-    <h2>エクスペリメンタルの部だぜ！</h2>
     <section class="sec-2">
         <ul>
             <li>📖 <router-link to="/experimental/page-1" :style="getPreviousLinkHighlight('/experimental/page-1')">ページ１の章だぜ！</router-link></li>

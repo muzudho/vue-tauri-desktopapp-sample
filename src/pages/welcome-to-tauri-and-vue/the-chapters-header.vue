@@ -1,6 +1,7 @@
 <template>
     <the-app-header/>
     <the-parts-header/>
+    <h2>Welcome to Tauri + Vue だぜ！　の部　インデックス</h2>
 </template>
 
 <script setup lang="ts">

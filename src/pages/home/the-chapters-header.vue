@@ -1,5 +1,11 @@
 <template>
     <the-app-header/>
+    <section class="sec-1">
+        先頭ページだぜ（＾▽＾）！<v-btn style="visibility: hidden;"></v-btn><br/>
+        <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
+    </section>
+
+    <h2>ホームだぜ！　の部　インデックス</h2>
     <!-- ホームに閉じるボタンはありません。 -->
 </template>
 

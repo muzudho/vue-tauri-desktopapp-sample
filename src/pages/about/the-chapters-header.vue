@@ -1,6 +1,7 @@
 <template>
     <the-app-header/>
     <the-parts-header/>
+    <h2>このサイトについての部だぜ！</h2>
 </template>
 
 <script setup lang="ts">

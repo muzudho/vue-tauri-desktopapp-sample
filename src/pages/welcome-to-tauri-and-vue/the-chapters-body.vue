@@ -1,6 +1,4 @@
 <template>
-    <h2>Welcome to Tauri + Vue だぜ！　の部　インデックス</h2>
-
     <v-container class="row">
         <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
         <v-btn icon href="https://vitejs.dev" target="_blank">

@@ -1,7 +1,6 @@
 <template>
     <the-app-header/>
     <the-parts-header/>
-
     <h2>リファレンスの部だぜ！</h2>
 </template>
 

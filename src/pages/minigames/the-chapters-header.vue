@@ -1,6 +1,7 @@
 <template>
     <the-app-header/>
     <the-parts-header/>
+    <h2>ミニゲームだぜ！　の部　インデックス</h2>
 </template>
 
 <script setup lang="ts">

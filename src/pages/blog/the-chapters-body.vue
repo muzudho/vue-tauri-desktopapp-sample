@@ -1,5 +1,4 @@
 <template>
-    <h2>ブログだぜ！　の部　インデックス</h2>
     <section class="sec-2">
         上の方の記事が新しいぜ（＾▽＾）！<br/>
     </section>

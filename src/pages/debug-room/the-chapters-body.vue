@@ -1,5 +1,4 @@
 <template>
-    <h2>デバッグ・ルームだぜ！　の部　インデックス</h2>
     <section class="sec-2">
         デバッグ部屋。<v-btn style="visibility: hidden;"></v-btn><br/>
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
