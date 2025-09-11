@@ -456,15 +456,31 @@ const routes = [
     },
 
 
-    // ++++++++++
-    // + その他 +
-    // ++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++
+    // + ウェルカム・ツー・タウリ・アンド・ビュー +
+    // ++++++++++++++++++++++++++++++++++++++++++++
 
     {
         name: 'WelcomeToTauriAndVue',
         path: '/welcome-to-tauri-and-vue',
         component: () => import('../pages/welcome-to-tauri-and-vue/index.vue'),
     },
+    {
+        name: 'WelcomeToTauriAndVue_TheChaptersBody',
+        path: '/welcome-to-tauri-and-vue/the-chapters-body',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-chapters-body.vue'),
+    },
+    {
+        name: 'WelcomeToTauriAndVue_TheChaptersFooter',
+        path: '/welcome-to-tauri-and-vue/the-chapters-footer',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-chapters-footer.vue'),
+    },
+    {
+        name: 'WelcomeToTauriAndVue_TheChaptersHeader',
+        path: '/welcome-to-tauri-and-vue/the-chapters-header',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-chapters-header.vue'),
+    },
+
 ] as const;
 
 const router = createRouter({
