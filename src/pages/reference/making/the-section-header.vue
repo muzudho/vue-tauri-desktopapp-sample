@@ -2,8 +2,13 @@
     <the-app-header/>
     <button-to-close-below-part/>
 
-    <h2>メイキングだぜ！　の部</h2>
+    <h2>リファレンスの部だぜ！</h2>
     <button-to-close-below-chapter
+        pagePath="/reference"
+    />
+
+    <h2>メイキングの章だぜ！</h2>
+    <button-to-close-below-section
         pagePath="/reference/making"
     />
 </template>
@@ -20,6 +25,7 @@
 
     import ButtonToCloseBelowChapter from '../../../components/ButtonToCloseBelowChapter.vue';
     import ButtonToCloseBelowPart from '../../../components/ButtonToCloseBelowPart.vue';
+    import ButtonToCloseBelowSection from '../../../components/ButtonToCloseBelowSection.vue';
     import TheAppHeader from '../../the-app-header.vue';
 
 </script>
