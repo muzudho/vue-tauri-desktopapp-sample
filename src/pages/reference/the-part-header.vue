@@ -1,8 +1,6 @@
 <template>
     <the-app-header/>
-    <section class="sec-1">
-        <v-btn @click="closePart" v-tooltip="'下の部を閉じる'">❌</v-btn>
-    </section>
+    <button-to-close-part/>
     <h2>リファレンスの部だぜ！</h2>
 </template>
 
@@ -12,23 +10,16 @@
     // # インポート #
     // ##############
 
-    import { useRouter } from 'vue-router';
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
+
+    import ButtonToClosePart from '@/components/ButtonToClosePart.vue';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
     import TheAppHeader from '../the-app-header.vue';
-
-    
-    // ############
-    // # ルーチン #
-    // ############
-
-    const router = useRouter();
-
-    function closePart() : void {
-        router.push('/');
-    }
 
 </script>
