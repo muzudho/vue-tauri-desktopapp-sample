@@ -1,24 +1,7 @@
 <template>
-    <the-app-header/>
-    <the-parts-header/>
-
-    <h2>ミニゲームだぜ！　の部　インデックス</h2>
-    <section class="sec-2">
-        ミニゲームだぜ（＾▽＾）！<v-btn style="visibility: hidden;"></v-btn><br/>
-        <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
-
-        <ul>
-            <li>📖 <router-link to="/minigames/shooting-star" :style="getPreviousLinkHighlight('/minigames/shooting-star')">シューティングスター</router-link> - 一瞬流れる星に狙いを付けろだぜ！</li>
-            <ul>
-                <li>📖 <router-link to="/minigames/shooting-star-naive" :style="getPreviousLinkHighlight('/minigames/shooting-star-naive')">同上</router-link> - ソースコードが初級者向けの書き方版</li>
-            </ul>
-            <!--
-            <li>📖 <router-link to="/minigames/maze" :style="getPreviousLinkHighlight('/minigames/maze')">迷路</router-link> - ただ歩くだけ！</li>
-            -->
-        </ul>
-    </section>
-
-    <the-parts-footer/>
+    <component :is="TheChaptersHeader"/>
+    <component :is="TheChaptersBody"/>
+    <component :is="TheChaptersFooter"/>
 </template>
 
 <script setup lang="ts">
@@ -27,19 +10,12 @@
     // # インポート #
     // ##############
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
 
-    import TheAppHeader from '../../the-app-header.vue';
-    import ThePartsFooter from '../the-parts-footer.vue';
-    import ThePartsHeader from '../the-parts-header.vue';
-
-
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
-
-    import { getPreviousLinkHighlight } from '../../composables/link-highlight';
+    import TheChaptersBody from '@/pages/minigames/the-chapters-body.vue';
+    import TheChaptersFooter from '@/pages/minigames/the-chapters-footer.vue';
+    import TheChaptersHeader from '@/pages/minigames/the-chapters-header.vue';
 
 </script>

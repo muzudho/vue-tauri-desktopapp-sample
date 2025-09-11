@@ -337,6 +337,22 @@ const routes = [
         component: () => import('../pages/minigames/index.vue'),
     },
     {
+        name: 'MiniGames_TheChaptersBody',
+        path: '/minigames/the-chapters-body',
+        component: () => import('../pages/minigames/the-chapters-body.vue'),
+    },
+    {
+        name: 'MiniGames_TheChaptersFooter',
+        path: '/minigames/the-chapters-footer',
+        component: () => import('../pages/minigames/the-chapters-footer.vue'),
+    },
+    {
+        name: 'MiniGames_TheChaptersHeader',
+        path: '/minigames/the-chapters-header',
+        component: () => import('../pages/minigames/the-chapters-header.vue'),
+    },
+
+    {
         name: 'ShootingStar',
         path: '/minigames/shooting-star',
         component: () => import('../pages/minigames/shooting-star.vue'),
