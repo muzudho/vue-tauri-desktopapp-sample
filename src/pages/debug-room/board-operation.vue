@@ -1,5 +1,5 @@
 <template>
-    <the-sections-header/>
+    <the-chapter-header/>
 
     <h3>盤操作のデバッグだぜ！</h3>
     <section class="sec-3">
@@ -38,7 +38,7 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
         <source-link/>
     </section>
 
-    <the-sections-footer/>
+    <the-chapter-footer/>
 </template>
 
 <script setup lang="ts">
@@ -69,8 +69,8 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheSectionsFooter from './the-sections-footer.vue';
-    import TheSectionsHeader from './the-sections-header.vue';
+    import TheChapterFooter from './the-chapter-footer.vue';
+    import TheChapterHeader from './the-chapter-header.vue';
 
 
     // ################

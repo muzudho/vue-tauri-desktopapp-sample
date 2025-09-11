@@ -9,7 +9,7 @@
             background-color: #FF66CC;
         "
     >
-        <the-sections-header/>
+        <the-chapter-header/>
 
         <div
             style="
@@ -50,7 +50,7 @@
             />
         </section>
 
-        <the-sections-footer/>
+        <the-chapter-footer/>
     </div>
 </template>
 
@@ -69,8 +69,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheSectionsFooter from './the-sections-footer.vue';
-    import TheSectionsHeader from './the-sections-header.vue';
+    import TheChapterFooter from './the-chapter-footer.vue';
+    import TheChapterHeader from './the-chapter-header.vue';
 
 
     // ############
