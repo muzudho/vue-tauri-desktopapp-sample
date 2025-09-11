@@ -379,6 +379,22 @@ const routes = [
         component: () => import('../pages/quiz/index.vue'),
     },
     {
+        name: 'Quiz_TheChaptersBody',
+        path: '/quiz/the-chapters-body',
+        component: () => import('../pages/quiz/the-chapters-body.vue'),
+    },
+    {
+        name: 'Quiz_TheChaptersFooter',
+        path: '/quiz/the-chapters-footer',
+        component: () => import('../pages/quiz/the-chapters-footer.vue'),
+    },
+    {
+        name: 'Quiz_TheChaptersHeader',
+        path: '/quiz/the-chapters-header',
+        component: () => import('../pages/quiz/the-chapters-header.vue'),
+    },
+
+    {
         name: 'KingsRoomTiles',
         path: '/quiz/kings-room-tiles',
         component: () => import('../pages/quiz/kings-room-tiles.vue'),
