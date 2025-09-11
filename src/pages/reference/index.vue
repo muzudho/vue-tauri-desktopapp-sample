@@ -24,15 +24,9 @@
         </talk-balloon>
     </section>
 
-    <h3>コーディング・スタイルの章だぜ！</h3>
-    <section class="sec-3">
-        <br/>
-
-        <ul>
-            <li>📖 <router-link to="/reference/coding-style/inline-style" :style="getPreviousLinkHighlight('/reference/coding-style/inline-style')">インライン・スタイルの書き方を決めておこうぜの節だぜ！</router-link></li>
-            <li>📖 <router-link to="/reference/coding-style/slot" :style="getPreviousLinkHighlight('/reference/coding-style/slot')">スロットの書き方を決めておこうぜの節だぜ！</router-link></li>
-        </ul>
-    </section>
+    <component
+        :is="TheReferenceCodingStyle"
+    ></component>
 
     <the-parent-footer/>
 </template>
@@ -45,9 +39,9 @@
 
     import { ref } from 'vue';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import TalkBalloon from '@/components/TalkBalloon.vue';
@@ -56,11 +50,11 @@
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';
 
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
 
-    import { getPreviousLinkHighlight } from '../../composables/link-highlight';
+    import TheReferenceCodingStyle from '@/pages/reference/coding-style/index.vue';
 
 
     // ##########

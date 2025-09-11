@@ -295,13 +295,18 @@ const routes = [
         component: () => import('../pages/reference/index.vue'),
     },
 
-    // ++++++++++++++++++++++++++
-    // + コーディング・スタイル +
-    // ++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++
+    // + リファレンス　＞　コーディング・スタイル +
+    // ++++++++++++++++++++++++++++++++++++++++++++
     {
         name: 'Reference_CodingStyle',
         path: '/reference/coding-style',
         component: () => import('../pages/reference/coding-style/index.vue'),
+    },
+    {
+        name: 'Reference_CodingStyle_IndexBody',
+        path: '/reference/coding-style/index-body',
+        component: () => import('../pages/reference/coding-style/index-body.vue'),
     },
     {
         name: 'Reference_CodingStyle_InlineStyle',
