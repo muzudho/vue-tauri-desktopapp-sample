@@ -1,7 +1,7 @@
 <template>
     <the-section-header/>
 
-    <h4>キーボードのキー入力を受け取ろうぜ！　の章</h4>
+    <h4>キーボードのキー入力を受け取る章だぜ！</h4>
     <section class="sec-4">
         <p>キーボードのキーを押してくれだぜ！</p>
         <pre class="key" style="display: inline;">{{ key }}</pre><!-- スペースキーを押下すると半角スペースが返ってくるので、preタグで隙間を表示させます。 -->

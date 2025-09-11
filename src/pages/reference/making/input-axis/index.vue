@@ -3,7 +3,7 @@
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
-    <h3>上下左右に移動しようぜ！　の章</h3>
+    <h3>上下左右に移動する章だぜ！</h3>
     <section class="sec-3">
         <br/>
 

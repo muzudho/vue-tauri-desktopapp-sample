@@ -1,7 +1,7 @@
 <template>
     <the-section-header/>
 
-    <h4>効果音を鳴らそうぜ！　の章</h4>
+    <h4>効果音を鳴らす章だぜ！</h4>
     <section class="sec-4">
         <v-btn @click="onSfx1Play()">効果音１</v-btn>
         <v-btn @click="onSfx2Play()">効果音２</v-btn>

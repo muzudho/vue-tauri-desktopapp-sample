@@ -1,7 +1,7 @@
 <template>
     <the-section-header/>
 
-    <h4>ノン・プレイヤー・キャラクターを動かそうぜ！　の章</h4>
+    <h4>ノン・プレイヤー・キャラクターを動かす章だぜ！</h4>
 
     <br/>
     <h5><span class="parent-header">ノン・プレイヤー・キャラクターを動かそうぜ！　＞　</span>ソースコード</h5>

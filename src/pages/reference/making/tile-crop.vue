@@ -1,7 +1,7 @@
 <template>
     <the-section-header/>
 
-    <h4>タイル　＞　を画像から切り抜くぜ！　の章</h4>
+    <h4>タイル　＞　を画像から切り抜く章だぜ！</h4>
     <section class="sec-4">
         ここに切り抜いたタイルを表示：<br/>
         <Tile

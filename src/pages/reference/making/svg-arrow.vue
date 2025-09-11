@@ -1,7 +1,7 @@
 <template>
     <the-section-header/>
 
-    <h4>グラフを描こうぜ！　の章</h4>
+    <h4>グラフを描く章だぜ！</h4>
     <section class="sec-4">
         画面上に矢印を描いてみようぜ（＾▽＾）！<br/>
         <br/>
