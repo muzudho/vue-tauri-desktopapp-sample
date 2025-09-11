@@ -16,7 +16,7 @@
         <router-link to="/quiz">クイズ</router-link> |
         <router-link to="/blog">ブログ</router-link> |
         <router-link to="/minigames">ミニゲーム</router-link> |
-        <router-link to="/making">メイキング</router-link> |
+        <router-link to="/reference/making">メイキング</router-link> |
         <router-link to="/reference">リファレンス</router-link> | 
         <router-link to="/experimental">エクスペリメンタル</router-link> | 
         <router-link to="/debug-room">デバッグ・ルーム</router-link>

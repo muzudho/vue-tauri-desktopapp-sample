@@ -2,9 +2,9 @@
     <the-app-header/>
     <button-to-close-below-part/>
 
-    <h2>実験場だぜ！　の部</h2>
+    <h2>メイキングだぜ！　の部</h2>
     <button-to-close-below-chapter
-        pagePath="/experimental"
+        pagePath="/reference/making"
     />
 </template>
 
@@ -18,8 +18,8 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import ButtonToCloseBelowChapter from '@/components/ButtonToCloseBelowChapter.vue';
-    import ButtonToCloseBelowPart from '@/components/ButtonToCloseBelowPart.vue';
-    import TheAppHeader from '@/the-app-header.vue';
+    import ButtonToCloseBelowChapter from '../../../components/ButtonToCloseBelowChapter.vue';
+    import ButtonToCloseBelowPart from '../../../components/ButtonToCloseBelowPart.vue';
+    import TheAppHeader from '../../the-app-header.vue';
 
 </script>

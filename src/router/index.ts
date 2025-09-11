@@ -142,200 +142,6 @@ const routes = [
         component: () => import('../pages/home/the-part-body.vue'),
     },
 
-    // ++++++++++++++++++++++++++++++++
-    // + メイキング　＞　デスクトップ +
-    // ++++++++++++++++++++++++++++++++
-    {
-        name: 'BasePaths',
-        path: '/making/desktop/base-paths',
-        component: () => import('../pages/making/desktop/base-paths.vue'),
-    },
-    {
-        name: 'BundleFileLoading',
-        path: '/making/desktop/bundle-file-loading',
-        component: () => import('../pages/making/desktop/bundle-file-loading.vue'),
-    },
-
-    // ++++++++++++++
-    // + メイキング +
-    // ++++++++++++++
-    {
-        name: 'Making',
-        path: '/making',
-        component: () => import('@/pages/making/index.vue'),
-    },
-    {
-        name: 'Making_TheChaptersBody',
-        path: '/making/the-part-body',
-        component: () => import('@/pages/making/the-part-body.vue'),
-    },
-    {
-        name: 'Making_TheChaptersFooter',
-        path: '/making/the-part-footer',
-        component: () => import('@/pages/making/the-part-footer.vue'),
-    },
-    {
-        name: 'Making_TheChaptersHeader',
-        path: '/making/the-part-header',
-        component: () => import('@/pages/making/the-part-header.vue'),
-    },
-
-    {
-        name: 'ButtonRepeat1',
-        path: '/making/button-repeat-1',
-        component: () => import('../pages/making/button-repeat-1.vue'),
-    },
-    {
-        name: 'CountUp',
-        path: '/making/count-up',
-        component: () => import('../pages/making/count-up.vue'),
-    },
-    {
-        name: 'InputAxisNewBoard',
-        path: '/making/input-axis/new-board-1',
-        component: () => import('../pages/making/input-axis/new-board-1.vue'),
-    },
-    {
-        name: 'InputAxisPerspectiveRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
-        path: '/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
-        component: () => import('../pages/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkBoardGridMoveaway1',
-        path: '/making/input-axis/rpg-walk-board-grid-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-board-grid-moveaway-1.vue'),
-    },
-    {
-        name: 'RpgWalkTilesWraparoundProjectionLoopOutofsight1',
-        path: '/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkPlayerAccumulateMoveaway1',
-        path: '/making/input-axis/rpg-walk-player-accumulate-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-accumulate-moveaway-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkPlayerGridMoveaway1',
-        path: '/making/input-axis/rpg-walk-player-grid-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-grid-moveaway-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkPlayerGridBounded1',
-        path: '/making/input-axis/rpg-walk-player-grid-bounded-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-player-grid-bounded-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkTilesImmovableProjectionBoundary1',
-        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkTilesImmovableProjectionLoop1',
-        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkTilesImmovableProjectionMoveaway1',
-        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkTilesImmovableProjectionMoveawaySizeVariable1',
-        path: '/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1.vue'),
-    },
-    {
-        name: 'InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
-        path: '/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
-        component: () => import('../pages/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
-    },
-    {
-        name: 'InputAxisTargetAccumulateMoveaway1',
-        path: '/making/input-axis/target-accumulate-moveaway-1',
-        component: () => import('../pages/making/input-axis/target-accumulate-moveaway-1.vue'),
-    },
-    {
-        name: 'InputAxis',
-        path: '/making/input-axis',
-        component: () => import('../pages/making/input-axis/index.vue'),
-    },
-    {
-        name: 'InputKey',
-        path: '/making/input-key',
-        component: () => import('../pages/making/input-key.vue'),
-    },
-    {
-        name: 'JsonFileLoading',
-        path: '/making/json-file-loading',
-        component: () => import('../pages/making/json-file-loading.vue'),
-    },
-    {
-        name: 'MountPractice',
-        path: '/making/mount-practice',
-        component: () => import('../pages/making/mount-practice.vue'),
-    },
-    {
-        name: 'NpcWalk',
-        path: '/making/npc-walk',
-        component: () => import('../pages/making/npc-walk.vue'),
-    },
-    {
-        name: 'PerspectiveVertical2Panes',
-        path: '/making/perspective-vertical-2-panes',
-        component: () => import('../pages/making/perspective-vertical-2-panes.vue'),
-    },
-    {
-        name: 'PerspectiveVertical3Panes',
-        path: '/making/perspective-vertical-3-panes',
-        component: () => import('../pages/making/perspective-vertical-3-panes.vue'),
-    },
-    {
-        name: 'PageLayout',
-        path: '/making/page-layout',
-        component: () => import('../pages/making/page-layout.vue'),
-    },
-    {
-        name: 'SfxPractice',
-        path: '/making/sfx-practice',
-        component: () => import('../pages/making/sfx-practice.vue'),
-    },
-    {
-        name: 'SkillTreeLayout',
-        path: '/making/skill-tree-layout',
-        component: () => import('../pages/making/skill-tree-layout.vue'),
-    },
-    {
-        name: 'SpriteRoutine',
-        path: '/making/sprite-routine',
-        component: () => import('../pages/making/sprite-routine.vue'),
-    },
-    {
-        name: 'SvgArrow',
-        path: '/making/svg-arrow',
-        component: () => import('../pages/making/svg-arrow.vue'),
-    },
-    {
-        name: 'TileCountUpNaive',
-        path: '/making/tile-count-up-naive',
-        component: () => import('../pages/making/tile-count-up-naive.vue'),
-    },
-    {
-        name: 'TileCountUpRpgWalk',
-        path: '/making/tile-count-up-rpg-walk',
-        component: () => import('../pages/making/tile-count-up-rpg-walk.vue'),
-    },
-    {
-        name: 'TileCountUp',
-        path: '/making/tile-count-up',
-        component: () => import('../pages/making/tile-count-up.vue'),
-    },
-    {
-        name: 'TileCrop',
-        path: '/making/tile-crop',
-        component: () => import('../pages/making/tile-crop.vue'),
-    },
-
 
     // ++++++++++++++
     // + ミニゲーム +
@@ -463,6 +269,202 @@ const routes = [
         name: 'Reference_CodingStyle_Slot',
         path: '/reference/coding-style/slot',
         component: () => import('../pages/reference/coding-style/slot.vue'),
+    },
+
+
+
+    // ++++++++++++++++++++++++++++++++
+    // + メイキング　＞　デスクトップ +
+    // ++++++++++++++++++++++++++++++++
+    {
+        name: 'BasePaths',
+        path: '/reference/making/desktop/base-paths',
+        component: () => import('../pages/reference/making/desktop/base-paths.vue'),
+    },
+    {
+        name: 'BundleFileLoading',
+        path: '/reference/making/desktop/bundle-file-loading',
+        component: () => import('../pages/reference/making/desktop/bundle-file-loading.vue'),
+    },
+
+    // ++++++++++++++
+    // + メイキング +
+    // ++++++++++++++
+    {
+        name: 'Reference_Making',
+        path: '/reference/making',
+        component: () => import('@/pages/reference/making/index.vue'),
+    },
+    {
+        name: 'Reference_Making_TheChaptersBody',
+        path: '/reference/making/the-part-body',
+        component: () => import('@/pages/reference/making/the-part-body.vue'),
+    },
+    {
+        name: 'Reference_Making_TheChaptersFooter',
+        path: '/reference/making/the-part-footer',
+        component: () => import('@/pages/reference/making/the-part-footer.vue'),
+    },
+    {
+        name: 'Reference_Making_TheChaptersHeader',
+        path: '/reference/making/the-part-header',
+        component: () => import('@/pages/reference/making/the-part-header.vue'),
+    },
+
+    {
+        name: 'Reference_Making_ButtonRepeat1',
+        path: '/reference/making/button-repeat-1',
+        component: () => import('../pages/reference/making/button-repeat-1.vue'),
+    },
+    {
+        name: 'Reference_Making_CountUp',
+        path: '/reference/making/count-up',
+        component: () => import('../pages/reference/making/count-up.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisNewBoard',
+        path: '/reference/making/input-axis/new-board-1',
+        component: () => import('../pages/reference/making/input-axis/new-board-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisPerspectiveRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
+        path: '/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
+        component: () => import('../pages/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkBoardGridMoveaway1',
+        path: '/reference/making/input-axis/rpg-walk-board-grid-moveaway-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-board-grid-moveaway-1.vue'),
+    },
+    {
+        name: 'Reference_Making_RpgWalkTilesWraparoundProjectionLoopOutofsight1',
+        path: '/reference/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkPlayerAccumulateMoveaway1',
+        path: '/reference/making/input-axis/rpg-walk-player-accumulate-moveaway-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-player-accumulate-moveaway-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkPlayerGridMoveaway1',
+        path: '/reference/making/input-axis/rpg-walk-player-grid-moveaway-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-player-grid-moveaway-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkPlayerGridBounded1',
+        path: '/reference/making/input-axis/rpg-walk-player-grid-bounded-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-player-grid-bounded-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkTilesImmovableProjectionBoundary1',
+        path: '/reference/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-tiles-immovable-projection-boundary-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkTilesImmovableProjectionLoop1',
+        path: '/reference/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-tiles-immovable-projection-loop-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkTilesImmovableProjectionMoveaway1',
+        path: '/reference/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkTilesImmovableProjectionMoveawaySizeVariable1',
+        path: '/reference/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-tiles-immovable-projection-moveaway-size-variable-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
+        path: '/reference/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
+        component: () => import('../pages/reference/making/input-axis/rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxisTargetAccumulateMoveaway1',
+        path: '/reference/making/input-axis/target-accumulate-moveaway-1',
+        component: () => import('../pages/reference/making/input-axis/target-accumulate-moveaway-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxis',
+        path: '/reference/making/input-axis',
+        component: () => import('../pages/reference/making/input-axis/index.vue'),
+    },
+    {
+        name: 'Reference_Making_InputKey',
+        path: '/reference/making/input-key',
+        component: () => import('../pages/reference/making/input-key.vue'),
+    },
+    {
+        name: 'Reference_Making_JsonFileLoading',
+        path: '/reference/making/json-file-loading',
+        component: () => import('../pages/reference/making/json-file-loading.vue'),
+    },
+    {
+        name: 'Reference_Making_MountPractice',
+        path: '/reference/making/mount-practice',
+        component: () => import('../pages/reference/making/mount-practice.vue'),
+    },
+    {
+        name: 'Reference_Making_NpcWalk',
+        path: '/reference/making/npc-walk',
+        component: () => import('../pages/reference/making/npc-walk.vue'),
+    },
+    {
+        name: 'Reference_Making_PerspectiveVertical2Panes',
+        path: '/reference/making/perspective-vertical-2-panes',
+        component: () => import('../pages/reference/making/perspective-vertical-2-panes.vue'),
+    },
+    {
+        name: 'Reference_Making_PerspectiveVertical3Panes',
+        path: '/reference/making/perspective-vertical-3-panes',
+        component: () => import('../pages/reference/making/perspective-vertical-3-panes.vue'),
+    },
+    {
+        name: 'Reference_Making_PageLayout',
+        path: '/reference/making/page-layout',
+        component: () => import('../pages/reference/making/page-layout.vue'),
+    },
+    {
+        name: 'Reference_Making_SfxPractice',
+        path: '/reference/making/sfx-practice',
+        component: () => import('../pages/reference/making/sfx-practice.vue'),
+    },
+    {
+        name: 'Reference_Making_SkillTreeLayout',
+        path: '/reference/making/skill-tree-layout',
+        component: () => import('../pages/reference/making/skill-tree-layout.vue'),
+    },
+    {
+        name: 'Reference_Making_SpriteRoutine',
+        path: '/reference/making/sprite-routine',
+        component: () => import('../pages/reference/making/sprite-routine.vue'),
+    },
+    {
+        name: 'Reference_Making_SvgArrow',
+        path: '/reference/making/svg-arrow',
+        component: () => import('../pages/reference/making/svg-arrow.vue'),
+    },
+    {
+        name: 'Reference_Making_TileCountUpNaive',
+        path: '/reference/making/tile-count-up-naive',
+        component: () => import('../pages/reference/making/tile-count-up-naive.vue'),
+    },
+    {
+        name: 'Reference_Making_TileCountUpRpgWalk',
+        path: '/reference/making/tile-count-up-rpg-walk',
+        component: () => import('../pages/reference/making/tile-count-up-rpg-walk.vue'),
+    },
+    {
+        name: 'Reference_Making_TileCountUp',
+        path: '/reference/making/tile-count-up',
+        component: () => import('../pages/reference/making/tile-count-up.vue'),
+    },
+    {
+        name: 'Reference_Making_TileCrop',
+        path: '/reference/making/tile-crop',
+        component: () => import('../pages/reference/making/tile-crop.vue'),
     },
 
 
