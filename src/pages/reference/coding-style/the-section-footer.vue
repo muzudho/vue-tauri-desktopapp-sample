@@ -1,8 +1,7 @@
 <template>
-    <br/>
-    <section class="sec-3">
-        <v-btn @click="closeSection" v-tooltip="'上の節を閉じる'">❌</v-btn>
-    </section>
+    <button-to-close-above-section
+        pagePath="/reference/coding-style"
+    />
 </template>
 
 <script setup lang="ts">
@@ -11,16 +10,10 @@
     // # インポート #
     // ##############
 
-    import { useRouter } from 'vue-router';
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
+    import ButtonToCloseAboveSection from '@/components/ButtonToCloseAboveSection.vue';
 
-    // ############
-    // # ルーチン #
-    // ############
-    const router = useRouter();
-
-
-    function closeSection() : void {
-        router.push('/reference/coding-style');
-    }
 </script>
