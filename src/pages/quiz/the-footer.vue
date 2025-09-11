@@ -1,6 +1,5 @@
 <template>
-    <br/>
-    <section class="sec-2">
+    <section class="sec-2 mt-6">
         <v-btn @click="goBack" v-tooltip="'上の章を閉じる'">❌</v-btn>
     </section>
 </template>
