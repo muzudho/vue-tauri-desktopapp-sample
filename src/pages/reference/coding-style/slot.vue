@@ -1,5 +1,5 @@
 <template>
-    <the-chapter-header/>
+    <the-sections-header/>
 
     <h4>スロットの書き方を決めておくの節だぜ！</h4>
     <section class="sec-4">
@@ -601,7 +601,7 @@ pnpm add -D @tauri-apps/cli@latest
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <the-sections-footer/>
 </template>
 
 <script setup lang="ts">
@@ -626,8 +626,8 @@ pnpm add -D @tauri-apps/cli@latest
     import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TalkImage from '@/components/TalkImage.vue';
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
+    import TheSectionsFooter from './the-sections-footer.vue';
+    import TheSectionsHeader from './the-sections-header.vue';
 
 
     // ##########

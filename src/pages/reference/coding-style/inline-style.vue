@@ -1,5 +1,5 @@
 <template>
-    <the-chapter-header/>
+    <the-sections-header/>
 
     <h4>インライン・スタイルの書き方を決めておくの節だぜ！</h4>
     <section class="sec-4">
@@ -441,7 +441,7 @@
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <the-sections-footer/>
 </template>
 
 <script setup lang="ts">
@@ -462,8 +462,8 @@
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
+    import TheSectionsFooter from './the-sections-footer.vue';
+    import TheSectionsHeader from './the-sections-header.vue';
 
 
     // ##########

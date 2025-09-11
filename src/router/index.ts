@@ -294,6 +294,16 @@ const routes = [
         path: '/reference',
         component: () => import('../pages/reference/index.vue'),
     },
+    {
+        name: 'Reference_ChaptersFooter',
+        path: '/reference/the-chapters-footer',
+        component: () => import('../pages/reference/the-chapters-footer.vue'),
+    },
+    {
+        name: 'Reference_ChaptersHeader',
+        path: '/reference/the-chapters-header',
+        component: () => import('../pages/reference/the-chapters-header.vue'),
+    },
 
     // ++++++++++++++++++++++++++++++++++++++++++++
     // + リファレンス　＞　コーディング・スタイル +
