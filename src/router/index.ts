@@ -118,6 +118,20 @@ const routes = [
         component: () => import('../pages/experimental/page-1.vue'),
     },
 
+    // ++++++++++
+    // + ホーム +
+    // ++++++++++
+    {
+        name: 'Home',
+        path: '/',
+        component: () => import('../pages/home/index.vue'),
+    },
+    {
+        name: 'Home_TheChaptersBody',
+        path: '/home/the-chapters-body',
+        component: () => import('../pages/home/the-chapters-body.vue'),
+    },
+
     // ++++++++++++++++++++
     // + Making / Desktop +
     // ++++++++++++++++++++
@@ -393,11 +407,6 @@ const routes = [
     // + その他 +
     // ++++++++++
 
-    {
-        name: 'Home',
-        path: '/',
-        component: () => import('../pages/home/index.vue'),
-    },
     {
         name: 'WelcomeToTauriAndVue',
         path: '/welcome-to-tauri-and-vue',
