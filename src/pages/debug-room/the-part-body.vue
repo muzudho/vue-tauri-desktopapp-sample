@@ -4,7 +4,7 @@
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
 
         <ul>
-            <li>📖 <router-link to="/debug-room/board-operation" :style="getPreviousLinkHighlight('/debug-room/board-operation')">盤操作のデバッグだぜ！</router-link></li>
+            <li>📖 <router-link to="/debug-room/board-operation" :style="getPreviousLinkHighlight('/debug-room/board-operation')">盤操作のデバッグの章だぜ！</router-link></li>
         </ul>
     </section>
 </template>

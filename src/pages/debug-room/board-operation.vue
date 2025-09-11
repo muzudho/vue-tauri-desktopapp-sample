@@ -1,7 +1,7 @@
 <template>
     <the-chapter-header/>
 
-    <h3>盤操作のデバッグだぜ！</h3>
+    <h3>盤操作のデバッグの章だぜ！</h3>
     <section class="sec-3">
         tileIndex = {{ tileIndex }}<br/>
         board1FileNum = {{ board1FileNum }}<br/>
