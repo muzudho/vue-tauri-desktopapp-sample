@@ -89,6 +89,35 @@ const routes = [
         component: () => import('../pages/debug-room/board-operation.vue'),
     },
 
+    // ++++++++++
+    // + 実験場 +
+    // ++++++++++
+    {
+        name: 'Experimental_TheChaptersBody',
+        path: '/experimental/the-chapters-body',
+        component: () => import('../pages/experimental/the-chapters-body.vue'),
+    },
+    {
+        name: 'Experimental',
+        path: '/experimental',
+        component: () => import('../pages/experimental/index.vue'),
+    },
+    {
+        name: 'Experimental_TheChaptersFooter',
+        path: '/experimental/the-chapters-footer',
+        component: () => import('../pages/experimental/the-chapters-footer.vue'),
+    },
+    {
+        name: 'Experimental_TheChaptersHeader',
+        path: '/experimental/the-chapters-header',
+        component: () => import('../pages/experimental/the-chapters-header.vue'),
+    },
+    {
+        name: 'Experimental_Page1',
+        path: '/experimental/page-1',
+        component: () => import('../pages/experimental/page-1.vue'),
+    },
+
     // ++++++++++++++++++++
     // + Making / Desktop +
     // ++++++++++++++++++++
@@ -101,15 +130,6 @@ const routes = [
         name: 'BundleFileLoading',
         path: '/making/desktop/bundle-file-loading',
         component: () => import('../pages/making/desktop/bundle-file-loading.vue'),
-    },
-
-    // ++++++++++
-    // + 実験場 +
-    // ++++++++++
-    {
-        name: 'Experimental',
-        path: '/experimental',
-        component: () => import('../pages/experimental/index.vue'),
     },
 
     // ++++++++++
