@@ -7,6 +7,14 @@
         上の方の記事が新しいぜ（＾▽＾）！<br/>
     </section>
 
+    <!--
+        静的インポート・動的コンポーネント
+        router/page-map.ts, router/articles.json も編集してください（TODO: ここらへん自動生成化したい）
+    -->
+    <blog-article page="2025-09/11-thu"/>
+    <blog-article page="2025-09/10-wed"/>
+
+    <!-- 静的インポート・静的コンポーネント -->
     <Blog20250811MonSample />
     <Blog20250810SunSample />
     <Blog20250809SatSample />
@@ -20,10 +28,11 @@
     // # インポート #
     // ##############
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
 
+    import BlogArticle from '@/components/BlogArticle.vue';
     import TheGrandParentHeader from '../../the-header.vue';
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';

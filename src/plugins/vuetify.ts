@@ -2,16 +2,16 @@
 // # インポート #
 // ##############
 
-import 'vuetify/styles'; // Vuetifyの基本スタイルをインポート
-//import { createApp } from 'vue'
 import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
-// ++++++++++++
-// + Tauri 用 +
-// ++++++++++++
+// ++++++++++++++++++++++++++++
+// + インポート　＞　Tauri 用 +
+// ++++++++++++++++++++++++++++
 
+import 'vuetify/styles'; // Vuetifyの基本スタイルをインポート
+//import { createApp } from 'vue'
 import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 
 // ################
@@ -22,7 +22,7 @@ import { aliases, mdi } from 'vuetify/iconsets/mdi-svg'
 const myCustomLightTheme = {
     dark: false,
     colors: {
-        background: '#FFFFFF',
+        background: '#FFFFFF',  /* Tauri, Next サンプル用 */
         surface: '#FFFFFF',
         'surface-bright': '#FFFFFF',
         'surface-light': '#EEEEEE',
@@ -62,7 +62,8 @@ const myCustomLightTheme = {
 // # エクスポート #
 // ################
 
-export default createVuetify({
+// Tauri, Nuxt でほぼ共通部分：
+const vuetifyOptions = {
     components,
     directives,
     icons: {
@@ -76,4 +77,10 @@ export default createVuetify({
             myCustomLightTheme,
         },
     },
-});
+};
+
+// Tauri 用：
+export default createVuetify(vuetifyOptions);
+
+// Nuxt 用：
+//      省略

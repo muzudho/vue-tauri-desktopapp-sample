@@ -2,13 +2,23 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
 
-    // ++++++++
-    // + Blog +
-    // ++++++++
+    // ++++++++++
+    // + ブログ +
+    // ++++++++++
     {
         name: 'Blog',
         path: '/blog',     // URL
         component: () => import('../pages/blog/index.vue'),  // importした Vue ファイル
+    },
+    {
+        name: 'Blog20250910Wed',
+        path: '/blog/2025-09/10-wed',
+        component: () => import('../pages/blog/2025-09/10-wed.vue'),
+    },
+    {
+        name: 'Blog20250911Thu',
+        path: '/blog/2025-09/11-thu',
+        component: () => import('../pages/blog/2025-09/11-thu.vue'),
     },
 
     // ++++++++++++++++++++++++++
