@@ -36,25 +36,6 @@ const routes = [
         component: () => import('../pages/blog/2025-09/11-thu.vue'),
     },
 
-    // ++++++++++++++++++++++++++
-    // + コーディング・スタイル +
-    // ++++++++++++++++++++++++++
-    {
-        name: 'CodingStyles',
-        path: '/coding-style',
-        component: () => import('../pages/coding-style/index.vue'),
-    },
-    {
-        name: 'CodingStylesInlineStyle',
-        path: '/coding-style/inline-style',
-        component: () => import('../pages/coding-style/inline-style.vue'),
-    },
-    {
-        name: 'CodingStylesSlot',
-        path: '/coding-style/slot',
-        component: () => import('../pages/coding-style/slot.vue'),
-    },
-
     // ++++++++++++++++++++
     // + デバッグ・ルーム +
     // ++++++++++++++++++++
@@ -301,6 +282,36 @@ const routes = [
         name: 'OperatingInstructions',
         path: '/quiz/operating-instructions',
         component: () => import('../pages/quiz/operating-instructions.vue'),
+    },
+
+
+    // ++++++++++++++++
+    // + リファレンス +
+    // ++++++++++++++++
+
+    {
+        name: 'Reference',
+        path: '/reference',
+        component: () => import('../pages/reference/index.vue'),
+    },
+
+    // ++++++++++++++++++++++++++
+    // + コーディング・スタイル +
+    // ++++++++++++++++++++++++++
+    {
+        name: 'Reference_CodingStyle',
+        path: '/reference/coding-style',
+        component: () => import('../pages/reference/coding-style/index.vue'),
+    },
+    {
+        name: 'Reference_CodingStyle_InlineStyle',
+        path: '/reference/coding-style/inline-style',
+        component: () => import('../pages/reference/coding-style/inline-style.vue'),
+    },
+    {
+        name: 'Reference_CodingStyle_Slot',
+        path: '/reference/coding-style/slot',
+        component: () => import('../pages/reference/coding-style/slot.vue'),
     },
 
 
