@@ -15,9 +15,9 @@
     <blog-article page="2025-09/10-wed"/>
 
     <!-- 静的インポート・静的コンポーネント -->
-    <Blog20250811MonSample />
-    <Blog20250810SunSample />
-    <Blog20250809SatSample />
+    <Blog20250403ThuSample />
+    <Blog20250402WedSample />
+    <Blog20250401TueSample />
 
     <the-parent-footer/>
 </template>
@@ -36,8 +36,8 @@
     import TheGrandParentHeader from '../../the-header.vue';
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';
-    import Blog20250809SatSample from './2025-08/09-sat-sample.vue';
-    import Blog20250810SunSample from './2025-08/10-sun-sample.vue';
-    import Blog20250811MonSample from './2025-08/11-mon-sample.vue';
+    import Blog20250401TueSample from './2025-04/01-tue-sample.vue';
+    import Blog20250402WedSample from './2025-04/02-wed-sample.vue';
+    import Blog20250403ThuSample from './2025-04/03-thu-sample.vue';
 
 </script>

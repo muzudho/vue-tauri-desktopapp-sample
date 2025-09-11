@@ -11,6 +11,21 @@ const routes = [
         component: () => import('../pages/blog/index.vue'),  // importした Vue ファイル
     },
     {
+        name: 'Blog20250401Tue',
+        path: '/blog/2025-04/01-tue',
+        component: () => import('../pages/blog/2025-04/01-tue-sample.vue'),
+    },
+    {
+        name: 'Blog20250402Wed',
+        path: '/blog/2025-04/02-wed',
+        component: () => import('../pages/blog/2025-04/02-wed-sample.vue'),
+    },
+    {
+        name: 'Blog20250403Thu',
+        path: '/blog/2025-04/03-thu',
+        component: () => import('../pages/blog/2025-04/03-thu-sample.vue'),
+    },
+    {
         name: 'Blog20250910Wed',
         path: '/blog/2025-09/10-wed',
         component: () => import('../pages/blog/2025-09/10-wed.vue'),
