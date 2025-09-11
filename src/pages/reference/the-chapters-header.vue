@@ -16,6 +16,6 @@
     // ++++++++++++++++++++++++++++++++++
 
     import TheAppHeader from '../../the-app-header.vue';
-    import ThePartsHeader from '../the-header.vue';
+    import ThePartsHeader from '../the-parts-header.vue';
 
 </script>

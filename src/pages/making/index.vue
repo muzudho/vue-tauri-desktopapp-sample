@@ -1,6 +1,6 @@
 <template>
     <the-app-header/>
-    <the-parent-header/>
+    <the-parts-header/>
 
     <h2>メイキングだぜ！　の部　インデックス</h2>
     <section class="sec-2">
@@ -49,7 +49,7 @@
         </ul>
     </section>
 
-    <the-parent-footer/>
+    <the-parts-footer/>
 </template>
 
 <script setup lang="ts">
@@ -63,8 +63,8 @@
     // ++++++++++++++++++
 
     import TheAppHeader from '../../the-app-header.vue';
-    import TheParentFooter from '../the-footer.vue';
-    import TheParentHeader from '../the-header.vue';
+    import ThePartsFooter from '../the-parts-footer.vue';
+    import ThePartsHeader from '../the-parts-header.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +

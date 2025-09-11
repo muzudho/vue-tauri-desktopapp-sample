@@ -1,6 +1,6 @@
 <template>
     <the-app-header/>
-    <the-parent-header/>
+    <the-parts-header/>
 
     <h2>ブログだぜ！　の部　インデックス</h2>
     <section class="sec-2">
@@ -19,7 +19,7 @@
     <Blog20250402WedSample />
     <Blog20250401TueSample />
 
-    <the-parent-footer/>
+    <the-parts-footer/>
 </template>
 
 <script setup lang="ts">
@@ -34,8 +34,8 @@
 
     import BlogArticle from '@/components/BlogArticle.vue';
     import TheAppHeader from '../../the-app-header.vue';
-    import TheParentFooter from '../the-footer.vue';
-    import TheParentHeader from '../the-header.vue';
+    import ThePartsFooter from '../the-parts-footer.vue';
+    import ThePartsHeader from '../the-parts-header.vue';
     import Blog20250401TueSample from './2025-04/01-tue-sample.vue';
     import Blog20250402WedSample from './2025-04/02-wed-sample.vue';
     import Blog20250403ThuSample from './2025-04/03-thu-sample.vue';

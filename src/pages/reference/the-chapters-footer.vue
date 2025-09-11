@@ -12,6 +12,6 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import TheParentFooter from '../the-footer.vue';
+    import TheParentFooter from '../the-parts-footer.vue';
 
 </script>

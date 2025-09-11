@@ -1,6 +1,6 @@
 <template>
     <the-app-header/>
-    <the-parent-header/>
+    <the-parts-header/>
 
     <h2>Welcome to Tauri + Vue だぜ！　の部　インデックス</h2>
 
@@ -26,7 +26,7 @@
 
     <p>{{ greetMsg }}</p>
 
-    <the-parent-footer/>
+    <the-parts-footer/>
 </template>
 
 <script setup lang="ts">
@@ -43,8 +43,8 @@
     // ++++++++++++++++++++++++++++++++++
 
     import TheAppHeader from '../../the-app-header.vue';
-    import TheParentHeader from '../the-header.vue';
-    import TheParentFooter from '../the-footer.vue';
+    import ThePartsHeader from '../the-parts-header.vue';
+    import ThePartsFooter from '../the-parts-footer.vue';
 
 
     // ##########
