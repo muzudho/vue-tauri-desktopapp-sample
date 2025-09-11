@@ -2,6 +2,30 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 const routes = [
 
+    // ++++++++++++++++++++++
+    // + このサイトについて +
+    // ++++++++++++++++++++++
+    {
+        name: 'About',
+        path: '/about',
+        component: () => import('../pages/about/index.vue'),
+    },
+    {
+        name: 'About_TheChaptersBody',
+        path: '/about/the-chapters-body',
+        component: () => import('../pages/about/the-chapters-body.vue'),
+    },
+    {
+        name: 'About_TheChaptersFooter',
+        path: '/about/the-chapters-footer',
+        component: () => import('../pages/about/the-chapters-footer.vue'),
+    },
+    {
+        name: 'About_TheChaptersHeader',
+        path: '/about/the-chapters-header',
+        component: () => import('../pages/about/the-chapters-header.vue'),
+    },
+
     // ++++++++++
     // + ブログ +
     // ++++++++++
@@ -334,11 +358,6 @@ const routes = [
     // + その他 +
     // ++++++++++
 
-    {
-        name: 'About',
-        path: '/about',
-        component: () => import('../pages/about/index.vue'),
-    },
     {
         name: 'Home',
         path: '/',
