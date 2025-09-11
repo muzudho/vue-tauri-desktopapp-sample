@@ -3,7 +3,7 @@
 -->
 
 <template>
-    <the-header/>
+    <the-chapter-header/>
 
     <!-- ボタン機能拡張 -->
     <button-20250822 ref="button1Ref"/>
@@ -606,7 +606,7 @@ color = i % 2;
         <source-link/>
     </section>
 
-    <the-footer/>
+    <the-chapter-footer/>
 </template>
 
 <script setup lang="ts">
@@ -645,8 +645,8 @@ color = i % 2;
     import TalkIllustration from '@/components/TalkIllustration.vue';
     import TalkNovel from '@/components/TalkNovel.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TheFooter from './the-footer.vue';
-    import TheHeader from './the-header.vue';
+    import TheChapterFooter from './the-chapter-footer.vue';
+    import TheChapterHeader from './the-chapter-header.vue';
 
     // ++++++++++++++++++
     // + コンポーザブル +

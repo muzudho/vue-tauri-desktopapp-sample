@@ -275,8 +275,8 @@
     import InputAxisTargetAccumulateMoveaway1 from './target-accumulate-moveaway-1.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TheParentFooter from '../the-footer.vue';
-    import TheParentHeader from '../the-header.vue';
+    import TheParentFooter from '../the-chapter-footer.vue';
+    import TheParentHeader from '../the-chapter-header.vue';
 
 
     // ##########

@@ -32,8 +32,8 @@
     //
 
     import SourceLink from '../../../components/SourceLink.vue';
-    import TheParentHeader from '../the-header.vue';
-    import TheParentFooter from '../the-footer.vue';
+    import TheParentHeader from '../the-chapter-header.vue';
+    import TheParentFooter from '../the-chapter-footer.vue';
 
     // ##############
     // # 共有データ #
