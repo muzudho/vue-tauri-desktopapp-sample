@@ -1,5 +1,5 @@
 <template>
-    <the-grand-parent-header/>
+    <the-app-header/>
     <the-parent-header/>
 
     <h2>ブログだぜ！　の部　インデックス</h2>
@@ -33,7 +33,7 @@
     // ++++++++++++++++++++++++++++++++++
 
     import BlogArticle from '@/components/BlogArticle.vue';
-    import TheGrandParentHeader from '../../the-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
     import TheParentFooter from '../the-footer.vue';
     import TheParentHeader from '../the-header.vue';
     import Blog20250401TueSample from './2025-04/01-tue-sample.vue';

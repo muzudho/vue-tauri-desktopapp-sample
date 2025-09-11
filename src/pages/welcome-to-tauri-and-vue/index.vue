@@ -1,5 +1,5 @@
 <template>
-    <the-grand-parent-header/>
+    <the-app-header/>
     <the-parent-header/>
 
     <h2>Welcome to Tauri + Vue だぜ！　の部　インデックス</h2>
@@ -42,7 +42,7 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import TheGrandParentHeader from '../../the-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
     import TheParentHeader from '../the-header.vue';
     import TheParentFooter from '../the-footer.vue';
 

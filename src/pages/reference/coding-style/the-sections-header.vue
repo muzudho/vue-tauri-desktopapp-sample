@@ -1,5 +1,5 @@
 <template>
-    <the-application-header/>
+    <the-app-header/>
 
     <section class="sec-1">
         <v-btn @click="closePart" v-tooltip="'下の部を閉じる'">❌</v-btn>
@@ -28,7 +28,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheApplicationHeader from '../../../the-header.vue';
+    import TheAppHeader from '../../../the-app-header.vue';
 
 
     // ############

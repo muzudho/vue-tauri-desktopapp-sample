@@ -1,5 +1,5 @@
 <template>
-    <the-grand-parent-header/>
+    <the-app-header/>
 
     <section class="sec-1">
         <v-btn @click="goBackToTopOf1" v-tooltip="'下の部を閉じる'">❌</v-btn>
@@ -20,7 +20,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheGrandParentHeader from '../../the-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
 
 
     // ############

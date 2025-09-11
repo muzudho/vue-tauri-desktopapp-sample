@@ -15,7 +15,7 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import TheAppHeader from '../../the-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
     import ThePartsHeader from '../the-header.vue';
 
 </script>

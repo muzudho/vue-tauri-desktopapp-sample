@@ -1,5 +1,5 @@
 <template>
-    <the-grand-parent-header/>
+    <the-app-header/>
 
     <!-- ホームに閉じるボタンはありません。 -->
 
@@ -42,7 +42,7 @@
     // + コンポーネント +
     // ++++++++++++++++++
 
-    import TheGrandParentHeader from '../../the-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
 
 
     // ##############
