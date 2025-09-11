@@ -1,5 +1,5 @@
 <template>
-    <the-header/>
+    <the-sections-header/>
 
     <h3>盤操作のデバッグだぜ！</h3>
     <section class="sec-3">
@@ -38,7 +38,7 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
         <source-link/>
     </section>
 
-    <the-footer/>
+    <the-sections-footer/>
 </template>
 
 <script setup lang="ts">
@@ -57,15 +57,20 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import SourceLink from '../../components/SourceLink.vue';
-    import TheFooter from './the-footer.vue';
-    import TheHeader from './the-header.vue';
+    import SourceLink from '@/components/SourceLink.vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
     import { getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
+
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import TheSectionsFooter from './the-sections-footer.vue';
+    import TheSectionsHeader from './the-sections-header.vue';
 
 
     // ################

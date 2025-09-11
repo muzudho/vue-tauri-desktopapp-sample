@@ -1,18 +1,7 @@
 <template>
-    <the-app-header/>
-    <the-parts-header/>
-
-    <h2>デバッグ・ルームだぜ！　の部　インデックス</h2>
-    <section class="sec-2">
-        デバッグ部屋。<v-btn style="visibility: hidden;"></v-btn><br/>
-        <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
-
-        <ul>
-            <li>📖 <router-link to="/debug-room/board-operation" :style="getPreviousLinkHighlight('/debug-room/board-operation')">盤操作のデバッグだぜ！</router-link></li>
-        </ul>
-    </section>
-
-    <the-parts-footer/>
+    <component :is="TheChaptersHeader"/>
+    <component :is="TheChaptersBody"/>
+    <component :is="TheChaptersFooter"/>
 </template>
 
 <script setup lang="ts">
@@ -21,19 +10,12 @@
     // # インポート #
     // ##############
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
 
-    import TheAppHeader from '../../the-app-header.vue';
-    import ThePartsFooter from '../the-parts-footer.vue';
-    import ThePartsHeader from '../the-parts-header.vue';
-
-
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
-
-    import { getPreviousLinkHighlight } from '../../composables/link-highlight';
+    import TheChaptersBody from '@/pages/debug-room/the-chapters-body.vue';
+    import TheChaptersFooter from '@/pages/debug-room/the-chapters-footer.vue';
+    import TheChaptersHeader from '@/pages/debug-room/the-chapters-header.vue';
 
 </script>

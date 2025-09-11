@@ -69,6 +69,21 @@ const routes = [
         component: () => import('../pages/debug-room/index.vue'),
     },
     {
+        name: 'DebugRoom_TheChaptersBody',
+        path: '/debug-room/the-chapters-body',
+        component: () => import('../pages/debug-room/the-chapters-body.vue'),
+    },
+    {
+        name: 'DebugRoom_TheChaptersFooter',
+        path: '/debug-room/the-chapters-footer',
+        component: () => import('../pages/debug-room/the-chapters-footer.vue'),
+    },
+    {
+        name: 'DebugRoom_TheChaptersHeader',
+        path: '/debug-room/the-chapters-header',
+        component: () => import('../pages/debug-room/the-chapters-header.vue'),
+    },
+    {
         name: 'DebugRoomBoardOperation',
         path: '/debug-room/board-operation',
         component: () => import('../pages/debug-room/board-operation.vue'),
