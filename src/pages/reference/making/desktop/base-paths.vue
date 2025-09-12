@@ -1,5 +1,10 @@
 <template>
-    <the-chapter-header/>
+    <the-app-header/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="down"
+        pagePath="/reference"
+    />
 
     <h1>デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</h1>
     <section class="sec-1">
@@ -126,7 +131,11 @@
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="up"
+        pagePath="/reference"
+    />
 </template>
 
 <script setup lang="ts">
@@ -145,9 +154,9 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
+    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import SourceLink from '../../../../components/SourceLink.vue';
-    import TheChapterHeader from '../the-chapter-header.vue';
-    import TheChapterFooter from '../the-chapter-footer.vue';
+    import TheAppHeader from '../../../the-app-header.vue';
 
     // ##############
     // # 共有データ #

@@ -1,8 +1,5 @@
 <template>
     <the-app-header/>
-
-    リファレンス　＞　メイキング<br/>
-
     <button-to-close-pane
         class="sec-0"
         direction="down"
