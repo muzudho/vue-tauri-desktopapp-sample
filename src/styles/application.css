@@ -139,27 +139,27 @@ h6::before {
     }
 
     section.sec-1 {
-        margin-left: 24px;
+        margin-left: calc(40px + 4px);
     }
 
     section.sec-2 {
-        margin-left: 44px;
+        margin-left: calc(60px + 4px);
     }
 
     section.sec-3 {
-        margin-left: 64px;
+        margin-left: calc(80px + 4px);
     }
 
     section.sec-4 {
-        margin-left: 84px;
+        margin-left: calc(100px + 4px);
     }
 
     section.sec-5 {
-        margin-left: 104px;
+        margin-left: calc(120px + 4px);
     }
 
     section.sec-6 {
-        margin-left: 124px;
+        margin-left: calc(140px + 4px);
     }
 
     .sec-1 img {
@@ -283,27 +283,27 @@ h6::before {
     }
 
     section.sec-1 {
-        margin-left: 64px;
+        margin-left: calc(120px + 4px);
     }
 
     section.sec-2 {
-        margin-left: 124px;
+        margin-left: calc(180px + 4px);
     }
 
     section.sec-3 {
-        margin-left: 184px;
+        margin-left: calc(240px + 4px);
     }
 
     section.sec-4 {
-        margin-left: 244px;
+        margin-left: calc(300px + 4px);
     }
 
     section.sec-5 {
-        margin-left: 304px;
+        margin-left: calc(360px + 4px);
     }
 
     section.sec-6 {
-        margin-left: 364px;
+        margin-left: calc(420px + 4px);
     }
 
     .sec-1 img {

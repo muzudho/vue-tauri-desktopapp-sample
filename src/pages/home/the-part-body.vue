@@ -1,10 +1,10 @@
 <template>
-    <section class="sec-2">
+    <section class="sec-1">
         デスクトップ・アプリケーションのホームだぜ（＾▽＾）！<br/>
     </section>
 
-    <h3>ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合</h3>
-    <section class="sec-3">
+    <h2>ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合</h2>
+    <section class="sec-2">
         以下の円グラフをクリックするとそのページへ飛べるぜ（＾▽＾）！<br/>
 	    <canvas id="pieChart" class="pieChartStyle"></canvas>
     </section>

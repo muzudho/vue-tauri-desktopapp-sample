@@ -20,6 +20,4 @@
         <router-link to="/experimental">エクスペリメンタル</router-link> | 
         <router-link to="/debug-room">デバッグ・ルーム</router-link>
     </nav>
-
-    <h1>Tauri デスクトップアプリのサンプルだぜ！</h1>
 </template>
