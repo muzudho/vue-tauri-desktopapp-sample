@@ -1,5 +1,10 @@
 <template>
-    <the-section-header/>
+    <the-app-header/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="down"
+        pagePath="/reference"
+    />
 
     <h1>JSONファイルを読込む章だぜ！</h1>
     <section class="sec-1">
@@ -16,7 +21,11 @@
         <source-link/>
     </section>
 
-    <the-section-footer/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="up"
+        pagePath="/reference"
+    />
 </template>
 
 <script setup lang="ts">
@@ -40,8 +49,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheSectionFooter from './the-section-footer.vue';
-    import TheSectionHeader from './the-section-header.vue';
+    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
+    import TheAppHeader from '../../the-app-header.vue';
 
 
     // ##############
