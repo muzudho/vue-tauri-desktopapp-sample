@@ -1,9 +1,9 @@
 <template>
     <the-app-header/>
     <the-welcome/>
-    <the-coding-style-contents-header/>
+    <div class="contents-header-1">コーディング・スタイル</div>
     <the-coding-style-contents/>
-    <the-making-contents-header class="mt-6"/>
+    <div class="contents-header-1 mt-6">メイキング</div>
     <the-making-contents class="mb-6"/>
 </template>
 
@@ -19,8 +19,6 @@
 
     import TheAppHeader from '@/pages/the-app-header.vue';
     import TheCodingStyleContents from '@/pages/reference/coding-style/the-contents.vue';
-    import TheCodingStyleContentsHeader from '@/pages/reference/coding-style/the-contents-header.vue';
     import TheMakingContents from '@/pages/reference/making/the-contents.vue';
-    import TheMakingContentsHeader from '@/pages/reference/making/the-contents-header.vue';
     import TheWelcome from '@/pages/reference/the-welcome.vue';
 </script>
