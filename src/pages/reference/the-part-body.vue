@@ -3,8 +3,7 @@
     <!-- デバイス互換機能 -->
     <compatible-device ref="compatibleDevice1Ref"/>
 
-    <section class="sec-2">
-        <br/>
+    <section class="sec-1 pt-6">
 
         <talk-image
             :href="reference1Png"
@@ -21,12 +20,12 @@
         </talk-balloon>
     </section>
 
-    <component :is="TheCodingStyleHeader"/>
-    <component :is="TheCodingStyleBody"/>
+    <the-coding-style-header/>
+    <the-coding-style-body/>
     <br/>
 
-    <component :is="TheMakingHeader"/>
-    <component :is="TheMakingBody"/>
+    <the-making-header/>
+    <the-making-body/>
 </template>
 
 <script setup lang="ts">
