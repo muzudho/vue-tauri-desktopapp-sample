@@ -1,25 +1,29 @@
 <template>
-    <v-container class="row">
-        <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
-        <v-btn icon href="https://vitejs.dev" target="_blank">
-            <v-img src="/vite.svg" class="logo vite" style="top: -20px;" alt="Vite logo" />
-        </v-btn>
-        <v-btn icon href="https://tauri.app" target="_blank">
-            <v-img src="/tauri.svg" class="logo tauri" style="top: -20px;" alt="Tauri logo" />
-        </v-btn>
-        <v-btn icon href="https://vuejs.org/" target="_blank">
-            <v-img :src="assetsVueLogoSvg" class="logo vue" style="top: -20px;" alt="Vue logo" />
-        </v-btn>
-    </v-container>
+    <section class="sec-1">
+        <br/>
 
-    <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
+        <v-container class="row">
+            <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
+            <v-btn icon href="https://vitejs.dev" target="_blank">
+                <v-img src="/vite.svg" class="logo vite" style="top: -20px;" alt="Vite logo" />
+            </v-btn>
+            <v-btn icon href="https://tauri.app" target="_blank">
+                <v-img src="/tauri.svg" class="logo tauri" style="top: -20px;" alt="Tauri logo" />
+            </v-btn>
+            <v-btn icon href="https://vuejs.org/" target="_blank">
+                <v-img :src="assetsVueLogoSvg" class="logo vue" style="top: -20px;" alt="Vue logo" />
+            </v-btn>
+        </v-container>
 
-    <v-form class="row" @submit.prevent="greet">
-        <v-text-field id="greet-input" v-model="name" placeholder="Enter a name..."></v-text-field>
-        <v-btn type="submit" class="button">Greet</v-btn>
-    </v-form>
+        <p>Click on the Tauri, Vite, and Vue logos to learn more.</p>
 
-    <p>{{ greetMsg }}</p>
+        <v-form class="row" @submit.prevent="greet">
+            <v-text-field id="greet-input" v-model="name" placeholder="Enter a name..."></v-text-field>
+            <v-btn type="submit" class="button">Greet</v-btn>
+        </v-form>
+
+        <p>{{ greetMsg }}</p>
+    </section>
 </template>
 
 <script setup lang="ts">

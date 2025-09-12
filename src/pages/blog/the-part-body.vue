@@ -1,5 +1,5 @@
 <template>
-    <section class="sec-2">
+    <section class="sec-0">
         上の方の記事が新しいぜ（＾▽＾）！<br/>
     </section>
 
