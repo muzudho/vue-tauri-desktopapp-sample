@@ -1,5 +1,5 @@
 <template>
-    <section class="sec-1 mt-6">
+    <section class="sec-0 mt-6">
         <v-btn @click="closePart" v-tooltip="'上の部を閉じる'">❌</v-btn>
     </section>
 </template>
