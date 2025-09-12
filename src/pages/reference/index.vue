@@ -2,11 +2,10 @@
     <the-app-header/>
     <the-welcome/>
 
-    <the-coding-style-header/>
+    <the-coding-style-contents-header/>
     <the-coding-style-contents/>
-    <br/>
 
-    <the-making-header/>
+    <the-making-contents-header class="mt-6"/>
     <the-making-contents/>
 
     <the-part-footer/>
@@ -24,9 +23,9 @@
 
     import TheAppHeader from '@/pages/the-app-header.vue';
     import TheCodingStyleContents from '@/pages/reference/coding-style/the-contents.vue';
-    import TheCodingStyleHeader from '@/pages/reference/coding-style/the-chapter-header.vue';
+    import TheCodingStyleContentsHeader from '@/pages/reference/coding-style/the-contents-header.vue';
     import TheMakingContents from '@/pages/reference/making/the-contents.vue';
-    import TheMakingHeader from '@/pages/reference/making/the-chapter-header.vue';
+    import TheMakingContentsHeader from '@/pages/reference/making/the-contents-header.vue';
     import ThePartFooter from '@/pages/reference/the-part-footer.vue';
     import TheWelcome from '@/pages/reference/the-welcome.vue';
 
