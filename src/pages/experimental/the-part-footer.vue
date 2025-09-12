@@ -1,5 +1,7 @@
 <template>
-    <button-to-close-above-part/>
+    <button-to-close-
+        pagePath="/"
+    />
 </template>
 
 <script setup lang="ts">

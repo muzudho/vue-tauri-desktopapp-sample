@@ -1,6 +1,8 @@
 <template>
     <the-app-header/>
-    <button-to-close-below-part/>
+    <button-to-close-below-part
+        pagePath="/"
+    />
     <h1>デバッグ・ルームの部だぜ！</h1>
 </template>
 

@@ -1,6 +1,8 @@
 <template>
     <the-app-header/>
-    <button-to-close-below-part/>
+    <button-to-close-below-part
+        pagePath="/"
+    />
     <button-to-close-below-chapter
         pagePath="/debug-room"
     />

@@ -4,7 +4,9 @@
     <section class="sec-0 mt-6 mb-6">
         上の方にある記事が新しいぜ（＾▽＾）！
     </section>
-    <button-to-close-below-part/>
+    <button-to-close-below-part
+        pagePath="/"
+    />
 </template>
 
 <script setup lang="ts">

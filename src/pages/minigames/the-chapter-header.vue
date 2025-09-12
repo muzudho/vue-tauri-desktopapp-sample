@@ -1,6 +1,8 @@
 <template>
     <the-app-header/>
-    <button-to-close-below-part/>
+    <button-to-close-below-part
+        pagePath="/"
+    />
 
     <h2>ミニゲームだぜ！　の部</h2>
     <button-to-close-below-chapter
