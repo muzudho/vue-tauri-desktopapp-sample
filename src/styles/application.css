@@ -3,8 +3,8 @@
  */
 
 div.v-toolbar__content {    /* アプリケーション・バー */
-    color: saddlebrown;
-    background-color: burlywood;
+    color: var(--myapplication-sec-5-header-fgcolor, #F0F0F0);
+    background-color: var(--myapplication-sec-5-header-bgcolor, #282828);
 }
 
 /* ヘッダーの先頭に # のアイコンを付ける */
@@ -73,6 +73,7 @@ h6::before {
  */
 @media screen and (max-width: 768px) {
     h1 {
+        margin-left: 20px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -83,7 +84,7 @@ h6::before {
     }
 
     h2 {
-        margin-left: 20px;
+        margin-left: 40px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -94,7 +95,7 @@ h6::before {
     }
 
     h3 {
-        margin-left: 40px;
+        margin-left: 60px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -105,7 +106,7 @@ h6::before {
     }
 
     h4 {
-        margin-left: 60px;
+        margin-left: 80px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -116,7 +117,7 @@ h6::before {
     }
 
     h5 {
-        margin-left: 80px;
+        margin-left: 100px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -127,7 +128,7 @@ h6::before {
     }
 
     h6 {
-        margin-left: 100px;
+        margin-left: 120px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -216,6 +217,7 @@ h6::before {
 /* パソコン向けスタイル (画面幅が769px以上) */
 @media screen and (min-width: 769px) {
     h1 {
+        margin-left: 60px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -226,7 +228,7 @@ h6::before {
     }
 
     h2 {
-        margin-left: 60px;
+        margin-left: 120px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -237,7 +239,7 @@ h6::before {
     }
 
     h3 {
-        margin-left: 120px;
+        margin-left: 180px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -248,7 +250,7 @@ h6::before {
     }
 
     h4{
-        margin-left: 180px;
+        margin-left: 240px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -259,7 +261,7 @@ h6::before {
     }
 
     h5 {
-        margin-left: 240px;
+        margin-left: 300px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -270,7 +272,7 @@ h6::before {
     }
 
     h6 {
-        margin-left: 300px;
+        margin-left: 360px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;

@@ -10,7 +10,7 @@
 
 <template>
     <v-app>
-        <v-app-bar app density="compact" class="app-bar">
+        <v-app-bar app density="compact">
             <v-toolbar-title style="display: inline;">デスクトップアプリ</v-toolbar-title>
             <!-- WIP:
             <v-spacer></v-spacer>
@@ -21,6 +21,7 @@
         <v-main>
             <!-- WIP: パンくずリスト -->
             <!--
+             class="app-bar"
 div.app-bar-breadcrumb-list {
     display: inline-block;
     left: 0;
