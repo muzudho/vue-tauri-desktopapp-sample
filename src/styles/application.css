@@ -6,23 +6,6 @@ div.v-toolbar__content {    /* アプリケーション・バー */
     color: saddlebrown;
     background-color: burlywood;
 }
-div.app-bar-breadcrumb-list {
-    padding-left: 8px;
-    padding-top: 1px;
-    padding-right: 8px;
-    padding-bottom: 2px;
-    border-radius: 15px;
-    color: burlywood;
-    background-color: maroon;
-}
-button.app-bar-button {
-    min-width: 20px;
-    max-width: 20px;
-    max-height: 20px;
-    padding-left: 4px;
-    padding-right: 4px;
-    background-color: white;
-}
 
 /* ヘッダーの先頭に # のアイコンを付ける */
 h1::before {
