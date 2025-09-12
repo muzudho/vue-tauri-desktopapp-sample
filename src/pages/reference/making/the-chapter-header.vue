@@ -1,5 +1,3 @@
 <template>
-    <section class="sec-0">
-        <span style="font-size: x-large;">メイキング</span>
-    </section>
+    <div class="contents-header-1">メイキング</div>
 </template>

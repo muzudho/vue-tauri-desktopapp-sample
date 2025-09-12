@@ -143,6 +143,66 @@ section.sec-contents {  /* 目次 */
         background-color: var(--myapplication-sec-6-header-bgcolor, #303030);
     }
 
+    div.contents-header-1 {
+        margin-left: 20px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        text-align: left !important;
+        font-size: xx-large;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-2 {
+        margin-left: 40px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: x-large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-3 {
+        margin-left: 60px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: x-large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-4 {
+        margin-left: 80px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-5 {
+        margin-left: 100px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-6 {
+        margin-left: 120px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: medium;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
     section.sec-0 {
         margin-left: calc(20px + 4px);
     }
@@ -295,6 +355,66 @@ section.sec-contents {  /* 目次 */
         overflow-wrap: break-word;
         color: var(--myapplication-sec-6-header-fgcolor, #F0F0F0);
         background-color: var(--myapplication-sec-6-header-bgcolor, #303030);
+    }
+
+    div.contents-header-1 {
+        margin-left: 60px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        text-align: left !important;
+        font-size: xx-large;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-2 {
+        margin-left: 120px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: x-large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-3 {
+        margin-left: 180px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: x-large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-4{
+        margin-left: 240px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-5 {
+        margin-left: 300px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: large;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
+    }
+
+    div.contents-header-6 {
+        margin-left: 360px;
+        padding-left: 4px;
+        padding-top: 6px;
+        padding-bottom: 2px;
+        font-size: medium;
+        overflow-wrap: break-word;
+        color: var(--text-light, #303030);
     }
 
     section.sec-0 {
