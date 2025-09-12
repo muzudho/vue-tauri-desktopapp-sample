@@ -21,7 +21,12 @@
             marginBottom: `calc(${5 * controllerSquareUnit}px)`,
         }"
     >
-        <the-chapter-header/>
+        <the-app-header/>
+        <button-to-close-pane
+            class="sec-0"
+            direction="down"
+            pagePath="/reference"
+        />
 
         <h1><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h1>
         <section class="sec-1">
@@ -183,7 +188,11 @@
                 pagePath="/reference/making/input-axis-rpg-walk-using-background-image-1"/>
         </section>
 
-        <the-chapter-footer/>
+        <button-to-close-pane
+            class="sec-0"
+            direction="up"
+            pagePath="/reference"
+        />
     </div>
 
     <!-- オーバーラップ画面 -->
@@ -580,15 +589,15 @@
     // アルファベット順
     import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
+    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import PreferencesExplanation from '@/components/talk/PreferencesExplanation.vue'
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
+    import TheAppHeader from '../../../the-app-header.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TheChapterFooter from '../the-chapter-footer.vue';
-    import TheChapterHeader from '../the-chapter-header.vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
