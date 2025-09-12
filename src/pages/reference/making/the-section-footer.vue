@@ -1,5 +1,7 @@
 <template>
-    <button-to-close-above-section
+    <button-to-close-pane
+        class="sec-0"
+        direction="up"
         pagePath="/reference/making"
     />
 </template>
@@ -14,6 +16,6 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import ButtonToCloseAboveSection from '@/components/ButtonToCloseAboveSection.vue';
+    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
 
 </script>
