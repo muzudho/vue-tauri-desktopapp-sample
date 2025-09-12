@@ -23,8 +23,8 @@
     >
         <the-chapter-header/>
 
-        <h3><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h3>
-        <section class="sec-3">
+        <h1><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h1>
+        <section class="sec-1">
             <br/>
 
             <!-- 免責 -->
@@ -42,8 +42,8 @@
             </talk-balloon>
         </section>
 
-        <h4>裏情報</h4>
-        <section class="sec-4">
+        <h2>裏情報</h2>
+        <section class="sec-2">
             <br/>
 
             <p>床タイルマップ：</p>

@@ -1,11 +1,11 @@
 <template>
     <the-section-header/>
 
-    <h4>ノン・プレイヤー・キャラクターを動かす章だぜ！</h4>
+    <h1>ノン・プレイヤー・キャラクターを動かす章だぜ！</h1>
 
     <br/>
-    <h5><span class="parent-header">ノン・プレイヤー・キャラクターを動かそうぜ！　＞　</span>ソースコード</h5>
-    <section class="sec-5">
+    <h2><span class="parent-header">ノン・プレイヤー・キャラクターを動かそうぜ！　＞　</span>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

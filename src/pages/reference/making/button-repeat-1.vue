@@ -6,8 +6,8 @@
 <template>
     <the-section-header/>
 
-    <h4>ボタンの押しっぱなしが利くようにしようぜ？</h4>
-    <section class="sec-4">
+    <h1>ボタンの押しっぱなしが利くようにしようぜ？</h1>
+    <section class="sec-1">
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul>
@@ -40,8 +40,8 @@
     </section>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

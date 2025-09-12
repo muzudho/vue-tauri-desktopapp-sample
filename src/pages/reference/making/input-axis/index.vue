@@ -4,8 +4,8 @@
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
-    <h4>上下左右に移動する節だぜ！</h4>
-    <section class="sec-4">
+    <h1>上下左右に移動する節だぜ！</h1>
+    <section class="sec-1">
         <br/>
 
         <talk-balloon
@@ -30,7 +30,7 @@
 
     <input-axis-target-accumulate-moveaway-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <talk-balloon
             :src="commonKifuwarabe2Src"
             :alt="commonKifuwarabe2Alt"
@@ -42,8 +42,7 @@
             <br/>
             ［累積］というのは、キーを押している間、数ドットずつ動くことだぜ。<br/>
         </talk-balloon>
-    </section>
-    <section class="sec-4">
+
         <talk-balloon
             :src="commonHiyoko2Src"
             :alt="commonHiyoko2Alt"
@@ -55,7 +54,7 @@
 
     <input-axis-rpg-walk-player-accumulate-moveaway-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -70,7 +69,7 @@
 
     <input-axis-rpg-walk-player-grid-moveaway-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -86,7 +85,7 @@
 
     <input-axis-rpg-walk-player-grid-bounded-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -102,7 +101,7 @@
 
     <input-axis-rpg-walk-board-grid-moveaway-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -118,7 +117,7 @@
 
     <input-axis-rpg-walk-tiles-immovable-projection-moveaway-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -158,7 +157,7 @@
 
     <input-axis-rpg-walk-tiles-immovable-projection-boundary-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -172,7 +171,7 @@
 
     <input-axis-rpg-walk-tiles-immovable-projection-loop-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -187,7 +186,7 @@
 
     <input-axis-rpg-walk-tiles-immovable-projection-moveaway-size-variable-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -201,7 +200,7 @@
 
     <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-1/><br/>
 
-    <section class="sec-4">
+    <section class="sec-1">
         <br/>
         
         <talk-balloon
@@ -239,8 +238,8 @@
     <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1/><br/>
 
     <br/>
-    <h5><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h5>
-    <section class="sec-5">
+    <h1><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h1>
+    <section class="sec-1">
         <source-link/>
     </section>
 

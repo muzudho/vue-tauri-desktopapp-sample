@@ -1,12 +1,10 @@
 <template>
     <the-app-header/>
-    <button-to-close-below-part
-        pagePath="/"
-    />
 
-    <h3>メイキングの章だぜ！</h3>
-    <button-to-close-below-section
-        pagePath="/reference/making"
+    リファレンス　＞　メイキング<br/>
+
+    <button-to-close-below-part
+        pagePath="/reference"
     />
 </template>
 

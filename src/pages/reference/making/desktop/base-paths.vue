@@ -1,8 +1,8 @@
 <template>
-    <the-parent-header/>
+    <the-chapter-header/>
 
-    <h3>デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</h3>
-    <section class="sec-3">
+    <h1>デスクトップアプリにて　＞　基本的なファイルパス一覧だぜ！</h1>
+    <section class="sec-1">
         <v-row>
             <v-col cols="1">1</v-col>
             <v-col cols="3">appCacheDirStr</v-col>
@@ -121,12 +121,12 @@
     </section>
 
     <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 
-    <the-parent-footer/>
+    <the-chapter-footer/>
 </template>
 
 <script setup lang="ts">
@@ -146,8 +146,8 @@
     //
 
     import SourceLink from '../../../../components/SourceLink.vue';
-    import TheParentHeader from '../the-chapter-header.vue';
-    import TheParentFooter from '../the-chapter-footer.vue';
+    import TheChapterHeader from '../the-chapter-header.vue';
+    import TheChapterFooter from '../the-chapter-footer.vue';
 
     // ##############
     // # 共有データ #

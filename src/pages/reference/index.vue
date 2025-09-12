@@ -1,5 +1,5 @@
 <template>
-    <the-part-header/>
+    <the-app-header/>
     <the-part-body/>
     <the-part-footer/>
 </template>
@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
+    import TheAppHeader from '@/pages/the-app-header.vue';
     import ThePartBody from '@/pages/reference/the-part-body.vue';
     import ThePartFooter from '@/pages/reference/the-part-footer.vue';
-    import ThePartHeader from '@/pages/reference/the-part-header.vue';
 
 </script>

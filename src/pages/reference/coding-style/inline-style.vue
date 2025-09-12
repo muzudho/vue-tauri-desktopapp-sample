@@ -1,9 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>インライン・スタイルの書き方を決めておくの節だぜ！</h4>
-    <section class="sec-4">
-        <br/>
+    <h1>インライン・スタイルの書き方を決めておくの節だぜ！</h1>
+    <section class="sec-1 pt-6">
 
         <talk-balloon
             :src="kifuwarabe2Src"
@@ -436,8 +435,8 @@
 
     </section>
 
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

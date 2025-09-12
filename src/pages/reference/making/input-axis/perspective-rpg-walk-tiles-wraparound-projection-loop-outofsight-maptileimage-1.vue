@@ -23,8 +23,8 @@
     >
         <the-chapter-header/>
 
-        <h3><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h3>
-        <section class="sec-3">
+        <h1><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h1>
+        <section class="sec-1">
             <br/>
 
             <!-- 免責 -->
@@ -68,8 +68,8 @@
             </talk-balloon>
         </section>
 
-        <h4>ゲーム画面説明</h4>
-        <section class="sec-4">
+        <h2>ゲーム画面説明</h2>
+        <section class="sec-2">
             <br/>
             <talk-balloon
                 :src="commonHiyoko2Src"
@@ -103,8 +103,8 @@
             </talk-balloon>
         </section>
 
-        <h4>コントローラー説明</h4>
-        <section class="sec-4">
+        <h2>コントローラー説明</h2>
+        <section class="sec-2">
             <br/>
             <talk-balloon
                 :src="commonOton2Src"
@@ -140,8 +140,8 @@
             </talk-balloon>
         </section>
 
-        <h4>裏情報</h4>
-        <section class="sec-4">
+        <h2>裏情報</h2>
+        <section class="sec-2">
             <br/>
             <talk-balloon
                 :src="commonKifuwarabe2Src"
@@ -170,15 +170,15 @@
 
         </section>
 
-        <h4>［設定］説明</h4>
-        <section class="sec-4">
+        <h2>［設定］説明</h2>
+        <section class="sec-2">
             <br/>
             <preferences-explanation/>
         </section>
         <br/>
 
-        <h4><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き　＞　</span>ソースコード</h4>
-        <section class="sec-4">
+        <h2><span class="parent-header-lights-out">ＲＰＧの歩行グラフィック　＞　</span><span class="parent-header">回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き　＞　</span>ソースコード</h2>
+        <section class="sec-2">
             <source-link
                 pagePath="/reference/making/input-axis-rpg-walk-using-background-image-1"/>
         </section>

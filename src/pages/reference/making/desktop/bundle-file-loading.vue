@@ -1,14 +1,14 @@
 <template>
     <the-parent-header/>
 
-    <h3>デスクトップアプリにて　＞　バンドルファイルの読込だぜ！</h3>
-    <section class="sec-3">
+    <h1>デスクトップアプリにて　＞　バンドルファイルの読込だぜ！</h1>
+    <section class="sec-1">
         <p>{{ startConfigJsonStr }}</p>
     </section>
 
     <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

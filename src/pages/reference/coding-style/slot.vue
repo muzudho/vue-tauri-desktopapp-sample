@@ -1,9 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>スロットの書き方を決めておくの節だぜ！</h4>
-    <section class="sec-4">
-        <br/>
+    <h1>スロットの書き方を決めておくの節だぜ！</h1>
+    <section class="sec-1 pt-6">
 
         <talk-balloon
             :src="kifuwarabe2Src"
@@ -484,9 +483,8 @@ pnpm add -D @tauri-apps/cli@latest
 
     </section>
 
-    <h4>スロット・プロパティ</h4>
-    <section class="sec-4">
-        <br/>
+    <h2 class="mt-6">スロット・プロパティ</h2>
+    <section class="sec-2 pt-6">
 
         <talk-balloon
             :src="oton2Src"
@@ -596,8 +594,8 @@ pnpm add -D @tauri-apps/cli@latest
 
     </section>
 
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2 pt-6">
         <source-link/>
     </section>
 

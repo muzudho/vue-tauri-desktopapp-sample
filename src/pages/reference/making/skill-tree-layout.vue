@@ -1,9 +1,9 @@
 <template>
     <the-section-header/>
 
-    <h4>説明を始める前に、スキル・ツリーのレイアウトを決めておく章だぜ！</h4>
+    <h1>説明を始める前に、スキル・ツリーのレイアウトを決めておく章だぜ！</h1>
     <section
-        class="sec-4"
+        class="sec-1"
         :style="`height: ${8 * cellHeight}px;`"
         style="position: relative;">
 
@@ -164,8 +164,8 @@
     </section>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

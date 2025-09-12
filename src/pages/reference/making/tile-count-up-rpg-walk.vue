@@ -1,8 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>タイル　＞　でカウントアップのアニメーションするぜ！　＞　ＲＰＧの歩行グラフィック　の章</h4>
-    <section class="sec-4">
+    <h1>タイル　＞　でカウントアップのアニメーションするぜ！　＞　ＲＰＧの歩行グラフィック　の章</h1>
+    <section class="sec-1">
         ここに切り抜いたタイルを表示：<br/>
         <tile-animation
             :frames="[
@@ -62,8 +62,8 @@
     </section>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

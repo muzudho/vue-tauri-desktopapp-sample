@@ -1,8 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>JSONファイルを読込む章だぜ！</h4>
-    <section class="sec-4">
+    <h1>JSONファイルを読込む章だぜ！</h1>
+    <section class="sec-1">
         <p>ここに読み込んだJSONデータを表示：</p>
         <pre>{{ jsonStr }}</pre>
         <p>：ここまで。</p>
@@ -11,8 +11,8 @@
     </section>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

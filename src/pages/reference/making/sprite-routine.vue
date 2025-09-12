@@ -1,8 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>スプライト　＞　ルーチン　の章</h4>
-    <section class="sec-4">
+    <h1>スプライト　＞　ルーチン　の章</h1>
+    <section class="sec-1">
         <p>スプライトに一定の動きをさせるぜ（＾▽＾）</p>
         <br/>
 
@@ -29,8 +29,8 @@
     </section>
     
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

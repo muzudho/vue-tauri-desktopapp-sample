@@ -1,8 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>説明を始める前に、説明ページのレイアウトを決めておくの章だぜ！</h4>
-    <section class="sec-4">
+    <h1>説明を始める前に、説明ページのレイアウトを決めておくの章だぜ！</h1>
+    <section class="sec-1">
         <p>凡例だぜ（＾▽＾）！</p>
         <v-container style="border:dashed 4px gray;">
             <h1>ワラベンチャー</h1>
@@ -44,8 +44,8 @@
     </section>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

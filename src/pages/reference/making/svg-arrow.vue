@@ -1,15 +1,15 @@
 <template>
     <the-section-header/>
 
-    <h4>グラフを描く章だぜ！</h4>
-    <section class="sec-4">
+    <h1>グラフを描く章だぜ！</h1>
+    <section class="sec-1">
         画面上に矢印を描いてみようぜ（＾▽＾）！<br/>
         <br/>
     </section>
 
-    <h4>まず、直線を引こうぜ（＾▽＾）！</h4>
+    <h2>まず、直線を引こうぜ（＾▽＾）！</h2>
     <section
-        class="sec-4"
+        class="sec-2"
         style="position: relative; left:0; top:0;">
         線には太さがあって、角が飛び出てしまうぜ（＾▽＾）<br/>
         中心がちょっとずれたり、右側と下側はちょっと食み出るけど、調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
@@ -165,9 +165,9 @@
         <br/>
     </section>
 
-    <h4>矩形も引こうぜ（＾▽＾）！</h4>
+    <h2>矩形も引こうぜ（＾▽＾）！</h2>
     <section
-        class="sec-4"
+        class="sec-2"
         style="position: relative; left:0; top:0;">
         角は丸く処理していないし、回転もできないぜ（＾▽＾）<br/>
         調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
@@ -197,9 +197,9 @@
         <br/>
     </section>
 
-    <h4>楕円も引こうぜ（＾▽＾）！</h4>
+    <h2>楕円も引こうぜ（＾▽＾）！</h2>
     <section
-        class="sec-4"
+        class="sec-2"
         style="position: relative; left:0; top:0;">
         角は丸く処理していないし、回転もできないぜ（＾▽＾）<br/>
         調整は他の人頑張ってくれだぜ（＾▽＾）！<br/>
@@ -235,9 +235,9 @@
         <br/>
     </section>
 
-    <h4>矢印を描こうぜ（＾▽＾）！</h4>
+    <h2>矢印を描こうぜ（＾▽＾）！</h2>
     <section
-        class="sec-4"
+        class="sec-2"
         style="position: relative; left:0; top:0;">
         Grok にコードを書いてもらいながら矢印を作ってみたけど、線に太さがあってはみ出てしまうぜ、難し～（＾▽＾）！<br/>
         <br/>
@@ -412,9 +412,9 @@
             style="position:relative; left:0px; top:0px; display: inline-block;"></v-checkbox>
     </section>
 
-    <h4>じゃあ、グラフを描くぜ（＾▽＾）！</h4>
+    <h2>じゃあ、グラフを描くぜ（＾▽＾）！</h2>
     <section
-        class="sec-4"
+        class="sec-2"
         style="position: relative; left:0; top:0;">
         直線、矩形、矢印を引けるようになったから、簡単なグラフが描けるな（＾▽＾）！<br/>
         タグ打つの結構大変だけど……（＾～＾）<br/>
@@ -468,8 +468,8 @@
         <br/>
     </section>
 
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

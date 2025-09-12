@@ -1,8 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>カウントアップするぜ！</h4>
-    <section class="sec-4">
+    <h1>カウントアップするぜ！</h1>
+    <section class="sec-1">
         <p>カウント: {{ count }}</p>
         <v-btn @click="timerStart">スタート</v-btn>
         <v-btn @click="timerStop">ストップ</v-btn>
@@ -10,8 +10,8 @@
     </section>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

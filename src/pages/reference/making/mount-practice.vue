@@ -1,8 +1,8 @@
 <template>
     <the-section-header/>
 
-    <h4>ページを開いたとき、閉じたときに処理をする章だぜ！</h4>
-    <section class="sec-4">
+    <h1>ページを開いたとき、閉じたときに処理をする章だぜ！</h1>
+    <section class="sec-1">
         <p>{{ textVM }}</p>
     </section>
 
@@ -10,8 +10,8 @@
     <p v-if="errorMessage" style="color: red;">{{ errorMessage }}</p>
 
     <br/>
-    <h5>ソースコード</h5>
-    <section class="sec-5">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 
