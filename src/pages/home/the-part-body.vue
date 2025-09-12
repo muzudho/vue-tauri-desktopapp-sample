@@ -1,16 +1,16 @@
 <template>
-    <section class="sec-1">
+    <section class="sec-0">
         デスクトップ・アプリケーションのホームだぜ（＾▽＾）！<br/>
     </section>
 
-    <h2>ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合</h2>
-    <section class="sec-2">
+    <h1>ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合</h1>
+    <section class="sec-1">
         以下の円グラフをクリックするとそのページへ飛べるぜ（＾▽＾）！<br/>
 	    <canvas id="pieChart" class="pieChartStyle"></canvas>
     </section>
 
     <br/>
-    <section class="sec-1">
+    <section class="sec-0">
         またのお越しをお待ちしておりますだぜ（＾▽＾）！<v-btn style="visibility: hidden;"></v-btn><br/>
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
     </section>
