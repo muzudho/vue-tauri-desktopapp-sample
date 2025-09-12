@@ -1,7 +1,6 @@
 <template>
     <the-app-header/>
     <button-to-close-below-part/>
-    <h2>エクスペリメンタルの部だぜ！</h2>
 </template>
 
 <script setup lang="ts">

@@ -5,10 +5,7 @@
 <template>
     <the-chapter-header/>
 
-    <h3>操作の説明だぜ！</h3>
-    <section class="sec-3">
-        <br/>
-    </section>
+    <h1>操作の説明だぜ！</h1>
 
     <the-chapter-footer/>
 </template>

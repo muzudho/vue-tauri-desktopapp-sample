@@ -1,8 +1,8 @@
 <template>
     <the-chapter-header/>
 
-    <h3>盤操作のデバッグの章だぜ！</h3>
-    <section class="sec-3">
+    <h1>盤操作のデバッグの章だぜ！</h1>
+    <section class="sec-1">
         tileIndex = {{ tileIndex }}<br/>
         board1FileNum = {{ board1FileNum }}<br/>
         board1RankNum = {{ board1RankNum }}<br/>
@@ -33,8 +33,8 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     </section>
 
     <br/>
-    <h3>ソースコード</h3>
-    <section class="sec-3">
+    <h2>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 

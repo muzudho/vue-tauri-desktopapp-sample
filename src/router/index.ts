@@ -93,8 +93,9 @@ const routes = [
         path: '/debug-room/the-part-header',
         component: () => import('../pages/debug-room/the-part-header.vue'),
     },
+
     {
-        name: 'DebugRoomBoardOperation',
+        name: 'DebugRoom_BoardOperation',
         path: '/debug-room/board-operation',
         component: () => import('../pages/debug-room/board-operation.vue'),
     },
