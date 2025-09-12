@@ -1,5 +1,5 @@
 <template>
-    <section class="sec-0" style="border: dashed 4px gray; padding: 20px;">
+    <section class="sec-0 sec-contents">
         <ul>
             <li>📖 <router-link to="/debug-room/board-operation" :style="getPreviousLinkHighlight('/debug-room/board-operation')">盤操作のデバッグの章だぜ！</router-link></li>
         </ul>

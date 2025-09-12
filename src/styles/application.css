@@ -68,6 +68,11 @@ h6::before {
     background-position: 0px 0;
 }
 
+section.sec-contents {  /* 目次 */
+    border: dashed 4px gray;
+    padding: 20px;
+}
+
 /* スマホ向けスタイル (画面幅が768px以下)
  * PC版に比べ、margin-left を 1/3。
  */
