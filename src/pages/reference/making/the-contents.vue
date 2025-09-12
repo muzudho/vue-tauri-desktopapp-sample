@@ -1,8 +1,5 @@
 <template>
-    <section class="sec-1 mt-6 mb-6">
-        アプリケーション製作の練習だぜ（＾▽＾）！
-    </section>
-    <section class="sec-1 sec-contents">
+    <section class="sec-1 sec-contents mt-6">
         <ul>
             <li>📖 <router-link to="/reference/making/page-layout" :style="getPreviousLinkHighlight('/reference/making/page-layout')">説明を始める前に、説明ページのレイアウトを決めておく章だぜ！</router-link></li>
             <li>📖 <router-link to="/reference/making/perspective-vertical-2-panes" :style="getPreviousLinkHighlight('/reference/making/perspective-vertical-2-panes')">画面を上下に分ける章だぜ！</router-link></li>

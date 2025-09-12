@@ -15,7 +15,7 @@
             :alt="kifuwarabe2Alt"
             :name="kifuwarabe2Name"
             :device="compatibleDevice1Ref?.device">
-                ここは調べものの部屋だぜ。<br/>
+                ここは物置だぜ。<br/>
                 面白いものは何もないぜ。用が無いなら帰った帰った！
         </talk-balloon>
     </section>

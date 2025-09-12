@@ -1,8 +1,5 @@
 <template>
-    <section class="sec-1 mt-6 mb-6">
-        コーディングの練習だぜ（＾▽＾）！
-    </section>
-    <section class="sec-1 sec-contents">
+    <section class="sec-1 sec-contents mt-6">
         <ul>
             <li>📖 <router-link to="/reference/coding-style/inline-style" :style="getPreviousLinkHighlight('/reference/coding-style/inline-style')">インライン・スタイルの書き方を決めておくの節だぜ！</router-link></li>
             <li>📖 <router-link to="/reference/coding-style/slot" :style="getPreviousLinkHighlight('/reference/coding-style/slot')">スロットの書き方を決めておくの節だぜ！</router-link></li>
