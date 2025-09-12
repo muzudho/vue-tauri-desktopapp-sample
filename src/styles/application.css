@@ -364,16 +364,17 @@ h6::before {
 
     /* 親リスト */
     ul {
+        padding-left: calc(0px + 20px);
         list-style-type: disc; /* リストのマーカー（点など）を設定 */
     }
     /* 子リスト */
     ul ul {
-        padding-left: 40px; /* インデントを増やす */
+        padding-left: calc(40px + 20px); /* インデントを増やす */
         list-style-type: circle; /* 異なるマーカーでネスト感を出す */
     }
     /* さらに深い子リスト */
     ul ul ul {
-        padding-left: 80px; /* さらにインデント */
+        padding-left: calc(80px + 20px); /* さらにインデント */
         list-style-type: square;
     }
 }

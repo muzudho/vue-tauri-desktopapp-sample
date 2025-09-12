@@ -1,9 +1,5 @@
 <template>
-    <section class="sec-1">
-        デバッグ部屋。
-        <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
-        <v-btn style="visibility: hidden;"></v-btn><br/>
-
+    <section class="sec-0" style="border: dashed 4px gray; padding: 20px;">
         <ul>
             <li>📖 <router-link to="/debug-room/board-operation" :style="getPreviousLinkHighlight('/debug-room/board-operation')">盤操作のデバッグの章だぜ！</router-link></li>
         </ul>
