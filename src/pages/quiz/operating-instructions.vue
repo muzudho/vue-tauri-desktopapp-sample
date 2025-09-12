@@ -5,7 +5,7 @@
 <template>
     <the-chapter-header/>
 
-    <h1>操作の説明だぜ！</h1>
+    操作の説明だぜ！
 
     <the-chapter-footer/>
 </template>
