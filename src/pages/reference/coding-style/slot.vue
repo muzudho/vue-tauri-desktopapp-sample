@@ -1,5 +1,11 @@
 <template>
-    <the-section-header/>
+    <the-app-header/>
+
+    <button-to-close-pane
+        class="sec-0"
+        direction="down"
+        pagePath="/reference"
+    />
 
     <h1>スロットの書き方を決めておくの節だぜ！</h1>
     <section class="sec-1 pt-6">
@@ -617,6 +623,7 @@ pnpm add -D @tauri-apps/cli@latest
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
+    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import No1o0Child from '@/components/coding-style/no-1-0-child.vue';
     import No1o2o0Child from '@/components/coding-style/no-1-2-0-child.vue';
@@ -624,8 +631,8 @@ pnpm add -D @tauri-apps/cli@latest
     import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TalkImage from '@/components/TalkImage.vue';
+    import TheAppHeader from '../../the-app-header.vue';
     import TheSectionFooter from './the-section-footer.vue';
-    import TheSectionHeader from './the-section-header.vue';
 
 
     // ##########

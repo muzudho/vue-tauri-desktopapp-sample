@@ -1,4 +1,7 @@
 <template>
+
+    🌟開発中<br/>
+
     <button-to-close-pane
         class="sec-0"
         direction="up"

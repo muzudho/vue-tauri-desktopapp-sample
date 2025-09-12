@@ -25,7 +25,7 @@
     
     interface Props {
         class: string,
-        direction: 'up' | 'down',
+        direction: 'up' | 'down' | '',
         pagePath: string;
     }
     // デフォルト値を設定
@@ -44,6 +44,8 @@
         tooltipMessage.value = '上のペーンを閉じる';
     } else if (props.direction == 'down') {
         tooltipMessage.value = '下のペーンを閉じる';
+    } else {
+        tooltipMessage.value = 'ペーンを閉じる';
     }
 
 
