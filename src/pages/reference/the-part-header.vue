@@ -1,5 +1,6 @@
 <template>
     <the-app-header/>
+
     <button-to-close-pane
         class="sec-0"
         direction="down"

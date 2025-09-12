@@ -1,12 +1,11 @@
 <template>
     <the-app-header/>
+
+    <router-link to="/reference/coding-style" :style="getLinkHighlight('/reference/coding-style')">コーディング・スタイル</router-link> |
+    <router-link to="/reference/making" :style="getLinkHighlight('/reference/making')">メイキング</router-link>
+
     <button-to-close-below-part
         pagePath="/"
-    />
-
-    <h2>リファレンスの部だぜ！</h2>
-    <button-to-close-below-chapter
-        pagePath="/reference"
     />
 
     <h3>コーディング・スタイルの章だぜ！</h3>
@@ -25,9 +24,14 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import ButtonToCloseBelowChapter from '@/components/ButtonToCloseBelowChapter.vue';
     import ButtonToCloseBelowPart from '@/components/ButtonToCloseBelowPart.vue';
     import ButtonToCloseBelowSection from '@/components/ButtonToCloseBelowSection.vue';
     import TheAppHeader from '../../the-app-header.vue';
+
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーザブル +
+    // ++++++++++++++++++++++++++++++++++
+
+    import { getLinkHighlight } from '../../../composables/link-highlight';
 
 </script>
