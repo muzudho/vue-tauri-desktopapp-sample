@@ -1,7 +1,6 @@
 <template>
     <the-app-header/>
     <button-to-close-below-part/>
-    <h1>このサイトについての部だぜ！</h1>
 </template>
 
 <script setup lang="ts">

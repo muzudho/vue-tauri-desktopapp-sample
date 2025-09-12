@@ -1,7 +1,5 @@
 <template>
-    <section class="sec-1">
-        <br/>
-
+    <section class="sec-0" style="pb-6">
         <v-container class="row">
             <!-- FIXME: なぜかボタンの画像が下にずれてしまう。 -->
             <v-btn icon href="https://vitejs.dev" target="_blank">
