@@ -1,6 +1,10 @@
 <template>
-    <the-part-header/>
-    <the-chapter-header/>
+    <the-app-header/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="down"
+        pagePath="/reference"
+    />
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
@@ -238,13 +242,16 @@
     <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1/><br/>
 
     <br/>
-    <h1><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h1>
-    <section class="sec-1">
+    <h2><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h2>
+    <section class="sec-2">
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
-    <the-part-footer/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="up"
+        pagePath="/reference"
+    />
 </template>
 
 <script setup lang="ts">
@@ -262,6 +269,7 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
+    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1 from './rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue';
     import InputAxisRpgWalkBoardGridMoveaway1 from './rpg-walk-board-grid-moveaway-1.vue';
@@ -276,10 +284,7 @@
     import InputAxisTargetAccumulateMoveaway1 from './target-accumulate-moveaway-1.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TheChapterFooter from '@/pages/reference/making/the-chapter-footer.vue';
-    import TheChapterHeader from '@/pages/reference/making/the-chapter-header.vue';
-    import ThePartFooter from '@/pages/reference/the-part-footer.vue';
-    import ThePartHeader from '@/pages/reference/the-part-header.vue';
+    import TheAppHeader from '../../../the-app-header.vue';
 
 
     // ##########
