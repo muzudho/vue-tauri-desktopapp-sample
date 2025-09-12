@@ -1,12 +1,10 @@
 <template>
     <the-app-header/>
-
     <button-to-close-pane
         class="sec-0"
         direction="down"
         pagePath="/reference"
     />
-
     <h1>インライン・スタイルの書き方を決めておくの節だぜ！</h1>
     <section class="sec-1 pt-6">
 
@@ -446,7 +444,11 @@
         <source-link/>
     </section>
 
-    <the-section-footer/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="up"
+        pagePath="/reference"
+    />
 </template>
 
 <script setup lang="ts">
@@ -469,7 +471,6 @@
     import SourceLink from '@/components/SourceLink.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TheAppHeader from '../../the-app-header.vue';
-    import TheSectionFooter from './the-section-footer.vue';
 
 
     // ##########

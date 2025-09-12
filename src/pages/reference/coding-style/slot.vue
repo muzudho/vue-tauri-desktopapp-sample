@@ -1,6 +1,5 @@
 <template>
     <the-app-header/>
-
     <button-to-close-pane
         class="sec-0"
         direction="down"
@@ -605,7 +604,11 @@ pnpm add -D @tauri-apps/cli@latest
         <source-link/>
     </section>
 
-    <the-section-footer/>
+    <button-to-close-pane
+        class="sec-0"
+        direction="up"
+        pagePath="/reference"
+    />
 </template>
 
 <script setup lang="ts">
@@ -632,7 +635,6 @@ pnpm add -D @tauri-apps/cli@latest
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TalkImage from '@/components/TalkImage.vue';
     import TheAppHeader from '../../the-app-header.vue';
-    import TheSectionFooter from './the-section-footer.vue';
 
 
     // ##########
