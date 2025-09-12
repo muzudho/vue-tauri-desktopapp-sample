@@ -396,14 +396,15 @@
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+            class="mb-6"
+        >
             リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
             👇これじゃ」<br/>
         </talk-balloon>
-        <br/>
 
         <pre
-            class="coding-example bt-6">
+            class="coding-example mb-6">
 // i はタイル番号。左上から右に向かって 0, 1, 2 ... 右端から１段下の左端に続く。
 //
 // そして、
@@ -593,7 +594,6 @@ color = i % 2;
                 <br/>
             </section>
         </section>
-        <br/>
 
     </section>
 

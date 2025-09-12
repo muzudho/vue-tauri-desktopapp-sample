@@ -57,7 +57,6 @@
 
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TalkImage from '@/components/TalkImage.vue';
 
 
     // ##########
@@ -76,9 +75,6 @@
     import hiyoko2Src from "@/assets/img/talk/202506__character__01-2025-hiyoko-o1o1o0.png";
     const hiyoko2Alt = "ひよこ２";
     const hiyoko2Name = "ひよこ";
-    import kurokichi1Src from "@/assets/img/talk/202509__character__10--kurokichi.png";
-    const kurokichi1Alt = "グロックの黒吉１";
-    const kurokichi1Name = "グロックの黒吉";
 
 
     // ################

@@ -2,6 +2,28 @@
  * plugins/vuetify.ts の方にテーマが設定されているので、そちらも見てください。
  */
 
+div.v-toolbar__content {    /* アプリケーション・バー */
+    color: saddlebrown;
+    background-color: burlywood;
+}
+div.app-bar-breadcrumb-list {
+    padding-left: 8px;
+    padding-top: 1px;
+    padding-right: 8px;
+    padding-bottom: 2px;
+    border-radius: 15px;
+    color: burlywood;
+    background-color: maroon;
+}
+button.app-bar-button {
+    min-width: 20px;
+    max-width: 20px;
+    max-height: 20px;
+    padding-left: 4px;
+    padding-right: 4px;
+    background-color: white;
+}
+
 /* ヘッダーの先頭に # のアイコンを付ける */
 h1::before {
     content: "";    /* 指定しないと、画像も表示されない */
@@ -78,7 +100,7 @@ h6::before {
     }
 
     h2 {
-        margin-left: 10px;
+        margin-left: 20px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -89,7 +111,7 @@ h6::before {
     }
 
     h3 {
-        margin-left: 20px;
+        margin-left: 40px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -100,7 +122,7 @@ h6::before {
     }
 
     h4 {
-        margin-left: 30px;
+        margin-left: 60px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -111,7 +133,7 @@ h6::before {
     }
 
     h5 {
-        margin-left: 40px;
+        margin-left: 80px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
@@ -122,7 +144,7 @@ h6::before {
     }
 
     h6 {
-        margin-left: 50px;
+        margin-left: 100px;
         padding-left: 4px;
         padding-top: 6px;
         padding-bottom: 2px;
