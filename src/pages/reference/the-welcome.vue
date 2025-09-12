@@ -19,13 +19,6 @@
                 面白いものは何もないぜ。用が無いなら帰った帰った！
         </talk-balloon>
     </section>
-
-    <the-coding-style-header/>
-    <the-coding-style-body/>
-    <br/>
-
-    <the-making-header/>
-    <the-making-body/>
 </template>
 
 <script setup lang="ts">
@@ -43,15 +36,6 @@
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import TalkBalloon from '@/components/TalkBalloon.vue';
     import TalkImage from '@/components/TalkImage.vue';
-
-    // ++++++++++++++++++++++++++
-    // + インポート　＞　ページ +
-    // ++++++++++++++++++++++++++
-
-    import TheCodingStyleBody from '@/pages/reference/coding-style/the-chapter-body.vue';
-    import TheCodingStyleHeader from '@/pages/reference/coding-style/the-chapter-header.vue';
-    import TheMakingBody from '@/pages/reference/making/the-chapter-body.vue';
-    import TheMakingHeader from '@/pages/reference/making/the-chapter-header.vue';
 
 
     // ##########

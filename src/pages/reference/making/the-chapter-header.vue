@@ -1,6 +1,5 @@
 <template>
-    リファレンス　＞　メイキング<br/>
-    <!--
-    <h1>メイキングの章だぜ！</h1>
-    -->
+    <section class="sec-0">
+        <span style="font-size: x-large;">メイキング</span>
+    </section>
 </template>
