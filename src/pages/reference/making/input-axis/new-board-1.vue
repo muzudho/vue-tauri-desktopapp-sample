@@ -22,9 +22,8 @@
         }"
     >
         <the-app-header/>
-        <button-to-close-pane
-            class="sec-0"
-            direction="down"
+        <button-to-back-to-contents
+            class="sec-0 mt-6"
             pagePath="/reference"
         />
 
@@ -59,11 +58,7 @@
 
         </section>
 
-        <button-to-close-pane
-            class="sec-0"
-            direction="up"
-            pagePath="/reference"
-        />
+        <button-to-go-to-top class="sec-0 pt-6"/>
     </div>
 
     <!-- オーバーラップ画面 -->
@@ -492,6 +487,13 @@
 
     import type Rectangle from '../../../../interfaces/Rectangle';
 
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
+
 
     // ##########
     // # コモン #
@@ -795,6 +797,7 @@
             pointerEvents: 'none',  /* クリックを透過させます */
         } as CompatibleStyleValue;
     });
+
 
     // ##########
     // # 開始時 #

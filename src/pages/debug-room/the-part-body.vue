@@ -1,7 +1,7 @@
 <template>
     <section class="sec-0 sec-contents">
         <ul>
-            <li>📖 <router-link to="/debug-room/board-operation" :style="getPreviousLinkHighlight('/debug-room/board-operation')">盤操作のデバッグの章だぜ！</router-link></li>
+            <li>📖 <router-link to="/debug-room/board-operation" :class="getLinkHighlight('/debug-room/board-operation')">盤操作のデバッグの章だぜ！</router-link></li>
         </ul>
     </section>
 </template>
@@ -16,6 +16,6 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { getPreviousLinkHighlight } from '../../composables/link-highlight';
+    import { getLinkHighlight } from '../../composables/link-highlight';
 
 </script>

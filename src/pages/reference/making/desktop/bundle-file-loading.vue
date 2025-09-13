@@ -1,8 +1,7 @@
 <template>
     <the-app-header/>
-    <button-to-close-pane
-        class="sec-0"
-        direction="down"
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
         pagePath="/reference"
     />
 
@@ -17,11 +16,7 @@
         <source-link/>
     </section>
 
-    <button-to-close-pane
-        class="sec-0"
-        direction="up"
-        pagePath="/reference"
-    />
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -43,12 +38,21 @@
     import SourceLink from '../../../../components/SourceLink.vue';
     import TheAppHeader from '../../../the-app-header.vue';
 
-    // ##############
-    // # 共有データ #
-    // ##############
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
+
+
+    // ################
+    // # オブジェクト #
+    // ################
 
     // 設定ファイルを読み込む練習
     const startConfigJsonStr = ref<string>('読み込み中...')
+
 
     // ##############
     // # 起動時処理 #

@@ -88,6 +88,17 @@ span.parent-header-lights-out {
     color:slategray;
 }
 
+a.link-highlight-current {
+    font-size: x-large;
+    color: white;
+    background-color: Royalblue;    /* Tauri, Nuxt 用 */
+    text-decoration: none;
+    pointer-events: none;   /* クリックしても画面遷移しないようにする */
+}
+a.link-highlight-previous {
+    background-color: lightgreen;
+}
+
 /* スマホ向けスタイル (画面幅が768px以下)
  * PC版に比べ、margin-left を 1/3。
  */

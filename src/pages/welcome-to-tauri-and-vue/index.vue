@@ -1,7 +1,7 @@
 <template>
-    <the-part-header/>
-    <the-part-body/>
-    <the-part-footer/>
+    <the-app-header/>
+    <the-body/>
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ThePartBody from '@/pages/welcome-to-tauri-and-vue/the-part-body.vue';
-    import ThePartFooter from '@/pages/welcome-to-tauri-and-vue/the-part-footer.vue';
-    import ThePartHeader from '@/pages/welcome-to-tauri-and-vue/the-part-header.vue';
+    import TheAppHeader from '@/pages/the-app-header.vue';
+    import TheBody from '@/pages/welcome-to-tauri-and-vue/the-body.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
 
 </script>

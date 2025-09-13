@@ -4,8 +4,8 @@
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
 
         <ul>
-            <li>📖 <router-link to="/quiz/operating-instructions" :style="getPreviousLinkHighlight('/quiz/operating-instructions')">操作の説明だぜ！</router-link></li>
-            <li>📖 <router-link to="/quiz/kings-room-tiles" :style="getPreviousLinkHighlight('/quiz/kings-room-tiles')">王の間のタイルを市松模様にしようぜ！</router-link></li>
+            <li>📖 <router-link to="/quiz/operating-instructions" :class="getLinkHighlight('/quiz/operating-instructions')">操作の説明だぜ！</router-link></li>
+            <li>📖 <router-link to="/quiz/kings-room-tiles" :class="getLinkHighlight('/quiz/kings-room-tiles')">王の間のタイルを市松模様にしようぜ！</router-link></li>
         </ul>
     </section>
 </template>
@@ -20,6 +20,6 @@
     // + コンポーザブル +
     // ++++++++++++++++++
 
-    import { getPreviousLinkHighlight } from '../../composables/link-highlight';
+    import { getLinkHighlight } from '../../composables/link-highlight';
 
 </script>

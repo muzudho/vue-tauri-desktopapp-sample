@@ -1,8 +1,7 @@
 <template>
     <the-app-header/>
-    <button-to-close-pane
-        class="sec-0"
-        direction="down"
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
         pagePath="/reference"
     />
 
@@ -131,11 +130,7 @@
         <source-link/>
     </section>
 
-    <button-to-close-pane
-        class="sec-0"
-        direction="up"
-        pagePath="/reference"
-    />
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -147,9 +142,9 @@
     import { onMounted, ref } from 'vue';
     import * as path from '@tauri-apps/api/path';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
     //
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
@@ -157,9 +152,17 @@
     import SourceLink from '../../../../components/SourceLink.vue';
     import TheAppHeader from '../../../the-app-header.vue';
 
-    // ##############
-    // # 共有データ #
-    // ##############
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
+
+
+    // ################
+    // # オブジェクト #
+    // ################
 
     // ディレクトリー・パス
     const appCacheDirStr = ref<string>('1 読み込み中...');           // 1
