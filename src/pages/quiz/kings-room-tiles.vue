@@ -3,15 +3,20 @@
 -->
 
 <template>
-    <the-chapter-header/>
-
-    <!-- ボタン機能拡張 -->
+    <!-- 機能 -->
     <button-20250822 ref="button1Ref"/>
-
     <compatible-device ref="compatibleDevice1Ref"/>
 
+    <!-- 以降、ページ -->
+    <the-app-header/>
+
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
+        pagePath="."
+    />
+
     <h1>王の間のタイルを市松模様にしようぜ！</h1>
-    <section class="sec-1 pt-6">
+    <section class="sec-1 pt-6 mb-6">
         
         <!-- 免責 -->
         <v-alert type="warning" title="免責！" text="画面は開発中のものだぜ（＾▽＾）！" closable />
@@ -597,13 +602,13 @@ color = i % 2;
     </section>
 
 
-    <br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
     <section class="sec-2">
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -618,22 +623,25 @@ color = i % 2;
 
     import { VBtn } from 'vuetify/components';
 
-    // ++++++++++++++
-    // + 互換性対応 +
-    // ++++++++++++++
+    // ++++++++++++++++++++++++++++++
+    // + インポート　＞　互換性対応 +
+    // ++++++++++++++++++++++++++++++
 
     import type { CompatibleStyleValue }  from '../../compatibles/compatible-style-value';
 
-    // ++++++++++++++++++
-    // + コンポーネント +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
     //
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
     // from の階層が上の順、アルファベット順
+    import TheAppHeader from '../the-app-header.vue';
     import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSight from '@/components/OutOfSightMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
@@ -642,12 +650,10 @@ color = i % 2;
     import TalkIllustration from '@/components/TalkIllustration.vue';
     import TalkNovel from '@/components/TalkNovel.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
 
-    // ++++++++++++++++++
-    // + コンポーザブル +
-    // ++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーザブル +
+    // ++++++++++++++++++++++++++++++++++
 
     import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../composables/board-operation';
     import {
@@ -1032,6 +1038,7 @@ color = i % 2;
         gameLoopStart();
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
+
 
     // ################
     // # サブルーチン #

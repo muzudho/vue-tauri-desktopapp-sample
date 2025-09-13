@@ -1,6 +1,4 @@
 <template>
-    <the-chapter-header/>
-
     <h1>盤操作のデバッグの章だぜ！</h1>
     <section class="sec-1">
         tileIndex = {{ tileIndex }}<br/>
@@ -37,8 +35,6 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     <section class="sec-2">
         <source-link/>
     </section>
-
-    <the-chapter-footer/>
 </template>
 
 <script setup lang="ts">
@@ -68,9 +64,6 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
-
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
 
 
     // ################

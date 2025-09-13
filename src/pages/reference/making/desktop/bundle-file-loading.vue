@@ -41,7 +41,6 @@
     //
 
     import SourceLink from '../../../../components/SourceLink.vue';
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import TheAppHeader from '../../../the-app-header.vue';
 
     // ##############

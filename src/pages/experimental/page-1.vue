@@ -9,7 +9,6 @@
             background-color: #FF66CC;
         "
     >
-        <the-chapter-header/>
 
         <div
             style="
@@ -49,8 +48,6 @@
                 v-if="selectedComponent"
             />
         </section>
-
-        <the-chapter-footer/>
     </div>
 </template>
 
@@ -68,9 +65,6 @@
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
-
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
 
 
     // ############

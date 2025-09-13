@@ -1,16 +1,15 @@
 <template>
     <the-app-header/>
-    <button-to-close-pane
-        class="sec-0"
-        direction="down"
-        pagePath="/reference"
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
+        pagePath="../"
     />
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
     <h1>上下左右に移動する節だぜ！</h1>
-    <section class="sec-1">
-        <br/>
+    <section class="sec-1 pt-6">
+
 
         <talk-balloon
             :src="commonOton2Src"
@@ -22,6 +21,8 @@
             <br/>
             コントローラーを触らせながら覚えていってもらおうぜ？
         </talk-balloon>
+
+
         <talk-balloon
             :src="commonKifuwarabe2Src"
             :alt="commonKifuwarabe2Alt"
@@ -30,11 +31,16 @@
             そこで、この記事では、ゲームパッドの十字キーを使って<br/>
             オブジェクトを動かせる例をいろいろ並べていくぜ。
         </talk-balloon>
+
+
     </section>
 
-    <input-axis-target-accumulate-moveaway-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-target-accumulate-moveaway-1/>
 
     <section class="sec-1">
+
+
         <talk-balloon
             :src="commonKifuwarabe2Src"
             :alt="commonKifuwarabe2Alt"
@@ -47,6 +53,7 @@
             ［累積］というのは、キーを押している間、数ドットずつ動くことだぜ。<br/>
         </talk-balloon>
 
+
         <talk-balloon
             :src="commonHiyoko2Src"
             :alt="commonHiyoko2Alt"
@@ -54,9 +61,12 @@
             :device="compatibleDevice1Ref?.device">
             でも［累積］ってあんま使わないから覚えなくていいわよね。<br/>
         </talk-balloon>
+
+
     </section>
 
-    <input-axis-rpg-walk-player-accumulate-moveaway-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-player-accumulate-moveaway-1/>
 
     <section class="sec-1">
         <br/>
@@ -71,7 +81,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-player-grid-moveaway-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-player-grid-moveaway-1/>
 
     <section class="sec-1">
         <br/>
@@ -87,7 +98,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-player-grid-bounded-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-player-grid-bounded-1/>
 
     <section class="sec-1">
         <br/>
@@ -103,7 +115,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-board-grid-moveaway-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-board-grid-moveaway-1/>
 
     <section class="sec-1">
         <br/>
@@ -119,7 +132,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-tiles-immovable-projection-moveaway-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-tiles-immovable-projection-moveaway-1/>
 
     <section class="sec-1">
         <br/>
@@ -159,7 +173,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-tiles-immovable-projection-boundary-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-tiles-immovable-projection-boundary-1/>
 
     <section class="sec-1">
         <br/>
@@ -173,7 +188,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-tiles-immovable-projection-loop-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-tiles-immovable-projection-loop-1/>
 
     <section class="sec-1">
         <br/>
@@ -188,7 +204,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-tiles-immovable-projection-moveaway-size-variable-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-tiles-immovable-projection-moveaway-size-variable-1/>
 
     <section class="sec-1">
         <br/>
@@ -202,7 +219,8 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-1/>
 
     <section class="sec-1">
         <br/>
@@ -239,19 +257,15 @@
         </talk-balloon>
     </section>
 
-    <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1/><br/>
+    <button-to-go-to-top class="sec-1 pt-6"/>
+    <input-axis-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1/>
 
-    <br/>
     <h2><span class="parent-header">上下左右に移動しようぜ！　＞　</span>ソースコード</h2>
     <section class="sec-2">
         <source-link/>
     </section>
 
-    <button-to-close-pane
-        class="sec-0"
-        direction="up"
-        pagePath="/reference"
-    />
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -269,7 +283,8 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import InputAxisRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1 from './rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue';
     import InputAxisRpgWalkBoardGridMoveaway1 from './rpg-walk-board-grid-moveaway-1.vue';

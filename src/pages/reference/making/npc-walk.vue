@@ -1,10 +1,5 @@
 <template>
     <the-app-header/>
-    <button-to-close-pane
-        class="sec-0"
-        direction="down"
-        pagePath="/reference"
-    />
 
     <h1>ノン・プレイヤー・キャラクターを動かす章だぜ！</h1>
 
@@ -14,11 +9,6 @@
         <source-link/>
     </section>
 
-    <button-to-close-pane
-        class="sec-0"
-        direction="up"
-        pagePath="/reference"
-    />
 </template>
 
 <script setup lang="ts">
@@ -40,7 +30,6 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import TheAppHeader from '../../the-app-header.vue';
 
 </script>

@@ -21,19 +21,9 @@ const routes = [
         component: () => import('../pages/about/index.vue'),
     },
     {
-        name: 'About_ThePartBody',
-        path: '/about/the-part-body',
-        component: () => import('../pages/about/the-part-body.vue'),
-    },
-    {
-        name: 'About_ThePartFooter',
-        path: '/about/the-part-footer',
-        component: () => import('../pages/about/the-part-footer.vue'),
-    },
-    {
-        name: 'About_ThePartHeader',
-        path: '/about/the-part-header',
-        component: () => import('../pages/about/the-part-header.vue'),
+        name: 'About_TheBody',
+        path: '/about/the-body',
+        component: () => import('../pages/about/the-body.vue'),
     },
 
     // ++++++++++
@@ -138,9 +128,9 @@ const routes = [
         component: () => import('../pages/home/index.vue'),
     },
     {
-        name: 'Home_TheChaptersBody',
-        path: '/home/the-part-body',
-        component: () => import('../pages/home/the-part-body.vue'),
+        name: 'Home_TheBody',
+        path: '/home/the-body',
+        component: () => import('../pages/home/the-body.vue'),
     },
 
 
@@ -154,19 +144,9 @@ const routes = [
         component: () => import('../pages/minigames/index.vue'),
     },
     {
-        name: 'MiniGames_TheChaptersBody',
-        path: '/minigames/the-part-body',
-        component: () => import('../pages/minigames/the-part-body.vue'),
-    },
-    {
-        name: 'MiniGames_TheChaptersFooter',
-        path: '/minigames/the-part-footer',
-        component: () => import('../pages/minigames/the-part-footer.vue'),
-    },
-    {
-        name: 'MiniGames_TheChaptersHeader',
-        path: '/minigames/the-part-header',
-        component: () => import('../pages/minigames/the-part-header.vue'),
+        name: 'MiniGames_TheBody',
+        path: '/minigames/the-body',
+        component: () => import('../pages/minigames/the-body.vue'),
     },
 
     {
@@ -196,19 +176,9 @@ const routes = [
         component: () => import('../pages/quiz/index.vue'),
     },
     {
-        name: 'Quiz_TheChaptersBody',
-        path: '/quiz/the-part-body',
-        component: () => import('../pages/quiz/the-part-body.vue'),
-    },
-    {
-        name: 'Quiz_TheChaptersFooter',
-        path: '/quiz/the-part-footer',
-        component: () => import('../pages/quiz/the-part-footer.vue'),
-    },
-    {
-        name: 'Quiz_TheChaptersHeader',
-        path: '/quiz/the-part-header',
-        component: () => import('../pages/quiz/the-part-header.vue'),
+        name: 'Quiz_TheBody',
+        path: '/quiz/the-body',
+        component: () => import('../pages/quiz/the-body.vue'),
     },
 
     {

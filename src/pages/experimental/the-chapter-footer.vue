@@ -1,9 +1,4 @@
 <template>
-    <button-to-close-pane
-        class="sec-0"
-        direction="up"
-        pagePath="/experimental"
-    />
 </template>
 
 <script setup lang="ts">
@@ -15,7 +10,5 @@
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
-
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
 
 </script>

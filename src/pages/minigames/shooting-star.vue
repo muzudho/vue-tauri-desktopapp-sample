@@ -1,11 +1,17 @@
 <template>
-    <the-chapter-header/>
-
-    <!-- ボタン機能拡張 -->
+    <!-- 機能 -->
     <button-20250822 ref="button1Ref"/>
 
+    <!-- 以降、ページ -->
+    <the-app-header/>
+
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
+        pagePath="."
+    />
+
     <h1>シューティング・スター</h1>
-    <section class="sec-1">
+    <section class="sec-1 mb-6">
 
         <!-- ゲームの操作方法 -->
         <v-btn @click="app.manual.isShowing = !app.manual.isShowing">{{ app.manual.isShowing ? 'ゲームの遊び方・操作方法を閉じる' : 'ゲームの遊び方・操作方法を表示' }}</v-btn>
@@ -186,14 +192,14 @@
             ：ここまで。
         -->
     </section>
-    
-    <br/>
+
+    <button-to-go-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
     <section class="sec-2">
         <source-link/>
     </section>
 
-    <the-chapter-footer/>
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -212,13 +218,19 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    // from の階層が上の順、アルファベット順
+    // アルファベット順
     import Button20250822 from '../../components/Button20250822.vue';
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import SourceLink from '../../components/SourceLink.vue';
     import Stopwatch from '../../components/Stopwatch.vue';
     import Tile from '../../components/Tile.vue';
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
+
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import TheAppHeader from '../the-app-header.vue';
 
 
     // ##########

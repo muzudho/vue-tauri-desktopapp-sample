@@ -1,9 +1,8 @@
 <template>
     <the-app-header/>
-    <button-to-close-pane
-        class="sec-0"
-        direction="down"
-        pagePath="/reference"
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
+        pagePath="../"
     />
 
     <h1>スロットの書き方を決めておくの節だぜ！</h1>
@@ -368,6 +367,7 @@
 
 
         <talk-image
+            expandable
             href="/img/coding-style/202509__warabenture__08-2136-slotError-o1o0.jpg"
             alt="Property 'author' does not exist on type '{}'. ts-plugin(2339) [Ln 349, Col 28]"
         />
@@ -604,11 +604,7 @@ pnpm add -D @tauri-apps/cli@latest
         <source-link/>
     </section>
 
-    <button-to-close-pane
-        class="sec-0"
-        direction="up"
-        pagePath="/reference"
-    />
+    <button-to-go-to-top class="sec-0 pt-6"/>
 </template>
 
 <script setup lang="ts">
@@ -626,7 +622,8 @@ pnpm add -D @tauri-apps/cli@latest
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import No1o0Child from '@/components/coding-style/no-1-0-child.vue';
     import No1o2o0Child from '@/components/coding-style/no-1-2-0-child.vue';

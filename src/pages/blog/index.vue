@@ -1,7 +1,7 @@
 <template>
-    <the-part-header/>
-    <the-part-body/>
-    <the-part-footer/>
+    <the-app-header/>
+    <the-blog-header/>
+    <the-blog-body/>
 </template>
 
 <script setup lang="ts">
@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ThePartBody from '@/pages/blog/the-part-body.vue';
-    import ThePartFooter from '@/pages/blog/the-part-footer.vue';
-    import ThePartHeader from '@/pages/blog/the-part-header.vue';
+    import TheAppHeader from '../the-app-header.vue';
+    import TheBlogBody from '@/pages/blog/the-body.vue';
+    import TheBlogHeader from '@/pages/blog/the-header.vue';
 
 </script>

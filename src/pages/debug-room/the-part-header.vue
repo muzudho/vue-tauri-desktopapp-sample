@@ -1,10 +1,5 @@
 <template>
     <the-app-header/>
-    <button-to-close-pane
-        class="sec-0"
-        direction="down"
-        pagePath="/"
-    />
 </template>
 
 <script setup lang="ts">
@@ -16,8 +11,6 @@
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
-
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +

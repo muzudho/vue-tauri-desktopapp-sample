@@ -1,17 +1,16 @@
 <template>
     <h1>ホームページ制作者のわたしが選ぶこのホームページで力を入れてる割合</h1>
+
     <section class="sec-1 pt-6">
         以下の円グラフをクリックするとそのページへ飛べるぜ（＾▽＾）！<br/>
 	    <canvas id="pieChart" class="pieChartStyle"></canvas>
     </section>
 
     <br/>
-    <section class="sec-0">
+    <section class="sec-1">
         またのお越しをお待ちしておりますだぜ（＾▽＾）！<v-btn style="visibility: hidden;"></v-btn><br/>
         <!-- 他のページと縦幅を揃えるために、何の働きもしない空ボタンを置いています。 -->
     </section>
-
-    <!-- ホームに閉じるボタンはありません。 -->
 </template>
 
 <script setup lang="ts">

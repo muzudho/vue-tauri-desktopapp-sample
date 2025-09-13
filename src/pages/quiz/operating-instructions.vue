@@ -3,11 +3,7 @@
 -->
 
 <template>
-    <the-chapter-header/>
-
     操作の説明だぜ！
-
-    <the-chapter-footer/>
 </template>
 
 <script setup lang="ts">
@@ -22,9 +18,6 @@
     //
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
-
-    import TheChapterFooter from './the-chapter-footer.vue';
-    import TheChapterHeader from './the-chapter-header.vue';
 
 </script>
 

@@ -16,6 +16,4 @@
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
 
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
-
 </script>

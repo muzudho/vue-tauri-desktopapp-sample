@@ -140,7 +140,6 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import TheAppHeader from '../../the-app-header.vue';
 
 

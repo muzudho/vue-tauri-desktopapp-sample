@@ -10,7 +10,7 @@
 
 <template>
     <v-app>
-        <v-app-bar app density="compact">
+        <v-app-bar app fixed density="compact">
             <v-toolbar-title style="display: inline;">デスクトップアプリ</v-toolbar-title>
             <!-- WIP:
             <v-spacer></v-spacer>
@@ -18,7 +18,11 @@
             <v-btn>ゲーム調整</v-btn>
             -->
         </v-app-bar>
-        <v-main>
+
+        <!--
+            `id="top"` - #top を使って画面上部に飛ぶリンクを作るのに使う。
+        -->
+        <v-main id="top">
             <!-- WIP: パンくずリスト -->
             <!--
              class="app-bar"

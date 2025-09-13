@@ -154,7 +154,6 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import ButtonToClosePane from '@/components/ButtonToClosePane.vue';
     import SourceLink from '../../../../components/SourceLink.vue';
     import TheAppHeader from '../../../the-app-header.vue';
 

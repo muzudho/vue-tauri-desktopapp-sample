@@ -41,7 +41,8 @@ export function getCurrentLinkHighlight(expected:string) : Record<string, number
         return {
             fontSize: 'x-large',
             color: 'white',
-            backgroundColor: 'Royalblue',
+            backgroundColor: 'Royalblue',   /* Tauri, Nuxt 用 */
+            textDecoration: 'none',
         };
     }
 
