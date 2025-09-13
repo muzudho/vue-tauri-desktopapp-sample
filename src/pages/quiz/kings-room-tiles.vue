@@ -1248,8 +1248,9 @@ color = i % 2;
 </script>
 
 <style scoped>
-
+    @import '@/styles/misc.css';
     @import '@/styles/notebook.css';
+    @import '@/styles/talk-pen.css';
     @import '@/styles/talk-scene.css';
 
     /* 

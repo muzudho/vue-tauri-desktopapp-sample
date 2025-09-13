@@ -21,17 +21,17 @@ const routes = [
         component: () => import('../pages/about/index.vue'),
     },
     {
-        name: 'About_TheChaptersBody',
+        name: 'About_ThePartBody',
         path: '/about/the-part-body',
         component: () => import('../pages/about/the-part-body.vue'),
     },
     {
-        name: 'About_TheChaptersFooter',
+        name: 'About_ThePartFooter',
         path: '/about/the-part-footer',
         component: () => import('../pages/about/the-part-footer.vue'),
     },
     {
-        name: 'About_TheChaptersHeader',
+        name: 'About_ThePartHeader',
         path: '/about/the-part-header',
         component: () => import('../pages/about/the-part-header.vue'),
     },
@@ -233,34 +233,20 @@ const routes = [
         component: () => import('../pages/reference/index.vue'),
     },
     {
-        name: 'Reference_TheChaptersBody',
-        path: '/reference/the-part-body',
-        component: () => import('../pages/reference/the-part-body.vue'),
-    },
-    {
-        name: 'Reference_TheChaptersFooter',
-        path: '/reference/the-part-footer',
-        component: () => import('../pages/reference/the-part-footer.vue'),
-    },
-    {
-        name: 'Reference_TheChaptersHeader',
-        path: '/reference/the-part-header',
-        component: () => import('../pages/reference/the-part-header.vue'),
+        name: 'Reference_TheWelcome',
+        path: '/reference/the-welcome',
+        component: () => import('../pages/reference/the-welcome.vue'),
     },
 
     // ++++++++++++++++++++++++++++++++++++++++++++
     // + リファレンス　＞　コーディング・スタイル +
     // ++++++++++++++++++++++++++++++++++++++++++++
     {
-        name: 'Reference_CodingStyle',
-        path: '/reference/coding-style',
-        component: () => import('../pages/reference/coding-style/index.vue'),
+        name: 'Reference_CodingStyle_TheContents',
+        path: '/reference/coding-style/the-contents',
+        component: () => import('../pages/reference/coding-style/the-contents.vue'),
     },
-    {
-        name: 'Reference_CodingStyle_IndexBody',
-        path: '/reference/coding-style/the-chapter-body',
-        component: () => import('../pages/reference/coding-style/the-chapter-body.vue'),
-    },
+
     {
         name: 'Reference_CodingStyle_InlineStyle',
         path: '/reference/coding-style/inline-style',
@@ -292,34 +278,9 @@ const routes = [
     // + メイキング +
     // ++++++++++++++
     {
-        name: 'Reference_Making',
-        path: '/reference/making',
-        component: () => import('@/pages/reference/making/index.vue'),
-    },
-    {
-        name: 'Reference_Making_TheChaptersBody',
-        path: '/reference/making/the-chapter-body',
-        component: () => import('@/pages/reference/making/the-chapter-body.vue'),
-    },
-    {
-        name: 'Reference_Making_TheChaptersFooter',
-        path: '/reference/making/the-chapter-footer',
-        component: () => import('@/pages/reference/making/the-chapter-footer.vue'),
-    },
-    {
-        name: 'Reference_Making_TheChaptersHeader',
-        path: '/reference/making/the-chapter-header',
-        component: () => import('@/pages/reference/making/the-chapter-header.vue'),
-    },
-    {
-        name: 'Reference_Making_TheSectionFooter',
-        path: '/reference/making/the-section-footer',
-        component: () => import('@/pages/reference/making/the-section-footer.vue'),
-    },
-    {
-        name: 'Reference_Making_TheSectionHeader',
-        path: '/reference/making/the-section-header',
-        component: () => import('@/pages/reference/making/the-section-header.vue'),
+        name: 'Reference_Making_TheContents',
+        path: '/reference/making/the-contents',
+        component: () => import('@/pages/reference/making/the-contents.vue'),
     },
 
     {

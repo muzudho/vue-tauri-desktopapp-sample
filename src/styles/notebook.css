@@ -1,3 +1,8 @@
+/**
+ * ノートブックのような演出
+ * ========================
+ */
+
 pre.coding-example {    /* ソースコード例 */
     display: block;
     padding-left: 24px;
@@ -10,43 +15,43 @@ pre.coding-example {    /* ソースコード例 */
 
 pre.coding-example-bad {    /* 悪いソースコード例 */
     display: inline-block;
-    border: dashed 4px gray;
-    color: #303030;
-    background-color: #f8c0c0;
     padding-left: 24px;
     padding-top: 16px;
     padding-right: 24px;
+    border: dashed 4px gray;
+    color: #303030;
+    background-color: #f8c0c0;
 }
 
 pre.coding-example-good {    /* 良いソースコード例 */
+    padding-left: 24px;
+    padding-top: 16px;
+    padding-right: 24px;
     display: inline-block;
     border: dashed 4px gray;
     color: #303030;
     background-color: #c0f8c0;
-    padding-left: 24px;
-    padding-top: 16px;
-    padding-right: 24px;
 }
 
 pre.terminal-example {    /* ターミナル例 */
+    padding-left: 24px;
+    padding-top: 16px;
+    padding-right: 24px;
     display: inline-block;
     border: dashed 4px #909090;
     color: #f0f0f0;
     background-color: #303030;
-    padding-left: 24px;
-    padding-top: 16px;
-    padding-right: 24px;
 }
 
 div.markup-example {    /* マークアップされたテキスト例 */
-    display: inline-block;
-    border: dashed 4px gray;
-    color: #303030;
-    background-color: #f0f0f0;
     padding-left: 24px;
     padding-top: 16px;
     padding-right: 24px;
     padding-bottom: 16px;
+    display: inline-block;
+    border: dashed 4px gray;
+    color: #303030;
+    background-color: #f0f0f0;
 }
 
 span.red-marker {   /* 強調 */

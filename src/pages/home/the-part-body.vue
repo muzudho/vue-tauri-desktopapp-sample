@@ -35,11 +35,11 @@
 
     // 円グラフのための、SPA用のルートパス
     const routes = [
-        "/reference/making",                      // メイキングのURL
-        "/minigames",                   // ミニゲーム
-        "/about",                       // ［このサイトについて］のURL
+        "/reference/making",    // メイキングのURL
+        "/minigames",   // ミニゲーム
+        "/about",   // ［このサイトについて］のURL
         "/welcome-to-tauri-and-vue",    // Tauri のウェルカムページ
-        "/coding-style",                // コーディング・スタイル
+        "/reference/coding-style",  // コーディング・スタイル
     ];
 
 
@@ -62,6 +62,8 @@
 
     function clientsideChartInit() {
         // window オブジェクトはブラウザー専用。サーバー側ではプリレンダリングできないので、マウント後に書く。
+        //const baseUrl = window.location.origin;
+        //alert(`baseUrl=${baseUrl}`);
         const ctx : HTMLCanvasElement = window.document.getElementById('pieChart') as HTMLCanvasElement;
 
         if (ctx == null){

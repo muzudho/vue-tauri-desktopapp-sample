@@ -1,3 +1,58 @@
+/**
+ * 会話画面
+ * ========
+ */
+
+/*  ++++++++
+ *  + 画像 +
+ *  ++++++++
+ */
+
+div.talk-image {    /** 会話の途中で引用される画像。スクリーンショット等 */
+    display: block;
+    max-height: 500px !important;
+    margin-top: 8px;
+}
+
+/*  ++++++++++++++++++++
+ *  + 吹き出し台詞領域 +
+ *  ++++++++++++++++++++
+ */
+
+div.talk-container {
+    display: flex;
+    align-items: center;
+    margin-top: 1px;
+    margin-bottom: 16px;
+    color: #101010;
+}
+
+/*
+ *  clip-path:
+ *          | 0%   100%
+ *      ----+----------
+ *        0%|         2
+ *       50%|  1
+ *      100%|         3
+ */
+div.baloon-tail {
+    width: 21px;    /* 右端の 1px は欠けることがあるから、 1px 長めに指定 */
+    height: 15px;
+    background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
+    clip-path: polygon(0% 50%, 100% 0%, 100% 100%); /* 上頂点、下底の三角形 */
+}
+
+div.baloon-body{
+    position: relative;
+    left: -1px; /* 吹き出しの尻尾との隙間を 1px 詰めたい */
+    padding-left:16px;
+    padding-top: 12px;
+    padding-bottom:16px;
+    padding-right:16px;
+    background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
+    border-radius: 16px;
+}
+
 /* スマホ向けスタイル (画面幅が768px以下) */
 @media screen and (max-width: 768px) {
     div.talk-face-container-2{
@@ -12,12 +67,6 @@
         max-width: 96px;
         font-size: small;
         color: rgb(var(--v-theme-text-light));  /* Tauri, Nuxt サンプル用 */
-    }
-    div.talk-name-novel { /* 名前 */
-        padding-left: 0;
-        padding-right: 0;
-        text-align: right;
-        max-width: 96px;
     }
 }
 /* パソコン向けスタイル (画面幅が769px以上) */
@@ -35,13 +84,12 @@
         font-size: small;
         color: rgb(var(--v-theme-text-light));  /* Tauri, Nuxt サンプル用 */
     }
-    div.talk-name-novel { /* 名前 */
-        padding-left: 0;
-        padding-right: 0;
-        text-align: right;
-        max-width: 128px;
-    }
 }
+
+/*  ++++++++++++++++++++
+ *  + ノベル風台詞領域 +
+ *  ++++++++++++++++++++
+ */
 
 div.talk-quot-open-novel { /* 鍵かっこ開く */
     margin-left: 8px;
@@ -49,66 +97,22 @@ div.talk-quot-open-novel { /* 鍵かっこ開く */
     padding-right: 0;
     max-width: 8px;
 }
-/* 鍵かっこ閉じる
-div.talk-quot-close-novel {
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding-left: 0;
-    padding-right: 0;
-    max-width: 32px;
-    max-height: 100%;
-}
-*/
-/* 本文
-div.talk-body-novel {
-    display: flex;
-    padding-left: 0;
-    padding-right: 0;
-    max-width:fit-content;
-}
-*/
 
-div.talk-container {
-    display: flex;
-    align-items: center;
-    margin-top: 1px;
-    margin-bottom: 16px;
-    color: #101010;
+/* スマホ向けスタイル (画面幅が768px以下) */
+@media screen and (max-width: 768px) {
+    div.talk-name-novel { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
+        max-width: 96px;
+    }
 }
-
-div.face-container{
-    width:100px;
-}
-
-div.baloon-body{
-    position: relative;
-    left: -1px; /* 吹き出しの尻尾との隙間を 1px 詰めたい */
-    padding-left:16px;
-    padding-top: 12px;
-    padding-bottom:16px;
-    padding-right:16px;
-    background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
-    border-radius: 16px;
-}
-
-/**
-*   clip-path:
-*           | 0%   100%
-*       ----+----------
-*         0%|         2
-*        50%|  1
-*       100%|         3
-*/
-div.baloon-tail {
-    width: 21px;    /* 右端の 1px は欠けることがあるから、 1px 長めに指定 */
-    height: 15px;
-    background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
-    clip-path: polygon(0% 50%, 100% 0%, 100% 100%); /* 上頂点、下底の三角形 */
-}
-
-div.talk-image {    /** 会話の途中で引用される画像 */
-    display: block;
-    max-height: 500px !important;
-    margin-top: 8px;
+/* パソコン向けスタイル (画面幅が769px以上) */
+@media screen and (min-width: 769px) {
+    div.talk-name-novel { /* 名前 */
+        padding-left: 0;
+        padding-right: 0;
+        text-align: right;
+        max-width: 128px;
+    }
 }
