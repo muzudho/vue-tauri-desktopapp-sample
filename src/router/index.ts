@@ -420,19 +420,9 @@ const routes = [
         component: () => import('../pages/welcome-to-tauri-and-vue/index.vue'),
     },
     {
-        name: 'WelcomeToTauriAndVue_TheChaptersBody',
-        path: '/welcome-to-tauri-and-vue/the-part-body',
-        component: () => import('../pages/welcome-to-tauri-and-vue/the-part-body.vue'),
-    },
-    {
-        name: 'WelcomeToTauriAndVue_TheChaptersFooter',
-        path: '/welcome-to-tauri-and-vue/the-part-footer',
-        component: () => import('../pages/welcome-to-tauri-and-vue/the-part-footer.vue'),
-    },
-    {
-        name: 'WelcomeToTauriAndVue_TheChaptersHeader',
-        path: '/welcome-to-tauri-and-vue/the-part-header',
-        component: () => import('../pages/welcome-to-tauri-and-vue/the-part-header.vue'),
+        name: 'WelcomeToTauriAndVue_TheBody',
+        path: '/welcome-to-tauri-and-vue/the-body',
+        component: () => import('../pages/welcome-to-tauri-and-vue/the-body.vue'),
     },
 
 ] as const;
@@ -440,6 +430,10 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),    // SPA の履歴管理に HTML5 History API を使う設定。Tauri でもこれでバッチリ！
     routes,
+    scrollBehavior(_to, _from, _savedPosition) {
+        // リンクをクリックしてページ遷移したとき、記憶されているスクロール量をリセットして、常にページの先頭にスクロール
+        return { top: 0 };
+    },
 });
 
 export default router;
