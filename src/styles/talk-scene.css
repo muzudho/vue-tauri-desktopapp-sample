@@ -19,7 +19,7 @@ div.talk-image {    /** 会話の途中で引用される画像。スクリー�
  *  ++++++++++++++++++++
  */
 
-div.talk-container {
+div.talk-balloon-container {
     display: flex;
     align-items: center;
     margin-top: 1px;
@@ -35,14 +35,14 @@ div.talk-container {
  *       50%|  1
  *      100%|         3
  */
-div.baloon-tail {
+div.talk-baloon-tail {
     width: 21px;    /* 右端の 1px は欠けることがあるから、 1px 長めに指定 */
     height: 15px;
     background-color: #F8F0C0;  /* Tauri, Nuxt サンプル用 */
     clip-path: polygon(0% 50%, 100% 0%, 100% 100%); /* 上頂点、下底の三角形 */
 }
 
-div.baloon-body{
+div.talk-baloon-body {
     position: relative;
     left: -1px; /* 吹き出しの尻尾との隙間を 1px 詰めたい */
     padding-left:16px;
@@ -55,12 +55,12 @@ div.baloon-body{
 
 /* スマホ向けスタイル (画面幅が768px以下) */
 @media screen and (max-width: 768px) {
-    div.talk-face-container-2{
+    div.talk-balloon-face-container{
         width: 96px;
         height: 128px;
         margin-right: 8px;
     }
-    div.talk-name-balloon { /* 名前 */
+    div.talk-balloon-name { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
@@ -71,12 +71,12 @@ div.baloon-body{
 }
 /* パソコン向けスタイル (画面幅が769px以上) */
 @media screen and (min-width: 769px) {
-    div.talk-face-container-2{
+    div.talk-balloon-face-container{
         width: 96px;
         height: 128px;
         margin-right: 16px;
     }
-    div.talk-name-balloon { /* 名前 */
+    div.talk-balloon-name { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
@@ -91,7 +91,7 @@ div.baloon-body{
  *  ++++++++++++++++++++
  */
 
-div.talk-quot-open-novel { /* 鍵かっこ開く */
+div.talk-novel-quot-open { /* 鍵かっこ開く */
     margin-left: 8px;
     padding-left: 0;
     padding-right: 0;
@@ -100,7 +100,7 @@ div.talk-quot-open-novel { /* 鍵かっこ開く */
 
 /* スマホ向けスタイル (画面幅が768px以下) */
 @media screen and (max-width: 768px) {
-    div.talk-name-novel { /* 名前 */
+    div.talk-novel-name { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
@@ -109,7 +109,7 @@ div.talk-quot-open-novel { /* 鍵かっこ開く */
 }
 /* パソコン向けスタイル (画面幅が769px以上) */
 @media screen and (min-width: 769px) {
-    div.talk-name-novel { /* 名前 */
+    div.talk-novel-name { /* 名前 */
         padding-left: 0;
         padding-right: 0;
         text-align: right;
