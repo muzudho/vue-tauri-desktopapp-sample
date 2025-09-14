@@ -163,11 +163,14 @@
             👇 以下の通り。
         </talk-balloon>
 
-<!--
+
+<!-- 
         <pre class="coding-example mb-6">
 {{ json2Str }}
         </pre>
 -->
+        <v-alert type="warning" title="免責！" text="useFetch() は Nuxt3 用です。 Tauri では使えません。" closable />
+
 
         <talk-balloon
             :src="hiyoko2Src"
@@ -198,7 +201,9 @@
             :device="compatibleDevice1Ref?.device"
         >
             後者の useFetch() は、静的ページの初期値として使える。<br/>
-            だから、サーバーサイドでプリレンダリングできる。
+            だから、サーバーサイドでプリレンダリングできる。<br/>
+            <br/>
+            Tauri で使えないので、ウェブアプリとデスクトップアプリを同じコードで書けないのがデメリットだな。
         </talk-balloon>
 
 
@@ -218,8 +223,28 @@
             第３の方法を説明する。<br/>
             まず、以下の設定をしておいてくれだぜ。<br/>
             <br/>
-            プロジェクト・フォルダーの直下に public フォルダーと、 nuxt.config.ts ファイルがあるとするぜ。
+            プロジェクト・フォルダーの直下に public フォルダーがあって、また、<br/>
+            Tauri デスクトップアプリには vite.config.ts が、<br/>
+            Nuxt ウェブアプリには nuxt.config.ts ファイルがあるとするぜ。
         </talk-balloon>
+
+
+        <p class="mt-6">📄 vite.config.ts（抜粋）:</p>
+        <pre class="coding-example mb-6">
+export default defineConfig(async () => ({
+    resolve: {
+        alias: {    // Tauri と Nuxt でエイリアスを合わせたい
+            '@': path.resolve(__dirname, './src'),  // @ が src のエイリアスなのは Vue、特に Vite の習慣。
+                                                    // 使用例： import Tile from '@/components/Tile.vue';
+
+            // ~ が プロジェクトフォルダー全体のエイリアスなのは Nuxt の習慣。ここでは使わず、 @ の方に統一する。
+
+            '/assets': path.resolve(__dirname, './src/assets'),
+            '#public': path.resolve(__dirname, './public'), // #public が public のエイリアスなのは Nuxt の習慣。
+        },
+    },
+}))
+        </pre>
 
 
         <p class="mt-6">📄 nuxt.config.ts（抜粋）:</p>
@@ -227,6 +252,12 @@
 export default defineNuxtConfig({
     alias: {
         '#public': './public', // public/ フォルダをエイリアス
+    },
+    dir: {
+        assets: 'assets', // src/assets
+        pages: 'pages', // src/pages
+        plugins: 'plugins', // src/plugins
+        public: '../public', // src から見て ../public
     },
 })
         </pre>
@@ -255,8 +286,8 @@ export default defineNuxtConfig({
     onMounted(async () => {
         try {
             // 動的インポート、ただし、ファイルパスは埋込み。
-            const jsonObj = <span class="red-marker">await import</span>('/assets/data/making/sample.json').then(module => module.default);
-            json3Str.value = jsonObj;
+            const jsonObj = <span class="red-marker">await import</span>('/assets/data/making/sample-assets.json').then(module => module.default);
+            json3Str.value = JSON.stringify(jsonObj, null, 4);
 
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : String(err);
@@ -276,11 +307,11 @@ export default defineNuxtConfig({
             👇 その結果は以下の通りだぜ。
         </talk-balloon>
 
-<!--
+
         <pre class="coding-example mb-6">
 {{ json3Str }}
         </pre>
--->
+
 
         <talk-balloon
             :src="oton2Src"
@@ -414,7 +445,8 @@ export default defineNuxtConfig({
     // + オブジェクト　＞　JSONファイル２ +
     // ++++++++++++++++++++++++++++++++++++
 
-    const json2Str = ref("読み込み中...");
+    // useFetch は Nuxt3 用。 Tauri では使えない。
+    // const json2Str = ref("読み込み中...");
 
     // const {
     //     data
@@ -443,17 +475,17 @@ export default defineNuxtConfig({
 
     const json3Str = ref("読み込み中...");
 
-    // onMounted(async () => {
-    //     try {
-    //         // 動的インポート、ただし、ファイルパスは埋込み。
-    //         const jsonObj = await import('/assets/data/making/sample.json').then(module => module.default);
+    onMounted(async () => {
+        try {
+            // 動的インポート、ただし、ファイルパスは埋込み。
+            const jsonObj = await import('/assets/data/making/sample-assets.json').then(module => module.default);
 
-    //         json3Str.value = jsonObj;
-    //     } catch (err: unknown) {
-    //         const errorMessage = err instanceof Error ? err.message : String(err);
-    //         json3Str.value = `ERROR: ${errorMessage}`;
-    //     }
-    // });
+            json3Str.value = JSON.stringify(jsonObj, null, 4);
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            json3Str.value = `ERROR: ${errorMessage}`;
+        }
+    });
 
 </script>
 
