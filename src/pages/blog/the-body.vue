@@ -19,7 +19,7 @@
     // # インポート #
     // ##############
 
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -33,16 +33,10 @@
     // # オブジェクト #
     // ################
 
+    // useRuntimeConfig() は Nuxt 用。
     //console.log(`DEBUG: useRuntimeConfig().public.baseUrl=${useRuntimeConfig().public.baseUrl}`);
 
     const pageList = ref<string[]>([]);
-    /*
-    const pageList = [
-        '2025-09/12-fri',
-        '2025-09/11-thu',
-        '2025-09/10-wed',
-    ];
-    */
 
     // Tauri （ブラウザ）に process 変数は無い。 Node.JS専用。
     // if (process.server) {
@@ -51,19 +45,21 @@
     //     console.log('DEBUG: 実行しているのはサーバーサイドではありません');
     // }
 
-    try {
-        // Vite（Tauriのビルドツール）は、public/ ディレクトリのファイルを import 文で直接インポートすることを禁止してる。
-        // インポートしたいなら、src/ ディレクトリにファイルを移動（例: src/data/blog-articles.json）。
-        // または、URLとして参照する場合は ?url クエリ（例: import url from '/data/blog-articles.json?url'）を使う。
+    // 非同期処理を含むコードブロックには async を付ける。
+    onMounted(async () => {
+        try {
+            // Vite（Tauriのビルドツール）は、public/ ディレクトリのファイルを import 文で直接インポートすることを禁止してる。
+            // インポートしたいなら、src/ ディレクトリ下にファイルを移動（例: src/assets/data/blog-articles.json）。
 
-        // プロジェクト内にあるファイルを動的インポート。ただし、ファイルパスに変数は不可。
-        const jsonData = await import('#data/blog-articles.json').then(module => module.default);
-        pageList.value = Array.isArray(jsonData) ? jsonData : ['1970-01/02-fri'];   // JSONが配列であることを確認し、配列ならそのまま返す、そうでなければ、エラー時の記事２を返す
-        //console.log('Local fetch success:', pageList.value);
+            // プロジェクト内にあるファイルを動的インポート。ただし、ファイルパスに変数は不可。
+            const jsonData = await import('#data/blog-articles.json').then(module => module.default);
+            pageList.value = Array.isArray(jsonData) ? jsonData : ['1970-01/02-fri'];   // JSONが配列であることを確認し、配列ならそのまま返す、そうでなければ、エラー時の記事２を返す
+            //console.log('Local fetch success:', pageList.value);
 
-    } catch (err) {
-        console.error('Local fetch error:', err);
-        pageList.value = ['1970-01/01-thu'];    // エラー時の記事１
-    }
+        } catch (err) {
+            console.error('Local fetch error:', err);
+            pageList.value = ['1970-01/01-thu'];    // エラー時の記事１
+        }
+    });
 
 </script>
