@@ -29,11 +29,11 @@
 
         <!-- 自分自身のページへ飛んでも、キャッシュが働いて画面は更新されない。 -->
         <router-link
-            to="/experimental?page=101">/experimental?page=101</router-link><br/>
+            to="/reference_desktopapp_webapp/experimental?page=101">/experimental?page=101</router-link><br/>
         <router-link
-            to="/experimental?page=102">/experimental?page=102</router-link><br/>
+            to="/reference_desktopapp_webapp/experimental?page=102">/experimental?page=102</router-link><br/>
         <router-link
-            to="/experimental?page=103">/experimental?page=103</router-link><br/>
+            to="/reference_desktopapp_webapp/experimental?page=103">/experimental?page=103</router-link><br/>
         test={{ test }}<br/>
         page={{ page }}<br/>
         
