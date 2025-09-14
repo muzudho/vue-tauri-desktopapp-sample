@@ -8,15 +8,14 @@ const host = process.env.TAURI_DEV_HOST;
 export default defineConfig(async () => ({
     plugins: [vue()],
     resolve: {
-        alias: {
-            // [2025-07-29_Tue] import 文で、.vue ファイルへのパスに @ エイリアスを使えるようにするための設定。
-            // 設定前： import Tile from '../components/Tile.vue';  // @のエイリアスが使えない
-            // 設定後： import Tile from '@/components/Tile.vue';   // @のエイリアスが使える
-            //'@': '/src',  // ここで@をルート・ディレクトリにマッピング
-            '@': path.resolve(__dirname, './src'),  // @エイリアス
+        alias: {    // Tauri と Nuxt でエイリアスを合わせたい
+            '@': path.resolve(__dirname, './src'),  // @ が src のエイリアスなのは Vue、特に Vite の習慣。
+                                                    // 使用例： import Tile from '@/components/Tile.vue';
 
-            '#data': path.resolve(__dirname, './src/assets/data'),  // Tauri と Nuxt で合わせたい
-            //'#public': path.resolve(__dirname, './public'),  // Nuxtに合わせたい
+            // ~ が プロジェクトフォルダー全体のエイリアスなのは Nuxt の習慣。ここでは使わず、 @ の方に統一する。
+
+            '/assets': path.resolve(__dirname, './src/assets'),
+            //'#public': path.resolve(__dirname, './public'),  // #public が public のエイリアスなのは Nuxt の習慣。
         },
     },
 

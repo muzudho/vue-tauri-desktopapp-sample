@@ -38,7 +38,7 @@
 
     const pageList = ref<string[]>([]);
 
-    // Tauri （ブラウザ）に process 変数は無い。 Node.JS専用。
+    // process は Node.JS専用。Tauri （ブラウザ）に process 変数は無い。
     // if (process.server) {
     //     console.log('DEBUG: サーバーサイドで実行されています');
     // } else {
@@ -52,7 +52,7 @@
             // インポートしたいなら、src/ ディレクトリ下にファイルを移動（例: src/assets/data/blog-articles.json）。
 
             // プロジェクト内にあるファイルを動的インポート。ただし、ファイルパスに変数は不可。
-            const jsonData = await import('#data/blog-articles.json').then(module => module.default);
+            const jsonData = await import('/assets/data/blog-articles.json').then(module => module.default);
             pageList.value = Array.isArray(jsonData) ? jsonData : ['1970-01/02-fri'];   // JSONが配列であることを確認し、配列ならそのまま返す、そうでなければ、エラー時の記事２を返す
             //console.log('Local fetch success:', pageList.value);
 
