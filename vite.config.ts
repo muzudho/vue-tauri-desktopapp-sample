@@ -14,6 +14,8 @@ export default defineConfig(async () => ({
             // 設定後： import Tile from '@/components/Tile.vue';   // @のエイリアスが使える
             //'@': '/src',  // ここで@をルート・ディレクトリにマッピング
             '@': path.resolve(__dirname, './src'),  // @エイリアス
+
+            '#public': path.resolve(__dirname, './public'),  // Nuxtに合わせたい
         },
     },
 

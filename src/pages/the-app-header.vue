@@ -10,15 +10,18 @@
                 📖 https://nuxt.com/docs/3.x/guide/directory-structure/pages
             Tauri では PascalCase が習慣的に使われています。異なるので注意。
         -->
-        <router-link to="/" :class="getLinkHighlight('/')">ホーム</router-link> |
-        <router-link to="/about" :class="getLinkHighlight('/about')">このサイトについて</router-link> |
-        <router-link to="/welcome-to-tauri-and-vue" :class="getLinkHighlight('/welcome-to-tauri-and-vue')">WelcomeToTauriAndVue</router-link> |
-        <router-link to="/blog" :class="getLinkHighlight('/blog')">ブログ</router-link> |
-        <router-link to="/quiz" :class="getLinkHighlight('/quiz')">クイズ</router-link> |
-        <router-link to="/minigames" :class="getLinkHighlight('/minigames')">ミニゲーム</router-link> |
-        <router-link to="/reference" :class="getLinkHighlight('/reference')">リファレンス</router-link> | 
-        <router-link to="/reference_desktopapp_webapp/experimental" :class="getLinkHighlight('/reference_desktopapp_webapp/experimental')">エクスペリメンタル</router-link> | 
-        <router-link to="/reference_desktopapp_webapp/debug-room" :class="getLinkHighlight('/reference_desktopapp_webapp/debug-room')">デバッグ・ルーム</router-link>
+        <router-link to="/" :class="home1Class">ホーム</router-link> |
+        <router-link to="/about" :class="about1Class">このサイトについて</router-link> |
+
+        <router-link to="/welcome-to-tauri-and-vue" :class="tauriAndVue1Class">WelcomeToTauriAndVue</router-link> |
+
+        <router-link to="/blog" :class="blog1Class">ブログ</router-link> |
+        <router-link to="/quiz" :class="quiz1Class">クイズ</router-link> |
+        <router-link to="/minigames" :class="minigames1Class">ミニゲーム</router-link> |
+        <router-link to="/reference" :class="reference1Class">リファレンス</router-link>
+
+         | <router-link to="/reference_desktopapp_webapp/experimental" :class="experimental1Class">エクスペリメンタル</router-link>
+         | <router-link to="/reference_desktopapp_webapp/debug-room" :class="debugRoom1Class">デバッグ・ルーム</router-link>
     </nav>
 </template>
 
@@ -28,11 +31,49 @@
     // # インポート #
     // ##############
 
+    import { onMounted, ref } from 'vue';
+
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
     import { getLinkHighlight } from '../composables/link-highlight';
 
+
+    // ################
+    // # オブジェクト #
+    // ################
+
+    // ++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　リンクのハイライト +
+    // ++++++++++++++++++++++++++++++++++++++++
+
+    const home1Class = ref('');
+    const about1Class = ref('');
+    const tauriAndVue1Class = ref('');
+    const blog1Class = ref('');
+    const quiz1Class = ref('');
+    const minigames1Class = ref('');
+    const reference1Class = ref('');
+    const experimental1Class = ref('');
+    const debugRoom1Class = ref('');
+
+
+    // ###############
+    // # 開始 / 終了 #
+    // ###############
+
+    onMounted(()=>{
+        // `:class="getLinkHighlight('/')"` のようにインラインに埋め込むと、ハイドレーション・エラーを引き起こしてしまう。 onMounted() を利用して回避する
+        home1Class.value = getLinkHighlight('/');
+        about1Class.value = getLinkHighlight('/about');
+        tauriAndVue1Class.value = getLinkHighlight('/welcome-to-tauri-and-vue');
+        blog1Class.value = getLinkHighlight('/blog');
+        quiz1Class.value = getLinkHighlight('/quiz');
+        minigames1Class.value = getLinkHighlight('/minigames');
+        reference1Class.value = getLinkHighlight('/reference');
+        experimental1Class.value = getLinkHighlight('/reference_desktopapp_webapp/experimental');
+        debugRoom1Class.value = getLinkHighlight('/reference_desktopapp_webapp/debug-room');
+    });
 </script>
 

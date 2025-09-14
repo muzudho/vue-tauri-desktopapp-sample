@@ -27,6 +27,10 @@
         "paths": {
             "/*": ["src/*"]
         },
+        
+        // types フォルダーに型定義を入れるため：
+        "types": ["@types/node", "@nuxt/types"],
+        "typeRoots": ["./types"]
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
     "references": [{ "path": "./tsconfig.node.json" }]
