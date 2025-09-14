@@ -33,14 +33,22 @@
             :name="kifuwarabe2Name"
             :device="compatibleDevice1Ref?.device"
         >
-            👇 じゃあ、以下の JSON ファイルを置いておくぜ。
+            👇 じゃあ、以下の２か所に JSON ファイルを置いておくぜ。
         </talk-balloon>
 
 
-        <p>📄 <a target="_blank" :href="jsonFilePath">public{{jsonFilePath}}</a>:</p>
+        <p>📄 <a target="_blank" :href="jsonFilePathPublic">public{{jsonFilePathPublic}}</a>:</p>
         <pre class="coding-example mb-6">
 {
-    "#this-file": "JSONのサンプルだぜ（＾▽＾）"
+    "#this-file": "publicフォルダー下に置いたJSONのサンプルだぜ（＾▽＾）"
+}
+        </pre>
+
+
+        <p>📄 src{{jsonFilePathAssets}}:</p>
+        <pre class="coding-example mb-6">
+{
+    "#this-file": "アセットフォルダー下に置いたJSONのサンプルだぜ（＾▽＾）"
 }
         </pre>
 
@@ -64,22 +72,22 @@
 &lt;/template&gt;
 
 &lt;script setup lang="ts"&gt;
-    import { ref } from 'vue';
+    import &#123; ref &#125; from 'vue';
 
     const jsonStr = ref("読み込み中...");
 
-    async function loadJson1() {
-        try {
-            const response = <span class="red-marker">await fetch</span>("/data/making/sample.json");   // publicフォルダ下のパス
+    async function loadJson1() &#123;
+        try &#123;
+            const response = <span class="red-marker">await fetch</span>("{{ jsonFilePathPublic }}");   // publicフォルダに置いたファイルにアクセスできる。
             if (!response.ok) throw new Error("Failed to fetch JSON");
             const data: any = await response.json();
 
             jsonStr.value = JSON.stringify(data, null, 4);
 
-        } catch (error) {
-            alert(`ERROR: sample.jsonファイル読込時。 ${error}`);
-        }
-    };
+        &#125; catch (error) &#123;
+            alert(`ERROR: sample.jsonファイル読込時。 $&#123;error&#125;`);
+        &#125;
+    &#125;;
 &lt;/script&gt;
         </pre>
 
@@ -94,9 +102,7 @@
             👇 以下のボタンをクリックしてくれだぜ。
         </talk-balloon>
 
-
         <v-btn @click="loadJson1" class="mt-6 mb-6">JSONファイル読込</v-btn>
-
 
         <pre class="coding-example mb-6">
 {{ json1Str }}
@@ -126,7 +132,7 @@
     const {
         data
     } = <span class="red-marker">await useFetch</span>&lt;any&gt;(
-        jsonFilePath,   // public フォルダー下のファイルへのパス
+        jsonFilePathPublic,   // public フォルダー下のファイルへのパス
         {
             baseURL: '/',   // ？
             transform: (jsonObj: unknown): any => {    // やりたければ、データの変換処理
@@ -157,11 +163,11 @@
             👇 以下の通り。
         </talk-balloon>
 
-
+<!--
         <pre class="coding-example mb-6">
 {{ json2Str }}
         </pre>
-
+-->
 
         <talk-balloon
             :src="hiyoko2Src"
@@ -179,7 +185,9 @@
             :device="compatibleDevice1Ref?.device"
         >
             前者の fetch() は、静的ページの初期値として使えない。<br/>
-            だから、ページの読込完了のタイミングや、ボタンを押したタイミングで使うことになるぜ。
+            だから、ページの読込完了のタイミングや、ボタンを押したタイミングで使うことになるぜ。<br/>
+            <br/>
+            public フォルダー下にアクセスできるのがメリットかな。
         </talk-balloon>
 
 
@@ -240,17 +248,21 @@ export default defineNuxtConfig({
 &lt;/template&gt;
 
 &lt;script setup lang="ts"&gt;
+    import { onMounted, ref } from 'vue';
+
     const jsonStr = ref("読み込み中...");
 
-    try {
-        // 動的インポート、ただし、ファイルパスは埋込み。
-        const jsonObj = <span class="red-marker">await import</span>('#public/data/making/sample.json').then(module => module.default);
-        json3Str.value = jsonObj;
+    onMounted(async () => {
+        try {
+            // 動的インポート、ただし、ファイルパスは埋込み。
+            const jsonObj = <span class="red-marker">await import</span>('/assets/data/making/sample.json').then(module => module.default);
+            json3Str.value = jsonObj;
 
-    } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        json3Str.value = `ERROR: ${errorMessage}`;
-    }
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            json3Str.value = `ERROR: ${errorMessage}`;
+        }
+    });
 &lt;/script&gt;
         </pre>
 
@@ -264,11 +276,11 @@ export default defineNuxtConfig({
             👇 その結果は以下の通りだぜ。
         </talk-balloon>
 
-
+<!--
         <pre class="coding-example mb-6">
 {{ json3Str }}
         </pre>
-
+-->
 
         <talk-balloon
             :src="oton2Src"
@@ -316,7 +328,7 @@ export default defineNuxtConfig({
     // # インポート #
     // ##############
 
-    import { ref } from 'vue';
+    import { onMounted, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -362,7 +374,8 @@ export default defineNuxtConfig({
     // + コモン　＞　外部ファイル +
     // ++++++++++++++++++++++++++++
 
-    const jsonFilePath = "/data/making/sample.json";    // public/data/making/sample.json
+    const jsonFilePathPublic = "/data/making/sample-public.json";  // public/data/making/sample.json
+    const jsonFilePathAssets = "/assets/data/making/sample-assets.json";   // src/assets/data/making/sample.json
 
 
     // ################
@@ -383,14 +396,17 @@ export default defineNuxtConfig({
 
     async function loadJson1() {
         try {
-            const response = await fetch(jsonFilePath);   // publicフォルダに置いたファイルにアクセスできる。
-            if (!response.ok) throw new Error("Failed to fetch JSON");
+            const response = await fetch(jsonFilePathPublic);   // publicフォルダに置いたファイルにアクセスできる。
+            if (!response.ok) {
+                throw new Error("Failed to fetch JSON");
+            }
             const data: any = await response.json();
 
             json1Str.value = JSON.stringify(data, null, 4);
 
-        } catch (error) {
-            alert(`ERROR: sample.jsonファイル読込時。 ${error}`);
+        } catch (error: unknown) {
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            json1Str.value = `ERROR: "${jsonFilePathPublic}" ファイル読込時。 ${errorMessage}`;
         }
     }
 
@@ -400,28 +416,26 @@ export default defineNuxtConfig({
 
     const json2Str = ref("読み込み中...");
 
-    // JSONファイルを読み込みたい。
-    // なんだかよくわからないが、 useFetch は、サーバーサイド・レンダリングのエラーになりにくいらしい。
-    const {
-        data
-    } = await useFetch<any>(
-        jsonFilePath,   // public フォルダー下のファイルへのパス
-        {
-            baseURL: '/',   // ？
-            transform: (jsonObj: unknown): any => {    // やりたければ、データの変換処理
+    // const {
+    //     data
+    // } = await useFetch<any>(
+    //     jsonFilePathPublic,   // public フォルダー下のファイルへのパス
+    //     {
+    //         baseURL: '/',   // ？
+    //         transform: (jsonObj: unknown): any => {    // やりたければ、データの変換処理
 
-                // JSON がオブジェクト（辞書型）かどうかのチェック
-                if (jsonObj && typeof jsonObj === 'object') {
-                    return jsonObj;
-                }
+    //             // JSON がオブジェクト（辞書型）かどうかのチェック
+    //             if (jsonObj && typeof jsonObj === 'object') {
+    //                 return jsonObj;
+    //             }
 
-                // オブジェクト（辞書型）でなければ、空辞書を返す
-                return {};
-            },
-            default: () => [], // エラー時のデフォルト値
-        }
-    );
-    json2Str.value = data.value;
+    //             // オブジェクト（辞書型）でなければ、空辞書を返す
+    //             return {};
+    //         },
+    //         default: () => [], // エラー時のデフォルト値
+    //     }
+    // );
+    // json2Str.value = data.value;
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　JSONファイル３ +
@@ -429,15 +443,17 @@ export default defineNuxtConfig({
 
     const json3Str = ref("読み込み中...");
 
-    try {
-        // 動的インポート、ただし、ファイルパスは埋込み。
-        const jsonObj = await import('#public/data/making/sample.json').then(module => module.default);
+    // onMounted(async () => {
+    //     try {
+    //         // 動的インポート、ただし、ファイルパスは埋込み。
+    //         const jsonObj = await import('/assets/data/making/sample.json').then(module => module.default);
 
-        json3Str.value = jsonObj;
-    } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        json3Str.value = `ERROR: ${errorMessage}`;
-    }
+    //         json3Str.value = jsonObj;
+    //     } catch (err: unknown) {
+    //         const errorMessage = err instanceof Error ? err.message : String(err);
+    //         json3Str.value = `ERROR: ${errorMessage}`;
+    //     }
+    // });
 
 </script>
 
