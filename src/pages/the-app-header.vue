@@ -17,8 +17,8 @@
         <router-link to="/quiz" :class="getLinkHighlight('/quiz')">クイズ</router-link> |
         <router-link to="/minigames" :class="getLinkHighlight('/minigames')">ミニゲーム</router-link> |
         <router-link to="/reference" :class="getLinkHighlight('/reference')">リファレンス</router-link> | 
-        <router-link to="/experimental" :class="getLinkHighlight('/experimental')">エクスペリメンタル</router-link> | 
-        <router-link to="/debug-room" :class="getLinkHighlight('/debug-room')">デバッグ・ルーム</router-link>
+        <router-link to="/reference_desktopapp_webapp/experimental" :class="getLinkHighlight('/reference_desktopapp_webapp/experimental')">エクスペリメンタル</router-link> | 
+        <router-link to="/reference_desktopapp_webapp/debug-room" :class="getLinkHighlight('/reference_desktopapp_webapp/debug-room')">デバッグ・ルーム</router-link>
     </nav>
 </template>
 

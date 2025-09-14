@@ -1,5 +1,27 @@
 # トラブルシューティング
 
+## ルーター設定をしていない、またはルーター設定に誤りがある
+
+```
+[Vue Router warn]: No match found for location with path "/reference_desktopapp_webapp/experimental"
+~~~~~~~~~~~~~~~~~~
+👆注目
+```
+
+📄 `router/index.ts` ファイルを確認。  
+
+
+## 
+
+```
+[plugin:vite:import-analysis] Failed to resolve import "@/pages/experimental/reference_desktopapp_webapp/the-part-body.vue" from "src/pages/reference_desktopapp_webapp/experimental/index.vue". Does the file exist?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+👆注目
+```
+
+import 文のパスが間違ている？
+
+
 ## トラブルシューティング１
 
 📁 `/node_modules` フォルダーを削除。  

@@ -60,65 +60,6 @@ const routes = [
         component: () => import('../pages/blog/2025-09/11-thu.vue'),
     },
 
-    // ++++++++++++++++++++
-    // + デバッグ・ルーム +
-    // ++++++++++++++++++++
-    {
-        name: 'DebugRoom',
-        path: '/debug-room',
-        component: () => import('../pages/debug-room/index.vue'),
-    },
-    {
-        name: 'DebugRoom_TheChaptersBody',
-        path: '/debug-room/the-part-body',
-        component: () => import('../pages/debug-room/the-part-body.vue'),
-    },
-    {
-        name: 'DebugRoom_TheChaptersFooter',
-        path: '/debug-room/the-part-footer',
-        component: () => import('../pages/debug-room/the-part-footer.vue'),
-    },
-    {
-        name: 'DebugRoom_TheChaptersHeader',
-        path: '/debug-room/the-part-header',
-        component: () => import('../pages/debug-room/the-part-header.vue'),
-    },
-
-    {
-        name: 'DebugRoom_BoardOperation',
-        path: '/debug-room/board-operation',
-        component: () => import('../pages/debug-room/board-operation.vue'),
-    },
-
-    // ++++++++++
-    // + 実験場 +
-    // ++++++++++
-    {
-        name: 'Experimental_TheChaptersBody',
-        path: '/experimental/the-part-body',
-        component: () => import('../pages/experimental/the-part-body.vue'),
-    },
-    {
-        name: 'Experimental',
-        path: '/experimental',
-        component: () => import('../pages/experimental/index.vue'),
-    },
-    {
-        name: 'Experimental_TheChaptersFooter',
-        path: '/experimental/the-part-footer',
-        component: () => import('../pages/experimental/the-part-footer.vue'),
-    },
-    {
-        name: 'Experimental_TheChaptersHeader',
-        path: '/experimental/the-part-header',
-        component: () => import('../pages/experimental/the-part-header.vue'),
-    },
-    {
-        name: 'Experimental_Page1',
-        path: '/experimental/page-1',
-        component: () => import('../pages/experimental/page-1.vue'),
-    },
-
     // ++++++++++
     // + ホーム +
     // ++++++++++
@@ -228,6 +169,64 @@ const routes = [
         component: () => import('../pages/reference/coding-style/slot.vue'),
     },
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + リファレンス・デスクトップアプリ・ウェブアプリ　＞　デバッグ・ルーム +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    {
+        name: 'Reference_DebugRoom',
+        path: '/reference_desktopapp_webapp/debug-room',
+        component: () => import('../pages/reference_desktopapp_webapp/debug-room/index.vue'),
+    },
+    {
+        name: 'Reference_DebugRoom_TheChaptersBody',
+        path: '/reference_desktopapp_webapp/debug-room/the-part-body',
+        component: () => import('../pages/reference_desktopapp_webapp/debug-room/the-part-body.vue'),
+    },
+    {
+        name: 'Reference_DebugRoom_TheChaptersFooter',
+        path: '/reference_desktopapp_webapp/debug-room/the-part-footer',
+        component: () => import('../pages/reference_desktopapp_webapp/debug-room/the-part-footer.vue'),
+    },
+    {
+        name: 'Reference_DebugRoom_TheChaptersHeader',
+        path: '/reference_desktopapp_webapp/debug-room/the-part-header',
+        component: () => import('../pages/reference_desktopapp_webapp/debug-room/the-part-header.vue'),
+    },
+
+    {
+        name: 'Reference_DebugRoom_BoardOperation',
+        path: '/reference_desktopapp_webapp/debug-room/board-operation',
+        component: () => import('../pages/reference_desktopapp_webapp/debug-room/board-operation.vue'),
+    },
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + リファレンス・デスクトップアプリ・ウェブアプリ　＞　実験場 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    {
+        name: 'Reference_Experimental',
+        path: '/reference_desktopapp_webapp/experimental',
+        component: () => import('../pages/reference_desktopapp_webapp/experimental/index.vue'),
+    },
+    {
+        name: 'Reference_Experimental_TheChaptersBody',
+        path: '/reference_desktopapp_webapp/experimental/the-part-body',
+        component: () => import('../pages/reference_desktopapp_webapp/experimental/the-part-body.vue'),
+    },
+    {
+        name: 'Reference_Experimental_TheChaptersFooter',
+        path: '/reference_desktopapp_webapp/experimental/the-part-footer',
+        component: () => import('../pages/reference_desktopapp_webapp/experimental/the-part-footer.vue'),
+    },
+    {
+        name: 'Reference_Experimental_TheChaptersHeader',
+        path: '/reference_desktopapp_webapp/experimental/the-part-header',
+        component: () => import('../pages/reference_desktopapp_webapp/experimental/the-part-header.vue'),
+    },
+    {
+        name: 'Reference_Experimental_Page1',
+        path: '/reference_desktopapp_webapp/experimental/page-1',
+        component: () => import('../pages/reference_desktopapp_webapp/experimental/page-1.vue'),
+    },
 
 
     // ++++++++++++++++++++++++++++++++

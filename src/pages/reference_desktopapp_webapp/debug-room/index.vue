@@ -14,8 +14,8 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ThePartBody from '@/pages/experimental/the-part-body.vue';
-    import ThePartFooter from '@/pages/experimental/the-part-footer.vue';
-    import ThePartHeader from '@/pages/experimental/the-part-header.vue';
+    import ThePartBody from '@/pages/reference_desktopapp_webapp/debug-room/the-part-body.vue';
+    import ThePartFooter from '@/pages/reference_desktopapp_webapp/debug-room/the-part-footer.vue';
+    import ThePartHeader from '@/pages/reference_desktopapp_webapp/debug-room/the-part-header.vue';
 
 </script>

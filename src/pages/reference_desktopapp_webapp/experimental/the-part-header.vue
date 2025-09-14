@@ -16,6 +16,6 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheAppHeader from '../the-app-header.vue';
+    import TheAppHeader from '../../the-app-header.vue';
 
 </script>

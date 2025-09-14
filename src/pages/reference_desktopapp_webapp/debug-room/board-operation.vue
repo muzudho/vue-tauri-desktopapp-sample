@@ -59,7 +59,7 @@ const fixedSquareIndex = getIndexWhenAddUpFileAndRankOnPeriodicTable(
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../composables/periodic-table-operation"
+    import { getIndexWhenAddUpFileAndRankOnPeriodicTable } from "../../../composables/periodic-table-operation"
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
