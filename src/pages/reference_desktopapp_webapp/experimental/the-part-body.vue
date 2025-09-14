@@ -1,7 +1,7 @@
 <template>
     <section class="sec-0 sec-contents">
         <ul>
-            <li>📖 <router-link to="/experimental/page-1" :class="getLinkHighlight('/experimental/page-1')">ページ１の章だぜ！</router-link></li>
+            <li>📖 <router-link to="/reference_desktopapp_webapp/experimental/page-1" :class="getLinkHighlight('/reference_desktopapp_webapp/experimental/page-1')">ページ１の章だぜ！</router-link></li>
         </ul>
     </section>
 </template>

@@ -1,6 +1,6 @@
 # トラブルシューティング
 
-## ルーター設定をしていない、またはルーター設定に誤りがある
+## ルーター設定をしていない、またはルーター設定に誤りがある、router-link タグの to 属性のパスが間違えている
 
 ```
 [Vue Router warn]: No match found for location with path "/reference_desktopapp_webapp/experimental"
@@ -9,6 +9,7 @@
 ```
 
 📄 `router/index.ts` ファイルを確認。  
+📄 `<router-link to="★ここ">` を確認。
 
 
 ## 
