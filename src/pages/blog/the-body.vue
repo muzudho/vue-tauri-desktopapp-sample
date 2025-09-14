@@ -19,6 +19,8 @@
     // # インポート #
     // ##############
 
+    import { ref } from 'vue';
+
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
@@ -31,7 +33,7 @@
     // # オブジェクト #
     // ################
 
-    console.log(`DEBUG: useRuntimeConfig().public.baseUrl=${useRuntimeConfig().public.baseUrl}`);
+    //console.log(`DEBUG: useRuntimeConfig().public.baseUrl=${useRuntimeConfig().public.baseUrl}`);
 
     const pageList = ref<string[]>([]);
     /*
@@ -42,15 +44,20 @@
     ];
     */
 
-    if (process.server) {
-        console.log('DEBUG: サーバーサイドで実行されています');
-    } else {
-        console.log('DEBUG: 実行しているのはサーバーサイドではありません');
-    }
+    // Tauri （ブラウザ）に process 変数は無い。 Node.JS専用。
+    // if (process.server) {
+    //     console.log('DEBUG: サーバーサイドで実行されています');
+    // } else {
+    //     console.log('DEBUG: 実行しているのはサーバーサイドではありません');
+    // }
 
     try {
+        // Vite（Tauriのビルドツール）は、public/ ディレクトリのファイルを import 文で直接インポートすることを禁止してる。
+        // インポートしたいなら、src/ ディレクトリにファイルを移動（例: src/data/blog-articles.json）。
+        // または、URLとして参照する場合は ?url クエリ（例: import url from '/data/blog-articles.json?url'）を使う。
+
         // プロジェクト内にあるファイルを動的インポート。ただし、ファイルパスに変数は不可。
-        const jsonData = await import('#public/data/blog-articles.json').then(module => module.default);
+        const jsonData = await import('#data/blog-articles.json').then(module => module.default);
         pageList.value = Array.isArray(jsonData) ? jsonData : ['1970-01/02-fri'];   // JSONが配列であることを確認し、配列ならそのまま返す、そうでなければ、エラー時の記事２を返す
         //console.log('Local fetch success:', pageList.value);
 

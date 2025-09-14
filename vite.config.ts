@@ -15,7 +15,8 @@ export default defineConfig(async () => ({
             //'@': '/src',  // ここで@をルート・ディレクトリにマッピング
             '@': path.resolve(__dirname, './src'),  // @エイリアス
 
-            '#public': path.resolve(__dirname, './public'),  // Nuxtに合わせたい
+            '#data': path.resolve(__dirname, './src/assets/data'),  // Tauri と Nuxt で合わせたい
+            //'#public': path.resolve(__dirname, './public'),  // Nuxtに合わせたい
         },
     },
 
