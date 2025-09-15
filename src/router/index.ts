@@ -35,28 +35,28 @@ const routes = [
         component: () => import('../pages/blog/index.vue'),  // importした Vue ファイル
     },
     {
-        name: 'Blog20250401Tue',
-        path: '/blog/2025-04/01-tue',
+        name: 'Blog20250401TueSample',
+        path: '/blog/2025-04/01-tue-sample',
         component: () => import('../pages/blog/2025-04/01-tue-sample.vue'),
     },
     {
-        name: 'Blog20250402Wed',
-        path: '/blog/2025-04/02-wed',
+        name: 'Blog20250402WedSample',
+        path: '/blog/2025-04/02-wed-sample',
         component: () => import('../pages/blog/2025-04/02-wed-sample.vue'),
     },
     {
-        name: 'Blog20250403Thu',
-        path: '/blog/2025-04/03-thu',
+        name: 'Blog20250403ThuSample',
+        path: '/blog/2025-04/03-thu-sample',
         component: () => import('../pages/blog/2025-04/03-thu-sample.vue'),
     },
     {
         name: 'Blog20250910Wed',
-        path: '/blog/2025-09/10-wed',
+        path: '/blog/2025-09/10-wed-sample',
         component: () => import('../pages/blog/2025-09/10-wed.vue'),
     },
     {
         name: 'Blog20250911Thu',
-        path: '/blog/2025-09/11-thu',
+        path: '/blog/2025-09/11-thu-sample',
         component: () => import('../pages/blog/2025-09/11-thu.vue'),
     },
 

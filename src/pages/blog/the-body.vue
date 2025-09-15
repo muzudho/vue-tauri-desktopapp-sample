@@ -80,7 +80,9 @@
             //console.log(`DEBUG: JSON.stringify(jsonData, null, 4)=${JSON.stringify(jsonObj, null, 4)}`);
 
             // JSONからidだけ抽出
-            const idList = (jsonObj as BlogArticle[]).map(article => article.id);
+            const idList = (jsonObj as BlogArticle[])
+                .filter(article => article.category.includes('Talking'))
+                .map(article => article.id);
             console.log(`idList=${idList}`)
 
             pageList.value = idList;
