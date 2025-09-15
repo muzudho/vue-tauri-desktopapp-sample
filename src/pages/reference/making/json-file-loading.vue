@@ -84,8 +84,9 @@
 
             jsonStr.value = JSON.stringify(data, null, 4);
 
-        &#125; catch (error) &#123;
-            alert(`ERROR: sample.jsonファイル読込時。 $&#123;error&#125;`);
+        &#125; catch (error: unknown) &#123;
+            const errorMessage = error instanceof Error ? error.message : String(error);
+            jsonStr.value = `ERROR: "${jsonFilePathPublic}" ファイル読込時。 $&#123;errorMessage&#125;`;
         &#125;
     &#125;;
 &lt;/script&gt;
@@ -102,7 +103,9 @@
             👇 以下のボタンをクリックしてくれだぜ。
         </talk-balloon>
 
+
         <v-btn @click="loadJson1" class="mt-6 mb-6">JSONファイル読込</v-btn>
+
 
         <pre class="coding-example mb-6">
 {{ json1Str }}
@@ -132,9 +135,9 @@
     const {
         data
     } = <span class="red-marker">await useFetch</span>&lt;any&gt;(
-        jsonFilePathPublic,   // public フォルダー下のファイルへのパス
+        '{{ jsonFilePathPublic }}',   // public フォルダー下のファイルへのパス
         {
-            baseURL: '/',   // ？
+            baseURL: '/',   // ここは開発環境なら例えば "http://localhost:3000/" 、本番環境なら例えば "https://www.warabenture.com/" といった風に入れてください
             transform: (jsonObj: unknown): any => {    // やりたければ、データの変換処理
 
                 // JSON がオブジェクト（辞書型）かどうかのチェック
@@ -405,8 +408,8 @@ export default defineNuxtConfig({
     // + コモン　＞　外部ファイル +
     // ++++++++++++++++++++++++++++
 
-    const jsonFilePathPublic = "/data/making/sample-public.json";  // public/data/making/sample.json
-    const jsonFilePathAssets = "/assets/data/making/sample-assets.json";   // src/assets/data/making/sample.json
+    const jsonFilePathPublic = "/data/making/sample-public.json";  // public/data/making/sample-public.json
+    const jsonFilePathAssets = "/assets/data/making/sample-assets.json";   // src/assets/data/making/sample-assets.json
 
 
     // ################
@@ -453,7 +456,7 @@ export default defineNuxtConfig({
     // } = await useFetch<any>(
     //     jsonFilePathPublic,   // public フォルダー下のファイルへのパス
     //     {
-    //         baseURL: '/',   // ？
+    //         baseURL: '/',   // ここは開発環境なら例えば "http://localhost:3000/" 、本番環境なら例えば "https://www.warabenture.com/" といった風に入れてください
     //         transform: (jsonObj: unknown): any => {    // やりたければ、データの変換処理
 
     //             // JSON がオブジェクト（辞書型）かどうかのチェック
