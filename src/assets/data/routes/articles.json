@@ -17,17 +17,17 @@
     {
         "id": "2025-04/03-thu-sample",
         "date": "2025-04-03",
-        "category": ["System", "Sample"]
+        "category": ["Sample"]
     },
     {
         "id": "2025-04/02-wed-sample",
         "date": "2025-04-02",
-        "category": ["System", "Sample"]
+        "category": ["Sample"]
     },
     {
         "id": "2025-04/01-tue-sample",
         "date": "2025-04-01",
-        "category": ["System", "Sample"]
+        "category": ["Sample"]
     },
     {
         "id": "1970-01/02-fri",

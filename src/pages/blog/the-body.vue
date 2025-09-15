@@ -1,11 +1,11 @@
 <template>
-    <label for="yearMonthSelect">Filter by Year-Month:</label>
+    <label for="yearMonthSelect">年月：</label>
     <select
         id="yearMonthSelect"
         v-model="selectedYearMonth"
         @change="filterByYearMonth"
     >
-        <option value="">All</option>
+        <option value="">ぜんぶ</option>
         <option
             v-for="ym in yearMonthList"
             :key="ym"
@@ -86,7 +86,7 @@
         idList.value = allArticlesJsonObj.value
             .filter(article => 
                 !article.category.includes('System')    // カテゴリーに "System" が含まれるものは除外
-                //&& (!selectedYearMonth.value || article.date.startsWith(selectedYearMonth.value))   // 年月で絞り込み
+                && (!selectedYearMonth.value || article.date.startsWith(selectedYearMonth.value))   // 年月で絞り込み
             )
             .map(article => article.id);    // 記事Id だけの配列にする
         console.log('Filtered:', idList.value);
@@ -132,9 +132,14 @@
                 allArticlesJsonObj.value
                     .filter(article => !article.category.includes('System'))    // カテゴリーに "System" を含むものは除外
                     .map(article => article.date.slice(0, 7)) // YYYY-MM-DD -> YYYY-MM
-            )].sort(); // オプション: ソート
+            )].sort((a, b) => b.localeCompare(a));  // 降順ソート
             console.log(`yearMonthList.value=${yearMonthList.value}`)
 
+            // 初期表示を最新の［年月］で絞り込み
+            if (yearMonthList.value.length > 0) {
+                selectedYearMonth.value = yearMonthList.value[0];
+                filterByYearMonth();
+            }
 
         } catch (err: unknown) {
             const errorMessage = err instanceof Error ? err.message : String(err);
