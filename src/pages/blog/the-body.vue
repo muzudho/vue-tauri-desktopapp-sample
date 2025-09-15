@@ -16,6 +16,12 @@
     </select>
 
     <!--
+    <p>idList={{ idList }}</p>
+    <p>yearMonthList={{ yearMonthList }}</p>
+    <p>selectedYearMonth={{ selectedYearMonth }}</p>
+    -->
+
+    <!--
         静的インポート・動的コンポーネント
         public/blog-articles.json、
         router/page-map.ts, "src/assets/data/routes/articles.json" も編集してください（TODO: ここらへん自動生成化したい）
@@ -52,6 +58,13 @@
     // useRuntimeConfig() は Nuxt 用。
     //console.log(`DEBUG: useRuntimeConfig().public.baseUrl=${useRuntimeConfig().public.baseUrl}`);
 
+    // process は Node.JS専用。Tauri （ブラウザ）に process 変数は無い。
+    // if (process.server) {
+    //     console.log('DEBUG: サーバーサイドで実行されています');
+    // } else {
+    //     console.log('DEBUG: 実行しているのはサーバーサイドではありません');
+    // }
+
     interface BlogArticle { // 型定義
         id: string;
         date: string;
@@ -73,18 +86,12 @@
         idList.value = allArticlesJsonObj.value
             .filter(article => 
                 !article.category.includes('System')    // カテゴリーに "System" が含まれるものは除外
-                && (!selectedYearMonth.value || article.date.startsWith(selectedYearMonth.value))   // 年月で絞り込み
+                //&& (!selectedYearMonth.value || article.date.startsWith(selectedYearMonth.value))   // 年月で絞り込み
             )
             .map(article => article.id);    // 記事Id だけの配列にする
         console.log('Filtered:', idList.value);
     };
 
-    // process は Node.JS専用。Tauri （ブラウザ）に process 変数は無い。
-    // if (process.server) {
-    //     console.log('DEBUG: サーバーサイドで実行されています');
-    // } else {
-    //     console.log('DEBUG: 実行しているのはサーバーサイドではありません');
-    // }
 
     // 非同期処理を含むコードブロックには async を付ける。
     onMounted(async () => {
@@ -111,18 +118,18 @@
             // インポートしたいなら、src/ ディレクトリ下にファイルを移動（例: src/assets/data/blog-articles.json）。
 
             // プロジェクト内にある src フォルダー下のファイルを動的インポート。ただし、ファイルパスに変数は不可。
-            const allArticlesJsonObj = await import('@/assets/data/routes/articles.json').then(module => module.default) as BlogArticle[];
+            allArticlesJsonObj.value = await import('@/assets/data/routes/articles.json').then(module => module.default) as BlogArticle[];
             //console.log(`DEBUG: JSON.stringify(jsonData, null, 4)=${JSON.stringify(allArticlesJsonObj, null, 4)}`);
 
             // 記事リストからidだけ抽出
-            idList.value = allArticlesJsonObj
+            idList.value = allArticlesJsonObj.value
                 .filter(article => article.category.includes('Talking'))
                 .map(article => article.id);
             console.log(`idList.value=${idList.value}`)
 
             // 記事リストから、 Date フィールドの年月（YYYY-MM）だけ抽出し、重複を排除
             yearMonthList.value = [...new Set(  // Set で重複を排除
-                allArticlesJsonObj
+                allArticlesJsonObj.value
                     .filter(article => !article.category.includes('System'))    // カテゴリーに "System" を含むものは除外
                     .map(article => article.date.slice(0, 7)) // YYYY-MM-DD -> YYYY-MM
             )].sort(); // オプション: ソート
