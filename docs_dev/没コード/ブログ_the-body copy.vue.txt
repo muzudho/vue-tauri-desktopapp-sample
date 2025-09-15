@@ -1,7 +1,7 @@
 <template>
     <!--
         静的インポート・動的コンポーネント
-        router/page-map.ts, router/articles.json も編集してください（TODO: ここらへん自動生成化したい）
+        router/page-map.ts, "src/assets/data/routes/articles.json" も編集してください（TODO: ここらへん自動生成化したい）
     -->
     <blog-article page="2025-09/12-fri"/>
     <button-to-go-to-top class="sec-1 pt-6"/>

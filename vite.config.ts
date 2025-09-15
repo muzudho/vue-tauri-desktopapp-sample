@@ -14,7 +14,7 @@ export default defineConfig(async () => ({
 
             // ~ が プロジェクトフォルダー全体のエイリアスなのは Nuxt の習慣。ここでは使わず、 @ の方に統一する。
 
-            '/assets': path.resolve(__dirname, './src/assets'),
+            //'/assets': path.resolve(__dirname, './src/assets'),   // "@/assets" で十分
             '#public': path.resolve(__dirname, './public'), // #public が public のエイリアスなのは Nuxt の習慣。
         },
     },

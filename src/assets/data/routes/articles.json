@@ -17,26 +17,26 @@
     {
         "id": "2025-04/03-thu-sample",
         "date": "2025-04-03",
-        "category": ["Sample"]
+        "category": ["System", "Sample"]
     },
     {
         "id": "2025-04/02-wed-sample",
         "date": "2025-04-02",
-        "category": ["Sample"]
+        "category": ["System", "Sample"]
     },
     {
         "id": "2025-04/01-tue-sample",
         "date": "2025-04-01",
-        "category": ["Sample"]
+        "category": ["System", "Sample"]
     },
     {
         "id": "1970-01/02-fri",
         "date": "1970-01-02",
-        "category": ["Error"]
+        "category": ["System", "Error"]
     },
     {
         "id": "1970-01/01-thu",
         "date": "1970-01-01",
-        "category": ["Error"]
+        "category": ["System", "Error"]
     }
 ]
