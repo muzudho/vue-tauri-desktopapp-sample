@@ -47,18 +47,47 @@
 
     // 非同期処理を含むコードブロックには async を付ける。
     onMounted(async () => {
+        // これは試し
+        // try {
+        //     // Vite（Tauriのビルドツール）は、public/ ディレクトリのファイルを import 文で直接インポートすることを禁止してる。
+        //     // インポートしたいなら、src/ ディレクトリ下にファイルを移動（例: src/assets/data/blog-articles.json）。
+
+        //     // プロジェクト内にある src フォルダー下のファイルを動的インポート。ただし、ファイルパスに変数は不可。
+        //     const jsonData = await import('/assets/data/blog-articles.json').then(module => module.default);
+        //     pageList.value = Array.isArray(jsonData) ? jsonData : ['1970-01/02-fri'];   // JSONが配列であることを確認し、配列ならそのまま返す、そうでなければ、エラー時の記事２を返す
+        //     //console.log('Local fetch success:', pageList.value);
+
+        // } catch (err: unknown) {
+        //     const errorMessage = err instanceof Error ? err.message : String(err);
+        //     console.error('Local fetch error:', errorMessage);
+        //     pageList.value = ['1970-01/01-thu'];    // エラー時の記事１
+        // }
+
+        // TODO: こちらがメイン
+        
+        interface BlogArticle { // 型定義
+            id: string;
+            date: string;
+            category: string[];
+        }
+
         try {
             // Vite（Tauriのビルドツール）は、public/ ディレクトリのファイルを import 文で直接インポートすることを禁止してる。
             // インポートしたいなら、src/ ディレクトリ下にファイルを移動（例: src/assets/data/blog-articles.json）。
 
-            // プロジェクト内にあるファイルを動的インポート。ただし、ファイルパスに変数は不可。
-            const jsonData = await import('/assets/data/blog-articles.json').then(module => module.default);
-            pageList.value = Array.isArray(jsonData) ? jsonData : ['1970-01/02-fri'];   // JSONが配列であることを確認し、配列ならそのまま返す、そうでなければ、エラー時の記事２を返す
-            //console.log('Local fetch success:', pageList.value);
+            // プロジェクト内にある src フォルダー下のファイルを動的インポート。ただし、ファイルパスに変数は不可。
+            const jsonObj = await import('@/router/articles.json').then(module => module.default);
+            //console.log(`DEBUG: JSON.stringify(jsonData, null, 4)=${JSON.stringify(jsonObj, null, 4)}`);
 
-        } catch (err) {
-            console.error('Local fetch error:', err);
-            pageList.value = ['1970-01/01-thu'];    // エラー時の記事１
+            // JSONからidだけ抽出
+            const idList = (jsonObj as BlogArticle[]).map(article => article.id);
+            console.log(`idList=${idList}`)
+
+            pageList.value = idList;
+
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : String(err);
+            console.error('Local fetch error:', errorMessage);
         }
     });
 
