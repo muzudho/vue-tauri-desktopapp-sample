@@ -148,10 +148,25 @@
                 mask-image: url(#game-machine-mask-rect);
             "
         >
+            <!-- ハード名 -->
+            <div
+                style="
+                    position: absolute;
+                    left: calc(1 * 64px - 4px); /* ボーダー幅を引いている */
+                    top: calc(4.5 * 64px - 32px - 4px);
+                    width: calc(3 * 64px + 1px);
+                    padding-left: 2px;
+                    box-sizing: border-box;
+                    color: goldenrod;
+                    background-color: brown;
+                    font-family:Verdana, Geneva, Tahoma, sans-serif;
+                "
+            >Waratch2</div>
+
             <!-- ボタン・センタリング用コンテナー -->
             <div
                 style="
-                    position: relative;
+                    position: absolute;
                     left: 0;
                     top: calc(5 * 64px - 32px);
                     right: 0;
