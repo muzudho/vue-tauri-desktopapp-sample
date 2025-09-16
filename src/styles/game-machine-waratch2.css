@@ -7,8 +7,8 @@ div.waratch2-hard {
     /* background-color: crimson; */
     background-color: blue; /* 何故か背景色が効かない */
     /* マスクで画面の部分を透過 */
-    -webkit-mask-image: url(#game-machine-mask-rect);
-    mask-image: url(#game-machine-mask-rect);
+    -webkit-mask-image: url(#waratch2-mask-rect);
+    mask-image: url(#waratch2-mask-rect);
 }
 
 /* 画面枠 */
