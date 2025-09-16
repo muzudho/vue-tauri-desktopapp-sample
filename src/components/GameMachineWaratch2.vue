@@ -1,4 +1,5 @@
 <template>
+    <!-- ハード。ただし画面内は切り抜き -->
     <div
         :style="props.hardStyle"
         style="
@@ -8,6 +9,16 @@
             background-color: crimson;
         "
     >
+        <!-- ハード名 -->
+        <div
+            class="waratch2-hard-name"
+            style="
+                left: calc(1 * 64px - 1px); /* ボーダー幅を引いている */
+                top: calc(4.5 * 64px - 32px - 1px);
+                width: calc(3 * 64px);
+            "
+        >Waratch2</div>
+
         <slot></slot>
     </div>
     🌟ゲームマシン・ワラッチ２
@@ -37,3 +48,9 @@
     const props = defineProps<Props>();
 
 </script>
+
+<style scoped>
+
+    @import '@/styles/game-machine-waratch2.css';
+
+</style>

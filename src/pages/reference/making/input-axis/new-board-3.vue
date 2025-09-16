@@ -142,15 +142,6 @@
             :hardStyle="perspectiveMiddle1Style"
         >
 
-            <!-- ハード名 -->
-            <div
-                class="waratch2-hard-name"
-                style="
-                    left: calc(1 * 64px - 1px); /* ボーダー幅を引いている */
-                    top: calc(4.5 * 64px - 32px - 1px);
-                    width: calc(3 * 64px);
-                "
-            >Waratch2</div>
 
 
             <!-- ボタン配置 -->
