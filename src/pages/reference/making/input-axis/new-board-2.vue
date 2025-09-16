@@ -210,6 +210,7 @@
                             left: ${1.5 * controllerSquareUnit}px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
+                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                         `"
                         style="position: absolute;"
                         @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
@@ -230,6 +231,7 @@
                             left: ${0.5 * controllerSquareUnit}px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
+                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                         `"
                         style="position: absolute;"
                         @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
@@ -250,6 +252,7 @@
                             left: ${2.5 * controllerSquareUnit}px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
+                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                         `"
                         style="position: absolute;"
                         @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
@@ -270,6 +273,7 @@
                             left: ${1.5 * controllerSquareUnit}px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
+                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                         `"
                         style="position: absolute;"
                         @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
@@ -290,6 +294,7 @@
                             left: ${4.5 * controllerSquareUnit}px;
                             width: ${3 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
+                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                         `"
                         style="position: absolute;"
                         @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
@@ -312,6 +317,7 @@
                             left: ${8 * controllerSquareUnit}px;
                             width: ${4 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
+                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
                         `"
                         style="position: absolute;"
                         ref="noopButton"
