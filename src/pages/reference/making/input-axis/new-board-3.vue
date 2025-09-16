@@ -4,7 +4,7 @@
 
 <template>
 
-    <!-- ボタン機能拡張 -->
+    <!-- 機能 -->
     <button-20250822 ref="button1Ref"/>
 
     <compatible-device ref="compatibleDevice1Ref"/>
@@ -137,111 +137,22 @@
             "
         ></div>
 
+
         <!-- ゲームマシン -->         
         <game-machine-waratch2
             :hardStyle="perspectiveMiddle1Style"
-        >
+            v-on:onLeftButtonPressed="onLeftButtonPressed"
+            v-on:onLeftButtonReleased="onLeftButtonReleased"
+            v-on:onUpButtonPressed="onUpButtonPressed"
+            v-on:onUpButtonReleased="onUpButtonReleased"
+            v-on:onRightButtonPressed="onRightButtonPressed"
+            v-on:onRightButtonReleased="onRightButtonReleased"
+            v-on:onDownButtonPressed="onDownButtonPressed"
+            v-on:onDownButtonReleased="onDownButtonReleased"
+            v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+            v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+        />
 
-            <!-- ボタン配置 -->
-            <template #buttons-area>
-                <!-- 上キー -->
-                <v-btn
-                    class="waratch2-button"
-                    :style="`
-                        top: ${0 * controllerSquareUnit}px;
-                        left: ${1.5 * controllerSquareUnit}px;
-                        width: ${1 * controllerSquareUnit}px;
-                        height: ${1 * controllerSquareUnit}px;
-                    `"
-                    @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onUpButtonReleased);"
-                    @touchcancel="button1Ref?.release(onUpButtonReleased);"
-                    @touchleave="button1Ref?.release(onUpButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onUpButtonReleased);"
-                    @mouseleave="button1Ref?.release(onUpButtonReleased);"
-                    v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
-                >↑</v-btn>
-
-                <!-- 左キー -->
-                <v-btn
-                    class="waratch2-button"
-                    :style="`
-                        top: ${1 * controllerSquareUnit}px;
-                        left: ${0.5 * controllerSquareUnit}px;
-                        width: ${1 * controllerSquareUnit}px;
-                        height: ${1 * controllerSquareUnit}px;
-                    `"
-                    @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onLeftButtonReleased);"
-                    @touchcancel="button1Ref?.release(onLeftButtonReleased);"
-                    @touchleave="button1Ref?.release(onLeftButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onLeftButtonReleased);"
-                    @mouseleave="button1Ref?.release(onLeftButtonReleased);"
-                    v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
-                >←</v-btn>
-
-                <!-- 右キー -->
-                <v-btn
-                    class="waratch2-button"
-                    :style="`
-                        top: ${1 * controllerSquareUnit}px;
-                        left: ${2.5 * controllerSquareUnit}px;
-                        width: ${1 * controllerSquareUnit}px;
-                        height: ${1 * controllerSquareUnit}px;
-                    `"
-                    @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onRightButtonReleased);"
-                    @touchcancel="button1Ref?.release(onRightButtonReleased);"
-                    @touchleave="button1Ref?.release(onRightButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onRightButtonReleased);"
-                    @mouseleave="button1Ref?.release(onRightButtonReleased);"
-                    v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
-                >→</v-btn>
-
-                <!-- 下キー -->
-                <v-btn
-                    class="waratch2-button"
-                    :style="`
-                        top: ${2 * controllerSquareUnit}px;
-                        left: ${1.5 * controllerSquareUnit}px;
-                        width: ${1 * controllerSquareUnit}px;
-                        height: ${1 * controllerSquareUnit}px;
-                    `"
-                    @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onDownButtonReleased);"
-                    @touchcancel="button1Ref?.release(onDownButtonReleased);"
-                    @touchleave="button1Ref?.release(onDownButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onDownButtonReleased);"
-                    @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                    v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
-                >↓</v-btn>
-
-                <!-- スペース・キー -->
-                <v-btn
-                    class="waratch2-button"
-                    :style="`
-                        top: ${1 * controllerSquareUnit}px;
-                        left: ${4.5 * controllerSquareUnit}px;
-                        width: ${3 * controllerSquareUnit}px;
-                        height: ${1 * controllerSquareUnit}px;
-                    `"
-                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onSpaceButtonReleased);"
-                    @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
-                    @touchleave="button1Ref?.release(onSpaceButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onSpaceButtonReleased);"
-                    @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
-                    v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
-                >（スペース）</v-btn>
-            </template>
-
-
-        </game-machine-waratch2>
 
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
         <div
