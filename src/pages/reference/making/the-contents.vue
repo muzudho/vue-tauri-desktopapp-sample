@@ -32,7 +32,8 @@
                 <ul>
                     <li>📖 <router-link to="/reference/making/input-axis" :class="getLinkHighlight('/reference/making/input-axis')">ＲＰＧの歩行グラフィックを表示して、上下左右に移動する章だぜ！</router-link></li>
                     <li>📖 <router-link to="/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1" :class="getLinkHighlight('/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1')">🌟画面３分割テスト：　回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</router-link></li>
-                    <li>📖 <router-link to="/reference/making/input-axis/new-board-1" :class="getLinkHighlight('/reference/making/input-axis/new-board-1')">🌟新盤テスト：　回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</router-link></li>
+                    <li>📖 <router-link to="/reference/making/input-axis/new-board-1" :class="getLinkHighlight('/reference/making/input-axis/new-board-1')">🌟新盤１テスト：　回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</router-link></li>
+                    <li>📖 <router-link to="/reference/making/input-axis/new-board-2" :class="getLinkHighlight('/reference/making/input-axis/new-board-2')">🌟新盤２テスト：　回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</router-link></li>
                 </ul>
             </li>
 

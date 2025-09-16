@@ -263,9 +263,14 @@ const routes = [
         component: () => import('../pages/reference/making/count-up.vue'),
     },
     {
-        name: 'Reference_Making_InputAxisNewBoard',
+        name: 'Reference_Making_InputAxis_NewBoard1',
         path: '/reference/making/input-axis/new-board-1',
         component: () => import('../pages/reference/making/input-axis/new-board-1.vue'),
+    },
+    {
+        name: 'Reference_Making_InputAxis_NewBoard2',
+        path: '/reference/making/input-axis/new-board-2',
+        component: () => import('../pages/reference/making/input-axis/new-board-2.vue'),
     },
     {
         name: 'Reference_Making_InputAxisPerspectiveRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
