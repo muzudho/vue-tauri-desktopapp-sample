@@ -118,6 +118,37 @@
             </div>
         </div>
 
+        <!-- ゲームマシン：画面透過用マスク -->
+        <svg width="0" height="0">
+            <defs>
+                <mask id="game-machine-mask-rect">
+                    <!-- 全体の大きさを白く塗る -->
+                    <rect x="0" y="0" width="320" height="320" fill="white"/>
+
+                    <!-- 透過したいところを黒く塗る -->
+                    <rect x="64" y="64" width="192" height="192" fill="black"/>
+                </mask>
+            </defs>
+        </svg>
+
+        <!-- ゲームマシン -->         
+        <div
+            :style="perspectiveMiddle1Style"
+            style="
+                position: fixed;
+                width: calc(5 * 64px);
+                height: calc(5 * 64px);
+                border: solid 4px black;
+                box-sizing: border-box;
+                border-radius: 64px;
+                background-color: crimson;
+                /* マスクで画面の部分を透過 */
+                -webkit-mask-image: url(#game-machine-mask-rect);
+                mask-image: url(#game-machine-mask-rect);
+            "
+        >
+        </div>
+
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
         <div
             :style="{
