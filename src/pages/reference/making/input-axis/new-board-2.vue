@@ -204,10 +204,11 @@
                 >
                     <!-- 上キー -->
                     <v-btn
-                        class="code-key direction-key"
+                        class="waratch2-button"
                         :style="`
                             top: ${0 * controllerSquareUnit}px;
                             left: ${1.5 * controllerSquareUnit}px;
+                            min-width: 32px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
                             box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -225,10 +226,11 @@
 
                     <!-- 左キー -->
                     <v-btn
-                        class="code-key direction-key"
+                        class="waratch2-key"
                         :style="`
                             top: ${1 * controllerSquareUnit}px;
                             left: ${0.5 * controllerSquareUnit}px;
+                            min-width: 32px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
                             box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -246,10 +248,11 @@
 
                     <!-- 右キー -->
                     <v-btn
-                        class="code-key direction-key"
+                        class="waratch2-key"
                         :style="`
                             top: ${1 * controllerSquareUnit}px;
                             left: ${2.5 * controllerSquareUnit}px;
+                            min-width: 32px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
                             box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -267,10 +270,11 @@
 
                     <!-- 下キー -->
                     <v-btn
-                        class="code-key direction-key"
+                        class="waratch2-key"
                         :style="`
                             top: ${2 * controllerSquareUnit}px;
                             left: ${1.5 * controllerSquareUnit}px;
+                            min-width: 32px;
                             width: ${1 * controllerSquareUnit}px;
                             height: ${1 * controllerSquareUnit}px;
                             box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
@@ -288,7 +292,7 @@
 
                     <!-- スペース・キー -->
                     <v-btn
-                        class="code-key"
+                        class="waratch2-key"
                         :style="`
                             top: ${1 * controllerSquareUnit}px;
                             left: ${4.5 * controllerSquareUnit}px;
@@ -311,7 +315,7 @@
                         フォーカスを外すためのダミー・ボタンです
                     -->
                     <v-btn
-                        class="noop-key"
+                        class="waratch2-key"
                         :style="`
                             top: ${1 * controllerSquareUnit}px;
                             left: ${8 * controllerSquareUnit}px;
@@ -1115,6 +1119,7 @@
 
     @import '@/styles/talk-scene.css';
     @import '@/styles/perspective.css';
+    @import '@/styles/game-machine-waratch2.css';
 
     div.board { /* 盤１ */
         position: relative;
@@ -1159,9 +1164,5 @@
         position: absolute;
         image-rendering: pixelated;
         z-index: 20;
-    }
-
-    .direction-key {
-        min-width: 32px;
     }
 </style>

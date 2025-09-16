@@ -1,0 +1,5 @@
+/* v-btn に効きます */
+span.waratch2-button {
+    min-width: 32px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+}
