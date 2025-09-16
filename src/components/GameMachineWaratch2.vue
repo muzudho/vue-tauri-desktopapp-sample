@@ -18,33 +18,44 @@
     </svg>
 
 
-
     <!-- ゲームマシンの枠、および画面に落ちる影。
         マスクでドロップシャドウを切り抜かれないようにするため、ゲームマシンの外に出します。
         :style="perspectiveMiddle1Style"
-            left: calc(1 * 64px - 3px); /* ボーダー幅を引いている */
-            top: calc(2 * 64px - 10px);    /* FIXME: うまく合わない */
     -->
     <div
-        class="waratch2-screen-frame"
-        :style="props.hardStyle"
+        :style="props.hardPositionStyle"
         style="
             position: fixed;
-            width: calc(3 * 64px + 4px);
-            height: calc(3 * 64px + 24px + 3px);
-            box-sizing: border-box;
+            width: calc(5 * 64px);
+            height: calc(7 * 64px);
+            pointer-events: none;  /* クリックを透過させます */
         "
-    ></div>
+    >
+        <!--
+                left: calc(1 * 64px - 3px); /* ボーダー幅を引いている */
+                top: calc(1 * 64px - 10px);    /* FIXME: うまく合わない */
+        -->
+        <div
+            class="waratch2-screen-frame"
+            style="
+                position: absolute;
+                width: calc(3 * 64px + 4px);
+                height: calc(3 * 64px + 24px + 3px);
+                box-sizing: border-box;
+            "
+        ></div>
+    </div>
 
         
     <!-- ハード。ただし画面内は切り抜き -->
     <div
-        :style="props.hardStyle"
+        :style="props.hardPositionStyle"
         style="
             position: fixed;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
             background-color: crimson;
+            pointer-events: none;  /* クリックを透過させます */
         "
     >
         <!-- ハード名 -->
@@ -198,7 +209,7 @@
     // ####################################
     
     interface Props {
-        hardStyle: CompatibleStyleValue;
+        hardPositionStyle: CompatibleStyleValue;
     }
     // デフォルト値を設定
     const props = defineProps<Props>();

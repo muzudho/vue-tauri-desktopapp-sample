@@ -9,295 +9,20 @@
 
     <compatible-device ref="compatibleDevice1Ref"/>
 
-    <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
-    <stopwatch
-        ref="stopwatch1Ref"
-        v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
-        style="display: none;" />
-
-    <!-- ブログ領域 -->
-    <div
-        :style="{
-            marginBottom: `calc(${5 * controllerSquareUnit}px)`,
-        }"
-    >
-        <the-app-header/>
-        <button-to-back-to-contents
-            class="sec-0 mt-6 mb-6"
-            pagePath="/reference"
-        />
-
-        <h1 class="mb-6"><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h1>
-        <section class="sec-1">
-
-
-            <talk-balloon
-                :src="commonKifuwarabe2Src"
-                :alt="commonKifuwarabe2Alt"
-                :name="commonKifuwarabe2Name"
-                :device="compatibleDevice1Ref?.device">
-                新盤テスト中……。
-            </talk-balloon>
-
-
-        </section>
-
-        <button-to-go-to-top class="sec-0 pt-6"/>
-    </div>
-
-    <!-- オーバーラップ画面 -->
-    <v-container fluid class="vertical-panes-container">
-
-        <!-- 中段の画像エリア（固定） -->
-        <div
-            :style="perspectiveMiddle1Style"
-            style="
-                position: fixed;
-                height: calc(6 * 64px);
-                clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
-            "
-        >
-            <!-- 盤領域 -->
-            <div
-                class="board"
-                :style="board1Style"
-                style="
-                    display: inline-block;  /* インライン化しておくと、センタリングできる */
-                "
-                >
-
-                <!-- 自機のホーム１ -->
-                <div
-                    class="playerHome"
-                    :style="playerHome1Style">
-                </div>
-
-                <!-- タイル盤１ -->
-                <board-made-of-tile
-                    :boardArea="board1Area"
-                    :tileWidth="tileBoard1TileWidth"
-                    :tileHeight="tileBoard1TileHeight"
-                    :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
-                    :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
-                    :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
-                    :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
-                    :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
-                >
-                    <template #default="{ tileSq }">
-                        {{ tileSq }}
-                    </template>
-
-                </board-made-of-tile
-
-                <!-- 自機１ -->
-                <tile-animation
-                    :frames="player1Frames"
-                    tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                    :slow="player1AnimationSlow"
-                    :time="stopwatch1Count"
-                    class="player"
-                    :style="player1Style" />
-                
-                <!-- 視界の外１ -->
-                <out-of-sight-making
-                    ref="outOfSight1Ref"
-                    :tileBoard1TileWidth="tileBoard1TileWidth"
-                    :tileBoard1TileHeight="tileBoard1TileHeight"
-                    :board1FileNum="board1FileNum"
-                    :board1RankNum="board1RankNum" />
-            </div>
-        </div>
-
-
-        <!-- ゲームマシン -->         
-        <game-machine-waratch2
-            :hardStyle="perspectiveMiddle1Style"
-            v-on:onLeftButtonPressed="onLeftButtonPressed"
-            v-on:onLeftButtonReleased="onLeftButtonReleased"
-            v-on:onUpButtonPressed="onUpButtonPressed"
-            v-on:onUpButtonReleased="onUpButtonReleased"
-            v-on:onRightButtonPressed="onRightButtonPressed"
-            v-on:onRightButtonReleased="onRightButtonReleased"
-            v-on:onDownButtonPressed="onDownButtonPressed"
-            v-on:onDownButtonReleased="onDownButtonReleased"
-            v-on:onSpaceButtonPressed="onSpaceButtonPressed"
-            v-on:onSpaceButtonReleased="onSpaceButtonReleased"
-        />
-
-
-        <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
-        <div
-            :style="{
-                top: `calc(100vh - ${2 * controllerSquareUnit}px)`,
-            }"
-            style="
-                position: fixed;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                overflow-y: auto; /* 内容物が収まらないならスクロールバーを出す */
-                color: white;
-                background-color: rgba(0,0,0,0.5);
-            "
-        >
-            
-            <!-- ボタン相対位置領域 -->
-            <!-- 設定パネル１ -->
-            <v-btn
-                class="code-key"
-                :style="`
-                    width: ${4 * controllerSquareUnit - 4}px;
-                    height: ${1 * controllerSquareUnit - 4}px;
-                `"
-                style="position: relative;"
-                @touchstart.prevent="button1Ref?.press($event, onConfig1ButtonPressed);"
-                @touchend="button1Ref?.release();"
-                @touchcancel="button1Ref?.release();"
-                @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onConfig1ButtonPressed)"
-                @mouseup="button1Ref?.release();"
-                @mouseleave="button1Ref?.release();"
-            >{{ config1IsShowing ? '⚙️設定を終わる' : '⚙️設定を表示' }}</v-btn>
-            <section v-if="config1IsShowing" class="sec-1">
-                <v-slider
-                    label="ズーム"
-                    v-model="appZoom"
-                    :min="0.5"
-                    :max="4"
-                    step="0.25"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <v-slider
-                    label="スローモーション"
-                    v-model="player1AnimationSlow"
-                    :min="1"
-                    :max="16"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <v-slider
-                    label="自機のホーム　＞　筋"
-                    v-model="playerHome1File"
-                    :min="0"
-                    :max="4"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <v-slider
-                    label="自機のホーム　＞　段"
-                    v-model="playerHome1Rank"
-                    :min="0"
-                    :max="4"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <p>マスクが被っているところも含めた盤のサイズ：</p>
-                <v-slider
-                    label="水平方向のタイル数"
-                    v-model="board1FileNum"
-                    :min="0"
-                    :max="board1FileMax"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <v-slider
-                    label="垂直方向のタイル数"
-                    v-model="board1RankNum"
-                    :min="0"
-                    :max="board1RankMax"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <p>マスク枠の幅。右側と下側は、１マス多めに付きます：</p>
-                <v-slider
-                    label="マスク枠の幅"
-                    v-model="outOfSight1WithMaskSquareCount"
-                    :min="0"
-                    :max="2"
-                    step="1"
-                    showTicks="always"
-                    thumbLabel="always" />
-                <v-switch
-                    v-model="printing1IsLooping"
-                    :label="printing1IsLooping ? '［像の端と端がつながって（ループして）］います' : '［像の端と端がつながって（ループして）］いません'"
-                    color="green"
-                    :hideDetails="true"
-                    inset />
-                <v-switch
-                    v-model="printing1OutOfSightIsLock"
-                    :label="printing1OutOfSightIsLock ? '［画面外を見せない］中' : '［画面外を見せない］をしていません'"
-                    color="green"
-                    :hideDetails="true"
-                    inset />
-                    <section class="sec-1">
-                        <v-switch
-                            v-model="player1CanBoardEdgeWalking"
-                            :disabled="!player1CanBoardEdgeWalkingIsEnabled"
-                            :label="player1CanBoardEdgeWalking ? '［盤の端まで歩ける］を可能中' : '［盤の端まで歩ける］を可能にしていません'"
-                            color="green"
-                            :hideDetails="true"
-                            inset />
-                    </section>
-                <br/>
-            </section>
-
-            <!-- デバッグ情報パネル１ -->
-            <v-btn
-                class="code-key"
-                :style="`
-                    width: ${5 * controllerSquareUnit - 4}px;
-                    height: ${1 * controllerSquareUnit - 4}px;
-                `"
-                style="position: relative;"
-                @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
-                @touchend="button1Ref?.release();"
-                @touchcancel="button1Ref?.release();"
-                @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
-                @mouseup="button1Ref?.release();"
-                @mouseleave="button1Ref?.release();"
-            >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
-            <section v-if="debugInfo1IsShowing" class="sec-1">
-                <br/>
-
-                <div style="z-index: 10;">
-                    印字x={{ printing1Left }}　｜　人x={{ player1Left }}　｜　人モーション・ウェイト={{ player1MotionWait }}<br/>
-                    印字y={{ printing1Top  }}　｜　人y={{ player1Top  }}<br/>
-                    人 スペース={{ player1Input[" "] }}　｜　↑={{ player1Input.ArrowLeft }}　｜　↑={{ player1Input.ArrowUp }}　｜　→={{ player1Input.ArrowRight }}　｜　↓={{ player1Input.ArrowDown }}<br/>
-                    印字 右へ回り込み={{ printing1Motion.wrapAroundRight }}　｜　下へ回り込み={{ printing1Motion.wrapAroundBottom }}<br/>
-                    outOfSight1WithMaskSquareCount={{ outOfSight1WithMaskSquareCount }}<br/>
-                </div>
-                <br/>
-
-                <p>
-                    controllerSquareUnit: {{ controllerSquareUnit }}<br/>
-                </p>
-
-                <p>👇 盤の各マス</p>
-                <div
-                    v-for="i in board1Area"
-                    :key="i">
-                    tile-index: {{ i - 1 }} | 
-                    fix-index: {{
-                        imageBoard1GetFixedTileSqFromTileSq(i - 1)
-                    }} | 
-                    printing: {{
-                        imageBoard1GetImageSqByFixedTileSq(imageBoard1GetFixedTileSqFromTileSq(i - 1))
-                    }}<br/>
-                </div>
-                <br/>
-                <p>👇 印字表の各マス</p>
-                <div
-                    v-for="j in printing1AreaMax"
-                    :key="j">
-                    printing-index: {{ j - 1 }} | 
-                    source-tile-index: {{ imageBoard1Data[j - 1] }}<br/>
-                </div>
-                <br/>
-            </section>
-        </div>
-
-    </v-container>
+    <!-- ゲームマシン -->         
+    <game-machine-waratch2
+        :hardPositionStyle="gameHard1PositionStyle"
+        v-on:onLeftButtonPressed="onLeftButtonPressed"
+        v-on:onLeftButtonReleased="onLeftButtonReleased"
+        v-on:onUpButtonPressed="onUpButtonPressed"
+        v-on:onUpButtonReleased="onUpButtonReleased"
+        v-on:onRightButtonPressed="onRightButtonPressed"
+        v-on:onRightButtonReleased="onRightButtonReleased"
+        v-on:onDownButtonPressed="onDownButtonPressed"
+        v-on:onDownButtonReleased="onDownButtonReleased"
+        v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+        v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+    />
 
 </template>
 
@@ -310,8 +35,6 @@
     import { computed, onMounted, ref, watch } from 'vue';
     // 👆 ［初級者向けのソースコード］では、 reactive は使いません。
     import type { Ref } from 'vue';
-
-    import { VBtn } from 'vuetify/components';
 
     // ++++++++++++++++++++++++++++++
     // + インポート　＞　互換性対応 +
@@ -327,21 +50,16 @@
     //
 
     // アルファベット順
-    import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
-    import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TheAppHeader from '../../../the-app-header.vue';
-    import TileAnimation from '@/components/TileAnimation.vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
@@ -352,20 +70,12 @@
     } from '../../../../composables/printing-controller'
     import type { PlayerInput, PlayerMotion } from '../../../../composables/player-controller';
     import type { PrintingInput, PrintingMotion } from '../../../../composables/printing-controller';
-    import { createGetResourceTileLeftByImageSq } from '../../../../composables/image-board';
 
     // +++++++++++++++++++++++++++++++++++
     // + インポート ＞　インターフェース +
     // +++++++++++++++++++++++++++++++++++
 
     import type Rectangle from '../../../../interfaces/Rectangle';
-
-    // ++++++++++++++++++++++++++
-    // + インポート　＞　ページ +
-    // ++++++++++++++++++++++++++
-
-    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
-    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
 
 
     // ##########
@@ -374,10 +84,6 @@
     //
     // よく使う設定をまとめたもの。特に不変のもの。
     //    
-
-    import commonKifuwarabe2Src from "@/assets/img/talk/202506__character__01-2013-kifuwarabe-o1o1o0.png";
-    const commonKifuwarabe2Alt = "きふわらべ";
-    const commonKifuwarabe2Name = "きふわらべ";
 
     const controllerSquareUnit: number = 40;
 
@@ -413,19 +119,6 @@
     // ++++++++++++++++++++++++++++++++++++++++
 
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
-    const stopwatch1Count = ref<number>(0);   // カウントの初期値
-
-    // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　設定パネル１ +
-    // ++++++++++++++++++++++++++++++++++
-
-    const config1IsShowing = ref<boolean>(false);    // 設定を表示中
-
-    // ++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　デバッグ情報パネル１ +
-    // ++++++++++++++++++++++++++++++++++++++++++
-
-    const debugInfo1IsShowing = ref<boolean>(false);  // デバッグ情報を表示中
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　視界の外１ +
@@ -448,23 +141,10 @@
 
     const tileBoard1TileWidth = 32;
     const tileBoard1TileHeight = 32;
-    const board1FileMax = 6;
-    const board1RankMax = 6;
     const board1FileNum = ref<number>(5);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
     const board1RankNum = ref<number>(5);   // 段の数
-    const board1Area = computed(()=> {  // 盤のマス数
-        return board1FileNum.value * board1RankNum.value;
-    });
     // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare = ref<number>(1);    // マスクの幅（単位：マス）
-    const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
-        return {
-            width: `${(board1FileNum.value + outOfSight1WithMaskSquareCount.value) * tileBoard1TileWidth}px`,
-            height: `${(board1RankNum.value + outOfSight1WithMaskSquareCount.value) * tileBoard1TileHeight}px`,
-            zoom: appZoom.value,
-            pointerEvents: 'auto',  /* 親要素がクリックの透過を設定しているはずなので、それを解除します */
-        };
-    });
     const board1FloorTilemapTileNum = 5;  // 床のタイルマップの、左上隅から数えたタイル数
 
     // ++++++++++++++++++++++++++++
@@ -478,7 +158,6 @@
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
-    const printing1IsLooping = ref<boolean>(true);  // ループ状態を管理（true: ループする, false: ループしない）
     const printing1FileMax = 10;    // 印字の最大サイズは、盤のサイズより大きいです。
     const printing1RankMax = 10;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
@@ -494,7 +173,6 @@
         const sourceTileIndex = Math.floor(Math.random() * (board1FloorTilemapTileNum - 1)) + 1;
         imageBoard1Data.value.push(sourceTileIndex);
     }
-    const computedImageBoard1Data = computed<number[]>(()=>imageBoard1Data.value);
     const printing1Input : PrintingInput = printingInputCreate();
     const printing1Motion = ref<PrintingMotion>(printingMotionCreate());
     const printing1MotionSpeed = ref<number>(2);  // 移動速度（単位：ピクセル）
@@ -506,36 +184,6 @@
         const ranks = Math.floor(i / board1FileNum.value);
         sourceTilemapRectangles.push({ top: ranks * tileBoard1TileHeight, left: files * tileBoard1TileWidth, width: tileBoard1TileWidth, height: tileBoard1TileHeight });
     }
-    const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
-        tileBoard1TileWidth,
-        tileBoard1TileHeight,
-        board1FileNum,
-        board1RankNum,
-        printing1Left,
-        printing1Top,
-    );
-    const imageBoard1GetResourceTileLeftByImageSq: (sq: number) => number = createGetResourceTileLeftByImageSq(
-        computedImageBoard1Data,
-        sourceTilemapRectangles,
-    );
-    const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
-        tileBoard1TileWidth,
-        tileBoard1TileHeight,
-        board1FileNum,
-        board1RankNum,
-        printing1Left,
-        printing1Top,
-    );
-    const imageBoard1GetImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
-        tileBoard1TileWidth,
-        tileBoard1TileHeight,
-        board1FileNum,
-        printing1Left,
-        printing1Top,
-        printing1FileNum,
-        printing1RankNum,
-        printing1IsLooping,
-    );
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機のホーム１ +
@@ -554,34 +202,17 @@
     const playerHome1Top = computed(()=>{
         return playerHome1Rank.value * tileBoard1TileHeight;
     });
-    const playerHome1Style = computed<CompatibleStyleValue>(()=>{
-        return {
-            left: `${playerHome1Left.value}px`,
-            top: `${playerHome1Top.value}px`,
-            width: `${tileBoard1TileWidth}px`,
-            height: `${tileBoard1TileHeight}px`,
-        };
-    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
 
-    const player1Width = tileBoard1TileWidth;
-    const player1Height = tileBoard1TileHeight;
     // アニメーションのことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const player1Left = ref<number>(playerHome1Left.value);    // スプライトの位置
     const player1Top = ref<number>(playerHome1Top.value);
     const player1Input = {  // 入力
         " ": false, ArrowUp: false, ArrowRight: false, ArrowDown: false, ArrowLeft: false
     } as PlayerInput;
-    const player1AnimationSlow = ref<number>(8);    // アニメーションを何倍遅くするか
-    const player1Style = computed<CompatibleStyleValue>(() => ({
-        left: `${player1Left.value}px`,
-        top: `${player1Top.value}px`,
-        width: `${player1Width}px`,
-        height: `${player1Height}px`,
-    }));
     const player1SourceFrames = {   // キャラクターの向きと、歩行タイルの指定
         left:[  // 左向き
             {top:  3 * tileBoard1TileHeight, left: 0 * tileBoard1TileWidth, width: tileBoard1TileWidth, height: tileBoard1TileHeight },
@@ -627,7 +258,7 @@
     // + オブジェクト　＞　画面中段１ +
     // ++++++++++++++++++++++++++++++++
 
-    const perspectiveMiddle1Style = computed<CompatibleStyleValue>(()=>{
+    const gameHard1PositionStyle = computed<CompatibleStyleValue>(()=>{
         // マスク込みのゲーム画面サイズは、次の３つの最大のものより小さくはなりません。
         //
         // （１）見えていないところを含む盤サイズ＋マスクの１
@@ -661,7 +292,6 @@
             marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
             marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
             /* backgroundColor: `rgba(0,0,0,0.1)`, */
-            pointerEvents: 'none',  /* クリックを透過させます */
         } as CompatibleStyleValue;
     });
 
@@ -884,22 +514,6 @@
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
         printing1Input[" "] = false;
-    }
-
-
-    /**
-     * ［設定パネル１］を開くボタン。
-     */
-    function onConfig1ButtonPressed() : void {
-        config1IsShowing.value = !config1IsShowing.value;
-    }
-
-
-    /**
-     * ［デバッグ情報を表示］ボタン。
-     */
-    function onDebugInfoButtonPressed() : void {
-        debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
     }
 
 </script>
