@@ -182,153 +182,128 @@
             >Waratch2</div>
 
             <!-- ボタン・センタリング用コンテナー -->
+
+            <!-- ボタン配置 -->
             <div
-                style="
-                    position: absolute;
-                    left: 0;
-                    top: calc(5 * 64px - 32px);
-                    right: 0;
-                    text-align: center;
-                "
+                class="waratch2-buttons-area"
+                :style="{
+                    top: `${5 * 64 - 32}px`,
+                    width: `${15 * controllerSquareUnit}px`,
+                    height: `${3 * controllerSquareUnit}px`,
+                }"
             >
-                <!-- ボタン配置 -->
-                <div
-                    :style="{
-                        width: `${15 * controllerSquareUnit}px`,
-                        height: `${3 * controllerSquareUnit}px`,
-                    }"
-                    style="
-                        position: relative;
-                        display: inline-block;
-                    "
-                >
-                    <!-- 上キー -->
-                    <v-btn
-                        class="waratch2-button"
-                        :style="`
-                            top: ${0 * controllerSquareUnit}px;
-                            left: ${1.5 * controllerSquareUnit}px;
-                            min-width: 32px;
-                            width: ${1 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit}px;
-                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onUpButtonReleased);"
-                        @touchcancel="button1Ref?.release(onUpButtonReleased);"
-                        @touchleave="button1Ref?.release(onUpButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onUpButtonReleased);"
-                        @mouseleave="button1Ref?.release(onUpButtonReleased);"
-                        v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
-                    >↑</v-btn>
+                <!-- 上キー -->
+                <v-btn
+                    class="waratch2-button"
+                    :style="`
+                        top: ${0 * controllerSquareUnit}px;
+                        left: ${1.5 * controllerSquareUnit}px;
+                        width: ${1 * controllerSquareUnit}px;
+                        height: ${1 * controllerSquareUnit}px;
+                    `"
+                    @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onUpButtonReleased);"
+                    @touchcancel="button1Ref?.release(onUpButtonReleased);"
+                    @touchleave="button1Ref?.release(onUpButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onUpButtonReleased);"
+                    @mouseleave="button1Ref?.release(onUpButtonReleased);"
+                    v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
+                >↑</v-btn>
 
-                    <!-- 左キー -->
-                    <v-btn
-                        class="waratch2-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${0.5 * controllerSquareUnit}px;
-                            min-width: 32px;
-                            width: ${1 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit}px;
-                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onLeftButtonReleased);"
-                        @touchcancel="button1Ref?.release(onLeftButtonReleased);"
-                        @touchleave="button1Ref?.release(onLeftButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onLeftButtonReleased);"
-                        @mouseleave="button1Ref?.release(onLeftButtonReleased);"
-                        v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
-                    >←</v-btn>
+                <!-- 左キー -->
+                <v-btn
+                    class="waratch2-button"
+                    :style="`
+                        top: ${1 * controllerSquareUnit}px;
+                        left: ${0.5 * controllerSquareUnit}px;
+                        width: ${1 * controllerSquareUnit}px;
+                        height: ${1 * controllerSquareUnit}px;
+                    `"
+                    @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onLeftButtonReleased);"
+                    @touchcancel="button1Ref?.release(onLeftButtonReleased);"
+                    @touchleave="button1Ref?.release(onLeftButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onLeftButtonReleased);"
+                    @mouseleave="button1Ref?.release(onLeftButtonReleased);"
+                    v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
+                >←</v-btn>
 
-                    <!-- 右キー -->
-                    <v-btn
-                        class="waratch2-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${2.5 * controllerSquareUnit}px;
-                            min-width: 32px;
-                            width: ${1 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit}px;
-                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onRightButtonReleased);"
-                        @touchcancel="button1Ref?.release(onRightButtonReleased);"
-                        @touchleave="button1Ref?.release(onRightButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onRightButtonReleased);"
-                        @mouseleave="button1Ref?.release(onRightButtonReleased);"
-                        v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
-                    >→</v-btn>
+                <!-- 右キー -->
+                <v-btn
+                    class="waratch2-button"
+                    :style="`
+                        top: ${1 * controllerSquareUnit}px;
+                        left: ${2.5 * controllerSquareUnit}px;
+                        width: ${1 * controllerSquareUnit}px;
+                        height: ${1 * controllerSquareUnit}px;
+                    `"
+                    @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onRightButtonReleased);"
+                    @touchcancel="button1Ref?.release(onRightButtonReleased);"
+                    @touchleave="button1Ref?.release(onRightButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onRightButtonReleased);"
+                    @mouseleave="button1Ref?.release(onRightButtonReleased);"
+                    v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
+                >→</v-btn>
 
-                    <!-- 下キー -->
-                    <v-btn
-                        class="waratch2-key"
-                        :style="`
-                            top: ${2 * controllerSquareUnit}px;
-                            left: ${1.5 * controllerSquareUnit}px;
-                            min-width: 32px;
-                            width: ${1 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit}px;
-                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onDownButtonReleased);"
-                        @touchcancel="button1Ref?.release(onDownButtonReleased);"
-                        @touchleave="button1Ref?.release(onDownButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onDownButtonReleased);"
-                        @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                        v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
-                    >↓</v-btn>
+                <!-- 下キー -->
+                <v-btn
+                    class="waratch2-button"
+                    :style="`
+                        top: ${2 * controllerSquareUnit}px;
+                        left: ${1.5 * controllerSquareUnit}px;
+                        width: ${1 * controllerSquareUnit}px;
+                        height: ${1 * controllerSquareUnit}px;
+                    `"
+                    @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onDownButtonReleased);"
+                    @touchcancel="button1Ref?.release(onDownButtonReleased);"
+                    @touchleave="button1Ref?.release(onDownButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onDownButtonReleased);"
+                    @mouseleave="button1Ref?.release(onDownButtonReleased);"
+                    v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
+                >↓</v-btn>
 
-                    <!-- スペース・キー -->
-                    <v-btn
-                        class="waratch2-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${4.5 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit}px;
-                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onSpaceButtonReleased);"
-                        @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
-                        @touchleave="button1Ref?.release(onSpaceButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onSpaceButtonReleased);"
-                        @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
-                        v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
-                    >（スペース）</v-btn>
+                <!-- スペース・キー -->
+                <v-btn
+                    class="waratch2-button"
+                    :style="`
+                        top: ${1 * controllerSquareUnit}px;
+                        left: ${4.5 * controllerSquareUnit}px;
+                        width: ${3 * controllerSquareUnit}px;
+                        height: ${1 * controllerSquareUnit}px;
+                    `"
+                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onSpaceButtonReleased);"
+                    @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
+                    @touchleave="button1Ref?.release(onSpaceButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onSpaceButtonReleased);"
+                    @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
+                    v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
+                >（スペース）</v-btn>
 
-                    <!-- 何もしないボタン
-                        フォーカスを外すためのダミー・ボタンです
-                    -->
-                    <v-btn
-                        class="waratch2-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${8 * controllerSquareUnit}px;
-                            width: ${4 * controllerSquareUnit}px;
-                            height: ${1 * controllerSquareUnit}px;
-                            box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
-                        `"
-                        style="position: absolute;"
-                        ref="noopButton"
-                        v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                    >何もしないボタン</v-btn>
-                </div>
             </div>
+
+            <!-- 何もしないボタン
+                フォーカスを外すためのダミー・ボタンです
+            -->
+            <v-btn
+                class="waratch2-button"
+                :style="`
+                    top: ${1 * controllerSquareUnit}px;
+                    left: ${8 * controllerSquareUnit}px;
+                    width: ${4 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit}px;
+                `"
+                style="position: absolute;"
+                ref="noopButton"
+                v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
+            >何もしないボタン</v-btn>
 
         </div>
 

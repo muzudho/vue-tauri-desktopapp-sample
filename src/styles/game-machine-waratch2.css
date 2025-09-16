@@ -1,5 +1,12 @@
+/* ボタン配置領域 */
+div.waratch2-buttons-area {
+    position: relative;
+    display: inline-block;
+}
+
 /* v-btn に効きます */
-span.waratch2-button {
+button.waratch2-button {
+    position: absolute;
     min-width: 32px;
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
 }
