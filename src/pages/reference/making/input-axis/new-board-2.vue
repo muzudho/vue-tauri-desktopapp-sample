@@ -136,48 +136,30 @@
         <div
             :style="perspectiveMiddle1Style"
             style="
-                position: absolute;
                 left: calc(1 * 64px - 2px); /* ボーダー幅を引いている */
                 top: calc(2 * 64px + 32px + 32px - 3px);    /* FIXME: うまく合わない */
                 width: calc(3 * 64px + 4px);
                 height: calc(3 * 64px + 24px + 4px);
-                box-sizing: border-box;
-                border: solid 2px brown;
-                font-family:Verdana, Geneva, Tahoma, sans-serif;
-                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5) inset;
-                z-index: 100;
             "
         ></div>
 
         <!-- ゲームマシン -->         
         <div
+            class="waratch2-hard"
             :style="perspectiveMiddle1Style"
             style="
-                position: fixed;
                 width: calc(5 * 64px);
                 height: calc(7 * 64px);
-                border: solid 4px black;
-                box-sizing: border-box;
-                border-radius: 64px;
                 background-color: crimson;
-                /* マスクで画面の部分を透過 */
-                -webkit-mask-image: url(#game-machine-mask-rect);
-                mask-image: url(#game-machine-mask-rect);
             "
         >
             <!-- ハード名 -->
             <div
+                class="waratch2-hard-name"
                 style="
-                    position: absolute;
                     left: calc(1 * 64px - 4px); /* ボーダー幅を引いている */
                     top: calc(4.5 * 64px - 32px - 4px);
                     width: calc(3 * 64px);
-                    height: 24px;
-                    padding-left: 4px;
-                    box-sizing: border-box;
-                    color: goldenrod;
-                    background-color: brown;
-                    font-family:Verdana, Geneva, Tahoma, sans-serif;
                 "
             >Waratch2</div>
 
@@ -846,7 +828,7 @@
             bottom: `calc(${5 * controllerSquareUnit}px)`,
             marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
             marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
-            backgroundColor: `rgba(0,0,0,0.1)`,
+            /* backgroundColor: `rgba(0,0,0,0.1)`, */
             pointerEvents: 'none',  /* クリックを透過させます */
         } as CompatibleStyleValue;
     });

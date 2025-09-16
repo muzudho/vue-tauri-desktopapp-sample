@@ -1,3 +1,37 @@
+/* ハード領域 */
+div.waratch2-hard {
+    position: fixed;
+    border: solid 4px black;
+    box-sizing: border-box;
+    border-radius: 64px;
+    /* background-color: crimson; */
+    background-color: blue; /* 何故か背景色が効かない */
+    /* マスクで画面の部分を透過 */
+    -webkit-mask-image: url(#game-machine-mask-rect);
+    mask-image: url(#game-machine-mask-rect);
+}
+
+/* 画面枠 */
+div.waratch2-screen-frame {
+    position: absolute;
+    box-sizing: border-box;
+    border: solid 2px brown;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5) inset;
+    z-index: 10000;
+}
+
+/* ハード銘領域 */
+div.waratch2-hard-name {
+    position: absolute;
+    height: 24px;
+    padding-left: 4px;
+    box-sizing: border-box;
+    color: goldenrod;
+    background-color: brown;
+    font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+
 /* ボタン配置領域 */
 div.waratch2-buttons-area {
     position: relative;
