@@ -108,35 +108,6 @@
             </div>
         </div>
 
-        <!-- ゲームマシン：画面部分透過用マスク -->
-        <svg width="0" height="0">
-            <defs>
-                <mask id="waratch2-mask-rect">
-                    <!-- 全体の大きさを白く塗る -->
-                    <rect x="0" y="0" width="320" height="448" fill="white"/>
-
-                    <!-- 透過したいところを黒く塗る -->
-                    <rect x="64" y="64" width="192" height="192" fill="black"/>
-                </mask>
-            </defs>
-        </svg>
-
-        <!-- ゲームマシンの枠、および画面に落ちる影。
-            マスクでドロップシャドウを切り抜かれないようにするため、ゲームマシンの外に出します。
-        -->
-        <div
-            class="waratch2-screen-frame"
-            :style="perspectiveMiddle1Style"
-            style="
-                position: fixed;
-                box-sizing: border-box;
-                left: calc(1 * 64px - 3px); /* ボーダー幅を引いている */
-                top: calc(2 * 64px - 10px);    /* FIXME: うまく合わない */
-                width: calc(3 * 64px + 4px);
-                height: calc(3 * 64px + 24px + 3px);
-            "
-        ></div>
-
 
         <!-- ゲームマシン -->         
         <game-machine-waratch2
