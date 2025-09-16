@@ -132,6 +132,23 @@
             </defs>
         </svg>
 
+        <!-- ゲームマシンの枠、および画面に落ちる影 -->
+        <div
+            :style="perspectiveMiddle1Style"
+            style="
+                position: absolute;
+                left: calc(1 * 64px - 2px); /* ボーダー幅を引いている */
+                top: calc(2 * 64px + 32px + 32px - 3px);    /* FIXME: うまく合わない */
+                width: calc(3 * 64px + 4px);
+                height: calc(3 * 64px + 24px + 4px);
+                box-sizing: border-box;
+                border: solid 2px brown;
+                font-family:Verdana, Geneva, Tahoma, sans-serif;
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5) inset;
+                z-index: 100;
+            "
+        ></div>
+
         <!-- ゲームマシン -->         
         <div
             :style="perspectiveMiddle1Style"
@@ -154,8 +171,9 @@
                     position: absolute;
                     left: calc(1 * 64px - 4px); /* ボーダー幅を引いている */
                     top: calc(4.5 * 64px - 32px - 4px);
-                    width: calc(3 * 64px + 1px);
-                    padding-left: 2px;
+                    width: calc(3 * 64px);
+                    height: 24px;
+                    padding-left: 4px;
                     box-sizing: border-box;
                     color: goldenrod;
                     background-color: brown;
@@ -307,7 +325,7 @@
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
         <div
             :style="{
-                top: `calc(100vh - ${5 * controllerSquareUnit}px)`,
+                top: `calc(100vh - ${2 * controllerSquareUnit}px)`,
             }"
             style="
                 position: fixed;
@@ -837,7 +855,7 @@
 
         return {
             top: `calc(
-                100vh - ${6 * controllerSquareUnit}px -
+                100vh - ${4 * controllerSquareUnit}px -
                 ${boardHeightPixelsWithMask}px
             )`,
             bottom: `calc(${5 * controllerSquareUnit}px)`,
