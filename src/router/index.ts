@@ -273,6 +273,11 @@ const routes = [
         component: () => import('../pages/reference/making/input-axis/new-board-2.vue'),
     },
     {
+        name: 'Reference_Making_InputAxis_NewBoard3',
+        path: '/reference/making/input-axis/new-board-3',
+        component: () => import('../pages/reference/making/input-axis/new-board-3.vue'),
+    },
+    {
         name: 'Reference_Making_InputAxisPerspectiveRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',
         path: '/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1',
         component: () => import('../pages/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1.vue'),
