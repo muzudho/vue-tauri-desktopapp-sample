@@ -4,8 +4,7 @@ div.waratch2-hard {
     border: solid 4px black;
     box-sizing: border-box;
     border-radius: 64px;
-    /* background-color: crimson; */
-    background-color: blue; /* 何故か背景色が効かない */
+    /* background-color: blue; 何故か背景色が効かない */
     /* マスクで画面の部分を透過 */
     -webkit-mask-image: url(#waratch2-mask-rect);
     mask-image: url(#waratch2-mask-rect);

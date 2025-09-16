@@ -19,6 +19,18 @@
             "
         >Waratch2</div>
 
+        <!-- ボタン配置 -->
+        <div
+            class="waratch2-buttons-area"
+            :style="{
+                top: `${5 * 64 - 32}px`,
+                width: `${15 * controllerSquareUnit}px`,
+                height: `${3 * controllerSquareUnit}px`,
+            }"
+        >
+            <slot name="buttons-area"></slot>
+        </div>
+
         <slot></slot>
     </div>
     🌟ゲームマシン・ワラッチ２
@@ -46,6 +58,16 @@
     }
     // デフォルト値を設定
     const props = defineProps<Props>();
+
+
+    // ##########
+    // # コモン #
+    // ##########
+    //
+    // よく使う設定をまとめたもの。特に不変のもの。
+    //    
+
+    const controllerSquareUnit: number = 40;
 
 </script>
 
