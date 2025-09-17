@@ -5,13 +5,13 @@ div.waratch2-hard {
     box-sizing: border-box;
     border-radius: 64px;
     background-color: crimson;
+    pointer-events: none;  /* クリックを透過させます */
+}
+
+div.waratch2-trim-screen {
     /* マスクで画面の部分を透過 */
-    /*
     -webkit-mask-image: url(#waratch2-mask-rect);
     mask-image: url(#waratch2-mask-rect);
-    */
-
-    pointer-events: none;  /* クリックを透過させます */
 }
 
 /* 画面枠 */

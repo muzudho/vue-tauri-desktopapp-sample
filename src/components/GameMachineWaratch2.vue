@@ -17,8 +17,8 @@
         </defs>
     </svg>
 
-        
-    <!-- ハード。ただし画面内は切り抜き -->
+
+    <!-- 画面内を切り抜かれないようにします -->
     <div
         class="waratch2-hard"
         :style="props.hardPositionStyle"
@@ -39,6 +39,17 @@
                 background-color: olivedrab;    /* cadetblue darkolivegreen darkslategray olive olivedrab */
             "
         ></div>
+    </div>
+        
+    <!-- ハード。ただし画面部分の矩形は切り抜き -->
+    <div
+        class="waratch2-hard waratch2-trim-screen"
+        :style="props.hardPositionStyle"
+        style="
+            width: calc(5 * 64px);
+            height: calc(7 * 64px);
+        "
+    >
 
         <!-- ハード名 -->
         <div
@@ -49,7 +60,7 @@
                 width: calc(3 * 64px);
             "
         ><span class="waratch2-hard-name">Waratch2</span></div>
-
+        
         <!-- ボタン配置 -->
         <div
             class="waratch2-buttons-area"
@@ -177,8 +188,8 @@
             class="waratch2-screen-frame"
             style="
                 position: absolute;
-                left: calc(1 * 64px - 2px); /* ボーダー幅 2px を引いている */
-                top: calc(1 * 64px - 2px);    /* ボーダー幅 2px を引いている */
+                left: calc(1 * 64px - 2px); /* ボーダー幅は 4px だが、 2px 引くとちょうどいい */
+                top: calc(1 * 64px - 2px);    /* ボーダー幅は 4px だが、 2px 引くとちょうどいい */
                 width: calc(3 * 64px + 4px);
                 height: calc(3 * 64px + 24px + 3px);
                 box-sizing: border-box;
