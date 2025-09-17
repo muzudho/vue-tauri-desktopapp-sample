@@ -80,14 +80,14 @@
             <!-- 全体サイズと、切り抜き領域 -->
             <div
                 style="
-                    /*position: absolute;*/
+                    position: absolute;
                     /* FIXME: 縦型と横型で隠れる部分を替えたい */
                     /*left: calc(-64 + 160)px;*/
-                    /*left: -64px;*/
+                    left: -64px;
                     /*top: calc(-64 + 32)px;*/ /* 画面外と想定している部分が、きちんと画面外になるように、目視確認しながら位置調整 */
-                    /*top: -64px;*/
+                    top: -64px;
                     height: calc(6 * 64px);
-                    /*clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);*/  /* 四隅の切り落とし。上、右、下、左 */
+                    clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
                 "
             >
                 <!-- 盤領域 -->
