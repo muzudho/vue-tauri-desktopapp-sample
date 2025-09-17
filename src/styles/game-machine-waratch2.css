@@ -36,7 +36,6 @@ div.waratch2-screen-frame {
 /* ハード銘領域 */
 div.waratch2-name-area {
     position: absolute;
-    height: 24px;
     box-sizing: border-box;
     color: goldenrod;
     background-color: brown;

@@ -57,7 +57,8 @@
             :style="{
                 left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
                 top: `${(screenMarginTopRankNum + screenScreenRankNum) * screenSquareUnit - shassisBorderThickness}px`,
-                width: `${screenScreenFileNum * screenSquareUnit}px`
+                width: `${screenScreenFileNum * screenSquareUnit}px`,
+                height: `${hardNameLineHeight}px`,
             }"
         ><span class="waratch2-name-1">Waratch2</span></div>
         
@@ -80,7 +81,7 @@
         <div
             class="waratch2-buttons-area"
             :style="{
-                top: `${5 * screenSquareUnit - 32}px`,
+                top: `${(screenMarginTopRankNum + screenScreenRankNum) * screenSquareUnit + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
                 width: `${15 * controllerSquareUnit}px`,
                 height: `${3 * controllerSquareUnit}px`,
             }"
@@ -278,6 +279,7 @@
     const screenScreenFileNum: number = 3;
     const screenScreenRankNum: number = 3;
     const shassisBorderThickness: number = 4;
+    const hardNameLineHeight: number = 24;
     const controllerSquareUnit: number = 40;
 
     // ################
