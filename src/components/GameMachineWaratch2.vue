@@ -103,8 +103,8 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onUpButtonPressed'), {repeat: true})"
                 @mouseup="button1Ref?.release(emit('onUpButtonReleased'));"
                 @mouseleave="button1Ref?.release(emit('onUpButtonReleased'));"
-                v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
             >↑</v-btn>
+            <!-- v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'" -->
 
             <!-- 左キー -->
             <v-btn
@@ -122,8 +122,8 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onLeftButtonPressed'), {repeat: true})"
                 @mouseup="button1Ref?.release(emit('onLeftButtonReleased'));"
                 @mouseleave="button1Ref?.release(emit('onLeftButtonReleased'));"
-                v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
             >←</v-btn>
+            <!-- v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'" -->
 
             <!-- 右キー -->
             <v-btn
@@ -141,8 +141,8 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onRightButtonPressed'), {repeat: true})"
                 @mouseup="button1Ref?.release(emit('onRightButtonReleased'));"
                 @mouseleave="button1Ref?.release(emit('onRightButtonReleased'));"
-                v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
             >→</v-btn>
+            <!-- v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'" -->
 
             <!-- 下キー -->
             <v-btn
@@ -160,8 +160,8 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onDownButtonPressed'), {repeat: true})"
                 @mouseup="button1Ref?.release(emit('onDownButtonReleased'));"
                 @mouseleave="button1Ref?.release(emit('onDownButtonReleased'));"
-                v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
             >↓</v-btn>
+            <!-- v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'" -->
         </div>
 
         <!-- 決定等ボタン配置 -->
@@ -189,8 +189,8 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onSpaceButtonPressed'), {repeat: true})"
                 @mouseup="button1Ref?.release(emit('onSpaceButtonReleased'));"
                 @mouseleave="button1Ref?.release(emit('onSpaceButtonReleased'));"
-                v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
             >（スペース）</v-btn>
+            <!-- v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'" -->
 
         </div>
     </div>
