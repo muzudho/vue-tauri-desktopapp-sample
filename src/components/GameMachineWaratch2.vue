@@ -168,8 +168,8 @@
         <div
             class="waratch2-buttons-area"
             :style="{
-                left: `${4.5 * controllerSquareUnit}px`,
-                top: `${screenMarginTop + props.screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
+                left: `${actionButtonsAreaLeft}px`,
+                top: `${actionButtonsAreaTop}px`,
                 width: `${2.5 * controllerSquareUnit}px`,
                 height: `${3 * controllerSquareUnit}px`,
             }"
@@ -357,14 +357,18 @@
             shassisHeight.value = 4 * screenSquareUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0;
             directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;    // 8 は画面とボタンの隙間
+            actionButtonsAreaLeft.value = 4.5 * controllerSquareUnit;
+            actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;
 
         } else {    // 横型
-            screenMarginLeft.value = 3 * screenSquareUnit;
-            screenMarginTop.value = 1 * screenSquareUnit;
+            screenMarginLeft.value = 2.5 * screenSquareUnit;
+            screenMarginTop.value = 0.5 * screenSquareUnit;
             shassisWidth.value = (3 + 2) * screenSquareUnit + props.screenWidth;
-            shassisHeight.value = (1 + 1) * screenSquareUnit + props.screenHeight;
+            shassisHeight.value = (1 + 0.25) * screenSquareUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0;
-            directionKeysAreaTop.value = screenMarginTop.value + hardNameLineHeight;
+            directionKeysAreaTop.value = screenMarginTop.value + 1 * controllerSquareUnit;
+            actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 0.5 * controllerSquareUnit;
+            actionButtonsAreaTop.value = screenMarginTop.value + 1 * controllerSquareUnit;
         }
     }
 
