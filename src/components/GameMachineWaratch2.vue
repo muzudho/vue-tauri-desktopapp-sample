@@ -41,7 +41,15 @@
         ></div>
 
         <!-- ゲーム画面はめ込み -->
-        <slot></slot>
+        <div
+            :style="{
+                position: 'relative',   /* スロットの親要素にする */
+                left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引いている
+                top: `${screenMarginTop - shassisBorderThickness}px`,
+            }"
+        >
+            <slot></slot>
+        </div>
     </div>
         
     <!-- シャーシ。画面部分の矩形は切り抜き -->

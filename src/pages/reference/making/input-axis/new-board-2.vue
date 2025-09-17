@@ -76,65 +76,71 @@
         v-on:onSpaceButtonPressed="onSpaceButtonPressed"
         v-on:onSpaceButtonReleased="onSpaceButtonReleased"
     >
-        <!-- 中段の画像エリア（固定） -->
-        <div
-            :style="perspectiveMiddle1Style"
-            style="
-                position: absolute;
-                height: calc(6 * 64px);
-                clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
-            "
-        >
-            <!-- 盤領域 -->
+        <templage #default>
+            <!-- 全体サイズと、切り抜き領域 -->
             <div
-                class="game-board-1"
-                :style="board1Style"
                 style="
-                    display: inline-block;  /* インライン化しておくと、センタリングできる */
+                    /*position: absolute;*/
+                    /* FIXME: 縦型と横型で隠れる部分を替えたい */
+                    /*left: calc(-64 + 160)px;*/
+                    /*left: -64px;*/
+                    /*top: calc(-64 + 32)px;*/ /* 画面外と想定している部分が、きちんと画面外になるように、目視確認しながら位置調整 */
+                    /*top: -64px;*/
+                    height: calc(6 * 64px);
+                    /*clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);*/  /* 四隅の切り落とし。上、右、下、左 */
                 "
-                >
-
-                <!-- 自機のホーム１ -->
+            >
+                <!-- 盤領域 -->
                 <div
-                    class="playerHome"
-                    :style="playerHome1Style">
+                    class="game-board-1"
+                    :style="board1Style"
+                    style="
+                        display: inline-block;  /* インライン化しておくと、センタリングできる */
+                    "
+                    >
+
+                    <!-- 自機のホーム１ -->
+                    <div
+                        class="playerHome"
+                        :style="playerHome1Style">
+                    </div>
+
+                    <!-- タイル盤１ -->
+                    <board-made-of-tile
+                        :boardArea="board1Area"
+                        :tileWidth="tileBoard1TileWidth"
+                        :tileHeight="tileBoard1TileHeight"
+                        :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
+                        :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
+                        :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
+                        :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+                        :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+                    >
+                        <template #default="{ tileSq }">
+                            {{ tileSq }}
+                        </template>
+
+                    </board-made-of-tile
+
+                    <!-- 自機１ -->
+                    <tile-animation
+                        :frames="player1Frames"
+                        tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                        :slow="player1AnimationSlow"
+                        :time="stopwatch1Count"
+                        class="player"
+                        :style="player1Style" />
+                    
+                    <!-- 視界の外１ -->
+                    <out-of-sight-making
+                        ref="outOfSight1Ref"
+                        :tileBoard1TileWidth="tileBoard1TileWidth"
+                        :tileBoard1TileHeight="tileBoard1TileHeight"
+                        :board1FileNum="board1FileNum"
+                        :board1RankNum="board1RankNum" />
                 </div>
-
-                <!-- タイル盤１ -->
-                <board-made-of-tile
-                    :boardArea="board1Area"
-                    :tileWidth="tileBoard1TileWidth"
-                    :tileHeight="tileBoard1TileHeight"
-                    :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
-                    :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
-                    :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
-                    :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
-                    :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
-                >
-                    <template #default="{ tileSq }">
-                        {{ tileSq }}
-                    </template>
-
-                </board-made-of-tile
-
-                <!-- 自機１ -->
-                <tile-animation
-                    :frames="player1Frames"
-                    tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                    :slow="player1AnimationSlow"
-                    :time="stopwatch1Count"
-                    class="player"
-                    :style="player1Style" />
-                
-                <!-- 視界の外１ -->
-                <out-of-sight-making
-                    ref="outOfSight1Ref"
-                    :tileBoard1TileWidth="tileBoard1TileWidth"
-                    :tileBoard1TileHeight="tileBoard1TileHeight"
-                    :board1FileNum="board1FileNum"
-                    :board1RankNum="board1RankNum" />
             </div>
-        </div>
+        </templage>
     </game-machine-waratch2>
 
     <!-- オーバーラップ画面 -->
@@ -477,7 +483,6 @@
             }
         }
     });
-    const oneForMask = 1;   // マスクが１マス分食み出ていることを示す定数。
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -582,7 +587,6 @@
     // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
-    const playerHome1Length = 1;    // ホームポジションが１マス分の大きさであることを示す定数。
     const playerHome1File = ref<number>(2); // ホーム
     const playerHome1Rank = ref<number>(2);
     const playerHome1Left = computed(()=>{
@@ -659,48 +663,6 @@
     const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
-
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　画面中段１ +
-    // ++++++++++++++++++++++++++++++++
-
-    const perspectiveMiddle1Style = computed<CompatibleStyleValue>(()=>{
-        // マスク込みのゲーム画面サイズは、次の３つの最大のものより小さくはなりません。
-        //
-        // （１）見えていないところを含む盤サイズ＋マスクの１
-        // （２）マスク幅×２＋ホームの１
-        // （３）ホームの位置
-        const minWidthPixels = Math.max(
-            appZoom.value * (board1FileNum.value + oneForMask) * tileBoard1TileWidth,
-            appZoom.value * (outOfSight1WithMaskSquareCount.value + playerHome1Length) * tileBoard1TileWidth,
-            appZoom.value * (playerHome1File.value + 1) * tileBoard1TileWidth,
-        );
-        const minHeightPixels = Math.max(
-            appZoom.value * (board1RankNum.value + oneForMask) * tileBoard1TileHeight,
-            appZoom.value * (outOfSight1WithMaskSquareCount.value + playerHome1Length) * tileBoard1TileHeight,
-            appZoom.value * (playerHome1Rank.value + 1) * tileBoard1TileHeight,
-        );
-        let boardWidthPixelsWithMask = appZoom.value * (board1FileNum.value + oneForMask) * tileBoard1TileWidth;
-        let boardHeightPixelsWithMask = appZoom.value * (board1RankNum.value + oneForMask) * tileBoard1TileHeight;
-        if (boardWidthPixelsWithMask < minWidthPixels) {
-            boardWidthPixelsWithMask = minWidthPixels;
-        }
-        if (boardHeightPixelsWithMask < minHeightPixels) {
-            boardHeightPixelsWithMask = minHeightPixels;
-        }
-
-        return {
-            // top: `calc(
-            //     100vh - ${4 * controllerSquareUnit}px -
-            //     ${boardHeightPixelsWithMask}px
-            // )`,
-            bottom: `calc(${5 * controllerSquareUnit}px)`,
-            marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
-            marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
-            /* backgroundColor: `rgba(0,0,0,0.1)`, */
-            pointerEvents: 'none',  /* クリックを透過させます */
-        } as CompatibleStyleValue;
-    });
 
 
     // ##########
