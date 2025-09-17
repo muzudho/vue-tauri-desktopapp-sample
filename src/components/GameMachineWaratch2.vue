@@ -27,12 +27,25 @@
             height: calc(7 * 64px);
         "
     >
+        <!-- ゲーム画面の裏地 -->
+        <div
+            style="
+                position: absolute;
+                box-sizing: border-box;
+                left: calc(1 * 64px - 4px);    /* ボーダー幅 4px を引いている */
+                top: calc(1 * 64px - 4px);     /* ボーダー幅 4px を引いている */
+                width: calc(3 * 64px);
+                height: calc(3 * 64px);
+                background-color: olivedrab;    /* cadetblue darkolivegreen darkslategray olive olivedrab */
+            "
+        ></div>
+
         <!-- ハード名 -->
         <div
             class="waratch2-hard-name-area"
             style="
-                left: calc(1 * 64px - 4px); /* ボーダー幅を引いている */
-                top: calc(4.5 * 64px - 32px - 4px);
+                left: calc(1 * 64px - 4px); /* ボーダー幅 4px を引いている */
+                top: calc(4.5 * 64px - 24px - 8px - 4px);
                 width: calc(3 * 64px);
             "
         ><span class="waratch2-hard-name">Waratch2</span></div>
@@ -128,7 +141,7 @@
                 :style="`
                     top: ${1 * controllerSquareUnit}px;
                     left: ${4.5 * controllerSquareUnit}px;
-                    width: ${3 * controllerSquareUnit}px;
+                    width: ${2.5 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onSpaceButtonPressed'), {repeat: true});"
@@ -143,9 +156,9 @@
 
         </div>
 
+        <!-- TODO: ゲーム画面を入れたい -->
         <slot></slot>
     </div>
-
 
 
     <!-- ゲームマシンの枠、および画面に落ちる影。
@@ -172,8 +185,6 @@
             "
         ></div>
     </div>
-
-    🌟ゲームマシン・ワラッチ２
 </template>
 
 <script setup lang="ts">

@@ -6,8 +6,11 @@ div.waratch2-hard {
     border-radius: 64px;
     background-color: crimson;
     /* マスクで画面の部分を透過 */
+    /*
     -webkit-mask-image: url(#waratch2-mask-rect);
     mask-image: url(#waratch2-mask-rect);
+    */
+
     pointer-events: none;  /* クリックを透過させます */
 }
 
