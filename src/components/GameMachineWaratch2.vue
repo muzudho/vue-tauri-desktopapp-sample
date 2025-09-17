@@ -12,7 +12,7 @@
                 <rect x="0" y="0" :width="5 * screenSquareUnit" :height="7 * screenSquareUnit" fill="white"/>
 
                 <!-- 透過したいところを黒く塗る -->
-                <rect :x="screenSquareUnit" :y="screenSquareUnit" :width="3 * screenSquareUnit" :height="3 * screenSquareUnit" fill="black"/>
+                <rect :x="screenMarginLeft" :y="screenSquareUnit" :width="3 * screenSquareUnit" :height="3 * screenSquareUnit" fill="black"/>
             </mask>
         </defs>
     </svg>
@@ -32,7 +32,7 @@
             :style="{
                 position: 'absolute',
                 boxSizing: 'border-box',
-                left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
+                left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引いている
                 top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
                 width: `${props.screenWidth}px`,
                 height: `${props.screenHeight}px`,
@@ -55,7 +55,7 @@
         <div
             class="waratch2-name-area"
             :style="{
-                left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
+                left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引いている
                 top: `${screenMarginTopRankNum * screenSquareUnit + props.screenHeight - shassisBorderThickness}px`,
                 width: `${props.screenWidth}px`,
                 height: `${hardNameLineHeight}px`,
@@ -198,8 +198,8 @@
         <div
             class="waratch2-screen-frame"
             :style="{
-                left: `${screenMarginLeftFileNum * screenSquareUnit - 4}px`,   // ボーダー幅を引く
-                top: `${screenMarginTopRankNum * screenSquareUnit - 4}px`,
+                left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引く
+                top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
                 width: `${screenWidth + 3}px`, // FIXME: なんや分からん+3
                 height: `${screenHeight + 24 + 2}px`,   // FIXME: なんや分からん+24+2
             }"
@@ -278,8 +278,10 @@
     const shassisWidth = ref<number>(2 * 64 + props.screenWidth);
     const shassisHeight = ref<number>(4 * 64 + props.screenHeight);
 
+
     const screenSquareUnit: number = 64;
-    const screenMarginLeftFileNum = ref<number>(1);
+    const screenMarginLeft = ref<number>(1 * screenSquareUnit);
+
     const screenMarginTopRankNum: number = 1;
     const shassisBorderThickness: number = 4;
     const hardNameLineHeight: number = 24;
@@ -337,9 +339,9 @@
         // }
 
         if (orientation.value == 'Portrait') {
-            screenMarginLeftFileNum.value = 1;
+            screenMarginLeft.value = 1 * screenSquareUnit;
         } else {
-            screenMarginLeftFileNum.value = 3;
+            screenMarginLeft.value = 3 * screenSquareUnit;
         }
     }
 
