@@ -9,10 +9,10 @@
         <defs>
             <mask id="waratch2-mask-rect">
                 <!-- 全体の大きさを白く塗る -->
-                <rect x="0" y="0" width="320" height="448" fill="white"/>
+                <rect x="0" y="0" :width="5 * screenSquareUnit" :height="7 * screenSquareUnit" fill="white"/>
 
                 <!-- 透過したいところを黒く塗る -->
-                <rect :x="screenSquareUnit" :y="screenSquareUnit" width="192" height="192" fill="black"/>
+                <rect :x="screenSquareUnit" :y="screenSquareUnit" :width="3 * screenSquareUnit" :height="3 * screenSquareUnit" fill="black"/>
             </mask>
         </defs>
     </svg>
