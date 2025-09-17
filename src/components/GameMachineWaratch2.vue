@@ -23,7 +23,6 @@
         class="waratch2-surface"
         :style="props.hardPositionStyle"
         style="
-            position: absolute;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
         "
@@ -49,7 +48,6 @@
         style="
             width: calc(5 * 64px);
             height: calc(7 * 64px);
-            background-color: crimson;
         "
     >
 
@@ -71,13 +69,11 @@
 
     <!-- クリック可能部分 -->
     <div
-        class="waratch2-surface"
+        class="waratch2-surface waratch2-clickable"
         :style="props.hardPositionStyle"
         style="
-            position: absolute;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
-            pointer-events: none;   /* クリックを透過させます */
         "
     >
         <!-- ボタン配置 -->
@@ -97,8 +93,6 @@
                     left: ${1.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
-                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
-                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onUpButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onUpButtonReleased'));"
@@ -118,8 +112,6 @@
                     left: ${0.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
-                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
-                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onLeftButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onLeftButtonReleased'));"
@@ -139,8 +131,6 @@
                     left: ${2.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
-                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
-                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onRightButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onRightButtonReleased'));"
@@ -160,8 +150,6 @@
                     left: ${1.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
-                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
-                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onDownButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onDownButtonReleased'));"
@@ -181,8 +169,6 @@
                     left: ${4.5 * controllerSquareUnit}px;
                     width: ${2.5 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
-                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
-                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onSpaceButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onSpaceButtonReleased'));"
@@ -201,23 +187,20 @@
         マスクでドロップシャドウを切り抜かれないようにするため、ゲームマシンの外に出します。
     -->
     <div
+        class="waratch2-surface"
         :style="props.hardPositionStyle"
         style="
-            position: absolute;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
-            /*pointer-events: none;*/  /* クリックを透過させます */
         "
     >
         <div
             class="waratch2-screen-frame"
             style="
-                position: absolute;
-                left: calc(1 * 64px - 2px); /* ボーダー幅は 4px だが、 2px 引くとちょうどいい */
-                top: calc(1 * 64px - 2px);    /* ボーダー幅は 4px だが、 2px 引くとちょうどいい */
-                width: calc(3 * 64px + 4px);
-                height: calc(3 * 64px + 24px + 3px);
-                box-sizing: border-box;
+                left: calc(1 * 64px - 4px); /* ボーダー幅 4px 引く */
+                top: calc(1 * 64px - 4px);    /* ボーダー幅 4px 引く */
+                width: calc(3 * 64px + 3px);
+                height: calc(3 * 64px + 24px + 2px);
             "
         ></div>
     </div>

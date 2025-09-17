@@ -4,6 +4,7 @@ div.waratch2-shassis {
     border: solid 4px black;
     box-sizing: border-box;
     border-radius: 64px;
+    background-color: crimson;
 }
 
 /* 表面 */
@@ -11,6 +12,10 @@ div.waratch2-surface {
     position: absolute;
     margin: 4px;    /* ボーダー分 */
     box-sizing: border-box;
+}
+
+div.waratch2-clickable {
+    pointer-events: none;   /* クリックを透過させます */
 }
 
 div.waratch2-trim-screen {
@@ -51,5 +56,7 @@ div.waratch2-buttons-area {
 button.waratch2-button {
     position: absolute;
     min-width: 32px;
+    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
     box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.5);
+    pointer-events: auto;   /* イベントを拾うよう設定 */
 }
