@@ -6,13 +6,11 @@ div.waratch2-shassis {
     border-radius: 64px;
 }
 
-/* ハード領域 */
-div.waratch2-hard-1 {
+/* 表面 */
+div.waratch2-surface {
     position: absolute;
-    border: solid 4px black;
+    margin: 4px;    /* ボーダー分 */
     box-sizing: border-box;
-    border-radius: 64px;
-    /*pointer-events: none;*/  /* クリックを透過させます */
 }
 
 div.waratch2-trim-screen {

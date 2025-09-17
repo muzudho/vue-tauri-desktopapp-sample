@@ -20,9 +20,10 @@
 
     <!-- 画面内を切り抜かれないようにします -->
     <div
-        class="waratch2-hard-1"
+        class="waratch2-surface"
         :style="props.hardPositionStyle"
         style="
+            position: absolute;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
         "
@@ -70,7 +71,7 @@
 
     <!-- クリック可能部分 -->
     <div
-        class="waratch2-hard-1"
+        class="waratch2-surface"
         :style="props.hardPositionStyle"
         style="
             position: absolute;
