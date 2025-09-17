@@ -22,9 +22,9 @@
     <div
         class="waratch2-surface"
         :style="{
-            ...props.hardPositionStyle,
-            width: `${shassisScreenFileNum * screenSquareUnit}px`,
-            height: `${shassisScreenRankNum * screenSquareUnit}px`,
+            ...props.hardLocationStyle,
+            width: `${shassisScrFileNum * screenSquareUnit}px`,
+            height: `${shassisScrRankNum * screenSquareUnit}px`,
         }"
     >
         <!-- ゲーム画面の裏地 -->
@@ -34,8 +34,8 @@
                 boxSizing: 'border-box',
                 left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
                 top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
-                width: `${screenWidth}px`,
-                height: `${screenHeight}px`,
+                width: `${props.screenWidth}px`,
+                height: `${props.screenHeight}px`,
                 backgroundColor: 'olivedrab',
             }"
         ></div>
@@ -45,9 +45,9 @@
     <div
         class="waratch2-shassis waratch2-trim-screen"
         :style="{
-            ...props.hardPositionStyle,
-            width: `${shassisScreenFileNum * screenSquareUnit}px`,
-            height: `${shassisScreenRankNum * screenSquareUnit}px`,
+            ...props.hardLocationStyle,
+            width: `${shassisScrFileNum * screenSquareUnit}px`,
+            height: `${shassisScrRankNum * screenSquareUnit}px`,
         }"
     >
 
@@ -56,8 +56,8 @@
             class="waratch2-name-area"
             :style="{
                 left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
-                top: `${screenMarginTopRankNum * screenSquareUnit + screenHeight - shassisBorderThickness}px`,
-                width: `${screenWidth}px`,
+                top: `${screenMarginTopRankNum * screenSquareUnit + props.screenHeight - shassisBorderThickness}px`,
+                width: `${props.screenWidth}px`,
                 height: `${hardNameLineHeight}px`,
             }"
         ><span class="waratch2-name-1">Waratch2</span></div>
@@ -72,16 +72,16 @@
     <div
         class="waratch2-surface waratch2-clickable"
         :style="{
-            ...props.hardPositionStyle,
-            width: `${shassisScreenFileNum * screenSquareUnit}px`,
-            height: `${shassisScreenRankNum * screenSquareUnit}px`
+            ...props.hardLocationStyle,
+            width: `${shassisScrFileNum * screenSquareUnit}px`,
+            height: `${shassisScrRankNum * screenSquareUnit}px`
         }"
     >
         <!-- ボタン配置 -->
         <div
             class="waratch2-buttons-area"
             :style="{
-                top: `${screenMarginTopRankNum * screenSquareUnit + screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
+                top: `${screenMarginTopRankNum * screenSquareUnit + props.screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
                 width: `${15 * controllerSquareUnit}px`,
                 height: `${3 * controllerSquareUnit}px`,
             }"
@@ -190,15 +190,15 @@
     <div
         class="waratch2-surface"
         :style="{
-            ...props.hardPositionStyle,
-            width: `${shassisScreenFileNum * screenSquareUnit}px`,
-            height: `${shassisScreenRankNum * screenSquareUnit}px`,
+            ...props.hardLocationStyle,
+            width: `${screenMarginLeftFileNum * screenSquareUnit}px`,
+            height: `${shassisScrRankNum * screenSquareUnit}px`,
         }"
     >
         <div
             class="waratch2-screen-frame"
             :style="{
-                left: `${1 * screenSquareUnit - 4}px`,   // ボーダー幅を引く
+                left: `${screenMarginLeftFileNum * screenSquareUnit - 4}px`,   // ボーダー幅を引く
                 top: `${1 * screenSquareUnit - 4}px`,
                 width: `${3 * screenSquareUnit + 3}px`, // FIXME: なんや分からん+3
                 height: `${3 * screenSquareUnit + 24 + 2}px`,   // FIXME: なんや分からん+24+2
@@ -239,7 +239,9 @@
     // ####################################
     
     interface Props {
-        hardPositionStyle: CompatibleStyleValue;
+        hardLocationStyle: CompatibleStyleValue;
+        screenWidth: number;
+        screenHeight: number;
     }
     // デフォルト値を設定
     const props = defineProps<Props>();
@@ -271,15 +273,12 @@
     // ##########
     //
     // よく使う設定をまとめたもの。特に不変のもの。
-    //    
-
-    const screenWidth: number = 3 * 64;
-    const screenHeight: number = 3 * 64;
+    //
 
     const screenSquareUnit: number = 64;
-    const shassisScreenFileNum: number = 5;
-    const shassisScreenRankNum: number = 7;
-    const screenMarginLeftFileNum: number = 1;
+    const shassisScrFileNum: number = 5;
+    const shassisScrRankNum: number = 7;
+    const screenMarginLeftFileNum = ref<number>(1);
     const screenMarginTopRankNum: number = 1;
     const shassisBorderThickness: number = 4;
     const hardNameLineHeight: number = 24;
@@ -335,6 +334,12 @@
         // } else {
         //     orientation.value = '不明';
         // }
+
+        if (orientation.value == 'Portrait') {
+            screenMarginLeftFileNum.value = 1;
+        } else {
+            screenMarginLeftFileNum.value = 3;
+        }
     }
 
 </script>

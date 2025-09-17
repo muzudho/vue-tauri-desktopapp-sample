@@ -6,10 +6,12 @@
 
     <!-- ゲームマシン -->         
     <game-machine-waratch2
-        :hardPositionStyle="{
+        :hardLocationStyle="{
             left: '100px',
             top: '100px',
         }"
+        :screenWidth="3 * 64"
+        :screenHeight="3 * 64"
         v-on:onLeftButtonPressed="onLeftButtonPressed"
         v-on:onLeftButtonReleased="onLeftButtonReleased"
         v-on:onUpButtonPressed="onUpButtonPressed"
