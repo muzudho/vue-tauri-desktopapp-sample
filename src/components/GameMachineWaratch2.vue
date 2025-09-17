@@ -12,7 +12,7 @@
                 <rect x="0" y="0" width="320" height="448" fill="white"/>
 
                 <!-- 透過したいところを黒く塗る -->
-                <rect x="64" y="64" width="192" height="192" fill="black"/>
+                <rect :x="screenSquareUnit" :y="screenSquareUnit" width="192" height="192" fill="black"/>
             </mask>
         </defs>
     </svg>
@@ -270,7 +270,9 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //    
 
+    const screenSquareUnit: number = 64;
     const controllerSquareUnit: number = 40;
+
     // ################
     // # オブジェクト #
     // ################
