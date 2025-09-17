@@ -88,12 +88,12 @@
             <!-- 上キー -->
             <v-btn
                 class="waratch2-button"
-                :style="`
-                    top: ${0 * controllerSquareUnit}px;
-                    left: ${1.5 * controllerSquareUnit}px;
-                    width: ${1 * controllerSquareUnit}px;
-                    height: ${1 * controllerSquareUnit}px;
-                `"
+                :style="{
+                    top: `${0 * controllerSquareUnit}px`,
+                    left: `${1.5 * controllerSquareUnit}px`,
+                    width: `${1 * controllerSquareUnit}px`,
+                    height: `${1 * controllerSquareUnit}px`,
+                }"
                 @touchstart.prevent="button1Ref?.press($event, emit('onUpButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onUpButtonReleased'));"
                 @touchcancel="button1Ref?.release(emit('onUpButtonReleased'));"
@@ -107,12 +107,12 @@
             <!-- 左キー -->
             <v-btn
                 class="waratch2-button"
-                :style="`
-                    top: ${1 * controllerSquareUnit}px;
-                    left: ${0.5 * controllerSquareUnit}px;
-                    width: ${1 * controllerSquareUnit}px;
-                    height: ${1 * controllerSquareUnit}px;
-                `"
+                :style="{
+                    top: `${1 * controllerSquareUnit}px`,
+                    left: `${0.5 * controllerSquareUnit}px`,
+                    width: `${1 * controllerSquareUnit}px`,
+                    height: `${1 * controllerSquareUnit}px`,
+                }"
                 @touchstart.prevent="button1Ref?.press($event, emit('onLeftButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onLeftButtonReleased'));"
                 @touchcancel="button1Ref?.release(emit('onLeftButtonReleased'));"
@@ -126,12 +126,12 @@
             <!-- 右キー -->
             <v-btn
                 class="waratch2-button"
-                :style="`
-                    top: ${1 * controllerSquareUnit}px;
-                    left: ${2.5 * controllerSquareUnit}px;
-                    width: ${1 * controllerSquareUnit}px;
-                    height: ${1 * controllerSquareUnit}px;
-                `"
+                :style="{
+                    top: `${1 * controllerSquareUnit}px`,
+                    left: `${2.5 * controllerSquareUnit}px`,
+                    width: `${1 * controllerSquareUnit}px`,
+                    height: `${1 * controllerSquareUnit}px`,
+                }"
                 @touchstart.prevent="button1Ref?.press($event, emit('onRightButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onRightButtonReleased'));"
                 @touchcancel="button1Ref?.release(emit('onRightButtonReleased'));"
@@ -145,12 +145,12 @@
             <!-- 下キー -->
             <v-btn
                 class="waratch2-button"
-                :style="`
-                    top: ${2 * controllerSquareUnit}px;
-                    left: ${1.5 * controllerSquareUnit}px;
-                    width: ${1 * controllerSquareUnit}px;
-                    height: ${1 * controllerSquareUnit}px;
-                `"
+                :style="{
+                    top: `${2 * controllerSquareUnit}px`,
+                    left: `${1.5 * controllerSquareUnit}px`,
+                    width: `${1 * controllerSquareUnit}px`,
+                    height: `${1 * controllerSquareUnit}px`,
+                }"
                 @touchstart.prevent="button1Ref?.press($event, emit('onDownButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onDownButtonReleased'));"
                 @touchcancel="button1Ref?.release(emit('onDownButtonReleased'));"
@@ -164,12 +164,12 @@
             <!-- スペース・キー -->
             <v-btn
                 class="waratch2-button"
-                :style="`
-                    top: ${1 * controllerSquareUnit}px;
-                    left: ${4.5 * controllerSquareUnit}px;
-                    width: ${2.5 * controllerSquareUnit}px;
-                    height: ${1 * controllerSquareUnit}px;
-                `"
+                :style="{
+                    top: `${1 * controllerSquareUnit}px`,
+                    left: `${4.5 * controllerSquareUnit}px`,
+                    width: `${2.5 * controllerSquareUnit}px`,
+                    height: `${1 * controllerSquareUnit}px`,
+                }"
                 @touchstart.prevent="button1Ref?.press($event, emit('onSpaceButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onSpaceButtonReleased'));"
                 @touchcancel="button1Ref?.release(emit('onSpaceButtonReleased'));"
@@ -188,20 +188,20 @@
     -->
     <div
         class="waratch2-surface"
-        :style="props.hardPositionStyle"
-        style="
-            width: calc(5 * 64px);
-            height: calc(7 * 64px);
-        "
+        :style="{
+            ...props.hardPositionStyle,
+            width: `calc(5 * 64px)`,
+            height: `calc(7 * 64px)`,
+        }"
     >
         <div
             class="waratch2-screen-frame"
-            style="
-                left: calc(1 * 64px - 4px); /* ボーダー幅 4px 引く */
-                top: calc(1 * 64px - 4px);    /* ボーダー幅 4px 引く */
-                width: calc(3 * 64px + 3px);
-                height: calc(3 * 64px + 24px + 2px);
-            "
+            :style="{
+                left: `calc(1 * 64px - 4px)`,   // ボーダー幅 4px 引く
+                top: `calc(1 * 64px - 4px)`,    // ボーダー幅 4px 引く
+                width: `calc(3 * 64px + 3px)`,
+                height: `calc(3 * 64px + 24px + 2px)`,
+            }"
         ></div>
     </div>
 </template>
