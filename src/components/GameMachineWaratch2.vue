@@ -9,10 +9,10 @@
         <defs>
             <mask id="waratch2-mask-rect">
                 <!-- 全体の大きさを白く塗る -->
-                <rect x="0" y="0" :width="5 * screenSquareUnit" :height="7 * screenSquareUnit" fill="white"/>
+                <rect x="0" y="0" :width="shassisWidth" :height="shassisHeight" fill="white"/>
 
                 <!-- 透過したいところを黒く塗る -->
-                <rect :x="screenMarginLeft" :y="screenSquareUnit" :width="3 * screenSquareUnit" :height="3 * screenSquareUnit" fill="black"/>
+                <rect :x="screenMarginLeft" :y="screenMarginTop" :width="screenWidth" :height="screenHeight" fill="black"/>
             </mask>
         </defs>
     </svg>
@@ -33,7 +33,7 @@
                 position: 'absolute',
                 boxSizing: 'border-box',
                 left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引いている
-                top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
+                top: `${screenMarginTop - shassisBorderThickness}px`,
                 width: `${props.screenWidth}px`,
                 height: `${props.screenHeight}px`,
                 backgroundColor: 'olivedrab',
@@ -56,7 +56,7 @@
             class="waratch2-name-area"
             :style="{
                 left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引いている
-                top: `${screenMarginTopRankNum * screenSquareUnit + props.screenHeight - shassisBorderThickness}px`,
+                top: `${screenMarginTop + props.screenHeight - shassisBorderThickness}px`,
                 width: `${props.screenWidth}px`,
                 height: `${hardNameLineHeight}px`,
             }"
@@ -77,12 +77,12 @@
             height: `${shassisHeight}px`
         }"
     >
-        <!-- ボタン配置 -->
+        <!-- 十字キー配置 -->
         <div
             class="waratch2-buttons-area"
             :style="{
-                top: `${screenMarginTopRankNum * screenSquareUnit + props.screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
-                width: `${15 * controllerSquareUnit}px`,
+                top: `${screenMarginTop + props.screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
+                width: `${3.5 * controllerSquareUnit}px`,
                 height: `${3 * controllerSquareUnit}px`,
             }"
         >
@@ -161,13 +161,23 @@
                 @mouseleave="button1Ref?.release(emit('onDownButtonReleased'));"
                 v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
             >↓</v-btn>
+        </div>
 
+        <!-- 決定等ボタン配置 -->
+        <div
+            class="waratch2-buttons-area"
+            :style="{
+                left: `${4.5 * controllerSquareUnit}px`,
+                top: `${screenMarginTop + props.screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
+                width: `${2.5 * controllerSquareUnit}px`,
+                height: `${3 * controllerSquareUnit}px`,
+            }"
+        >
             <!-- スペース・キー -->
             <v-btn
                 class="waratch2-button"
                 :style="{
                     top: `${1 * controllerSquareUnit}px`,
-                    left: `${4.5 * controllerSquareUnit}px`,
                     width: `${2.5 * controllerSquareUnit}px`,
                     height: `${1 * controllerSquareUnit}px`,
                 }"
@@ -199,7 +209,7 @@
             class="waratch2-screen-frame"
             :style="{
                 left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引く
-                top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
+                top: `${screenMarginTop - shassisBorderThickness}px`,
                 width: `${screenWidth + 3}px`, // FIXME: なんや分からん+3
                 height: `${screenHeight + 24 + 2}px`,   // FIXME: なんや分からん+24+2
             }"
@@ -275,14 +285,11 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
-    const shassisWidth = ref<number>(2 * 64 + props.screenWidth);
-    const shassisHeight = ref<number>(4 * 64 + props.screenHeight);
-
-
     const screenSquareUnit: number = 64;
-    const screenMarginLeft = ref<number>(1 * screenSquareUnit);
-
-    const screenMarginTopRankNum: number = 1;
+    const shassisWidth = ref<number>(0);
+    const shassisHeight = ref<number>(0);
+    const screenMarginLeft = ref<number>(0);
+    const screenMarginTop = ref<number>(0);
     const shassisBorderThickness: number = 4;
     const hardNameLineHeight: number = 24;
     const controllerSquareUnit: number = 40;
@@ -338,10 +345,17 @@
         //     orientation.value = '不明';
         // }
 
-        if (orientation.value == 'Portrait') {
+        if (orientation.value == 'Portrait') {  // 縦型
             screenMarginLeft.value = 1 * screenSquareUnit;
-        } else {
+            screenMarginTop.value = 1 * screenSquareUnit;
+            shassisWidth.value = 2 * screenSquareUnit + props.screenWidth;
+            shassisHeight.value = 4 * screenSquareUnit + props.screenHeight;
+
+        } else {    // 横型
             screenMarginLeft.value = 3 * screenSquareUnit;
+            screenMarginTop.value = 1 * screenSquareUnit;
+            shassisWidth.value = (3 + 2) * screenSquareUnit + props.screenWidth;
+            shassisHeight.value = (1 + 1) * screenSquareUnit + props.screenHeight;
         }
     }
 

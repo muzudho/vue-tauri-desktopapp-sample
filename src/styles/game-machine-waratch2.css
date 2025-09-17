@@ -47,7 +47,7 @@ span.waratch2-name-1 {
 
 /* ボタン配置領域 */
 div.waratch2-buttons-area {
-    position: relative;
+    position: absolute;
     display: inline-block;
 }
 
