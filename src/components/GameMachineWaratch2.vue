@@ -22,7 +22,7 @@
     <div
         class="waratch2-surface"
         :style="{
-            ...props.hardLocationStyle,
+            ...toObject(props.hardLocationStyle),
             width: `${shassisWidth}px`,
             height: `${shassisHeight}px`,
         }"
@@ -45,7 +45,7 @@
     <div
         class="waratch2-shassis waratch2-trim-screen"
         :style="{
-            ...props.hardLocationStyle,
+            ...toObject(props.hardLocationStyle),
             width: `${shassisWidth}px`,
             height: `${shassisHeight}px`,
         }"
@@ -72,7 +72,7 @@
     <div
         class="waratch2-surface waratch2-clickable"
         :style="{
-            ...props.hardLocationStyle,
+            ...toObject(props.hardLocationStyle),
             width: `${shassisWidth}px`,
             height: `${shassisHeight}px`
         }"
@@ -201,7 +201,7 @@
     <div
         class="waratch2-surface"
         :style="{
-            ...props.hardLocationStyle,
+            ...toObject(props.hardLocationStyle),
             width: `${screenWidth}px`,
             height: `${screenHeight}px`,
         }"
@@ -232,7 +232,8 @@
     // + インポート　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++
 
-    import type { CompatibleStyleValue }  from '../compatibles/compatible-style-value';
+    import { toObject } from '../compatibles/compatible-style-value';
+    import type { CompatibleStyleValue } from '../compatibles/compatible-style-value';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
