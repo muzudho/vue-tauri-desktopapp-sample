@@ -23,8 +23,8 @@
         class="waratch2-surface"
         :style="{
             ...props.hardPositionStyle,
-            width: `${5 * screenSquareUnit}px`,
-            height: `${7 * screenSquareUnit}px`,
+            width: `${shassisScreenFileNum * screenSquareUnit}px`,
+            height: `${shassisScreenRankNum * screenSquareUnit}px`,
         }"
     >
         <!-- ゲーム画面の裏地 -->
@@ -32,10 +32,10 @@
             :style="{
                 position: 'absolute',
                 boxSizing: 'border-box',
-                left: `${1 * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
-                top: `${1 * screenSquareUnit - shassisBorderThickness}px`,
-                width: `${3 * screenSquareUnit}px`,
-                height: `${3 * screenSquareUnit}px`,
+                left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
+                top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
+                width: `${screenScreenFileNum * screenSquareUnit}px`,
+                height: `${screenScreenRankNum * screenSquareUnit}px`,
                 backgroundColor: 'olivedrab',
             }"
         ></div>
@@ -46,8 +46,8 @@
         class="waratch2-shassis waratch2-trim-screen"
         :style="{
             ...props.hardPositionStyle,
-            width: `${5 * screenSquareUnit}px`,
-            height: `${7 * screenSquareUnit}px`,
+            width: `${shassisScreenFileNum * screenSquareUnit}px`,
+            height: `${shassisScreenRankNum * screenSquareUnit}px`,
         }"
     >
 
@@ -55,9 +55,9 @@
         <div
             class="waratch2-name-area"
             :style="{
-                left: `${1 * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
-                top: `${4.5 * screenSquareUnit - 24 - 8 - shassisBorderThickness}px`,   // FIXME: なんや分からん
-                width: `${3 * screenSquareUnit}px`
+                left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
+                top: `${(screenMarginTopRankNum + screenScreenRankNum) * screenSquareUnit - shassisBorderThickness}px`,
+                width: `${screenScreenFileNum * screenSquareUnit}px`
             }"
         ><span class="waratch2-name-1">Waratch2</span></div>
         
@@ -72,8 +72,8 @@
         class="waratch2-surface waratch2-clickable"
         :style="{
             ...props.hardPositionStyle,
-            width: `${5 * screenSquareUnit}px`,
-            height: `${7 * screenSquareUnit}px`
+            width: `${shassisScreenFileNum * screenSquareUnit}px`,
+            height: `${shassisScreenRankNum * screenSquareUnit}px`
         }"
     >
         <!-- ボタン配置 -->
@@ -190,8 +190,8 @@
         class="waratch2-surface"
         :style="{
             ...props.hardPositionStyle,
-            width: `${5 * screenSquareUnit}px`,
-            height: `${7 * screenSquareUnit}px`,
+            width: `${shassisScreenFileNum * screenSquareUnit}px`,
+            height: `${shassisScreenRankNum * screenSquareUnit}px`,
         }"
     >
         <div
@@ -271,6 +271,12 @@
     //    
 
     const screenSquareUnit: number = 64;
+    const shassisScreenFileNum: number = 5;
+    const shassisScreenRankNum: number = 7;
+    const screenMarginLeftFileNum: number = 1;
+    const screenMarginTopRankNum: number = 1;
+    const screenScreenFileNum: number = 3;
+    const screenScreenRankNum: number = 3;
     const shassisBorderThickness: number = 4;
     const controllerSquareUnit: number = 40;
 
