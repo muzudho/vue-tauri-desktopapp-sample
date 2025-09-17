@@ -20,7 +20,7 @@
 
     <!-- 画面内を切り抜かれないようにします -->
     <div
-        class="waratch2-hard"
+        class="waratch2-hard-1"
         :style="props.hardPositionStyle"
         style="
             width: calc(5 * 64px);
@@ -41,25 +41,26 @@
         ></div>
     </div>
         
-    <!-- ハード。ただし画面部分の矩形は切り抜き -->
+    <!-- シャーシ。画面部分の矩形は切り抜き -->
     <div
-        class="waratch2-hard waratch2-trim-screen"
+        class="waratch2-shassis waratch2-trim-screen"
         :style="props.hardPositionStyle"
         style="
             width: calc(5 * 64px);
             height: calc(7 * 64px);
+            background-color: crimson;
         "
     >
 
         <!-- ハード名 -->
         <div
-            class="waratch2-hard-name-area"
+            class="waratch2-name-area"
             style="
                 left: calc(1 * 64px - 4px); /* ボーダー幅 4px を引いている */
                 top: calc(4.5 * 64px - 24px - 8px - 4px);
                 width: calc(3 * 64px);
             "
-        ><span class="waratch2-hard-name">Waratch2</span></div>
+        ><span class="waratch2-name-1">Waratch2</span></div>
         
 
         <!-- TODO: ゲーム画面を入れたい -->
@@ -69,6 +70,7 @@
 
     <!-- クリック可能部分 -->
     <div
+        class="waratch2-hard-1"
         :style="props.hardPositionStyle"
         style="
             position: absolute;

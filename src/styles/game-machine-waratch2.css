@@ -1,10 +1,17 @@
-/* ハード領域 */
-div.waratch2-hard {
+/* シャーシ */
+div.waratch2-shassis {
     position: absolute;
     border: solid 4px black;
     box-sizing: border-box;
     border-radius: 64px;
-    background-color: crimson;
+}
+
+/* ハード領域 */
+div.waratch2-hard-1 {
+    position: absolute;
+    border: solid 4px black;
+    box-sizing: border-box;
+    border-radius: 64px;
     /*pointer-events: none;*/  /* クリックを透過させます */
 }
 
@@ -24,7 +31,7 @@ div.waratch2-screen-frame {
 }
 
 /* ハード銘領域 */
-div.waratch2-hard-name-area {
+div.waratch2-name-area {
     position: absolute;
     height: 24px;
     box-sizing: border-box;
@@ -32,7 +39,7 @@ div.waratch2-hard-name-area {
     background-color: brown;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
 }
-span.waratch2-hard-name {
+span.waratch2-name-1 {
     padding-left: 4px;
 }
 
