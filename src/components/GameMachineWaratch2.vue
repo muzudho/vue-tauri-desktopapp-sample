@@ -205,6 +205,8 @@
             }"
         ></div>
     </div>
+
+    <p>画面の向き: {{ orientation }}</p>
 </template>
 
 <script setup lang="ts">
@@ -213,7 +215,7 @@
     // # インポート #
     // ##############
 
-    import { ref } from 'vue';
+    import { onMounted, onUnmounted, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++
     // + インポート　＞　互換性対応 +
@@ -291,6 +293,48 @@
     // ++++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
+
+
+    // ###############
+    // # 開始 / 終了 #
+    // ###############
+
+    onMounted(()=>{
+        // 初回チェック
+        checkOrientation();
+        // 向きが変わったときのイベントリスナー
+        window.screen.orientation.addEventListener('change', checkOrientation);
+        // ウィンドウサイズが変わったときのイベントリスナー
+        window.addEventListener('resize', checkOrientation);
+    });
+
+    onUnmounted(()=>{
+        // コンポーネント破棄時にリスナー削除
+        window.screen.orientation.removeEventListener('change', checkOrientation);
+        window.removeEventListener('resize', checkOrientation);
+    });
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    let orientation = ref<string>('読込中...');
+
+    function checkOrientation() {
+        // 単純に縦横比でチェック。正方形なら縦とする。
+        orientation.value = window.innerWidth <= window.innerHeight ? '縦（Portrait）' : '横（Landscape）';
+
+        // // PCでは、あくまでブラウザのアスペクト比ではなく、画面のアスペクト比。
+        // ちゃんと検出するケース：
+        // const type = window.screen.orientation.type;
+        // if (type.includes('portrait')) {
+        //     orientation.value = '縦（Portrait）';
+        // } else if (type.includes('landscape')) {
+        //     orientation.value = '横（Landscape）';
+        // } else {
+        //     orientation.value = '不明';
+        // }
+    }
 
 </script>
 
