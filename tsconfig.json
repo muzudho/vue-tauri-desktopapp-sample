@@ -29,7 +29,7 @@
         },
         
         // types フォルダーに型定義を入れるため：
-        "types": ["@types/node", "@nuxt/types"],
+        // "types": ["@types/node", "@nuxt/types"], // これは Nuxt 2 用だから書いてはいけない
         "typeRoots": ["./types"]
     },
     "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.vue"],
