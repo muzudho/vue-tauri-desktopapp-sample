@@ -67,16 +67,6 @@
     </div>
 
 
-    <div
-        :style="props.hardPositionStyle"
-        style="
-            position: fixed;
-            top: 100px;
-        "
-    >
-    </div>
-
-
     <!-- クリック可能部分 -->
     <div
         :style="props.hardPositionStyle"
@@ -210,7 +200,7 @@
     <div
         :style="props.hardPositionStyle"
         style="
-            position: fixed;
+            position: absolute;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
             /*pointer-events: none;*/  /* クリックを透過させます */

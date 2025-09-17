@@ -1,6 +1,6 @@
 /* ハード領域 */
 div.waratch2-hard {
-    position: fixed;
+    position: absolute;
     border: solid 4px black;
     box-sizing: border-box;
     border-radius: 64px;
