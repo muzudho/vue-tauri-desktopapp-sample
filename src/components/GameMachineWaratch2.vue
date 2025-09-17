@@ -217,7 +217,9 @@
         ></div>
     </div>
 
+    <!--
     <p>🌟画面の向き: {{ orientation }}</p>
+    -->
 </template>
 
 <script setup lang="ts">
