@@ -21,23 +21,23 @@
     <!-- 画面内を切り抜かれないようにします -->
     <div
         class="waratch2-surface"
-        :style="props.hardPositionStyle"
-        style="
-            width: calc(5 * 64px);
-            height: calc(7 * 64px);
-        "
+        :style="{
+            ...props.hardPositionStyle,
+            width: `calc(5 * ${screenSquareUnit})px`,
+            height: `calc(7 * ${screenSquareUnit})px`,
+        }"
     >
         <!-- ゲーム画面の裏地 -->
         <div
-            style="
-                position: absolute;
-                box-sizing: border-box;
-                left: calc(1 * 64px - 4px);    /* ボーダー幅 4px を引いている */
-                top: calc(1 * 64px - 4px);     /* ボーダー幅 4px を引いている */
-                width: calc(3 * 64px);
-                height: calc(3 * 64px);
-                background-color: olivedrab;    /* cadetblue darkolivegreen darkslategray olive olivedrab */
-            "
+            :style="{
+                position: 'absolute',
+                boxSizing: 'border-box',
+                left: 'calc(1 * 64px - 4px)',   // ボーダー幅 4px を引いている
+                top: 'calc(1 * 64px - 4px)',    // ボーダー幅 4px を引いている
+                width: 'calc(3 * 64px)',
+                height: 'calc(3 * 64px)',
+                backgroundColor: 'olivedrab',
+            }"
         ></div>
     </div>
         
@@ -54,11 +54,11 @@
         <!-- ハード名 -->
         <div
             class="waratch2-name-area"
-            style="
-                left: calc(1 * 64px - 4px); /* ボーダー幅 4px を引いている */
-                top: calc(4.5 * 64px - 24px - 8px - 4px);
-                width: calc(3 * 64px);
-            "
+            :style="{
+                left: `calc(1 * ${screenSquareUnit}px - 4px)`,   // ボーダー幅 4px を引いている
+                top: `calc(4.5 * ${screenSquareUnit}px - 24px - 8px - 4px)`,
+                width: `calc(3 * ${screenSquareUnit}px)`
+            }"
         ><span class="waratch2-name-1">Waratch2</span></div>
         
 
@@ -70,11 +70,11 @@
     <!-- クリック可能部分 -->
     <div
         class="waratch2-surface waratch2-clickable"
-        :style="props.hardPositionStyle"
-        style="
-            width: calc(5 * 64px);
-            height: calc(7 * 64px);
-        "
+        :style="{
+            ...props.hardPositionStyle,
+            width: `calc(5 * ${screenSquareUnit}px)`,
+            height: `calc(7 * ${screenSquareUnit}px)`
+        }"
     >
         <!-- ボタン配置 -->
         <div
