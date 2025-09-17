@@ -44,11 +44,11 @@
     <!-- シャーシ。画面部分の矩形は切り抜き -->
     <div
         class="waratch2-shassis waratch2-trim-screen"
-        :style="props.hardPositionStyle"
-        style="
-            width: calc(5 * 64px);
-            height: calc(7 * 64px);
-        "
+        :style="{
+            ...props.hardPositionStyle,
+            width: `calc(5 * ${screenSquareUnit}px)`,
+            height: `calc(7 * ${screenSquareUnit}px)`,
+        }"
     >
 
         <!-- ハード名 -->
