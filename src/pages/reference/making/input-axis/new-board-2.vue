@@ -496,11 +496,12 @@
     // アルファベット順
     import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TheAppHeader from '../../../the-app-header.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
 
     // ++++++++++++++++++++++++++++++++++
@@ -530,8 +531,7 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
-    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
+    import TheAppHeader from '@/pages/the-app-header.vue';
 
 
     // ##########

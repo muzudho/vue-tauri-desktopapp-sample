@@ -4,11 +4,17 @@
 
 <template>
 
-    <!-- ゲームマシン -->         
+    <the-app-header/>
+    <button-to-back-to-contents
+        class="sec-0 mt-6 mb-6"
+        pagePath="/reference"
+    />
+
+    <!-- ゲームマシン -->
     <game-machine-waratch2
         :hardLocationStyle="{
             left: '100px',
-            top: '100px',
+            top: '200px',
         }"
         :screenWidth="3 * 64"
         :screenHeight="3 * 64"
@@ -40,7 +46,14 @@
     //
 
     // アルファベット順
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
+
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import TheAppHeader from '@/pages/the-app-header.vue';
 
 
     // ################
