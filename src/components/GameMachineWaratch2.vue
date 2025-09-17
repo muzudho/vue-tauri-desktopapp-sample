@@ -76,34 +76,15 @@
     >
     </div>
 
-            <!-- 上キー -->
-            <v-btn
-                class="waratch2-button"
-                :style="`
-                    top: ${0 * controllerSquareUnit + 100}px;
-                    left: ${1.5 * controllerSquareUnit + 10}px;
-                    width: ${1 * controllerSquareUnit}px;
-                    height: ${1 * controllerSquareUnit}px;
-                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
-                `"
-                @touchstart.prevent="button1Ref?.press($event, emit('onUpButtonPressed'), {repeat: true});"
-                @touchend="button1Ref?.release(emit('onUpButtonReleased'));"
-                @touchcancel="button1Ref?.release(emit('onUpButtonReleased'));"
-                @touchleave="button1Ref?.release(emit('onUpButtonReleased'));"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onUpButtonPressed'), {repeat: true})"
-                @mouseup="button1Ref?.release(emit('onUpButtonReleased'));"
-                @mouseleave="button1Ref?.release(emit('onUpButtonReleased'));"
-                v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
-            >↑</v-btn>
 
     <!-- クリック可能部分 -->
     <div
         :style="props.hardPositionStyle"
         style="
-            position: fixed;
+            position: absolute;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
-            /*pointer-events: none;*/  /* クリックを透過させます */
+            pointer-events: none;   /* クリックを透過させます */
         "
     >
         <!-- ボタン配置 -->
@@ -115,6 +96,26 @@
                 height: `${3 * controllerSquareUnit}px`,
             }"
         >
+            <!-- 上キー -->
+            <v-btn
+                class="waratch2-button"
+                :style="`
+                    top: ${0 * controllerSquareUnit}px;
+                    left: ${1.5 * controllerSquareUnit}px;
+                    width: ${1 * controllerSquareUnit}px;
+                    height: ${1 * controllerSquareUnit}px;
+                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
+                    pointer-events: auto;   /* イベントを拾うよう設定 */
+                `"
+                @touchstart.prevent="button1Ref?.press($event, emit('onUpButtonPressed'), {repeat: true});"
+                @touchend="button1Ref?.release(emit('onUpButtonReleased'));"
+                @touchcancel="button1Ref?.release(emit('onUpButtonReleased'));"
+                @touchleave="button1Ref?.release(emit('onUpButtonReleased'));"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, emit('onUpButtonPressed'), {repeat: true})"
+                @mouseup="button1Ref?.release(emit('onUpButtonReleased'));"
+                @mouseleave="button1Ref?.release(emit('onUpButtonReleased'));"
+                v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
+            >↑</v-btn>
 
             <!-- 左キー -->
             <v-btn
@@ -124,6 +125,8 @@
                     left: ${0.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
+                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
+                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onLeftButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onLeftButtonReleased'));"
@@ -143,6 +146,8 @@
                     left: ${2.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
+                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
+                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onRightButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onRightButtonReleased'));"
@@ -162,6 +167,8 @@
                     left: ${1.5 * controllerSquareUnit}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
+                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
+                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onDownButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onDownButtonReleased'));"
@@ -181,6 +188,8 @@
                     left: ${4.5 * controllerSquareUnit}px;
                     width: ${2.5 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
+                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
+                    pointer-events: auto;   /* イベントを拾うよう設定 */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onSpaceButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onSpaceButtonReleased'));"
