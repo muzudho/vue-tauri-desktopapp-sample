@@ -20,24 +20,22 @@
         
     <!-- ハード。ただし画面内は切り抜き -->
     <div
+        class="waratch2-hard"
         :style="props.hardPositionStyle"
         style="
-            position: fixed;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
-            background-color: crimson;
-            pointer-events: none;  /* クリックを透過させます */
         "
     >
         <!-- ハード名 -->
         <div
-            class="waratch2-hard-name"
+            class="waratch2-hard-name-area"
             style="
-                left: calc(1 * 64px - 1px); /* ボーダー幅を引いている */
-                top: calc(4.5 * 64px - 32px - 1px);
+                left: calc(1 * 64px - 4px); /* ボーダー幅を引いている */
+                top: calc(4.5 * 64px - 32px - 4px);
                 width: calc(3 * 64px);
             "
-        >Waratch2</div>
+        ><span class="waratch2-hard-name">Waratch2</span></div>
 
         <!-- ボタン配置 -->
         <div
@@ -166,8 +164,8 @@
             class="waratch2-screen-frame"
             style="
                 position: absolute;
-                left: calc(1 * 64px - 2px); /* ボーダー幅を引いている */
-                top: calc(1 * 64px - 2px);    /* FIXME: うまく合わない */
+                left: calc(1 * 64px - 2px); /* ボーダー幅 2px を引いている */
+                top: calc(1 * 64px - 2px);    /* ボーダー幅 2px を引いている */
                 width: calc(3 * 64px + 4px);
                 height: calc(3 * 64px + 24px + 3px);
                 box-sizing: border-box;

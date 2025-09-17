@@ -4,10 +4,11 @@ div.waratch2-hard {
     border: solid 4px black;
     box-sizing: border-box;
     border-radius: 64px;
-    /* background-color: blue; 何故か背景色が効かない */
+    background-color: crimson;
     /* マスクで画面の部分を透過 */
     -webkit-mask-image: url(#waratch2-mask-rect);
     mask-image: url(#waratch2-mask-rect);
+    pointer-events: none;  /* クリックを透過させます */
 }
 
 /* 画面枠 */
@@ -21,14 +22,16 @@ div.waratch2-screen-frame {
 }
 
 /* ハード銘領域 */
-div.waratch2-hard-name {
+div.waratch2-hard-name-area {
     position: absolute;
     height: 24px;
-    padding-left: 4px;
     box-sizing: border-box;
     color: goldenrod;
     background-color: brown;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
+}
+span.waratch2-hard-name {
+    padding-left: 4px;
 }
 
 /* ボタン配置領域 */
