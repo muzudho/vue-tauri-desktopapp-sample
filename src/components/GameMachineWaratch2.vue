@@ -34,8 +34,8 @@
                 boxSizing: 'border-box',
                 left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
                 top: `${screenMarginTopRankNum * screenSquareUnit - shassisBorderThickness}px`,
-                width: `${screenScreenFileNum * screenSquareUnit}px`,
-                height: `${screenScreenRankNum * screenSquareUnit}px`,
+                width: `${screenWidth}px`,
+                height: `${screenHeight}px`,
                 backgroundColor: 'olivedrab',
             }"
         ></div>
@@ -56,8 +56,8 @@
             class="waratch2-name-area"
             :style="{
                 left: `${screenMarginLeftFileNum * screenSquareUnit - shassisBorderThickness}px`,   // ボーダー幅を引いている
-                top: `${(screenMarginTopRankNum + screenScreenRankNum) * screenSquareUnit - shassisBorderThickness}px`,
-                width: `${screenScreenFileNum * screenSquareUnit}px`,
+                top: `${screenMarginTopRankNum * screenSquareUnit + screenHeight - shassisBorderThickness}px`,
+                width: `${screenWidth}px`,
                 height: `${hardNameLineHeight}px`,
             }"
         ><span class="waratch2-name-1">Waratch2</span></div>
@@ -81,7 +81,7 @@
         <div
             class="waratch2-buttons-area"
             :style="{
-                top: `${(screenMarginTopRankNum + screenScreenRankNum) * screenSquareUnit + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
+                top: `${screenMarginTopRankNum * screenSquareUnit + screenHeight + hardNameLineHeight + 8}px`, // 8 は画面とボタンの隙間
                 width: `${15 * controllerSquareUnit}px`,
                 height: `${3 * controllerSquareUnit}px`,
             }"
@@ -206,7 +206,7 @@
         ></div>
     </div>
 
-    <p>画面の向き: {{ orientation }}</p>
+    <p>🌟画面の向き: {{ orientation }}</p>
 </template>
 
 <script setup lang="ts">
@@ -273,13 +273,14 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //    
 
+    const screenWidth: number = 3 * 64;
+    const screenHeight: number = 3 * 64;
+
     const screenSquareUnit: number = 64;
     const shassisScreenFileNum: number = 5;
     const shassisScreenRankNum: number = 7;
     const screenMarginLeftFileNum: number = 1;
     const screenMarginTopRankNum: number = 1;
-    const screenScreenFileNum: number = 3;
-    const screenScreenRankNum: number = 3;
     const shassisBorderThickness: number = 4;
     const hardNameLineHeight: number = 24;
     const controllerSquareUnit: number = 40;
@@ -318,11 +319,11 @@
     // # サブルーチン #
     // ################
 
-    let orientation = ref<string>('読込中...');
+    let orientation = ref<'Portrait' | 'Landscape'>('Landscape'); // Portrait:縦, Landscape:横
 
     function checkOrientation() {
         // 単純に縦横比でチェック。正方形なら縦とする。
-        orientation.value = window.innerWidth <= window.innerHeight ? '縦（Portrait）' : '横（Landscape）';
+        orientation.value = window.innerWidth <= window.innerHeight ? 'Portrait' : 'Landscape';
 
         // // PCでは、あくまでブラウザのアスペクト比ではなく、画面のアスペクト比。
         // ちゃんと検出するケース：
