@@ -23,8 +23,8 @@
         class="waratch2-surface"
         :style="{
             ...props.hardLocationStyle,
-            width: `${shassisScrFileNum * screenSquareUnit}px`,
-            height: `${shassisScrRankNum * screenSquareUnit}px`,
+            width: `${shassisWidth}px`,
+            height: `${shassisHeight}px`,
         }"
     >
         <!-- ゲーム画面の裏地 -->
@@ -46,8 +46,8 @@
         class="waratch2-shassis waratch2-trim-screen"
         :style="{
             ...props.hardLocationStyle,
-            width: `${shassisScrFileNum * screenSquareUnit}px`,
-            height: `${shassisScrRankNum * screenSquareUnit}px`,
+            width: `${shassisWidth}px`,
+            height: `${shassisHeight}px`,
         }"
     >
 
@@ -73,8 +73,8 @@
         class="waratch2-surface waratch2-clickable"
         :style="{
             ...props.hardLocationStyle,
-            width: `${shassisScrFileNum * screenSquareUnit}px`,
-            height: `${shassisScrRankNum * screenSquareUnit}px`
+            width: `${shassisWidth}px`,
+            height: `${shassisHeight}px`
         }"
     >
         <!-- ボタン配置 -->
@@ -191,17 +191,17 @@
         class="waratch2-surface"
         :style="{
             ...props.hardLocationStyle,
-            width: `${screenMarginLeftFileNum * screenSquareUnit}px`,
-            height: `${shassisScrRankNum * screenSquareUnit}px`,
+            width: `${screenWidth}px`,
+            height: `${screenHeight}px`,
         }"
     >
         <div
             class="waratch2-screen-frame"
             :style="{
                 left: `${screenMarginLeftFileNum * screenSquareUnit - 4}px`,   // ボーダー幅を引く
-                top: `${1 * screenSquareUnit - 4}px`,
-                width: `${3 * screenSquareUnit + 3}px`, // FIXME: なんや分からん+3
-                height: `${3 * screenSquareUnit + 24 + 2}px`,   // FIXME: なんや分からん+24+2
+                top: `${screenMarginTopRankNum * screenSquareUnit - 4}px`,
+                width: `${screenWidth + 3}px`, // FIXME: なんや分からん+3
+                height: `${screenHeight + 24 + 2}px`,   // FIXME: なんや分からん+24+2
             }"
         ></div>
     </div>
@@ -275,9 +275,10 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
+    const shassisWidth = ref<number>(2 * 64 + props.screenWidth);
+    const shassisHeight = ref<number>(4 * 64 + props.screenHeight);
+
     const screenSquareUnit: number = 64;
-    const shassisScrFileNum: number = 5;
-    const shassisScrRankNum: number = 7;
     const screenMarginLeftFileNum = ref<number>(1);
     const screenMarginTopRankNum: number = 1;
     const shassisBorderThickness: number = 4;
