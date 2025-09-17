@@ -75,23 +75,19 @@
         v-on:onDownButtonReleased="onDownButtonReleased"
         v-on:onSpaceButtonPressed="onSpaceButtonPressed"
         v-on:onSpaceButtonReleased="onSpaceButtonReleased"
-    />
-
-    <!-- オーバーラップ画面 -->
-    <v-container fluid class="vertical-panes-container">
-
+    >
         <!-- 中段の画像エリア（固定） -->
         <div
             :style="perspectiveMiddle1Style"
             style="
-                position: fixed;
+                position: absolute;
                 height: calc(6 * 64px);
                 clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
             "
         >
             <!-- 盤領域 -->
             <div
-                class="board"
+                class="game-board-1"
                 :style="board1Style"
                 style="
                     display: inline-block;  /* インライン化しておくと、センタリングできる */
@@ -139,6 +135,11 @@
                     :board1RankNum="board1RankNum" />
             </div>
         </div>
+    </game-machine-waratch2>
+
+    <!-- オーバーラップ画面 -->
+    <v-container fluid class="vertical-panes-container">
+
 
         <!-- 何もしないボタン
             フォーカスを外すためのダミー・ボタンです
@@ -689,10 +690,10 @@
         }
 
         return {
-            top: `calc(
-                100vh - ${4 * controllerSquareUnit}px -
-                ${boardHeightPixelsWithMask}px
-            )`,
+            // top: `calc(
+            //     100vh - ${4 * controllerSquareUnit}px -
+            //     ${boardHeightPixelsWithMask}px
+            // )`,
             bottom: `calc(${5 * controllerSquareUnit}px)`,
             marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
             marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
@@ -946,7 +947,7 @@
     @import '@/styles/perspective.css';
     @import '@/styles/game-machine-waratch2.css';
 
-    div.board { /* 盤１ */
+    div.game-board-1 { /* 盤１ */
         position: relative;
     }
     div.square {    /* マス */

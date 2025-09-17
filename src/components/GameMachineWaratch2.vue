@@ -39,6 +39,9 @@
                 backgroundColor: 'olivedrab',
             }"
         ></div>
+
+        <!-- ゲーム画面はめ込み -->
+        <slot></slot>
     </div>
         
     <!-- シャーシ。画面部分の矩形は切り抜き -->
@@ -61,10 +64,6 @@
                 height: `${hardNameLineHeight}px`,
             }"
         ><span class="waratch2-name-1">Waratch2</span></div>
-        
-
-        <!-- TODO: ゲーム画面を入れたい -->
-        <slot></slot>
     </div>
 
 
