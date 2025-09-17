@@ -17,35 +17,6 @@
         </defs>
     </svg>
 
-
-    <!-- ゲームマシンの枠、および画面に落ちる影。
-        マスクでドロップシャドウを切り抜かれないようにするため、ゲームマシンの外に出します。
-        :style="perspectiveMiddle1Style"
-    -->
-    <div
-        :style="props.hardPositionStyle"
-        style="
-            position: fixed;
-            width: calc(5 * 64px);
-            height: calc(7 * 64px);
-            pointer-events: none;  /* クリックを透過させます */
-        "
-    >
-        <!--
-                left: calc(1 * 64px - 3px); /* ボーダー幅を引いている */
-                top: calc(1 * 64px - 10px);    /* FIXME: うまく合わない */
-        -->
-        <div
-            class="waratch2-screen-frame"
-            style="
-                position: absolute;
-                width: calc(3 * 64px + 4px);
-                height: calc(3 * 64px + 24px + 3px);
-                box-sizing: border-box;
-            "
-        ></div>
-    </div>
-
         
     <!-- ハード。ただし画面内は切り抜き -->
     <div
@@ -176,6 +147,34 @@
 
         <slot></slot>
     </div>
+
+
+
+    <!-- ゲームマシンの枠、および画面に落ちる影。
+        マスクでドロップシャドウを切り抜かれないようにするため、ゲームマシンの外に出します。
+    -->
+    <div
+        :style="props.hardPositionStyle"
+        style="
+            position: fixed;
+            width: calc(5 * 64px);
+            height: calc(7 * 64px);
+            pointer-events: none;  /* クリックを透過させます */
+        "
+    >
+        <div
+            class="waratch2-screen-frame"
+            style="
+                position: absolute;
+                left: calc(1 * 64px - 2px); /* ボーダー幅を引いている */
+                top: calc(1 * 64px - 2px);    /* FIXME: うまく合わない */
+                width: calc(3 * 64px + 4px);
+                height: calc(3 * 64px + 24px + 3px);
+                box-sizing: border-box;
+            "
+        ></div>
+    </div>
+
     🌟ゲームマシン・ワラッチ２
 </template>
 
