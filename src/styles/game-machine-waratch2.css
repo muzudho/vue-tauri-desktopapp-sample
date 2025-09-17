@@ -5,7 +5,7 @@ div.waratch2-hard {
     box-sizing: border-box;
     border-radius: 64px;
     background-color: crimson;
-    pointer-events: none;  /* クリックを透過させます */
+    /*pointer-events: none;*/  /* クリックを透過させます */
 }
 
 div.waratch2-trim-screen {
@@ -21,7 +21,6 @@ div.waratch2-screen-frame {
     border: solid 2px brown;
     font-family:Verdana, Geneva, Tahoma, sans-serif;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5) inset;
-    z-index: 10000;
 }
 
 /* ハード銘領域 */

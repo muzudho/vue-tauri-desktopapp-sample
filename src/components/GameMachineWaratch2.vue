@@ -61,23 +61,30 @@
             "
         ><span class="waratch2-hard-name">Waratch2</span></div>
         
-        <!-- ボタン配置 -->
-        <div
-            class="waratch2-buttons-area"
-            :style="{
-                top: `${5 * 64 - 32}px`,
-                width: `${15 * controllerSquareUnit}px`,
-                height: `${3 * controllerSquareUnit}px`,
-            }"
-        >
+
+        <!-- TODO: ゲーム画面を入れたい -->
+        <slot></slot>
+    </div>
+
+
+    <div
+        :style="props.hardPositionStyle"
+        style="
+            position: fixed;
+            top: 100px;
+        "
+    >
+    </div>
+
             <!-- 上キー -->
             <v-btn
                 class="waratch2-button"
                 :style="`
-                    top: ${0 * controllerSquareUnit}px;
-                    left: ${1.5 * controllerSquareUnit}px;
+                    top: ${0 * controllerSquareUnit + 100}px;
+                    left: ${1.5 * controllerSquareUnit + 10}px;
                     width: ${1 * controllerSquareUnit}px;
                     height: ${1 * controllerSquareUnit}px;
+                    z-index: 10;    /* 視覚的に見えていても、クリック・イベントはそうでないケースがあるので、前面に出す */
                 `"
                 @touchstart.prevent="button1Ref?.press($event, emit('onUpButtonPressed'), {repeat: true});"
                 @touchend="button1Ref?.release(emit('onUpButtonReleased'));"
@@ -88,6 +95,26 @@
                 @mouseleave="button1Ref?.release(emit('onUpButtonReleased'));"
                 v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
             >↑</v-btn>
+
+    <!-- クリック可能部分 -->
+    <div
+        :style="props.hardPositionStyle"
+        style="
+            position: fixed;
+            width: calc(5 * 64px);
+            height: calc(7 * 64px);
+            /*pointer-events: none;*/  /* クリックを透過させます */
+        "
+    >
+        <!-- ボタン配置 -->
+        <div
+            class="waratch2-buttons-area"
+            :style="{
+                top: `${5 * 64 - 32}px`,
+                width: `${15 * controllerSquareUnit}px`,
+                height: `${3 * controllerSquareUnit}px`,
+            }"
+        >
 
             <!-- 左キー -->
             <v-btn
@@ -166,11 +193,7 @@
             >（スペース）</v-btn>
 
         </div>
-
-        <!-- TODO: ゲーム画面を入れたい -->
-        <slot></slot>
     </div>
-
 
     <!-- ゲームマシンの枠、および画面に落ちる影。
         マスクでドロップシャドウを切り抜かれないようにするため、ゲームマシンの外に出します。
@@ -181,7 +204,7 @@
             position: fixed;
             width: calc(5 * 64px);
             height: calc(7 * 64px);
-            pointer-events: none;  /* クリックを透過させます */
+            /*pointer-events: none;*/  /* クリックを透過させます */
         "
     >
         <div
