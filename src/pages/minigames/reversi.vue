@@ -20,11 +20,11 @@
 
             
             <v-btn
-                @touchstart.prevent="button1Ref?.press($event, onPowerOnButtonPushed, {repeat: false});"
+                @touchstart.prevent="button1Ref?.press($event, onGamePowerOnButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
                 @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPowerOnButtonPushed, {repeat: false})"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePowerOnButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >{{ gameMachine1IsPowerOn ? "Off" : "On" }}</v-btn>
@@ -113,6 +113,35 @@
         </game-machine-waratch2>
         
 
+        <!-- お好み設定パネル１ -->
+        <section class="sec-0 mt-6 mb-6">
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onGamePreferences1ButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePreferences1ButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ gameMachine1PreferencesIsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
+            <section
+                v-if="gameMachine1PreferencesIsShowing"
+                class="sec-0 pt-6 pb-6"
+                style="background-color: rgb(0, 0, 0, 0.1);"
+            >
+                <v-slider
+                    label="ズーム"
+                    v-model="gameMachine1Zoom"
+                    :min="0.375"
+                    :max="4"
+                    step="0.125"
+                    showTicks="always"
+                    thumbLabel="always" />
+            </section>
+        </section>
+
+
     </section>
     
     <button-to-back-to-top class="sec-1 pt-6"/>
@@ -165,7 +194,7 @@
     // + オブジェクト　＞　ゲームマシン１ +
     // ++++++++++++++++++++++++++++++++++++
 
-    const gameMachine1Zoom = ref<number>(0.375);    // ズーム
+    const gameMachine1Zoom = ref<number>(0.5);    // ズーム
     const gameMachine1Width = computed(()=>{
         //return 512;
         return tileBoard1FileNum.value * tileBoard1TileWidth.value;
@@ -197,6 +226,12 @@
 
     const gameMachine1GamePauseButton1Enabled = ref<boolean>(false);
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　お好み設定 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1PreferencesIsShowing = ref<boolean>(false);
+
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
     // ++++++++++++++++++++++++++++
@@ -213,7 +248,7 @@
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1FileNum = ref<number>(16);  // 盤が横に何マスか
+    const tileBoard1FileNum = ref<number>(12);  // 盤が横に何マスか
     const tileBoard1RankNum = ref<number>(12);  // 盤が縦に何マスか
     const tileBoard1Area = computed(()=>{   // 盤のマス数
         return tileBoard1FileNum.value * tileBoard1RankNum.value;
@@ -299,7 +334,7 @@
     /**
      * 電源ボタン押下時
      */
-    function onPowerOnButtonPushed() : void {
+    function onGamePowerOnButtonPushed() : void {
         if(gameMachine1IsPowerOn.value) {
             gamePowerOff();
             return;
@@ -336,16 +371,13 @@
         gameMachine1IsPlayingPause.value = !gameMachine1IsPlayingPause.value;
     }
 
-    // ++++++++++++++++++++++++++++++++++
-    // + イベントハンドラー　＞　その他 +
-    // ++++++++++++++++++++++++++++++++++
 
-    // /**
-    //  * ［お好み設定パネル１］を開くボタン。
-    //  */
-    // function onPreferences1ButtonPressed() : void {
-    //     gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
-    // }
+    /**
+     * ［お好み設定パネル１］を開くボタン。
+     */
+    function onGamePreferences1ButtonPressed() : void {
+        gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
+    }
 
 
     // ################

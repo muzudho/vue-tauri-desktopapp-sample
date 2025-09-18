@@ -37,11 +37,11 @@
 
             
             <v-btn
-                @touchstart.prevent="button1Ref?.press($event, onPowerOnButtonPushed, {repeat: false});"
+                @touchstart.prevent="button1Ref?.press($event, onGamePowerOnButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
                 @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPowerOnButtonPushed, {repeat: false})"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePowerOnButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >{{ gameMachine1IsPowerOn ? "Off" : "On" }}</v-btn>
@@ -183,15 +183,15 @@
         </game-machine-waratch2>
 
 
+        <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
-            <!-- お好み設定パネル１ -->
             <v-btn
                 class="code-key"
-                @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
+                @touchstart.prevent="button1Ref?.press($event, onGamePreferences1ButtonPressed);"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
                 @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePreferences1ButtonPressed)"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >{{ gameMachine1PreferencesIsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
@@ -832,7 +832,7 @@
     /**
      * 電源ボタン押下時
      */
-    function onPowerOnButtonPushed() : void {
+    function onGamePowerOnButtonPushed() : void {
         if(gameMachine1IsPowerOn.value) {
             gamePowerOff();
             return;
@@ -869,14 +869,11 @@
         gameMachine1IsPlayingPause.value = !gameMachine1IsPlayingPause.value;
     }
 
-    // ++++++++++++++++++++++++++++++++++
-    // + イベントハンドラー　＞　その他 +
-    // ++++++++++++++++++++++++++++++++++
 
     /**
      * ［お好み設定パネル１］を開くボタン。
      */
-    function onPreferences1ButtonPressed() : void {
+    function onGamePreferences1ButtonPressed() : void {
         gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
     }
 
