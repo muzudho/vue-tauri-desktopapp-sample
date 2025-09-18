@@ -111,17 +111,20 @@
 
                     <!-- マス -->
                     <v-btn
-                        v-for="i in range(0, 8)"
+                        v-for="i in range(0, gameBoard1Area)"
                         :key="i"
                         :style="{
-                            left: `${(i + 2) * tileBoard1TileWidth}px`,
-                            top: `${2 * tileBoard1TileHeight}px`,
+                            left: `${(i % gameBoard1FileNum + 2) * tileBoard1TileWidth}px`,
+                            top: `${(Math.floor(i / gameBoard1FileNum) + 2) * tileBoard1TileHeight}px`,
                             minWidth: `${tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
+                            backgroundColor: `${(i % gameBoard1FileNum + Math.floor(i/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                            /* 列が奇数だとストライプになる： backgroundColor: `${((i + Math.floor(i/gameBoard1FileNum))%2)==0 ? '#F0E0C0' : '#F0C050'}`, */
                         }"
                         style="
                             position: absolute;
+                            z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
                         "
                     ></v-btn>
                 </div>
@@ -193,14 +196,13 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    //import { range } from '../../composables/range';
     import { range } from '@/composables/range';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import TheAppHeader from '../the-app-header.vue';
+    import TheAppHeader from '@/pages/the-app-header.vue';
 
 
     // ################
@@ -277,6 +279,15 @@
         return tileBoard1FileNum.value * tileBoard1RankNum.value;
     });
 
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲーム盤１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const gameBoard1FileNum = ref<number>(8);  // 盤が横に何マスか
+    const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
+    const gameBoard1Area = computed(()=>{
+        return gameBoard1FileNum.value * gameBoard1RankNum.value;
+    })
 
     // ######################
     // # イベントハンドラー #
