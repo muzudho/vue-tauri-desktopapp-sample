@@ -156,7 +156,21 @@
                         :style="reloadPieStyle"
                         style="position:absolute;" /><br/>
                         
+                    <!-- メッセージ -->
+                    <p
+                        v-if="!appGameIsPlaying"
+                        :style="{
+                            left: `${tileBoard1TileWidth}px`,
+                            top: `${8 * tileBoard1TileHeight}px`,
+                            width: `${14 * tileBoard1TileHeight}px`,
+                        }"
+                        style="
+                            position: absolute;
+                            color: white;
+                        "
+                    >ボタン操作の練習ができます。ゲームを開始するには、ゲーム機の上の［▶］ボタンを押してください。</p>
                 </div>
+
             </template>
         </game-machine-waratch2>
 
