@@ -14,8 +14,8 @@
     <section class="sec-1 pt-6 mb-6">
 
         <!-- ゲームの操作方法 -->
-        <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? 'ゲームの遊び方閉じる' : 'ゲームの遊び方を表示' }}</v-btn>
-        <section class="sec-0 pt-6 pb-6" v-if="appManualIsShowing">
+        <v-btn @click="gameMachine1ManualIsShowing = !gameMachine1ManualIsShowing">{{ gameMachine1ManualIsShowing ? 'ゲームの遊び方を閉じる' : 'ゲームの遊び方を表示' }}</v-btn>
+        <section class="sec-1 pt-6 pb-6" v-if="gameMachine1ManualIsShowing">
             <p>
                 このゲームは、星を撮影する、という状況を見立てたゲームだぜ。<br/>
                 <br/>
@@ -25,7 +25,9 @@
                 たまに星が流れてくる。<br/>
                 60秒の間に、カメラのファインダー（点線の長方形だ）を上下左右に動かして、星をファインダーの中に入っているときに、［（スペース）］キーを押してくれだぜ。これで 100点 だぜ。<br/>
                 <br/>
-                飽きたら終わりだぜ。
+                飽きたら終わりだぜ。<br/>
+                <br/>
+                じゃあ、［ゲームの遊び方を閉じる］ボタンをクリックしてくれだぜ。
             </p>
         </section>
 
@@ -34,7 +36,6 @@
             <!-- ボタンを並べる -->
 
             
-
             <v-btn
                 class="code-key"
                 @touchstart.prevent="button1Ref?.press($event, onPowerOnButtonPushed, {repeat: false});"
@@ -57,7 +58,7 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ appGameIsPlaying ? "⏹" : "▶" }}</v-btn>
+            >{{ gameMachine1IsPlaying ? "⏹" : "▶" }}</v-btn>
 
 
             <v-btn
@@ -70,15 +71,13 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ appGameIsPause ? "⏯" : "⏸" }}</v-btn>
+            >{{ gameMachine1IsPause ? "⏯" : "⏸" }}</v-btn>
 
 
         </section>
-        <div>
-            <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
-            スコア： {{ appGameScore }}　　残り時間: {{ Math.floor((appGameMaxCount - stopwatch1Count) / commonSeconds) }} . {{ (appGameMaxCount - stopwatch1Count) % commonSeconds }}
-            </p>
-        </div>
+        <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
+            スコア： {{ gameMachine1Score }}　　残り時間: {{ Math.floor((gameMachine1MaxCount - stopwatch1Count) / commonSeconds) }} . {{ (gameMachine1MaxCount - stopwatch1Count) % commonSeconds }}
+        </p>
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
@@ -93,8 +92,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="appZoom * board1FileNum * tileBoard1TileWidth"
-            :screenHeight="appZoom * board1RankNum * tileBoard1TileHeight"
+            :screenWidth="gameMachine1Zoom * board1FileNum * tileBoard1TileWidth"
+            :screenHeight="gameMachine1Zoom * board1RankNum * tileBoard1TileHeight"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
             v-on:onUpButtonPressed="onUpButtonPressed"
@@ -158,7 +157,7 @@
                         
                     <!-- メッセージ -->
                     <p
-                        v-if="!appGameIsPlaying"
+                        v-if="!gameMachine1IsPlaying"
                         :style="{
                             left: `${tileBoard1TileWidth}px`,
                             top: `${8 * tileBoard1TileHeight}px`,
@@ -244,22 +243,6 @@
     const commonSpriteMotionDown = 1;
 
 
-    // ############################
-    // # アプリケーション・データ #
-    // ############################
-    //
-    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
-    //
-
-    const appManualIsShowing = ref<boolean>(false); // ゲームの操作方法・遊び方説明書を表示中
-    const appGameScore = ref<number>(0);    // 得点
-    const appGameIsPlaying = ref<boolean>(false);   // ゲーム中
-    const appGameIsPause = ref<boolean>(false); // ゲームは一時停止中
-    const appGameMaxCount = computed(()=>60 * commonSeconds);   // ゲーム時間は１分
-    const appGameScheduleStep = ref<number>(0); // 星の出現スケジュール
-    const appZoom = ref<number>(1); // ズーム
-
-
     // ################
     // # 読込リソース #
     // ################
@@ -315,8 +298,15 @@
     // + オブジェクト　＞　ゲームマシン +
     // ++++++++++++++++++++++++++++++++++
 
-    const gameMachine1IsPowerOn = ref<boolean>(false);   // 電源ボタンは演出です
+    const gameMachine1ManualIsShowing = ref<boolean>(false);    // ゲームの操作方法・遊び方説明書を表示中
+    const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1Visibility = ref<string>('hidden');
+    const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
+    const gameMachine1IsPause = ref<boolean>(false);    // ゲームは一時停止中
+    const gameMachine1Zoom = ref<number>(1);    // ズーム
+    const gameMachine1Score = ref<number>(0);   // 得点
+    const gameMachine1MaxCount = computed(()=>60 * commonSeconds);  // ゲーム時間は１分
+    const gameMachine1ScheduleStep = ref<number>(0);    // 星の出現スケジュール
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン　＞　開始／終了ボタン +
@@ -343,7 +333,7 @@
         // - オブジェクト　＞　ストップウォッチ１　＞　スケジュール -
         // ----------------------------------------------------------
 
-        switch (appGameScheduleStep.value) {
+        switch (gameMachine1ScheduleStep.value) {
             case 0:
                 // ゲーム開始から1秒後、星表示
                 if (newCount >= 1 * commonSeconds) {
@@ -351,14 +341,14 @@
                     star1StartFiles.value = 5;
                     star1StartRanks.value = 3;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;                    
+                    gameMachine1ScheduleStep.value += 1;                    
                 }
                 break;
             case 1:
                 // ゲーム開始から3秒後、星非表示
                 if (newCount >= 3 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 2:
@@ -368,14 +358,14 @@
                     star1StartFiles.value = 9;
                     star1StartRanks.value = 9;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 3:
                 // ゲーム開始から6秒後、星非表示
                 if (newCount >= 6 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 4:
@@ -385,14 +375,14 @@
                     star1StartFiles.value = 0;
                     star1StartRanks.value = 8;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 5:
                 // ゲーム開始から10秒後、星非表示
                 if (newCount >= 10 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 6:
@@ -402,14 +392,14 @@
                     star1StartFiles.value = 12;
                     star1StartRanks.value = 5;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 7:
                 // ゲーム開始から15秒後、星非表示
                 if (newCount >= 15 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 8:
@@ -419,14 +409,14 @@
                     star1StartFiles.value = 3;
                     star1StartRanks.value = 3;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 9:
                 // ゲーム開始から21秒後、星非表示
                 if (newCount >= 21 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 10:
@@ -436,14 +426,14 @@
                     star1StartFiles.value = 6;
                     star1StartRanks.value = 11;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 11:
                 // ゲーム開始から29秒後、星非表示
                 if (newCount >= 29 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 12:
@@ -453,14 +443,14 @@
                     star1StartFiles.value = 4;
                     star1StartRanks.value = 6;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 13:
                 // ゲーム開始から36秒後、星非表示
                 if (newCount >= 36 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 14:
@@ -470,14 +460,14 @@
                     star1StartFiles.value = 5;
                     star1StartRanks.value = 0;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 15:
                 // ゲーム開始から41秒後、星非表示
                 if (newCount >= 41 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 16:
@@ -487,14 +477,14 @@
                     star1StartFiles.value = 6;
                     star1StartRanks.value = 7;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 17:
                 // ゲーム開始から48秒後、星非表示
                 if (newCount >= 48 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 18:
@@ -504,14 +494,14 @@
                     star1StartFiles.value = 7;
                     star1StartRanks.value = 3;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 19:
                 // ゲーム開始から54秒後、星非表示
                 if (newCount >= 54 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 20:
@@ -521,19 +511,19 @@
                     star1StartFiles.value = 8;
                     star1StartRanks.value = 9;
                     star1Visibility.value = 'visible';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
             case 21:
                 // ゲーム開始から60秒後、星非表示
                 if (newCount >= 59 * commonSeconds) {
                     star1Visibility.value = 'hidden';
-                    appGameScheduleStep.value += 1;
+                    gameMachine1ScheduleStep.value += 1;
                 }
                 break;
         }
 
-        if (newCount >= appGameMaxCount.value) {
+        if (newCount >= gameMachine1MaxCount.value) {
             // ゲーム停止
             stopwatch1Ref.value?.timerStop();  // タイマーをストップ
         }
@@ -732,7 +722,7 @@
      * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
      */
     function onGameStartOrEndButtonPushed() : void {
-        if(appGameIsPlaying.value) {
+        if(gameMachine1IsPlaying.value) {
             gameStop();
             return;
         }
@@ -749,7 +739,7 @@
 
 
     function powerOff() : void {
-        if(appGameIsPlaying.value) {    // ゲーム中なら、停止させます
+        if(gameMachine1IsPlaying.value) {    // ゲーム中なら、停止させます
             gameStop();
         }
 
@@ -762,7 +752,7 @@
     function gameStart() : void {
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         pauseButton1Enabled.value = true;
-        appGameIsPlaying.value = !appGameIsPlaying.value;
+        gameMachine1IsPlaying.value = !gameMachine1IsPlaying.value;
     }
 
 
@@ -776,13 +766,13 @@
      * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
      */
     function onGamePauseOrRestartButtonPushed() : void {
-        if(appGameIsPause.value) {
+        if(gameMachine1IsPause.value) {
             stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         } else {
             stopwatch1Ref.value?.timerStop();  // タイマーをストップ
         }
 
-        appGameIsPause.value = !appGameIsPause.value;
+        gameMachine1IsPause.value = !gameMachine1IsPause.value;
     }
 
 
@@ -792,10 +782,10 @@
     function gameInit() : void {
         stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
-        appGameScore.value = 0;
-        appGameIsPlaying.value = false;
-        appGameIsPause.value = false;
-        appGameScheduleStep.value = 0;
+        gameMachine1Score.value = 0;
+        gameMachine1IsPlaying.value = false;
+        gameMachine1IsPause.value = false;
+        gameMachine1ScheduleStep.value = 0;
 
         star1Visibility.value = 'hidden';
     }
@@ -930,7 +920,7 @@
             sfxCameraShutterAudio.play();
         }
 
-        appGameScore.value += 100;
+        gameMachine1Score.value += 100;
     }
 
 
