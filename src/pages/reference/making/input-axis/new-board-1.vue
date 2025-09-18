@@ -58,7 +58,7 @@
 
         </section>
 
-        <button-to-go-to-top class="sec-0 pt-6"/>
+        <button-to-back-to-top class="sec-0 pt-6"/>
     </div>
 
     <!-- オーバーラップ画面 -->
@@ -492,7 +492,7 @@
     // ++++++++++++++++++++++++++
 
     import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
-    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
+    import ButtonToBackToTop from '@/components/ButtonToBackToTop.vue';
 
 
     // ##########
