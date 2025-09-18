@@ -118,19 +118,16 @@
                         position:relative;
                         left: 0;
                         top: 0;
-                        background-color: #303030;
+                        background-color: #303030;  /* 黒背景 */
                     "
                 >
-                    <!--
-                        グリッド
-                        NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-                    -->
+                    <!-- グリッド -->
                     <div
-                        v-for="i in board1Area"
+                        v-for="i in tileBoard1Area"
                         :key="i"
                         :style="{
-                            top: `${Math.floor((i - 1) / board1FileNum) * tileBoard1TileHeight}px`,
-                            left: `${((i - 1) % board1FileNum) * tileBoard1TileWidth}px`,
+                            top: `${Math.floor((i - 1) / tileBoard1FileNum) * tileBoard1TileHeight}px`,
+                            left: `${((i - 1) % tileBoard1FileNum) * tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
                         }"
@@ -138,7 +135,7 @@
                             position: absolute;
                             border: solid 1px gray;
                         "
-                        ></div>
+                    ></div>
 
                     <!-- 星 -->
                     <Tile
@@ -341,10 +338,10 @@
 
     const gameMachine1Zoom = ref<number>(0.375);    // ズーム
     const gameMachine1Width = computed(()=>{
-        return board1FileNum.value * tileBoard1TileWidth.value;
+        return tileBoard1FileNum.value * tileBoard1TileWidth.value;
     });
     const gameMachine1Height = computed(()=>{
-        return board1RankNum.value * tileBoard1TileHeight.value;
+        return tileBoard1RankNum.value * tileBoard1TileHeight.value;
     });
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
@@ -589,10 +586,10 @@
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
-    const board1FileNum = ref<number>(16);        // 盤が横に何マスか
-    const board1RankNum = ref<number>(12);        // 盤が縦に何マスか
-    const board1Area = computed(()=>{           // 盤のマス数
-        return board1FileNum.value * board1RankNum.value;
+    const tileBoard1FileNum = ref<number>(16);  // 盤が横に何マスか
+    const tileBoard1RankNum = ref<number>(12);  // 盤が縦に何マスか
+    const tileBoard1Area = computed(()=>{   // 盤のマス数
+        return tileBoard1FileNum.value * tileBoard1RankNum.value;
     });
 
     // ++++++++++++++++++++++++
@@ -994,7 +991,7 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["xAxis"]==1) {   // 右
-                if (player1Left.value < (board1FileNum.value - player1FileNum.value) * tileBoard1TileWidth.value) {    // 境界チェック
+                if (player1Left.value < (tileBoard1FileNum.value - player1FileNum.value) * tileBoard1TileWidth.value) {    // 境界チェック
                     player1Left.value += player1SpeedHorizontal.value;
                 }
             } else if (player1Motion.value["xAxis"]==-1) {  // 左
@@ -1008,7 +1005,7 @@
                     player1Top.value -= player1SpeedVertical.value;
                 }
             } else if (player1Motion.value["yAxis"]==1) {   // 下
-                if (player1Top.value < (board1RankNum.value - player1RankNum.value) * tileBoard1TileHeight.value) {    // 境界チェック
+                if (player1Top.value < (tileBoard1RankNum.value - player1RankNum.value) * tileBoard1TileHeight.value) {    // 境界チェック
                     player1Top.value += player1SpeedVertical.value;
                 }
             }
