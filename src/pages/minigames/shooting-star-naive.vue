@@ -583,6 +583,8 @@
 
     const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
+    // const tileBoard1TileWidth = ref<number>(16);  // マスの横幅（ピクセル）
+    // const tileBoard1TileHeight = ref<number>(16); // マスの縦幅（ピクセル）
     const board1FileNum = ref<number>(16);        // 盤が横に何マスか
     const board1RankNum = ref<number>(12);        // 盤が縦に何マスか
     const board1Area = computed(()=>{           // 盤のマス数
@@ -625,13 +627,14 @@
     const player1Top = ref<number>(4 * tileBoard1TileHeight.value);     // スプライトのY座標
     const player1FileNum = ref<number>(4);                            // スプライトの列数
     const player1RankNum = ref<number>(3);                            // スプライトの行数
-    const player1Speed = ref<number>(4);                              // 移動速度
     const player1Input = <Record<string, boolean>>{                     // 入力
         // アルファベット順
         " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
     };
-    const player1AnimationWalkingFrames = 8;                        // 歩行フレーム数
     const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
+    const player1AnimationWalkingFrames = 8;                        // 歩行フレーム数
+    const player1SpeedHorizontal = ref<number>(tileBoard1TileWidth.value / player1AnimationWalkingFrames);  // 移動速度。割り切れるようにすること
+    const player1SpeedVertical = ref<number>(tileBoard1TileHeight.value / player1AnimationWalkingFrames);
     const player1Motion = ref<Record<string, number>>({             // 入力
         xAxis: 0,   // 負なら左、正なら右
         yAxis: 0,   // 負なら上、正なら下
@@ -707,8 +710,8 @@
         //      window はブラウザーのオブジェクトなので、（サーバー側ではプリレンダリングできないので）マウント後にアクセスします。
         //
         window.addEventListener('keydown', (e: KeyboardEvent) => {
-            // 上下キーの場合
-            if (e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+            // スペース、上下キーの場合
+            if (e.key == ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
                 // ブラウザーのデフォルトの上下スクロール動作をキャンセル
                 e.preventDefault();
             }
@@ -891,21 +894,21 @@
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["xAxis"]==1) {   // 右
                 if (player1Left.value < (board1FileNum.value - player1FileNum.value) * tileBoard1TileWidth.value) {    // 境界チェック
-                    player1Left.value += player1Speed.value;
+                    player1Left.value += player1SpeedHorizontal.value;
                 }
             } else if (player1Motion.value["xAxis"]==-1) {  // 左
                 if (0 < player1Left.value) {    // 境界チェック
-                    player1Left.value -= player1Speed.value;
+                    player1Left.value -= player1SpeedHorizontal.value;
                 }
             }
 
             if (player1Motion.value["yAxis"]==-1) {  // 上
                 if (0 < player1Top.value) {    // 境界チェック
-                    player1Top.value -= player1Speed.value;
+                    player1Top.value -= player1SpeedVertical.value;
                 }
             } else if (player1Motion.value["yAxis"]==1) {   // 下
                 if (player1Top.value < (board1RankNum.value - player1RankNum.value) * tileBoard1TileHeight.value) {    // 境界チェック
-                    player1Top.value += player1Speed.value;
+                    player1Top.value += player1SpeedVertical.value;
                 }
             }
 
