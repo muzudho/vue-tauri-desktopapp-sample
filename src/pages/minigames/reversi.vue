@@ -121,6 +121,7 @@
                             height: `${tileBoard1TileHeight}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                             backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                            pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
                         style="
                             position: absolute;
@@ -305,6 +306,14 @@
         2: '#289028', // 暗い緑
     }
     const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
+    const gameBoard1StoneClickable = computed<
+        (sq: number) => boolean
+    >(()=>{    // マスをクリック可能か
+        return (sq: number)=>{
+            return gameBoard1StoneColorArray.value[sq] == 0;
+        }
+    });
+
 
     // ######################
     // # イベントハンドラー #
