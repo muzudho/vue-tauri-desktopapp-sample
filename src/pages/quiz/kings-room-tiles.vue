@@ -189,6 +189,43 @@
                     showTicks="always"
                     thumbLabel="always" />
             </section>
+
+            <!-- 問題設定パネル１ -->
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onProblem1ButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onProblem1ButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ problem1IsShowing ? '⚙️問題設定を終わる' : '⚙️問題設定を表示' }}</v-btn>
+            <section
+                v-if="problem1IsShowing"
+                class="sec-0 pt-6 pb-6 mb-6"
+                style="background-color: rgb(0, 0, 0, 0.1);"
+            >
+                <!-- マスクが被っているところも含めた盤のサイズ： -->
+                <v-slider
+                    label="水平方向のタイル数"
+                    v-model="board1FileNum"
+                    :min="board1FileMin"
+                    :max="board1FileMax"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+
+
+                <v-slider
+                    label="垂直方向のタイル数"
+                    v-model="board1RankNum"
+                    :min="board1RankMin"
+                    :max="board1RankMax"
+                    step="1"
+                    showTicks="always"
+                    thumbLabel="always" />
+            </section>
         </section>
 
 
@@ -235,45 +272,10 @@
             :device="compatibleDevice1Ref?.device"
             class="mb-6"
         >
-            では、👇下の［⚙問題設定を表示］ボタンをクリックして、<br/>
+            では、👆上に戻って［⚙問題設定を表示］ボタンをクリックして、<br/>
             出てくる［水平方向のタイル数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
-            もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……
+            もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じてほしい。
         </talk-balloon>
-        <br/>
-        <br/>
-
-        <!-- 問題設定パネル１ -->
-        <v-btn
-            class="code-key"
-            @touchstart.prevent="button1Ref?.press($event, onProblem1ButtonPressed);"
-            @touchend="button1Ref?.release();"
-            @touchcancel="button1Ref?.release();"
-            @touchleave="button1Ref?.release();"
-            @mousedown.prevent="button1Ref?.handleMouseDown($event, onProblem1ButtonPressed)"
-            @mouseup="button1Ref?.release();"
-            @mouseleave="button1Ref?.release();"
-        >{{ problem1IsShowing ? '⚙️問題設定を終わる' : '⚙️問題設定を表示' }}</v-btn>
-        <section v-if="problem1IsShowing" class="sec-1 pt-6 pb-6 mb-6">
-            <!-- マスクが被っているところも含めた盤のサイズ： -->
-            <v-slider
-                label="水平方向のタイル数"
-                v-model="board1FileNum"
-                :min="board1FileMin"
-                :max="board1FileMax"
-                step="1"
-                showTicks="always"
-                thumbLabel="always" />
-
-
-            <v-slider
-                label="垂直方向のタイル数"
-                v-model="board1RankNum"
-                :min="board1RankMin"
-                :max="board1RankMax"
-                step="1"
-                showTicks="always"
-                thumbLabel="always" />
-        </section>
 
         <!-- デバッグ情報パネル１ -->
         <!--
@@ -323,17 +325,6 @@
             <br/>
         </section>
         -->
-
-        <br/>
-
-        <talk-balloon
-            :src="commonPapepoKingSrc"
-            :alt="commonPapepoKingAlt"
-            :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
-            そして一度画面を👆上にスクロールし、先ほどの床を見てから<br/>
-            ここに戻ってきてほしい。
-        </talk-balloon>
 
         <talk-balloon
             :src="commonKifuwaranyanSrc"
@@ -411,44 +402,10 @@ color = i % 2;
 
         <p class="mb-6">
             <!--
-            <v-checkbox
-                :hideDetails="true">
-                <template v-slot:label>
-                    <span style="margin-right: 16px;">（１）</span>水平方向のタイル数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
-                </template>
-            </v-checkbox>
-            <v-checkbox
-                :hideDetails="true">
-                <template v-slot:label>
-                    <span style="margin-right: 16px;">（２）</span>水平方向のタイル数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
-                </template>
-            </v-checkbox>
-            <v-checkbox
-                :hideDetails="true">
-                <template v-slot:label>
-                    <span style="margin-right: 16px;">（３）</span>水平方向のタイル数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
-                </template>
-            </v-checkbox>
-            <v-checkbox
-                :hideDetails="true">
-                <template v-slot:label>
-                    <span style="margin-right: 16px;">（４）</span>水平方向のタイル数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
-                </template>
-            </v-checkbox>
-            -->
-            <!--
             {{ choices1Num }}
             -->
             <v-radio-group
                 v-model="choices1Num">
-                <!--
-                <v-radio
-                    :value="0">
-                    <template v-slot:label>
-                        <span style="margin-right: 16px;">（０）</span>未選択
-                    </template>
-                </v-radio>
-                -->
                 <v-radio
                     :value="1">
                     <template v-slot:label>
@@ -471,6 +428,12 @@ color = i % 2;
                     :value="4">
                     <template v-slot:label>
                         <span style="margin-right: 16px;">（４）</span>水平方向のタイル数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
+                    </template>
+                </v-radio>
+                <v-radio
+                    :value="5">
+                    <template v-slot:label>
+                        <span style="margin-right: 16px;">（５）</span>i の水平位置を左から file=0, 1, 2...、垂直位置を上から rank=0, 1, 2...、盤の水平方向のタイル数を width とするとき、color = (file + rank) % 2 とする。
                     </template>
                 </v-radio>
             </v-radio-group>
@@ -523,7 +486,7 @@ color = i % 2;
                 <span class="font-x2">😑</span>答えを選べだぜ<br/>
             </section>
             <section
-                v-if="choices1Num==1 || choices1Num==2"
+                v-if="choices1Num==1 || choices1Num==2 || choices1Num==5"
                 class="pt-6 pb-6"
             >
                 <p class="mb-6"><span class="font-x2">😄</span>正解<br/></p>
@@ -816,6 +779,11 @@ color = i % 2;
                 if (width % 2 == 1) {
                     color = (color + 1 * ((rank + 1) % 2)) % 2;
                 }
+            } else if (choices1Num.value == 5) {
+                // これも正解。
+                const file = i % width;
+                const rank = Math.floor(i / width);
+                color = (file + rank) % 2;
             }
             // ：ここまで　クイズの答え
 
