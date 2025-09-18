@@ -10,12 +10,12 @@
         pagePath="."
     />
 
-    <h1>シューティング・スター（初級者向けのソースコード）</h1>
-    <section class="sec-1 mb-6">
+    <h1>シューティング・スター</h1>
+    <section class="sec-1 pt-6 mb-6">
 
         <!-- ゲームの操作方法 -->
         <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? 'ゲームの遊び方閉じる' : 'ゲームの遊び方を表示' }}</v-btn>
-        <section class="sec-0 pt-6 pb-6 mb-6" v-if="appManualIsShowing">
+        <section class="sec-0 pt-6 pb-6" v-if="appManualIsShowing">
             <p>
                 このゲームは、星を撮影する、という状況を見立てたゲームだぜ。<br/>
                 <br/>
@@ -29,33 +29,50 @@
             </p>
         </section>
 
-        <p>ボタン</p>
-        <ul>
-            <li>
-                <!-- ボタンを並べる -->
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
-                    @touchend="button1Ref?.release();"
-                    @touchcancel="button1Ref?.release();"
-                    @touchleave="button1Ref?.release();"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: false})"
-                    @mouseup="button1Ref?.release();"
-                    @mouseleave="button1Ref?.release();"
-                >{{ appGameIsPlaying ? "⏹" : "▶" }}</v-btn>
-                <v-btn
-                    class="code-key"
-                    :disabled="!pauseButton1Enabled"
-                    @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
-                    @touchend="button1Ref?.release();"
-                    @touchcancel="button1Ref?.release();"
-                    @touchleave="button1Ref?.release();"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
-                    @mouseup="button1Ref?.release();"
-                    @mouseleave="button1Ref?.release();"
-                >{{ appGameIsPause ? "⏯" : "⏸" }}</v-btn>
-            </li>
-        </ul>
+        <p class="mt-6">ボタン</p>
+        <section class="sec-0 mb-6">
+            <!-- ボタンを並べる -->
+
+            
+
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onPowerOnButtonPushed, {repeat: false});"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPowerOnButtonPushed, {repeat: false})"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ gameMachine1IsPowerOn ? "Off" : "On" }}</v-btn>
+
+            
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: false})"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ appGameIsPlaying ? "⏹" : "▶" }}</v-btn>
+
+
+            <v-btn
+                class="code-key"
+                :disabled="!pauseButton1Enabled"
+                @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ appGameIsPause ? "⏯" : "⏸" }}</v-btn>
+
+
+        </section>
         <div>
             <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
             スコア： {{ appGameScore }}　　残り時間: {{ Math.floor((appGameMaxCount - stopwatch1Count) / commonSeconds) }} . {{ (appGameMaxCount - stopwatch1Count) % commonSeconds }}
@@ -90,7 +107,19 @@
         >
             <template #default>
                 <!-- ゲーム画面 -->
-                <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
+                <div
+                    :style="{
+                        visibility: gameMachine1Visibility,
+                    }"
+                    style="
+                        position:relative;
+                        left: 0;
+                        top: 0;
+                        width:512px;
+                        height:384px;
+                        background-color: #303030;
+                    "
+                >
                     <!--
                         グリッド
                         NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
@@ -267,9 +296,16 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
-    // ++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　一時停止／再開ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン +
+    // ++++++++++++++++++++++++++++++++++
+
+    const gameMachine1IsPowerOn = ref<boolean>(false);   // 電源ボタンは演出です
+    const gameMachine1Visibility = ref<string>('hidden');
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン　＞　一時停止／再開ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const pauseButton1Enabled = ref<boolean>(false);
 
@@ -597,12 +633,13 @@
     });
 
 
-    // ##########
-    // # 開始時 #
-    // ##########
+    // ###############
+    // # 開始 / 終了 #
+    // ###############
 
     onMounted(() => {
         sfxLoad();
+        powerOn();  // 電源を入れる演出
         gameInit();
         gameLoopStart();
 
@@ -658,19 +695,53 @@
     // ################
 
     /**
+     * 電源ボタン押下時
+     */
+    function onPowerOnButtonPushed() : void {
+        if(gameMachine1IsPowerOn.value) {
+            powerOff();
+            return;
+        }
+
+        powerOn();
+    }
+
+
+    /**
      * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
      */
     function onGameStartOrEndButtonPushed() : void {
         if(appGameIsPlaying.value) {
-            pauseButton1Enabled.value = false;
-            gameInit(); // ゲームは終了したので、初期状態に戻します
+            gameStop();
             return;
         }
 
+        gameStart();
+    }
+
+
+    function powerOn() : void {
+        gameMachine1Visibility.value = 'visible';
+        gameMachine1IsPowerOn.value = true;
+    }
+
+
+    function powerOff() : void {
+        gameMachine1Visibility.value = 'hidden';
+        gameMachine1IsPowerOn.value = false;
+    }
+
+
+    function gameStart() : void {
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         pauseButton1Enabled.value = true;
-
         appGameIsPlaying.value = !appGameIsPlaying.value;
+    }
+
+
+    function gameStop() : void {
+        pauseButton1Enabled.value = false;
+        gameInit(); // ゲームは終了したので、初期状態に戻します
     }
 
 
