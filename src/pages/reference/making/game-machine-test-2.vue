@@ -131,10 +131,14 @@
         <section class="sec-2 pt-6">
 
             <p>床タイルマップ：</p>
-            <v-img
+            <img
+                style="
+                    border:dashed 4px gray;
+                    image-rendering: pixelated;
+                "
                 src="/img/making/tilemap-floor-20250826.png"
-                :style="`width: ${8 * tileBoard1TileWidth}px; height:${4 * tileBoard1TileHeight}px;`"
-                style="image-rendering: pixelated; margin:0; padding:0; border:dashed 4px gray;"/>
+                alt="床タイルマップ"
+            />
 
         </section>
 
@@ -371,8 +375,8 @@
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
-    import TalkBalloon from '@/components/TalkBalloon.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
+    import TalkBalloon from '@/components/TalkBalloon.vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーザブル +
