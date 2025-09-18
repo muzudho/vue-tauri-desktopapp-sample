@@ -53,13 +53,6 @@
                     @mouseup="button1Ref?.release();"
                     @mouseleave="button1Ref?.release();"
                 >{{ appGameIsPause ? "再開" : "一時停止" }}</v-btn>
-
-                <!-- フォーカスを外すためのダミー・ボタンです -->
-                <v-btn
-                    class="noop-key"
-                    ref="noopButton"
-                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                >何もしないボタン</v-btn>
             </li>
         </ul>
         <div>
@@ -266,12 +259,6 @@
     // ################
     // # オブジェクト #
     // ################
-
-    // ++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　何もしないボタン +
-    // ++++++++++++++++++++++++++++++++++++++
-
-    const noopButton = ref<InstanceType<typeof VBtn> | null>(null);
 
     // ++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ボタン押しっぱなし機能 +
@@ -667,8 +654,6 @@
      * ［ゲームスタート］または［ゲーム終了］ボタン押下時。（状態により切り替わります）
      */
     function onGameStartOrEndButtonPushed() : void {
-        focusRemove();  // フォーカスを外す
-
         if(appGameIsPlaying.value) {
             // ゲームを終了させます
             gameInit();
@@ -685,8 +670,6 @@
      * ［一時停止］または［再開］ボタン押下時。（状態により切り替わります）
      */
     function onGamePauseOrRestartButtonPushed() : void {
-        focusRemove();  // フォーカスを外す
-
         if(appGameIsPause.value) {
             stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         } else {
@@ -842,16 +825,6 @@
         }
 
         appGameScore.value += 100;
-    }
-
-
-    /**
-     * フォーカスを外すのが上手くいかないため、［何もしないボタン］にフォーカスを合わせます。
-     */
-    function focusRemove() : void {
-        if (noopButton.value) {
-            noopButton.value.$el.focus();    // $el は、<v-btn> 要素の中の <button> 要素。
-        }
     }
 
 
