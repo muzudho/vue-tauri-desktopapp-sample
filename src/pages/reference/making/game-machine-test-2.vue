@@ -42,12 +42,8 @@
                 class="mb-6"
                 :style="{
                     position: 'relative',
-                    // position: 'absolute',
-                    // top: '0',
-                    // left: '0',
-                    //height: '450px', // 高さと幅は可変です。縦型表示のときを目視確認して手動で調整します。
                 }"
-                :screenWidth="3 * 64"
+                :screenWidth="4 * 64"
                 :screenHeight="3 * 64"
                 v-on:onLeftButtonPressed="onLeftButtonPressed"
                 v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -60,6 +56,11 @@
                 v-on:onSpaceButtonPressed="onSpaceButtonPressed"
                 v-on:onSpaceButtonReleased="onSpaceButtonReleased"
             >
+                <!--
+                :screenWidth="3 * 64"
+                :screenHeight="3 * 64"
+                -->
+
                 <templage #default>
                     <!-- 全体サイズと、切り抜き領域 -->
                     <div

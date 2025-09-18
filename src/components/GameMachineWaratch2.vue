@@ -382,7 +382,7 @@
             shassisHeight.value = 4 * screenSquareUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0;
             directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;    // 8 は画面とボタンの隙間
-            actionButtonsAreaLeft.value = 4.5 * controllerSquareUnit;
+            actionButtonsAreaLeft.value = 1.5 * controllerSquareUnit + props.screenWidth;
             actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;
 
         } else {    // 横型
