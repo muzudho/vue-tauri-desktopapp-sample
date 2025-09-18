@@ -19,8 +19,7 @@
     <section class="sec-1 pt-6 mb-6">
         
         <!-- 免責 -->
-        <v-alert type="warning" title="免責！" text="画面は開発中のものだぜ（＾▽＾）！" closable />
-        <br/>
+        <v-alert type="warning" class="mb-6" title="免責！" text="画面は開発中のものだぜ（＾▽＾）！" closable />
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
@@ -34,12 +33,11 @@
             alt="パペポ王国"
             caption="グラフィッカー：　Grok" />
 
-        <p>
+        <p class="mb-6">
             ここはパペポ王国。<br/>
             王様はある悩みを持っていました。<br/>
             勇者　キフワラニャン　は呼び出されました。<br/>
         </p>
-        <br/>
 
         <talk-illustration
             src="/img/quiz/by-grok/202508__grok__30-1229-kifuwaranyan-o2o0.png"
@@ -47,7 +45,9 @@
         
         <talk-novel
             name="キフワラニャン"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+            class="mb-6"
+        >
             わたしは勇者キフワラニャン、<br/>
             この世界の神がブラウザーで動くフリーゲームを<br/>
             作ろうとしていると聞いて馳せ参じたぜ。<br/>
@@ -55,7 +55,6 @@
             顔や背景がコロコロ変わるかもしれないが、<br/>
             気にしないでくれだぜ
         </talk-novel>
-        <br/>
 
         <!-- パペポ王１ -->
         <talk-illustration
@@ -83,15 +82,16 @@
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+            class="mb-6"
+        >
             我が城の床タイルを市松模様にしろと<br/>
-            リフォーム会社に命じたのだが……<br/>
+            リフォーム会社に命じたのだが……
         </talk-balloon>
-        <br/>
 
         <!-- 盤領域 -->
         <div
-            class="board"
+            class="board mb-6"
             :style="board1Style">
 
             <!-- 新・タイル盤１ -->
@@ -104,8 +104,7 @@
                 :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
                 :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
                 :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
-            >
-            </board-made-of-tile
+            />
 
             <!-- 自機１ -->
             <tile-animation
@@ -125,11 +124,10 @@
                 :board1RankNum="board1RankNum"
                 class="parent-mask" />
         </div>
-        <br/>
 
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
-        <ul>
+        <ul class="mb-6">
             <li>
                 <v-btn class="code-key hidden"/>
                 <v-btn
@@ -214,8 +212,7 @@
                     @mouseup="button1Ref?.release();"
                     @mouseleave="button1Ref?.release();"
                 >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
-                <section v-if="preferences1IsShowing" class="sec-1">
-                    <br/>
+                <section v-if="preferences1IsShowing" class="sec-1 pt-6 pb-6">
                     <v-slider
                         label="ズーム"
                         v-model="appZoom"
@@ -224,56 +221,69 @@
                         step="0.5"
                         showTicks="always"
                         thumbLabel="always" />
-                    <br/>
                 </section>
             </li>
         </ul>
-        <br/>
+
 
         <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+        >
             ＰＣであればキーボード入力を、<br/>
             スマホであれば👆上のボタンをタップすることで、<br/>
-            自機を歩かせることができるんじゃ。<br/>
+            自機を歩かせることができるんじゃ。
         </talk-balloon>
+
+
         <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+        >
             盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして<br/>
             出てくる［ズーム］スライダーボックスを左右に動かして<br/>
-            盤の大きさを調整してほしい。<br/>
+            盤の大きさを調整してほしい。
         </talk-balloon>
+
+
         <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+        >
             もしＰＣ版で例えばスライダーバーにフォーカスが残ってしまい、<br/>
             左右キーを入力したら自機ではなくスライダーバーが動いてしまい腹が立ったときは<br/>
-            ［何もしないボタン］を押せ。<br/>
+            ［何もしないボタン］を押せ。
         </talk-balloon>
+
+
         <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+        >
             おおー、説明的なセリフありがとうございますだぜ。<br/>
             <br/>
-            なってるなってる、王よ、床、市松模様になってる。<br/>
+            なってるなってる、王よ、床、市松模様になってる。
         </talk-balloon>
+
+
         <talk-balloon
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+            class="mb-6"
+        >
             では、👇下の［⚙問題設定を表示］ボタンをクリックして、<br/>
             出てくる［水平方向のタイル数］スライダーバーを横に１つ動かして例えば１０にし、<br/>
-            もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……<br/>
+            もう１回［⚙問題設定を終わる］に名前の変わっているボタンを押して設定を閉じ……
         </talk-balloon>
         <br/>
         <br/>
@@ -289,8 +299,7 @@
             @mouseup="button1Ref?.release();"
             @mouseleave="button1Ref?.release();"
         >{{ problem1IsShowing ? '⚙️問題設定を終わる' : '⚙️問題設定を表示' }}</v-btn>
-        <section v-if="problem1IsShowing" class="sec-1">
-            <br/>
+        <section v-if="problem1IsShowing" class="sec-1 pt-6 pb-6 mb-6">
             <!-- マスクが被っているところも含めた盤のサイズ： -->
             <v-slider
                 label="水平方向のタイル数"
@@ -300,6 +309,8 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
+
+
             <v-slider
                 label="垂直方向のタイル数"
                 v-model="board1RankNum"
@@ -308,9 +319,7 @@
                 step="1"
                 showTicks="always"
                 thumbLabel="always" />
-            <br/>
         </section>
-        <br/>
 
         <!-- デバッグ情報パネル１ -->
         <!--
@@ -362,7 +371,6 @@
         -->
 
         <br/>
-        <br/>
 
         <talk-balloon
             :src="commonPapepoKingSrc"
@@ -370,8 +378,9 @@
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device">
             そして一度画面を👆上にスクロールし、先ほどの床を見てから<br/>
-            ここに戻ってきてほしい。<br/>
+            ここに戻ってきてほしい。
         </talk-balloon>
+
         <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
@@ -379,7 +388,7 @@
             :device="compatibleDevice1Ref?.device">
             フーム……、床がストライプになっている……<br/>
             <br/>
-            これはバグだぜ！<br/>
+            これはバグだぜ！
         </talk-balloon>
         <!--
             <p>
@@ -404,7 +413,7 @@
             class="mb-6"
         >
             リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
-            👇これじゃ」<br/>
+            👇これじゃ」
         </talk-balloon>
 
         <pre
@@ -429,21 +438,24 @@ color = i % 2;
             :src="commonPapepoKingSrc"
             :alt="commonPapepoKingAlt"
             :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device">
-            この呪文を、チョチョイと直してほしい！」<br/>
+            :device="compatibleDevice1Ref?.device"
+        >
+            この呪文を、チョチョイと直してほしい！」
         </talk-balloon>
+
         <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+            class="mb-6"
+        >
             おー、お安い御用だぜ。<br/>
             <br/>
-            どう直したらいいか、👇下の選択肢から選んでくれだぜ！」<br/>
+            どう直したらいいか、👇下の選択肢から選んでくれだぜ！」
         </talk-balloon>
-        <br/>
 
-        <p>
+        <p class="mb-6">
             <!--
             <v-checkbox
                 :hideDetails="true">
@@ -526,18 +538,18 @@ color = i % 2;
             >何もしないボタン</v-btn>
         </p>
         <br/>
-        <br/>
 
         <talk-balloon
             :src="commonKifuwaranyanSrc"
             :alt="commonKifuwaranyanAlt"
             :name="commonKifuwaranyanName"
-            :device="compatibleDevice1Ref?.device">
+            :device="compatibleDevice1Ref?.device"
+            class="mb-6"
+        >
             上の選択肢を選んだら、<br/>
             画面を👆上にスクロールしてさっきの床を確認して、これで合ってると思ったら、<br/>
             👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
         </talk-balloon>
-        <br/>
 
         <v-btn
             class="code-key"
@@ -550,36 +562,43 @@ color = i % 2;
             @mouseleave="button1Ref?.release();"
         ><span class="font-x2">{{ answer1IsShowing ? '' : '🆗' }}</span>{{ answer1IsShowing ? '答えを隠す' : 'この答えで確定する' }}</v-btn>
         <section v-if="answer1IsShowing" class="sec-1">
-            <section v-if="choices1Num==0">
-                <br/>
+            <section
+                v-if="choices1Num==0"
+                class="pt-6 pb-6"
+            >
                 <span class="font-x2">😑</span>答えを選べだぜ<br/>
-                <br/>
             </section>
-            <section v-if="choices1Num==1 || choices1Num==2">
-                <br/>
-                <span class="font-x2">😄</span>正解<br/>
-                <br/>
+            <section
+                v-if="choices1Num==1 || choices1Num==2"
+                class="pt-6 pb-6"
+            >
+                <p class="mb-6"><span class="font-x2">😄</span>正解<br/></p>
+
 
                 <talk-balloon
                     :src="commonPapepoKingSrc"
                     :alt="commonPapepoKingAlt"
                     :name="commonPapepoKingName"
                     :device="compatibleDevice1Ref?.device">
-                    おお、さすがキフワラニャン　床が市松模様になったわい。<br/>
+                    おお、さすがキフワラニャン　床が市松模様になったわい。
                 </talk-balloon>
+
+
                 <talk-balloon
                     :src="commonKifuwaranyanSrc"
                     :alt="commonKifuwaranyanAlt"
                     :name="commonKifuwaranyanName"
                     :device="compatibleDevice1Ref?.device">
-                    やったぜ！<br/>
+                    やったぜ！
                 </talk-balloon>
-                <br/>
             </section>
-            <section v-if="choices1Num==3 || choices1Num==4">
-                <br/>
-                <span class="font-x2">😭</span>間違い<br/>
-                <br/>
+
+
+            <section
+                v-if="choices1Num==3 || choices1Num==4"
+                class="pt-6 pb-6"
+            >
+                <p class="mb-6"><span class="font-x2">😭</span>間違い</p>
 
                 <talk-balloon
                     :src="commonPapepoKingSrc"
@@ -588,6 +607,8 @@ color = i % 2;
                     :device="compatibleDevice1Ref?.device">
                     全ての部屋の床がストライプになってしまったのう。<br/>
                 </talk-balloon>
+
+
                 <talk-balloon
                     :src="commonKifuwaranyanSrc"
                     :alt="commonKifuwaranyanAlt"
@@ -595,12 +616,9 @@ color = i % 2;
                     :device="compatibleDevice1Ref?.device">
                     なんということだぜ……。<br/>
                 </talk-balloon>
-                <br/>
             </section>
         </section>
-
     </section>
-
 
     <button-to-go-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
