@@ -40,6 +40,93 @@
             </talk-balloon>
 
 
+            <!-- ゲームマシン -->
+            <game-machine-waratch2
+                hardLocationClass="mb-6"
+                :hardLocationStyle="{
+                    position: 'relative',
+                }"
+                :screenWidth="3 * 64"
+                :screenHeight="3 * 64"
+                v-on:onLeftButtonPressed="onLeftButtonPressed"
+                v-on:onLeftButtonReleased="onLeftButtonReleased"
+                v-on:onUpButtonPressed="onUpButtonPressed"
+                v-on:onUpButtonReleased="onUpButtonReleased"
+                v-on:onRightButtonPressed="onRightButtonPressed"
+                v-on:onRightButtonReleased="onRightButtonReleased"
+                v-on:onDownButtonPressed="onDownButtonPressed"
+                v-on:onDownButtonReleased="onDownButtonReleased"
+                v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+                v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+            >
+                <templage #default>
+                    <!-- 全体サイズと、切り抜き領域 -->
+                    <div
+                        style="
+                            position: absolute;
+                            /* FIXME: 縦型と横型で隠れる部分を替えたい */
+                            /*left: calc(-64 + 160)px;*/
+                            left: -64px;
+                            /*top: calc(-64 + 32)px;*/ /* 画面外と想定している部分が、きちんと画面外になるように、目視確認しながら位置調整 */
+                            top: -64px;
+                            height: calc(6 * 64px);
+                            clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
+                        "
+                    >
+                        <!-- 盤領域 -->
+                        <div
+                            class="game-board-1"
+                            :style="board1Style"
+                            style="
+                                display: inline-block;  /* インライン化しておくと、センタリングできる */
+                            "
+                            >
+
+                            <!-- 自機のホーム１ -->
+                            <div
+                                class="playerHome"
+                                :style="playerHome1Style">
+                            </div>
+
+                            <!-- タイル盤１ -->
+                            <board-made-of-tile
+                                :boardArea="board1Area"
+                                :tileWidth="tileBoard1TileWidth"
+                                :tileHeight="tileBoard1TileHeight"
+                                :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
+                                :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
+                                :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
+                                :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+                                :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+                            >
+                                <template #default="{ tileSq }">
+                                    {{ tileSq }}
+                                </template>
+
+                            </board-made-of-tile
+
+                            <!-- 自機１ -->
+                            <tile-animation
+                                :frames="player1Frames"
+                                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                                :slow="player1AnimationSlow"
+                                :time="stopwatch1Count"
+                                class="player"
+                                :style="player1Style" />
+                            
+                            <!-- 視界の外１ -->
+                            <out-of-sight-making
+                                ref="outOfSight1Ref"
+                                :tileBoard1TileWidth="tileBoard1TileWidth"
+                                :tileBoard1TileHeight="tileBoard1TileHeight"
+                                :board1FileNum="board1FileNum"
+                                :board1RankNum="board1RankNum" />
+                        </div>
+                    </div>
+                </templage>
+            </game-machine-waratch2>
+
+
         </section>
 
         <h2>裏情報</h2>
@@ -56,94 +143,6 @@
         <button-to-go-to-top class="sec-0 pt-6"/>
     </div>
 
-
-    <!-- ゲームマシン -->
-    <game-machine-waratch2
-        :hardLocationStyle="{
-            //position: 'absolute',
-            position: 'relative',
-            //left: '100px',
-            //top: '200px',
-        }"
-        :screenWidth="3 * 64"
-        :screenHeight="3 * 64"
-        v-on:onLeftButtonPressed="onLeftButtonPressed"
-        v-on:onLeftButtonReleased="onLeftButtonReleased"
-        v-on:onUpButtonPressed="onUpButtonPressed"
-        v-on:onUpButtonReleased="onUpButtonReleased"
-        v-on:onRightButtonPressed="onRightButtonPressed"
-        v-on:onRightButtonReleased="onRightButtonReleased"
-        v-on:onDownButtonPressed="onDownButtonPressed"
-        v-on:onDownButtonReleased="onDownButtonReleased"
-        v-on:onSpaceButtonPressed="onSpaceButtonPressed"
-        v-on:onSpaceButtonReleased="onSpaceButtonReleased"
-    >
-        <templage #default>
-            <!-- 全体サイズと、切り抜き領域 -->
-            <div
-                style="
-                    position: absolute;
-                    /* FIXME: 縦型と横型で隠れる部分を替えたい */
-                    /*left: calc(-64 + 160)px;*/
-                    left: -64px;
-                    /*top: calc(-64 + 32)px;*/ /* 画面外と想定している部分が、きちんと画面外になるように、目視確認しながら位置調整 */
-                    top: -64px;
-                    height: calc(6 * 64px);
-                    clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
-                "
-            >
-                <!-- 盤領域 -->
-                <div
-                    class="game-board-1"
-                    :style="board1Style"
-                    style="
-                        display: inline-block;  /* インライン化しておくと、センタリングできる */
-                    "
-                    >
-
-                    <!-- 自機のホーム１ -->
-                    <div
-                        class="playerHome"
-                        :style="playerHome1Style">
-                    </div>
-
-                    <!-- タイル盤１ -->
-                    <board-made-of-tile
-                        :boardArea="board1Area"
-                        :tileWidth="tileBoard1TileWidth"
-                        :tileHeight="tileBoard1TileHeight"
-                        :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
-                        :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
-                        :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
-                        :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
-                        :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
-                    >
-                        <template #default="{ tileSq }">
-                            {{ tileSq }}
-                        </template>
-
-                    </board-made-of-tile
-
-                    <!-- 自機１ -->
-                    <tile-animation
-                        :frames="player1Frames"
-                        tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                        :slow="player1AnimationSlow"
-                        :time="stopwatch1Count"
-                        class="player"
-                        :style="player1Style" />
-                    
-                    <!-- 視界の外１ -->
-                    <out-of-sight-making
-                        ref="outOfSight1Ref"
-                        :tileBoard1TileWidth="tileBoard1TileWidth"
-                        :tileBoard1TileHeight="tileBoard1TileHeight"
-                        :board1FileNum="board1FileNum"
-                        :board1RankNum="board1RankNum" />
-                </div>
-            </div>
-        </templage>
-    </game-machine-waratch2>
 
     <!-- オーバーラップ画面 -->
     <v-container fluid class="vertical-panes-container">

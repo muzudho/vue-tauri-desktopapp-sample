@@ -19,6 +19,7 @@
 
     <!-- 全体の位置 -->
     <div
+        :class="props.hardLocationClass"
         :style="props.hardLocationStyle"
     >
         <!-- 画面内を切り抜かれないようにします -->
@@ -84,6 +85,7 @@
             class="waratch2-surface waratch2-clickable"
             :style="{
                 //...toObject(props.hardLocationStyle),
+                position: 'absolute',
                 width: `${shassisWidth}px`,
                 height: `${shassisHeight}px`
             }"
@@ -213,6 +215,7 @@
             class="waratch2-surface"
             :style="{
                 //...toObject(props.hardLocationStyle),
+                position: 'absolute',
                 width: `${screenWidth}px`,
                 height: `${screenHeight}px`,
             }"
@@ -246,7 +249,7 @@
     // + インポート　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++
 
-    import { toObject } from '../compatibles/compatible-style-value';
+    //import { toObject } from '../compatibles/compatible-style-value';
     import type { CompatibleStyleValue } from '../compatibles/compatible-style-value';
 
     // ++++++++++++++++++++++++++++++++++
@@ -265,6 +268,7 @@
     // ####################################
     
     interface Props {
+        hardLocationClass?: CompatibleStyleValue;
         hardLocationStyle: CompatibleStyleValue;
         screenWidth: number;
         screenHeight: number;
