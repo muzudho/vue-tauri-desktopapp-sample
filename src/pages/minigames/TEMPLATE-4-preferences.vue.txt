@@ -108,22 +108,6 @@
                             border: solid 1px gray;
                         "
                     ></div>
-
-                    <!-- マス -->
-                    <v-btn
-                        v-for="i in range(0, 8)"
-                        :key="i"
-                        :style="{
-                            left: `${(i + 2) * tileBoard1TileWidth}px`,
-                            top: `${2 * tileBoard1TileHeight}px`,
-                            minWidth: `${tileBoard1TileWidth}px`,
-                            width: `${tileBoard1TileWidth}px`,
-                            height: `${tileBoard1TileHeight}px`,
-                        }"
-                        style="
-                            position: absolute;
-                        "
-                    ></v-btn>
                 </div>
             </template>
         </game-machine-waratch2>
@@ -188,12 +172,6 @@
     import Comment from '@/components/Comment.vue';
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
-
-    // ++++++++++++++++++++++++++++++++++
-    // + インポート　＞　コンポーザブル +
-    // ++++++++++++++++++++++++++++++++++
-
-    import { range } from '@/composables/range';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
