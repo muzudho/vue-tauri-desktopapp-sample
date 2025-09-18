@@ -735,6 +735,10 @@
 
 
     function powerOff() : void {
+        if(appGameIsPlaying.value) {    // ゲーム中なら、停止させます
+            gameStop();
+        }
+
         startButton1Enabled.value = false;
         gameMachine1Visibility.value = 'hidden';
         gameMachine1IsPowerOn.value = false;
