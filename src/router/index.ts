@@ -102,7 +102,7 @@ const routes = [
     },
     {
         name: 'MiniGames_Reversi',
-        path: '/minigames/shooting-reversi',
+        path: '/minigames/reversi',
         component: () => import('../pages/minigames/reversi.vue'),
     },
     // {
