@@ -296,13 +296,13 @@
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
     const gameBoard1StoneColorArray = ref<number[]>(new Array(64).fill(0));    // 石の色
-    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-        gameBoard1StoneColorArray.value[sq] = 1
-    }
+    // for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+    //     gameBoard1StoneColorArray.value[sq] = 1
+    // }
     const gameBoard1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
-        1: 'brown',
-        2: 'green',
+        1: '#C86868', // 明るい茶色
+        2: '#289028', // 暗い緑
     }
     const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
@@ -442,8 +442,8 @@
     function onGameBoard1Clicked(sq: number) : void {
         gameBoard1DebugMessage.value = `sq=${sq}`;
 
-        if(gameBoard1StoneColorArray.value[sq]=='') {
-
+        if(gameBoard1StoneColorArray.value[sq]==0) {
+            gameBoard1StoneColorArray.value[sq] = Math.floor(Math.random() * 2) + 1;
         }
     }
 
