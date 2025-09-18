@@ -33,10 +33,11 @@
                     <li>📖 <router-link to="/reference/making/input-axis" :class="getLinkHighlight('/reference/making/input-axis')">ＲＰＧの歩行グラフィックを表示して、上下左右に移動する章だぜ！</router-link></li>
                     <li>📖 <router-link to="/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1" :class="getLinkHighlight('/reference/making/input-axis/perspective-rpg-walk-tiles-wraparound-projection-loop-outofsight-maptileimage-1')">🌟画面３分割テスト：　回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</router-link></li>
                     <li>📖 <router-link to="/reference/making/input-axis/new-board-1" :class="getLinkHighlight('/reference/making/input-axis/new-board-1')">🌟新盤１テスト：　回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</router-link></li>
-                    <li>📖 <router-link to="/reference/making/input-axis/game-machine-test-1" :class="getLinkHighlight('/reference/making/input-axis/game-machine-test-1')">🌟ゲームマシン・テスト１：　ゲーム画面はめ込み</router-link></li>
-                    <li>📖 <router-link to="/reference/making/input-axis/game-machine-test-2" :class="getLinkHighlight('/reference/making/input-axis/game-machine-test-2')">🌟ゲームマシン・テスト２：　ゲーム画面はめ込み無し</router-link></li>
                 </ul>
             </li>
+
+            <li>📖 <router-link to="/reference/making/game-machine-test-1" :class="getLinkHighlight('/reference/making/game-machine-test-1')">🌟ゲームマシン・テスト１：　ゲーム画面はめ込み無し</router-link></li>
+            <li>📖 <router-link to="/reference/making/game-machine-test-2" :class="getLinkHighlight('/reference/making/game-machine-test-2')">🌟ゲームマシン・テスト２：　ゲーム画面はめ込み有り</router-link></li>
 
             <li>📖 <router-link to="/reference/making/sprite-routine" :class="getLinkHighlight('/reference/making/sprite-routine')">スプライト　＞　ルーチンの章だぜ！</router-link></li>
 

@@ -96,8 +96,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="3 * 64"
-            :screenHeight="3 * 64"
+            :screenWidth="7 * tileBoard1TileWidth"
+            :screenHeight="7 * tileBoard1TileHeight"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
             v-on:onUpButtonPressed="onUpButtonPressed"
@@ -807,8 +807,8 @@ color = i % 2;
     const board1RankMin = 6;
     const board1FileMax = 16;
     const board1RankMax = 16;
-    const board1FileNum = ref<number>(9);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
-    const board1RankNum = ref<number>(9);   // 段の数
+    const board1FileNum = ref<number>(7);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+    const board1RankNum = ref<number>(7);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
         return board1FileNum.value * board1RankNum.value;
     });

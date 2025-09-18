@@ -23,7 +23,7 @@
             pagePath="/reference"
         />
 
-        <h1 class="mb-6">ゲームマシン・テスト１</h1>
+        <h1 class="mb-6">ゲームマシン・テスト２</h1>
         <section class="sec-1" style="position: relative;">
             <!-- overflow: auto; -->
 
@@ -356,7 +356,7 @@
     // + インポート　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++
 
-    import type { CompatibleStyleValue }  from '../../../../compatibles/compatible-style-value';
+    import type { CompatibleStyleValue }  from '../../../compatibles/compatible-style-value';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -381,24 +381,24 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
-    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../../composables/board-operation';
+    import { createGetFixedTileSqFromTileSq, createGetImageSqByFixedTileSq, createGetTileStyleByTileSq } from '../../../composables/board-operation';
     import {
         getPlayer1File, getPlayer1Rank,
         isPlayerInputKey,
         playerMotionClearIfCountZero, playerImageAndPositionAndWaitUpdate, playerMotionCountDown, playerMotionUpdateByInputWithWrapAround,
-    } from '../../../../composables/player-controller';
+    } from '../../../composables/player-controller';
     import {
         checkOutOfSightBottomIsLook, checkOutOfSightLeftIsLook, checkOutOfSightRightIsLook, checkOutOfSightTopIsLook, printingImageAndPositionAndWaitUpdate, printingMotionClearIfCountZero, printingInputCreate, printingMotionCountDown, printingMotionCreate, printingMotionUpdateByInputWithWrapAround,
-    } from '../../../../composables/printing-controller'
-    import type { PlayerInput, PlayerMotion } from '../../../../composables/player-controller';
-    import type { PrintingInput, PrintingMotion } from '../../../../composables/printing-controller';
-    import { createGetResourceTileLeftByImageSq } from '../../../../composables/image-board';
+    } from '../../../composables/printing-controller'
+    import type { PlayerInput, PlayerMotion } from '../../../composables/player-controller';
+    import type { PrintingInput, PrintingMotion } from '../../../composables/printing-controller';
+    import { createGetResourceTileLeftByImageSq } from '../../../composables/image-board';
 
     // +++++++++++++++++++++++++++++++++++
     // + インポート ＞　インターフェース +
     // +++++++++++++++++++++++++++++++++++
 
-    import type Rectangle from '../../../../interfaces/Rectangle';
+    import type Rectangle from '../../../interfaces/Rectangle';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +

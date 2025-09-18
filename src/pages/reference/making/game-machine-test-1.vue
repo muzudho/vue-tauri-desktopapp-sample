@@ -10,7 +10,7 @@
         pagePath="/reference"
     />
 
-    <h1 class="mb-6">ゲームマシン・テスト２</h1>
+    <h1 class="mb-6">ゲームマシン・テスト１</h1>
 
     <!-- ゲームマシン -->
     <game-machine-waratch2
@@ -18,7 +18,7 @@
             position: 'absolute',
             //position: 'relative',
             left: '100px',
-            top: '200px',
+            top: '250px',
         }"
         :screenWidth="3 * 64"
         :screenHeight="3 * 64"
