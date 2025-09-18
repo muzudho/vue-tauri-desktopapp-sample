@@ -99,6 +99,7 @@
                     top: `${directionKeysAreaTop}px`,
                     width: `${directionKeysAreaWidth}px`,
                     height: `${directionKeysAreaHeight}px`,
+                    //backgroundColor: 'yellow',
                 }"
             >
                 <!-- 上キー -->
@@ -186,12 +187,14 @@
                     top: `${actionButtonsAreaTop}px`,
                     width: `${actionButtonsAreaWidth}px`,
                     height: `${actionButtonsAreaHeight}px`,
+                    //backgroundColor: 'blue',
                 }"
             >
                 <!-- スペース・キー -->
                 <v-btn
                     class="waratch2-button"
                     :style="{
+                        left: `${0.5 * gridUnit}px`,
                         top: `${2 * gridUnit}px`,
                         width: `${5 * gridUnit}px`,
                         height: `${2 * gridUnit}px`,
@@ -322,8 +325,8 @@
     const directionKeysAreaHeight = 6 * gridUnit + paddingSize;
     const actionButtonsAreaLeft = ref<number>(0);
     const actionButtonsAreaTop = ref<number>(0);
-    const actionButtonsAreaWidth = 5 * gridUnit;
-    const actionButtonsAreaHeight = 6 * gridUnit;
+    const actionButtonsAreaWidth = 6 * gridUnit + paddingSize;  // 方向キーと合わせる。
+    const actionButtonsAreaHeight = 6 * gridUnit + paddingSize;
 
 
     // ################
@@ -384,7 +387,7 @@
             shassisHeight.value = 2 * cornerRadius + directionKeysAreaHeight + props.screenHeight;
             directionKeysAreaLeft.value = paddingSize;
             directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
-            actionButtonsAreaLeft.value = props.screenWidth;
+            actionButtonsAreaLeft.value = shassisWidth.value - paddingSize - actionButtonsAreaWidth;
             actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
 
         } else {    // 横型
