@@ -43,7 +43,7 @@
                 :style="{
                     position: 'relative',
                 }"
-                :screenWidth="4 * 64"
+                :screenWidth="3 * 64"
                 :screenHeight="3 * 64"
                 v-on:onLeftButtonPressed="onLeftButtonPressed"
                 v-on:onLeftButtonReleased="onLeftButtonReleased"
