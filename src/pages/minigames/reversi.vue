@@ -119,7 +119,7 @@
                             minWidth: `${tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
-                            color: gameBoard1StoneColorArray[sq],    /* 石の色 */
+                            color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                             backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
                         }"
                         style="
@@ -295,9 +295,14 @@
     for(let sq: number=0; sq<gameBoard1Area.value; sq++){
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
-    const gameBoard1StoneColorArray = ref<string[]>(new Array(64).fill(''));    // 石の色
+    const gameBoard1StoneColorArray = ref<number[]>(new Array(64).fill(0));    // 石の色
     for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-        gameBoard1StoneColorArray.value[sq] = 'brown'
+        gameBoard1StoneColorArray.value[sq] = 1
+    }
+    const gameBoard1StoneColorNameMap: Record<number, string> = {
+        0: 'transparent',
+        1: 'brown',
+        2: 'green',
     }
     const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
@@ -436,6 +441,10 @@
      */
     function onGameBoard1Clicked(sq: number) : void {
         gameBoard1DebugMessage.value = `sq=${sq}`;
+
+        if(gameBoard1StoneColorArray.value[sq]=='') {
+
+        }
     }
 
 

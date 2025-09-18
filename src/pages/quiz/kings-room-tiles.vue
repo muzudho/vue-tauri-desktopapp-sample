@@ -355,7 +355,7 @@
 
         <pre
             class="coding-example mb-6">
-// i はタイル番号。左上から右に向かって 0, 1, 2 ... 右端から１段下の左端に続く。
+// sq はタイル番号（Square）。左上から右に向かって 0, 1, 2 ... 右端から１段下の左端に続く。
 //
 // そして、
 // color が 0 なら白い床、
@@ -368,7 +368,7 @@
 // % 記号は、この記号の左側の数を、右側の数で割った余りを求める。 例） 3 % 2 なら 1。
 //
 
-color = i % 2;
+color = sq % 2;
         </pre>
 
         <talk-balloon
@@ -425,7 +425,7 @@ color = i % 2;
                 <v-radio
                     :value="5">
                     <template v-slot:label>
-                        <span style="margin-right: 16px;">（５）</span>i の水平位置を左から file=0, 1, 2...、垂直位置を上から rank=0, 1, 2...、盤の水平方向のタイル数を width とするとき、color = (file + rank) % 2 とする。
+                        <span style="margin-right: 16px;">（５）</span>sq の水平位置を左から file=0, 1, 2...、垂直位置を上から rank=0, 1, 2...、盤の水平方向のタイル数を width とするとき、color = (file + rank) % 2 とする。
                     </template>
                 </v-radio>
             </v-radio-group>
@@ -745,48 +745,48 @@ color = i % 2;
         const height = printing1RankNum.value;
 
         // マップデータを生成。盤サイズが変わるたび更新
-        for (let i=0; i<width * height; i++) {
-            // i: タイル番号。左上から右に向かって 0, 1, 2 ...
+        for (let sq=0; sq<width * height; sq++) {
+            // sq: タイル番号。左上から右に向かって 0, 1, 2 ...
             // color = 0: 白い床
             // color = 1: 赤い床
             // とする。
 
             // 計算式：　タイルの偶数盤を白い床、奇数盤を赤い床にする。
-            let color = i % 2;
+            let color = sq % 2;
 
             // ここから　クイズの答え：
             if (choices1Num.value == 1) {
                 // これは正解。
                 // 水平方向のタイル数が偶数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
-                const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
+                const rank = Math.floor(sq / width); // タイル番号を分解して rank を抽出
                 if (width % 2 == 0) {
                     color = (color + 1 * ((rank) % 2)) % 2;
                 }
             } else if (choices1Num.value == 2) {
                 // これも正解。
                 // 水平方向のタイル数が偶数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
-                const rank = Math.floor(i / width);
+                const rank = Math.floor(sq / width);
                 if (width % 2 == 0) {
                     color = (color + 1 * ((rank + 1) % 2)) % 2;
                 }
             } else if (choices1Num.value == 3) {
                 // 間違い。常にストライプになる。
                 // 水平方向のタイル数が奇数のとき、偶数段は color の 0, 1 を反転するようにすればよい。
-                const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
+                const rank = Math.floor(sq / width); // タイル番号を分解して rank を抽出
                 if (width % 2 == 1) {
                     color = (color + 1 * ((rank) % 2)) % 2;
                 }
             } else if (choices1Num.value == 4) {
                 // 間違い。常にストライプになる。
                 // 水平方向のタイル数が奇数のとき、奇数段は color の 0, 1 を反転するようにすればよい。
-                const rank = Math.floor(i / width); // タイル番号を分解して rank を抽出
+                const rank = Math.floor(sq / width); // タイル番号を分解して rank を抽出
                 if (width % 2 == 1) {
                     color = (color + 1 * ((rank + 1) % 2)) % 2;
                 }
             } else if (choices1Num.value == 5) {
                 // これも正解。
-                const file = i % width;
-                const rank = Math.floor(i / width);
+                const file = sq % width;
+                const rank = Math.floor(sq / width);
                 color = (file + rank) % 2;
             }
             // ：ここまで　クイズの答え
@@ -809,9 +809,9 @@ color = i % 2;
     const printing1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
     const sourceTilemapRectangles : Rectangle[] = [];
-    for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
-        const files = i % tileBoard1FileNum.value;
-        const ranks = Math.floor(i / tileBoard1FileNum.value);
+    for (let sq = 0; sq < printing1AreaMax; sq++) {   // 最大サイズで作っておく。
+        const files = sq % tileBoard1FileNum.value;
+        const ranks = Math.floor(sq / tileBoard1FileNum.value);
         sourceTilemapRectangles.push({
             top: ranks * tileBoard1TileHeight,
             left: files * tileBoard1TileWidth,
