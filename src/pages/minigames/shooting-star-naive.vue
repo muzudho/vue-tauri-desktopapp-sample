@@ -49,6 +49,7 @@
             
             <v-btn
                 class="code-key"
+                :disabled="!startButton1Enabled"
                 @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
@@ -302,6 +303,12 @@
 
     const gameMachine1IsPowerOn = ref<boolean>(false);   // 電源ボタンは演出です
     const gameMachine1Visibility = ref<string>('hidden');
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン　＞　開始／終了ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const startButton1Enabled = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン　＞　一時停止／再開ボタン +
@@ -721,12 +728,14 @@
 
 
     function powerOn() : void {
+        startButton1Enabled.value = true;
         gameMachine1Visibility.value = 'visible';
         gameMachine1IsPowerOn.value = true;
     }
 
 
     function powerOff() : void {
+        startButton1Enabled.value = false;
         gameMachine1Visibility.value = 'hidden';
         gameMachine1IsPowerOn.value = false;
     }
