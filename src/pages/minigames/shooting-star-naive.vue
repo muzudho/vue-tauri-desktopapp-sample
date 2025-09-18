@@ -339,12 +339,12 @@
     // + オブジェクト　＞　ゲームマシン１ +
     // ++++++++++++++++++++++++++++++++++++
 
-    const gameMachine1ManualIsShowing = ref<boolean>(false);    // ゲームの操作方法・遊び方説明書を表示中
+    const gameMachine1Zoom = ref<number>(0.375);    // ズーム
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
+    const gameMachine1ManualIsShowing = ref<boolean>(false);    // ゲームの操作方法・遊び方説明書を表示中
     const gameMachine1Visibility = ref<string>('hidden');
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPause = ref<boolean>(false);    // ゲームは一時停止中
-    const gameMachine1Zoom = ref<number>(0.375);    // ズーム
     const gameMachine1Score = ref<number>(0);   // 得点
     const gameMachine1MaxCount = computed(()=>60 * commonSeconds);  // ゲーム時間は１分
     const gameMachine1ScheduleStep = ref<number>(0);    // 星の出現スケジュール
@@ -621,14 +621,14 @@
     // カメラのファインダー。点線の枠。
     //
 
-    const player1Left = ref<number>(6 * tileBoard1TileWidth.value);     // スプライトのX座標
-    const player1Top = ref<number>(4 * tileBoard1TileHeight.value);     // スプライトのY座標
-    const player1FileNum = ref<number>(4);                            // スプライトの列数
-    const player1RankNum = ref<number>(3);                            // スプライトの行数
     const player1Input = <Record<string, boolean>>{                     // 入力
         // アルファベット順
         " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
     };
+    const player1Left = ref<number>(6 * tileBoard1TileWidth.value);     // スプライトのX座標
+    const player1Top = ref<number>(4 * tileBoard1TileHeight.value);     // スプライトのY座標
+    const player1FileNum = ref<number>(4);                            // スプライトの列数
+    const player1RankNum = ref<number>(3);                            // スプライトの行数
     const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
     const player1AnimationWalkingFrames = 8;                        // 歩行フレーム数
     const player1SpeedHorizontal = ref<number>(tileBoard1TileWidth.value / player1AnimationWalkingFrames);  // 移動速度。割り切れるようにすること
@@ -693,9 +693,81 @@
     });
 
 
-    // ###############
-    // # 開始 / 終了 #
-    // ###############
+    // ######################
+    // # イベントハンドラー #
+    // ######################
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　ゲームマシン・ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+
+    /**
+     * 左。
+     */
+    function onLeftButtonPressed() : void {
+        player1Input.ArrowLeft = true;
+    }
+
+
+    function onLeftButtonReleased() : void {
+        player1Input.ArrowLeft = false;
+    }
+
+
+    /**
+     * 上。
+     */
+    function onUpButtonPressed() : void {
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        player1Input.ArrowUp = false;
+    }
+
+
+    /**
+     * 右。
+     */
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    /**
+     * 下。
+     */
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    /**
+     * スペース・キー。
+     */
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
+    }
+
+
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
+    }
+    
+    // +++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　開始 / 終了 +
+    // +++++++++++++++++++++++++++++++++++++++
 
     onMounted(() => {
         sfxLoad();
@@ -750,9 +822,9 @@
     });
 
 
-    // ################
-    // # サブルーチン #
-    // ################
+    // ++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　その他 +
+    // ++++++++++++++++++++++++++++++++++
 
     /**
      * 電源ボタン押下時
@@ -778,6 +850,34 @@
 
         gameStart();
     }
+
+
+    /**
+     * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
+     */
+    function onGamePauseOrRestartButtonPushed() : void {
+        if(gameMachine1IsPause.value) {
+            // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
+            stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+        } else {
+            stopwatch1Ref.value?.timerStop();  // タイマーをストップ
+        }
+
+        gameMachine1IsPause.value = !gameMachine1IsPause.value;
+    }
+
+
+    /**
+     * ［お好み設定パネル１］を開くボタン。
+     */
+    function onPreferences1ButtonPressed() : void {
+        gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
+    }
+
+
+    // ################
+    // # サブルーチン #
+    // ################
 
 
     function powerOn() : void {
@@ -808,21 +908,6 @@
     function gameStop() : void {
         pauseButton1Enabled.value = false;
         gameInit(); // ゲームは終了したので、初期状態に戻します
-    }
-
-
-    /**
-     * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
-     */
-    function onGamePauseOrRestartButtonPushed() : void {
-        if(gameMachine1IsPause.value) {
-            // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
-            stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-        } else {
-            stopwatch1Ref.value?.timerStop();  // タイマーをストップ
-        }
-
-        gameMachine1IsPause.value = !gameMachine1IsPause.value;
     }
 
 
@@ -971,79 +1056,6 @@
         }
 
         gameMachine1Score.value += 100;
-    }
-
-
-    /**
-     * 左。
-     */
-    function onLeftButtonPressed() : void {
-        player1Input.ArrowLeft = true;
-    }
-
-
-    function onLeftButtonReleased() : void {
-        player1Input.ArrowLeft = false;
-    }
-
-
-    /**
-     * 上。
-     */
-    function onUpButtonPressed() : void {
-        player1Input.ArrowUp = true;
-    }
-
-
-    function onUpButtonReleased() : void {
-        player1Input.ArrowUp = false;
-    }
-
-
-    /**
-     * 右。
-     */
-    function onRightButtonPressed() : void {
-        player1Input.ArrowRight = true;
-    }
-
-
-    function onRightButtonReleased() : void {
-        player1Input.ArrowRight = false;
-    }
-
-
-    /**
-     * 下。
-     */
-    function onDownButtonPressed() : void {
-        player1Input.ArrowDown = true;
-    }
-
-
-    function onDownButtonReleased() : void {
-        player1Input.ArrowDown = false;
-    }
-
-
-    /**
-     * スペース・キー。
-     */
-    function onSpaceButtonPressed() : void {
-        player1Input[" "] = true;
-    }
-
-
-    function onSpaceButtonReleased() : void {
-        player1Input[" "] = false;
-    }
-
-
-    /**
-     * ［お好み設定パネル１］を開くボタン。
-     */
-    function onPreferences1ButtonPressed() : void {
-        gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
     }
 
 </script>
