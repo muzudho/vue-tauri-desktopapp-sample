@@ -298,9 +298,10 @@
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
     const gameBoard1StoneColorArray = ref<number[]>(new Array(64).fill(0));    // 石の色
-    // for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-    //     gameBoard1StoneColorArray.value[sq] = 1
-    // }
+    gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
+    gameBoard1StoneColorArray.value[28] = 2;
+    gameBoard1StoneColorArray.value[35] = 2;
+    gameBoard1StoneColorArray.value[36] = 1;
     const gameBoard1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
         1: '#C86868', // 明るい茶色
