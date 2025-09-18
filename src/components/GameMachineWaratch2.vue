@@ -380,20 +380,20 @@
         // }
 
         if (orientation.value == 'Portrait') {  // 縦型
-            screenMarginLeft.value = 1 * (3 * gridUnit);
-            screenMarginTop.value = 1 * (3 * gridUnit);
-            shassisWidth.value = 2 * (3 * gridUnit) + props.screenWidth;
-            shassisHeight.value = 4 * (3 * gridUnit) + props.screenHeight;
+            screenMarginLeft.value = 3 * gridUnit;
+            screenMarginTop.value = 3 * gridUnit;
+            shassisWidth.value = 6 * gridUnit + props.screenWidth;
+            shassisHeight.value = 12 * gridUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0.5 * gridUnit;
             directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;    // 8 は画面とボタンの隙間
             actionButtonsAreaLeft.value = props.screenWidth;
             actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;
 
         } else {    // 横型
-            screenMarginLeft.value = 2.5 * (3 * gridUnit);
-            screenMarginTop.value = 0.5 * (3 * gridUnit);
-            shassisWidth.value = (3 + 2) * (3 * gridUnit) + props.screenWidth;
-            shassisHeight.value = (1 + 0.25) * (3 * gridUnit) + props.screenHeight;
+            screenMarginLeft.value = 7.5 * gridUnit;
+            screenMarginTop.value = 1.5 * gridUnit;
+            shassisWidth.value = (9 + 6) * gridUnit + props.screenWidth;
+            shassisHeight.value = (3 + 0.75) * gridUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0.5 * gridUnit;
             directionKeysAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2; // 上から 1/3 のところに合わせる
             actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 1 * gridUnit;
