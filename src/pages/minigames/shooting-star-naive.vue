@@ -15,8 +15,7 @@
 
         <!-- ゲームの操作方法 -->
         <v-btn @click="appManualIsShowing = !appManualIsShowing">{{ appManualIsShowing ? 'ゲームの遊び方閉じる' : 'ゲームの遊び方を表示' }}</v-btn>
-        <section class="sec-0" v-if="appManualIsShowing">
-            <br>
+        <section class="sec-0 pt-6 pb-6 mb-6" v-if="appManualIsShowing">
             <p>
                 このゲームは、星を撮影する、という状況を見立てたゲームだぜ。<br/>
                 <br/>
@@ -24,12 +23,12 @@
                 この黒い画面は宇宙な。<br/>
                 ［ゲームスタート］ボタンを押すと、ゲームが始まるぜ。<br/>
                 たまに星が流れてくる。<br/>
-                60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、エンターキーを押してくれだぜ。これで 100点 だぜ。<br/>
+                60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、スペース・キーを押してくれだぜ。これで 100点 だぜ。<br/>
                 <br/>
-                飽きたら終わりだぜ。<br/>
+                飽きたら終わりだぜ。
             </p>
-        </section><br/>
-        <br/>
+        </section>
+
         <p>ボタン</p>
         <ul>
             <li>
@@ -119,14 +118,14 @@
             <li>
                 <v-btn
                     class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onEnterButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onEnterButtonReleased);"
-                    @touchcancel="button1Ref?.release(onEnterButtonReleased);"
-                    @touchleave="button1Ref?.release(onEnterButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onEnterButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onEnterButtonReleased);"
-                    @mouseleave="button1Ref?.release(onEnterButtonReleased);"
-                >（エンター）</v-btn>
+                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
+                    @touchend="button1Ref?.release(onSpaceButtonReleased);"
+                    @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
+                    @touchleave="button1Ref?.release(onSpaceButtonReleased);"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
+                    @mouseup="button1Ref?.release(onSpaceButtonReleased);"
+                    @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
+                >（スペース）</v-btn>
                 　…　撮影。
             </li>
         </ul>
@@ -140,8 +139,31 @@
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
             ref="stopwatch1Ref"
-            v-on:countUp="(countNum) => { stopwatch1Count = countNum; }"
+            v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
             style="display: none;" />
+
+        
+        <!-- ゲームマシン -->
+        <game-machine-waratch2
+            :hardLocationStyle="{
+                left: '0px',
+                top: '0px',
+            }"
+            :screenWidth="appZoom * board1FileNum * tileBoard1TileWidth"
+            :screenHeight="appZoom * board1RankNum * tileBoard1TileHeight"
+            v-on:onLeftButtonPressed="onLeftButtonPressed"
+            v-on:onLeftButtonReleased="onLeftButtonReleased"
+            v-on:onUpButtonPressed="onUpButtonPressed"
+            v-on:onUpButtonReleased="onUpButtonReleased"
+            v-on:onRightButtonPressed="onRightButtonPressed"
+            v-on:onRightButtonReleased="onRightButtonReleased"
+            v-on:onDownButtonPressed="onDownButtonPressed"
+            v-on:onDownButtonReleased="onDownButtonReleased"
+            v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+            v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+        >
+        </game-machine-waratch2>
+
 
         <!-- ゲーム画面領域（宇宙） -->
         <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
@@ -152,7 +174,7 @@
             <div
                 v-for="i in board1Area"
                 :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / board1Files) * tileBoard1TileHeight}px; left: ${((i - 1) % board1Files) * tileBoard1TileWidth}px; width:${tileBoard1TileWidth}px; height:${tileBoard1TileHeight}px; border: solid 1px gray;`"></div>
+                :style="`position:absolute; top: ${Math.floor((i - 1) / board1FileNum) * tileBoard1TileHeight}px; left: ${((i - 1) % board1FileNum) * tileBoard1TileWidth}px; width:${tileBoard1TileWidth}px; height:${tileBoard1TileHeight}px; border: solid 1px gray;`"></div>
 
             <!-- 星 -->
             <Tile
@@ -223,12 +245,13 @@
     // ++++++++++++++++++++++++++++++++++
 
     // アルファベット順
-    import Button20250822 from '../../components/Button20250822.vue';
+    import Button20250822 from '@/components/Button20250822.vue';
     import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
     import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
-    import SourceLink from '../../components/SourceLink.vue';
-    import Stopwatch from '../../components/Stopwatch.vue';
-    import Tile from '../../components/Tile.vue';
+    import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
+    import SourceLink from '@/components/SourceLink.vue';
+    import Stopwatch from '@/components/Stopwatch.vue';
+    import Tile from '@/components/Tile.vue';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
@@ -258,12 +281,13 @@
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appManualIsShowing = ref<boolean>(false);     // ゲームの操作方法・遊び方説明書を表示中
-    const appGameScore = ref<number>(0);                // 得点
-    const appGameIsPlaying = ref<boolean>(false);       // ゲーム中
-    const appGameIsPause = ref<boolean>(false);         // ゲームは一時停止中
+    const appManualIsShowing = ref<boolean>(false); // ゲームの操作方法・遊び方説明書を表示中
+    const appGameScore = ref<number>(0);    // 得点
+    const appGameIsPlaying = ref<boolean>(false);   // ゲーム中
+    const appGameIsPause = ref<boolean>(false); // ゲームは一時停止中
     const appGameMaxCount = computed(()=>60 * commonSeconds);   // ゲーム時間は１分
-    const appGameScheduleStep = ref<number>(0);         // 星の出現スケジュール
+    const appGameScheduleStep = ref<number>(0); // 星の出現スケジュール
+    const appZoom = ref<number>(1); // ズーム
 
 
     // ################
@@ -538,10 +562,10 @@
 
     const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
-    const board1Files = ref<number>(16);        // 盤が横に何マスか
-    const board1Ranks = ref<number>(12);        // 盤が縦に何マスか
+    const board1FileNum = ref<number>(16);        // 盤が横に何マスか
+    const board1RankNum = ref<number>(12);        // 盤が縦に何マスか
     const board1Area = computed(()=>{           // 盤のマス数
-        return board1Files.value * board1Ranks.value;
+        return board1FileNum.value * board1RankNum.value;
     });
 
     // ++++++++++++++++++++++++
@@ -583,7 +607,7 @@
     const player1Speed = ref<number>(4);                              // 移動速度
     const player1Input = <Record<string, boolean>>{                     // 入力
         // アルファベット順
-        ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false, Enter: false,
+        " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
     };
     const player1AnimationWalkingFrames = 8;                        // 歩行フレーム数
     const player1MotionWait = ref<number>(0);   // 排他的モーション時間。
@@ -779,7 +803,7 @@
             // ++++++++++++++++++++++++++++++
             if (player1MotionWait.value<=0) {   // ウェイトが無ければ、入力を受け付ける。
 
-                if (player1Input.Enter) {
+                if (player1Input[" "]) {
                     cameraShot();   // 撮影
                 }
 
@@ -807,7 +831,7 @@
             // 移動処理
             // 斜め方向の場合、上下を優先する。
             if (player1Motion.value["xAxis"]==1) {   // 右
-                if (player1Left.value < (board1Files.value - player1FileNum.value) * tileBoard1TileWidth.value) {    // 境界チェック
+                if (player1Left.value < (board1FileNum.value - player1FileNum.value) * tileBoard1TileWidth.value) {    // 境界チェック
                     player1Left.value += player1Speed.value;
                 }
             } else if (player1Motion.value["xAxis"]==-1) {  // 左
@@ -821,7 +845,7 @@
                     player1Top.value -= player1Speed.value;
                 }
             } else if (player1Motion.value["yAxis"]==1) {   // 下
-                if (player1Top.value < (board1Ranks.value - player1RankNum.value) * tileBoard1TileHeight.value) {    // 境界チェック
+                if (player1Top.value < (board1RankNum.value - player1RankNum.value) * tileBoard1TileHeight.value) {    // 境界チェック
                     player1Top.value += player1Speed.value;
                 }
             }
@@ -952,15 +976,15 @@
 
 
     /**
-     * エンター・キー。
+     * スペース・キー。
      */
-    function onEnterButtonPressed() : void {
-        player1Input.Enter = true;
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
     }
 
 
-    function onEnterButtonReleased() : void {
-        player1Input.Enter = false;
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
     }
 
 </script>

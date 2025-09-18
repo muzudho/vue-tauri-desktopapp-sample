@@ -607,7 +607,7 @@ color = i % 2;
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    // from の階層が上の順、アルファベット順
+    // アルファベット順
     import TheAppHeader from '../the-app-header.vue';
     import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
@@ -669,7 +669,6 @@ color = i % 2;
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    //const appZoom = ref<number>(2);    // ズーム
     const appZoom = ref<number>(1);    // ズーム
 
 
