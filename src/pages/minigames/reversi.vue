@@ -128,7 +128,7 @@
                             line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
                             z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
                         "
-                    >●</v-btn>
+                    >{{ gameBoard1StoneShapeArray[i] }}</v-btn>
                 </div>
             </template>
         </game-machine-waratch2>
@@ -290,7 +290,11 @@
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     })
-    const gameBoard1StoneColorArray = ref<string[]>(new Array(64).fill(''));
+    const gameBoard1StoneShapeArray = ref<string[]>(new Array(64).fill(''));    // 石の形
+    for(let i: number=0; i<gameBoard1Area.value; i++){
+        gameBoard1StoneShapeArray.value[i] = '●'
+    }
+    const gameBoard1StoneColorArray = ref<string[]>(new Array(64).fill(''));    // 石の色
     for(let i: number=0; i<gameBoard1Area.value; i++){
         gameBoard1StoneColorArray.value[i] = 'brown'
     }
