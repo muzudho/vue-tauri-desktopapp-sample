@@ -124,9 +124,12 @@
                         }"
                         style="
                             position: absolute;
+                            font-size: 24px;
+                            line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
                             z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
+                            color: brown;   /* 石の色 */
                         "
-                    ></v-btn>
+                    >●</v-btn>
                 </div>
             </template>
         </game-machine-waratch2>
