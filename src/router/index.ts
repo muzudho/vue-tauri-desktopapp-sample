@@ -91,14 +91,14 @@ const routes = [
     },
 
     {
-        name: 'ShootingStar',
-        path: '/minigames/shooting-star',
-        component: () => import('../pages/minigames/shooting-star.vue'),
-    },
-    {
-        name: 'ShootingStarNaive',
+        name: 'MiniGames_ShootingStarNaive',
         path: '/minigames/shooting-star-naive',
         component: () => import('../pages/minigames/shooting-star-naive.vue'),
+    },
+    {
+        name: 'MiniGames_ShootingStarReactive',
+        path: '/minigames/shooting-star-reactive',
+        component: () => import('../pages/minigames/shooting-star-reactive.vue'),
     },
     // {
     //     name: 'Maze',
