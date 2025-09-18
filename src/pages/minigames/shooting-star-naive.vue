@@ -111,16 +111,14 @@
                 <div
                     :style="{
                         visibility: gameMachine1Visibility,
-                        width: `${gameMachine1Zoom * board1FileNum * tileBoard1TileWidth}px`,
-                        height: `${gameMachine1Zoom * board1RankNum * tileBoard1TileHeight}px`,
+                        width: `${board1FileNum * tileBoard1TileWidth}px`,
+                        height: `${board1RankNum * tileBoard1TileHeight}px`,
+                        zoom: gameMachine1Zoom,
                     }"
                     style="
                         position:relative;
                         left: 0;
                         top: 0;
-                        /* width:512px; */
-                        /* height:384px; */
-                        zoom: gameMachine1Zoom;
                         background-color: #303030;
                     "
                 >
@@ -131,7 +129,17 @@
                     <div
                         v-for="i in board1Area"
                         :key="i"
-                        :style="`position:absolute; top: ${Math.floor((i - 1) / board1FileNum) * tileBoard1TileHeight}px; left: ${((i - 1) % board1FileNum) * tileBoard1TileWidth}px; width:${tileBoard1TileWidth}px; height:${tileBoard1TileHeight}px; border: solid 1px gray;`"></div>
+                        :style="{
+                            top: `${Math.floor((i - 1) / board1FileNum) * tileBoard1TileHeight}px`,
+                            left: `${((i - 1) % board1FileNum) * tileBoard1TileWidth}px`,
+                            width: `${tileBoard1TileWidth}px`,
+                            height: `${tileBoard1TileHeight}px`,
+                        }"
+                        style="
+                            position: absolute;
+                            border: solid 1px gray;
+                        "
+                        ></div>
 
                     <!-- 星 -->
                     <Tile
