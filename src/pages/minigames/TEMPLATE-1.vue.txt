@@ -1,0 +1,222 @@
+<template>
+    <!-- 以降、ページ -->
+    <the-app-header/>
+
+    <button-to-back-to-contents
+        class="sec-0 mt-6"
+        pagePath="."
+    />
+
+    <h1>リバーシ</h1>
+    <section class="sec-1 pt-6 mb-6">
+
+
+        <!-- ゲームマシン１ -->
+        <game-machine-waratch2
+            :hardLocationStyle="{
+                left: '0px',
+                top: '0px',
+            }"
+            :screenWidth="gameMachine1Zoom * 512"
+            :screenHeight="gameMachine1Zoom * 512"
+            :powerOn="gameMachine1IsPowerOn"
+            v-on:onLeftButtonPressed="onLeftButtonPressed"
+            v-on:onLeftButtonReleased="onLeftButtonReleased"
+            v-on:onUpButtonPressed="onUpButtonPressed"
+            v-on:onUpButtonReleased="onUpButtonReleased"
+            v-on:onRightButtonPressed="onRightButtonPressed"
+            v-on:onRightButtonReleased="onRightButtonReleased"
+            v-on:onDownButtonPressed="onDownButtonPressed"
+            v-on:onDownButtonReleased="onDownButtonReleased"
+            v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+            v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+        >
+        </game-machine-waratch2>
+        
+
+    </section>
+    
+    <button-to-back-to-top class="sec-1 pt-6"/>
+    <h2>ソースコード</h2>
+    <section class="sec-2">
+        <source-link/>
+    </section>
+
+    <button-to-back-to-top class="sec-0 pt-6"/>
+</template>
+
+<script setup lang="ts">
+
+    // ##############
+    // # インポート #
+    // ##############
+
+    import { ref } from 'vue';
+
+    // ++++++++++++++++++++++++++++++++++
+    // + インポート　＞　コンポーネント +
+    // ++++++++++++++++++++++++++++++++++
+
+    // アルファベット順
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToBackToTop from '@/components/ButtonToBackToTop.vue';
+    import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
+
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import TheAppHeader from '../the-app-header.vue';
+
+
+    // ################
+    // # オブジェクト #
+    // ################
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１ +
+    // ++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1Zoom = ref<number>(0.375);    // ズーム
+    const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
+
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　自機１ +
+    // ++++++++++++++++++++++++++++
+
+    const player1Input = <Record<string, boolean>>{                     // 入力
+        // アルファベット順
+        " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
+    };
+
+
+    // ######################
+    // # イベントハンドラー #
+    // ######################
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　ゲームマシン・ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+
+    /**
+     * 左。
+     */
+    function onLeftButtonPressed() : void {
+        player1Input.ArrowLeft = true;
+    }
+
+
+    function onLeftButtonReleased() : void {
+        player1Input.ArrowLeft = false;
+    }
+
+
+    /**
+     * 上。
+     */
+    function onUpButtonPressed() : void {
+        player1Input.ArrowUp = true;
+    }
+
+
+    function onUpButtonReleased() : void {
+        player1Input.ArrowUp = false;
+    }
+
+
+    /**
+     * 右。
+     */
+    function onRightButtonPressed() : void {
+        player1Input.ArrowRight = true;
+    }
+
+
+    function onRightButtonReleased() : void {
+        player1Input.ArrowRight = false;
+    }
+
+
+    /**
+     * 下。
+     */
+    function onDownButtonPressed() : void {
+        player1Input.ArrowDown = true;
+    }
+
+
+    function onDownButtonReleased() : void {
+        player1Input.ArrowDown = false;
+    }
+
+
+    /**
+     * スペース・キー。
+     */
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
+    }
+
+
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
+    }
+
+    // ++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　その他 +
+    // ++++++++++++++++++++++++++++++++++
+
+    // /**
+    //  * 電源ボタン押下時
+    //  */
+    // function onPowerOnButtonPushed() : void {
+    //     if(gameMachine1IsPowerOn.value) {
+    //         powerOff();
+    //         return;
+    //     }
+
+    //     powerOn();
+    // }
+
+
+    // /**
+    //  * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
+    //  */
+    // function onGameStartOrEndButtonPushed() : void {
+    //     if(gameMachine1IsPlaying.value) {
+    //         gameStop();
+    //         return;
+    //     }
+
+    //     gameStart();
+    // }
+
+
+    // /**
+    //  * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
+    //  */
+    // function onGamePauseOrRestartButtonPushed() : void {
+    //     if(gameMachine1IsPause.value) {
+    //         // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
+    //         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+    //     } else {
+    //         stopwatch1Ref.value?.timerStop();  // タイマーをストップ
+    //     }
+
+    //     gameMachine1IsPause.value = !gameMachine1IsPause.value;
+    // }
+
+
+    // /**
+    //  * ［お好み設定パネル１］を開くボタン。
+    //  */
+    // function onPreferences1ButtonPressed() : void {
+    //     gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
+    // }
+
+</script>
+
+<style lang="css" scoped>
+    @import '@/styles/misc.css';
+    @import '@/styles/talk-pen.css';
+</style>

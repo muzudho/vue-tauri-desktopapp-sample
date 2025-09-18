@@ -14,9 +14,9 @@
     <section class="sec-1 pt-6 mb-6">
 
         <!-- ゲームの操作方法 -->
-        <v-btn @click="gameMachine1ManualIsShowing = !gameMachine1ManualIsShowing">{{ gameMachine1ManualIsShowing ? 'ゲームの遊び方を閉じる' : 'ゲームの遊び方を表示' }}</v-btn>
-        <section class="sec-1 pt-6 pb-6" v-if="gameMachine1ManualIsShowing">
-            <p>
+        <div class="mb-6">
+            <v-btn @click="gameMachine1ManualIsShowing = !gameMachine1ManualIsShowing">{{ gameMachine1ManualIsShowing ? 'ゲームの遊び方を閉じる' : 'ゲームの遊び方を表示' }}</v-btn>
+            <section class="sec-1 pt-6 pb-6" v-if="gameMachine1ManualIsShowing">
                 このゲームは、星を撮影する、という状況を見立てたゲームだぜ。<br/>
                 <br/>
                 下に黒い画面が見えるように、ウィンドウを広げてくれだぜ。<br/>
@@ -28,16 +28,14 @@
                 飽きたら終わりだぜ。<br/>
                 <br/>
                 じゃあ、［ゲームの遊び方を閉じる］ボタンをクリックしてくれだぜ。
-            </p>
-        </section>
+            </section>
+        </div>
 
-        <p class="mt-6">ボタン</p>
-        <section class="sec-0 mb-6">
-            <!-- ボタンを並べる -->
+        <!-- 外付けシステムボタン -->
+        <section class="mb-6">
 
             
             <v-btn
-                class="code-key"
                 @touchstart.prevent="button1Ref?.press($event, onPowerOnButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
@@ -49,8 +47,7 @@
 
             
             <v-btn
-                class="code-key"
-                :disabled="!startButton1Enabled"
+                :disabled="!gameMachine1GameStartButton1Enabled"
                 @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
@@ -62,8 +59,7 @@
 
 
             <v-btn
-                class="code-key"
-                :disabled="!pauseButton1Enabled"
+                :disabled="!gameMachine1GamePauseButton1Enabled"
                 @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
@@ -71,18 +67,20 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ gameMachine1IsPause ? "⏯" : "⏸" }}</v-btn>
+            >{{ gameMachine1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
 
 
         </section>
+
+
         <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
-            スコア： {{ gameMachine1Score }}　　残り時間: {{ Math.floor((gameMachine1MaxCount - stopwatch1Count) / commonSeconds) }} . {{ (gameMachine1MaxCount - stopwatch1Count) % commonSeconds }}
+            スコア： {{ gameMachine1Score }}　　残り時間: {{ Math.floor((gameMachine1MaxCount - gameMachine1Stopwatch1Count) / commonSeconds) }} . {{ (gameMachine1MaxCount - gameMachine1Stopwatch1Count) % commonSeconds }}
         </p>
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
-            ref="stopwatch1Ref"
-            v-on:countUp="(countNum: number) => { stopwatch1Count = countNum; }"
+            ref="gameMachine1Stopwatch1Ref"
+            v-on:countUp="(countNum: number) => { gameMachine1Stopwatch1Count = countNum; }"
             style="display: none;" />
 
         
@@ -330,7 +328,7 @@
     // ################
 
     // ++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　拡張機能 +
+    // + オブジェクト　＞　機能拡張 +
     // ++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
@@ -341,39 +339,21 @@
 
     const gameMachine1Zoom = ref<number>(0.375);    // ズーム
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
-    const gameMachine1ManualIsShowing = ref<boolean>(false);    // ゲームの操作方法・遊び方説明書を表示中
-    const gameMachine1Visibility = ref<string>('hidden');
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
-    const gameMachine1IsPause = ref<boolean>(false);    // ゲームは一時停止中
+    const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
+    const gameMachine1Visibility = ref<string>('hidden');
+    const gameMachine1ManualIsShowing = ref<boolean>(false);    // ゲームの操作方法・遊び方説明書を表示中
     const gameMachine1Score = ref<number>(0);   // 得点
     const gameMachine1MaxCount = computed(()=>60 * commonSeconds);  // ゲーム時間は１分
     const gameMachine1ScheduleStep = ref<number>(0);    // 星の出現スケジュール
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　ストップウォッチ１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const startButton1Enabled = ref<boolean>(false);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　一時停止／再開ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const pauseButton1Enabled = ref<boolean>(false);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　お好み設定 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const gameMachine1PreferencesIsShowing = ref<boolean>(false);
-
-    // ++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ストップウォッチ１ +
-    // ++++++++++++++++++++++++++++++++++++++++
-
-    const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null); // Stopwatch のインスタンス
-    const stopwatch1Count = ref<number>(0);   // カウントの初期値
-    watch(stopwatch1Count, (newCount) => {
+    const gameMachine1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
+    const gameMachine1Stopwatch1Count = ref<number>(0);   // カウントの初期値
+    watch(gameMachine1Stopwatch1Count, (newCount) => {
         // カウントが変わったら、何か処理をしたい。
 
         // ----------------------------------------------------------
@@ -572,9 +552,27 @@
 
         if (newCount >= gameMachine1MaxCount.value) {
             // ゲーム停止
-            stopwatch1Ref.value?.timerStop();  // タイマーをストップ
+            gameMachine1Stopwatch1Ref.value?.timerStop();  // タイマーをストップ
         }
     });
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1GameStartButton1Enabled = ref<boolean>(false);
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　一時停止／再開ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1GamePauseButton1Enabled = ref<boolean>(false);
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　お好み設定 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1PreferencesIsShowing = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -599,7 +597,7 @@
     const star1Visibility = ref<'hidden' | 'visible'>('hidden');    // 星の表示／非表示
 
     const star1Files = computed(()=>{
-        return star1StartFiles.value + Math.floor((stopwatch1Count.value - star1StartTime.value) / 20);
+        return star1StartFiles.value + Math.floor((gameMachine1Stopwatch1Count.value - star1StartTime.value) / 20);
     });
     const star1Ranks = computed(()=>{
         return star1StartRanks.value;
@@ -771,7 +769,7 @@
 
     onMounted(() => {
         sfxLoad();
-        powerOn();  // 電源を入れる演出
+        gamePowerOn();  // 電源を入れる演出
         gameInit();
         gameLoopStart();
 
@@ -822,20 +820,20 @@
     });
 
 
-    // ++++++++++++++++++++++++++++++++++
-    // + イベントハンドラー　＞　その他 +
-    // ++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　外付けシステムボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
 
     /**
      * 電源ボタン押下時
      */
     function onPowerOnButtonPushed() : void {
         if(gameMachine1IsPowerOn.value) {
-            powerOff();
+            gamePowerOff();
             return;
         }
 
-        powerOn();
+        gamePowerOn();
     }
 
 
@@ -856,16 +854,19 @@
      * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
      */
     function onGamePauseOrRestartButtonPushed() : void {
-        if(gameMachine1IsPause.value) {
+        if(gameMachine1IsPlayingPause.value) {
             // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
-            stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+            gameMachine1Stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         } else {
-            stopwatch1Ref.value?.timerStop();  // タイマーをストップ
+            gameMachine1Stopwatch1Ref.value?.timerStop();  // タイマーをストップ
         }
 
-        gameMachine1IsPause.value = !gameMachine1IsPause.value;
+        gameMachine1IsPlayingPause.value = !gameMachine1IsPlayingPause.value;
     }
 
+    // ++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　その他 +
+    // ++++++++++++++++++++++++++++++++++
 
     /**
      * ［お好み設定パネル１］を開くボタン。
@@ -879,34 +880,37 @@
     // # サブルーチン #
     // ################
 
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // + サブルーチン　＞　外付けシステムボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++
 
-    function powerOn() : void {
-        startButton1Enabled.value = true;
+    function gamePowerOn() : void {
+        gameMachine1GameStartButton1Enabled.value = true;
         gameMachine1Visibility.value = 'visible';
         gameMachine1IsPowerOn.value = true;
     }
 
 
-    function powerOff() : void {
+    function gamePowerOff() : void {
         if(gameMachine1IsPlaying.value) {    // ゲーム中なら、停止させます
             gameStop();
         }
 
-        startButton1Enabled.value = false;
+        gameMachine1GameStartButton1Enabled.value = false;
         gameMachine1Visibility.value = 'hidden';
         gameMachine1IsPowerOn.value = false;
     }
 
 
     function gameStart() : void {
-        stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-        pauseButton1Enabled.value = true;
+        gameMachine1Stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+        gameMachine1GamePauseButton1Enabled.value = true;
         gameMachine1IsPlaying.value = !gameMachine1IsPlaying.value;
     }
 
 
     function gameStop() : void {
-        pauseButton1Enabled.value = false;
+        gameMachine1GamePauseButton1Enabled.value = false;
         gameInit(); // ゲームは終了したので、初期状態に戻します
     }
 
@@ -915,16 +919,21 @@
      * ゲームの初期化
      */
     function gameInit() : void {
-        stopwatch1Ref.value?.timerReset();  // タイマーをリセット
+        gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
-        gameMachine1Score.value = 0;
+        // 外付けシステムボタンをリセット
         gameMachine1IsPlaying.value = false;
-        gameMachine1IsPause.value = false;
-        gameMachine1ScheduleStep.value = 0;
+        gameMachine1IsPlayingPause.value = false;
 
+        // ゲームデータをリセット
+        gameMachine1Score.value = 0;
+        gameMachine1ScheduleStep.value = 0;
         star1Visibility.value = 'hidden';
     }
 
+    // ++++++++++++++++++++++++++++
+    // + サブルーチン　＞　その他 +
+    // ++++++++++++++++++++++++++++
 
     /**
      * ゲームのメインループ開始

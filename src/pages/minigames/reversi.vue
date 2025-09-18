@@ -11,6 +11,48 @@
     <section class="sec-1 pt-6 mb-6">
 
 
+        <!-- 外付けシステムボタン -->
+        <section class="mb-6">
+
+            
+            <v-btn
+                @touchstart.prevent="button1Ref?.press($event, onPowerOnButtonPushed, {repeat: false});"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPowerOnButtonPushed, {repeat: false})"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ gameMachine1IsPowerOn ? "Off" : "On" }}</v-btn>
+
+            
+            <v-btn
+                :disabled="!gameMachine1GameStartButton1Enabled"
+                @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: false})"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ gameMachine1IsPlaying ? "⏹" : "▶" }}</v-btn>
+
+
+            <v-btn
+                :disabled="!gameMachine1GamePauseButton1Enabled"
+                @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ gameMachine1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
+
+
+        </section>
+
+
         <!-- ゲームマシン１ -->
         <game-machine-waratch2
             :hardLocationStyle="{
@@ -58,9 +100,11 @@
     // ++++++++++++++++++++++++++++++++++
 
     // アルファベット順
+    import Button20250822 from '@/components/Button20250822.vue';
     import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
     import ButtonToBackToTop from '@/components/ButtonToBackToTop.vue';
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
+    import Stopwatch from '@/components/Stopwatch.vue';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
@@ -73,12 +117,39 @@
     // # オブジェクト #
     // ################
 
+    // ++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　機能拡張 +
+    // ++++++++++++++++++++++++++++++
+
+    const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
+
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１ +
     // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1Zoom = ref<number>(0.375);    // ズーム
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
+    const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
+    const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
+    const gameMachine1Visibility = ref<string>('hidden');
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　ストップウォッチ１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1GameStartButton1Enabled = ref<boolean>(false);
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　一時停止／再開ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1GamePauseButton1Enabled = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　自機１ +
@@ -162,50 +233,53 @@
         player1Input[" "] = false;
     }
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　外付けシステムボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+
+    /**
+     * 電源ボタン押下時
+     */
+    function onPowerOnButtonPushed() : void {
+        if(gameMachine1IsPowerOn.value) {
+            gamePowerOff();
+            return;
+        }
+
+        gamePowerOn();
+    }
+
+
+    /**
+     * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
+     */
+    function onGameStartOrEndButtonPushed() : void {
+        if(gameMachine1IsPlaying.value) {
+            gameStop();
+            return;
+        }
+
+        gameStart();
+    }
+
+
+    /**
+     * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
+     */
+    function onGamePauseOrRestartButtonPushed() : void {
+        if(gameMachine1IsPlayingPause.value) {
+            // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
+            gameMachine1Stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+        } else {
+            gameMachine1Stopwatch1Ref.value?.timerStop();  // タイマーをストップ
+        }
+
+        gameMachine1IsPlayingPause.value = !gameMachine1IsPlayingPause.value;
+    }
+
     // ++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　その他 +
     // ++++++++++++++++++++++++++++++++++
-
-    // /**
-    //  * 電源ボタン押下時
-    //  */
-    // function onPowerOnButtonPushed() : void {
-    //     if(gameMachine1IsPowerOn.value) {
-    //         powerOff();
-    //         return;
-    //     }
-
-    //     powerOn();
-    // }
-
-
-    // /**
-    //  * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
-    //  */
-    // function onGameStartOrEndButtonPushed() : void {
-    //     if(gameMachine1IsPlaying.value) {
-    //         gameStop();
-    //         return;
-    //     }
-
-    //     gameStart();
-    // }
-
-
-    // /**
-    //  * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
-    //  */
-    // function onGamePauseOrRestartButtonPushed() : void {
-    //     if(gameMachine1IsPause.value) {
-    //         // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
-    //         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
-    //     } else {
-    //         stopwatch1Ref.value?.timerStop();  // タイマーをストップ
-    //     }
-
-    //     gameMachine1IsPause.value = !gameMachine1IsPause.value;
-    // }
-
 
     // /**
     //  * ［お好み設定パネル１］を開くボタン。
@@ -213,6 +287,62 @@
     // function onPreferences1ButtonPressed() : void {
     //     gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
     // }
+
+
+    // ################
+    // # サブルーチン #
+    // ################
+
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // + サブルーチン　＞　外付けシステムボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++
+
+    function gamePowerOn() : void {
+        gameMachine1GameStartButton1Enabled.value = true;
+        gameMachine1Visibility.value = 'visible';
+        gameMachine1IsPowerOn.value = true;
+    }
+
+
+    function gamePowerOff() : void {
+        if(gameMachine1IsPlaying.value) {    // ゲーム中なら、停止させます
+            gameStop();
+        }
+
+        gameMachine1GameStartButton1Enabled.value = false;
+        gameMachine1Visibility.value = 'hidden';
+        gameMachine1IsPowerOn.value = false;
+    }
+
+
+    function gameStart() : void {
+        gameMachine1Stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+        gameMachine1GamePauseButton1Enabled.value = true;
+        gameMachine1IsPlaying.value = !gameMachine1IsPlaying.value;
+    }
+
+
+    function gameStop() : void {
+        gameMachine1GamePauseButton1Enabled.value = false;
+        gameInit(); // ゲームは終了したので、初期状態に戻します
+    }
+
+
+    /**
+     * ゲームの初期化
+     */
+    function gameInit() : void {
+        gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
+
+        // 外付けシステムボタンをリセット
+        gameMachine1IsPlaying.value = false;
+        gameMachine1IsPlayingPause.value = false;
+
+        // ゲームデータをリセット
+        //gameMachine1Score.value = 0;
+        //gameMachine1ScheduleStep.value = 0;
+        //star1Visibility.value = 'hidden';
+    }
 
 </script>
 
