@@ -98,6 +98,7 @@
             }"
             :screenWidth="appZoom * (board1FileNum - 2 * board1WithMaskFrSize) * tileBoard1TileWidth"
             :screenHeight="appZoom * (board1RankNum - 2 * board1WithMaskFrSize) * tileBoard1TileHeight"
+            :powerOn="true"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
             v-on:onUpButtonPressed="onUpButtonPressed"

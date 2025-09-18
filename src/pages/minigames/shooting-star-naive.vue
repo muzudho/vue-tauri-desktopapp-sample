@@ -94,6 +94,7 @@
             }"
             :screenWidth="gameMachine1Zoom * board1FileNum * tileBoard1TileWidth"
             :screenHeight="gameMachine1Zoom * board1RankNum * tileBoard1TileHeight"
+            :powerOn="gameMachine1IsPowerOn"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
             v-on:onUpButtonPressed="onUpButtonPressed"
