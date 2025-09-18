@@ -95,11 +95,11 @@
                 >
                     <!-- グリッド -->
                     <div
-                        v-for="i in tileBoard1Area"
-                        :key="i"
+                        v-for="sq in tileBoard1Area"
+                        :key="sq"
                         :style="{
-                            top: `${Math.floor((i - 1) / tileBoard1FileNum) * tileBoard1TileHeight}px`,
-                            left: `${((i - 1) % tileBoard1FileNum) * tileBoard1TileWidth}px`,
+                            top: `${Math.floor((sq - 1) / tileBoard1FileNum) * tileBoard1TileHeight}px`,
+                            left: `${((sq - 1) % tileBoard1FileNum) * tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
                         }"
@@ -111,16 +111,16 @@
 
                     <!-- マス -->
                     <v-btn
-                        v-for="i in range(0, gameBoard1Area)"
-                        :key="i"
+                        v-for="sq in range(0, gameBoard1Area)"
+                        :key="sq"
                         :style="{
-                            left: `${(i % gameBoard1FileNum + 2) * tileBoard1TileWidth}px`,
-                            top: `${(Math.floor(i / gameBoard1FileNum) + 2) * tileBoard1TileHeight}px`,
+                            left: `${(sq % gameBoard1FileNum + 2) * tileBoard1TileWidth}px`,
+                            top: `${(Math.floor(sq / gameBoard1FileNum) + 2) * tileBoard1TileHeight}px`,
                             minWidth: `${tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
-                            color: gameBoard1StoneColorArray[i],    /* 石の色 */
-                            backgroundColor: `${(i % gameBoard1FileNum + Math.floor(i/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                            color: gameBoard1StoneColorArray[sq],    /* 石の色 */
+                            backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
                         }"
                         style="
                             position: absolute;
@@ -128,11 +128,12 @@
                             line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
                             z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
                         "
-                    >{{ gameBoard1StoneShapeArray[i] }}</v-btn>
+                        @click="onGameBoard1Clicked(sq)"
+                    >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
                 </div>
             </template>
         </game-machine-waratch2>
-        
+        {{ gameBoard1DebugMessage }}
 
         <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
@@ -291,13 +292,14 @@
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     })
     const gameBoard1StoneShapeArray = ref<string[]>(new Array(64).fill(''));    // 石の形
-    for(let i: number=0; i<gameBoard1Area.value; i++){
-        gameBoard1StoneShapeArray.value[i] = '●'
+    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+        gameBoard1StoneShapeArray.value[sq] = '●'
     }
     const gameBoard1StoneColorArray = ref<string[]>(new Array(64).fill(''));    // 石の色
-    for(let i: number=0; i<gameBoard1Area.value; i++){
-        gameBoard1StoneColorArray.value[i] = 'brown'
+    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+        gameBoard1StoneColorArray.value[sq] = 'brown'
     }
+    const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
     // ######################
     // # イベントハンドラー #
@@ -421,6 +423,19 @@
      */
     function onGamePreferences1ButtonPressed() : void {
         gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
+    }
+
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　ゲーム盤１ +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    /**
+     * 
+     * @param sq （0から始まる）マス番号
+     */
+    function onGameBoard1Clicked(sq: number) : void {
+        gameBoard1DebugMessage.value = `sq=${sq}`;
     }
 
 
