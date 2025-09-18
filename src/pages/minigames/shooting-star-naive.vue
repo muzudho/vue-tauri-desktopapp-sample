@@ -21,7 +21,7 @@
                 <br/>
                 下に黒い画面が見えるように、ウィンドウを広げてくれだぜ。<br/>
                 この黒い画面は宇宙な。<br/>
-                ［ゲームスタート］ボタンを押すと、ゲームが始まるぜ。<br/>
+                ［▶］ボタンを押すと、ゲームが始まるぜ。<br/>
                 たまに星が流れてくる。<br/>
                 60秒の間に、カメラのファインダー（点線の長方形だ）を上下左右に動かして、星をファインダーの中に入っているときに、［（スペース）］キーを押してくれだぜ。これで 100点 だぜ。<br/>
                 <br/>
@@ -35,24 +35,24 @@
                 <!-- ボタンを並べる -->
                 <v-btn
                     class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: true});"
+                    @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
                     @touchend="button1Ref?.release();"
                     @touchcancel="button1Ref?.release();"
                     @touchleave="button1Ref?.release();"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: true})"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: false})"
                     @mouseup="button1Ref?.release();"
                     @mouseleave="button1Ref?.release();"
-                >{{ appGameIsPlaying ? "ゲーム終了" : "ゲームスタート" }}</v-btn>
+                >{{ appGameIsPlaying ? "⏹" : "▶" }}</v-btn>
                 <v-btn
                     class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: true});"
+                    @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
                     @touchend="button1Ref?.release();"
                     @touchcancel="button1Ref?.release();"
                     @touchleave="button1Ref?.release();"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: true})"
+                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
                     @mouseup="button1Ref?.release();"
                     @mouseleave="button1Ref?.release();"
-                >{{ appGameIsPause ? "再開" : "一時停止" }}</v-btn>
+                >{{ appGameIsPause ? "⏯" : "⏸" }}</v-btn>
             </li>
         </ul>
         <div>
@@ -651,7 +651,7 @@
     // ################
 
     /**
-     * ［ゲームスタート］または［ゲーム終了］ボタン押下時。（状態により切り替わります）
+     * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
      */
     function onGameStartOrEndButtonPushed() : void {
         if(appGameIsPlaying.value) {
@@ -667,7 +667,7 @@
 
 
     /**
-     * ［一時停止］または［再開］ボタン押下時。（状態により切り替わります）
+     * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
      */
     function onGamePauseOrRestartButtonPushed() : void {
         if(appGameIsPause.value) {
