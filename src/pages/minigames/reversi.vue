@@ -314,7 +314,7 @@
             return gameBoard1StoneColorArray.value[sq] == 0;
         }
     });
-    const gameBoard1Turn: number = 1;
+    const gameBoard1Turn = ref<number>(1);
 
 
     // ######################
@@ -385,10 +385,9 @@
 
         // TODO: 後で消す
         // 適当に石を置く
-        putStone(
-            Math.floor(Math.random() * gameBoard1Area.value),
-            Math.floor(Math.random() * 2) + 1
-        );
+        const sq = Math.floor(Math.random() * gameBoard1Area.value);
+        const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+        putStone(sq, color);
     }
 
 
@@ -479,6 +478,7 @@
 
     function putStone(sq: number, color: number) : void {
         gameBoard1StoneColorArray.value[sq] = color;
+        gameBoard1Turn.value = gameBoard1Turn.value % 2 + 1;    // 1 なら 2 に、2 なら 1 に
     }
 
     // ################
