@@ -96,8 +96,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="appZoom * (board1FileNum - 2 * board1WithMaskFrSize) * tileBoard1TileWidth"
-            :screenHeight="appZoom * (board1RankNum - 2 * board1WithMaskFrSize) * tileBoard1TileHeight"
+            :screenWidth="gameMachine1Zoom * (board1FileNum - 2 * board1WithMaskFrSize) * tileBoard1TileWidth"
+            :screenHeight="gameMachine1Zoom * (board1RankNum - 2 * board1WithMaskFrSize) * tileBoard1TileHeight"
             :powerOn="true"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -119,7 +119,7 @@
                         top: `${-tileBoard1TileHeight}px`,
                         width: `${board1FileNum * tileBoard1TileWidth}px`,
                         height: `${board1RankNum * tileBoard1TileHeight}px`,
-                        zoom: appZoom,
+                        zoom: gameMachine1Zoom,
                         clipPath: `inset(
                             ${tileBoard1TileHeight}px
                             ${tileBoard1TileWidth}px
@@ -174,15 +174,15 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
+            >{{ gameMachine1PreferencesIsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
             <section
-                v-if="preferences1IsShowing"
+                v-if="gameMachine1PreferencesIsShowing"
                 class="sec-0 pt-6 pb-6"
                 style="background-color: rgb(0, 0, 0, 0.1);"
             >
                 <v-slider
                     label="ズーム"
-                    v-model="appZoom"
+                    v-model="gameMachine1Zoom"
                     :min="1"
                     :max="4"
                     step="0.125"
@@ -663,16 +663,6 @@ color = i % 2;
     const commonPapepoKingName = "パペポ王";
 
 
-    // ############################
-    // # アプリケーション・データ #
-    // ############################
-    //
-    // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
-    //
-
-    const appZoom = ref<number>(1);    // ズーム
-
-
     // ################
     // # オブジェクト #
     // ################
@@ -696,17 +686,23 @@ color = i % 2;
     const stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
     const stopwatch1Count = ref<number>(0);   // カウントの初期値
 
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１ +
+    // ++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1Zoom = ref<number>(1);    // ズーム
+
     // ++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　設定パネル１ +
     // ++++++++++++++++++++++++++++++++++
 
     const problem1IsShowing = ref<boolean>(false);    // 設定を表示中
 
-    // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　お好み設定１ +
-    // ++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　お好み設定 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const preferences1IsShowing = ref<boolean>(false);
+    const gameMachine1PreferencesIsShowing = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　デバッグ情報パネル１ +
@@ -1205,7 +1201,7 @@ color = i % 2;
      * ［お好み設定パネル１］を開くボタン。
      */
     function onPreferences1ButtonPressed() : void {
-        preferences1IsShowing.value = !preferences1IsShowing.value;
+        gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
     }
 
 

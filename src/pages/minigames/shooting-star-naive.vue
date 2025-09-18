@@ -86,7 +86,7 @@
             style="display: none;" />
 
         
-        <!-- ゲームマシン -->
+        <!-- ゲームマシン１ -->
         <game-machine-waratch2
             :hardLocationStyle="{
                 left: '0px',
@@ -174,6 +174,36 @@
             </template>
         </game-machine-waratch2>
 
+
+        <section class="sec-0 mt-6 mb-6">
+            <!-- お好み設定パネル１ -->
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ gameMachine1PreferencesIsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
+            <section
+                v-if="gameMachine1PreferencesIsShowing"
+                class="sec-0 pt-6 pb-6"
+                style="background-color: rgb(0, 0, 0, 0.1);"
+            >
+                <v-slider
+                    label="ズーム"
+                    v-model="gameMachine1Zoom"
+                    :min="1"
+                    :max="4"
+                    step="0.125"
+                    showTicks="always"
+                    thumbLabel="always" />
+            </section>
+        </section>
+
+        
         <!-- デバッグ用 -->
         <!--
             <p>スケジュール・ステップ: {{ appGameScheduleStep.value }}</p>
@@ -295,9 +325,9 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
-    // ++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン +
-    // ++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１ +
+    // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1ManualIsShowing = ref<boolean>(false);    // ゲームの操作方法・遊び方説明書を表示中
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
@@ -309,17 +339,23 @@
     const gameMachine1MaxCount = computed(()=>60 * commonSeconds);  // ゲーム時間は１分
     const gameMachine1ScheduleStep = ref<number>(0);    // 星の出現スケジュール
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン　＞　開始／終了ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const startButton1Enabled = ref<boolean>(false);
 
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン　＞　一時停止／再開ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　一時停止／再開ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const pauseButton1Enabled = ref<boolean>(false);
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　お好み設定 +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine1PreferencesIsShowing = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ１ +
@@ -987,6 +1023,14 @@
 
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
+    }
+
+
+    /**
+     * ［お好み設定パネル１］を開くボタン。
+     */
+    function onPreferences1ButtonPressed() : void {
+        gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
     }
 
 </script>
