@@ -19,7 +19,9 @@
     <section class="sec-1 pt-6 mb-6">
         
         <!-- 免責 -->
+        <!--
         <v-alert type="warning" class="mb-6" title="免責！" text="画面は開発中のものだぜ（＾▽＾）！" closable />
+        -->
 
         <!-- ストップウォッチ。デバッグに使いたいときは、 display: none; を消してください。 -->
         <stopwatch
@@ -96,8 +98,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="gameMachine1Zoom * (board1FileNum - 2 * board1WithMaskFrSize) * tileBoard1TileWidth"
-            :screenHeight="gameMachine1Zoom * (board1RankNum - 2 * board1WithMaskFrSize) * tileBoard1TileHeight"
+            :screenWidth="gameMachine1Zoom * (tileBoard1FileNum - 2 * board1WithMaskFrSize) * tileBoard1TileWidth"
+            :screenHeight="gameMachine1Zoom * (tileBoard1RankNum - 2 * board1WithMaskFrSize) * tileBoard1TileHeight"
             :powerOn="true"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -117,8 +119,8 @@
                         position: 'relative',
                         left: `${-tileBoard1TileWidth}px`,
                         top: `${-tileBoard1TileHeight}px`,
-                        width: `${board1FileNum * tileBoard1TileWidth}px`,
-                        height: `${board1RankNum * tileBoard1TileHeight}px`,
+                        width: `${tileBoard1FileNum * tileBoard1TileWidth}px`,
+                        height: `${tileBoard1RankNum * tileBoard1TileHeight}px`,
                         zoom: gameMachine1Zoom,
                         clipPath: `inset(
                             ${tileBoard1TileHeight}px
@@ -155,8 +157,8 @@
                         ref="outOfSight1Ref"
                         :tileBoard1TileWidth="tileBoard1TileWidth"
                         :tileBoard1TileHeight="tileBoard1TileHeight"
-                        :board1FileNum="board1FileNum"
-                        :board1RankNum="board1RankNum"
+                        :board1FileNum="tileBoard1FileNum"
+                        :board1RankNum="tileBoard1RankNum"
                         class="parent-mask" />
                 </div>
             </template>
@@ -209,9 +211,9 @@
                 <!-- マスクが被っているところも含めた盤のサイズ： -->
                 <v-slider
                     label="水平方向のタイル数"
-                    v-model="board1FileNum"
-                    :min="board1FileMin"
-                    :max="board1FileMax"
+                    v-model="tileBoard1WithoutMaskFileNum"
+                    :min="tileBoard1FileMin - 2 * board1WithMaskFrSize"
+                    :max="tileBoard1FileMax - 2 * board1WithMaskFrSize"
                     step="1"
                     showTicks="always"
                     thumbLabel="always" />
@@ -219,9 +221,9 @@
 
                 <v-slider
                     label="垂直方向のタイル数"
-                    v-model="board1RankNum"
-                    :min="board1RankMin"
-                    :max="board1RankMax"
+                    v-model="tileBoard1WithoutMaskRankNum"
+                    :min="tileBoard1RankMin - 2 * board1WithMaskFrSize"
+                    :max="tileBoard1RankMax - 2 * board1WithMaskFrSize"
                     step="1"
                     showTicks="always"
                     thumbLabel="always" />
@@ -335,16 +337,6 @@
             <br/>
             これはバグだぜ！
         </talk-balloon>
-        <!--
-            <p>
-                <section v-if="choices1Num==0 || choices1Num==3 || choices1Num==4">
-                </section>
-                <section v-if="choices1Num==1 || choices1Num==2">
-                    キフワラニャン　「おお……、市松模様になっているような……」<br/>
-                </section>
-            </p>
-            <br/>
-        -->
 
         <talk-illustration
             src="/img/quiz/by-grok/202508__grok__30-2023-spellScroll-o1o0.png"
@@ -358,7 +350,7 @@
             class="mb-6"
         >
             リフォーム会社が残した、床のタイルの色を決める魔法の呪文は<br/>
-            👇これじゃ」
+            👇これじゃ
         </talk-balloon>
 
         <pre
@@ -385,7 +377,7 @@ color = i % 2;
             :name="commonPapepoKingName"
             :device="compatibleDevice1Ref?.device"
         >
-            この呪文を、チョチョイと直してほしい！」
+            この呪文を、チョチョイと直してほしい！
         </talk-balloon>
 
         <talk-balloon
@@ -397,7 +389,7 @@ color = i % 2;
         >
             おー、お安い御用だぜ。<br/>
             <br/>
-            どう直したらいいか、👇下の選択肢から選んでくれだぜ！」
+            どう直したらいいか、👇下の選択肢から選んでくれだぜ！
         </talk-balloon>
 
         <p class="mb-6">
@@ -465,7 +457,7 @@ color = i % 2;
         >
             上の選択肢を選んだら、<br/>
             画面を👆上にスクロールしてさっきの床を確認して、これで合ってると思ったら、<br/>
-            👇下の［この答えで確定する］ボタンを押してくれだぜ！」<br/>
+            👇下の［この答えで確定する］ボタンを押してくれだぜ！<br/>
         </talk-balloon>
 
         <v-btn
@@ -497,7 +489,7 @@ color = i % 2;
                     :alt="commonPapepoKingAlt"
                     :name="commonPapepoKingName"
                     :device="compatibleDevice1Ref?.device">
-                    おお、さすがキフワラニャン　床が市松模様になったわい。
+                    おお、さすがキフワラニャン。どの部屋も床が市松模様になったわい。
                 </talk-balloon>
 
 
@@ -693,17 +685,29 @@ color = i % 2;
 
     const tileBoard1TileWidth = 32;
     const tileBoard1TileHeight = 32;
-    const board1FileMin = 6;
-    const board1RankMin = 6;
-    const board1FileMax = 16;
-    const board1RankMax = 16;
-    const board1FileNum = ref<number>(7);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
-    const board1RankNum = ref<number>(7);   // 段の数
+    const tileBoard1FileMin = 6;
+    const tileBoard1RankMin = 6;
+    const tileBoard1FileMax = 16;
+    const tileBoard1RankMax = 16;
+    const tileBoard1FileNum = ref<number>(7);   // 筋の数。ただし、右側と下側に１マス余分に付いているマスクは含まない。
+    const tileBoard1RankNum = ref<number>(7);   // 段の数
     const board1Area = computed(()=> {  // 盤のマス数
-        return board1FileNum.value * board1RankNum.value;
+        return tileBoard1FileNum.value * tileBoard1RankNum.value;
     });
     // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskFrSize: number = 1; // マスクの幅（単位：マス）
+    const tileBoard1WithoutMaskFileNum = computed<number>({
+        get: ()=> tileBoard1FileNum.value - 2 * board1WithMaskFrSize,
+        set: (newValue: number) => {
+            tileBoard1FileNum.value = newValue + 2 * board1WithMaskFrSize;
+        }
+    });
+    const tileBoard1WithoutMaskRankNum = computed<number>({
+        get: ()=> tileBoard1RankNum.value - 2 * board1WithMaskFrSize,
+        set: (newValue: number) => {
+            tileBoard1RankNum.value = newValue + 2 * board1WithMaskFrSize;
+        }
+    });
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　像盤１ +
@@ -717,16 +721,16 @@ color = i % 2;
     watch(printing1OutOfSightIsLock, (newValue: boolean)=>{
         player1CanBoardEdgeWalkingIsEnabled.value = newValue;
     });
-    const printing1FileMax = board1FileMax;
-    const printing1RankMax = board1RankMax;
+    const printing1FileMax = tileBoard1FileMax;
+    const printing1RankMax = tileBoard1RankMax;
     const printing1AreaMax = printing1FileMax * printing1RankMax;
     const printing1FileNum = computed<number>({ // 列数。印字表のサイズを、盤と同期。
-        get: () => { return board1FileNum.value; },
-        set: (value) => { board1FileNum.value = value; }
+        get: () => { return tileBoard1FileNum.value; },
+        set: (value) => { tileBoard1FileNum.value = value; }
     });
     const printing1RankNum = computed<number>({ // 行数。印字表のサイズを、盤と同期。
-        get: () => { return board1RankNum.value; },
-        set: (value) => { board1RankNum.value = value; }
+        get: () => { return tileBoard1RankNum.value; },
+        set: (value) => { tileBoard1RankNum.value = value; }
     });
     // のちのち自機を１ドットずつ動かすことを考えると、 File, Rank ではデジタルになってしまうので、 Left, Top で指定したい。
     const printing1Left = ref<number>(0);
@@ -806,8 +810,8 @@ color = i % 2;
     const printing1MotionWalkingFrames = 16;       // 歩行フレーム数
     const sourceTilemapRectangles : Rectangle[] = [];
     for (let i = 0; i < printing1AreaMax; i++) {   // 最大サイズで作っておく。
-        const files = i % board1FileNum.value;
-        const ranks = Math.floor(i / board1FileNum.value);
+        const files = i % tileBoard1FileNum.value;
+        const ranks = Math.floor(i / tileBoard1FileNum.value);
         sourceTilemapRectangles.push({
             top: ranks * tileBoard1TileHeight,
             left: files * tileBoard1TileWidth,
@@ -818,8 +822,8 @@ color = i % 2;
     const imageBoard1GetTileStyleByTileSq = createGetTileStyleByTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
-        board1FileNum,
-        board1RankNum,
+        tileBoard1FileNum,
+        tileBoard1RankNum,
         printing1Left,
         printing1Top,
     );
@@ -830,15 +834,15 @@ color = i % 2;
     const imageBoard1GetFixedTileSqFromTileSq: (tileSq: number) => number = createGetFixedTileSqFromTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
-        board1FileNum,
-        board1RankNum,
+        tileBoard1FileNum,
+        tileBoard1RankNum,
         printing1Left,
         printing1Top,
     );
     const imageBoard1GetImageSqByFixedTileSq: (fixedTileSq: number) => number = createGetImageSqByFixedTileSq(
         tileBoard1TileWidth,
         tileBoard1TileHeight,
-        board1FileNum,
+        tileBoard1FileNum,
         printing1Left,
         printing1Top,
         printing1FileNum,
@@ -1011,8 +1015,8 @@ color = i % 2;
                 printing1OutOfSightIsLock.value,
                 tileBoard1TileWidth,
                 tileBoard1TileHeight,
-                board1FileNum.value,
-                board1RankNum.value,
+                tileBoard1FileNum.value,
+                tileBoard1RankNum.value,
                 outOfSight1WithMaskSquareCount.value,
                 printing1FileNum.value,
                 printing1RankNum.value,
@@ -1030,8 +1034,8 @@ color = i % 2;
                 printing1OutOfSightIsLock.value,
                 tileBoard1TileWidth,
                 tileBoard1TileHeight,
-                board1FileNum.value,
-                board1RankNum.value,
+                tileBoard1FileNum.value,
+                tileBoard1RankNum.value,
                 outOfSight1Ref.value?.outOfSight1WithMaskSquareCount ?? 1,
                 playerHome1File.value,
                 playerHome1Rank.value,
@@ -1042,9 +1046,9 @@ color = i % 2;
                 player1MotionWait.value,
                 player1CanBoardEdgeWalking.value,
                 ()=>{ return checkOutOfSightLeftIsLook(tileBoard1TileWidth, board1WithMaskFrSize, printing1Left.value); },    // ここで進むと、左側に外側が見えるなら。
-                ()=>{ return checkOutOfSightRightIsLook(tileBoard1TileWidth, board1WithMaskFrSize, board1FileNum.value, printing1FileNum.value, printing1Left.value); },  // ここで進むと、右側に外側が見えるなら。
+                ()=>{ return checkOutOfSightRightIsLook(tileBoard1TileWidth, board1WithMaskFrSize, tileBoard1FileNum.value, printing1FileNum.value, printing1Left.value); },  // ここで進むと、右側に外側が見えるなら。
                 ()=>{ return checkOutOfSightTopIsLook(tileBoard1TileHeight, board1WithMaskFrSize, printing1Top.value); }, // ここで進むと、上側に外側が見えるなら。
-                ()=>{ return checkOutOfSightBottomIsLook(tileBoard1TileHeight, board1WithMaskFrSize, board1RankNum.value, printing1RankNum.value, printing1Top.value); }, // ここで進むと、下側に外側が見えるなら。
+                ()=>{ return checkOutOfSightBottomIsLook(tileBoard1TileHeight, board1WithMaskFrSize, tileBoard1RankNum.value, printing1RankNum.value, printing1Top.value); }, // ここで進むと、下側に外側が見えるなら。
             );
 
             // ++++++++++++++++++++++++++++++
