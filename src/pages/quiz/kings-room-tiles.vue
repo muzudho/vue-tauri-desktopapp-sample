@@ -166,14 +166,6 @@
         <p>キーボード操作方法</p>
         <ul class="mb-6">
             <li>
-                <!-- フォーカスを外すためのダミー・ボタンです -->
-                <v-btn
-                    class="noop-key"
-                    ref="noopButton"
-                    v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                >何もしないボタン</v-btn><br/>
-            </li>
-            <li>
                 <!-- お好み設定パネル１ -->
                 <v-btn
                     class="code-key"
@@ -220,18 +212,6 @@
             盤がでかすぎるときは［お好み設定を表示］ボタンをクリックして<br/>
             出てくる［ズーム］スライダーボックスを左右に動かして<br/>
             盤の大きさを調整してほしい。
-        </talk-balloon>
-
-
-        <talk-balloon
-            :src="commonPapepoKingSrc"
-            :alt="commonPapepoKingAlt"
-            :name="commonPapepoKingName"
-            :device="compatibleDevice1Ref?.device"
-        >
-            もしＰＣ版で例えばスライダーバーにフォーカスが残ってしまい、<br/>
-            左右キーを入力したら自機ではなくスライダーバーが動いてしまい腹が立ったときは<br/>
-            ［何もしないボタン］を押せ。
         </talk-balloon>
 
 
