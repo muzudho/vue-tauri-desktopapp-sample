@@ -119,15 +119,14 @@
                             minWidth: `${tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
+                            color: gameBoard1StoneColorArray[i],    /* 石の色 */
                             backgroundColor: `${(i % gameBoard1FileNum + Math.floor(i/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
-                            /* 列が奇数だとストライプになる： backgroundColor: `${((i + Math.floor(i/gameBoard1FileNum))%2)==0 ? '#F0E0C0' : '#F0C050'}`, */
                         }"
                         style="
                             position: absolute;
                             font-size: 24px;
                             line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
                             z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
-                            color: brown;   /* 石の色 */
                         "
                     >●</v-btn>
                 </div>
@@ -291,6 +290,10 @@
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     })
+    const gameBoard1StoneColorArray = ref<string[]>(new Array(64).fill(''));
+    for(let i: number=0; i<gameBoard1Area.value; i++){
+        gameBoard1StoneColorArray.value[i] = 'brown'
+    }
 
     // ######################
     // # イベントハンドラー #
