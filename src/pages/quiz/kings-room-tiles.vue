@@ -97,8 +97,8 @@
                 top: '0px',
                 //zoom: appZoom,  // FIXME: きいてない？
             }"
-            :screenWidth="7 * tileBoard1TileWidth"
-            :screenHeight="7 * tileBoard1TileHeight"
+            :screenWidth="(board1FileNum - board1WithMaskFrSize) * tileBoard1TileWidth"
+            :screenHeight="(board1RankNum - board1WithMaskFrSize) * tileBoard1TileHeight"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
             v-on:onUpButtonPressed="onUpButtonPressed"
@@ -111,15 +111,22 @@
             v-on:onSpaceButtonReleased="onSpaceButtonReleased"
         >
             <template #default>
-                <!-- 全体サイズと、切り抜き領域 -->
+                <!-- 盤の全体サイズと、切り抜き領域 -->
                 <div
                     :style="{
                         position: 'relative',
                         left: `${-tileBoard1TileWidth}px`,
                         top: `${-tileBoard1TileHeight}px`,
-                        width: `${(board1FileNum + outOfSight1WithMaskSquareCount.value) * tileBoard1TileWidth}px`,
-                        height: `${(board1RankNum + outOfSight1WithMaskSquareCount.value) * tileBoard1TileHeight}px`,
+                        width: `${(board1FileNum + 1) * tileBoard1TileWidth}px`,
+                        height: `${(board1RankNum + 1) * tileBoard1TileHeight}px`,
                         zoom: appZoom,
+                        clipPath: `inset(
+                            ${tileBoard1TileHeight}px
+                            ${4 * tileBoard1TileWidth}px
+                            ${4 * tileBoard1TileHeight}px
+                            ${tileBoard1TileWidth}px
+                        )`, // 四隅の切り落とし。上、右、下、左
+                        // FIXME: 右と下の 4倍 が分からん
                     }"
                 >
 
@@ -758,7 +765,7 @@ color = i % 2;
         return board1FileNum.value * board1RankNum.value;
     });
     // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
-    const board1WithMaskSizeSquare: number = 1; // マスクの幅（単位：マス）
+    const board1WithMaskFrSize: number = 1; // マスクの幅（単位：マス）
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　像盤１ +
@@ -1091,10 +1098,10 @@ color = i % 2;
                 player1Motion,
                 player1MotionWait.value,
                 player1CanBoardEdgeWalking.value,
-                ()=>{ return checkOutOfSightLeftIsLook(tileBoard1TileWidth, board1WithMaskSizeSquare, printing1Left.value); },    // ここで進むと、左側に外側が見えるなら。
-                ()=>{ return checkOutOfSightRightIsLook(tileBoard1TileWidth, board1WithMaskSizeSquare, board1FileNum.value, printing1FileNum.value, printing1Left.value); },  // ここで進むと、右側に外側が見えるなら。
-                ()=>{ return checkOutOfSightTopIsLook(tileBoard1TileHeight, board1WithMaskSizeSquare, printing1Top.value); }, // ここで進むと、上側に外側が見えるなら。
-                ()=>{ return checkOutOfSightBottomIsLook(tileBoard1TileHeight, board1WithMaskSizeSquare, board1RankNum.value, printing1RankNum.value, printing1Top.value); }, // ここで進むと、下側に外側が見えるなら。
+                ()=>{ return checkOutOfSightLeftIsLook(tileBoard1TileWidth, board1WithMaskFrSize, printing1Left.value); },    // ここで進むと、左側に外側が見えるなら。
+                ()=>{ return checkOutOfSightRightIsLook(tileBoard1TileWidth, board1WithMaskFrSize, board1FileNum.value, printing1FileNum.value, printing1Left.value); },  // ここで進むと、右側に外側が見えるなら。
+                ()=>{ return checkOutOfSightTopIsLook(tileBoard1TileHeight, board1WithMaskFrSize, printing1Top.value); }, // ここで進むと、上側に外側が見えるなら。
+                ()=>{ return checkOutOfSightBottomIsLook(tileBoard1TileHeight, board1WithMaskFrSize, board1RankNum.value, printing1RankNum.value, printing1Top.value); }, // ここで進むと、下側に外側が見えるなら。
             );
 
             // ++++++++++++++++++++++++++++++
