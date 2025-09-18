@@ -109,7 +109,7 @@
                     class="waratch2-button"
                     :style="{
                         top: `${0 * gridUnit}px`,
-                        left: `${3 * gridUnit}px`,
+                        left: `${2 * gridUnit}px`,
                         width: `${2 * gridUnit}px`,
                         height: `${2 * gridUnit}px`,
                     }"
@@ -128,7 +128,7 @@
                     class="waratch2-button"
                     :style="{
                         top: `${2 * gridUnit}px`,
-                        left: `${1 * gridUnit}px`,
+                        left: `${0 * gridUnit}px`,
                         width: `${2 * gridUnit}px`,
                         height: `${2 * gridUnit}px`,
                     }"
@@ -147,7 +147,7 @@
                     class="waratch2-button"
                     :style="{
                         top: `${2 * gridUnit}px`,
-                        left: `${5 * gridUnit}px`,
+                        left: `${4 * gridUnit}px`,
                         width: `${2 * gridUnit}px`,
                         height: `${2 * gridUnit}px`,
                     }"
@@ -166,7 +166,7 @@
                     class="waratch2-button"
                     :style="{
                         top: `${4 * gridUnit}px`,
-                        left: `${3 * gridUnit}px`,
+                        left: `${2 * gridUnit}px`,
                         width: `${2 * gridUnit}px`,
                         height: `${2 * gridUnit}px`,
                     }"
@@ -312,7 +312,6 @@
     //
 
     const gridUnit = 20;
-    const screenSquareUnit: number = 64;
     const shassisWidth = ref<number>(0);
     const shassisHeight = ref<number>(0);
     const screenMarginLeft = ref<number>(0);
@@ -321,7 +320,7 @@
     const hardNameLineHeight: number = 24;
     const directionKeysAreaLeft = ref<number>(0);
     const directionKeysAreaTop = ref<number>(0);
-    const directionKeysAreaWidth = 7 * gridUnit;
+    const directionKeysAreaWidth = 6 * gridUnit;
     const directionKeysAreaHeight = 6 * gridUnit;
     const actionButtonsAreaLeft = ref<number>(0);
     const actionButtonsAreaTop = ref<number>(0);
@@ -381,21 +380,21 @@
         // }
 
         if (orientation.value == 'Portrait') {  // 縦型
-            screenMarginLeft.value = 1 * screenSquareUnit;
-            screenMarginTop.value = 1 * screenSquareUnit;
-            shassisWidth.value = 2 * screenSquareUnit + props.screenWidth;
-            shassisHeight.value = 4 * screenSquareUnit + props.screenHeight;
-            directionKeysAreaLeft.value = 0;
+            screenMarginLeft.value = 1 * (3 * gridUnit);
+            screenMarginTop.value = 1 * (3 * gridUnit);
+            shassisWidth.value = 2 * (3 * gridUnit) + props.screenWidth;
+            shassisHeight.value = 4 * (3 * gridUnit) + props.screenHeight;
+            directionKeysAreaLeft.value = 0.5 * gridUnit;
             directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;    // 8 は画面とボタンの隙間
             actionButtonsAreaLeft.value = props.screenWidth;
             actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;
 
         } else {    // 横型
-            screenMarginLeft.value = 2.5 * screenSquareUnit;
-            screenMarginTop.value = 0.5 * screenSquareUnit;
-            shassisWidth.value = (3 + 2) * screenSquareUnit + props.screenWidth;
-            shassisHeight.value = (1 + 0.25) * screenSquareUnit + props.screenHeight;
-            directionKeysAreaLeft.value = 0;
+            screenMarginLeft.value = 2.5 * (3 * gridUnit);
+            screenMarginTop.value = 0.5 * (3 * gridUnit);
+            shassisWidth.value = (3 + 2) * (3 * gridUnit) + props.screenWidth;
+            shassisHeight.value = (1 + 0.25) * (3 * gridUnit) + props.screenHeight;
+            directionKeysAreaLeft.value = 0.5 * gridUnit;
             directionKeysAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2; // 上から 1/3 のところに合わせる
             actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 1 * gridUnit;
             actionButtonsAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2;
