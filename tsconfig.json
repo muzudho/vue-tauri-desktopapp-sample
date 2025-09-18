@@ -25,7 +25,8 @@
         "allowSyntheticDefaultImports": true,
         "baseUrl": ".",
         "paths": {
-            "/*": ["src/*"]
+            //"/*": ["src/*"]   // 間違い
+            "@/*": ["src/*"]
         },
         
         // types フォルダーに型定義を入れるため：

@@ -193,6 +193,7 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
+    //import { range } from '../../composables/range';
     import { range } from '@/composables/range';
 
     // ++++++++++++++++++++++++++
