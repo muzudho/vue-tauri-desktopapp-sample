@@ -1,8 +1,9 @@
 <template>
-    <!-- 機能 -->
+
+    <comment>機能</comment>
     <button-20250822 ref="button1Ref"/>
 
-    <!-- 以降、ページ -->
+    <comment>以降、ページ</comment>
     <the-app-header/>
 
     <button-to-back-to-contents
@@ -256,6 +257,7 @@
     import Button20250822 from '@/components/Button20250822.vue';
     import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
     import ButtonToBackToTop from '@/components/ButtonToBackToTop.vue';
+    import Comment from '@/components/Comment.vue';
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
