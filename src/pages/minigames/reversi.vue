@@ -134,8 +134,9 @@
                 </div>
             </template>
         </game-machine-waratch2>
-        {{ gameBoard1DebugMessage }}<br/>
-        turn={{ gameBoard1Turn }}
+        <p>{{ gameBoard1DebugMessage }}</p>
+        <p>next-times={{ gameBoard1Times+1 }}</p>
+        <p>next-turn={{ gameBoard1Turn }}</p>
 
         <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
@@ -316,6 +317,7 @@
         }
     });
     const gameBoard1Turn = ref<number>(1);
+    const gameBoard1Times = ref<number>(4); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
 
 
     // ######################
@@ -388,7 +390,7 @@
         // 適当に石を置く
         const sq = Math.floor(Math.random() * gameBoard1Area.value);
         const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-        putStone(sq, color);
+        const itsOk = putStone(sq, color);
     }
 
 
@@ -469,7 +471,7 @@
         gameBoard1DebugMessage.value = `sq=${sq}`;
 
         if(gameBoard1StoneColorArray.value[sq]==0) {
-            putStone(
+            const itsOk = putStone(
                 sq,
                 Math.floor(Math.random() * 2) + 1
             );
@@ -477,9 +479,15 @@
     }
 
 
-    function putStone(sq: number, color: number) : void {
+    function putStone(sq: number, color: number) : boolean {
+        if (!gameBoard1StoneClickable.value(sq)) {  // 石を置けないマスなら
+            return false;
+        }
+
         gameBoard1StoneColorArray.value[sq] = color;
         gameBoard1Turn.value = gameBoard1Turn.value % 2 + 1;    // 1 なら 2 に、2 なら 1 に
+        gameBoard1Times.value += 1;
+        return true;
     }
 
     // ################
