@@ -1,7 +1,3 @@
-<!--
-    RPGのキャラクターの歩行グラフィック・サンプル。背景画像付き
--->
-
 <template>
 
     <!-- ボタン機能拡張 -->
@@ -27,8 +23,9 @@
             pagePath="/reference"
         />
 
-        <h1 class="mb-6"><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h1>
-        <section class="sec-1">
+        <h1 class="mb-6">ゲームマシン・テスト１</h1>
+        <section class="sec-1" style="position: relative;">
+            <!-- overflow: auto; -->
 
 
             <talk-balloon
@@ -38,6 +35,97 @@
                 :device="compatibleDevice1Ref?.device">
                 新盤テスト中……。
             </talk-balloon>
+
+
+            <!-- ゲームマシン -->
+            <game-machine-waratch2
+                class="mb-6"
+                :style="{
+                    position: 'relative',
+                    // position: 'absolute',
+                    // top: '0',
+                    // left: '0',
+                    //height: '450px', // 高さと幅は可変です。縦型表示のときを目視確認して手動で調整します。
+                }"
+                :screenWidth="3 * 64"
+                :screenHeight="3 * 64"
+                v-on:onLeftButtonPressed="onLeftButtonPressed"
+                v-on:onLeftButtonReleased="onLeftButtonReleased"
+                v-on:onUpButtonPressed="onUpButtonPressed"
+                v-on:onUpButtonReleased="onUpButtonReleased"
+                v-on:onRightButtonPressed="onRightButtonPressed"
+                v-on:onRightButtonReleased="onRightButtonReleased"
+                v-on:onDownButtonPressed="onDownButtonPressed"
+                v-on:onDownButtonReleased="onDownButtonReleased"
+                v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+                v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+            >
+                <templage #default>
+                    <!-- 全体サイズと、切り抜き領域 -->
+                    <div
+                        style="
+                            position: absolute;
+                            /* FIXME: 縦型と横型で隠れる部分を替えたい */
+                            /*left: calc(-64 + 160)px;*/
+                            left: -64px;
+                            /*top: calc(-64 + 32)px;*/ /* 画面外と想定している部分が、きちんと画面外になるように、目視確認しながら位置調整 */
+                            top: -64px;
+                            height: calc(6 * 64px);
+                            clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
+                        "
+                    >
+                        <!-- 盤領域 -->
+                        <div
+                            class="game-board-1"
+                            :style="board1Style"
+                            style="
+                                display: inline-block;  /* インライン化しておくと、センタリングできる */
+                            "
+                            >
+
+                            <!-- 自機のホーム１ -->
+                            <div
+                                class="playerHome"
+                                :style="playerHome1Style">
+                            </div>
+
+                            <!-- タイル盤１ -->
+                            <board-made-of-tile
+                                :boardArea="board1Area"
+                                :tileWidth="tileBoard1TileWidth"
+                                :tileHeight="tileBoard1TileHeight"
+                                :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
+                                :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
+                                :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
+                                :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+                                :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+                            >
+                                <template #default="{ tileSq }">
+                                    {{ tileSq }}
+                                </template>
+
+                            </board-made-of-tile
+
+                            <!-- 自機１ -->
+                            <tile-animation
+                                :frames="player1Frames"
+                                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                                :slow="player1AnimationSlow"
+                                :time="stopwatch1Count"
+                                class="player"
+                                :style="player1Style" />
+                            
+                            <!-- 視界の外１ -->
+                            <out-of-sight-making
+                                ref="outOfSight1Ref"
+                                :tileBoard1TileWidth="tileBoard1TileWidth"
+                                :tileBoard1TileHeight="tileBoard1TileHeight"
+                                :board1FileNum="board1FileNum"
+                                :board1RankNum="board1RankNum" />
+                        </div>
+                    </div>
+                </templage>
+            </game-machine-waratch2>
 
 
         </section>
@@ -56,103 +144,31 @@
         <button-to-go-to-top class="sec-0 pt-6"/>
     </div>
 
+
     <!-- オーバーラップ画面 -->
     <v-container fluid class="vertical-panes-container">
 
-        <!-- 中段の画像エリア（固定） -->
-        <div
-            :style="perspectiveMiddle1Style"
-            style="
-                position: fixed;
-                clip-path: inset(64px calc(2 * 64px) calc(2 * 64px) 64px);  /* 四隅の切り落とし。上、右、下、左 */
-            "
-        >
-            <!-- 盤領域 -->
-            <div
-                class="board"
-                :style="board1Style"
-                style="
-                    display: inline-block;  /* インライン化しておくと、センタリングできる */
-                "
-                >
 
-                <!-- 自機のホーム１ -->
-                <div
-                    class="playerHome"
-                    :style="playerHome1Style">
-                </div>
-
-                <!-- タイル盤１ -->
-                <board-made-of-tile
-                    :boardArea="board1Area"
-                    :tileWidth="tileBoard1TileWidth"
-                    :tileHeight="tileBoard1TileHeight"
-                    :tilemapUrl="'/img/making/tilemap-floor-20250826.png'"
-                    :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
-                    :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
-                    :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
-                    :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
-                >
-                    <template #default="{ tileSq }">
-                        {{ tileSq }}
-                    </template>
-
-                </board-made-of-tile
-
-                <!-- 自機１ -->
-                <tile-animation
-                    :frames="player1Frames"
-                    tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                    :slow="player1AnimationSlow"
-                    :time="stopwatch1Count"
-                    class="player"
-                    :style="player1Style" />
-                
-                <!-- 視界の外１ -->
-                <out-of-sight-making
-                    ref="outOfSight1Ref"
-                    :tileBoard1TileWidth="tileBoard1TileWidth"
-                    :tileBoard1TileHeight="tileBoard1TileHeight"
-                    :board1FileNum="board1FileNum"
-                    :board1RankNum="board1RankNum" />
-            </div>
-        </div>
-
-        <!-- ゲームマシン：画面透過用マスク -->
-        <svg width="0" height="0">
-            <defs>
-                <mask id="game-machine-mask-rect">
-                    <!-- 全体の大きさを白く塗る -->
-                    <rect x="0" y="0" width="320" height="320" fill="white"/>
-
-                    <!-- 透過したいところを黒く塗る -->
-                    <rect x="64" y="64" width="192" height="192" fill="black"/>
-                </mask>
-            </defs>
-        </svg>
-
-        <!-- ゲームマシン -->         
-        <div
-            :style="perspectiveMiddle1Style"
-            style="
-                position: fixed;
-                width: calc(5 * 64px);
-                height: calc(5 * 64px);
-                border: solid 4px black;
-                box-sizing: border-box;
-                border-radius: 64px;
-                background-color: crimson;
-                /* マスクで画面の部分を透過 */
-                -webkit-mask-image: url(#game-machine-mask-rect);
-                mask-image: url(#game-machine-mask-rect);
-            "
-        >
-        </div>
+        <!-- 何もしないボタン
+            フォーカスを外すためのダミー・ボタンです
+        -->
+        <v-btn
+            class="waratch2-button"
+            :style="`
+                top: ${1 * controllerSquareUnit}px;
+                left: ${8 * controllerSquareUnit}px;
+                width: ${4 * controllerSquareUnit}px;
+                height: ${1 * controllerSquareUnit}px;
+            `"
+            style="position: absolute;"
+            ref="noopButton"
+            v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
+        >何もしないボタン</v-btn>
 
         <!-- 下段：　ソフトウェア・キーボード、兼・操作説明 -->
         <div
             :style="{
-                top: `calc(100vh - ${5 * controllerSquareUnit}px)`,
+                top: `calc(100vh - ${2 * controllerSquareUnit}px)`,
             }"
             style="
                 position: fixed;
@@ -164,138 +180,6 @@
                 background-color: rgba(0,0,0,0.5);
             "
         >
-            <!-- ボタン・センタリング用コンテナー -->
-            <div
-                style="
-                    position: relative;
-                    left: 0;
-                    right: 0;
-                    text-align: center;
-                "
-            >
-                <div
-                    :style="{
-                        width: `${15 * controllerSquareUnit}px`,
-                        height: `${3 * controllerSquareUnit}px`,
-                    }"
-                    style="
-                        position: relative;
-                        display: inline-block;
-                    "
-                >
-                    <!-- 十字キー -->
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${0 * controllerSquareUnit}px;
-                            left: ${2 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit - 4}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onUpButtonReleased);"
-                        @touchcancel="button1Ref?.release(onUpButtonReleased);"
-                        @touchleave="button1Ref?.release(onUpButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onUpButtonReleased);"
-                        @mouseleave="button1Ref?.release(onUpButtonReleased);"
-                        v-tooltip="'自機を上へ、像を逆向きへ動かすぜ！'"
-                    >↑</v-btn>
-
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${0 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit - 4}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onLeftButtonReleased);"
-                        @touchcancel="button1Ref?.release(onLeftButtonReleased);"
-                        @touchleave="button1Ref?.release(onLeftButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onLeftButtonReleased);"
-                        @mouseleave="button1Ref?.release(onLeftButtonReleased);"
-                        v-tooltip="'自機を左へ、像を逆向きへ動かすぜ！'"
-                    >←</v-btn>
-
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${1 * controllerSquareUnit}px;
-                            left: ${4 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit - 4}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onRightButtonReleased);"
-                        @touchcancel="button1Ref?.release(onRightButtonReleased);"
-                        @touchleave="button1Ref?.release(onRightButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onRightButtonReleased);"
-                        @mouseleave="button1Ref?.release(onRightButtonReleased);"
-                        v-tooltip="'自機を右へ、像を逆向きへ動かすぜ！'"
-                    >→</v-btn>
-
-                    <v-btn class="code-key hidden"/>
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${2 * controllerSquareUnit}px;
-                            left: ${2 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit - 4}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onDownButtonReleased);"
-                        @touchcancel="button1Ref?.release(onDownButtonReleased);"
-                        @touchleave="button1Ref?.release(onDownButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onDownButtonReleased);"
-                        @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                        v-tooltip="'自機を下へ、像を逆向きへ動かすぜ！'"
-                    >↓</v-btn>
-
-                    <!-- スペース・キー -->
-                    <v-btn
-                        class="code-key"
-                        :style="`
-                            top: ${2 * controllerSquareUnit}px;
-                            left: ${8 * controllerSquareUnit}px;
-                            width: ${3 * controllerSquareUnit - 4}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
-                        @touchend="button1Ref?.release(onSpaceButtonReleased);"
-                        @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
-                        @touchleave="button1Ref?.release(onSpaceButtonReleased);"
-                        @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
-                        @mouseup="button1Ref?.release(onSpaceButtonReleased);"
-                        @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
-                        v-tooltip="'自機、印字の位置を最初に有ったところに戻すぜ。'"
-                    >（スペース）</v-btn>
-
-                    <!-- フォーカスを外すためのダミー・ボタンです -->
-                    <v-btn
-                        class="noop-key"
-                        :style="`
-                            top: ${2 * controllerSquareUnit}px;
-                            left: ${11 * controllerSquareUnit}px;
-                            width: ${4 * controllerSquareUnit - 4}px;
-                            height: ${1 * controllerSquareUnit - 4}px;
-                        `"
-                        style="position: absolute;"
-                        ref="noopButton"
-                        v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-                    >何もしないボタン</v-btn>
-                </div>
-            </div>
             
             <!-- ボタン相対位置領域 -->
             <!-- 設定パネル１ -->
@@ -484,11 +368,13 @@
     // アルファベット順
     import BoardMadeOfTile from '@/components/BoardMadeOfTile.vue';
     import Button20250822 from '@/components/Button20250822.vue';
+    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
+    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
+    import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import OutOfSightMaking from '@/components/OutOfSightMaking.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
     import TalkBalloon from '@/components/TalkBalloon.vue';
-    import TheAppHeader from '../../../the-app-header.vue';
     import TileAnimation from '@/components/TileAnimation.vue';
 
     // ++++++++++++++++++++++++++++++++++
@@ -518,8 +404,7 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
-    import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
+    import TheAppHeader from '@/pages/the-app-header.vue';
 
 
     // ##########
@@ -600,7 +485,6 @@
             }
         }
     });
-    const oneForMask = 1;   // マスクが１マス分食み出ていることを示す定数。
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -705,7 +589,6 @@
     // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
-    const playerHome1Length = 1;    // ホームポジションが１マス分の大きさであることを示す定数。
     const playerHome1File = ref<number>(2); // ホーム
     const playerHome1Rank = ref<number>(2);
     const playerHome1Left = computed(()=>{
@@ -782,48 +665,6 @@
     const player1MotionWalkingFrames: number = 16;  // 歩行フレーム数
     const player1CanBoardEdgeWalking = ref<boolean>(false); // ［盤の端の歩行］可能状態を管理（true: 可能にする, false: 可能にしない）
     const player1CanBoardEdgeWalkingIsEnabled = ref<boolean>(false);    // ［盤の端の歩行］可能状態の活性性を管理（true: 不活性にする, false: 活性にする）
-
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　画面中段１ +
-    // ++++++++++++++++++++++++++++++++
-
-    const perspectiveMiddle1Style = computed<CompatibleStyleValue>(()=>{
-        // マスク込みのゲーム画面サイズは、次の３つの最大のものより小さくはなりません。
-        //
-        // （１）見えていないところを含む盤サイズ＋マスクの１
-        // （２）マスク幅×２＋ホームの１
-        // （３）ホームの位置
-        const minWidthPixels = Math.max(
-            appZoom.value * (board1FileNum.value + oneForMask) * tileBoard1TileWidth,
-            appZoom.value * (outOfSight1WithMaskSquareCount.value + playerHome1Length) * tileBoard1TileWidth,
-            appZoom.value * (playerHome1File.value + 1) * tileBoard1TileWidth,
-        );
-        const minHeightPixels = Math.max(
-            appZoom.value * (board1RankNum.value + oneForMask) * tileBoard1TileHeight,
-            appZoom.value * (outOfSight1WithMaskSquareCount.value + playerHome1Length) * tileBoard1TileHeight,
-            appZoom.value * (playerHome1Rank.value + 1) * tileBoard1TileHeight,
-        );
-        let boardWidthPixelsWithMask = appZoom.value * (board1FileNum.value + oneForMask) * tileBoard1TileWidth;
-        let boardHeightPixelsWithMask = appZoom.value * (board1RankNum.value + oneForMask) * tileBoard1TileHeight;
-        if (boardWidthPixelsWithMask < minWidthPixels) {
-            boardWidthPixelsWithMask = minWidthPixels;
-        }
-        if (boardHeightPixelsWithMask < minHeightPixels) {
-            boardHeightPixelsWithMask = minHeightPixels;
-        }
-
-        return {
-            top: `calc(
-                100vh - ${5 * controllerSquareUnit}px -
-                ${boardHeightPixelsWithMask}px
-            )`,
-            bottom: `calc(${5 * controllerSquareUnit}px)`,
-            marginLeft: `calc(50vw - ${boardWidthPixelsWithMask / 2}px)`,
-            marginRight: `calc(50vw + ${boardWidthPixelsWithMask / 2}px)`,
-            backgroundColor: `rgba(0,0,0,0.1)`,
-            pointerEvents: 'none',  /* クリックを透過させます */
-        } as CompatibleStyleValue;
-    });
 
 
     // ##########
@@ -1068,8 +909,9 @@
 
     @import '@/styles/talk-scene.css';
     @import '@/styles/perspective.css';
+    @import '@/styles/game-machine-waratch2.css';
 
-    div.board { /* 盤１ */
+    div.game-board-1 { /* 盤１ */
         position: relative;
     }
     div.square {    /* マス */

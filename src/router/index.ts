@@ -268,14 +268,14 @@ const routes = [
         component: () => import('../pages/reference/making/input-axis/new-board-1.vue'),
     },
     {
-        name: 'Reference_Making_InputAxis_NewBoard2',
-        path: '/reference/making/input-axis/new-board-2',
-        component: () => import('../pages/reference/making/input-axis/new-board-2.vue'),
+        name: 'Reference_Making_InputAxis_GameMachineTest1',
+        path: '/reference/making/input-axis/game-machine-test-1',
+        component: () => import('../pages/reference/making/input-axis/game-machine-test-1.vue'),
     },
     {
-        name: 'Reference_Making_InputAxis_NewBoard3',
-        path: '/reference/making/input-axis/new-board-3',
-        component: () => import('../pages/reference/making/input-axis/new-board-3.vue'),
+        name: 'Reference_Making_InputAxis_GameMachineTest2',
+        path: '/reference/making/input-axis/game-machine-test-2',
+        component: () => import('../pages/reference/making/input-axis/game-machine-test-2.vue'),
     },
     {
         name: 'Reference_Making_InputAxisPerspectiveRpgWalkTilesWraparoundProjectionLoopOutofsightMaptileimage1',

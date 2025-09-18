@@ -10,6 +10,8 @@
         pagePath="/reference"
     />
 
+    <h1 class="mb-6">ゲームマシン・テスト２</h1>
+
     <!-- ゲームマシン -->
     <game-machine-waratch2
         :style="{
