@@ -95,6 +95,7 @@
             :hardLocationStyle="{
                 left: '0px',
                 top: '0px',
+                //zoom: appZoom,  // FIXME: きいてない？
             }"
             :screenWidth="7 * tileBoard1TileWidth"
             :screenHeight="7 * tileBoard1TileHeight"
@@ -109,112 +110,56 @@
             v-on:onSpaceButtonPressed="onSpaceButtonPressed"
             v-on:onSpaceButtonReleased="onSpaceButtonReleased"
         >
+            <template #default>
+                <!-- 全体サイズと、切り抜き領域 -->
+                <div
+                    :style="{
+                        position: 'relative',
+                        left: `${-tileBoard1TileWidth}px`,
+                        top: `${-tileBoard1TileHeight}px`,
+                        width: `${(board1FileNum + outOfSight1WithMaskSquareCount.value) * tileBoard1TileWidth}px`,
+                        height: `${(board1RankNum + outOfSight1WithMaskSquareCount.value) * tileBoard1TileHeight}px`,
+                        zoom: appZoom,
+                    }"
+                >
+
+                    <!-- 新・タイル盤１ -->
+                    <board-made-of-tile
+                        :boardArea="board1Area"
+                        :tileWidth="tileBoard1TileWidth"
+                        :tileHeight="tileBoard1TileHeight"
+                        :tilemapUrl="'/img/quiz/kings-room-tiles.png'"
+                        :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
+                        :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
+                        :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
+                        :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
+                    />
+
+                    <!-- 自機１ -->
+                    <tile-animation
+                        :frames="player1Frames"
+                        tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
+                        :slow="player1AnimationSlow"
+                        :time="stopwatch1Count"
+                        class="player"
+                        :style="player1Style" />
+
+                    <!-- 視界の外１ -->
+                    <out-of-sight
+                        ref="outOfSight1Ref"
+                        :tileBoard1TileWidth="tileBoard1TileWidth"
+                        :tileBoard1TileHeight="tileBoard1TileHeight"
+                        :board1FileNum="board1FileNum"
+                        :board1RankNum="board1RankNum"
+                        class="parent-mask" />
+                </div>
+            </template>
         </game-machine-waratch2>
 
-
-        <!-- 盤領域 -->
-        <div
-            class="board mb-6"
-            :style="board1Style">
-
-            <!-- 新・タイル盤１ -->
-            <board-made-of-tile
-                :boardArea="board1Area"
-                :tileWidth="tileBoard1TileWidth"
-                :tileHeight="tileBoard1TileHeight"
-                :tilemapUrl="'/img/quiz/kings-room-tiles.png'"
-                :getFixedTileSqFromTileSq="imageBoard1GetFixedTileSqFromTileSq"
-                :getImageSqByFixedTileSq="imageBoard1GetImageSqByFixedTileSq"
-                :getTileStyleByTileSq="imageBoard1GetTileStyleByTileSq"
-                :getSourceTileLeftByImageSq="imageBoard1GetResourceTileLeftByImageSq"
-            />
-
-            <!-- 自機１ -->
-            <tile-animation
-                :frames="player1Frames"
-                tilemapUrl="/img/making/202508__warabenture__15-1612-kifuwarabe-o1o0.png"
-                :slow="player1AnimationSlow"
-                :time="stopwatch1Count"
-                class="player"
-                :style="player1Style" />
-
-            <!-- 視界の外１ -->
-            <out-of-sight
-                ref="outOfSight1Ref"
-                :tileBoard1TileWidth="tileBoard1TileWidth"
-                :tileBoard1TileHeight="tileBoard1TileHeight"
-                :board1FileNum="board1FileNum"
-                :board1RankNum="board1RankNum"
-                class="parent-mask" />
-        </div>
 
         <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
         <p>キーボード操作方法</p>
         <ul class="mb-6">
-            <li>
-                <v-btn class="code-key hidden"/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onUpButtonReleased);"
-                    @touchcancel="button1Ref?.release(onUpButtonReleased);"
-                    @touchleave="button1Ref?.release(onUpButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onUpButtonReleased);"
-                    @mouseleave="button1Ref?.release(onUpButtonReleased);"
-                >↑</v-btn>
-                <br/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onLeftButtonReleased);"
-                    @touchcancel="button1Ref?.release(onLeftButtonReleased);"
-                    @touchleave="button1Ref?.release(onLeftButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onLeftButtonReleased);"
-                    @mouseleave="button1Ref?.release(onLeftButtonReleased);"
-                >←</v-btn>
-                <v-btn class="code-key hidden"/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onRightButtonReleased);"
-                    @touchcancel="button1Ref?.release(onRightButtonReleased);"
-                    @touchleave="button1Ref?.release(onRightButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onRightButtonReleased);"
-                    @mouseleave="button1Ref?.release(onRightButtonReleased);"
-                >→</v-btn>
-                <br/>
-                <v-btn class="code-key hidden"/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onDownButtonReleased);"
-                    @touchcancel="button1Ref?.release(onDownButtonReleased);"
-                    @touchleave="button1Ref?.release(onDownButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onDownButtonReleased);"
-                    @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                >↓</v-btn>
-                　…　自機を上下左右へ、印字を逆方向へ動かすぜ！
-                <br/>
-            </li>
-            <!--
-            <li>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onSpaceButtonReleased);"
-                    @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
-                    @touchleave="button1Ref?.release(onSpaceButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onSpaceButtonReleased);"
-                    @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
-                >（スペース）</v-btn>
-                　…　自機、印字の位置を最初に有ったところに戻すぜ。
-            </li>
-            -->
             <li>
                 <!-- フォーカスを外すためのダミー・ボタンです -->
                 <v-btn
@@ -814,14 +759,6 @@ color = i % 2;
     });
     // ※　盤およびその各タイルは、決まりきった位置でラップアラウンドを繰り返すだけです。座標が大きく移動することはありません。
     const board1WithMaskSizeSquare: number = 1; // マスクの幅（単位：マス）
-    const board1Style = computed<CompatibleStyleValue>(()=>{    // ボードとマスクを含んでいる領域のスタイル
-        return {
-            width: `${(board1FileNum.value + outOfSight1WithMaskSquareCount.value) * tileBoard1TileWidth}px`,
-            height: `${(board1RankNum.value + outOfSight1WithMaskSquareCount.value) * tileBoard1TileHeight}px`,
-            zoom: appZoom.value,
-        };
-    });
-    //const board1FloorTilemapTileNum = 3;  // 床のタイルマップの、左上隅から数えたタイル数
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　像盤１ +
@@ -967,8 +904,8 @@ color = i % 2;
     // ［自機１］に紐づくホームというわけではなく、［自機のホーム］の１つです。
     //
 
-    const playerHome1File = ref<number>(4);    // ホーム
-    const playerHome1Rank = ref<number>(4);
+    const playerHome1File = ref<number>(3);    // ホーム
+    const playerHome1Rank = ref<number>(3);
     const playerHome1Left = computed(()=>{
         return playerHome1File.value * tileBoard1TileWidth;
     });
@@ -1323,9 +1260,6 @@ color = i % 2;
      */
     section.sec-3 > div.board > :deep(.mask) {
         border-color: rgba(32, 32, 32, 0.9) !important;
-    }
-    div.board { /* 盤１ */
-        position: relative;
     }
     div.square {    /* マス */
         position: absolute;
