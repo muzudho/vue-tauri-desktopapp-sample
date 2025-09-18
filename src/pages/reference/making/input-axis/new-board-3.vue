@@ -12,8 +12,9 @@
 
     <!-- ゲームマシン -->
     <game-machine-waratch2
-        :hardLocationStyle="{
+        :style="{
             position: 'absolute',
+            //position: 'relative',
             left: '100px',
             top: '200px',
         }"

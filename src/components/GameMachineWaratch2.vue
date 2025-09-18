@@ -1,10 +1,9 @@
 <template>
 
-    <!-- 機能 -->
+    <comment>機能</comment>
     <button-20250822 ref="button1Ref"/>
 
-
-    <!-- ゲームマシン：画面部分透過用マスク -->
+    <!-- ゲームマシン　＞　スクリーン透過マスク -->
     <svg width="0" height="0">
         <defs>
             <mask id="waratch2-mask-rect">
@@ -17,12 +16,16 @@
         </defs>
     </svg>
 
-    <!-- 全体の位置 -->
+    <!-- ゲームマシン　＞　全体の位置 -->
     <div
-        :class="props.hardLocationClass"
-        :style="props.hardLocationStyle"
+        :class="props.class"
+        :style="{
+            ...toObject(props.style),
+            width: `${shassisWidth}px`,
+            height: `${shassisHeight}px`,
+        }"
     >
-        <!-- 画面内を切り抜かれないようにします -->
+        <comment>画面内を切り抜かれないようにします</comment>
         <div
             class="waratch2-surface"
             :style="{
@@ -62,6 +65,7 @@
             class="waratch2-shassis waratch2-trim-screen"
             :style="{
                 //...toObject(props.hardLocationStyle),
+                position: 'absolute',
                 width: `${shassisWidth}px`,
                 height: `${shassisHeight}px`,
             }"
@@ -223,6 +227,7 @@
             <div
                 class="waratch2-screen-frame"
                 :style="{
+                    position: 'absolute',
                     left: `${screenMarginLeft - shassisBorderThickness}px`,   // ボーダー幅を引く
                     top: `${screenMarginTop - shassisBorderThickness}px`,
                     width: `${screenWidth + 3}px`, // FIXME: なんや分からん+3
@@ -249,7 +254,7 @@
     // + インポート　＞　互換性対応 +
     // ++++++++++++++++++++++++++++++
 
-    //import { toObject } from '../compatibles/compatible-style-value';
+    import { toObject } from '../compatibles/compatible-style-value';
     import type { CompatibleStyleValue } from '../compatibles/compatible-style-value';
 
     // ++++++++++++++++++++++++++++++++++
@@ -261,6 +266,7 @@
 
     // アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
+    import Comment from '@/components/Comment.vue';
 
 
     // ####################################
@@ -268,8 +274,8 @@
     // ####################################
     
     interface Props {
-        hardLocationClass?: CompatibleStyleValue;
-        hardLocationStyle: CompatibleStyleValue;
+        class?: CompatibleStyleValue;
+        style?: CompatibleStyleValue;
         screenWidth: number;
         screenHeight: number;
     }

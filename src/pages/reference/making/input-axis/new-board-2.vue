@@ -28,7 +28,8 @@
         />
 
         <h1 class="mb-6"><span class="parent-header">ＲＰＧの歩行グラフィック　＞　</span>回り込むタイルへ投影・両端つながりの像・視野外マスク例示・マップタイル画像付き</h1>
-        <section class="sec-1">
+        <section class="sec-1" style="position: relative;">
+            <!-- overflow: auto; -->
 
 
             <talk-balloon
@@ -42,9 +43,13 @@
 
             <!-- ゲームマシン -->
             <game-machine-waratch2
-                hardLocationClass="mb-6"
-                :hardLocationStyle="{
+                class="mb-6"
+                :style="{
                     position: 'relative',
+                    // position: 'absolute',
+                    // top: '0',
+                    // left: '0',
+                    //height: '450px', // 高さと幅は可変です。縦型表示のときを目視確認して手動で調整します。
                 }"
                 :screenWidth="3 * 64"
                 :screenHeight="3 * 64"
