@@ -1,6 +1,6 @@
 /* シャーシ */
 div.waratch2-shassis {
-    position: absolute;
+    /* position: absolute; */
     border: solid 4px black;
     box-sizing: border-box;
     border-radius: 64px;
@@ -9,7 +9,7 @@ div.waratch2-shassis {
 
 /* 表面 */
 div.waratch2-surface {
-    position: absolute;
+    /* position: absolute; */
     margin: 4px;    /* ボーダー分 */
     box-sizing: border-box;
 }

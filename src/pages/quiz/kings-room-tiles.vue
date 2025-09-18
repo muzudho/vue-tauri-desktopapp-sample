@@ -89,6 +89,29 @@
             リフォーム会社に命じたのだが……
         </talk-balloon>
 
+
+        <!-- ゲームマシン -->
+        <game-machine-waratch2
+            :hardLocationStyle="{
+                left: '0px',
+                top: '0px',
+            }"
+            :screenWidth="3 * 64"
+            :screenHeight="3 * 64"
+            v-on:onLeftButtonPressed="onLeftButtonPressed"
+            v-on:onLeftButtonReleased="onLeftButtonReleased"
+            v-on:onUpButtonPressed="onUpButtonPressed"
+            v-on:onUpButtonReleased="onUpButtonReleased"
+            v-on:onRightButtonPressed="onRightButtonPressed"
+            v-on:onRightButtonReleased="onRightButtonReleased"
+            v-on:onDownButtonPressed="onDownButtonPressed"
+            v-on:onDownButtonReleased="onDownButtonReleased"
+            v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+            v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+        >
+        </game-machine-waratch2>
+
+
         <!-- 盤領域 -->
         <div
             class="board mb-6"
@@ -661,6 +684,7 @@ color = i % 2;
     import ButtonToBackToContents from '@/components/ButtonToBackToContents.vue';
     import ButtonToGoToTop from '@/components/ButtonToGoToTop.vue';
     import CompatibleDevice from '@/components/CompatibleDevice.vue'
+    import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import OutOfSight from '@/components/OutOfSightMaking.vue';
     import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
@@ -1228,6 +1252,21 @@ color = i % 2;
     function onDownButtonReleased() : void {
         player1Input.ArrowDown = false;
         printing1Input.ArrowDown = false;
+    }
+
+
+    /**
+     * スペース・キー。
+     */
+    function onSpaceButtonPressed() : void {
+        player1Input[" "] = true;
+        printing1Input[" "] = true;
+    }
+
+
+    function onSpaceButtonReleased() : void {
+        player1Input[" "] = false;
+        printing1Input[" "] = false;
     }
 
 

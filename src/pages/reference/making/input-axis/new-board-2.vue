@@ -60,6 +60,7 @@
     <!-- ゲームマシン -->
     <game-machine-waratch2
         :hardLocationStyle="{
+            position: 'absolute',
             left: '100px',
             top: '200px',
         }"
