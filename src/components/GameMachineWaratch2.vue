@@ -100,8 +100,8 @@
                 :style="{
                     left: `${directionKeysAreaLeft}px`,
                     top: `${directionKeysAreaTop}px`,
-                    width: `${3.5 * controllerSquareUnit}px`,
-                    height: `${3 * controllerSquareUnit}px`,
+                    width: `${directionKeysAreaWidth}px`,
+                    height: `${directionKeysAreaHeight}px`,
                 }"
             >
                 <!-- 上キー -->
@@ -187,8 +187,8 @@
                 :style="{
                     left: `${actionButtonsAreaLeft}px`,
                     top: `${actionButtonsAreaTop}px`,
-                    width: `${2.5 * controllerSquareUnit}px`,
-                    height: `${3 * controllerSquareUnit}px`,
+                    width: `${actionButtonsAreaWidth}px`,
+                    height: `${actionButtonsAreaHeight}px`,
                 }"
             >
                 <!-- スペース・キー -->
@@ -321,8 +321,13 @@
     const controllerSquareUnit: number = 40;
     const directionKeysAreaLeft = ref<number>(0);
     const directionKeysAreaTop = ref<number>(0);
+    const directionKeysAreaWidth = 3.5 * controllerSquareUnit;
+    const directionKeysAreaHeight = 3 * controllerSquareUnit;
     const actionButtonsAreaLeft = ref<number>(0);
     const actionButtonsAreaTop = ref<number>(0);
+    const actionButtonsAreaWidth = 2.5 * controllerSquareUnit;
+    const actionButtonsAreaHeight = 3 * controllerSquareUnit;
+
 
     // ################
     // # オブジェクト #
@@ -391,9 +396,9 @@
             shassisWidth.value = (3 + 2) * screenSquareUnit + props.screenWidth;
             shassisHeight.value = (1 + 0.25) * screenSquareUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0;
-            directionKeysAreaTop.value = screenMarginTop.value + 1 * controllerSquareUnit;
+            directionKeysAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2; // 上から 1/3 のところに合わせる
             actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 0.5 * controllerSquareUnit;
-            actionButtonsAreaTop.value = screenMarginTop.value + 1 * controllerSquareUnit;
+            actionButtonsAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2;
         }
     }
 
