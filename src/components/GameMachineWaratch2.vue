@@ -247,7 +247,7 @@
     // # インポート #
     // ##############
 
-    import { onMounted, onUnmounted, ref } from 'vue';
+    import { computed, onMounted, onUnmounted, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++
     // + インポート　＞　互換性対応 +
@@ -313,8 +313,24 @@
     const gridUnit = 20;
     const cornerRadius = 3 * gridUnit;  // 角の弧の半径は、だいたいグリッド3目盛り分
     const paddingSize = 0.5 * gridUnit; // ちょっとの隙間
-    const shassisWidth = ref<number>(0);
-    const shassisHeight = ref<number>(0);
+    // const shassisWidth = ref<number>(0);
+    // const shassisHeight = ref<number>(0);
+    const shassisWidth = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return 2 * cornerRadius + props.screenWidth;
+
+        } else {    // 横型
+            return (9 + 6) * gridUnit + props.screenWidth;
+        }
+    });
+    const shassisHeight = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return 2 * cornerRadius + directionKeysAreaHeight + props.screenHeight;
+
+        } else {    // 横型
+            return  (3 + 0.75) * gridUnit + props.screenHeight;
+        }
+    });
     const screenMarginLeft = ref<number>(0);
     const screenMarginTop = ref<number>(0);
     const shassisBorderThickness: number = 4;

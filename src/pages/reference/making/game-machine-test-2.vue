@@ -43,8 +43,8 @@
                 :style="{
                     position: 'relative',
                 }"
-                :screenWidth="3 * 64"
-                :screenHeight="3 * 64"
+                :screenWidth="appZoom * 3 * tileBoard1TileWidth"
+                :screenHeight="appZoom * 3 * tileBoard1TileHeight"
                 v-on:onLeftButtonPressed="onLeftButtonPressed"
                 v-on:onLeftButtonReleased="onLeftButtonReleased"
                 v-on:onUpButtonPressed="onUpButtonPressed"

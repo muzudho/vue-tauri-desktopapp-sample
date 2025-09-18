@@ -95,10 +95,9 @@
             :hardLocationStyle="{
                 left: '0px',
                 top: '0px',
-                //zoom: appZoom,  // FIXME: きいてない？
             }"
-            :screenWidth="(board1FileNum - board1WithMaskFrSize) * tileBoard1TileWidth"
-            :screenHeight="(board1RankNum - board1WithMaskFrSize) * tileBoard1TileHeight"
+            :screenWidth="appZoom * (board1FileNum - 2 * board1WithMaskFrSize) * tileBoard1TileWidth"
+            :screenHeight="appZoom * (board1RankNum - 2 * board1WithMaskFrSize) * tileBoard1TileHeight"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
             v-on:onUpButtonPressed="onUpButtonPressed"
@@ -117,16 +116,15 @@
                         position: 'relative',
                         left: `${-tileBoard1TileWidth}px`,
                         top: `${-tileBoard1TileHeight}px`,
-                        width: `${(board1FileNum + 1) * tileBoard1TileWidth}px`,
-                        height: `${(board1RankNum + 1) * tileBoard1TileHeight}px`,
+                        width: `${board1FileNum * tileBoard1TileWidth}px`,
+                        height: `${board1RankNum * tileBoard1TileHeight}px`,
                         zoom: appZoom,
                         clipPath: `inset(
                             ${tileBoard1TileHeight}px
-                            ${4 * tileBoard1TileWidth}px
-                            ${4 * tileBoard1TileHeight}px
+                            ${tileBoard1TileWidth}px
+                            ${tileBoard1TileHeight}px
                             ${tileBoard1TileWidth}px
                         )`, // 四隅の切り落とし。上、右、下、左
-                        // FIXME: 右と下の 4倍 が分からん
                     }"
                 >
 
@@ -691,7 +689,8 @@ color = i % 2;
     // 今動いているアプリケーションの状態を記録しているデータ。特に可変のもの。
     //
 
-    const appZoom = ref<number>(2);    // ズーム
+    //const appZoom = ref<number>(2);    // ズーム
+    const appZoom = ref<number>(1);    // ズーム
 
 
     // ################
