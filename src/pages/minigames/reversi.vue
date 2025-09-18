@@ -63,8 +63,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="gameMachine1Zoom * 512"
-            :screenHeight="gameMachine1Zoom * 512"
+            :screenWidth="gameMachine1Zoom * gameMachine1Width"
+            :screenHeight="gameMachine1Zoom * gameMachine1Height"
             :powerOn="gameMachine1IsPowerOn"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -97,7 +97,7 @@
     // # インポート #
     // ##############
 
-    import { ref } from 'vue';
+    import { computed, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -133,6 +133,12 @@
     // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1Zoom = ref<number>(0.375);    // ズーム
+    const gameMachine1Width = computed(()=>{
+        return 512; //board1FileNum.value * tileBoard1TileWidth.value;
+    });
+    const gameMachine1Height = computed(()=>{
+        return 512; //board1RankNum.value * tileBoard1TileHeight.value;
+    });
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中

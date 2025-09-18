@@ -91,8 +91,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="gameMachine1Zoom * board1FileNum * tileBoard1TileWidth"
-            :screenHeight="gameMachine1Zoom * board1RankNum * tileBoard1TileHeight"
+            :screenWidth="gameMachine1Zoom * gameMachine1Width"
+            :screenHeight="gameMachine1Zoom * gameMachine1Height"
             :powerOn="gameMachine1IsPowerOn"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -110,8 +110,8 @@
                 <div
                     :style="{
                         visibility: gameMachine1Visibility,
-                        width: `${board1FileNum * tileBoard1TileWidth}px`,
-                        height: `${board1RankNum * tileBoard1TileHeight}px`,
+                        width: `${gameMachine1Width}px`,
+                        height: `${gameMachine1Height}px`,
                         zoom: gameMachine1Zoom,
                     }"
                     style="
@@ -340,6 +340,12 @@
     // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1Zoom = ref<number>(0.375);    // ズーム
+    const gameMachine1Width = computed(()=>{
+        return board1FileNum.value * tileBoard1TileWidth.value;
+    });
+    const gameMachine1Height = computed(()=>{
+        return board1RankNum.value * tileBoard1TileHeight.value;
+    });
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
