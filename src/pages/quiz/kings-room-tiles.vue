@@ -163,33 +163,33 @@
         </game-machine-waratch2>
 
 
-        <!-- タッチパネルでも操作できるように、ボタンを置いておきます。キーボードの操作説明も兼ねます。 -->
-        <p>キーボード操作方法</p>
-        <ul class="mb-6">
-            <li>
-                <!-- お好み設定パネル１ -->
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
-                    @touchend="button1Ref?.release();"
-                    @touchcancel="button1Ref?.release();"
-                    @touchleave="button1Ref?.release();"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
-                    @mouseup="button1Ref?.release();"
-                    @mouseleave="button1Ref?.release();"
-                >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
-                <section v-if="preferences1IsShowing" class="sec-1 pt-6 pb-6">
-                    <v-slider
-                        label="ズーム"
-                        v-model="appZoom"
-                        :min="1"
-                        :max="4"
-                        step="0.5"
-                        showTicks="always"
-                        thumbLabel="always" />
-                </section>
-            </li>
-        </ul>
+        <section class="sec-0 mt-6 mb-6">
+            <!-- お好み設定パネル１ -->
+            <v-btn
+                class="code-key"
+                @touchstart.prevent="button1Ref?.press($event, onPreferences1ButtonPressed);"
+                @touchend="button1Ref?.release();"
+                @touchcancel="button1Ref?.release();"
+                @touchleave="button1Ref?.release();"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onPreferences1ButtonPressed)"
+                @mouseup="button1Ref?.release();"
+                @mouseleave="button1Ref?.release();"
+            >{{ preferences1IsShowing ? '⚙️お好み設定を終わる' : '⚙️お好み設定を表示' }}</v-btn>
+            <section
+                v-if="preferences1IsShowing"
+                class="sec-0 pt-6 pb-6"
+                style="background-color: rgb(0, 0, 0, 0.1);"
+            >
+                <v-slider
+                    label="ズーム"
+                    v-model="appZoom"
+                    :min="1"
+                    :max="4"
+                    step="0.125"
+                    showTicks="always"
+                    thumbLabel="always" />
+            </section>
+        </section>
 
 
         <talk-balloon
