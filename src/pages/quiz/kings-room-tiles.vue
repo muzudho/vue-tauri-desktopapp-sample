@@ -111,7 +111,7 @@
             v-on:onSpaceButtonReleased="onSpaceButtonReleased"
         >
             <template #default>
-                <!-- 盤の全体サイズと、切り抜き領域 -->
+                <!-- ゲーム画面の全体サイズと、切り抜き領域 -->
                 <div
                     :style="{
                         position: 'relative',

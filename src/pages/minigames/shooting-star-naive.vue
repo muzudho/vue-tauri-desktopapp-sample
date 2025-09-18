@@ -107,17 +107,20 @@
             v-on:onSpaceButtonReleased="onSpaceButtonReleased"
         >
             <template #default>
-                <!-- ゲーム画面 -->
+                <!-- ゲーム画面の全体サイズと、切り抜き領域 -->
                 <div
                     :style="{
                         visibility: gameMachine1Visibility,
+                        width: `${gameMachine1Zoom * board1FileNum * tileBoard1TileWidth}px`,
+                        height: `${gameMachine1Zoom * board1RankNum * tileBoard1TileHeight}px`,
                     }"
                     style="
                         position:relative;
                         left: 0;
                         top: 0;
-                        width:512px;
-                        height:384px;
+                        /* width:512px; */
+                        /* height:384px; */
+                        zoom: gameMachine1Zoom;
                         background-color: #303030;
                     "
                 >
