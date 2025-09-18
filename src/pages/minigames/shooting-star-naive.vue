@@ -177,7 +177,7 @@
                         }"
                         style="
                             position: absolute;
-                            font-size: 14px;
+                            font-size: 28px;
                             color: white;
                         "
                     >ボタン操作の練習ができます。ゲームを開始するには、ゲーム機の上の［▶］ボタンを押してください。</p>
@@ -207,7 +207,7 @@
                 <v-slider
                     label="ズーム"
                     v-model="gameMachine1Zoom"
-                    :min="1"
+                    :min="0.375"
                     :max="4"
                     step="0.125"
                     showTicks="always"
@@ -346,7 +346,7 @@
     const gameMachine1Visibility = ref<string>('hidden');
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPause = ref<boolean>(false);    // ゲームは一時停止中
-    const gameMachine1Zoom = ref<number>(1);    // ズーム
+    const gameMachine1Zoom = ref<number>(0.375);    // ズーム
     const gameMachine1Score = ref<number>(0);   // 得点
     const gameMachine1MaxCount = computed(()=>60 * commonSeconds);  // ゲーム時間は１分
     const gameMachine1ScheduleStep = ref<number>(0);    // 星の出現スケジュール
@@ -582,10 +582,9 @@
     // + オブジェクト　＞　タイル盤１ +
     // ++++++++++++++++++++++++++++++++
 
-    // const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
-    // const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
-    const tileBoard1TileWidth = ref<number>(16);  // マスの横幅（ピクセル）
-    const tileBoard1TileHeight = ref<number>(16); // マスの縦幅（ピクセル）
+    // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
+    const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
+    const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
     const board1FileNum = ref<number>(16);        // 盤が横に何マスか
     const board1RankNum = ref<number>(12);        // 盤が縦に何マスか
     const board1Area = computed(()=>{           // 盤のマス数
