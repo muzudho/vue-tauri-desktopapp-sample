@@ -45,6 +45,7 @@
                 >{{ appGameIsPlaying ? "⏹" : "▶" }}</v-btn>
                 <v-btn
                     class="code-key"
+                    :disabled="!pauseButton1Enabled"
                     @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
                     @touchend="button1Ref?.release();"
                     @touchcancel="button1Ref?.release();"
@@ -260,11 +261,17 @@
     // # オブジェクト #
     // ################
 
-    // ++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ボタン押しっぱなし機能 +
-    // ++++++++++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　拡張機能 +
+    // ++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
+
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　一時停止／再開ボタン +
+    // ++++++++++++++++++++++++++++++++++++++++++
+
+    const pauseButton1Enabled = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ストップウォッチ１ +
@@ -655,12 +662,13 @@
      */
     function onGameStartOrEndButtonPushed() : void {
         if(appGameIsPlaying.value) {
-            // ゲームを終了させます
-            gameInit();
+            pauseButton1Enabled.value = false;
+            gameInit(); // ゲームは終了したので、初期状態に戻します
             return;
         }
 
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+        pauseButton1Enabled.value = true;
 
         appGameIsPlaying.value = !appGameIsPlaying.value;
     }
