@@ -177,6 +177,7 @@
                         }"
                         style="
                             position: absolute;
+                            font-size: 14px;
                             color: white;
                         "
                     >ボタン操作の練習ができます。ゲームを開始するには、ゲーム機の上の［▶］ボタンを押してください。</p>
@@ -581,10 +582,10 @@
     // + オブジェクト　＞　タイル盤１ +
     // ++++++++++++++++++++++++++++++++
 
-    const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
-    const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
-    // const tileBoard1TileWidth = ref<number>(16);  // マスの横幅（ピクセル）
-    // const tileBoard1TileHeight = ref<number>(16); // マスの縦幅（ピクセル）
+    // const tileBoard1TileWidth = ref<number>(32);  // マスの横幅（ピクセル）
+    // const tileBoard1TileHeight = ref<number>(32); // マスの縦幅（ピクセル）
+    const tileBoard1TileWidth = ref<number>(16);  // マスの横幅（ピクセル）
+    const tileBoard1TileHeight = ref<number>(16); // マスの縦幅（ピクセル）
     const board1FileNum = ref<number>(16);        // 盤が横に何マスか
     const board1RankNum = ref<number>(12);        // 盤が縦に何マスか
     const board1Area = computed(()=>{           // 盤のマス数
