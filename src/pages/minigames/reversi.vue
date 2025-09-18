@@ -134,7 +134,8 @@
                 </div>
             </template>
         </game-machine-waratch2>
-        {{ gameBoard1DebugMessage }}
+        {{ gameBoard1DebugMessage }}<br/>
+        turn={{ gameBoard1Turn }}
 
         <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
@@ -182,7 +183,7 @@
     // # インポート #
     // ##############
 
-    import { computed, ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -313,6 +314,7 @@
             return gameBoard1StoneColorArray.value[sq] == 0;
         }
     });
+    const gameBoard1Turn: number = 1;
 
 
     // ######################
@@ -380,6 +382,13 @@
      */
     function onSpaceButtonPressed() : void {
         player1Input[" "] = true;
+
+        // TODO: 後で消す
+        // 適当に石を置く
+        putStone(
+            Math.floor(Math.random() * gameBoard1Area.value),
+            Math.floor(Math.random() * 2) + 1
+        );
     }
 
 
@@ -441,6 +450,14 @@
 
 
     // ++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　開始／終了 +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    onMounted(()=>{
+        gamePowerOn();  // 電源を入れる演出
+    });
+
+    // ++++++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++++++++
 
@@ -452,10 +469,17 @@
         gameBoard1DebugMessage.value = `sq=${sq}`;
 
         if(gameBoard1StoneColorArray.value[sq]==0) {
-            gameBoard1StoneColorArray.value[sq] = Math.floor(Math.random() * 2) + 1;
+            putStone(
+                sq,
+                Math.floor(Math.random() * 2) + 1
+            );
         }
     }
 
+
+    function putStone(sq: number, color: number) : void {
+        gameBoard1StoneColorArray.value[sq] = color;
+    }
 
     // ################
     // # サブルーチン #
