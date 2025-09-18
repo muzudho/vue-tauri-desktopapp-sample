@@ -23,7 +23,7 @@
                 この黒い画面は宇宙な。<br/>
                 ［ゲームスタート］ボタンを押すと、ゲームが始まるぜ。<br/>
                 たまに星が流れてくる。<br/>
-                60秒の間に、カメラのファインダーを上下左右に動かして、星をファインダーの中に入っているときに、スペース・キーを押してくれだぜ。これで 100点 だぜ。<br/>
+                60秒の間に、カメラのファインダー（点線の長方形だ）を上下左右に動かして、星をファインダーの中に入っているときに、［（スペース）］キーを押してくれだぜ。これで 100点 だぜ。<br/>
                 <br/>
                 飽きたら終わりだぜ。
             </p>
@@ -62,74 +62,6 @@
                 >何もしないボタン</v-btn>
             </li>
         </ul>
-        <br/>
-        <p>キーボード操作方法</p>
-        <ul>
-            <li>ＰＣならボタンをマウスクリックか、キーボード操作、スマホならボタンをタッチ。</li>
-            <li>
-                <v-btn class="code-key hidden"/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onUpButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onUpButtonReleased);"
-                    @touchcancel="button1Ref?.release(onUpButtonReleased);"
-                    @touchleave="button1Ref?.release(onUpButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onUpButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onUpButtonReleased);"
-                    @mouseleave="button1Ref?.release(onUpButtonReleased);"
-                >↑</v-btn>
-                <br/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onLeftButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onLeftButtonReleased);"
-                    @touchcancel="button1Ref?.release(onLeftButtonReleased);"
-                    @touchleave="button1Ref?.release(onLeftButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onLeftButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onLeftButtonReleased);"
-                    @mouseleave="button1Ref?.release(onLeftButtonReleased);"
-                >←</v-btn>
-                <v-btn class="code-key hidden"/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onRightButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onRightButtonReleased);"
-                    @touchcancel="button1Ref?.release(onRightButtonReleased);"
-                    @touchleave="button1Ref?.release(onRightButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onRightButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onRightButtonReleased);"
-                    @mouseleave="button1Ref?.release(onRightButtonReleased);"
-                >→</v-btn>
-                　…　カメラのファインダー（点線の長方形だ）を上下左右に移動
-                <br/>
-                <v-btn class="code-key hidden"/>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onDownButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onDownButtonReleased);"
-                    @touchcancel="button1Ref?.release(onDownButtonReleased);"
-                    @touchleave="button1Ref?.release(onDownButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onDownButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onDownButtonReleased);"
-                    @mouseleave="button1Ref?.release(onDownButtonReleased);"
-                >↓</v-btn>
-                <br/>
-            </li>
-            <li>
-                <v-btn
-                    class="code-key"
-                    @touchstart.prevent="button1Ref?.press($event, onSpaceButtonPressed, {repeat: true});"
-                    @touchend="button1Ref?.release(onSpaceButtonReleased);"
-                    @touchcancel="button1Ref?.release(onSpaceButtonReleased);"
-                    @touchleave="button1Ref?.release(onSpaceButtonReleased);"
-                    @mousedown.prevent="button1Ref?.handleMouseDown($event, onSpaceButtonPressed, {repeat: true})"
-                    @mouseup="button1Ref?.release(onSpaceButtonReleased);"
-                    @mouseleave="button1Ref?.release(onSpaceButtonReleased);"
-                >（スペース）</v-btn>
-                　…　撮影。
-            </li>
-        </ul>
-        <br/>
         <div>
             <p style="font-size: x-large; margin-top: 8px; margin-bottom: 8px;">
             スコア： {{ appGameScore }}　　残り時間: {{ Math.floor((appGameMaxCount - stopwatch1Count) / commonSeconds) }} . {{ (appGameMaxCount - stopwatch1Count) % commonSeconds }}
@@ -162,47 +94,47 @@
             v-on:onSpaceButtonPressed="onSpaceButtonPressed"
             v-on:onSpaceButtonReleased="onSpaceButtonReleased"
         >
+            <template #default>
+                <!-- ゲーム画面 -->
+                <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
+                    <!--
+                        グリッド
+                        NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
+                    -->
+                    <div
+                        v-for="i in board1Area"
+                        :key="i"
+                        :style="`position:absolute; top: ${Math.floor((i - 1) / board1FileNum) * tileBoard1TileHeight}px; left: ${((i - 1) % board1FileNum) * tileBoard1TileWidth}px; width:${tileBoard1TileWidth}px; height:${tileBoard1TileHeight}px; border: solid 1px gray;`"></div>
+
+                    <!-- 星 -->
+                    <Tile
+                        :srcLeft="0"
+                        :srcTop="0"
+                        :srcWidth="tileBoard1TileWidth"
+                        :srcHeight="tileBoard1TileHeight"
+                        tilemapUrl="/img/making/sprite-objects-001.png"
+                        :style="starStyle"
+                        style="position:absolute;" /><br/>
+
+                    <!-- カメラのファインダー（点線の枠） -->
+                    <div
+                        class="player"
+                        :style="playerStyle"
+                        style="position:absolute;" ></div>
+
+                    <!-- リロードのカウントダウン（パイみたいなやつ） -->
+                    <Tile
+                        :srcLeft="reloadPie1TileLeft"
+                        :srcTop="reloadPie1TileTop"
+                        :srcWidth="tileBoard1TileWidth"
+                        :srcHeight="tileBoard1TileHeight"
+                        tilemapUrl="/img/making/202508__warabenture__16-2357-8counts-red.png"
+                        :style="reloadPieStyle"
+                        style="position:absolute;" /><br/>
+                        
+                </div>
+            </template>
         </game-machine-waratch2>
-
-
-        <!-- ゲーム画面領域（宇宙） -->
-        <div style="position:relative; left: 0; top: 0; width:512px; height:384px; background-color: #303030;">
-            <!--
-                グリッド
-                NOTE: ループカウンターは 1 から始まるので、1～9の9個のセルを作成。
-            -->
-            <div
-                v-for="i in board1Area"
-                :key="i"
-                :style="`position:absolute; top: ${Math.floor((i - 1) / board1FileNum) * tileBoard1TileHeight}px; left: ${((i - 1) % board1FileNum) * tileBoard1TileWidth}px; width:${tileBoard1TileWidth}px; height:${tileBoard1TileHeight}px; border: solid 1px gray;`"></div>
-
-            <!-- 星 -->
-            <Tile
-                :srcLeft="0"
-                :srcTop="0"
-                :srcWidth="tileBoard1TileWidth"
-                :srcHeight="tileBoard1TileHeight"
-                tilemapUrl="/img/making/sprite-objects-001.png"
-                :style="starStyle"
-                style="position:absolute;" /><br/>
-
-            <!-- カメラのファインダー（点線の枠） -->
-            <div
-                class="player"
-                :style="playerStyle"
-                style="position:absolute;" ></div>
-
-            <!-- リロードのカウントダウン（パイみたいなやつ） -->
-            <Tile
-                :srcLeft="reloadPie1TileLeft"
-                :srcTop="reloadPie1TileTop"
-                :srcWidth="tileBoard1TileWidth"
-                :srcHeight="tileBoard1TileHeight"
-                tilemapUrl="/img/making/202508__warabenture__16-2357-8counts-red.png"
-                :style="reloadPieStyle"
-                style="position:absolute;" /><br/>
-                
-        </div>
 
         <!-- デバッグ用 -->
         <!--
