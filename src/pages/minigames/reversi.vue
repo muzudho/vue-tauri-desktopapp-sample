@@ -238,6 +238,7 @@
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
     const gameMachine1Visibility = ref<string>('hidden');
+    const gameMachineRandomLimit: number = 2 * Math.PI * Math.E;    // 偏りのない乱数なら、マスをランダムに指定しても、マス目の数 × 2πe回試行すれば、すべてのマスをだいたい１回は訪問するという経験則（＾～＾）確率論の［クーポン収集問題（Coupon Collector's Problem）］よりでかい数。
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１　＞　ストップウォッチ１ +
@@ -387,10 +388,14 @@
         player1Input[" "] = true;
 
         // TODO: 後で消す
-        // 適当に石を置く
-        const sq = Math.floor(Math.random() * gameBoard1Area.value);
-        const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-        const itsOk = putStone(sq, color);
+        let itsOk = false;
+        let count = 0;
+        while(!itsOk && count <= gameMachineRandomLimit) {
+            // 適当に石を置く
+            const sq = Math.floor(Math.random() * gameBoard1Area.value);
+            const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+            itsOk = putStone(sq, color);
+        }
     }
 
 
