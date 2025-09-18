@@ -189,7 +189,7 @@
                     <v-slider
                         label="ズーム"
                         v-model="appZoom"
-                        :min="0.5"
+                        :min="1"
                         :max="4"
                         step="0.5"
                         showTicks="always"

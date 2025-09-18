@@ -313,8 +313,12 @@
     const gridUnit = 20;
     const cornerRadius = 3 * gridUnit;  // 角の弧の半径は、だいたいグリッド3目盛り分
     const paddingSize = 0.5 * gridUnit; // ちょっとの隙間
-    // const shassisWidth = ref<number>(0);
-    // const shassisHeight = ref<number>(0);
+    const shassisBorderThickness: number = 4;
+    const hardNameLineHeight: number = 24;
+    const directionKeysAreaWidth = 6 * gridUnit + paddingSize;  // ドロップシャドウ分、paddingSize を追加
+    const directionKeysAreaHeight = 6 * gridUnit + paddingSize;
+    const actionButtonsAreaWidth = 6 * gridUnit + paddingSize;  // 方向キーと合わせる。
+    const actionButtonsAreaHeight = 6 * gridUnit + paddingSize;
     const shassisWidth = computed(()=>{
         if (orientation.value == 'Portrait') {  // 縦型
             return 2 * cornerRadius + props.screenWidth;
@@ -331,18 +335,54 @@
             return  (3 + 0.75) * gridUnit + props.screenHeight;
         }
     });
-    const screenMarginLeft = ref<number>(0);
-    const screenMarginTop = ref<number>(0);
-    const shassisBorderThickness: number = 4;
-    const hardNameLineHeight: number = 24;
-    const directionKeysAreaLeft = ref<number>(0);
-    const directionKeysAreaTop = ref<number>(0);
-    const directionKeysAreaWidth = 6 * gridUnit + paddingSize;  // ドロップシャドウ分、paddingSize を追加
-    const directionKeysAreaHeight = 6 * gridUnit + paddingSize;
-    const actionButtonsAreaLeft = ref<number>(0);
-    const actionButtonsAreaTop = ref<number>(0);
-    const actionButtonsAreaWidth = 6 * gridUnit + paddingSize;  // 方向キーと合わせる。
-    const actionButtonsAreaHeight = 6 * gridUnit + paddingSize;
+    const screenMarginLeft = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return cornerRadius;
+
+        } else {    // 横型
+            return  2 * paddingSize + directionKeysAreaWidth;
+        }
+    });
+    const screenMarginTop = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return cornerRadius;
+
+        } else {    // 横型
+            return 1.5 * gridUnit;
+        }
+    });
+    const directionKeysAreaLeft = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return paddingSize;
+
+        } else {    // 横型
+            return 0.5 * gridUnit;
+        }
+    });
+    const directionKeysAreaTop = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
+
+        } else {    // 横型
+            return shassisHeight.value / 3 - directionKeysAreaHeight / 2; // 上から 1/3 のところに合わせる
+        }
+    });
+    const actionButtonsAreaLeft = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return shassisWidth.value - paddingSize - actionButtonsAreaWidth;
+
+        } else {    // 横型
+            return screenMarginLeft.value + props.screenWidth + 1 * gridUnit;
+        }
+    });
+    const actionButtonsAreaTop = computed(()=>{
+        if (orientation.value == 'Portrait') {  // 縦型
+            return screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
+
+        } else {    // 横型
+            return shassisHeight.value / 3 - directionKeysAreaHeight / 2;
+        }
+    });
 
 
     // ################
@@ -395,28 +435,6 @@
         // } else {
         //     orientation.value = '不明';
         // }
-
-        if (orientation.value == 'Portrait') {  // 縦型
-            screenMarginLeft.value = cornerRadius;
-            screenMarginTop.value = cornerRadius;
-            shassisWidth.value = 2 * cornerRadius + props.screenWidth;
-            shassisHeight.value = 2 * cornerRadius + directionKeysAreaHeight + props.screenHeight;
-            directionKeysAreaLeft.value = paddingSize;
-            directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
-            actionButtonsAreaLeft.value = shassisWidth.value - paddingSize - actionButtonsAreaWidth;
-            actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
-
-        } else {    // 横型
-            const paddingSize = 0.5 * gridUnit; // ちょっとの隙間
-            screenMarginLeft.value = 2 * paddingSize + directionKeysAreaWidth;
-            screenMarginTop.value = 1.5 * gridUnit;
-            shassisWidth.value = (9 + 6) * gridUnit + props.screenWidth;
-            shassisHeight.value = (3 + 0.75) * gridUnit + props.screenHeight;
-            directionKeysAreaLeft.value = 0.5 * gridUnit;
-            directionKeysAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2; // 上から 1/3 のところに合わせる
-            actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 1 * gridUnit;
-            actionButtonsAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2;
-        }
     }
 
 </script>
