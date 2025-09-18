@@ -380,17 +380,19 @@
         // }
 
         if (orientation.value == 'Portrait') {  // 縦型
-            screenMarginLeft.value = 3 * gridUnit;
-            screenMarginTop.value = 3 * gridUnit;
-            shassisWidth.value = 6 * gridUnit + props.screenWidth;
-            shassisHeight.value = 12 * gridUnit + props.screenHeight;
-            directionKeysAreaLeft.value = 0.5 * gridUnit;
-            directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;    // 8 は画面とボタンの隙間
+            const cornerRadius = 3 * gridUnit;  // 角の弧の半径は、だいたいグリッド3目盛り分
+            const paddingSize = 0.5 * gridUnit; // ちょっとの隙間
+            screenMarginLeft.value = cornerRadius;
+            screenMarginTop.value = cornerRadius;
+            shassisWidth.value = 2 * cornerRadius + props.screenWidth;
+            shassisHeight.value = 2 * cornerRadius + directionKeysAreaHeight + props.screenHeight;
+            directionKeysAreaLeft.value = paddingSize;
+            directionKeysAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
             actionButtonsAreaLeft.value = props.screenWidth;
-            actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + 8;
+            actionButtonsAreaTop.value = screenMarginTop.value + props.screenHeight + hardNameLineHeight + paddingSize;
 
         } else {    // 横型
-            screenMarginLeft.value = 7.5 * gridUnit;
+            screenMarginLeft.value = 1.5 * gridUnit + directionKeysAreaWidth;
             screenMarginTop.value = 1.5 * gridUnit;
             shassisWidth.value = (9 + 6) * gridUnit + props.screenWidth;
             shassisHeight.value = (3 + 0.75) * gridUnit + props.screenHeight;
