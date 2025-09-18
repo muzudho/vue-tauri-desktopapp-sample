@@ -108,10 +108,10 @@
                 <v-btn
                     class="waratch2-button"
                     :style="{
-                        top: `${0 * controllerSquareUnit}px`,
-                        left: `${1.5 * controllerSquareUnit}px`,
-                        width: `${1 * controllerSquareUnit}px`,
-                        height: `${1 * controllerSquareUnit}px`,
+                        top: `${0 * gridUnit}px`,
+                        left: `${3 * gridUnit}px`,
+                        width: `${2 * gridUnit}px`,
+                        height: `${2 * gridUnit}px`,
                     }"
                     @touchstart.prevent="button1Ref?.press($event, emit('onUpButtonPressed'), {repeat: true});"
                     @touchend="button1Ref?.release(emit('onUpButtonReleased'));"
@@ -127,10 +127,10 @@
                 <v-btn
                     class="waratch2-button"
                     :style="{
-                        top: `${1 * controllerSquareUnit}px`,
-                        left: `${0.5 * controllerSquareUnit}px`,
-                        width: `${1 * controllerSquareUnit}px`,
-                        height: `${1 * controllerSquareUnit}px`,
+                        top: `${2 * gridUnit}px`,
+                        left: `${1 * gridUnit}px`,
+                        width: `${2 * gridUnit}px`,
+                        height: `${2 * gridUnit}px`,
                     }"
                     @touchstart.prevent="button1Ref?.press($event, emit('onLeftButtonPressed'), {repeat: true});"
                     @touchend="button1Ref?.release(emit('onLeftButtonReleased'));"
@@ -146,10 +146,10 @@
                 <v-btn
                     class="waratch2-button"
                     :style="{
-                        top: `${1 * controllerSquareUnit}px`,
-                        left: `${2.5 * controllerSquareUnit}px`,
-                        width: `${1 * controllerSquareUnit}px`,
-                        height: `${1 * controllerSquareUnit}px`,
+                        top: `${2 * gridUnit}px`,
+                        left: `${5 * gridUnit}px`,
+                        width: `${2 * gridUnit}px`,
+                        height: `${2 * gridUnit}px`,
                     }"
                     @touchstart.prevent="button1Ref?.press($event, emit('onRightButtonPressed'), {repeat: true});"
                     @touchend="button1Ref?.release(emit('onRightButtonReleased'));"
@@ -165,10 +165,10 @@
                 <v-btn
                     class="waratch2-button"
                     :style="{
-                        top: `${2 * controllerSquareUnit}px`,
-                        left: `${1.5 * controllerSquareUnit}px`,
-                        width: `${1 * controllerSquareUnit}px`,
-                        height: `${1 * controllerSquareUnit}px`,
+                        top: `${4 * gridUnit}px`,
+                        left: `${3 * gridUnit}px`,
+                        width: `${2 * gridUnit}px`,
+                        height: `${2 * gridUnit}px`,
                     }"
                     @touchstart.prevent="button1Ref?.press($event, emit('onDownButtonPressed'), {repeat: true});"
                     @touchend="button1Ref?.release(emit('onDownButtonReleased'));"
@@ -195,9 +195,9 @@
                 <v-btn
                     class="waratch2-button"
                     :style="{
-                        top: `${1 * controllerSquareUnit}px`,
-                        width: `${2.5 * controllerSquareUnit}px`,
-                        height: `${1 * controllerSquareUnit}px`,
+                        top: `${2 * gridUnit}px`,
+                        width: `${5 * gridUnit}px`,
+                        height: `${2 * gridUnit}px`,
                     }"
                     @touchstart.prevent="button1Ref?.press($event, emit('onSpaceButtonPressed'), {repeat: true});"
                     @touchend="button1Ref?.release(emit('onSpaceButtonReleased'));"
@@ -311,6 +311,7 @@
     // よく使う設定をまとめたもの。特に不変のもの。
     //
 
+    const gridUnit = 20;
     const screenSquareUnit: number = 64;
     const shassisWidth = ref<number>(0);
     const shassisHeight = ref<number>(0);
@@ -318,15 +319,14 @@
     const screenMarginTop = ref<number>(0);
     const shassisBorderThickness: number = 4;
     const hardNameLineHeight: number = 24;
-    const controllerSquareUnit: number = 40;
     const directionKeysAreaLeft = ref<number>(0);
     const directionKeysAreaTop = ref<number>(0);
-    const directionKeysAreaWidth = 3.5 * controllerSquareUnit;
-    const directionKeysAreaHeight = 3 * controllerSquareUnit;
+    const directionKeysAreaWidth = 7 * gridUnit;
+    const directionKeysAreaHeight = 6 * gridUnit;
     const actionButtonsAreaLeft = ref<number>(0);
     const actionButtonsAreaTop = ref<number>(0);
-    const actionButtonsAreaWidth = 2.5 * controllerSquareUnit;
-    const actionButtonsAreaHeight = 3 * controllerSquareUnit;
+    const actionButtonsAreaWidth = 5 * gridUnit;
+    const actionButtonsAreaHeight = 6 * gridUnit;
 
 
     // ################
@@ -397,7 +397,7 @@
             shassisHeight.value = (1 + 0.25) * screenSquareUnit + props.screenHeight;
             directionKeysAreaLeft.value = 0;
             directionKeysAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2; // 上から 1/3 のところに合わせる
-            actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 0.5 * controllerSquareUnit;
+            actionButtonsAreaLeft.value = screenMarginLeft.value + props.screenWidth + 1 * gridUnit;
             actionButtonsAreaTop.value = shassisHeight.value / 3 - directionKeysAreaHeight / 2;
         }
     }
