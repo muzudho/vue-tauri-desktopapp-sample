@@ -85,9 +85,9 @@ const routes = [
         component: () => import('../pages/minigames/index.vue'),
     },
     {
-        name: 'MiniGames_TheBody',
-        path: '/minigames/the-body',
-        component: () => import('../pages/minigames/the-body.vue'),
+        name: 'MiniGames_TheContents',
+        path: '/minigames/the-contents',
+        component: () => import('../pages/minigames/the-contents.vue'),
     },
 
     {
@@ -99,6 +99,11 @@ const routes = [
         name: 'MiniGames_ShootingStarReactive',
         path: '/minigames/shooting-star-reactive',
         component: () => import('../pages/minigames/shooting-star-reactive.vue'),
+    },
+    {
+        name: 'MiniGames_Reversi',
+        path: '/minigames/shooting-reversi',
+        component: () => import('../pages/minigames/reversi.vue'),
     },
     // {
     //     name: 'Maze',

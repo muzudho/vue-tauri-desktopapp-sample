@@ -818,6 +818,7 @@
      */
     function onGamePauseOrRestartButtonPushed() : void {
         if(gameMachine1IsPause.value) {
+            // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
             stopwatch1Ref.value?.timerStart();  // タイマーをスタート
         } else {
             stopwatch1Ref.value?.timerStop();  // タイマーをストップ
