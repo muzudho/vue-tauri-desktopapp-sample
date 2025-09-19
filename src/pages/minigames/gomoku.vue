@@ -735,29 +735,30 @@
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
 
             // 左上隅
-            if (sq==0) {
+            if (isNorthwestCorner(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-06';
             // 右上隅
-            } else if (sq == gameBoard1FileNum.value - 1) {
+            } else if (isNortheastCorner(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-12';
             // 左下隅
-            } else if (sq == gameBoard1Area.value - gameBoard1FileNum.value) {
+            } else if (isSouthwestCorner(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-03';
             // 右下隅
-            } else if (sq == gameBoard1Area.value - 1) {
+            } else if (isSoutheastCorner(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-09';
-            // 上辺（隅を除く）
-            } else if (Math.floor(sq/gameBoard1FileNum.value) == 0) {
+            // 上辺
+            } else if (isNorthEdge(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-14';
-            // 左辺（隅を除く）
-            } else if (sq%gameBoard1FileNum.value == 0) {
+            // 左辺
+            } else if (isWestEdge(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-07';
-            // 右辺（隅を除く）
-            } else if (sq%gameBoard1FileNum.value == gameBoard1FileNum.value - 1) {
+            // 右辺
+            } else if (isEastEdge(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-13';
-            // 下辺（隅を除く）
-            } else if (Math.floor(sq/gameBoard1FileNum.value) == gameBoard1RankNum.value - 1) {
+            // 下辺
+            } else if (isSouthEdge(sq)) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-11';
+            // 盤中
             } else {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-15';
             }
@@ -994,6 +995,78 @@
         }
 
         return northwestSq;
+    }
+
+
+    /**
+     * 左上隅か
+     * @param sq 
+     */
+    function isNorthwestCorner(sq: number) : boolean {
+        return sq==0;
+    }
+
+
+    /**
+     * 右上隅か
+     * @param sq 
+     */
+    function isNortheastCorner(sq: number) : boolean {
+        return sq == gameBoard1FileNum.value - 1;
+    }
+
+
+    /**
+     * 左下隅か
+     * @param sq 
+     */
+    function isSouthwestCorner(sq: number) : boolean {
+        return sq == gameBoard1Area.value - gameBoard1FileNum.value;
+    }
+
+
+    /**
+     * 右下隅か
+     * @param sq 
+     */
+    function isSoutheastCorner(sq: number) : boolean {
+        return sq == gameBoard1Area.value - 1;
+    }
+
+
+    /**
+     * 上辺か
+     * @param sq 
+     */
+    function isNorthEdge(sq: number) : boolean {
+        return Math.floor(sq/gameBoard1FileNum.value) == 0;
+    }
+
+
+    /**
+     * 左辺か
+     * @param sq 
+     */
+    function isWestEdge(sq: number) : boolean {
+        return sq%gameBoard1FileNum.value == 0;
+    }
+
+
+    /**
+     * 右辺か
+     * @param sq 
+     */
+    function isEastEdge(sq: number) : boolean {
+        return sq%gameBoard1FileNum.value == gameBoard1FileNum.value - 1;
+    }
+
+
+    /**
+     * 下辺か
+     * @param sq 
+     */
+    function isSouthEdge(sq: number) : boolean {
+        return Math.floor(sq/gameBoard1FileNum.value) == gameBoard1RankNum.value - 1;
     }
 
 
