@@ -105,6 +105,11 @@ const routes = [
         path: '/minigames/reversi',
         component: () => import('../pages/minigames/reversi.vue'),
     },
+    {
+        name: 'MiniGames_Gomoku',
+        path: '/minigames/gomoku',
+        component: () => import('../pages/minigames/gomoku.vue'),
+    },
     // {
     //     name: 'Maze',
     //     path: '/minigames/maze',
