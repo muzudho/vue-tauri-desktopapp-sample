@@ -388,8 +388,78 @@
     // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const gameBoard1SourceTilemap1 : Record<string, Rectangle> = {
-
+    const w = 32;   // tlie width
+    const h = 32;
+    const gw = 3;   // tile group width
+    //
+    // 八方罫線魔法陣
+    //
+    // 008 016 001
+    // 168     032
+    // 004 064 002
+    //
+    // 四方罫線魔法陣
+    //
+    //    01
+    // 08    02
+    //    04
+    //
+    const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {
+        // 0*gw
+        'vacantLand-1' : {top: 0*h, left: 0*gw + 0*w, width: w, height: h},    // 更地
+        'vacantLand-gridLines-06' : {top: 1*h, left: 0*gw + 0*w, width: w, height: h},  // ┌
+        'vacantLand-gridLines-14' : {top: 1*h, left: 0*gw + 1*w, width: w, height: h},  // ┬
+        'vacantLand-gridLines-12' : {top: 1*h, left: 0*gw + 2*w, width: w, height: h},  // ┐
+        'vacantLand-gridLines-07' : {top: 2*h, left: 0*gw + 0*w, width: w, height: h},  // ├
+        'vacantLand-gridLines-15' : {top: 2*h, left: 0*gw + 1*w, width: w, height: h},  // ┼
+        'vacantLand-gridLines-13' : {top: 2*h, left: 0*gw + 2*w, width: w, height: h},  // ┤
+        'vacantLand-gridLines-03' : {top: 3*h, left: 0*gw + 0*w, width: w, height: h},  // └
+        'vacantLand-gridLines-11' : {top: 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
+        'vacantLand-gridLines-09' : {top: 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
+        // 1*gw
+        'vacantLand-yelowMarker-1' : {top: 0*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-06' : {top: 1*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-14' : {top: 1*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-12' : {top: 1*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-07' : {top: 2*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-15' : {top: 2*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-13' : {top: 2*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-03' : {top: 3*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-11' : {top: 3*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-09' : {top: 3*h, left: 1*gw + 2*w, width: w, height: h},
+        // 2*gw
+        'vacantLand-greenMarker-1' : {top: 0*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-06' : {top: 1*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-14' : {top: 1*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-12' : {top: 1*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-07' : {top: 2*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-15' : {top: 2*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-13' : {top: 2*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-03' : {top: 3*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-11' : {top: 3*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-09' : {top: 3*h, left: 2*gw + 2*w, width: w, height: h},
+        // 3*gw
+        'vacantLand-blueMarker-1' : {top: 0*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-06' : {top: 1*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-14' : {top: 1*h, left: 3*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-12' : {top: 1*h, left: 3*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-07' : {top: 2*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-15' : {top: 2*h, left: 3*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-13' : {top: 2*h, left: 3*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-03' : {top: 3*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-11' : {top: 3*h, left: 3*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-09' : {top: 3*h, left: 3*gw + 2*w, width: w, height: h},
+        // 4*gw
+        'vacantLand-skyBlueMarker-1' : {top: 0*h, left: 4*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-06' : {top: 1*h, left: 4*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-14' : {top: 1*h, left: 4*gw + 1*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-12' : {top: 1*h, left: 4*gw + 2*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-07' : {top: 2*h, left: 4*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-15' : {top: 2*h, left: 4*gw + 1*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-13' : {top: 2*h, left: 4*gw + 2*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-03' : {top: 3*h, left: 4*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-11' : {top: 3*h, left: 4*gw + 1*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-09' : {top: 3*h, left: 4*gw + 2*w, width: w, height: h},
     };
 
     // /**
