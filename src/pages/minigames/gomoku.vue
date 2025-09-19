@@ -1245,46 +1245,47 @@
     ) : void {
         const opponentColor1 = opponentColor(gameBoard1Turn.value);
 
-        // 垂直方向
-        const connectedStoneSqArray: number[] = []; // つながりのある自石のあるマス番号
-        connectedStoneSqArray.push(startSq);
-        // 北
-        let aNextSq = startSq;
-        let aNextMaxConn = 0;
-        // 上５マスをチェック
-        for(let i:number=0; i<5; i++){
-            aNextSq = aNextOf(aNextSq);
+        function checkDirectionalLineConnectionOfStones(
+            aNextOf: (sq: number)=>number
+        ) : [number[], number] {
+            // 垂直方向
+            const connectedStoneSqArray: number[] = []; // つながりのある自石のあるマス番号
+            connectedStoneSqArray.push(startSq);
+            // 北
+            let aNextSq = startSq;
+            let aNextMaxConn = 0;
+            // 連続５マスをチェック
+            for(let i:number=0; i<5; i++){
+                aNextSq = aNextOf(aNextSq);
 
-            if (aNextSq == -1 || gameBoard1StoneColorArray.value[aNextSq] == opponentColor1) {  // 盤外、または相手の石なら
-                break;  // 探索終了
+                if (aNextSq == -1 || gameBoard1StoneColorArray.value[aNextSq] == opponentColor1) {  // 盤外、または相手の石なら
+                    break;  // 探索終了
+                }
+
+                if(gameBoard1StoneColorArray.value[aNextSq] == gameBoard1Turn.value) {  // 自石なら
+                    // 石の接続数を加算
+                    connectedStoneSqArray.push(aNextSq);
+                    aNextMaxConn = Math.max(directionalConnectionArray.value[aNextSq], aNextMaxConn);
+                }
             }
 
-            if(gameBoard1StoneColorArray.value[aNextSq] == gameBoard1Turn.value) {  // 自石なら
-                // 石の接続数を加算
-                connectedStoneSqArray.push(aNextSq);
-                aNextMaxConn = Math.max(directionalConnectionArray.value[aNextSq], aNextMaxConn);
-            }
+            return [connectedStoneSqArray, aNextMaxConn];
         }
-        // 南
-        let bNextSq = startSq;
-        let bNextMaxConn = 0;
-        // 下５マスをチェック
-        for(let i:number=0; i<5; i++){
-            bNextSq = bNextOf(bNextSq);
 
-            if (bNextSq == -1 || gameBoard1StoneColorArray.value[bNextSq] == opponentColor1) {  // 盤外、または相手の石なら
-                break;  // 探索終了
-            }
 
-            if(gameBoard1StoneColorArray.value[bNextSq] == gameBoard1Turn.value) {  // 自石なら
-                // 石の接続数を加算
-                connectedStoneSqArray.push(bNextSq);
-                bNextMaxConn = Math.max(directionalConnectionArray.value[aNextSq], aNextMaxConn);
-            }
-        }
+        const [aConnectedStoneSqArray, aNextMaxConn] = checkDirectionalLineConnectionOfStones(
+            aNextOf
+        );
+        const [bConnectedStoneSqArray, bNextMaxConn] = checkDirectionalLineConnectionOfStones(
+            bNextOf
+        );
+
         // 集計
         const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
-        connectedStoneSqArray.forEach((sq, _index, _array)=>{
+        aConnectedStoneSqArray.forEach((sq, _index, _array)=>{
+            directionalConnectionArray.value[sq] = maxConn + 1;
+        });
+        bConnectedStoneSqArray.forEach((sq, _index, _array)=>{
             directionalConnectionArray.value[sq] = maxConn + 1;
         });
     }
