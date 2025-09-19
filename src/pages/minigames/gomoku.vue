@@ -382,6 +382,7 @@
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
     const gameBoard1SquareImageArray = ref<string[]>(new Array(gameBoard1Area.value).fill('vacantLand-1')); // マスの画像
+    const gameBoard1StoneConnectionArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の接続数
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
@@ -657,13 +658,18 @@
     }
 
 
+    /**
+     * 石を置く
+     * @param sq 
+     * @param color 
+     */
     function putStone(sq: number, color: number) : boolean {
         if (!gameBoard1StoneClickable.value(sq)) {  // 石を置けないマスなら
             return false;
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
-        //reverseStones(sq);
+        checkConnectionOfStones(sq);    // 石のつながりをチェックします
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[color] += 1;
@@ -733,6 +739,7 @@
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
+            gameBoard1StoneConnectionArray.value[sq] = 0;   // マス上の石の接続数
 
             // 左上隅
             if (isNorthwestCorner(sq)) {
@@ -1115,20 +1122,41 @@
     // }
 
 
-    // /**
-    //  * できれば、石をひっくり返します
-    //  * @param startSq 石を置いたマス番号
-    //  */
-    // function reverseStones(startSq: number) : void {
-    //     reverseLineStones(startSq, northOf);    // 北
-    //     reverseLineStones(startSq, northeastOf);    // 北東
-    //     reverseLineStones(startSq, eastOf); // 東
-    //     reverseLineStones(startSq, southeastOf);    // 南東
-    //     reverseLineStones(startSq, southOf);    // 南
-    //     reverseLineStones(startSq, southwestOf);    // 南西
-    //     reverseLineStones(startSq, westOf); // 西
-    //     reverseLineStones(startSq, northwestOf);    // 北西
-    // }
+    /**
+     * 石のつながりをチェックします
+     * @param startSq 石を置いたマス番号
+     */
+    function checkConnectionOfStones(startSq: number) : void {
+        const opponentColor1 = opponentColor(gameBoard1Turn.value);
+
+        // 北
+        let northSq = startSq;
+        // 上５マスをチェック
+        for(let i:number=0; i<5; i++){
+            northSq = northOf(northSq);
+
+            if (northSq == -1 || gameBoard1StoneColorArray.value[northSq] == opponentColor1) {  // 盤外、または相手の石なら
+                break;  // 探索終了
+            }
+
+            if(gameBoard1StoneColorArray.value[northSq] == gameBoard1Turn.value) {  // 自石なら
+                // 石の接続数を加算
+                const a = gameBoard1StoneConnectionArray.value[startSq];
+                const b = gameBoard1StoneConnectionArray.value[northSq];
+                gameBoard1StoneConnectionArray.value[startSq] = a+b;
+                gameBoard1StoneConnectionArray.value[northSq] = a+b;
+            }
+        }
+
+        // reverseLineStones(startSq, northOf);    // 北
+        // reverseLineStones(startSq, northeastOf);    // 北東
+        // reverseLineStones(startSq, eastOf); // 東
+        // reverseLineStones(startSq, southeastOf);    // 南東
+        // reverseLineStones(startSq, southOf);    // 南
+        // reverseLineStones(startSq, southwestOf);    // 南西
+        // reverseLineStones(startSq, westOf); // 西
+        // reverseLineStones(startSq, northwestOf);    // 北西
+    }
 
 
     /**
