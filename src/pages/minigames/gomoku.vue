@@ -117,14 +117,16 @@
                         :style="{
                             left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
                             top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
-                            minWidth: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].width}px`,
-                            width: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].width}px`,
-                            height: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].height}px`,
+                            minWidth: `${gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].width}px`,
+                            width: `${gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].width}px`,
+                            height: `${gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].height}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                            //backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
-                            //backgroundColor: gameBoard1BacklightColorNameMap[gameBoard1BacklightColorArray[sq]],  /* 盤の色 */
                             backgroundImage: `url('${spriteBoard001Png}')`,
-                            backgroundPosition: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].left}px ${gameBoard1SourceTilemap1Frames['vacantLand-1'].top}px`,   // 元画像のスケールでシフトする
+                            //backgroundPosition: `0px -32px`,   // 元画像のスケールで逆向きシフトする
+                            //backgroundPosition: `${-0}px ${-32}px`,   // 元画像のスケールで逆向きシフトする
+                            //backgroundPosition: `${-gameBoard1SourceTilemap1Frames['test-1']['left']}px ${-gameBoard1SourceTilemap1Frames['test-1']['top']}px`,   // 元画像のスケールで逆向きシフトする
+                            //backgroundPosition: `${-gameBoard1SourceTilemap1Frames['test-1'].left}px ${-gameBoard1SourceTilemap1Frames['test-1'].top}px`,   // 元画像のスケールで逆向きシフトする
+                            backgroundPosition: `${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].left}px ${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].top}px`,   // 元画像のスケールで逆向きシフトする
                             backgroundRepeat: 'no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
@@ -140,7 +142,15 @@
                 </div>
             </template>
         </game-machine-waratch2>
-
+        gameBoard1SquareImageArray[sq] = {{ gameBoard1SquareImageArray[0] }}<br/>
+        <!--
+        gameBoard1SourceTilemap1Frames['test-1']['left'] = {{ gameBoard1SourceTilemap1Frames['test-1']['left'] }}<br/>
+        gameBoard1SourceTilemap1Frames['test-1']['top'] = {{ gameBoard1SourceTilemap1Frames['test-1']['top'] }}<br/>
+        -->
+        <!--
+        gameBoard1SourceTilemap1Frames['test-1'].left = {{ gameBoard1SourceTilemap1Frames['test-1'].left }}<br/>
+        gameBoard1SourceTilemap1Frames['test-1'].top = {{ gameBoard1SourceTilemap1Frames['test-1'].top }}<br/>
+        -->
         <!--
             NOTE: src属性は Vite が @/ を解決してくれるが、style="" の中までは解決してくれない。style="" の中を解決するのはブラウザー。だから、 import文を使う。
             <img src="@/assets/img/references/Sprite_Board_001.png" />
@@ -371,18 +381,7 @@
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
-    const gameBoard1BacklightColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 背景色の色
-    // for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-    //     gameBoard1BacklightColorArray.value[sq] = Math.ceil(Math.random() * 6);
-    // }
-    const gameBoard1BacklightColorNameMap: Record<number, string> = {   // マスの色
-        0: '#F0C050', // 白。盤の色
-        1: '#F0C050', // 同上
-        2: '#F8D030', // ［二］橙
-        3: '#80F880', // ［三］緑
-        4: '#90E8F8', // ［四］青
-        5: '#70C8F8', // ［五］濃い青
-    }
+    const gameBoard1SquareImageArray = ref<string[]>(new Array(gameBoard1Area.value).fill('vacantLand-1')); // マスの画像
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
@@ -390,7 +389,7 @@
 
     const w = tileBoard1TileWidth.value;   // tlie width
     const h = tileBoard1TileHeight.value;
-    const gw = 3;   // tile group width
+    const gw = 3 * w;   // tile group width
     //
     // 八方罫線魔法陣
     //
@@ -405,52 +404,54 @@
     //    04
     //
     const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {
+        'test-1' : {top: 32, left: 0, width: 32, height: 32},  // テスト TODO: 削除方針
+
         // 0*gw
-        'vacantLand-1' : {top: 0*h, left: 0*gw + 0*w, width: w, height: h},    // 更地
-        'vacantLand-gridLines-06' : {top: 1*h, left: 0*gw + 0*w, width: w, height: h},  // ┌
-        'vacantLand-gridLines-14' : {top: 1*h, left: 0*gw + 1*w, width: w, height: h},  // ┬
-        'vacantLand-gridLines-12' : {top: 1*h, left: 0*gw + 2*w, width: w, height: h},  // ┐
-        'vacantLand-gridLines-07' : {top: 2*h, left: 0*gw + 0*w, width: w, height: h},  // ├
-        'vacantLand-gridLines-15' : {top: 2*h, left: 0*gw + 1*w, width: w, height: h},  // ┼
-        'vacantLand-gridLines-13' : {top: 2*h, left: 0*gw + 2*w, width: w, height: h},  // ┤
-        'vacantLand-gridLines-03' : {top: 3*h, left: 0*gw + 0*w, width: w, height: h},  // └
-        'vacantLand-gridLines-11' : {top: 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
-        'vacantLand-gridLines-09' : {top: 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
+        'vacantLand-1'                          : {top: 0*h, left: 0*gw + 0*w, width: w, height: h},    // 更地
+        'vacantLand-gridLines-06'               : {top: 1*h, left: 0*gw + 0*w, width: w, height: h},  // ┌
+        'vacantLand-gridLines-14'               : {top: 1*h, left: 0*gw + 1*w, width: w, height: h},  // ┬
+        'vacantLand-gridLines-12'               : {top: 1*h, left: 0*gw + 2*w, width: w, height: h},  // ┐
+        'vacantLand-gridLines-07'               : {top: 2*h, left: 0*gw + 0*w, width: w, height: h},  // ├
+        'vacantLand-gridLines-15'               : {top: 2*h, left: 0*gw + 1*w, width: w, height: h},  // ┼
+        'vacantLand-gridLines-13'               : {top: 2*h, left: 0*gw + 2*w, width: w, height: h},  // ┤
+        'vacantLand-gridLines-03'               : {top: 3*h, left: 0*gw + 0*w, width: w, height: h},  // └
+        'vacantLand-gridLines-11'               : {top: 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
+        'vacantLand-gridLines-09'               : {top: 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
         // 1*gw
-        'vacantLand-yelowMarker-1' : {top: 0*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-06' : {top: 1*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-14' : {top: 1*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-12' : {top: 1*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-07' : {top: 2*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-15' : {top: 2*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-13' : {top: 2*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-03' : {top: 3*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-11' : {top: 3*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-09' : {top: 3*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yelowMarker-1'              : {top: 0*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-06'   : {top: 1*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-14'   : {top: 1*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-12'   : {top: 1*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-07'   : {top: 2*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-15'   : {top: 2*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-13'   : {top: 2*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-03'   : {top: 3*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-11'   : {top: 3*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yelowMarker-gridLines-09'   : {top: 3*h, left: 1*gw + 2*w, width: w, height: h},
         // 2*gw
-        'vacantLand-greenMarker-1' : {top: 0*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-06' : {top: 1*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-14' : {top: 1*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-12' : {top: 1*h, left: 2*gw + 2*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-07' : {top: 2*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-15' : {top: 2*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-13' : {top: 2*h, left: 2*gw + 2*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-03' : {top: 3*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-11' : {top: 3*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-09' : {top: 3*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-1'              : {top: 0*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-06'   : {top: 1*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-14'   : {top: 1*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-12'   : {top: 1*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-07'   : {top: 2*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-15'   : {top: 2*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-13'   : {top: 2*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-03'   : {top: 3*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-11'   : {top: 3*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-09'   : {top: 3*h, left: 2*gw + 2*w, width: w, height: h},
         // 3*gw
-        'vacantLand-blueMarker-1' : {top: 0*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-06' : {top: 1*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-14' : {top: 1*h, left: 3*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-12' : {top: 1*h, left: 3*gw + 2*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-07' : {top: 2*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-15' : {top: 2*h, left: 3*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-13' : {top: 2*h, left: 3*gw + 2*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-03' : {top: 3*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-11' : {top: 3*h, left: 3*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-09' : {top: 3*h, left: 3*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-1'               : {top: 0*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-06'    : {top: 1*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-14'    : {top: 1*h, left: 3*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-12'    : {top: 1*h, left: 3*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-07'    : {top: 2*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-15'    : {top: 2*h, left: 3*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-13'    : {top: 2*h, left: 3*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-03'    : {top: 3*h, left: 3*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-11'    : {top: 3*h, left: 3*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-09'    : {top: 3*h, left: 3*gw + 2*w, width: w, height: h},
         // 4*gw
-        'vacantLand-skyBlueMarker-1' : {top: 0*h, left: 4*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-1'            : {top: 0*h, left: 4*gw + 0*w, width: w, height: h},
         'vacantLand-skyBlueMarker-gridLines-06' : {top: 1*h, left: 4*gw + 0*w, width: w, height: h},
         'vacantLand-skyBlueMarker-gridLines-14' : {top: 1*h, left: 4*gw + 1*w, width: w, height: h},
         'vacantLand-skyBlueMarker-gridLines-12' : {top: 1*h, left: 4*gw + 2*w, width: w, height: h},
@@ -732,8 +733,21 @@
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
-            gameBoard1BacklightColorArray.value[sq] = 0;    // 無着色
+
+            // 左上隅
+            if (sq==0) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-06';
+            // 右上隅
+            } else if (sq == gameBoard1FileNum.value - 1) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-12';
+            // 上辺（隅を除く）
+            } else if (Math.floor(sq/gameBoard1FileNum.value) == 0) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-14';
+            } else {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-15';
+            }
         }
+
         gameBoard1Times.value = 0;
         gameBoard1Turn.value = 1;
         gameBoard1StoneCount.value[1] = 0;
