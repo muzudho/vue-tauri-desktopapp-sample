@@ -117,14 +117,14 @@
                         :style="{
                             left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
                             top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
-                            minWidth: `${tileBoard1TileWidth}px`,
-                            width: `${tileBoard1TileWidth}px`,
-                            height: `${tileBoard1TileHeight}px`,
+                            minWidth: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].width}px`,
+                            width: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].width}px`,
+                            height: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].height}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                             //backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
                             //backgroundColor: gameBoard1BacklightColorNameMap[gameBoard1BacklightColorArray[sq]],  /* 盤の色 */
                             backgroundImage: `url('${spriteBoard001Png}')`,
-                            backgroundPosition: `0px 0px`,   // 元画像のスケールでシフトする
+                            backgroundPosition: `${gameBoard1SourceTilemap1Frames['vacantLand-1'].left}px ${gameBoard1SourceTilemap1Frames['vacantLand-1'].top}px`,   // 元画像のスケールでシフトする
                             backgroundRepeat: 'no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
@@ -388,8 +388,8 @@
     // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const w = 32;   // tlie width
-    const h = 32;
+    const w = tileBoard1TileWidth.value;   // tlie width
+    const h = tileBoard1TileHeight.value;
     const gw = 3;   // tile group width
     //
     // 八方罫線魔法陣
