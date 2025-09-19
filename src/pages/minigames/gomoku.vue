@@ -111,6 +111,7 @@
 
                     <!-- マス -->
                     <v-btn
+                        flat
                         v-for="sq in range(0, gameBoard1Area)"
                         :key="sq"
                         :style="{
@@ -126,6 +127,7 @@
                         }"
                         style="
                             position: absolute;
+                            border-radius: 0;
                             font-size: 24px;
                             line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
                             z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
@@ -338,11 +340,10 @@
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
     const gameBoard1BacklightColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 背景色の色
-    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-        gameBoard1BacklightColorArray.value[sq] = Math.ceil(Math.random() * 6);
-    }
-    // backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
-    const gameBoard1BacklightColorNameMap: Record<number, string> = {
+    // for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+    //     gameBoard1BacklightColorArray.value[sq] = Math.ceil(Math.random() * 6);
+    // }
+    const gameBoard1BacklightColorNameMap: Record<number, string> = {   // マスの色
         0: '#F0C050', // 白。盤の色
         1: '#F0C050', // 同上
         2: '#F8D030', // ［二］橙
@@ -622,6 +623,7 @@
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
+            gameBoard1BacklightColorArray.value[sq] = 0;    // 無着色
         }
         gameBoard1Times.value = 0;
         gameBoard1Turn.value = 1;
