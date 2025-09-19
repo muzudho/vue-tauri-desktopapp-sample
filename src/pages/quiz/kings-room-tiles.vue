@@ -968,7 +968,7 @@ color = sq % 2;
             }
         });
 
-        gameLoopStart();
+        gameLoopStart();    // 入力受付、描画を行います
         stopwatch1Ref.value?.timerStart();  // タイマーをスタート
     });
 

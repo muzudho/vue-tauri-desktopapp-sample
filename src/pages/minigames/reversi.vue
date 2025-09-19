@@ -203,6 +203,8 @@
     // + インポート　＞　コンポーザブル +
     // ++++++++++++++++++++++++++++++++++
 
+    // from 部分のアルファベット順
+    import { isPlayerInputKey } from '@/composables/player-controller';
     import { range } from '@/composables/range';
 
     // ++++++++++++++++++++++++++
@@ -366,17 +368,18 @@
                 e.preventDefault();
             }
 
-            if (player1Input.hasOwnProperty(e.key)) {
+            if (isPlayerInputKey(e.key)) {  // 型ガード
                 player1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
-            if (player1Input.hasOwnProperty(e.key)) {
+            if (isPlayerInputKey(e.key)) {  // 型ガード
                 player1Input[e.key] = false;
             }
         });
 
         gamePowerOn();  // 電源を入れる演出
+        gameLoopStart();    // 入力処理、描画を行います
     });
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -439,19 +442,8 @@
      * スペース・キー。
      */
     function onSpaceButtonPressed() : void {
-        gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
         player1Input[" "] = true;
-
-        // TODO: 後で消す
-        let itsOk = false;
-        let count = 0;
-        while(!itsOk && count <= gameMachineRandomLimit) {
-            // 適当に石を置く
-            const sq = Math.floor(Math.random() * gameBoard1Area.value);
-            const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-            itsOk = putStone(sq, color);
-            count += 1;
-        }
+        //gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
     }
 
 
@@ -593,6 +585,54 @@
         //star1Visibility.value = 'hidden';
     }
 
+    // ++++++++++++++++++++++++++++++++++
+    // + サブルーチン　＞　メインループ +
+    // ++++++++++++++++++++++++++++++++++
+
+    /**
+     * ゲームのメインループ開始
+     */
+    function gameLoopStart() : void {
+        const update = () => {
+
+            // ++++++++++++++++++++++++
+            // + モーション・タイマー +
+            // ++++++++++++++++++++++++
+
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // + モーション・ウェイトが０のとき、モーションのクリアー +
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            // ++++++++++++++++++++++++++++++
+            // + キー入力をモーションに変換 +
+            // ++++++++++++++++++++++++++++++
+
+            if (player1Input[' ']) {
+                // TODO: 後で消す
+                let itsOk = false;
+                let count = 0;
+                while(!itsOk && count <= gameMachineRandomLimit) {
+                    // 適当に石を置く
+                    const sq = Math.floor(Math.random() * gameBoard1Area.value);
+                    const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+                    itsOk = putStone(sq, color);
+                    count += 1;
+                }
+
+                player1Input[' '] = false;
+            }
+
+            // ++++++++++++++++++++++++++++++
+            // + 向き・移動・ウェイトを更新 +
+            // ++++++++++++++++++++++++++++++
+
+            // 次のフレーム
+            requestAnimationFrame(update);
+        };
+
+        // 初回呼び出し
+        requestAnimationFrame(update);
+    }
 
     // ++++++++++++++++++++++++++++++++
     // + サブルーチン　＞　ゲーム盤１ +
