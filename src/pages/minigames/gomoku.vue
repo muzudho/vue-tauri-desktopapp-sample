@@ -808,7 +808,6 @@
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
-        gameBoard1StoneConnectionVerticalArray.value[sq] = 1;
         checkConnectionOfStones(sq);    // 石のつながりをチェックします
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
@@ -1245,8 +1244,12 @@
     function checkConnectionOfStones(startSq: number) : void {
         const opponentColor1 = opponentColor(gameBoard1Turn.value);
 
+        // 垂直方向
+        const connectedStoneSqArray: number[] = []; // つながりのある自石のあるマス番号
+        connectedStoneSqArray.push(startSq);
         // 北
         let northSq = startSq;
+        let northMaxConn = 0;
         // 上５マスをチェック
         for(let i:number=0; i<5; i++){
             northSq = northOf(northSq);
@@ -1257,14 +1260,33 @@
 
             if(gameBoard1StoneColorArray.value[northSq] == gameBoard1Turn.value) {  // 自石なら
                 // 石の接続数を加算
-
-                // 垂直方向
-                const a = gameBoard1StoneConnectionVerticalArray.value[startSq];
-                const b = gameBoard1StoneConnectionVerticalArray.value[northSq];
-                gameBoard1StoneConnectionVerticalArray.value[startSq] = a+b;
-                gameBoard1StoneConnectionVerticalArray.value[northSq] = a+b;
+                connectedStoneSqArray.push(northSq);
+                northMaxConn = Math.max(gameBoard1StoneConnectionVerticalArray.value[northSq], northMaxConn);
             }
         }
+        // 南
+        let southSq = startSq;
+        let southMaxConn = 0;
+        // 下５マスをチェック
+        for(let i:number=0; i<5; i++){
+            southSq = southOf(southSq);
+
+            if (southSq == -1 || gameBoard1StoneColorArray.value[southSq] == opponentColor1) {  // 盤外、または相手の石なら
+                break;  // 探索終了
+            }
+
+            if(gameBoard1StoneColorArray.value[southSq] == gameBoard1Turn.value) {  // 自石なら
+                // 石の接続数を加算
+                connectedStoneSqArray.push(southSq);
+                southMaxConn = Math.max(gameBoard1StoneConnectionVerticalArray.value[northSq], northMaxConn);
+            }
+        }
+        // 集計
+        const maxConn = Math.max(northMaxConn, southMaxConn);
+        connectedStoneSqArray.forEach((sq, _index, _array)=>{
+            gameBoard1StoneConnectionVerticalArray.value[sq] = maxConn + 1;
+        });
+
 
         // reverseLineStones(startSq, northOf);    // 北
         // reverseLineStones(startSq, northeastOf);    // 北東
