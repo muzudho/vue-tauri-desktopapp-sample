@@ -117,15 +117,11 @@
                         :style="{
                             left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
                             top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
-                            minWidth: `${gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].width}px`,
-                            width: `${gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].width}px`,
-                            height: `${gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].height}px`,
+                            minWidth: `${gameBoard1SquareSrcTilemapRect(sq).width}px`,
+                            width: `${gameBoard1SquareSrcTilemapRect(sq).width}px`,
+                            height: `${gameBoard1SquareSrcTilemapRect(sq).height}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                             backgroundImage: `url('${spriteBoard001Png}')`,
-                            //backgroundPosition: `0px -32px`,   // 元画像のスケールで逆向きシフトする
-                            //backgroundPosition: `${-0}px ${-32}px`,   // 元画像のスケールで逆向きシフトする
-                            //backgroundPosition: `${-gameBoard1SourceTilemap1Frames['test-1']['left']}px ${-gameBoard1SourceTilemap1Frames['test-1']['top']}px`,   // 元画像のスケールで逆向きシフトする
-                            //backgroundPosition: `${-gameBoard1SourceTilemap1Frames['test-1'].left}px ${-gameBoard1SourceTilemap1Frames['test-1'].top}px`,   // 元画像のスケールで逆向きシフトする
                             backgroundPosition: gameBoard1SquareBackgroundPosition(sq),   // 元画像のスケールで逆向きシフトする
                             backgroundRepeat: 'no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
@@ -142,15 +138,6 @@
                 </div>
             </template>
         </game-machine-waratch2>
-        gameBoard1SquareImageArray[sq] = {{ gameBoard1SquareImageArray[0] }}<br/>
-        <!--
-        gameBoard1SourceTilemap1Frames['test-1']['left'] = {{ gameBoard1SourceTilemap1Frames['test-1']['left'] }}<br/>
-        gameBoard1SourceTilemap1Frames['test-1']['top'] = {{ gameBoard1SourceTilemap1Frames['test-1']['top'] }}<br/>
-        -->
-        <!--
-        gameBoard1SourceTilemap1Frames['test-1'].left = {{ gameBoard1SourceTilemap1Frames['test-1'].left }}<br/>
-        gameBoard1SourceTilemap1Frames['test-1'].top = {{ gameBoard1SourceTilemap1Frames['test-1'].top }}<br/>
-        -->
         <!--
             NOTE: src属性は Vite が @/ を解決してくれるが、style="" の中までは解決してくれない。style="" の中を解決するのはブラウザー。だから、 import文を使う。
             <img src="@/assets/img/references/Sprite_Board_001.png" />
@@ -381,13 +368,60 @@
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
-    const gameBoard1SquareImageArray = ref<string[]>(new Array(gameBoard1Area.value).fill('vacantLand-1')); // マスの画像
     const gameBoard1StoneConnectionArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の接続数
+    const gameBoard1SquareSrcTilemapRect = computed<
+        (sq: number)=>Rectangle
+    >(()=>{
+        return (sq: number)=>{
+            function getKey(sq: number) : string {
+                
+                if (isNorthwestCorner(sq)) {    // 左上隅
+                    return 'vacantLand-gridLines-06';
+                }
+                
+                if (isNortheastCorner(sq)) {    // 右上隅
+                    return 'vacantLand-gridLines-12';
+                }
+
+                if (isSouthwestCorner(sq)) {    // 左下隅
+                    return 'vacantLand-gridLines-03';
+                }
+                
+                if (isSoutheastCorner(sq)) {    // 右下隅
+                    return 'vacantLand-gridLines-09';                
+                }
+                
+                if (isNorthEdge(sq)) {  // 上辺
+                    return 'vacantLand-gridLines-14';
+                }
+                
+                if (isWestEdge(sq)) {    // 左辺
+                    return 'vacantLand-gridLines-07';
+                }
+
+                if (isEastEdge(sq)) {    // 右辺
+                    return 'vacantLand-gridLines-13';
+                }
+                
+                if (isSouthEdge(sq)) {  // 下辺
+                    return 'vacantLand-gridLines-11';
+                }
+                
+                // 盤中
+                return 'vacantLand-gridLines-15';
+            }
+
+            return gameBoard1SourceTilemap1Frames[getKey(sq)];
+        };
+    });
     const gameBoard1SquareBackgroundPosition = computed<
         (sq: number)=>string
     >(()=>{
         return (sq: number)=>{
-            return `${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray.value[sq]].left}px ${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray.value[sq]].top}px`;
+            // マスの画像は、［石の接続数］の影響を受ける
+
+            const rect = gameBoard1SquareSrcTilemapRect.value(sq);
+            return `${-rect.left}px ${-rect.top}px`;
         };
     });
 
@@ -747,35 +781,6 @@
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
             gameBoard1StoneConnectionArray.value[sq] = 0;   // マス上の石の接続数
-
-            // 左上隅
-            if (isNorthwestCorner(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-06';
-            // 右上隅
-            } else if (isNortheastCorner(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-12';
-            // 左下隅
-            } else if (isSouthwestCorner(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-03';
-            // 右下隅
-            } else if (isSoutheastCorner(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-09';
-            // 上辺
-            } else if (isNorthEdge(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-14';
-            // 左辺
-            } else if (isWestEdge(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-07';
-            // 右辺
-            } else if (isEastEdge(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-13';
-            // 下辺
-            } else if (isSouthEdge(sq)) {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-11';
-            // 盤中
-            } else {
-                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-15';
-            }
         }
 
         gameBoard1Times.value = 0;
