@@ -398,11 +398,11 @@
                     return greenMarker;
                 }
 
-                if (conn == 4) {
+                if (conn == 4) {    // TODO: ［四］以上は全部この色にしたい
                     return blueMarker;
                 }
 
-                return skyBlueMarker;
+                return skyBlueMarker;   // TODO: ［五］は連続して５つの場合に限りたい。
             }
 
             function getKey(
@@ -1261,7 +1261,6 @@
         ) : [number[], number] {
             // 垂直方向
             const connectedStoneSqArray: number[] = []; // つながりのある自石のあるマス番号
-            connectedStoneSqArray.push(startSq);
             // 北
             let aNextSq = startSq;
             let aNextMaxConn = 0;
@@ -1291,13 +1290,16 @@
         );
 
         // 集計
-        const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
         aConnectedStoneSqArray.forEach((sq, _index, _array)=>{
-            directionalConnectionArray.value[sq] = maxConn + 1;
+            directionalConnectionArray.value[sq] = aNextMaxConn + 1;
         });
         bConnectedStoneSqArray.forEach((sq, _index, _array)=>{
-            directionalConnectionArray.value[sq] = maxConn + 1;
+            directionalConnectionArray.value[sq] = bNextMaxConn + 1;
         });
+
+        // 打った石
+        const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
+        directionalConnectionArray.value[startSq] = maxConn + 1;
     }
 
     /**
