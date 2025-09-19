@@ -376,152 +376,135 @@
         (sq: number)=>Rectangle
     >(()=>{
         return (sq: number)=>{
+
+            function getKeyByConn(
+                conn: number,
+                vanilla: string,
+                yellowMarker: string,
+                greenMarker: string,
+                blueMarker: string,
+                skyBlueMarker: string,
+            ) : string {
+                if (conn <= 1) {
+                    return vanilla;
+                }
+
+                if (conn == 2) {
+                    return yellowMarker;
+                }
+
+                if (conn == 3) {
+                    return greenMarker;
+                }
+
+                if (conn == 4) {
+                    return blueMarker;
+                }
+
+                return skyBlueMarker;
+            }
+
             function getKey(sq: number) : string {
 
                 const conn = gameBoard1StoneConnectionVerticalArray.value[sq];  // マス上の石の垂直方向の接続数
                 
                 if (isNorthwestCorner(sq)) {    // 左上隅
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-06';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-06';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-06';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-06';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-06',
+                        'vacantLand-yellowMarker-gridLines-06',
+                        'vacantLand-greenMarker-gridLines-06',
+                        'vacantLand-blueMarker-gridLines-06',
+                        'vacantLand-skyBlueMarker-gridLines-06',
+                    );
                 }
                 
                 if (isNortheastCorner(sq)) {    // 右上隅
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-12';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-12';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-12';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-12';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-12',
+                        'vacantLand-yellowMarker-gridLines-12',
+                        'vacantLand-greenMarker-gridLines-12',
+                        'vacantLand-blueMarker-gridLines-12',
+                        'vacantLand-skyBlueMarker-gridLines-12'
+                    );
                 }
 
                 if (isSouthwestCorner(sq)) {    // 左下隅
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-03';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-03';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-03';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-03';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-03',
+                        'vacantLand-yellowMarker-gridLines-03',
+                        'vacantLand-greenMarker-gridLines-03',
+                        'vacantLand-blueMarker-gridLines-03',
+                        'vacantLand-skyBlueMarker-gridLines-03',
+                    );
                 }
                 
                 if (isSoutheastCorner(sq)) {    // 右下隅
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-09';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-09';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-09';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-09';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-09',
+                        'vacantLand-yellowMarker-gridLines-09',
+                        'vacantLand-greenMarker-gridLines-09',
+                        'vacantLand-blueMarker-gridLines-09',
+                        'vacantLand-skyBlueMarker-gridLines-09',
+                    );
                 }
                 
                 if (isNorthEdge(sq)) {  // 上辺
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-14';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-14';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-14';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-14';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-14',
+                        'vacantLand-yellowMarker-gridLines-14',
+                        'vacantLand-greenMarker-gridLines-14',
+                        'vacantLand-blueMarker-gridLines-14',
+                        'vacantLand-skyBlueMarker-gridLines-14',
+                    );
                 }
                 
                 if (isWestEdge(sq)) {    // 左辺
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-07';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-07';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-07';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-07';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-07',
+                        'vacantLand-yellowMarker-gridLines-07',
+                        'vacantLand-greenMarker-gridLines-07',
+                        'vacantLand-blueMarker-gridLines-07',
+                        'vacantLand-skyBlueMarker-gridLines-07',
+                    );
                 }
 
                 if (isEastEdge(sq)) {    // 右辺
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-13';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-13';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-13';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-13';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-13',
+                        'vacantLand-yellowMarker-gridLines-13',
+                        'vacantLand-greenMarker-gridLines-13',
+                        'vacantLand-blueMarker-gridLines-13',
+                        'vacantLand-skyBlueMarker-gridLines-13',
+                    );
                 }
                 
                 if (isSouthEdge(sq)) {  // 下辺
-                    if (conn <= 2) {
-                        return 'vacantLand-gridLines-11';
-                    }
-
-                    if (conn == 3) {
-                        return 'vacantLand-yellowMarker-gridLines-11';
-                    }
-
-                    if (conn == 4) {
-                        return 'vacantLand-greenMarker-gridLines-11';
-                    }
-
-                    return 'vacantLand-blueMarker-gridLines-11';
+                    return getKeyByConn(
+                        conn,
+                        'vacantLand-gridLines-11',
+                        'vacantLand-yellowMarker-gridLines-11',
+                        'vacantLand-greenMarker-gridLines-11',
+                        'vacantLand-blueMarker-gridLines-11',
+                        'vacantLand-skyBlueMarker-gridLines-11',
+                    );
                 }
                 
                 // 盤中
-                if (conn <= 2) {
-                    return 'vacantLand-gridLines-15';
-                }
-
-                if (conn == 3) {
-                    return 'vacantLand-yellowMarker-gridLines-15';
-                }
-
-                if (conn == 4) {
-                    return 'vacantLand-greenMarker-gridLines-15';
-                }
-
-                return 'vacantLand-blueMarker-gridLines-15';
+                return getKeyByConn(
+                    conn,
+                    'vacantLand-gridLines-15',
+                    'vacantLand-yellowMarker-gridLines-15',
+                    'vacantLand-greenMarker-gridLines-15',
+                    'vacantLand-blueMarker-gridLines-15',
+                    'vacantLand-skyBlueMarker-gridLines-15',
+                );
             }
 
             const key = getKey(sq);
