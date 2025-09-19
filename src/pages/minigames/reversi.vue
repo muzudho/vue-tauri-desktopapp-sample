@@ -303,10 +303,6 @@
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
     const gameBoard1StoneColorArray = ref<number[]>(new Array(64).fill(0));    // 石の色
-    gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
-    gameBoard1StoneColorArray.value[28] = 2;
-    gameBoard1StoneColorArray.value[35] = 2;
-    gameBoard1StoneColorArray.value[36] = 1;
     const gameBoard1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
         1: '#C86868', // 明るい茶色
@@ -321,8 +317,8 @@
             return isEmptySquare && isAdjacentToOpponentStone(sq);
         }
     });
-    const gameBoard1Turn = ref<number>(1);
-    const gameBoard1Times = ref<number>(4); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
+    const gameBoard1Turn = ref<number>(0);
+    const gameBoard1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
 
 
     /**
@@ -542,6 +538,8 @@
         gameMachine1GameStartButton1Enabled.value = true;
         gameMachine1Visibility.value = 'visible';
         gameMachine1IsPowerOn.value = true;
+
+        gameInit(); // ゲームの初期化
     }
 
 
@@ -568,26 +566,41 @@
         gameInit(); // ゲームは終了したので、初期状態に戻します
     }
 
+    // ++++++++++++++++++++++++++++
+    // + サブルーチン　＞　ゲーム +
+    // ++++++++++++++++++++++++++++
 
     /**
      * ゲームの初期化
      */
     function gameInit() : void {
+        gameBoard1DebugMessage.value = "ゲームの初期化";
         gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
         // 外付けシステムボタンをリセット
         gameMachine1IsPlaying.value = false;
         gameMachine1IsPlayingPause.value = false;
 
-        // ゲームデータをリセット
+        // ++++++++++++++++++++++++++
+        // + ゲームデータをリセット +
+        // ++++++++++++++++++++++++++
+
+        // 盤の初期化
+        for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+            gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
+        }
+        gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
+        gameBoard1StoneColorArray.value[28] = 2;
+        gameBoard1StoneColorArray.value[35] = 2;
+        gameBoard1StoneColorArray.value[36] = 1;
+        gameBoard1Times.value = 4;
+        gameBoard1Turn.value = 1;
+
         //gameMachine1Score.value = 0;
         //gameMachine1ScheduleStep.value = 0;
         //star1Visibility.value = 'hidden';
     }
 
-    // ++++++++++++++++++++++++++++++++++
-    // + サブルーチン　＞　メインループ +
-    // ++++++++++++++++++++++++++++++++++
 
     /**
      * ゲームのメインループ開始
