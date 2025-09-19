@@ -183,7 +183,7 @@
     // Tauri なら明示的にインポートを指定する必要がある。 Nuxt なら自動でインポートしてくれる場合がある。
     //
 
-    import Arrow from '../../../components/Arrow.vue';
+    import Arrow from '../../../components/GraphArrow.vue';
     import SourceLink from '../../../components/SourceLink.vue';
 
     // ++++++++++++++++++++++++++

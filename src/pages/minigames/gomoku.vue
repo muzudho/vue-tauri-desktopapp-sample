@@ -121,8 +121,11 @@
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                            backgroundColor: gameBoard1BacklightColorNameMap[gameBoard1BacklightColorArray[sq]],  /* 盤の色 */
                             //backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                            //backgroundColor: gameBoard1BacklightColorNameMap[gameBoard1BacklightColorArray[sq]],  /* 盤の色 */
+                            backgroundImage: `url('${spriteBoard001Png}')`,
+                            backgroundPosition: `0px 0px`,   // 元画像のスケールでシフトする
+                            backgroundRepeat: 'no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
                         style="
@@ -137,6 +140,23 @@
                 </div>
             </template>
         </game-machine-waratch2>
+
+        <!--
+            NOTE: src属性は Vite が @/ を解決してくれるが、style="" の中までは解決してくれない。style="" の中を解決するのはブラウザー。だから、 import文を使う。
+            <img src="@/assets/img/references/Sprite_Board_001.png" />
+            <v-btn :style="{
+                backgroundImage: `url('${spriteBoard001Png}')`,
+            }"></v-btn>
+            <v-btn :style="{
+                backgroundImage: `url('${spriteBoard001Png}')`,
+                backgroundPosition: `0px 0px`,   // 元画像のスケールでシフトする
+                minWidth: '32px',   // ボタンには min-width が設定されているから、上書きすること
+                width: '32px',
+                height: '32px',
+                // backgroundSize: `32px 32px`, // これは元画像のサイズ指定。拡縮に使う
+                backgroundRepeat: 'no-repeat',
+            }"></v-btn>
+        -->
 
         <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
@@ -202,6 +222,12 @@
 
     import { computed, onMounted, ref } from 'vue';
 
+    // ++++++++++++++++++++++++++++
+    // + インポート　＞　アセット +
+    // ++++++++++++++++++++++++++++
+
+    import spriteBoard001Png from '@/assets/img/references/Sprite_Board_001.png';
+
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
     // ++++++++++++++++++++++++++++++++++
@@ -222,6 +248,12 @@
     // from 部分のアルファベット順
     import { isPlayerInputKey } from '@/composables/player-controller';
     import { range } from '@/composables/range';
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + インポート　＞　インターフェース +
+    // ++++++++++++++++++++++++++++++++++++
+
+    import type Rectangle from '@/interfaces/Rectangle';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
@@ -352,6 +384,13 @@
         5: '#70C8F8', // ［五］濃い青
     }
 
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameBoard1SourceTilemap1 : Record<string, Rectangle> = {
+
+    };
 
     // /**
     //  * 相手の石に隣接するマスだ
