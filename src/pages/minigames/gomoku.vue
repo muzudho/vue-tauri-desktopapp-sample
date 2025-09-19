@@ -368,14 +368,17 @@
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
-    const gameBoard1StoneConnectionArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の接続数
+    const gameBoard1StoneConnectionVerticalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の垂直方向の接続数
+    const gameBoard1StoneConnectionHorizontalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の水平方向の接続数
+    const gameBoard1StoneConnectionBaroqueDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左下から右上に上がる対角線方向の接続数
+    const gameBoard1StoneConnectionMinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向の接続数
     const gameBoard1SquareSrcTilemapRect = computed<
         (sq: number)=>Rectangle
     >(()=>{
         return (sq: number)=>{
             function getKey(sq: number) : string {
 
-                const conn = gameBoard1StoneConnectionArray.value[sq];  // 石の接続数
+                const conn = gameBoard1StoneConnectionVerticalArray.value[sq];  // マス上の石の垂直方向の接続数
                 
                 if (isNorthwestCorner(sq)) {    // 左上隅
                     if (conn <= 2) {
@@ -502,7 +505,7 @@
                         return 'vacantLand-greenMarker-gridLines-11';
                     }
 
-                    return 'vacantLand-blueMarker-gridLines-1';
+                    return 'vacantLand-blueMarker-gridLines-11';
                 }
                 
                 // 盤中
@@ -521,7 +524,9 @@
                 return 'vacantLand-blueMarker-gridLines-15';
             }
 
-            return gameBoard1SourceTilemap1Frames[getKey(sq)];
+            const key = getKey(sq);
+            //console.log(`sq=${sq} key=${key} gameBoard1SourceTilemap1Frames[key]=${gameBoard1SourceTilemap1Frames[key]}`);
+            return gameBoard1SourceTilemap1Frames[key];
         };
     });
     const gameBoard1SquareBackgroundPosition = computed<
@@ -570,16 +575,16 @@
         'vacantLand-gridLines-11'               : {top: 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
         'vacantLand-gridLines-09'               : {top: 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
         // 1*gw
-        'vacantLand-yelowMarker-1'              : {top: 0*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-06'   : {top: 1*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-14'   : {top: 1*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-12'   : {top: 1*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-07'   : {top: 2*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-15'   : {top: 2*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-13'   : {top: 2*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-03'   : {top: 3*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-11'   : {top: 3*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yelowMarker-gridLines-09'   : {top: 3*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yellowMarker-1'             : {top: 0*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-06'  : {top: 1*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-14'  : {top: 1*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-12'  : {top: 1*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-07'  : {top: 2*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-15'  : {top: 2*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-13'  : {top: 2*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-03'  : {top: 3*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-11'  : {top: 3*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-09'  : {top: 3*h, left: 1*gw + 2*w, width: w, height: h},
         // 2*gw
         'vacantLand-greenMarker-1'              : {top: 0*h, left: 2*gw + 0*w, width: w, height: h},
         'vacantLand-greenMarker-gridLines-06'   : {top: 1*h, left: 2*gw + 0*w, width: w, height: h},
@@ -820,6 +825,7 @@
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
+        gameBoard1StoneConnectionVerticalArray.value[sq] = 1;
         checkConnectionOfStones(sq);    // 石のつながりをチェックします
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
@@ -890,7 +896,12 @@
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
-            gameBoard1StoneConnectionArray.value[sq] = 0;   // マス上の石の接続数
+
+            // マス上の石の接続数
+            gameBoard1StoneConnectionVerticalArray.value[sq] = 0;
+            gameBoard1StoneConnectionHorizontalArray.value[sq] = 0;
+            gameBoard1StoneConnectionBaroqueDiagonalArray.value[sq] = 0;
+            gameBoard1StoneConnectionMinisterDiagonalArray.value[sq] = 0;
         }
 
         gameBoard1Times.value = 0;
@@ -1263,10 +1274,12 @@
 
             if(gameBoard1StoneColorArray.value[northSq] == gameBoard1Turn.value) {  // 自石なら
                 // 石の接続数を加算
-                const a = gameBoard1StoneConnectionArray.value[startSq];
-                const b = gameBoard1StoneConnectionArray.value[northSq];
-                gameBoard1StoneConnectionArray.value[startSq] = a+b;
-                gameBoard1StoneConnectionArray.value[northSq] = a+b;
+
+                // 垂直方向
+                const a = gameBoard1StoneConnectionVerticalArray.value[startSq];
+                const b = gameBoard1StoneConnectionVerticalArray.value[northSq];
+                gameBoard1StoneConnectionVerticalArray.value[startSq] = a+b;
+                gameBoard1StoneConnectionVerticalArray.value[northSq] = a+b;
             }
         }
 
