@@ -439,14 +439,7 @@ color = sq % 2;
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >未選択にする</v-btn>
-            <!-- フォーカスを外すためのダミー・ボタンです -->
-            <v-btn
-                class="noop-key"
-                ref="noopButton"
-                v-tooltip="'PCでのマウス操作で、フォーカスがコントロールに残って邪魔になるときは、このボタンを押してくれだぜ'"
-            >何もしないボタン</v-btn>
         </p>
-        <br/>
 
         <talk-balloon
             :src="commonKifuwaranyanSrc"
