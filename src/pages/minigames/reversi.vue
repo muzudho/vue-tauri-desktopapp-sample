@@ -521,6 +521,7 @@
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
+        reverseStones(sq);
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
         return true;
@@ -717,6 +718,52 @@
         }
 
         return westSq;
+    }
+
+
+    /**
+     * できれば、石をひっくり返します
+     * @param sq 石を置いたマス番号
+     */
+    function reverseStones(sq: number) : void {
+        const opponentColor1 = opponentColor(gameBoard1Turn.value);
+        // 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します。
+        const reverseSqArray = [];
+        // 北
+        let northSq = northOf(sq);
+        while (true) {
+            if (northSq == -1) {    // 番外なら、リストを空にしてループを抜ける
+                reverseSqArray.length = 0;
+                break;
+            }
+
+            const northColor = gameBoard1StoneColorArray.value[northSq];
+            console.log(`northSq=${northSq} northColor=${northColor} opponentColor1=${opponentColor1}`);
+            if (northColor == gameBoard1Turn.value) {   // 自分の石に当たったら、ループを抜ける
+                break;
+            }
+
+            if (northColor == 0) {  // 空マスに突き当たったら、リストを空にしてループを抜ける
+                reverseSqArray.length = 0;
+                break;
+            }
+
+            reverseSqArray.push(northSq);   // 相手の石はマス番号を記録
+            northSq = northOf(northSq);
+        }
+        // ひっくり返す
+        for(let i=0; i<reverseSqArray.length; i++) {
+            const sq = reverseSqArray[i];
+            gameBoard1StoneColorArray.value[sq] = gameBoard1Turn.value;
+        }
+
+        // 北東
+        // 東
+        // 南東
+        // 南
+        // 南西
+        // 西
+        // 北西
     }
 
 </script>
