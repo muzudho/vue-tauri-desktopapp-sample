@@ -311,11 +311,11 @@
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     })
-    const gameBoard1StoneShapeArray = ref<string[]>(new Array(64).fill(''));    // 石の形
+    const gameBoard1StoneShapeArray = ref<string[]>(new Array(gameBoard1Area.value).fill(''));    // 石の形
     for(let sq: number=0; sq<gameBoard1Area.value; sq++){
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
-    const gameBoard1StoneColorArray = ref<number[]>(new Array(64).fill(0));    // 石の色
+    const gameBoard1StoneColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
     const gameBoard1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
         1: '#C86868', // 明るい茶色

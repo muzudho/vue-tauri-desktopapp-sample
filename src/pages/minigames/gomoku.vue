@@ -120,7 +120,8 @@
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                            backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                            backgroundColor: gameBoard1BacklightColorNameMap[gameBoard1BacklightColorArray[sq]],  /* 盤の色 */
+                            //backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
                         style="
@@ -311,11 +312,11 @@
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     })
-    const gameBoard1StoneShapeArray = ref<string[]>(new Array(64).fill(''));    // 石の形
+    const gameBoard1StoneShapeArray = ref<string[]>(new Array(gameBoard1Area.value).fill(''));    // 石の形
     for(let sq: number=0; sq<gameBoard1Area.value; sq++){
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
-    const gameBoard1StoneColorArray = ref<number[]>(new Array(64).fill(0));    // 石の色
+    const gameBoard1StoneColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
     const gameBoard1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
         1: '#C86868', // 明るい茶色
@@ -336,6 +337,19 @@
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
+    const gameBoard1BacklightColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 背景色の色
+    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+        gameBoard1BacklightColorArray.value[sq] = Math.ceil(Math.random() * 6);
+    }
+    // backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+    const gameBoard1BacklightColorNameMap: Record<number, string> = {
+        0: '#F0C050', // 白。盤の色
+        1: '#F0C050', // 同上
+        2: '#F8D030', // ［二］橙
+        3: '#80F880', // ［三］緑
+        4: '#90E8F8', // ［四］青
+        5: '#70C8F8', // ［五］濃い青
+    }
 
 
     // /**
@@ -538,7 +552,7 @@
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
-        reverseStones(sq);
+        //reverseStones(sq);
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[color] += 1;
@@ -843,65 +857,65 @@
     }
 
 
-    /**
-     * 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します
-     * @param startSq 石を置いたマス番号
-     * @param nextOf 隣のマス番号を取得する関数
-     */
-    function reverseLineStones(
-        startSq: number,
-        nextOf: (sq: number) => number,
-    ) : void {
-        const reverseSqArray = [];
+    // /**
+    //  * 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します
+    //  * @param startSq 石を置いたマス番号
+    //  * @param nextOf 隣のマス番号を取得する関数
+    //  */
+    // function reverseLineStones(
+    //     startSq: number,
+    //     nextOf: (sq: number) => number,
+    // ) : void {
+    //     const reverseSqArray = [];
         
-        let nextSq = nextOf(startSq);   // 隣のマス番号
-        while (true) {
-            if (nextSq == -1) { // 番外なら、リストを空にしてループを抜ける
-                reverseSqArray.length = 0;
-                break;
-            }
+    //     let nextSq = nextOf(startSq);   // 隣のマス番号
+    //     while (true) {
+    //         if (nextSq == -1) { // 番外なら、リストを空にしてループを抜ける
+    //             reverseSqArray.length = 0;
+    //             break;
+    //         }
 
-            const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
-            //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
-            if (nextColor == gameBoard1Turn.value) {    // 自分の石に当たったら、ループを抜ける
-                break;
-            }
+    //         const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
+    //         //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
+    //         if (nextColor == gameBoard1Turn.value) {    // 自分の石に当たったら、ループを抜ける
+    //             break;
+    //         }
 
-            if (nextColor == 0) {   // 空マスに突き当たったら、リストを空にしてループを抜ける
-                reverseSqArray.length = 0;
-                break;
-            }
+    //         if (nextColor == 0) {   // 空マスに突き当たったら、リストを空にしてループを抜ける
+    //             reverseSqArray.length = 0;
+    //             break;
+    //         }
 
-            reverseSqArray.push(nextSq);    // 相手の石はマス番号を記録
-            nextSq = nextOf(nextSq);
-        }
+    //         reverseSqArray.push(nextSq);    // 相手の石はマス番号を記録
+    //         nextSq = nextOf(nextSq);
+    //     }
 
-        // 石の数を数える
-        gameBoard1StoneCount.value[gameBoard1Turn.value] += reverseSqArray.length;
-        gameBoard1StoneCount.value[opponentColor(gameBoard1Turn.value)] -= reverseSqArray.length;
+    //     // 石の数を数える
+    //     gameBoard1StoneCount.value[gameBoard1Turn.value] += reverseSqArray.length;
+    //     gameBoard1StoneCount.value[opponentColor(gameBoard1Turn.value)] -= reverseSqArray.length;
 
-        // ひっくり返す
-        for(let i=0; i<reverseSqArray.length; i++) {
-            const sq = reverseSqArray[i];
-            gameBoard1StoneColorArray.value[sq] = gameBoard1Turn.value;
-        }
-    }
+    //     // ひっくり返す
+    //     for(let i=0; i<reverseSqArray.length; i++) {
+    //         const sq = reverseSqArray[i];
+    //         gameBoard1StoneColorArray.value[sq] = gameBoard1Turn.value;
+    //     }
+    // }
 
 
-    /**
-     * できれば、石をひっくり返します
-     * @param startSq 石を置いたマス番号
-     */
-    function reverseStones(startSq: number) : void {
-        reverseLineStones(startSq, northOf);    // 北
-        reverseLineStones(startSq, northeastOf);    // 北東
-        reverseLineStones(startSq, eastOf); // 東
-        reverseLineStones(startSq, southeastOf);    // 南東
-        reverseLineStones(startSq, southOf);    // 南
-        reverseLineStones(startSq, southwestOf);    // 南西
-        reverseLineStones(startSq, westOf); // 西
-        reverseLineStones(startSq, northwestOf);    // 北西
-    }
+    // /**
+    //  * できれば、石をひっくり返します
+    //  * @param startSq 石を置いたマス番号
+    //  */
+    // function reverseStones(startSq: number) : void {
+    //     reverseLineStones(startSq, northOf);    // 北
+    //     reverseLineStones(startSq, northeastOf);    // 北東
+    //     reverseLineStones(startSq, eastOf); // 東
+    //     reverseLineStones(startSq, southeastOf);    // 南東
+    //     reverseLineStones(startSq, southOf);    // 南
+    //     reverseLineStones(startSq, southwestOf);    // 南西
+    //     reverseLineStones(startSq, westOf); // 西
+    //     reverseLineStones(startSq, northwestOf);    // 北西
+    // }
 
 
     /**
