@@ -218,6 +218,7 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
+    import type { Ref } from 'vue';
 
     // ++++++++++++++++++++++++++++
     // + インポート　＞　アセット +
@@ -371,7 +372,7 @@
     const gameBoard1StoneConnectionVerticalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の垂直方向の接続数
     const gameBoard1StoneConnectionHorizontalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の水平方向の接続数
     const gameBoard1StoneConnectionBaroqueDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左下から右上に上がる対角線方向の接続数
-    const gameBoard1StoneConnectionMinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向の接続数
+    const gameBoard1StoneConnectionSinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向の接続数
     const gameBoard1SquareSrcTilemapRect = computed<
         (sq: number)=>Rectangle
     >(()=>{
@@ -883,7 +884,7 @@
             gameBoard1StoneConnectionVerticalArray.value[sq] = 0;
             gameBoard1StoneConnectionHorizontalArray.value[sq] = 0;
             gameBoard1StoneConnectionBaroqueDiagonalArray.value[sq] = 0;
-            gameBoard1StoneConnectionMinisterDiagonalArray.value[sq] = 0;
+            gameBoard1StoneConnectionSinisterDiagonalArray.value[sq] = 0;
         }
 
         gameBoard1Times.value = 0;
@@ -1236,66 +1237,87 @@
     //     }
     // }
 
-
-    /**
-     * 石のつながりをチェックします
-     * @param startSq 石を置いたマス番号
-     */
-    function checkConnectionOfStones(startSq: number) : void {
+    function checkLineConnectionOfStones(
+        startSq: number,
+        aNextOf: (sq: number)=>number,
+        bNextOf: (sq: number)=>number,
+        directionalConnectionArray: Ref<number[]>,
+    ) : void {
         const opponentColor1 = opponentColor(gameBoard1Turn.value);
 
         // 垂直方向
         const connectedStoneSqArray: number[] = []; // つながりのある自石のあるマス番号
         connectedStoneSqArray.push(startSq);
         // 北
-        let northSq = startSq;
-        let northMaxConn = 0;
+        let aNextSq = startSq;
+        let aNextMaxConn = 0;
         // 上５マスをチェック
         for(let i:number=0; i<5; i++){
-            northSq = northOf(northSq);
+            aNextSq = aNextOf(aNextSq);
 
-            if (northSq == -1 || gameBoard1StoneColorArray.value[northSq] == opponentColor1) {  // 盤外、または相手の石なら
+            if (aNextSq == -1 || gameBoard1StoneColorArray.value[aNextSq] == opponentColor1) {  // 盤外、または相手の石なら
                 break;  // 探索終了
             }
 
-            if(gameBoard1StoneColorArray.value[northSq] == gameBoard1Turn.value) {  // 自石なら
+            if(gameBoard1StoneColorArray.value[aNextSq] == gameBoard1Turn.value) {  // 自石なら
                 // 石の接続数を加算
-                connectedStoneSqArray.push(northSq);
-                northMaxConn = Math.max(gameBoard1StoneConnectionVerticalArray.value[northSq], northMaxConn);
+                connectedStoneSqArray.push(aNextSq);
+                aNextMaxConn = Math.max(directionalConnectionArray.value[aNextSq], aNextMaxConn);
             }
         }
         // 南
-        let southSq = startSq;
-        let southMaxConn = 0;
+        let bNextSq = startSq;
+        let bNextMaxConn = 0;
         // 下５マスをチェック
         for(let i:number=0; i<5; i++){
-            southSq = southOf(southSq);
+            bNextSq = bNextOf(bNextSq);
 
-            if (southSq == -1 || gameBoard1StoneColorArray.value[southSq] == opponentColor1) {  // 盤外、または相手の石なら
+            if (bNextSq == -1 || gameBoard1StoneColorArray.value[bNextSq] == opponentColor1) {  // 盤外、または相手の石なら
                 break;  // 探索終了
             }
 
-            if(gameBoard1StoneColorArray.value[southSq] == gameBoard1Turn.value) {  // 自石なら
+            if(gameBoard1StoneColorArray.value[bNextSq] == gameBoard1Turn.value) {  // 自石なら
                 // 石の接続数を加算
-                connectedStoneSqArray.push(southSq);
-                southMaxConn = Math.max(gameBoard1StoneConnectionVerticalArray.value[northSq], northMaxConn);
+                connectedStoneSqArray.push(bNextSq);
+                bNextMaxConn = Math.max(directionalConnectionArray.value[aNextSq], aNextMaxConn);
             }
         }
         // 集計
-        const maxConn = Math.max(northMaxConn, southMaxConn);
+        const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
         connectedStoneSqArray.forEach((sq, _index, _array)=>{
-            gameBoard1StoneConnectionVerticalArray.value[sq] = maxConn + 1;
+            directionalConnectionArray.value[sq] = maxConn + 1;
         });
+    }
 
-
-        // reverseLineStones(startSq, northOf);    // 北
-        // reverseLineStones(startSq, northeastOf);    // 北東
-        // reverseLineStones(startSq, eastOf); // 東
-        // reverseLineStones(startSq, southeastOf);    // 南東
-        // reverseLineStones(startSq, southOf);    // 南
-        // reverseLineStones(startSq, southwestOf);    // 南西
-        // reverseLineStones(startSq, westOf); // 西
-        // reverseLineStones(startSq, northwestOf);    // 北西
+    /**
+     * 石のつながりをチェックします
+     * @param startSq 石を置いたマス番号
+     */
+    function checkConnectionOfStones(startSq: number) : void {
+        checkLineConnectionOfStones(    // 垂直方向
+            startSq,
+            northOf,
+            southOf,
+            gameBoard1StoneConnectionVerticalArray
+        );
+        checkLineConnectionOfStones(    // 水平方向
+            startSq,
+            eastOf,
+            westOf,
+            gameBoard1StoneConnectionHorizontalArray
+        );
+        checkLineConnectionOfStones(    // バロック対角線方向
+            startSq,
+            northeastOf,
+            southwestOf,
+            gameBoard1StoneConnectionBaroqueDiagonalArray
+        );
+        checkLineConnectionOfStones(    // シニスター対角線方向
+            startSq,
+            southeastOf,
+            northwestOf,
+            gameBoard1StoneConnectionSinisterDiagonalArray
+        );
     }
 
 
