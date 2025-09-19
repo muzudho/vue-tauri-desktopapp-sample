@@ -677,6 +677,24 @@
 
 
     /**
+     * 北東側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function northeastOf(sq: number) : number {
+        const northeastSq = sq - gameBoard1FileNum.value + 1;
+        if (
+            northeastSq < 0 // 盤を飛び出たら
+            || northeastSq % gameBoard1FileNum.value == 0    // 世界一周したら
+        ) {  
+            return -1;
+        }
+
+        return northeastSq;
+    }
+
+
+    /**
      * 東側のマス番号。
      * @param sq 
      * @returns 該当がなければ -1
@@ -688,6 +706,24 @@
         }
 
         return eastSq;
+    }
+
+
+    /**
+     * 南東側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function southeastOf(sq: number) : number {
+        const southeastSq = sq + gameBoard1FileNum.value + 1;
+        if (
+            southeastSq % gameBoard1FileNum.value == 0  // 世界一周したら
+            || gameBoard1Area.value <= southeastSq  // 盤を飛び出たら
+        ) {   
+            return -1;
+        }
+
+        return southeastSq;
     }
 
 
@@ -707,6 +743,24 @@
 
 
     /**
+     * 南西側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function southwestOf(sq: number) : number {
+        const southwestSq = sq + gameBoard1FileNum.value - 1;
+        if (
+            gameBoard1Area.value <= southwestSq // 盤を飛び出たら
+            || southwestSq % gameBoard1FileNum.value == gameBoard1FileNum.value - 1 // 世界一周したら
+        ) { 
+            return -1;
+        }
+
+        return southwestSq;
+    }
+
+
+    /**
      * 西側のマス番号。
      * @param sq 
      * @returns 該当がなければ -1
@@ -722,48 +776,75 @@
 
 
     /**
-     * できれば、石をひっくり返します
-     * @param sq 石を置いたマス番号
+     * 北西側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
      */
-    function reverseStones(sq: number) : void {
-        const opponentColor1 = opponentColor(gameBoard1Turn.value);
-        // 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します。
+    function northwestOf(sq: number) : number {
+        const northwestSq = sq - gameBoard1FileNum.value - 1;
+        if (
+            northwestSq % gameBoard1FileNum.value == gameBoard1FileNum.value - 1    // 世界一周したら
+            || northwestSq < 0  // 盤を飛び出たら
+        ) { 
+            return -1;
+        }
+
+        return northwestSq;
+    }
+
+
+    /**
+     * 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します
+     * @param startSq 石を置いたマス番号
+     * @param nextOf 隣のマス番号を取得する関数
+     */
+    function reverseLineStones(
+        startSq: number,
+        nextOf: (sq: number) => number,
+    ) : void {
         const reverseSqArray = [];
-        // 北
-        let northSq = northOf(sq);
+        
+        let nextSq = nextOf(startSq);   // 隣のマス番号
         while (true) {
-            if (northSq == -1) {    // 番外なら、リストを空にしてループを抜ける
+            if (nextSq == -1) { // 番外なら、リストを空にしてループを抜ける
                 reverseSqArray.length = 0;
                 break;
             }
 
-            const northColor = gameBoard1StoneColorArray.value[northSq];
-            console.log(`northSq=${northSq} northColor=${northColor} opponentColor1=${opponentColor1}`);
-            if (northColor == gameBoard1Turn.value) {   // 自分の石に当たったら、ループを抜ける
+            const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
+            //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
+            if (nextColor == gameBoard1Turn.value) {    // 自分の石に当たったら、ループを抜ける
                 break;
             }
 
-            if (northColor == 0) {  // 空マスに突き当たったら、リストを空にしてループを抜ける
+            if (nextColor == 0) {   // 空マスに突き当たったら、リストを空にしてループを抜ける
                 reverseSqArray.length = 0;
                 break;
             }
 
-            reverseSqArray.push(northSq);   // 相手の石はマス番号を記録
-            northSq = northOf(northSq);
+            reverseSqArray.push(nextSq);    // 相手の石はマス番号を記録
+            nextSq = nextOf(nextSq);
         }
         // ひっくり返す
         for(let i=0; i<reverseSqArray.length; i++) {
             const sq = reverseSqArray[i];
             gameBoard1StoneColorArray.value[sq] = gameBoard1Turn.value;
         }
+    }
 
-        // 北東
-        // 東
-        // 南東
-        // 南
-        // 南西
-        // 西
-        // 北西
+    /**
+     * できれば、石をひっくり返します
+     * @param startSq 石を置いたマス番号
+     */
+    function reverseStones(startSq: number) : void {
+        reverseLineStones(startSq, northOf);    // 北
+        reverseLineStones(startSq, northeastOf);    // 北東
+        reverseLineStones(startSq, eastOf); // 東
+        reverseLineStones(startSq, southeastOf);    // 南東
+        reverseLineStones(startSq, southOf);    // 南
+        reverseLineStones(startSq, southwestOf);    // 南西
+        reverseLineStones(startSq, westOf); // 西
+        reverseLineStones(startSq, northwestOf);    // 北西
     }
 
 </script>
