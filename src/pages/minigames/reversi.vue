@@ -134,11 +134,6 @@
                 </div>
             </template>
         </game-machine-waratch2>
-        <p>{{ gameBoard1DebugMessage }}</p>
-        <p>次の手数={{ gameBoard1Times+1 }}</p>
-        <p>次の手番=<span :style="{
-            color: gameBoard1StoneColorNameMap[gameBoard1Turn],
-        }">●</span></p>
 
         <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
@@ -168,6 +163,20 @@
             </section>
         </section>
 
+        <!-- 各種表示 -->
+        <p>{{ gameBoard1DebugMessage }}</p>
+        <p>次の手数={{ gameBoard1Times+1 }}</p>
+        <p>次の手番=<span :style="{
+            color: gameBoard1StoneColorNameMap[gameBoard1Turn],
+        }">●</span></p>
+        <p><span
+            :style="{
+                color: gameBoard1StoneColorNameMap[1],
+            }">●</span>の数={{ gameBoard1StoneCount[1] }}</p>
+        <p><span
+            :style="{
+                color: gameBoard1StoneColorNameMap[2],
+            }">●</span>の数={{ gameBoard1StoneCount[2] }}</p>
 
     </section>
     
@@ -321,6 +330,7 @@
     });
     const gameBoard1Turn = ref<number>(0);
     const gameBoard1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
+    const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
 
 
     /**
@@ -526,6 +536,7 @@
         reverseStones(sq);
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
+        gameBoard1StoneCount.value[color] += 1;
         return true;
     }
 
@@ -598,6 +609,8 @@
         gameBoard1StoneColorArray.value[36] = 1;
         gameBoard1Times.value = 4;
         gameBoard1Turn.value = 1;
+        gameBoard1StoneCount.value[1] = 2;
+        gameBoard1StoneCount.value[2] = 2;
 
         //gameMachine1Score.value = 0;
         //gameMachine1ScheduleStep.value = 0;
@@ -827,6 +840,11 @@
             reverseSqArray.push(nextSq);    // 相手の石はマス番号を記録
             nextSq = nextOf(nextSq);
         }
+
+        // 石の数を数える
+        gameBoard1StoneCount.value[gameBoard1Turn.value] += reverseSqArray.length;
+        gameBoard1StoneCount.value[opponentColor(gameBoard1Turn.value)] -= reverseSqArray.length;
+
         // ひっくり返す
         for(let i=0; i<reverseSqArray.length; i++) {
             const sq = reverseSqArray[i];
