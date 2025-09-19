@@ -178,7 +178,7 @@
                 color: gameBoard1StoneColorNameMap[2],
             }">●</span>の数={{ gameBoard1StoneCount[2] }}</p>
         <p>連続パス回数={{ gameBoard1PassCount }}</p>
-        <p>{{ gameBoard1IsEnd ? '終局' : '' }}</p>
+        <p>{{ gameBoard1IsEnd ? (gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
     </section>
     
@@ -676,6 +676,11 @@
                             itsOk = putStone(lastSq, color);    // 必ず置けるはず
                         }
                     }
+
+                    if (gameIsFullCapacity()) {
+                        // 満局なら終局
+                        gameBoard1IsEnd.value = true;
+                    }
                 }
 
                 player1Input[' '] = false;
@@ -882,6 +887,7 @@
         }
     }
 
+
     /**
      * できれば、石をひっくり返します
      * @param startSq 石を置いたマス番号
@@ -897,12 +903,22 @@
         reverseLineStones(startSq, northwestOf);    // 北西
     }
 
+
     /**
      * パス
      */
     function gamePass() : void {
+        gameBoard1Times.value += 1;
         gameBoard1PassCount.value += 1;
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value);
+    }
+
+
+    /**
+     * 満局か
+     */
+    function gameIsFullCapacity() : boolean {
+        return gameBoard1Area.value < gameBoard1Times.value;
     }
 
 </script>
