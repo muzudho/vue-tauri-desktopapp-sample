@@ -658,14 +658,14 @@
                     if (!itsOk) {   // 確率的に置けなかったら、本当に置けないか確認
                         let lastSq = -1;
                         for(let sq: number=0; sq<gameBoard1Area.value; sq++) {
-                            if (gameBoard1StoneColorArray.value[sq] == 0) {
+                            if (gameBoard1StoneClickable.value(sq)) {   // クリック可能（石を置ける）
                                 lastSq = sq;
                                 break;
                             }
                         }
 
-                        if (lastSq==-1) {
-                            gamePass(); // どこにも置くところがなければパス
+                        if (lastSq==-1) {   // どこにも石を置けなかった
+                            gamePass(); // パス
 
                             if (2 <= gameBoard1PassCount.value) {
                                 // パスが２回続いたら終局
@@ -674,6 +674,9 @@
 
                         } else {
                             itsOk = putStone(lastSq, color);    // 必ず置けるはず
+                            if (!itsOk) {
+                                throw Error(`石を置けなかった。 lastSq=${lastSq} color=${color}`);
+                            }
                         }
                     }
 
@@ -918,7 +921,7 @@
      * 満局か
      */
     function gameIsFullCapacity() : boolean {
-        return gameBoard1Area.value < gameBoard1Times.value;
+        return gameBoard1Area.value <= gameBoard1StoneCount.value[1] + gameBoard1StoneCount.value[2];
     }
 
 </script>
