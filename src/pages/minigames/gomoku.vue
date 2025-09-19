@@ -740,9 +740,24 @@
             // 右上隅
             } else if (sq == gameBoard1FileNum.value - 1) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-12';
+            // 左下隅
+            } else if (sq == gameBoard1Area.value - gameBoard1FileNum.value) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-03';
+            // 右下隅
+            } else if (sq == gameBoard1Area.value - 1) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-09';
             // 上辺（隅を除く）
             } else if (Math.floor(sq/gameBoard1FileNum.value) == 0) {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-14';
+            // 左辺（隅を除く）
+            } else if (sq%gameBoard1FileNum.value == 0) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-07';
+            // 右辺（隅を除く）
+            } else if (sq%gameBoard1FileNum.value == gameBoard1FileNum.value - 1) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-13';
+            // 下辺（隅を除く）
+            } else if (Math.floor(sq/gameBoard1FileNum.value) == gameBoard1RankNum.value - 1) {
+                gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-11';
             } else {
                 gameBoard1SquareImageArray.value[sq] = 'vacantLand-gridLines-15';
             }
