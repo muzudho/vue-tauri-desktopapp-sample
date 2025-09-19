@@ -126,7 +126,7 @@
                             //backgroundPosition: `${-0}px ${-32}px`,   // 元画像のスケールで逆向きシフトする
                             //backgroundPosition: `${-gameBoard1SourceTilemap1Frames['test-1']['left']}px ${-gameBoard1SourceTilemap1Frames['test-1']['top']}px`,   // 元画像のスケールで逆向きシフトする
                             //backgroundPosition: `${-gameBoard1SourceTilemap1Frames['test-1'].left}px ${-gameBoard1SourceTilemap1Frames['test-1'].top}px`,   // 元画像のスケールで逆向きシフトする
-                            backgroundPosition: `${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].left}px ${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray[sq]].top}px`,   // 元画像のスケールで逆向きシフトする
+                            backgroundPosition: gameBoard1SquareBackgroundPosition(sq),   // 元画像のスケールで逆向きシフトする
                             backgroundRepeat: 'no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
@@ -383,6 +383,13 @@
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
     const gameBoard1SquareImageArray = ref<string[]>(new Array(gameBoard1Area.value).fill('vacantLand-1')); // マスの画像
     const gameBoard1StoneConnectionArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の接続数
+    const gameBoard1SquareBackgroundPosition = computed<
+        (sq: number)=>string
+    >(()=>{
+        return (sq: number)=>{
+            return `${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray.value[sq]].left}px ${-gameBoard1SourceTilemap1Frames[gameBoard1SquareImageArray.value[sq]].top}px`;
+        };
+    });
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
