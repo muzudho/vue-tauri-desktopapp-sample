@@ -637,15 +637,31 @@
             // ++++++++++++++++++++++++++++++
 
             if (player1Input[' ']) {
-                // TODO: 後で消す
+                const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
                 let itsOk = false;
                 let count = 0;
                 while(!itsOk && count <= gameMachineRandomLimit) {
                     // 適当に石を置く
                     const sq = Math.floor(Math.random() * gameBoard1Area.value);
-                    const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
                     itsOk = putStone(sq, color);
                     count += 1;
+                }
+
+                if (!itsOk) {   // 確率的に置けなかったら、本当に置けないか確認
+                    let lastSq = -1;
+                    for(let sq: number=0; sq<gameBoard1Area.value; sq++) {
+                        if (gameBoard1StoneColorArray.value[sq] == 0) {
+                            lastSq = sq;
+                            break;
+                        }
+                    }
+
+                    if (lastSq==-1) {
+                        gamePass(); // どこにも置くところがなければパス
+                        // FIXME: パスが２回続いたら終局にしたい。
+                    } else {
+                        itsOk = putStone(lastSq, color);    // 必ず置けるはず
+                    }
                 }
 
                 player1Input[' '] = false;
@@ -865,6 +881,13 @@
         reverseLineStones(startSq, southwestOf);    // 南西
         reverseLineStones(startSq, westOf); // 西
         reverseLineStones(startSq, northwestOf);    // 北西
+    }
+
+    /**
+     * パス
+     */
+    function gamePass() : void {
+        gameBoard1Turn.value = opponentColor(gameBoard1Turn.value);
     }
 
 </script>
