@@ -135,8 +135,10 @@
             </template>
         </game-machine-waratch2>
         <p>{{ gameBoard1DebugMessage }}</p>
-        <p>next-times={{ gameBoard1Times+1 }}</p>
-        <p>next-turn={{ gameBoard1Turn }}</p>
+        <p>次の手数={{ gameBoard1Times+1 }}</p>
+        <p>次の手番=<span :style="{
+            color: gameBoard1StoneColorNameMap[gameBoard1Turn],
+        }">●</span></p>
 
         <!-- お好み設定パネル１ -->
         <section class="sec-0 mt-6 mb-6">
@@ -575,7 +577,7 @@
      * ゲームの初期化
      */
     function gameInit() : void {
-        gameBoard1DebugMessage.value = "ゲームの初期化";
+        //gameBoard1DebugMessage.value = "ゲームの初期化";
         gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
         // 外付けシステムボタンをリセット
