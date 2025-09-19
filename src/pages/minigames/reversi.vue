@@ -177,6 +177,8 @@
             :style="{
                 color: gameBoard1StoneColorNameMap[2],
             }">●</span>の数={{ gameBoard1StoneCount[2] }}</p>
+        <p>連続パス回数={{ gameBoard1PassCount }}</p>
+        <p>{{ gameBoard1IsEnd ? '終局' : '' }}</p>
 
     </section>
     
@@ -325,12 +327,14 @@
     >(()=>{    // マスをクリック可能か
         return (sq: number)=>{
             const isEmptySquare = gameBoard1StoneColorArray.value[sq] == 0; // 空マスだ
-            return isEmptySquare && isAdjacentToOpponentStone(sq);
+            return isEmptySquare && isAdjacentToOpponentStone(sq) && !gameBoard1IsEnd.value;
         }
     });
     const gameBoard1Turn = ref<number>(0);
     const gameBoard1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
+    const gameBoard1PassCount = ref<number>(0); // 連続パス回数
+    const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
 
 
     /**
@@ -537,6 +541,7 @@
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[color] += 1;
+        gameBoard1PassCount.value = 0;  // リセット
         return true;
     }
 
@@ -611,6 +616,8 @@
         gameBoard1Turn.value = 1;
         gameBoard1StoneCount.value[1] = 2;
         gameBoard1StoneCount.value[2] = 2;
+        gameBoard1PassCount.value = 0;
+        gameBoard1IsEnd.value = false;
 
         //gameMachine1Score.value = 0;
         //gameMachine1ScheduleStep.value = 0;
@@ -637,30 +644,37 @@
             // ++++++++++++++++++++++++++++++
 
             if (player1Input[' ']) {
-                const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-                let itsOk = false;
-                let count = 0;
-                while(!itsOk && count <= gameMachineRandomLimit) {
-                    // 適当に石を置く
-                    const sq = Math.floor(Math.random() * gameBoard1Area.value);
-                    itsOk = putStone(sq, color);
-                    count += 1;
-                }
-
-                if (!itsOk) {   // 確率的に置けなかったら、本当に置けないか確認
-                    let lastSq = -1;
-                    for(let sq: number=0; sq<gameBoard1Area.value; sq++) {
-                        if (gameBoard1StoneColorArray.value[sq] == 0) {
-                            lastSq = sq;
-                            break;
-                        }
+                if (!gameBoard1IsEnd.value) { // 終局していたら、何もしない
+                    const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+                    let itsOk = false;
+                    let count = 0;
+                    while(!itsOk && count <= gameMachineRandomLimit) {
+                        // 適当に石を置く
+                        const sq = Math.floor(Math.random() * gameBoard1Area.value);
+                        itsOk = putStone(sq, color);
+                        count += 1;
                     }
 
-                    if (lastSq==-1) {
-                        gamePass(); // どこにも置くところがなければパス
-                        // FIXME: パスが２回続いたら終局にしたい。
-                    } else {
-                        itsOk = putStone(lastSq, color);    // 必ず置けるはず
+                    if (!itsOk) {   // 確率的に置けなかったら、本当に置けないか確認
+                        let lastSq = -1;
+                        for(let sq: number=0; sq<gameBoard1Area.value; sq++) {
+                            if (gameBoard1StoneColorArray.value[sq] == 0) {
+                                lastSq = sq;
+                                break;
+                            }
+                        }
+
+                        if (lastSq==-1) {
+                            gamePass(); // どこにも置くところがなければパス
+
+                            if (2 <= gameBoard1PassCount.value) {
+                                // パスが２回続いたら終局
+                                gameBoard1IsEnd.value = true;
+                            }
+
+                        } else {
+                            itsOk = putStone(lastSq, color);    // 必ず置けるはず
+                        }
                     }
                 }
 
@@ -887,6 +901,7 @@
      * パス
      */
     function gamePass() : void {
+        gameBoard1PassCount.value += 1;
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value);
     }
 
