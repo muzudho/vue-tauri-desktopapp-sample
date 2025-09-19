@@ -94,7 +94,7 @@
 
         <!-- ゲームマシン -->
         <game-machine-waratch2
-            :hardLocationStyle="{
+            :style="{
                 left: '0px',
                 top: '0px',
             }"

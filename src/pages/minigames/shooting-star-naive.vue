@@ -87,7 +87,7 @@
         
         <!-- ゲームマシン１ -->
         <game-machine-waratch2
-            :hardLocationStyle="{
+            :style="{
                 left: '0px',
                 top: '0px',
             }"
@@ -699,6 +699,62 @@
     // ######################
     // # イベントハンドラー #
     // ######################
+    
+    // +++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　開始 / 終了 +
+    // +++++++++++++++++++++++++++++++++++++++
+
+    onMounted(() => {
+        sfxLoad();
+        gamePowerOn();  // 電源を入れる演出
+        gameInit();
+        gameLoopStart();
+
+        // キーボード操作の設定
+        //
+        //      window はブラウザーのオブジェクトなので、（サーバー側ではプリレンダリングできないので）マウント後にアクセスします。
+        //
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // スペース、上下キーの場合
+            if (e.key == ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = true;
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = false;
+            }
+        });
+    });
+
+
+    onUnmounted(()=>{
+        // 効果音のメモリ解放を真面目に行う場合
+        if (sfxDeniedAudio) {
+            sfxDeniedAudio.pause();
+            sfxDeniedAudio.src = '';
+            sfxDeniedAudio.load(); // バッファクリア
+            // イベントリスナー解除（必要なら）
+            // sfxDeniedAudio.removeEventListener('ended', handler);
+        }
+
+        if (sfxCameraShutterAudio) {
+            sfxCameraShutterAudio.pause();
+            sfxCameraShutterAudio.src = '';
+            sfxCameraShutterAudio.load(); // バッファクリア
+        }
+
+        if (sfxMissAudio) {
+            sfxMissAudio.pause();
+            sfxMissAudio.src = '';
+            sfxMissAudio.load(); // バッファクリア
+        }
+    });
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　ゲームマシン・ボタン +
@@ -767,63 +823,6 @@
     function onSpaceButtonReleased() : void {
         player1Input[" "] = false;
     }
-    
-    // +++++++++++++++++++++++++++++++++++++++
-    // + イベントハンドラー　＞　開始 / 終了 +
-    // +++++++++++++++++++++++++++++++++++++++
-
-    onMounted(() => {
-        sfxLoad();
-        gamePowerOn();  // 電源を入れる演出
-        gameInit();
-        gameLoopStart();
-
-        // キーボード操作の設定
-        //
-        //      window はブラウザーのオブジェクトなので、（サーバー側ではプリレンダリングできないので）マウント後にアクセスします。
-        //
-        window.addEventListener('keydown', (e: KeyboardEvent) => {
-            // スペース、上下キーの場合
-            if (e.key == ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
-                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
-                e.preventDefault();
-            }
-
-            if (player1Input.hasOwnProperty(e.key)) {
-                player1Input[e.key] = true;
-            }
-        });
-        window.addEventListener('keyup', (e) => {
-            if (player1Input.hasOwnProperty(e.key)) {
-                player1Input[e.key] = false;
-            }
-        });
-    });
-
-
-    onUnmounted(()=>{
-        // 効果音のメモリ解放を真面目に行う場合
-        if (sfxDeniedAudio) {
-            sfxDeniedAudio.pause();
-            sfxDeniedAudio.src = '';
-            sfxDeniedAudio.load(); // バッファクリア
-            // イベントリスナー解除（必要なら）
-            // sfxDeniedAudio.removeEventListener('ended', handler);
-        }
-
-        if (sfxCameraShutterAudio) {
-            sfxCameraShutterAudio.pause();
-            sfxCameraShutterAudio.src = '';
-            sfxCameraShutterAudio.load(); // バッファクリア
-        }
-
-        if (sfxMissAudio) {
-            sfxMissAudio.pause();
-            sfxMissAudio.src = '';
-            sfxMissAudio.load(); // バッファクリア
-        }
-    });
-
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　外付けシステムボタン +

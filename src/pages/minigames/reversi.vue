@@ -59,7 +59,7 @@
 
         <!-- ゲームマシン１ -->
         <game-machine-waratch2
-            :hardLocationStyle="{
+            :style="{
                 left: '0px',
                 top: '0px',
             }"
@@ -196,6 +196,7 @@
     import ButtonToBackToTop from '@/components/ButtonToBackToTop.vue';
     import Comment from '@/components/Comment.vue';
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
+    import SourceLink from '@/components/SourceLink.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
 
     // ++++++++++++++++++++++++++++++++++
@@ -314,16 +315,69 @@
         (sq: number) => boolean
     >(()=>{    // マスをクリック可能か
         return (sq: number)=>{
-            return gameBoard1StoneColorArray.value[sq] == 0;
+            const isEmptySquare = gameBoard1StoneColorArray.value[sq] == 0; // 空マスだ
+            return isEmptySquare && isAdjacentToOpponentStone(sq);
         }
     });
     const gameBoard1Turn = ref<number>(1);
     const gameBoard1Times = ref<number>(4); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
 
 
+    /**
+     * 相手の石に隣接するマスだ
+     * @param sq 
+     */
+    function isAdjacentToOpponentStone(sq: number) : boolean {
+        const northSq = northOf(sq);
+        const eastSq = eastOf(sq);
+        const southSq = southOf(sq);
+        const westSq = westOf(sq);
+        const northColor = northSq != -1 ? gameBoard1StoneColorArray.value[northSq] : 0;
+        const eastColor = eastSq != -1 ? gameBoard1StoneColorArray.value[eastSq] : 0;
+        const southColor = southSq != -1 ? gameBoard1StoneColorArray.value[southSq] : 0;
+        const westColor = westSq != -1 ? gameBoard1StoneColorArray.value[westSq] : 0;
+        const opponentColor1 = opponentColor(gameBoard1Turn.value);
+        return northColor == opponentColor1
+            || eastColor == opponentColor1
+            || southColor == opponentColor1
+            || westColor == opponentColor1
+            ;
+    }
+
+
     // ######################
     // # イベントハンドラー #
     // ######################
+
+    // ++++++++++++++++++++++++++++++++++++++
+    // + イベントハンドラー　＞　開始／終了 +
+    // ++++++++++++++++++++++++++++++++++++++
+
+    onMounted(()=>{
+
+        // キーボード操作の設定
+        //
+        //      window はブラウザーのオブジェクトなので、（サーバー側ではプリレンダリングできないので）マウント後にアクセスします。
+        //
+        window.addEventListener('keydown', (e: KeyboardEvent) => {
+            // スペース、上下キーの場合
+            if (e.key == ' ' || e.key === 'ArrowUp' || e.key === 'ArrowDown') {
+                // ブラウザーのデフォルトの上下スクロール動作をキャンセル
+                e.preventDefault();
+            }
+
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = true;
+            }
+        });
+        window.addEventListener('keyup', (e) => {
+            if (player1Input.hasOwnProperty(e.key)) {
+                player1Input[e.key] = false;
+            }
+        });
+
+        gamePowerOn();  // 電源を入れる演出
+    });
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　ゲームマシン・ボタン +
@@ -385,6 +439,7 @@
      * スペース・キー。
      */
     function onSpaceButtonPressed() : void {
+        gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
         player1Input[" "] = true;
 
         // TODO: 後で消す
@@ -395,6 +450,7 @@
             const sq = Math.floor(Math.random() * gameBoard1Area.value);
             const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
             itsOk = putStone(sq, color);
+            count += 1;
         }
     }
 
@@ -455,15 +511,6 @@
         gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
     }
 
-
-    // ++++++++++++++++++++++++++++++++++++++
-    // + イベントハンドラー　＞　開始／終了 +
-    // ++++++++++++++++++++++++++++++++++++++
-
-    onMounted(()=>{
-        gamePowerOn();  // 電源を入れる演出
-    });
-
     // ++++++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++++++++
@@ -473,14 +520,10 @@
      * @param sq （0から始まる）マス番号
      */
     function onGameBoard1Clicked(sq: number) : void {
-        gameBoard1DebugMessage.value = `sq=${sq}`;
+        //gameBoard1DebugMessage.value = `sq=${sq}`;
 
-        if(gameBoard1StoneColorArray.value[sq]==0) {
-            const itsOk = putStone(
-                sq,
-                Math.floor(Math.random() * 2) + 1
-            );
-        }
+        const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+        const itsOk = putStone(sq, color);
     }
 
 
@@ -490,7 +533,7 @@
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
-        gameBoard1Turn.value = gameBoard1Turn.value % 2 + 1;    // 1 なら 2 に、2 なら 1 に
+        gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
         gameBoard1Times.value += 1;
         return true;
     }
@@ -548,6 +591,79 @@
         //gameMachine1Score.value = 0;
         //gameMachine1ScheduleStep.value = 0;
         //star1Visibility.value = 'hidden';
+    }
+
+
+    // ++++++++++++++++++++++++++++++++
+    // + サブルーチン　＞　ゲーム盤１ +
+    // ++++++++++++++++++++++++++++++++
+
+    /**
+     * 相手の石の色に変更
+     * @param color 自分の石の色
+     */
+    function opponentColor(color: number) : number {
+        return color % 2 + 1;   // 1 なら 2 に、2 なら 1 に
+    }
+
+
+    /**
+     * 北側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function northOf(sq: number) : number {
+        const northSq = sq - gameBoard1FileNum.value;
+        if (northSq < 0) {  // 盤を飛び出たら
+            return -1;
+        }
+
+        return northSq;
+    }
+
+
+    /**
+     * 東側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function eastOf(sq: number) : number {
+        const eastSq = sq + 1;
+        if (eastSq % gameBoard1FileNum.value == 0) {   // 世界一周したら
+            return -1;
+        }
+
+        return eastSq;
+    }
+
+
+    /**
+     * 南側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function southOf(sq: number) : number {
+        const southSq = sq + gameBoard1FileNum.value;
+        if (gameBoard1Area.value <= southSq) {  // 盤を飛び出たら
+            return -1;
+        }
+
+        return southSq;
+    }
+
+
+    /**
+     * 西側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function westOf(sq: number) : number {
+        const westSq = sq - 1;
+        if (westSq % gameBoard1FileNum.value == gameBoard1FileNum.value - 1) {  // 世界一周したら
+            return -1;
+        }
+
+        return westSq;
     }
 
 </script>
