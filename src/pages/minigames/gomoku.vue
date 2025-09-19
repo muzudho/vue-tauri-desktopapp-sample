@@ -374,41 +374,151 @@
     >(()=>{
         return (sq: number)=>{
             function getKey(sq: number) : string {
+
+                const conn = gameBoard1StoneConnectionArray.value[sq];  // 石の接続数
                 
                 if (isNorthwestCorner(sq)) {    // 左上隅
-                    return 'vacantLand-gridLines-06';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-06';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-06';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-06';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-06';
                 }
                 
                 if (isNortheastCorner(sq)) {    // 右上隅
-                    return 'vacantLand-gridLines-12';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-12';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-12';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-12';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-12';
                 }
 
                 if (isSouthwestCorner(sq)) {    // 左下隅
-                    return 'vacantLand-gridLines-03';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-03';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-03';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-03';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-03';
                 }
                 
                 if (isSoutheastCorner(sq)) {    // 右下隅
-                    return 'vacantLand-gridLines-09';                
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-09';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-09';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-09';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-09';
                 }
                 
                 if (isNorthEdge(sq)) {  // 上辺
-                    return 'vacantLand-gridLines-14';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-14';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-14';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-14';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-14';
                 }
                 
                 if (isWestEdge(sq)) {    // 左辺
-                    return 'vacantLand-gridLines-07';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-07';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-07';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-07';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-07';
                 }
 
                 if (isEastEdge(sq)) {    // 右辺
-                    return 'vacantLand-gridLines-13';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-13';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-13';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-13';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-13';
                 }
                 
                 if (isSouthEdge(sq)) {  // 下辺
-                    return 'vacantLand-gridLines-11';
+                    if (conn <= 2) {
+                        return 'vacantLand-gridLines-11';
+                    }
+
+                    if (conn == 3) {
+                        return 'vacantLand-yellowMarker-gridLines-11';
+                    }
+
+                    if (conn == 4) {
+                        return 'vacantLand-greenMarker-gridLines-11';
+                    }
+
+                    return 'vacantLand-blueMarker-gridLines-1';
                 }
                 
                 // 盤中
-                return 'vacantLand-gridLines-15';
+                if (conn <= 2) {
+                    return 'vacantLand-gridLines-15';
+                }
+
+                if (conn == 3) {
+                    return 'vacantLand-yellowMarker-gridLines-15';
+                }
+
+                if (conn == 4) {
+                    return 'vacantLand-greenMarker-gridLines-15';
+                }
+
+                return 'vacantLand-blueMarker-gridLines-15';
             }
 
             return gameBoard1SourceTilemap1Frames[getKey(sq)];
