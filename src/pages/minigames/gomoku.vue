@@ -1309,10 +1309,10 @@
         ) : [number[], number, number] {
             const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
             let nextSq = startSq;  // 隣
-            let nextMaxConn = 0;
+            let runsNum = 1;    // ランズ。初期値は打った石の分１つ。
             let continuity = true;  // 連続でつながっている自石が継続中
             let solidLineLength = 0;   // （自分を含まない）連続でつながっている自石の長さ
-            // 連続５マス（つまり、残り４マス）をチェック
+            // 置いた石から連続して４つの石（つまり全体で５交点）をチェック。 
             for(let i:number=0; i<4; i++){
                 nextSq = aNextOf(nextSq);
 
@@ -1327,21 +1327,21 @@
                 }
 
                 // 自石
-                runsStoneSqArray.push(nextSq);    // 石の接続数を加算
-                nextMaxConn = Math.max(directionalRunsArray.value[nextSq], nextMaxConn);
+                runsStoneSqArray.push(nextSq);    // ランズの石のマス番号を覚える
+                runsNum += 1;
                 if (continuity) {
                     solidLineLength += 1;
                 }
             }
 
-            return [runsStoneSqArray, nextMaxConn, solidLineLength];
+            return [runsStoneSqArray, runsNum, solidLineLength];
         }
 
 
-        const [aRunsStoneSqArray, aNextMaxConn, aSolidLineLength] = checkDirectionalLineConnectionOfStones(
+        const [aRunsStoneSqArray, aRunsNum, aSolidLineLength] = checkDirectionalLineConnectionOfStones(
             aNextOf
         );
-        const [bRunsStoneSqArray, bNextMaxConn, bSolidLineLength] = checkDirectionalLineConnectionOfStones(
+        const [bRunsStoneSqArray, bRunsNum, bSolidLineLength] = checkDirectionalLineConnectionOfStones(
             bNextOf
         );
 
@@ -1349,21 +1349,20 @@
 
         // 集計
         aRunsStoneSqArray.forEach((sq, index, _array)=>{
-            directionalRunsArray.value[sq] = aNextMaxConn + 1;
+            directionalRunsArray.value[sq] = aRunsNum;
             if (solidLineBeing && index < aSolidLineLength) {
                 directionalSolidLineArray.value[sq] = true;
             }
         });
         bRunsStoneSqArray.forEach((sq, index, _array)=>{
-            directionalRunsArray.value[sq] = bNextMaxConn + 1;
+            directionalRunsArray.value[sq] = bRunsNum;
             if (solidLineBeing && index < bSolidLineLength) {
                 directionalSolidLineArray.value[sq] = true;
             }
         });
 
         // 打った石
-        const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
-        directionalRunsArray.value[startSq] = maxConn + 1;
+        directionalRunsArray.value[startSq] = aRunsNum + bRunsNum - 1;  // 打った石の数が重複しているので 1 引く
         if (solidLineBeing) {
             directionalSolidLineArray.value[startSq] = true;
         }
