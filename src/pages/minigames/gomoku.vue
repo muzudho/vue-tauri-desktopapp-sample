@@ -1421,11 +1421,17 @@
             }
             console.log(`squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
 
-            const windowSolidLine: boolean[] = new Array(5).fill(false);    // ウィンドウは［五］か？
             const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
             const startWindow = 4 - backLength;
             for(let window:number=startWindow; window<5; window++){
-                const windowEnd = Math.max(window+5, 5+nextLength); // end 自身を含まない
+                const windowEnd = Math.min(window+5, 5+nextLength); // end 自身を含まない
+                if (5 < windowEnd - window) {
+                    console.log(`
+                        ERROR: startWindow=${startWindow} window=${window} windowEnd=${windowEnd} nextLength=${nextLength}
+                        window+5=${window+5}
+                        5+nextLength=${5+nextLength}
+                    `);
+                }
                 let continuity = true;  // 連続でつながっている自石が継続中
                 let solidLineLength = 0;   // （自分を含まない）連続でつながっている自石の長さ
                 for(let i:number=window; i<windowEnd; i++){
