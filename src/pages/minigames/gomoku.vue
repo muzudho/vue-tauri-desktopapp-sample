@@ -1512,7 +1512,6 @@
                         directionalSolidLineArray.value[sq] = 'Alive';
                     }
                 }
-
             }
 
             // ［死に石］判定
@@ -1593,33 +1592,6 @@
             aNextOf,
             bNextOf,
         );
-        // const [bRunsStoneSqArray, bSolidLineLength] = checkDirectionalLineConnectionOfStones(
-        //     bNextOf,
-        //     aNextOf,
-        // );
-
-        //const solidLineBeing = 4 <= aSolidLineLength + bSolidLineLength;    // ［五］ができていれば真
-        // const solidLineBeing = 5 <= aSolidLineLength;    // ［五］ができていれば真
-
-        // // 集計
-        // aRunsStoneSqArray.forEach((sq, index, _array)=>{
-        //     //directionalRunsArray.value[sq] = Math.max(directionalRunsArray.value[sq], aRunsNum);  // 小さな数で上書きしないように注意
-        //     if (solidLineBeing && index < aSolidLineLength) {
-        //         directionalSolidLineArray.value[sq] = true;
-        //     }
-        // });
-        // bRunsStoneSqArray.forEach((sq, index, _array)=>{
-        //     //directionalRunsArray.value[sq] = Math.max(directionalRunsArray.value[sq], bRunsNum);
-        //     if (solidLineBeing && index < bSolidLineLength) {
-        //         directionalSolidLineArray.value[sq] = true;
-        //     }
-        // });
-
-        // 打った石
-        //directionalRunsArray.value[startSq] = aRunsNum + bRunsNum - 1;  // 打った石の数が重複しているので 1 引く
-        // if (solidLineBeing) {
-        //     directionalSolidLineArray.value[startSq] = true;
-        // }
     }
 
     /**
@@ -1717,43 +1689,85 @@
         // [0] では肝心の [2], [3] が更新されません。
         //
 
-        // TODO: （途切れた）相手の石のつながりをチェックします
-        const opponentColor1 = opponentColor(friendColor);
-        //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
-        const eastOpponentStartSq = farthestNextFrom(   // 自石から東へ
-            opponentColor1, //friendColor,
-            startSq,
-            4,
-            eastOf
-        );
-        console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} startSq=${startSq} eastOpponentStartSq=${eastOpponentStartSq}`);
-        if (eastOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
-            checkGomokuRunsSingleLine(    // 水平方向
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++
+        // + （途切れた）相手の石のつながりをチェックします +
+        // ++++++++++++++++++++++++++++++++++++++++++++++++++
+
+        function checkGomokuOpponentRuns(
+            nextOf: (sq: number)=>number,
+            backOf: (sq: number)=>number,
+            directionalRunsArray: Ref<number[]>,
+            directionalSolidLineArray: Ref<Array<StoneState>>,
+        ) : void {
+            const opponentColor1 = opponentColor(friendColor);
+            //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
+
+            // 順ウィング上の起点
+            const nextOpponentStartSq = farthestNextFrom(   // 自石から東へ
                 opponentColor1,
-                eastOpponentStartSq,
-                eastOf,
-                westOf,
-                gameBoard1StoneRunsHorizontalArray,
-                gameBoard1StoneSolidLineHorizontalArray
+                startSq,
+                4,
+                nextOf
             );
-        }
-        const westOpponentStartSq = farthestNextFrom(   // 自石から西へ
-            opponentColor1, //friendColor,
-            startSq,
-            4,
-            westOf
-        );
-        console.log(`DEBUG: [Opponent Wing 2] opponentColor1=${opponentColor1} startSq=${startSq} westOpponentStartSq=${westOpponentStartSq}`);
-        if (westOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
-            checkGomokuRunsSingleLine(
+            console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} startSq=${startSq} nextOpponentStartSq=${nextOpponentStartSq}`);
+            if (nextOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
+                checkGomokuRunsSingleLine(    // 水平方向
+                    opponentColor1,
+                    nextOpponentStartSq,
+                    nextOf,
+                    backOf,
+                    directionalRunsArray,
+                    directionalSolidLineArray
+                );
+            }
+
+            // 逆ウィング上の起点
+            const backOpponentStartSq = farthestNextFrom(   // 自石から西へ
                 opponentColor1,
-                westOpponentStartSq,
-                eastOf,
-                westOf,
-                gameBoard1StoneRunsHorizontalArray,
-                gameBoard1StoneSolidLineHorizontalArray
+                startSq,
+                4,
+                backOf
             );
+            console.log(`DEBUG: [Opponent Wing 2] opponentColor1=${opponentColor1} startSq=${startSq} backOpponentStartSq=${backOpponentStartSq}`);
+            if (backOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
+                checkGomokuRunsSingleLine(
+                    opponentColor1,
+                    backOpponentStartSq,
+                    nextOf,
+                    backOf,
+                    directionalRunsArray,
+                    directionalSolidLineArray
+                );
+            }
         }
+
+        checkGomokuOpponentRuns(    // 水平方向
+            eastOf,
+            westOf,
+            gameBoard1StoneRunsHorizontalArray,
+            gameBoard1StoneSolidLineHorizontalArray
+        );
+
+        checkGomokuOpponentRuns(    // 垂直方向
+            southOf,
+            northOf,
+            gameBoard1StoneRunsVerticalArray,
+            gameBoard1StoneSolidLineVerticalArray
+        );
+
+        checkGomokuOpponentRuns(    // バロック対角線方向
+            northeastOf,
+            southwestOf,
+            gameBoard1StoneRunsBaroqueDiagonalArray,
+            gameBoard1StoneSolidLineBaroqueDiagonalArray
+        );
+
+        checkGomokuOpponentRuns(    // シニスター対角線方向
+            southeastOf,
+            northwestOf,
+            gameBoard1StoneRunsSinisterDiagonalArray,
+            gameBoard1StoneSolidLineSinisterDiagonalArray
+        );
     }
 
 

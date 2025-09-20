@@ -527,7 +527,7 @@
         //gameBoard1DebugMessage.value = `sq=${sq}`;
 
         const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-        const itsOk = putStone(sq, color);
+        putStone(sq, color);  // 石を置くのに失敗しても何もしません
     }
 
 
