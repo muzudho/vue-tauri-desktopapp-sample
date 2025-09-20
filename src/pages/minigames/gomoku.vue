@@ -339,6 +339,7 @@
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
+    const COLOR_EMPTY = 0; // 空きマス。石の色無し。
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
@@ -369,10 +370,14 @@
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
-    const gameBoard1StoneConnectionHorizontalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の水平方向の接続数
-    const gameBoard1StoneConnectionVerticalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の垂直方向の接続数
-    const gameBoard1StoneConnectionBaroqueDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左下から右上に上がる対角線方向の接続数
-    const gameBoard1StoneConnectionSinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向の接続数
+    const gameBoard1StoneRunsHorizontalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上で石が水平方向に（飛び飛びでも）続いている石の数
+    const gameBoard1StoneRunsVerticalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の垂直方向
+    const gameBoard1StoneRunsBaroqueDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左下から右上に上がる対角線方向
+    const gameBoard1StoneRunsSinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向
+    const gameBoard1StoneSolidLineHorizontalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));   // マス上で石が水平方向に（隙間なく）連続しているか
+    const gameBoard1StoneSolidLineVerticalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));
+    const gameBoard1StoneSolidLineBaroqueDiagonalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));
+    const gameBoard1StoneSolidLineSinisterDiagonalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));
     const gameBoard1SquareSrcTilemapRect = computed<
         (sq: number)=>Rectangle
     >(()=>{
@@ -383,8 +388,7 @@
                 vanilla: string,
                 yellowMarker: string,
                 greenMarker: string,
-                blueMarker: string,
-                skyBlueMarker: string,
+                blueMarker: string
             ) : string {
                 if (conn <= 1) {
                     return vanilla;
@@ -398,11 +402,8 @@
                     return greenMarker;
                 }
 
-                if (conn == 4) {    // TODO: ［四］以上は全部この色にしたい
-                    return blueMarker;
-                }
-
-                return skyBlueMarker;   // TODO: ［五］は連続して５つの場合に限りたい。
+                // ［四］以上は全部この色
+                return blueMarker;
             }
 
             function getKey(
@@ -416,8 +417,7 @@
                         'vacantLand-gridLines-06',
                         'vacantLand-yellowMarker-gridLines-06',
                         'vacantLand-greenMarker-gridLines-06',
-                        'vacantLand-blueMarker-gridLines-06',
-                        'vacantLand-skyBlueMarker-gridLines-06',
+                        'vacantLand-blueMarker-gridLines-06'
                     );
                 }
                 
@@ -427,8 +427,7 @@
                         'vacantLand-gridLines-12',
                         'vacantLand-yellowMarker-gridLines-12',
                         'vacantLand-greenMarker-gridLines-12',
-                        'vacantLand-blueMarker-gridLines-12',
-                        'vacantLand-skyBlueMarker-gridLines-12'
+                        'vacantLand-blueMarker-gridLines-12'
                     );
                 }
 
@@ -438,8 +437,7 @@
                         'vacantLand-gridLines-03',
                         'vacantLand-yellowMarker-gridLines-03',
                         'vacantLand-greenMarker-gridLines-03',
-                        'vacantLand-blueMarker-gridLines-03',
-                        'vacantLand-skyBlueMarker-gridLines-03',
+                        'vacantLand-blueMarker-gridLines-03'
                     );
                 }
                 
@@ -449,8 +447,7 @@
                         'vacantLand-gridLines-09',
                         'vacantLand-yellowMarker-gridLines-09',
                         'vacantLand-greenMarker-gridLines-09',
-                        'vacantLand-blueMarker-gridLines-09',
-                        'vacantLand-skyBlueMarker-gridLines-09',
+                        'vacantLand-blueMarker-gridLines-09'
                     );
                 }
                 
@@ -460,8 +457,7 @@
                         'vacantLand-gridLines-14',
                         'vacantLand-yellowMarker-gridLines-14',
                         'vacantLand-greenMarker-gridLines-14',
-                        'vacantLand-blueMarker-gridLines-14',
-                        'vacantLand-skyBlueMarker-gridLines-14',
+                        'vacantLand-blueMarker-gridLines-14'
                     );
                 }
                 
@@ -471,8 +467,7 @@
                         'vacantLand-gridLines-07',
                         'vacantLand-yellowMarker-gridLines-07',
                         'vacantLand-greenMarker-gridLines-07',
-                        'vacantLand-blueMarker-gridLines-07',
-                        'vacantLand-skyBlueMarker-gridLines-07',
+                        'vacantLand-blueMarker-gridLines-07'
                     );
                 }
 
@@ -482,8 +477,7 @@
                         'vacantLand-gridLines-13',
                         'vacantLand-yellowMarker-gridLines-13',
                         'vacantLand-greenMarker-gridLines-13',
-                        'vacantLand-blueMarker-gridLines-13',
-                        'vacantLand-skyBlueMarker-gridLines-13',
+                        'vacantLand-blueMarker-gridLines-13'
                     );
                 }
                 
@@ -493,8 +487,7 @@
                         'vacantLand-gridLines-11',
                         'vacantLand-yellowMarker-gridLines-11',
                         'vacantLand-greenMarker-gridLines-11',
-                        'vacantLand-blueMarker-gridLines-11',
-                        'vacantLand-skyBlueMarker-gridLines-11',
+                        'vacantLand-blueMarker-gridLines-11'
                     );
                 }
                 
@@ -504,17 +497,64 @@
                     'vacantLand-gridLines-15',
                     'vacantLand-yellowMarker-gridLines-15',
                     'vacantLand-greenMarker-gridLines-15',
-                    'vacantLand-blueMarker-gridLines-15',
-                    'vacantLand-skyBlueMarker-gridLines-15',
+                    'vacantLand-blueMarker-gridLines-15'
                 );
+            }
+
+
+            function getKeyOfSolidLine(sq: number) : string {
+                if (isNorthwestCorner(sq)) {    // 左上隅
+                    return 'vacantLand-skyBlueMarker-gridLines-06';
+                }
+                
+                if (isNortheastCorner(sq)) {    // 右上隅
+                    return 'vacantLand-skyBlueMarker-gridLines-12';
+                }
+
+                if (isSouthwestCorner(sq)) {    // 左下隅
+                    return 'vacantLand-skyBlueMarker-gridLines-03';
+                }
+                
+                if (isSoutheastCorner(sq)) {    // 右下隅
+                    return 'vacantLand-skyBlueMarker-gridLines-09';
+                }
+                
+                if (isNorthEdge(sq)) {  // 上辺
+                    return 'vacantLand-skyBlueMarker-gridLines-14';
+                }
+                
+                if (isWestEdge(sq)) {    // 左辺
+                    return 'vacantLand-skyBlueMarker-gridLines-07';
+                }
+
+                if (isEastEdge(sq)) {    // 右辺
+                    return 'vacantLand-skyBlueMarker-gridLines-13';
+                }
+                
+                if (isSouthEdge(sq)) {  // 下辺
+                    return 'vacantLand-skyBlueMarker-gridLines-11';
+                }
+                
+                // 盤中
+                return 'vacantLand-skyBlueMarker-gridLines-15';
+            }
+
+
+            if (
+                gameBoard1StoneSolidLineHorizontalArray.value[sq]
+                || gameBoard1StoneSolidLineVerticalArray.value[sq]
+                || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq]
+                || gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq]
+            ) {
+                return gameBoard1SourceTilemap1Frames[getKeyOfSolidLine(sq)];
             }
 
             // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
             const conn = Math.max(
-                gameBoard1StoneConnectionHorizontalArray.value[sq], // 水平
-                gameBoard1StoneConnectionVerticalArray.value[sq],   // 垂直
-                gameBoard1StoneConnectionBaroqueDiagonalArray.value[sq],    // バロック対角線
-                gameBoard1StoneConnectionSinisterDiagonalArray.value[sq],   // シニスター対角線
+                gameBoard1StoneRunsHorizontalArray.value[sq], // 水平
+                gameBoard1StoneRunsVerticalArray.value[sq],   // 垂直
+                gameBoard1StoneRunsBaroqueDiagonalArray.value[sq],    // バロック対角線
+                gameBoard1StoneRunsSinisterDiagonalArray.value[sq],   // シニスター対角線
             );
             const key = getKey(
                 sq,
@@ -891,11 +931,17 @@
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
 
-            // マス上の石の接続数
-            gameBoard1StoneConnectionHorizontalArray.value[sq] = 0;
-            gameBoard1StoneConnectionVerticalArray.value[sq] = 0;
-            gameBoard1StoneConnectionBaroqueDiagonalArray.value[sq] = 0;
-            gameBoard1StoneConnectionSinisterDiagonalArray.value[sq] = 0;
+            // マス上で自石が（飛び飛びでも）続いている数
+            gameBoard1StoneRunsHorizontalArray.value[sq] = 0;
+            gameBoard1StoneRunsVerticalArray.value[sq] = 0;
+            gameBoard1StoneRunsBaroqueDiagonalArray.value[sq] = 0;
+            gameBoard1StoneRunsSinisterDiagonalArray.value[sq] = 0;
+
+            // マス上で自石が（隙間なく）連続しているか
+            gameBoard1StoneSolidLineHorizontalArray.value[sq] = false;
+            gameBoard1StoneSolidLineVerticalArray.value[sq] = false;
+            gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] = false;
+            gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] = false;
         }
 
         gameBoard1Times.value = 0;
@@ -1252,54 +1298,69 @@
         startSq: number,
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
-        directionalConnectionArray: Ref<number[]>,
+        directionalRunsArray: Ref<number[]>,
+        directionalSolidLineArray: Ref<boolean[]>,
     ) : void {
         const opponentColor1 = opponentColor(gameBoard1Turn.value);
 
         function checkDirectionalLineConnectionOfStones(
             aNextOf: (sq: number)=>number
-        ) : [number[], number] {
-            // 垂直方向
-            const connectedStoneSqArray: number[] = []; // つながりのある自石のあるマス番号
-            // 北
-            let aNextSq = startSq;
-            let aNextMaxConn = 0;
-            // 連続５マスをチェック
-            for(let i:number=0; i<5; i++){
-                aNextSq = aNextOf(aNextSq);
+        ) : [number[], number, number] {
+            const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
+            let nextSq = startSq;  // 隣
+            let nextMaxConn = 0;
+            let continuity = true;  // 連続でつながっている自石が継続中
+            let solidLineLength = 1;   // 連続でつながっている自石の長さ
+            // 連続５マス（つまり、残り４マス）をチェック
+            for(let i:number=0; i<4; i++){
+                nextSq = aNextOf(nextSq);
 
-                if (aNextSq == -1 || gameBoard1StoneColorArray.value[aNextSq] == opponentColor1) {  // 盤外、または相手の石なら
+                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
                     break;  // 探索終了
                 }
 
-                if(gameBoard1StoneColorArray.value[aNextSq] == gameBoard1Turn.value) {  // 自石なら
-                    connectedStoneSqArray.push(aNextSq);    // 石の接続数を加算
-                    aNextMaxConn = Math.max(directionalConnectionArray.value[aNextSq], aNextMaxConn);
+                // 空きマスなら続行
+                if (gameBoard1StoneColorArray.value[nextSq] == COLOR_EMPTY) {
+                    continuity = false;
+                    continue;
+                }
+
+                // 自石
+                runsStoneSqArray.push(nextSq);    // 石の接続数を加算
+                nextMaxConn = Math.max(directionalRunsArray.value[nextSq], nextMaxConn);
+                if (continuity) {
+                    solidLineLength += 1;
                 }
             }
 
-            return [connectedStoneSqArray, aNextMaxConn];
+            return [runsStoneSqArray, nextMaxConn, solidLineLength];
         }
 
 
-        const [aConnectedStoneSqArray, aNextMaxConn] = checkDirectionalLineConnectionOfStones(
+        const [aRunsStoneSqArray, aNextMaxConn, aSolidLineLength] = checkDirectionalLineConnectionOfStones(
             aNextOf
         );
-        const [bConnectedStoneSqArray, bNextMaxConn] = checkDirectionalLineConnectionOfStones(
+        const [bRunsStoneSqArray, bNextMaxConn, bSolidLineLength] = checkDirectionalLineConnectionOfStones(
             bNextOf
         );
 
         // 集計
-        aConnectedStoneSqArray.forEach((sq, _index, _array)=>{
-            directionalConnectionArray.value[sq] = aNextMaxConn + 1;
+        aRunsStoneSqArray.forEach((sq, index, _array)=>{
+            directionalRunsArray.value[sq] = aNextMaxConn + 1;
+            if (index < aSolidLineLength) {
+                directionalSolidLineArray.value[sq] = true;
+            }
         });
-        bConnectedStoneSqArray.forEach((sq, _index, _array)=>{
-            directionalConnectionArray.value[sq] = bNextMaxConn + 1;
+        bRunsStoneSqArray.forEach((sq, index, _array)=>{
+            directionalRunsArray.value[sq] = bNextMaxConn + 1;
+            if (index < bSolidLineLength) {
+                directionalSolidLineArray.value[sq] = true;
+            }
         });
 
         // 打った石
         const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
-        directionalConnectionArray.value[startSq] = maxConn + 1;
+        directionalRunsArray.value[startSq] = maxConn + 1;
     }
 
     /**
@@ -1311,25 +1372,29 @@
             startSq,
             eastOf,
             westOf,
-            gameBoard1StoneConnectionHorizontalArray
+            gameBoard1StoneRunsHorizontalArray,
+            gameBoard1StoneSolidLineHorizontalArray
         );
         checkLineConnectionOfStones(    // 垂直方向
             startSq,
             northOf,
             southOf,
-            gameBoard1StoneConnectionVerticalArray
+            gameBoard1StoneRunsVerticalArray,
+            gameBoard1StoneSolidLineVerticalArray
         );
         checkLineConnectionOfStones(    // バロック対角線方向
             startSq,
             northeastOf,
             southwestOf,
-            gameBoard1StoneConnectionBaroqueDiagonalArray
+            gameBoard1StoneRunsBaroqueDiagonalArray,
+            gameBoard1StoneSolidLineBaroqueDiagonalArray
         );
         checkLineConnectionOfStones(    // シニスター対角線方向
             startSq,
             southeastOf,
             northwestOf,
-            gameBoard1StoneConnectionSinisterDiagonalArray
+            gameBoard1StoneRunsSinisterDiagonalArray,
+            gameBoard1StoneSolidLineSinisterDiagonalArray
         );
     }
 
