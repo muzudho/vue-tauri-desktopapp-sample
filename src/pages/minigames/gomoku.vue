@@ -1573,28 +1573,27 @@
             gameBoard1StoneRunsHorizontalArray,
             gameBoard1StoneSolidLineHorizontalArray
         );
-        // TODO:
-        // checkLineOfStones(    // 垂直方向
-        //     startSq,
-        //     northOf,
-        //     southOf,
-        //     gameBoard1StoneRunsVerticalArray,
-        //     gameBoard1StoneSolidLineVerticalArray
-        // );
-        // checkLineOfStones(    // バロック対角線方向
-        //     startSq,
-        //     northeastOf,
-        //     southwestOf,
-        //     gameBoard1StoneRunsBaroqueDiagonalArray,
-        //     gameBoard1StoneSolidLineBaroqueDiagonalArray
-        // );
-        // checkLineOfStones(    // シニスター対角線方向
-        //     startSq,
-        //     southeastOf,
-        //     northwestOf,
-        //     gameBoard1StoneRunsSinisterDiagonalArray,
-        //     gameBoard1StoneSolidLineSinisterDiagonalArray
-        // );
+        checkLineOfStones(    // 垂直方向
+            startSq,
+            northOf,
+            southOf,
+            gameBoard1StoneRunsVerticalArray,
+            gameBoard1StoneSolidLineVerticalArray
+        );
+        checkLineOfStones(    // バロック対角線方向
+            startSq,
+            northeastOf,
+            southwestOf,
+            gameBoard1StoneRunsBaroqueDiagonalArray,
+            gameBoard1StoneSolidLineBaroqueDiagonalArray
+        );
+        checkLineOfStones(    // シニスター対角線方向
+            startSq,
+            southeastOf,
+            northwestOf,
+            gameBoard1StoneRunsSinisterDiagonalArray,
+            gameBoard1StoneSolidLineSinisterDiagonalArray
+        );
     }
 
 
