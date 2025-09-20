@@ -876,8 +876,8 @@
         }
 
         gameBoard1StoneColorArray.value[sq] = color;
-        checkConnectionOfStones(sq);    // 石のつながりをチェックします
-        gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
+        checkGomokuRuns(sq);    // 石のつながりをチェックします
+        gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // （チェック後に）相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[color] += 1;
         gameBoard1PassCount.value = 0;  // リセット
@@ -1311,20 +1311,20 @@
     // }
 
     function checkLineOfStones(
+        friendColor: number,    // 自石の色
         startSq: number,
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
         directionalSolidLineArray: Ref<boolean[]>,
     ) : void {
-        const opponentColor1 = opponentColor(gameBoard1Turn.value);
+        const opponentColor1 = opponentColor(friendColor);
 
         function checkDirectionalLineConnectionOfStones(
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
         ) : void {
             const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
-            //let runsNum = 1;    // ランズ。初期値は打った石の分１つ。
 
             //          ここに石を置いたら
             //          v
@@ -1565,8 +1565,11 @@
      * 石のつながりをチェックします
      * @param startSq 石を置いたマス番号
      */
-    function checkConnectionOfStones(startSq: number) : void {
+    function checkGomokuRuns(startSq: number) : void {
+        const friendColor = gameBoard1Turn.value;   // 自石の色
+        // 自石のつながりを更新します
         checkLineOfStones(    // 水平方向
+            friendColor,
             startSq,
             eastOf,
             westOf,
@@ -1574,6 +1577,7 @@
             gameBoard1StoneSolidLineHorizontalArray
         );
         checkLineOfStones(    // 垂直方向
+            friendColor,
             startSq,
             northOf,
             southOf,
@@ -1581,6 +1585,7 @@
             gameBoard1StoneSolidLineVerticalArray
         );
         checkLineOfStones(    // バロック対角線方向
+            friendColor,
             startSq,
             northeastOf,
             southwestOf,
@@ -1588,14 +1593,127 @@
             gameBoard1StoneSolidLineBaroqueDiagonalArray
         );
         checkLineOfStones(    // シニスター対角線方向
+            friendColor,
             startSq,
             southeastOf,
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
             gameBoard1StoneSolidLineSinisterDiagonalArray
         );
+
+        //
+        // 例えば、
+        //
+        //  0 1 2 3 4 5 6 7 8
+        // +-+-+-+-+-+-+-+-+-+
+        // |.|o|o|o|.|o|.|.|.|
+        // +-+-+-+-+-+-+-+-+-+
+        //
+        // のような［四］ができているところへ、
+        //
+        //  0 1 2 3 4 5 6 7 8
+        // +-+-+-+-+-+-+-+-+-+
+        // |.|o|o|o|x|o|.|.|.|
+        // +-+-+-+-+-+-+-+-+-+
+        //
+        // [4] に割り打てば、［三］と［一］に減らせるはずです。
+        // この仕掛けとしては、
+        //
+        //          0 1 2 3 4 5 6 7 8
+        //         +-+-+-+-+-+-+-+-+-+
+        //         |.|o|o|o|x|o|.|.|.|
+        //         +-+-+-+-+-+-+-+-+-+
+        // -4-3-2-1 0 1 2 3 4
+        // +-+-+-+-+-+-+-+-+-+
+        // |.|.|.|.|O|.|.|.|.|
+        // +-+-+-+-+-+-+-+-+-+
+        //                    5 6 7 8 9101112
+        //                 +-+-+-+-+-+-+-+-+-+
+        //                 |.|.|.|.|O|.|.|.|.|
+        //                 +-+-+-+-+-+-+-+-+-+
+        //
+        // [0] と [8] のマスを起点に[o]側のランズを更新すればよいはずです。
+        // ただし、以下の局面では：
+        //
+        //  0 1 2 3 4 5 6 7 8
+        // +-+-+-+-+-+-+-+-+-+
+        // |.|x|o|o|.|o|.|.|.|
+        // +-+-+-+-+-+-+-+-+-+
+        //
+        // [4] に割り打てば、［零］と［一］に減らせるはずです。
+        // この仕掛けとしては、
+        //
+        //          0 1 2 3 4 5 6 7 8
+        //         +-+-+-+-+-+-+-+-+-+
+        //         |.|x|o|o|x|o|.|.|.|
+        //         +-+-+-+-+-+-+-+-+-+
+        //     -2-1 0 1 2 3 4 5 6
+        //     +-+-+-+-+-+-+-+-+-+
+        //     |.|.|.|.|O|.|.|.|.|
+        //     +-+-+-+-+-+-+-+-+-+
+        //
+        // [0] ではなく、例えば [2] を起点とするべきです。
+        // [0] では肝心の [2], [3] が更新されません。
+        //
+
+        // TODO: （途切れた）相手の石のつながりをチェックします
+        const opponentColor1 = opponentColor(friendColor);
+        console.log(`startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
+        const eastOpponentStartSq = farthestNextFrom(   // 自石から東へ
+            friendColor,
+            startSq,
+            4,
+            eastOf
+        );
+        console.log(`eastOpponentStartSq=${eastOpponentStartSq}`);
+        checkLineOfStones(    // 水平方向
+            opponentColor1,
+            eastOpponentStartSq,
+            eastOf,
+            westOf,
+            gameBoard1StoneRunsHorizontalArray,
+            gameBoard1StoneSolidLineHorizontalArray
+        );
+        const westOpponentStartSq = farthestNextFrom(   // 自石から西へ
+            friendColor,
+            startSq,
+            4,
+            westOf
+        );
+        console.log(`opponentColor1=${opponentColor1} startSq=${startSq} westOpponentStartSq=${westOpponentStartSq}`);
+        checkLineOfStones(
+            opponentColor1,
+            westOpponentStartSq,
+            eastOf,
+            westOf,
+            gameBoard1StoneRunsHorizontalArray,
+            gameBoard1StoneSolidLineHorizontalArray
+        );
     }
 
+
+    function farthestNextFrom(
+        friendColor: number,
+        startSq: number,
+        maxLength: number,
+        nextOf: (sq: number)=>number,
+    ) : number {
+        const opponentColor1 = opponentColor(friendColor);
+        let nextSq = startSq;
+        for(let i:number=0; i<maxLength; i++) {
+            const featureSq = nextOf(nextSq);
+            //console.log(`farthestNextFrom: friendColor=${friendColor} opponentColor1=${opponentColor1} nextSq=${nextSq} featureSq=${featureSq}`);
+
+            if (featureSq == -1 || gameBoard1StoneColorArray.value[featureSq] == opponentColor1) {  // 盤外または相手の石なら
+                break;
+            }
+
+            // 自石、または空点
+            nextSq = featureSq;
+        }
+
+        return nextSq;
+    }
 
     /**
      * パス
