@@ -1310,9 +1310,9 @@
     //     }
     // }
 
-    function checkLineOfStones(
+    function checkGomokuRunsSingleLine(
         friendColor: number,    // 自石の色
-        startSq: number,
+        startSq: number,    // 打った場所。自石が置いている前提
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
@@ -1419,13 +1419,13 @@
                 squareMap[i] = nextSq;
                 backLength += 1;
             }
-            console.log(`squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
+            console.log(`DEBUG: squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
 
             const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
             const startWindow = 4 - backLength;
             for(let window:number=startWindow; window<5; window++){
                 const windowEnd = Math.min(window+5, 5+nextLength); // end 自身を含まない
-                if (5 < windowEnd - window) {
+                if (5 < windowEnd - window) {   // TODO: 消す
                     console.log(`
                         ERROR: startWindow=${startWindow} window=${window} windowEnd=${windowEnd} nextLength=${nextLength}
                         window+5=${window+5}
@@ -1523,8 +1523,6 @@
                 // 自石
                 runsStoneSqArray.push(nextSq);    // ランズの石のマス番号を覚える
             }
-
-            //return [runsStoneSqArray, squareMap, windowSolidLine];
         }
 
 
@@ -1568,7 +1566,7 @@
     function checkGomokuRuns(startSq: number) : void {
         const friendColor = gameBoard1Turn.value;   // 自石の色
         // 自石のつながりを更新します
-        checkLineOfStones(    // 水平方向
+        checkGomokuRunsSingleLine(    // 水平方向
             friendColor,
             startSq,
             eastOf,
@@ -1576,7 +1574,7 @@
             gameBoard1StoneRunsHorizontalArray,
             gameBoard1StoneSolidLineHorizontalArray
         );
-        checkLineOfStones(    // 垂直方向
+        checkGomokuRunsSingleLine(    // 垂直方向
             friendColor,
             startSq,
             northOf,
@@ -1584,7 +1582,7 @@
             gameBoard1StoneRunsVerticalArray,
             gameBoard1StoneSolidLineVerticalArray
         );
-        checkLineOfStones(    // バロック対角線方向
+        checkGomokuRunsSingleLine(    // バロック対角線方向
             friendColor,
             startSq,
             northeastOf,
@@ -1592,7 +1590,7 @@
             gameBoard1StoneRunsBaroqueDiagonalArray,
             gameBoard1StoneSolidLineBaroqueDiagonalArray
         );
-        checkLineOfStones(    // シニスター対角線方向
+        checkGomokuRunsSingleLine(    // シニスター対角線方向
             friendColor,
             startSq,
             southeastOf,
@@ -1660,35 +1658,39 @@
         const opponentColor1 = opponentColor(friendColor);
         console.log(`startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
         const eastOpponentStartSq = farthestNextFrom(   // 自石から東へ
-            friendColor,
+            opponentColor1, //friendColor,
             startSq,
             4,
             eastOf
         );
         console.log(`eastOpponentStartSq=${eastOpponentStartSq}`);
-        checkLineOfStones(    // 水平方向
-            opponentColor1,
-            eastOpponentStartSq,
-            eastOf,
-            westOf,
-            gameBoard1StoneRunsHorizontalArray,
-            gameBoard1StoneSolidLineHorizontalArray
-        );
+        if (eastOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
+            checkGomokuRunsSingleLine(    // 水平方向
+                opponentColor1,
+                eastOpponentStartSq,
+                eastOf,
+                westOf,
+                gameBoard1StoneRunsHorizontalArray,
+                gameBoard1StoneSolidLineHorizontalArray
+            );
+        }
         const westOpponentStartSq = farthestNextFrom(   // 自石から西へ
-            friendColor,
+            opponentColor1, //friendColor,
             startSq,
             4,
             westOf
         );
         console.log(`opponentColor1=${opponentColor1} startSq=${startSq} westOpponentStartSq=${westOpponentStartSq}`);
-        checkLineOfStones(
-            opponentColor1,
-            westOpponentStartSq,
-            eastOf,
-            westOf,
-            gameBoard1StoneRunsHorizontalArray,
-            gameBoard1StoneSolidLineHorizontalArray
-        );
+        if (westOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
+            checkGomokuRunsSingleLine(
+                opponentColor1,
+                westOpponentStartSq,
+                eastOf,
+                westOf,
+                gameBoard1StoneRunsHorizontalArray,
+                gameBoard1StoneSolidLineHorizontalArray
+            );
+        }
     }
 
 
