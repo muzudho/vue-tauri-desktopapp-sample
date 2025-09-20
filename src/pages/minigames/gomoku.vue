@@ -1312,7 +1312,7 @@
 
     function checkGomokuRunsSingleLine(
         friendColor: number,    // 自石の色
-        startSq: number,    // 打った場所。自石が置いている前提
+        startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
@@ -1324,9 +1324,9 @@
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
         ) : void {
-            const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
+            //const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
 
-            //          ここに石を置いたら
+            //          ここに石を置いたら（仮定なので、空点でも構わない）
             //          v
             // +-+-+-+-+-+-+-+-+-+
             // |.|.|.|.|o|.|.|.|.|
@@ -1406,6 +1406,7 @@
                 if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
                     break;  // 探索終了
                 }
+                // 空点または自石なら
                 squareMap[i] = nextSq;
                 nextLength += 1;
             }
@@ -1414,7 +1415,7 @@
             for(let i:number=3; 0<=i; i--){  // 逆方向
                 nextSq = backOf(nextSq);
                 if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
-                    break;  // 探索終了
+                    break;
                 }
                 squareMap[i] = nextSq;
                 backLength += 1;
@@ -1433,7 +1434,7 @@
                     `);
                 }
                 let continuity = true;  // 連続でつながっている自石が継続中
-                let solidLineLength = 0;   // （自分を含まない）連続でつながっている自石の長さ
+                let solidLineLength = 0;   // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
                 for(let i:number=window; i<windowEnd; i++){
                     const sq = squareMap[i];
 
@@ -1460,7 +1461,7 @@
                 }
             }
 
-            // 各マスのランズ数を確定する：
+            // （９つの切り取りマスの）各マスのランズ数を確定する：
             let sq;
             sq = squareMap[0];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
@@ -1507,22 +1508,22 @@
                 directionalRunsArray.value[sq] = windowRunsNum[4];
             }
 
-            // 置いた石から連続して４つの石（つまり全体で５交点）をチェック。 
-            for(let i:number=0; i<4; i++){
-                nextSq = nextOf(nextSq);
+            // // 置いた石（これ自身は除く）から連続して４つの石（つまり全体で５交点）をチェック。 
+            // for(let i:number=0; i<4; i++){
+            //     nextSq = nextOf(nextSq);
 
-                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
-                    break;  // 探索終了
-                }
+            //     if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
+            //         break;  // 探索終了
+            //     }
 
-                // 空きマスなら続行
-                if (gameBoard1StoneColorArray.value[nextSq] == COLOR_EMPTY) {
-                    continue;
-                }
+            //     // 空きマスなら続行
+            //     if (gameBoard1StoneColorArray.value[nextSq] == COLOR_EMPTY) {
+            //         continue;
+            //     }
 
-                // 自石
-                runsStoneSqArray.push(nextSq);    // ランズの石のマス番号を覚える
-            }
+            //     // 自石
+            //     runsStoneSqArray.push(nextSq);    // ランズの石のマス番号を覚える
+            // }
         }
 
 
