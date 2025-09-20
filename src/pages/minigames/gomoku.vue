@@ -1324,8 +1324,6 @@
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
         ) : void {
-            //const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
-
             //          ここに石を置いたら（仮定なので、空点でも構わない）
             //          v
             // +-+-+-+-+-+-+-+-+-+
@@ -1465,65 +1463,57 @@
             let sq;
             sq = squareMap[0];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[0]=${windowRunsNum[0]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[0];
             }
 
             sq = squareMap[1];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[1]=${windowRunsNum[1]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
             }
 
             sq = squareMap[2];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[2]=${windowRunsNum[2]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
             }
 
             sq = squareMap[3];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[3]=${windowRunsNum[3]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
             }
 
             sq = squareMap[4];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[4]=${windowRunsNum[4]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = squareMap[5];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[5]=${windowRunsNum[5]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
             }
 
             sq = squareMap[6];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[6]=${windowRunsNum[6]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = squareMap[7];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[7]=${windowRunsNum[7]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = squareMap[8];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                console.log(`DEBUG: windowRunsNum[8]=${windowRunsNum[8]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[4];
             }
-
-            // // 置いた石（これ自身は除く）から連続して４つの石（つまり全体で５交点）をチェック。 
-            // for(let i:number=0; i<4; i++){
-            //     nextSq = nextOf(nextSq);
-
-            //     if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
-            //         break;  // 探索終了
-            //     }
-
-            //     // 空きマスなら続行
-            //     if (gameBoard1StoneColorArray.value[nextSq] == COLOR_EMPTY) {
-            //         continue;
-            //     }
-
-            //     // 自石
-            //     runsStoneSqArray.push(nextSq);    // ランズの石のマス番号を覚える
-            // }
         }
 
 
@@ -1657,14 +1647,14 @@
 
         // TODO: （途切れた）相手の石のつながりをチェックします
         const opponentColor1 = opponentColor(friendColor);
-        console.log(`startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
+        //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
         const eastOpponentStartSq = farthestNextFrom(   // 自石から東へ
             opponentColor1, //friendColor,
             startSq,
             4,
             eastOf
         );
-        console.log(`eastOpponentStartSq=${eastOpponentStartSq}`);
+        console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} startSq=${startSq} eastOpponentStartSq=${eastOpponentStartSq}`);
         if (eastOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
             checkGomokuRunsSingleLine(    // 水平方向
                 opponentColor1,
@@ -1681,7 +1671,7 @@
             4,
             westOf
         );
-        console.log(`opponentColor1=${opponentColor1} startSq=${startSq} westOpponentStartSq=${westOpponentStartSq}`);
+        console.log(`DEBUG: [Opponent Wing 2] opponentColor1=${opponentColor1} startSq=${startSq} westOpponentStartSq=${westOpponentStartSq}`);
         if (westOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
             checkGomokuRunsSingleLine(
                 opponentColor1,
