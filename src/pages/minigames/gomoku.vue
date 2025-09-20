@@ -389,10 +389,14 @@
     const gameBoard1StoneRunsVerticalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の垂直方向
     const gameBoard1StoneRunsBaroqueDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左下から右上に上がる対角線方向
     const gameBoard1StoneRunsSinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向
-    const gameBoard1StoneSolidLineHorizontalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));   // マス上で石が水平方向に（隙間なく）連続しているか
-    const gameBoard1StoneSolidLineVerticalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));
-    const gameBoard1StoneSolidLineBaroqueDiagonalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));
-    const gameBoard1StoneSolidLineSinisterDiagonalArray = ref<boolean[]>(new Array(gameBoard1Area.value).fill(false));
+
+    // （隙間なく）連続する石は、［五］（Alive）か、［死に石］（Dead）か、［いずれでもない］（Neither）の３状態。
+    type StoneState = 'Alive'|'Dead'|'Neither';
+    const gameBoard1StoneSolidLineHorizontalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));   // マス上で石が水平方向に（隙間なく）連続しているか
+    const gameBoard1StoneSolidLineVerticalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));
+    const gameBoard1StoneSolidLineBaroqueDiagonalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));
+    const gameBoard1StoneSolidLineSinisterDiagonalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));
+
     const gameBoard1SquareSrcTilemapRect = computed<
         (sq: number)=>Rectangle
     >(()=>{
@@ -421,7 +425,7 @@
                 return blueMarker;
             }
 
-            function getKey(
+            function getRunsKey(
                 sq: number,
                 conn: number,
             ) : string {
@@ -518,51 +522,100 @@
 
 
             function getKeyOfSolidLine(sq: number) : string {
-                if (isNorthwestCorner(sq)) {    // 左上隅
-                    return 'vacantLand-skyBlueMarker-gridLines-06';
-                }
-                
-                if (isNortheastCorner(sq)) {    // 右上隅
-                    return 'vacantLand-skyBlueMarker-gridLines-12';
+                // ［生き石］
+                if (
+                    gameBoard1StoneSolidLineHorizontalArray.value[sq] == 'Alive'
+                    || gameBoard1StoneSolidLineVerticalArray.value[sq] == 'Alive'
+                    || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] == 'Alive'
+                    || gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] == 'Alive'
+                ) {
+                    if (isNorthwestCorner(sq)) {    // 左上隅
+                        return 'vacantLand-skyBlueMarker-gridLines-06';
+                    }
+                    
+                    if (isNortheastCorner(sq)) {    // 右上隅
+                        return 'vacantLand-skyBlueMarker-gridLines-12';
+                    }
+
+                    if (isSouthwestCorner(sq)) {    // 左下隅
+                        return 'vacantLand-skyBlueMarker-gridLines-03';
+                    }
+                    
+                    if (isSoutheastCorner(sq)) {    // 右下隅
+                        return 'vacantLand-skyBlueMarker-gridLines-09';
+                    }
+                    
+                    if (isNorthEdge(sq)) {  // 上辺
+                        return 'vacantLand-skyBlueMarker-gridLines-14';
+                    }
+                    
+                    if (isWestEdge(sq)) {    // 左辺
+                        return 'vacantLand-skyBlueMarker-gridLines-07';
+                    }
+
+                    if (isEastEdge(sq)) {    // 右辺
+                        return 'vacantLand-skyBlueMarker-gridLines-13';
+                    }
+                    
+                    if (isSouthEdge(sq)) {  // 下辺
+                        return 'vacantLand-skyBlueMarker-gridLines-11';
+                    }
+
+                    // 盤中
+                    return 'vacantLand-skyBlueMarker-gridLines-15';
+                    
+                // ［死に石］
+                } else if (
+                    gameBoard1StoneSolidLineHorizontalArray.value[sq] == 'Dead'
+                    || gameBoard1StoneSolidLineVerticalArray.value[sq] == 'Dead'
+                    || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] == 'Dead'
+                    || gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] == 'Dead'
+                ) {
+                    if (isNorthwestCorner(sq)) {    // 左上隅
+                        return 'bgDead-gridLines-06';
+                    }
+                    
+                    if (isNortheastCorner(sq)) {    // 右上隅
+                        return 'bgDead-gridLines-12';
+                    }
+
+                    if (isSouthwestCorner(sq)) {    // 左下隅
+                        return 'bgDead-gridLines-03';
+                    }
+                    
+                    if (isSoutheastCorner(sq)) {    // 右下隅
+                        return 'bgDead-gridLines-09';
+                    }
+                    
+                    if (isNorthEdge(sq)) {  // 上辺
+                        return 'bgDead-gridLines-14';
+                    }
+                    
+                    if (isWestEdge(sq)) {    // 左辺
+                        return 'bgDead-gridLines-07';
+                    }
+
+                    if (isEastEdge(sq)) {    // 右辺
+                        return 'bgDead-gridLines-13';
+                    }
+                    
+                    if (isSouthEdge(sq)) {  // 下辺
+                        return 'bgDead-gridLines-11';
+                    }
+
+                    // 盤中
+                    return 'bgDead-gridLines-15';
                 }
 
-                if (isSouthwestCorner(sq)) {    // 左下隅
-                    return 'vacantLand-skyBlueMarker-gridLines-03';
-                }
-                
-                if (isSoutheastCorner(sq)) {    // 右下隅
-                    return 'vacantLand-skyBlueMarker-gridLines-09';
-                }
-                
-                if (isNorthEdge(sq)) {  // 上辺
-                    return 'vacantLand-skyBlueMarker-gridLines-14';
-                }
-                
-                if (isWestEdge(sq)) {    // 左辺
-                    return 'vacantLand-skyBlueMarker-gridLines-07';
-                }
-
-                if (isEastEdge(sq)) {    // 右辺
-                    return 'vacantLand-skyBlueMarker-gridLines-13';
-                }
-                
-                if (isSouthEdge(sq)) {  // 下辺
-                    return 'vacantLand-skyBlueMarker-gridLines-11';
-                }
-                
-                // 盤中
-                return 'vacantLand-skyBlueMarker-gridLines-15';
+                // ［どちらでもない］
+                return '';
             }
 
 
             // （途切れず）連続する石判定
-            if (
-                gameBoard1StoneSolidLineHorizontalArray.value[sq]
-                || gameBoard1StoneSolidLineVerticalArray.value[sq]
-                || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq]
-                || gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq]
-            ) {
-                return gameBoard1SourceTilemap1Frames[getKeyOfSolidLine(sq)];
+            let buttonImageKey = getKeyOfSolidLine(sq);
+            if (buttonImageKey != ''){
+                return gameBoard1SourceTilemap1Frames[buttonImageKey];
             }
 
             // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
@@ -571,13 +624,13 @@
                 gameBoard1StoneRunsVerticalArray.value[sq],   // 垂直
                 gameBoard1StoneRunsBaroqueDiagonalArray.value[sq],    // バロック対角線
                 gameBoard1StoneRunsSinisterDiagonalArray.value[sq],   // シニスター対角線
-            );
-            const key = getKey(
+            );            
+            buttonImageKey = getRunsKey(
                 sq,
                 conn
             );
             //console.log(`sq=${sq} key=${key} gameBoard1SourceTilemap1Frames[key]=${gameBoard1SourceTilemap1Frames[key]}`);
-            return gameBoard1SourceTilemap1Frames[key];
+            return gameBoard1SourceTilemap1Frames[buttonImageKey];
         };
     });
     const gameBoard1SquareBackgroundPosition = computed<
@@ -598,6 +651,7 @@
     const w = tileBoard1TileWidth.value;   // tlie width
     const h = tileBoard1TileHeight.value;
     const gw = 3 * w;   // tile group width
+    const gh = 4 * h;   // tile group height
     //
     // 八方罫線魔法陣
     //
@@ -612,63 +666,72 @@
     //    04
     //
     const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {
-        'test-1' : {top: 32, left: 0, width: 32, height: 32},  // テスト TODO: 削除方針
-
-        // 0*gw
-        'vacantLand-1'                          : {top: 0*h, left: 0*gw + 0*w, width: w, height: h},    // 更地
-        'vacantLand-gridLines-06'               : {top: 1*h, left: 0*gw + 0*w, width: w, height: h},  // ┌
-        'vacantLand-gridLines-14'               : {top: 1*h, left: 0*gw + 1*w, width: w, height: h},  // ┬
-        'vacantLand-gridLines-12'               : {top: 1*h, left: 0*gw + 2*w, width: w, height: h},  // ┐
-        'vacantLand-gridLines-07'               : {top: 2*h, left: 0*gw + 0*w, width: w, height: h},  // ├
-        'vacantLand-gridLines-15'               : {top: 2*h, left: 0*gw + 1*w, width: w, height: h},  // ┼
-        'vacantLand-gridLines-13'               : {top: 2*h, left: 0*gw + 2*w, width: w, height: h},  // ┤
-        'vacantLand-gridLines-03'               : {top: 3*h, left: 0*gw + 0*w, width: w, height: h},  // └
-        'vacantLand-gridLines-11'               : {top: 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
-        'vacantLand-gridLines-09'               : {top: 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
-        // 1*gw
-        'vacantLand-yellowMarker-1'             : {top: 0*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-06'  : {top: 1*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-14'  : {top: 1*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-12'  : {top: 1*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-07'  : {top: 2*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-15'  : {top: 2*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-13'  : {top: 2*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-03'  : {top: 3*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-11'  : {top: 3*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-09'  : {top: 3*h, left: 1*gw + 2*w, width: w, height: h},
-        // 2*gw
-        'vacantLand-greenMarker-1'              : {top: 0*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-06'   : {top: 1*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-14'   : {top: 1*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-12'   : {top: 1*h, left: 2*gw + 2*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-07'   : {top: 2*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-15'   : {top: 2*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-13'   : {top: 2*h, left: 2*gw + 2*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-03'   : {top: 3*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-11'   : {top: 3*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-09'   : {top: 3*h, left: 2*gw + 2*w, width: w, height: h},
-        // 3*gw
-        'vacantLand-blueMarker-1'               : {top: 0*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-06'    : {top: 1*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-14'    : {top: 1*h, left: 3*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-12'    : {top: 1*h, left: 3*gw + 2*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-07'    : {top: 2*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-15'    : {top: 2*h, left: 3*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-13'    : {top: 2*h, left: 3*gw + 2*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-03'    : {top: 3*h, left: 3*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-11'    : {top: 3*h, left: 3*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-09'    : {top: 3*h, left: 3*gw + 2*w, width: w, height: h},
-        // 4*gw
-        'vacantLand-skyBlueMarker-1'            : {top: 0*h, left: 4*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-06' : {top: 1*h, left: 4*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-14' : {top: 1*h, left: 4*gw + 1*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-12' : {top: 1*h, left: 4*gw + 2*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-07' : {top: 2*h, left: 4*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-15' : {top: 2*h, left: 4*gw + 1*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-13' : {top: 2*h, left: 4*gw + 2*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-03' : {top: 3*h, left: 4*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-11' : {top: 3*h, left: 4*gw + 1*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-09' : {top: 3*h, left: 4*gw + 2*w, width: w, height: h},
+        // 0*gh 0*gw
+        'vacantLand-1'                          : {top: 0*gh + 0*h, left: 0*gw + 0*w, width: w, height: h},    // 更地
+        'vacantLand-gridLines-06'               : {top: 0*gh + 1*h, left: 0*gw + 0*w, width: w, height: h},  // ┌
+        'vacantLand-gridLines-14'               : {top: 0*gh + 1*h, left: 0*gw + 1*w, width: w, height: h},  // ┬
+        'vacantLand-gridLines-12'               : {top: 0*gh + 1*h, left: 0*gw + 2*w, width: w, height: h},  // ┐
+        'vacantLand-gridLines-07'               : {top: 0*gh + 2*h, left: 0*gw + 0*w, width: w, height: h},  // ├
+        'vacantLand-gridLines-15'               : {top: 0*gh + 2*h, left: 0*gw + 1*w, width: w, height: h},  // ┼
+        'vacantLand-gridLines-13'               : {top: 0*gh + 2*h, left: 0*gw + 2*w, width: w, height: h},  // ┤
+        'vacantLand-gridLines-03'               : {top: 0*gh + 3*h, left: 0*gw + 0*w, width: w, height: h},  // └
+        'vacantLand-gridLines-11'               : {top: 0*gh + 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
+        'vacantLand-gridLines-09'               : {top: 0*gh + 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
+        // 0*gh 1*gw
+        'vacantLand-yellowMarker-1'             : {top: 0*gh + 0*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-06'  : {top: 0*gh + 1*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-14'  : {top: 0*gh + 1*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-12'  : {top: 0*gh + 1*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-07'  : {top: 0*gh + 2*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-15'  : {top: 0*gh + 2*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-13'  : {top: 0*gh + 2*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-03'  : {top: 0*gh + 3*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-11'  : {top: 0*gh + 3*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-yellowMarker-gridLines-09'  : {top: 0*gh + 3*h, left: 1*gw + 2*w, width: w, height: h},
+        // 0*gh 2*gw
+        'vacantLand-greenMarker-1'              : {top: 0*gh + 0*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-06'   : {top: 0*gh + 1*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-14'   : {top: 0*gh + 1*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-12'   : {top: 0*gh + 1*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-07'   : {top: 0*gh + 2*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-15'   : {top: 0*gh + 2*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-13'   : {top: 0*gh + 2*h, left: 2*gw + 2*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-03'   : {top: 0*gh + 3*h, left: 2*gw + 0*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-11'   : {top: 0*gh + 3*h, left: 2*gw + 1*w, width: w, height: h},
+        'vacantLand-greenMarker-gridLines-09'   : {top: 0*gh + 3*h, left: 2*gw + 2*w, width: w, height: h},
+        // 1*gh 0*gw
+        'vacantLand-blueMarker-1'               : {top: 1*gh + 0*h, left: 0*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-06'    : {top: 1*gh + 1*h, left: 0*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-14'    : {top: 1*gh + 1*h, left: 0*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-12'    : {top: 1*gh + 1*h, left: 0*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-07'    : {top: 1*gh + 2*h, left: 0*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-15'    : {top: 1*gh + 2*h, left: 0*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-13'    : {top: 1*gh + 2*h, left: 0*gw + 2*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-03'    : {top: 1*gh + 3*h, left: 0*gw + 0*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-11'    : {top: 1*gh + 3*h, left: 0*gw + 1*w, width: w, height: h},
+        'vacantLand-blueMarker-gridLines-09'    : {top: 1*gh + 3*h, left: 0*gw + 2*w, width: w, height: h},
+        // 1*gh 1*gw
+        'vacantLand-skyBlueMarker-1'            : {top: 1*gh + 0*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-06' : {top: 1*gh + 1*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-14' : {top: 1*gh + 1*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-12' : {top: 1*gh + 1*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-07' : {top: 1*gh + 2*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-15' : {top: 1*gh + 2*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-13' : {top: 1*gh + 2*h, left: 1*gw + 2*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-03' : {top: 1*gh + 3*h, left: 1*gw + 0*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-11' : {top: 1*gh + 3*h, left: 1*gw + 1*w, width: w, height: h},
+        'vacantLand-skyBlueMarker-gridLines-09' : {top: 1*gh + 3*h, left: 1*gw + 2*w, width: w, height: h},
+        // 1*gh 2*gw
+        'bgDead-1'                              : {top: 1*gh + 0*h, left: 2*gw + 0*w, width: w, height: h},
+        'bgDead-gridLines-06'                   : {top: 1*gh + 1*h, left: 2*gw + 0*w, width: w, height: h},
+        'bgDead-gridLines-14'                   : {top: 1*gh + 1*h, left: 2*gw + 1*w, width: w, height: h},
+        'bgDead-gridLines-12'                   : {top: 1*gh + 1*h, left: 2*gw + 2*w, width: w, height: h},
+        'bgDead-gridLines-07'                   : {top: 1*gh + 2*h, left: 2*gw + 0*w, width: w, height: h},
+        'bgDead-gridLines-15'                   : {top: 1*gh + 2*h, left: 2*gw + 1*w, width: w, height: h},
+        'bgDead-gridLines-13'                   : {top: 1*gh + 2*h, left: 2*gw + 2*w, width: w, height: h},
+        'bgDead-gridLines-03'                   : {top: 1*gh + 3*h, left: 2*gw + 0*w, width: w, height: h},
+        'bgDead-gridLines-11'                   : {top: 1*gh + 3*h, left: 2*gw + 1*w, width: w, height: h},
+        'bgDead-gridLines-09'                   : {top: 1*gh + 3*h, left: 2*gw + 2*w, width: w, height: h},
     };
 
     // /**
@@ -861,7 +924,7 @@
         //gameBoard1DebugMessage.value = `sq=${sq}`;
 
         const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-        const itsOk = putStone(sq, color);
+        putStone(sq, color);  // 石が置けなくても、とくに対応しません
     }
 
 
@@ -953,11 +1016,11 @@
             gameBoard1StoneRunsBaroqueDiagonalArray.value[sq] = 0;
             gameBoard1StoneRunsSinisterDiagonalArray.value[sq] = 0;
 
-            // マス上で自石が（隙間なく）連続しているか
-            gameBoard1StoneSolidLineHorizontalArray.value[sq] = false;
-            gameBoard1StoneSolidLineVerticalArray.value[sq] = false;
-            gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] = false;
-            gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] = false;
+            // マス上で自石が（隙間なく）連続しているとみたときの状態
+            gameBoard1StoneSolidLineHorizontalArray.value[sq] = 'Neither';
+            gameBoard1StoneSolidLineVerticalArray.value[sq] = 'Neither';
+            gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] = 'Neither';
+            gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] = 'Neither';
         }
 
         gameBoard1Times.value = 0;
@@ -1266,57 +1329,13 @@
     }
 
 
-    // /**
-    //  * 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します
-    //  * @param startSq 石を置いたマス番号
-    //  * @param nextOf 隣のマス番号を取得する関数
-    //  */
-    // function reverseLineStones(
-    //     startSq: number,
-    //     nextOf: (sq: number) => number,
-    // ) : void {
-    //     const reverseSqArray = [];
-        
-    //     let nextSq = nextOf(startSq);   // 隣のマス番号
-    //     while (true) {
-    //         if (nextSq == -1) { // 番外なら、リストを空にしてループを抜ける
-    //             reverseSqArray.length = 0;
-    //             break;
-    //         }
-
-    //         const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
-    //         //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
-    //         if (nextColor == gameBoard1Turn.value) {    // 自分の石に当たったら、ループを抜ける
-    //             break;
-    //         }
-
-    //         if (nextColor == 0) {   // 空マスに突き当たったら、リストを空にしてループを抜ける
-    //             reverseSqArray.length = 0;
-    //             break;
-    //         }
-
-    //         reverseSqArray.push(nextSq);    // 相手の石はマス番号を記録
-    //         nextSq = nextOf(nextSq);
-    //     }
-
-    //     // 石の数を数える
-    //     gameBoard1StoneCount.value[gameBoard1Turn.value] += reverseSqArray.length;
-    //     gameBoard1StoneCount.value[opponentColor(gameBoard1Turn.value)] -= reverseSqArray.length;
-
-    //     // ひっくり返す
-    //     for(let i=0; i<reverseSqArray.length; i++) {
-    //         const sq = reverseSqArray[i];
-    //         gameBoard1StoneColorArray.value[sq] = gameBoard1Turn.value;
-    //     }
-    // }
-
     function checkGomokuRunsSingleLine(
         friendColor: number,    // 自石の色
         startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
-        directionalSolidLineArray: Ref<boolean[]>,
+        directionalSolidLineArray: Ref<Array<StoneState>>,
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
 
@@ -1380,6 +1399,15 @@
             // |.|x|.|.|o|.|.|.|x|
             // +-+-+-+-+-+-+-+-+-+
             //
+            //      - - 
+            //       A    - - -
+            //              B
+            //
+            // B を nextLength、
+            // A を backLength と呼ぶとし、
+            // nextLength + backLength + 1 が 5 未満のとき、ランズ数は 0 とする。
+            // [dead] マーカーを付けてもいいかも。
+            //
             // ウィンドウは３と４だけ調べれよい：
             //
             // +-+-+-+-+-+-+-+-+-+
@@ -1432,11 +1460,17 @@
                     `);
                 }
                 let continuity = true;  // 連続でつながっている自石が継続中
-                let solidLineLength = 0;   // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
+                let spaceLength = windowEnd - window;    // ［五］を作るのに必要な空間があるか数えます
+                let aliveLength = 0;    // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
                 for(let i:number=window; i<windowEnd; i++){
+                    // 番外、相手の石は含まない
                     const sq = squareMap[i];
 
-                    // 番外、相手の石は含まない
+                    // // スペースが無いのなら、［死に石］確定。
+                    // if (spaceLength < 5) {
+                    //     directionalSolidLineArray.value[sq] = 'Dead';
+                    //     break;
+                    // }
 
                     // 空きマスなら（連続は途切れるが）続行
                     if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
@@ -1447,14 +1481,14 @@
                     // 自石なら
                     windowRunsNum[window] += 1;
                     if (continuity) {
-                        solidLineLength += 1;
+                        aliveLength += 1;
                     }
                 }
                 
-                if (5<=solidLineLength) {   // ［五］ができていたら
+                if (5<=aliveLength) {   // ［五］ができていたら
                     for(let i:number=window; i<windowEnd; i++){
                         const sq = squareMap[i];
-                        directionalSolidLineArray.value[sq] = true;
+                        directionalSolidLineArray.value[sq] = 'Alive';
                     }
                 }
             }
