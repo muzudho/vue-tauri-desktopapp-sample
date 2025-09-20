@@ -524,6 +524,7 @@
             function getKeyOfSolidLine(sq: number) : string {
                 // ［生き石］
                 if (
+                    // オア結合です
                     gameBoard1StoneSolidLineHorizontalArray.value[sq] == 'Alive'
                     || gameBoard1StoneSolidLineVerticalArray.value[sq] == 'Alive'
                     || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] == 'Alive'
@@ -566,6 +567,7 @@
                     
                 // ［死に石］
                 } else if (
+                    // TODO アンド結合です
                     gameBoard1StoneSolidLineHorizontalArray.value[sq] == 'Dead'
                     || gameBoard1StoneSolidLineVerticalArray.value[sq] == 'Dead'
                     || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] == 'Dead'
@@ -852,7 +854,17 @@
      */
     function onSpaceButtonPressed() : void {
         player1Input[" "] = true;
-        //gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
+
+        gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
+        // test
+        const BLACK = 1;
+        const oneWing = getOneWing(
+            BLACK,
+            8, // startSq
+            5, // maxLength
+            eastOf,
+        );
+        console.log(`TEST: oneWing=${oneWing}`);
     }
 
 
@@ -1336,6 +1348,7 @@
         bNextOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
         directionalSolidLineArray: Ref<Array<StoneState>>,
+        hasDeadCheck: boolean,  // 死に石判定をするか
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
 
@@ -1473,7 +1486,7 @@
                 opponentSqMap[i] = nextSq;
                 backOpponentLength += 1;
             }
-            console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
+            //console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
 
             const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
             const startFriendWindow = 4 - backFriendLength;
@@ -1515,17 +1528,25 @@
             }
 
             // ［死に石］判定
-            const startOpponentWindow = 4 - backOpponentLength;
-            for(let window:number=startOpponentWindow; window<5; window++){
-                const opponentWindowEnd = Math.min(window+5, 5+nextOpponentLength); // end 自身を含まない
-                const spaceLength = opponentWindowEnd - startOpponentWindow;
-                // TODO （両ウィング合わせて）空点が５つ無いのなら、［死に石］確定。
-                if (spaceLength < 5) {
-                    console.log(`DEBUG: [Single Line > 死に石判定] spaceLength=${spaceLength} window=${window} windowEnd=${opponentWindowEnd}`);
-                    for(let i:number=window; i<opponentWindowEnd; i++){
-                        // 盤外、自分の石は含まない
-                        const sq = opponentSqMap[i];
-                        directionalSolidLineArray.value[sq] = 'Dead';
+            if (hasDeadCheck) {
+                const startOpponentWindow = 4 - backOpponentLength;
+                for(let window:number=startOpponentWindow; window<5; window++){
+                    const opponentWindowEnd = Math.min(window+5, 5+nextOpponentLength); // end 自身を含まない
+                    const spaceLength = opponentWindowEnd - startOpponentWindow;
+                    // TODO （両ウィング合わせて）空点が５つ無いのなら、［死に石］確定。
+                    if (spaceLength < 5) {
+                        //console.log(`DEBUG: [Single Line > 死に石判定] spaceLength=${spaceLength} window=${window} windowEnd=${opponentWindowEnd}`);
+                        for(let i:number=window; i<opponentWindowEnd; i++){
+                            // 盤外、自分の石は含まない
+                            const sq = opponentSqMap[i];
+
+                            // FIXME: 空きマスは、自分と相手のどちらのものとも言えない（言える場合もあるが）から無視。
+                            if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
+                                continue;
+                            }
+
+                            directionalSolidLineArray.value[sq] = 'Dead';
+                        }
                     }
                 }
             }
@@ -1534,55 +1555,55 @@
             let sq;
             sq = friendSqMap[0];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[0];
             }
 
             sq = friendSqMap[1];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
             }
 
             sq = friendSqMap[2];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
             }
 
             sq = friendSqMap[3];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
             }
 
             sq = friendSqMap[4];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = friendSqMap[5];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
             }
 
             sq = friendSqMap[6];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = friendSqMap[7];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = friendSqMap[8];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
+                //console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[4];
             }
         }
@@ -1600,6 +1621,7 @@
      */
     function checkGomokuRuns(startSq: number) : void {
         const friendColor = gameBoard1Turn.value;   // 自石の色
+        const HAS_NOT_DEAD_CHECK: boolean = false;
         // 自石のつながりを更新します
         checkGomokuRunsSingleLine(    // 水平方向
             friendColor,
@@ -1607,7 +1629,8 @@
             eastOf,
             westOf,
             gameBoard1StoneRunsHorizontalArray,
-            gameBoard1StoneSolidLineHorizontalArray
+            gameBoard1StoneSolidLineHorizontalArray,
+            HAS_NOT_DEAD_CHECK
         );
         checkGomokuRunsSingleLine(    // 垂直方向
             friendColor,
@@ -1615,7 +1638,8 @@
             northOf,
             southOf,
             gameBoard1StoneRunsVerticalArray,
-            gameBoard1StoneSolidLineVerticalArray
+            gameBoard1StoneSolidLineVerticalArray,
+            HAS_NOT_DEAD_CHECK
         );
         checkGomokuRunsSingleLine(    // バロック対角線方向
             friendColor,
@@ -1623,7 +1647,8 @@
             northeastOf,
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
-            gameBoard1StoneSolidLineBaroqueDiagonalArray
+            gameBoard1StoneSolidLineBaroqueDiagonalArray,
+            HAS_NOT_DEAD_CHECK
         );
         checkGomokuRunsSingleLine(    // シニスター対角線方向
             friendColor,
@@ -1631,7 +1656,8 @@
             southeastOf,
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
-            gameBoard1StoneSolidLineSinisterDiagonalArray
+            gameBoard1StoneSolidLineSinisterDiagonalArray,
+            HAS_NOT_DEAD_CHECK
         );
 
         //
@@ -1700,6 +1726,7 @@
             directionalSolidLineArray: Ref<Array<StoneState>>,
         ) : void {
             const opponentColor1 = opponentColor(friendColor);
+            const HAS_DEAD_CHECK = true;
             //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
 
             // 順ウィング上の起点
@@ -1709,7 +1736,7 @@
                 4,
                 nextOf
             );
-            console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} startSq=${startSq} nextOpponentStartSq=${nextOpponentStartSq}`);
+            //console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} startSq=${startSq} nextOpponentStartSq=${nextOpponentStartSq}`);
             if (nextOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
                 checkGomokuRunsSingleLine(    // 水平方向
                     opponentColor1,
@@ -1717,7 +1744,8 @@
                     nextOf,
                     backOf,
                     directionalRunsArray,
-                    directionalSolidLineArray
+                    directionalSolidLineArray,
+                    HAS_DEAD_CHECK
                 );
             }
 
@@ -1728,7 +1756,7 @@
                 4,
                 backOf
             );
-            console.log(`DEBUG: [Opponent Wing 2] opponentColor1=${opponentColor1} startSq=${startSq} backOpponentStartSq=${backOpponentStartSq}`);
+            //console.log(`DEBUG: [Opponent Wing 2] opponentColor1=${opponentColor1} startSq=${startSq} backOpponentStartSq=${backOpponentStartSq}`);
             if (backOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
                 checkGomokuRunsSingleLine(
                     opponentColor1,
@@ -1736,7 +1764,8 @@
                     nextOf,
                     backOf,
                     directionalRunsArray,
-                    directionalSolidLineArray
+                    directionalSolidLineArray,
+                    HAS_DEAD_CHECK
                 );
             }
         }
@@ -1768,6 +1797,100 @@
             gameBoard1StoneRunsSinisterDiagonalArray,
             gameBoard1StoneSolidLineSinisterDiagonalArray
         );
+    }
+
+
+    /**
+     * ［片翼］取得
+     * 
+     * 着手点を含まず、指定の向きに（隙間なく）連続する空点、自石が［翼］だ。
+     * @returns マス番号の配列
+     */
+    function getOneWing(
+        friendColor: number,
+        startSq: number,
+        maxLength: number,
+        nextOf: (sq: number)=>number,
+    ) : number[] {
+        const sqArray: number[] = [];
+        const opponentColor1 = opponentColor(friendColor);
+
+        let nextSq: number = startSq;;  // 隣
+        for(let i:number=0; i<maxLength; i++){  // 順方向
+            nextSq = nextOf(nextSq);
+            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
+                break;  // 探索終了
+            }
+            // 空点または自石なら
+            sqArray.push(nextSq);
+        }
+
+        return sqArray;
+    }
+
+    /**
+     * ［飛び石］取得
+     * 
+     * ［逆ウィング］の逆順、着手点、順ウィングを合わせたものが［飛び石］だ。
+     * @returns マス番号の配列
+     */
+    function getRuns(
+        friendColor: number,
+        startSq: number,    // 着手点
+        nextOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
+    ) : number[] {
+        const MAX_LENGTH = 5;
+
+        // 順ウィング
+        const aWing = getOneWing(
+            friendColor,
+            startSq,
+            MAX_LENGTH,
+            nextOf,
+        );
+
+        // 逆ウィング
+        const bWing = getOneWing(
+            friendColor,
+            startSq,
+            MAX_LENGTH,
+            backOf,
+        );
+
+        return [...bWing.reverse(), startSq, ...aWing]; // 向きを揃えて１つの配列にする
+    }
+
+    /**
+     * TODO: ［死に飛び石］判定
+     * 
+     * 着手点、順ウィング、逆ウィングを合わせて［五］を作れないとき、［死に飛び石］だ。
+     */
+    function checkDeadRuns(
+        friendColor: number,
+        startSq: number,    // 着手点
+        nextOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
+    ) : void {
+        const runs = getRuns(
+            friendColor,
+            startSq,    // 着手点
+            nextOf,
+            backOf,
+        );
+    }
+
+
+    /**
+     * TODO: ［死に石］判定
+     * 
+     * ４方向（水平、垂直、バロック対角線、シニスター対角線）全てが［死に飛び石］のとき、［死に石］だ。
+     */
+    function checkDeadStone(
+        friendColor: number,
+        startSq: number,
+    ) : void {
+
     }
 
 
