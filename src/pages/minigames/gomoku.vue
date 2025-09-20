@@ -857,14 +857,27 @@
 
         gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
         // test
-        const BLACK = 1;
+        const BLACK = 1;    // 自石の色
+        const START_SQ = 8; // 着手点
+        const ONE_WING_MAX_LENGTH = 5;  // 片翼の最大長さ
+        const FWD_DIRECTION = eastOf; // 順方向
+        const REV_DIRECTION = westOf; // 逆方向
         const oneWing = getOneWing(
             BLACK,
-            8, // startSq
-            5, // maxLength
-            eastOf,
+            START_SQ,
+            ONE_WING_MAX_LENGTH,
+            FWD_DIRECTION,
         );
         console.log(`TEST: oneWing=${oneWing}`);
+
+        const runs = getRuns(
+            BLACK,
+            START_SQ,
+            ONE_WING_MAX_LENGTH,
+            FWD_DIRECTION,
+            REV_DIRECTION,
+        );
+        console.log(`TEST: runs=${runs}`);
     }
 
 
@@ -1837,16 +1850,15 @@
     function getRuns(
         friendColor: number,
         startSq: number,    // 着手点
+        oneWingMaxLength: number,
         nextOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
     ) : number[] {
-        const MAX_LENGTH = 5;
-
         // 順ウィング
         const aWing = getOneWing(
             friendColor,
             startSq,
-            MAX_LENGTH,
+            oneWingMaxLength,
             nextOf,
         );
 
@@ -1854,7 +1866,7 @@
         const bWing = getOneWing(
             friendColor,
             startSq,
-            MAX_LENGTH,
+            oneWingMaxLength,
             backOf,
         );
 
@@ -1869,12 +1881,14 @@
     function checkDeadRuns(
         friendColor: number,
         startSq: number,    // 着手点
+        oneWingMaxLength: number,
         nextOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
     ) : void {
         const runs = getRuns(
             friendColor,
-            startSq,    // 着手点
+            startSq,
+            oneWingMaxLength,
             nextOf,
             backOf,
         );
