@@ -1418,7 +1418,7 @@
                 squareMap[i] = nextSq;
                 backLength += 1;
             }
-            console.log(`DEBUG: squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
+            console.log(`DEBUG: [Single Line] squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
 
             const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
             const startWindow = 4 - backLength;
@@ -1426,7 +1426,7 @@
                 const windowEnd = Math.min(window+5, 5+nextLength); // end 自身を含まない
                 if (5 < windowEnd - window) {   // TODO: 消す
                     console.log(`
-                        ERROR: startWindow=${startWindow} window=${window} windowEnd=${windowEnd} nextLength=${nextLength}
+                        ERROR: [Single Line] startWindow=${startWindow} window=${window} windowEnd=${windowEnd} nextLength=${nextLength}
                         window+5=${window+5}
                         5+nextLength=${5+nextLength}
                     `);
@@ -1462,56 +1462,56 @@
             // （９つの切り取りマスの）各マスのランズ数を確定する：
             let sq;
             sq = squareMap[0];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[0]=${windowRunsNum[0]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[0];
             }
 
             sq = squareMap[1];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[1]=${windowRunsNum[1]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
             }
 
             sq = squareMap[2];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[2]=${windowRunsNum[2]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
             }
 
             sq = squareMap[3];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[3]=${windowRunsNum[3]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
             }
 
             sq = squareMap[4];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[4]=${windowRunsNum[4]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = squareMap[5];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[5]=${windowRunsNum[5]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
             }
 
             sq = squareMap[6];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[6]=${windowRunsNum[6]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = squareMap[7];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[7]=${windowRunsNum[7]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
             }
 
             sq = squareMap[8];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
-                console.log(`DEBUG: windowRunsNum[8]=${windowRunsNum[8]}`);
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[4];
             }
         }
