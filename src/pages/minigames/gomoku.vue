@@ -1422,10 +1422,15 @@
             //
             //
 
-            const squareMap: number[] = new Array(9).fill(-1);
-            squareMap[4] = startSq;
+            const friendSqMap: number[] = new Array(9).fill(-1);    // ランズと［生き石］を判定するのに使う
+            const opponentSqMap: number[] = new Array(9).fill(-1);  // ［死に石］を判定するのに使う
+            friendSqMap[4] = startSq;
+            opponentSqMap[4] = startSq;
+
+            // 順ウィング
+            let nextFriendLength = 0; // 0 ～ 4
+            let nextOpponentLength = 0; // 0 ～ 4
             let nextSq: number;  // 隣
-            let nextLength = 0; // 0 ～ 4
             nextSq = startSq;  // 隣
             for(let i:number=5; i<9; i++){  // 順方向
                 nextSq = nextOf(nextSq);
@@ -1433,117 +1438,150 @@
                     break;  // 探索終了
                 }
                 // 空点または自石なら
-                squareMap[i] = nextSq;
-                nextLength += 1;
+                friendSqMap[i] = nextSq;
+                nextFriendLength += 1;
             }
-            let backLength = 0; // 0 ～ 4
+            nextSq = startSq;  // 隣
+            for(let i:number=5; i<9; i++){  // 順方向
+                nextSq = nextOf(nextSq);
+                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == friendColor) {  // 盤外、または自石なら
+                    break;  // 探索終了
+                }
+                // 空点または相手石なら
+                opponentSqMap[i] = nextSq;
+                nextOpponentLength += 1;
+            }
+
+            // 逆ウィング
+            let backFriendLength = 0; // 0 ～ 4
+            let backOpponentLength = 0; // 0 ～ 4
             nextSq = startSq;  // 隣
             for(let i:number=3; 0<=i; i--){  // 逆方向
                 nextSq = backOf(nextSq);
                 if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
                     break;
                 }
-                squareMap[i] = nextSq;
-                backLength += 1;
+                friendSqMap[i] = nextSq;
+                backFriendLength += 1;
             }
-            console.log(`DEBUG: [Single Line] squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
+            nextSq = startSq;  // 隣
+            for(let i:number=3; 0<=i; i--){  // 逆方向
+                nextSq = backOf(nextSq);
+                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == friendColor) {
+                    break;
+                }
+                opponentSqMap[i] = nextSq;
+                backOpponentLength += 1;
+            }
+            console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
 
             const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
-            const startWindow = 4 - backLength;
-            for(let window:number=startWindow; window<5; window++){
-                const windowEnd = Math.min(window+5, 5+nextLength); // end 自身を含まない
-                if (5 < windowEnd - window) {   // TODO: 消す
+            const startFriendWindow = 4 - backFriendLength;
+            // ランズと［生き石］判定
+            for(let window:number=startFriendWindow; window<5; window++){
+                const friendWindowEnd = Math.min(window+5, 5+nextFriendLength); // end 自身を含まない
+                if (5 < friendWindowEnd - window) {   // TODO: 消す
                     console.log(`
-                        ERROR: [Single Line] startWindow=${startWindow} window=${window} windowEnd=${windowEnd} nextLength=${nextLength}
+                        ERROR: [Single Line] startWindow=${startFriendWindow} window=${window} windowEnd=${friendWindowEnd} nextLength=${nextFriendLength}
                         window+5=${window+5}
-                        5+nextLength=${5+nextLength}
+                        5+nextLength=${5+nextFriendLength}
                     `);
                 }
-                let continuity = true;  // 連続でつながっている自石が継続中
-                let spaceLength = windowEnd - window;    // ［五］を作るのに必要な空間があるか数えます
+                let aliveContinuity = true;  // 連続でつながっている自石が継続中
                 let aliveLength = 0;    // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
-                for(let i:number=window; i<windowEnd; i++){
-                    // 番外、相手の石は含まない
-                    const sq = squareMap[i];
-
-                    // // スペースが無いのなら、［死に石］確定。
-                    // if (spaceLength < 5) {
-                    //     directionalSolidLineArray.value[sq] = 'Dead';
-                    //     break;
-                    // }
+                for(let i:number=window; i<friendWindowEnd; i++){
+                    // 盤外、相手の石は含まない
+                    const sq = friendSqMap[i];
 
                     // 空きマスなら（連続は途切れるが）続行
                     if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
-                        continuity = false;
+                        aliveContinuity = false;
                         continue;
                     }
 
                     // 自石なら
                     windowRunsNum[window] += 1;
-                    if (continuity) {
+                    if (aliveContinuity) {
                         aliveLength += 1;
                     }
                 }
                 
                 if (5<=aliveLength) {   // ［五］ができていたら
-                    for(let i:number=window; i<windowEnd; i++){
-                        const sq = squareMap[i];
+                    for(let i:number=window; i<friendWindowEnd; i++){
+                        const sq = friendSqMap[i];
                         directionalSolidLineArray.value[sq] = 'Alive';
+                    }
+                }
+
+            }
+
+            // ［死に石］判定
+            const startOpponentWindow = 4 - backOpponentLength;
+            for(let window:number=startOpponentWindow; window<5; window++){
+                const opponentWindowEnd = Math.min(window+5, 5+nextOpponentLength); // end 自身を含まない
+                const spaceLength = opponentWindowEnd - startOpponentWindow;
+                // TODO （両ウィング合わせて）空点が５つ無いのなら、［死に石］確定。
+                if (spaceLength < 5) {
+                    console.log(`DEBUG: [Single Line > 死に石判定] spaceLength=${spaceLength} window=${window} windowEnd=${opponentWindowEnd}`);
+                    for(let i:number=window; i<opponentWindowEnd; i++){
+                        // 盤外、自分の石は含まない
+                        const sq = opponentSqMap[i];
+                        directionalSolidLineArray.value[sq] = 'Dead';
                     }
                 }
             }
 
             // （９つの切り取りマスの）各マスのランズ数を確定する：
             let sq;
-            sq = squareMap[0];
+            sq = friendSqMap[0];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[0];
             }
 
-            sq = squareMap[1];
+            sq = friendSqMap[1];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
             }
 
-            sq = squareMap[2];
+            sq = friendSqMap[2];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
             }
 
-            sq = squareMap[3];
+            sq = friendSqMap[3];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
             }
 
-            sq = squareMap[4];
+            sq = friendSqMap[4];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
-            sq = squareMap[5];
+            sq = friendSqMap[5];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
             }
 
-            sq = squareMap[6];
+            sq = friendSqMap[6];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
             }
 
-            sq = squareMap[7];
+            sq = friendSqMap[7];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
                 directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
             }
 
-            sq = squareMap[8];
+            sq = friendSqMap[8];
             if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
                 console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
                 directionalRunsArray.value[sq] = windowRunsNum[4];

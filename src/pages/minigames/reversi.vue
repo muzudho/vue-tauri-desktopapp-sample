@@ -859,7 +859,7 @@
         
         let nextSq = nextOf(startSq);   // 隣のマス番号
         while (true) {
-            if (nextSq == -1) { // 番外なら、リストを空にしてループを抜ける
+            if (nextSq == -1) { // 盤外なら、リストを空にしてループを抜ける
                 reverseSqArray.length = 0;
                 break;
             }
