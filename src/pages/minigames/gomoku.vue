@@ -202,6 +202,21 @@
 
     </section>
     
+    デバッグ：<br/>
+    Runs:<br/>
+    <span
+        v-for="i in range(0,15)"
+        :key="i"
+    >
+        {{ gameBoard1StoneRunsHorizontalArray[i] }}&nbsp;
+    </span><br/>
+    <span
+        v-for="i in range(15,30)"
+        :key="i"
+    >
+        {{ gameBoard1StoneRunsHorizontalArray[i] }}&nbsp;
+    </span><br/>
+
     <button-to-back-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
     <section class="sec-2">
@@ -1305,16 +1320,190 @@
         const opponentColor1 = opponentColor(gameBoard1Turn.value);
 
         function checkDirectionalLineConnectionOfStones(
-            aNextOf: (sq: number)=>number
-        ) : [number[], number, number] {
+            nextOf: (sq: number)=>number,
+            backOf: (sq: number)=>number,
+        ) : void {
             const runsStoneSqArray: number[] = []; // 飛び飛びだがつながりのある（runs）自石のあるマス番号
-            let nextSq = startSq;  // 隣
-            let runsNum = 1;    // ランズ。初期値は打った石の分１つ。
-            let continuity = true;  // 連続でつながっている自石が継続中
-            let solidLineLength = 0;   // （自分を含まない）連続でつながっている自石の長さ
+            //let runsNum = 1;    // ランズ。初期値は打った石の分１つ。
+
+            //          ここに石を置いたら
+            //          v
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|.|.|o|.|.|.|.|
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // 少なくとも：
+            //
+            // +-+-+-+-+-+-+-+-+-+
+            // |w|w|w|w|w|.|.|.|.|  ウィンドウ０
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|w|w|w|w|w|.|.|.|  ウィンドウ１
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|w|w|w|w|w|.|.|  ウィンドウ２
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|.|w|w|w|w|w|.|  ウィンドウ３
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|.|.|w|w|w|w|w|  ウィンドウ４
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // 以上の５つの範囲で、連の長さを数えなおす必要がある。
+            // ［累積和］か何か高速化技法が使えそうだが、とりあえず高速化せずに愚直に書いてみる。
+            //
+            //
+            // とりあえず長さ９の配列を用意し、[4] を打った石のマス番号とし、
+            //
+            //  0 1 2 3 4 5 6 7 8
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|.|.|o|.|.|.|.|  スクウェア・マップ
+            // +-+-+-+-+-+-+-+-+-+
+            //            1 2 3 4   順方向へ４つ
+            //  4 3 2 1             逆方向へ４つ
+            //
+            // 以上の９つのマス番号を探索する。
+            // 予めすべての９つのマスを作ってテーブルにしておけば高速化できそうだが、とりあえず高速化せずに愚直に書いてみる。
+            //
+            // （１）ウィンドウ１～５のランズ数を調べる
+            // （２）各マスには、ウィンドウ１～５の中の最大ランズ数を入れる。
+            //
+            // このとき、[4] を起点に端に向かって探索し、途中で［盤外］または［相手の石］とぶつかった場合は、そこで探索を終了する。
+            // nextLength, backLength のようなカウントをしておくといいかも。
+            // 例えば、相手の石（または盤外）が [1], [8] の位置にあるとき：
+            //
+            //  0 1 2 3 4 5 6 7 8
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|x|.|.|o|.|.|.|x|
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            // ウィンドウは３と４だけ調べれよい：
+            //
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|w|w|w|w|w|.|.|  ウィンドウ２
+            // +-+-+-+-+-+-+-+-+-+
+            // +-+-+-+-+-+-+-+-+-+
+            // |.|.|.|w|w|w|w|w|.|  ウィンドウ３
+            // +-+-+-+-+-+-+-+-+-+
+            //
+            //
+            //
+            //
+            //
+
+            const squareMap: number[] = new Array(9).fill(-1);
+            squareMap[4] = startSq;
+            let nextSq: number;  // 隣
+            let nextLength = 0; // 0 ～ 4
+            nextSq = startSq;  // 隣
+            for(let i:number=5; i<9; i++){  // 順方向
+                nextSq = nextOf(nextSq);
+                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
+                    break;  // 探索終了
+                }
+                squareMap[i] = nextSq;
+                nextLength += 1;
+            }
+            let backLength = 0; // 0 ～ 4
+            nextSq = startSq;  // 隣
+            for(let i:number=3; 0<=i; i--){  // 逆方向
+                nextSq = backOf(nextSq);
+                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
+                    break;  // 探索終了
+                }
+                squareMap[i] = nextSq;
+                backLength += 1;
+            }
+            console.log(`squareMap: ${squareMap[0]} ${squareMap[1]} ${squareMap[2]} ${squareMap[3]} ${squareMap[4]} ${squareMap[5]} ${squareMap[6]} ${squareMap[7]} ${squareMap[8]}`);
+
+            const windowSolidLine: boolean[] = new Array(5).fill(false);    // ウィンドウは［五］か？
+            const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
+            const startWindow = 4 - backLength;
+            for(let window:number=startWindow; window<5; window++){
+                const windowEnd = Math.max(window+5, 5+nextLength); // end 自身を含まない
+                let continuity = true;  // 連続でつながっている自石が継続中
+                let solidLineLength = 0;   // （自分を含まない）連続でつながっている自石の長さ
+                for(let i:number=window; i<windowEnd; i++){
+                    const sq = squareMap[i];
+
+                    // 番外、相手の石は含まない
+
+                    // 空きマスなら（連続は途切れるが）続行
+                    if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
+                        continuity = false;
+                        continue;
+                    }
+
+                    // 自石なら
+                    windowRunsNum[window] += 1;
+                    if (continuity) {
+                        solidLineLength += 1;
+                    }
+                }
+                
+                if (5<=solidLineLength) {   // ［五］ができていたら
+                    for(let i:number=window; i<windowEnd; i++){
+                        const sq = squareMap[i];
+                        directionalSolidLineArray.value[sq] = true;
+                    }
+                }
+            }
+
+            // 各マスのランズ数を確定する：
+            let sq;
+            sq = squareMap[0];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = windowRunsNum[0];
+            }
+
+            sq = squareMap[1];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
+            }
+
+            sq = squareMap[2];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
+            }
+
+            sq = squareMap[3];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
+            }
+
+            sq = squareMap[4];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
+            }
+
+            sq = squareMap[5];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
+            }
+
+            sq = squareMap[6];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
+            }
+
+            sq = squareMap[7];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
+            }
+
+            sq = squareMap[8];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {  // 自石なら
+                directionalRunsArray.value[sq] = windowRunsNum[4];
+            }
+
             // 置いた石から連続して４つの石（つまり全体で５交点）をチェック。 
             for(let i:number=0; i<4; i++){
-                nextSq = aNextOf(nextSq);
+                nextSq = nextOf(nextSq);
 
                 if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
                     break;  // 探索終了
@@ -1322,50 +1511,48 @@
 
                 // 空きマスなら続行
                 if (gameBoard1StoneColorArray.value[nextSq] == COLOR_EMPTY) {
-                    continuity = false;
                     continue;
                 }
 
                 // 自石
                 runsStoneSqArray.push(nextSq);    // ランズの石のマス番号を覚える
-                runsNum += 1;
-                if (continuity) {
-                    solidLineLength += 1;
-                }
             }
 
-            return [runsStoneSqArray, runsNum, solidLineLength];
+            //return [runsStoneSqArray, squareMap, windowSolidLine];
         }
 
 
-        const [aRunsStoneSqArray, aRunsNum, aSolidLineLength] = checkDirectionalLineConnectionOfStones(
-            aNextOf
+        checkDirectionalLineConnectionOfStones(
+            aNextOf,
+            bNextOf,
         );
-        const [bRunsStoneSqArray, bRunsNum, bSolidLineLength] = checkDirectionalLineConnectionOfStones(
-            bNextOf
-        );
+        // const [bRunsStoneSqArray, bSolidLineLength] = checkDirectionalLineConnectionOfStones(
+        //     bNextOf,
+        //     aNextOf,
+        // );
 
-        const solidLineBeing = 4 <= aSolidLineLength + bSolidLineLength;    // ［五］ができていれば真
+        //const solidLineBeing = 4 <= aSolidLineLength + bSolidLineLength;    // ［五］ができていれば真
+        // const solidLineBeing = 5 <= aSolidLineLength;    // ［五］ができていれば真
 
-        // 集計
-        aRunsStoneSqArray.forEach((sq, index, _array)=>{
-            directionalRunsArray.value[sq] = aRunsNum;
-            if (solidLineBeing && index < aSolidLineLength) {
-                directionalSolidLineArray.value[sq] = true;
-            }
-        });
-        bRunsStoneSqArray.forEach((sq, index, _array)=>{
-            directionalRunsArray.value[sq] = bRunsNum;
-            if (solidLineBeing && index < bSolidLineLength) {
-                directionalSolidLineArray.value[sq] = true;
-            }
-        });
+        // // 集計
+        // aRunsStoneSqArray.forEach((sq, index, _array)=>{
+        //     //directionalRunsArray.value[sq] = Math.max(directionalRunsArray.value[sq], aRunsNum);  // 小さな数で上書きしないように注意
+        //     if (solidLineBeing && index < aSolidLineLength) {
+        //         directionalSolidLineArray.value[sq] = true;
+        //     }
+        // });
+        // bRunsStoneSqArray.forEach((sq, index, _array)=>{
+        //     //directionalRunsArray.value[sq] = Math.max(directionalRunsArray.value[sq], bRunsNum);
+        //     if (solidLineBeing && index < bSolidLineLength) {
+        //         directionalSolidLineArray.value[sq] = true;
+        //     }
+        // });
 
         // 打った石
-        directionalRunsArray.value[startSq] = aRunsNum + bRunsNum - 1;  // 打った石の数が重複しているので 1 引く
-        if (solidLineBeing) {
-            directionalSolidLineArray.value[startSq] = true;
-        }
+        //directionalRunsArray.value[startSq] = aRunsNum + bRunsNum - 1;  // 打った石の数が重複しているので 1 引く
+        // if (solidLineBeing) {
+        //     directionalSolidLineArray.value[startSq] = true;
+        // }
     }
 
     /**
@@ -1380,27 +1567,28 @@
             gameBoard1StoneRunsHorizontalArray,
             gameBoard1StoneSolidLineHorizontalArray
         );
-        checkLineOfStones(    // 垂直方向
-            startSq,
-            northOf,
-            southOf,
-            gameBoard1StoneRunsVerticalArray,
-            gameBoard1StoneSolidLineVerticalArray
-        );
-        checkLineOfStones(    // バロック対角線方向
-            startSq,
-            northeastOf,
-            southwestOf,
-            gameBoard1StoneRunsBaroqueDiagonalArray,
-            gameBoard1StoneSolidLineBaroqueDiagonalArray
-        );
-        checkLineOfStones(    // シニスター対角線方向
-            startSq,
-            southeastOf,
-            northwestOf,
-            gameBoard1StoneRunsSinisterDiagonalArray,
-            gameBoard1StoneSolidLineSinisterDiagonalArray
-        );
+        // TODO:
+        // checkLineOfStones(    // 垂直方向
+        //     startSq,
+        //     northOf,
+        //     southOf,
+        //     gameBoard1StoneRunsVerticalArray,
+        //     gameBoard1StoneSolidLineVerticalArray
+        // );
+        // checkLineOfStones(    // バロック対角線方向
+        //     startSq,
+        //     northeastOf,
+        //     southwestOf,
+        //     gameBoard1StoneRunsBaroqueDiagonalArray,
+        //     gameBoard1StoneSolidLineBaroqueDiagonalArray
+        // );
+        // checkLineOfStones(    // シニスター対角線方向
+        //     startSq,
+        //     southeastOf,
+        //     northwestOf,
+        //     gameBoard1StoneRunsSinisterDiagonalArray,
+        //     gameBoard1StoneSolidLineSinisterDiagonalArray
+        // );
     }
 
 
