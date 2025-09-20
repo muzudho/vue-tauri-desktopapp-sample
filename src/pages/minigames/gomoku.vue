@@ -540,6 +540,7 @@
             }
 
 
+            // （途切れず）連続する石判定
             if (
                 gameBoard1StoneSolidLineHorizontalArray.value[sq]
                 || gameBoard1StoneSolidLineVerticalArray.value[sq]
@@ -1294,7 +1295,7 @@
     //     }
     // }
 
-    function checkLineConnectionOfStones(
+    function checkLineOfStones(
         startSq: number,
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
@@ -1310,7 +1311,7 @@
             let nextSq = startSq;  // 隣
             let nextMaxConn = 0;
             let continuity = true;  // 連続でつながっている自石が継続中
-            let solidLineLength = 1;   // 連続でつながっている自石の長さ
+            let solidLineLength = 0;   // （自分を含まない）連続でつながっている自石の長さ
             // 連続５マス（つまり、残り４マス）をチェック
             for(let i:number=0; i<4; i++){
                 nextSq = aNextOf(nextSq);
@@ -1344,16 +1345,18 @@
             bNextOf
         );
 
+        const solidLineBeing = 4 <= aSolidLineLength + bSolidLineLength;    // ［五］ができていれば真
+
         // 集計
         aRunsStoneSqArray.forEach((sq, index, _array)=>{
             directionalRunsArray.value[sq] = aNextMaxConn + 1;
-            if (index < aSolidLineLength) {
+            if (solidLineBeing && index < aSolidLineLength) {
                 directionalSolidLineArray.value[sq] = true;
             }
         });
         bRunsStoneSqArray.forEach((sq, index, _array)=>{
             directionalRunsArray.value[sq] = bNextMaxConn + 1;
-            if (index < bSolidLineLength) {
+            if (solidLineBeing && index < bSolidLineLength) {
                 directionalSolidLineArray.value[sq] = true;
             }
         });
@@ -1361,6 +1364,9 @@
         // 打った石
         const maxConn = Math.max(aNextMaxConn, bNextMaxConn);
         directionalRunsArray.value[startSq] = maxConn + 1;
+        if (solidLineBeing) {
+            directionalSolidLineArray.value[startSq] = true;
+        }
     }
 
     /**
@@ -1368,28 +1374,28 @@
      * @param startSq 石を置いたマス番号
      */
     function checkConnectionOfStones(startSq: number) : void {
-        checkLineConnectionOfStones(    // 水平方向
+        checkLineOfStones(    // 水平方向
             startSq,
             eastOf,
             westOf,
             gameBoard1StoneRunsHorizontalArray,
             gameBoard1StoneSolidLineHorizontalArray
         );
-        checkLineConnectionOfStones(    // 垂直方向
+        checkLineOfStones(    // 垂直方向
             startSq,
             northOf,
             southOf,
             gameBoard1StoneRunsVerticalArray,
             gameBoard1StoneSolidLineVerticalArray
         );
-        checkLineConnectionOfStones(    // バロック対角線方向
+        checkLineOfStones(    // バロック対角線方向
             startSq,
             northeastOf,
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
             gameBoard1StoneSolidLineBaroqueDiagonalArray
         );
-        checkLineConnectionOfStones(    // シニスター対角線方向
+        checkLineOfStones(    // シニスター対角線方向
             startSq,
             southeastOf,
             northwestOf,
