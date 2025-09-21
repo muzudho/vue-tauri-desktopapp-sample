@@ -414,6 +414,7 @@
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
+    const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
     const COLOR_EMPTY = 0; // 空きマス。石の色無し。
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
@@ -899,7 +900,6 @@
         // test
         const BLACK = 1;    // 自石の色
         const START_SQ = 7; // 着手点
-        const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
         const FWD_DIRECTION = eastOf; // 順方向
         const REV_DIRECTION = westOf; // 逆方向
         const oneWing = getOneWing(
@@ -1789,7 +1789,6 @@
         ) : void {
             const opponentColor1 = opponentColor(friendColor);
             const HAS_DEAD_CHECK = true;
-            const ONE_WING_MAX_LENGTH = 4;
             //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
 
             function checkOpponentOneWing(
@@ -1952,7 +1951,6 @@
         friendColor: number,
         startSq: number,
     ) : boolean {
-        const ONE_WING_MAX_LENGTH = 5;
         const horizontalIsDeadRuns = checkDeadRuns(
             friendColor,
             startSq,
@@ -2016,7 +2014,6 @@
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
 
-        const ONE_WING_MAX_LENGTH = 4;
         const eightWayIntersection = getEightWayIntersection(
             opponentColor1,
             startSq,
