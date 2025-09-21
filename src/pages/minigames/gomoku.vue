@@ -402,12 +402,21 @@
     const gameBoard1StoneRunsBaroqueDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左下から右上に上がる対角線方向
     const gameBoard1StoneRunsSinisterDiagonalArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向
 
-    // （隙間なく）連続する石は、［五］（Alive）か、［死に石］（Dead）か、［いずれでもない］（Neither）の３状態。
-    type StoneState = 'Alive'|'Dead'|'Neither';
-    const gameBoard1StoneSolidLineHorizontalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));   // マス上で石が水平方向に（隙間なく）連続しているか
-    const gameBoard1StoneSolidLineVerticalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));
-    const gameBoard1StoneSolidLineBaroqueDiagonalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));
-    const gameBoard1StoneSolidLineSinisterDiagonalArray = ref<Array<StoneState>>(new Array(gameBoard1Area.value).fill('Neither'));
+    // 水平方向に並ぶ［五］の一部の石なら 1 を、
+    // 垂直方向に並ぶ［五］の一部の石なら 2 を、
+    // バロック対角線方向に並ぶ［五］の一部の石なら 4 を、
+    // シニスター対角線方向に並ぶ［五］の一部の石なら 8 を、
+    // ［死に石］なら 16 を入れる。
+    const STONE_STATE_NONE = 0;
+    const STONE_STATE_ALIVE_HORIZONTAL = 1;
+    const STONE_STATE_ALIVE_VERTICAL = 2;
+    const STONE_STATE_ALIVE_BAROQUE_DIAGONAL = 4;
+    const STONE_STATE_ALIVE_SINISTER_DIAGONAL = 8;
+    const STONE_STATE_DEAD = 16;
+    function isAliveStone(sq: number) : boolean {
+        return 1 <= gameBoard1StoneStateArray.value[sq] && gameBoard1StoneStateArray.value[sq] <= 15;
+    }
+    const gameBoard1StoneStateArray = ref<Array<number>>(new Array(gameBoard1Area.value).fill(STONE_STATE_NONE));
 
     const gameBoard1SquareSrcTilemapRect = computed<
         (sq: number)=>Rectangle
@@ -535,13 +544,7 @@
 
             function getKeyOfSolidLine(sq: number) : string {
                 // ［生き石］
-                if (
-                    // オア結合です
-                    gameBoard1StoneSolidLineHorizontalArray.value[sq] == 'Alive'
-                    || gameBoard1StoneSolidLineVerticalArray.value[sq] == 'Alive'
-                    || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] == 'Alive'
-                    || gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] == 'Alive'
-                ) {
+                if (isAliveStone(sq)) {
                     if (isNorthwestCorner(sq)) {    // 左上隅
                         return 'vacantLand-skyBlueMarker-gridLines-06';
                     }
@@ -578,13 +581,7 @@
                     return 'vacantLand-skyBlueMarker-gridLines-15';
                     
                 // ［死に石］
-                } else if (
-                    // TODO アンド結合です
-                    gameBoard1StoneSolidLineHorizontalArray.value[sq] == 'Dead'
-                    || gameBoard1StoneSolidLineVerticalArray.value[sq] == 'Dead'
-                    || gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] == 'Dead'
-                    || gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] == 'Dead'
-                ) {
+                } else if (gameBoard1StoneStateArray.value[sq] == STONE_STATE_DEAD) {
                     if (isNorthwestCorner(sq)) {    // 左上隅
                         return 'bgDead-gridLines-06';
                     }
@@ -884,6 +881,9 @@
             START_SQ,
         );
         console.log(`TEST: isDeadStone=${isDeadStone} color=${BLACK} startSq=${START_SQ}`);
+        // if (isDeadStone) {
+        // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
+        // }
 
         const eightWayIntersection = getEightWayIntersection(
             BLACK,
@@ -1055,10 +1055,7 @@
             gameBoard1StoneRunsSinisterDiagonalArray.value[sq] = 0;
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
-            gameBoard1StoneSolidLineHorizontalArray.value[sq] = 'Neither';
-            gameBoard1StoneSolidLineVerticalArray.value[sq] = 'Neither';
-            gameBoard1StoneSolidLineBaroqueDiagonalArray.value[sq] = 'Neither';
-            gameBoard1StoneSolidLineSinisterDiagonalArray.value[sq] = 'Neither';
+            gameBoard1StoneStateArray.value[sq] = STONE_STATE_NONE;
         }
 
         gameBoard1Times.value = 0;
@@ -1373,7 +1370,8 @@
         aNextOf: (sq: number)=>number,
         bNextOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
-        directionalSolidLineArray: Ref<Array<StoneState>>,
+        directionalStoneStateArray: Ref<Array<number>>,
+        aliveDirection: number,
         hasDeadCheck: boolean,  // 死に石判定をするか
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
@@ -1525,7 +1523,7 @@
                 if (5<=aliveLength) {   // ［五］ができていたら
                     for(let i:number=window; i<friendWindowEnd; i++){
                         const sq = friendSqMap[i];
-                        directionalSolidLineArray.value[sq] = 'Alive';
+                        directionalStoneStateArray.value[sq] = aliveDirection;
                     }
                 }
             }
@@ -1572,7 +1570,7 @@
                         sq
                     );
                     if (isDeadStone) {
-                        directionalSolidLineArray.value[sq] = 'Dead';
+                        directionalStoneStateArray.value[sq] = STONE_STATE_DEAD;
                     }
                 });
             }
@@ -1655,7 +1653,8 @@
             eastOf,
             westOf,
             gameBoard1StoneRunsHorizontalArray,
-            gameBoard1StoneSolidLineHorizontalArray,
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_HORIZONTAL,
             HAS_NOT_DEAD_CHECK
         );
         checkGomokuRunsSingleLine(    // 垂直方向
@@ -1664,7 +1663,8 @@
             northOf,
             southOf,
             gameBoard1StoneRunsVerticalArray,
-            gameBoard1StoneSolidLineVerticalArray,
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_VERTICAL,
             HAS_NOT_DEAD_CHECK
         );
         checkGomokuRunsSingleLine(    // バロック対角線方向
@@ -1673,7 +1673,8 @@
             northeastOf,
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
-            gameBoard1StoneSolidLineBaroqueDiagonalArray,
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
             HAS_NOT_DEAD_CHECK
         );
         checkGomokuRunsSingleLine(    // シニスター対角線方向
@@ -1682,7 +1683,8 @@
             southeastOf,
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
-            gameBoard1StoneSolidLineSinisterDiagonalArray,
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_SINISTER_DIAGONAL,
             HAS_NOT_DEAD_CHECK
         );
 
@@ -1749,7 +1751,8 @@
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
             directionalRunsArray: Ref<number[]>,
-            directionalSolidLineArray: Ref<Array<StoneState>>,
+            directionalStoneStateArray: Ref<Array<number>>,
+            aliveDirection: number,
         ) : void {
             const opponentColor1 = opponentColor(friendColor);
             const HAS_DEAD_CHECK = true;
@@ -1770,7 +1773,8 @@
                     nextOf,
                     backOf,
                     directionalRunsArray,
-                    directionalSolidLineArray,
+                    directionalStoneStateArray,
+                    aliveDirection,
                     HAS_DEAD_CHECK
                 );
             }
@@ -1790,7 +1794,8 @@
                     nextOf,
                     backOf,
                     directionalRunsArray,
-                    directionalSolidLineArray,
+                    directionalStoneStateArray,
+                    aliveDirection,
                     HAS_DEAD_CHECK
                 );
             }
@@ -1800,28 +1805,32 @@
             eastOf,
             westOf,
             gameBoard1StoneRunsHorizontalArray,
-            gameBoard1StoneSolidLineHorizontalArray
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_HORIZONTAL,
         );
 
         checkGomokuOpponentRuns(    // 垂直方向
             southOf,
             northOf,
             gameBoard1StoneRunsVerticalArray,
-            gameBoard1StoneSolidLineVerticalArray
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_VERTICAL,
         );
 
         checkGomokuOpponentRuns(    // バロック対角線方向
             northeastOf,
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
-            gameBoard1StoneSolidLineBaroqueDiagonalArray
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
         );
 
         checkGomokuOpponentRuns(    // シニスター対角線方向
             southeastOf,
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
-            gameBoard1StoneSolidLineSinisterDiagonalArray
+            gameBoard1StoneStateArray,
+            STONE_STATE_ALIVE_SINISTER_DIAGONAL,
         );
     }
 
@@ -1887,7 +1896,7 @@
     }
 
     /**
-     * TODO: ［死に飛び石］判定
+     * ［死に飛び石］判定
      * 
      * 着手点、順ウィング、逆ウィングを合わせて長さが５に満たないとき、［死に飛び石］だ。
      */
@@ -1910,7 +1919,7 @@
 
 
     /**
-     * TODO: ［死に石］判定
+     * ［死に石］判定
      * 
      * ４方向（水平、垂直、バロック対角線、シニスター対角線）全てが［死に飛び石］のとき、［死に石］だ。
      */
