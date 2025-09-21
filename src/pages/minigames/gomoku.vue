@@ -1598,7 +1598,18 @@
     }
 
 
-    function executeGoLength(
+    /**
+     * ［五］の処理。
+     * 内訳は、走査（スキャン）、判定（ジャッジメント）、記入（チェック）
+     * 
+     * @param friendColor 
+     * @param startSq 
+     * @param nextOf 
+     * @param backOf 
+     * @param directionalStoneStateArray 
+     * @param aliveDirection 
+     */
+    function processingFive(
         friendColor: number,    // 自石の色
         startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
         nextOf: (sq: number)=>number,
@@ -1606,78 +1617,41 @@
         directionalStoneStateArray: Ref<Array<number>>,
         aliveDirection: number,
     ) : void {
-        const opponentColor1 = opponentColor(friendColor);
 
-        const friendSqMap: number[] = new Array(9).fill(-1);    // ランズと［生き石］を判定するのに使う
-        friendSqMap[4] = startSq;
+        const runs = getRuns(
+            friendColor,
+            startSq,
+            ONE_WING_MAX_LENGTH,
+            nextOf,
+            backOf,
+        );
 
-        // 順ウィング
-        let nextFriendLength = 0; // 0 ～ 4
-        let nextSq: number;  // 隣
-        nextSq = startSq;  // 隣
-        for(let i:number=5; i<9; i++){  // 順方向
-            nextSq = nextOf(nextSq);
-            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
-                break;  // 探索終了
-            }
-            // 空点または自石なら
-            friendSqMap[i] = nextSq;
-            nextFriendLength += 1;
-        }
+        const continuityStones: number[] = [];  // 連続している自石のマス番号
 
-        // 逆ウィング
-        let backFriendLength = 0; // 0 ～ 4
-        nextSq = startSq;  // 隣
-        for(let i:number=3; 0<=i; i--){  // 逆方向
-            nextSq = backOf(nextSq);
-            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
-                break;
-            }
-            friendSqMap[i] = nextSq;
-            backFriendLength += 1;
-        }
-        //console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
-
-        const startFriendWindow = 4 - backFriendLength;
-
-        // ++++++++++++++++++
-        // + ［五］チェック +
-        // ++++++++++++++++++
-
-        for(let window:number=startFriendWindow; window<5; window++){
-            const friendWindowEnd = Math.min(window+5, 5+nextFriendLength); // end 自身を含まない
-            if (5 < friendWindowEnd - window) {   // TODO: 消す
-                console.log(`
-                    ERROR: [Single Line] startWindow=${startFriendWindow} window=${window} windowEnd=${friendWindowEnd} nextLength=${nextFriendLength}
-                    window+5=${window+5}
-                    5+nextLength=${5+nextFriendLength}
-                `);
-            }
-            let aliveContinuity = true;  // 連続でつながっている自石が継続中
-            let aliveLength = 0;    // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
-            for(let i:number=window; i<friendWindowEnd; i++){
-                // 盤外、相手の石は含まない
-                const sq = friendSqMap[i];
-
-                // 空きマスなら（連続は途切れるが）続行
-                if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
-                    aliveContinuity = false;
-                    continue;
-                }
-
-                // 自石なら
-                if (aliveContinuity) {
-                    aliveLength += 1;
-                }
-            }
-            
-            if (5<=aliveLength) {   // ［五］ができていたら
-                for(let i:number=window; i<friendWindowEnd; i++){
-                    const sq = friendSqMap[i];
+        function processingContinuityStones() : void {
+            if (5 <= continuityStones.length) {   // ［五］ができていたら
+                continuityStones.forEach((sq, _index, _array)=>{
                     directionalStoneStateArray.value[sq] |= aliveDirection; // 論理和
-                }
+                });
             }
+
+            continuityStones.length = 0;    // クリアー
         }
+
+        runs.forEach((sq, _index, _array)=>{
+            // 盤外、相手の石は含まない
+
+            // 自石なら
+            if (gameBoard1StoneColorArray.value[sq] == friendColor) {
+                continuityStones.push(sq);
+
+            // 自石でなければ
+            } else {
+                processingContinuityStones();
+            }
+        });
+
+        processingContinuityStones();
     }
 
 
@@ -1738,7 +1712,7 @@
             westOf,
             gameBoard1StoneRunsHorizontalArray,
         );
-        executeGoLength(    // 水平方向
+        processingFive(    // 水平方向
             friendColor,
             startSq,
             eastOf,
@@ -1754,7 +1728,7 @@
             southOf,
             gameBoard1StoneRunsVerticalArray,
         );
-        executeGoLength(    // 垂直方向
+        processingFive(    // 垂直方向
             friendColor,
             startSq,
             northOf,
@@ -1770,7 +1744,7 @@
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
         );
-        executeGoLength(    // バロック対角線方向
+        processingFive(    // バロック対角線方向
             friendColor,
             startSq,
             northeastOf,
@@ -1786,7 +1760,7 @@
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
         );
-        executeGoLength(    // シニスター対角線方向
+        processingFive(    // シニスター対角線方向
             friendColor,
             startSq,
             southeastOf,
@@ -1885,7 +1859,7 @@
                         backOf,
                         directionalRunsArray,
                     );
-                    executeGoLength(  // 任意の方向
+                    processingFive(  // 任意の方向
                         opponentColor1,
                         opponentStartSq,
                         nextOf,
