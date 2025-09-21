@@ -1023,7 +1023,11 @@
      * @param sq 
      */
     function sqToCode(sq: number) : string {
-        return `${sq}`
+        const BOARD_WIDTH = 15;
+        const BOARD_HEIGHT = 15;
+        const file = sq % BOARD_WIDTH;
+        const rank = Math.floor(sq / BOARD_WIDTH);
+        return `${gameBoard1FileNameArray[file]}${BOARD_HEIGHT-rank}`
     }
 
 
