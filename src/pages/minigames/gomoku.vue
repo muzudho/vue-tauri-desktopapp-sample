@@ -1601,7 +1601,7 @@
             // ++++++++++++++++++++++
 
             if (hasDeadCheck) {
-                checkDeadStones(friendColor, startSq, directionalStoneStateArray);
+                checkOpponentDeadStones(friendColor, startSq, directionalStoneStateArray);
             }
 
             // ++++++++++++++++++++++
@@ -2009,7 +2009,7 @@
      * 👆 x を自分の着手とするとき、上記の数字（xを含まない）の位置にある相手の石が対象。
      * この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
      */
-    function checkDeadStones(
+    function checkOpponentDeadStones(
         friendColor: number,
         startSq: number,
         directionalStoneStateArray: Ref<Array<number>>,
@@ -2023,7 +2023,7 @@
             ONE_WING_MAX_LENGTH,
         );
         eightWayIntersection.forEach((sq, _index, _array)=>{
-            if (gameBoard1StoneColorArray.value[sq] == friendColor) {
+            if (gameBoard1StoneColorArray.value[sq] == opponentColor1) {
                 const isDeadStone1 = isDeadStone(
                     opponentColor1,
                     sq
