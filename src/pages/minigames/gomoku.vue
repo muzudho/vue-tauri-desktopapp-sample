@@ -858,7 +858,7 @@
         gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
         // test
         const BLACK = 1;    // 自石の色
-        const START_SQ = 8; // 着手点
+        const START_SQ = 7; // 着手点
         const ONE_WING_MAX_LENGTH = 5;  // 片翼の最大長さ
         const FWD_DIRECTION = eastOf; // 順方向
         const REV_DIRECTION = westOf; // 逆方向
@@ -887,6 +887,12 @@
             REV_DIRECTION,
         );
         console.log(`TEST: isDeadRuns=${isDeadRuns} color=${BLACK}`);
+
+        const isDeadStone = checkDeadStone(
+            BLACK,
+            START_SQ,
+        );
+        console.log(`TEST: isDeadStone=${isDeadStone} color=${BLACK} startSq=${START_SQ}`);
     }
 
 
@@ -1913,8 +1919,37 @@
     function checkDeadStone(
         friendColor: number,
         startSq: number,
-    ) : void {
-
+    ) : boolean {
+        const ONE_WING_MAX_LENGTH = 5;
+        const horizontalIsDeadRuns = checkDeadRuns(
+            friendColor,
+            startSq,
+            ONE_WING_MAX_LENGTH,
+            eastOf,
+            westOf,
+        );
+        const verticalIsDeadRuns = checkDeadRuns(
+            friendColor,
+            startSq,
+            ONE_WING_MAX_LENGTH,
+            southOf,
+            northOf,
+        );
+        const baroqueDiagonalIsDeadRuns = checkDeadRuns(
+            friendColor,
+            startSq,
+            ONE_WING_MAX_LENGTH,
+            northeastOf,
+            southwestOf,
+        );
+        const sinisterDiagonalIsDeadRuns = checkDeadRuns(
+            friendColor,
+            startSq,
+            ONE_WING_MAX_LENGTH,
+            southeastOf,
+            northwestOf,
+        );
+        return horizontalIsDeadRuns && verticalIsDeadRuns && baroqueDiagonalIsDeadRuns && sinisterDiagonalIsDeadRuns;
     }
 
 
