@@ -423,33 +423,33 @@
     >(()=>{
         return (sq: number)=>{
 
-            function getKeyByConn(
-                conn: number,
-                vanilla: string,
-                yellowMarker: string,
-                greenMarker: string,
-                blueMarker: string
-            ) : string {
-                if (conn <= 1) {
-                    return vanilla;
-                }
-
-                if (conn == 2) {
-                    return yellowMarker;
-                }
-
-                if (conn == 3) {
-                    return greenMarker;
-                }
-
-                // ［四］以上は全部この色
-                return blueMarker;
-            }
-
             function getRunsKey(
                 sq: number,
                 conn: number,
             ) : string {
+
+                function getKeyByConn(
+                    conn: number,
+                    vanilla: string,
+                    yellowMarker: string,
+                    greenMarker: string,
+                    blueMarker: string
+                ) : string {
+                    if (conn <= 1) {
+                        return vanilla;
+                    }
+
+                    if (conn == 2) {
+                        return yellowMarker;
+                    }
+
+                    if (conn == 3) {
+                        return greenMarker;
+                    }
+
+                    // ［四］以上は全部この色
+                    return blueMarker;
+                }
                 
                 if (isNorthwestCorner(sq)) {    // 左上隅
                     return getKeyByConn(
@@ -581,7 +581,7 @@
                     return 'vacantLand-skyBlueMarker-gridLines-15';
                     
                 // ［死に石］
-                } else if (gameBoard1StoneStateArray.value[sq] == STONE_STATE_DEAD) {
+                } else if ((gameBoard1StoneStateArray.value[sq] & STONE_STATE_DEAD) == STONE_STATE_DEAD) {
                     if (isNorthwestCorner(sq)) {    // 左上隅
                         return 'bgDead-gridLines-06';
                     }
