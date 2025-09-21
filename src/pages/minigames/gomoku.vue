@@ -216,18 +216,33 @@
     >
         {{ gameBoard1StoneRunsHorizontalArray[i] }}&nbsp;
     </span><br/>
+
     マス番号:<br/>
     <p
         v-for="rank in range(0, 15)"
         :key="rank"
     >
         <span
-            v-for="i in range(rank * 15, (rank + 1) * 15)"
-            :key="i"
+            v-for="sq in range(rank * 15, (rank + 1) * 15)"
+            :key="sq"
         >
-            {{ i.toString().padStart(3, '0') }}&nbsp;
+            {{ sq.toString().padStart(3, '0') }}&nbsp;
         </span><br/>
     </p>
+    
+    石の状態:<br/>
+    <p
+        v-for="rank in range(0, 15)"
+        :key="rank"
+    >
+        <span
+            v-for="sq in range(rank * 15, (rank + 1) * 15)"
+            :key="sq"
+        >
+            {{ gameBoard1StoneStateArray[sq].toString().padStart(2, '0') }}&nbsp;
+        </span><br/>
+    </p>
+
 
     <button-to-back-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
