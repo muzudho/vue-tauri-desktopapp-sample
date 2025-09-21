@@ -1527,8 +1527,6 @@
         nextOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
-        directionalStoneStateArray: Ref<Array<number>>,
-        aliveDirection: number,
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
 
@@ -1593,6 +1591,55 @@
             }
         }
 
+        // ++++++++++++++++++++++
+        // + ［飛び石］チェック +
+        // ++++++++++++++++++++++
+        checkRunsOneDirection(friendColor, friendSqMap, windowRunsNum, directionalRunsArray);
+    }
+
+
+    function executeGoLength(
+        friendColor: number,    // 自石の色
+        startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
+        nextOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
+        directionalStoneStateArray: Ref<Array<number>>,
+        aliveDirection: number,
+    ) : void {
+        const opponentColor1 = opponentColor(friendColor);
+
+        const friendSqMap: number[] = new Array(9).fill(-1);    // ランズと［生き石］を判定するのに使う
+        friendSqMap[4] = startSq;
+
+        // 順ウィング
+        let nextFriendLength = 0; // 0 ～ 4
+        let nextSq: number;  // 隣
+        nextSq = startSq;  // 隣
+        for(let i:number=5; i<9; i++){  // 順方向
+            nextSq = nextOf(nextSq);
+            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
+                break;  // 探索終了
+            }
+            // 空点または自石なら
+            friendSqMap[i] = nextSq;
+            nextFriendLength += 1;
+        }
+
+        // 逆ウィング
+        let backFriendLength = 0; // 0 ～ 4
+        nextSq = startSq;  // 隣
+        for(let i:number=3; 0<=i; i--){  // 逆方向
+            nextSq = backOf(nextSq);
+            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
+                break;
+            }
+            friendSqMap[i] = nextSq;
+            backFriendLength += 1;
+        }
+        //console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
+
+        const startFriendWindow = 4 - backFriendLength;
+
         // ++++++++++++++++++
         // + ［五］チェック +
         // ++++++++++++++++++
@@ -1631,14 +1678,8 @@
                 }
             }
         }
-
-        // ++++++++++++++++++++++
-        // + ［飛び石］チェック +
-        // ++++++++++++++++++++++
-        checkRunsOneDirection(friendColor, friendSqMap, windowRunsNum, directionalRunsArray);
     }
 
-    
 
     function checkRunsOneDirection(
         friendColor: number,    // 自石の色
@@ -1696,33 +1737,60 @@
             eastOf,
             westOf,
             gameBoard1StoneRunsHorizontalArray,
+        );
+        executeGoLength(    // 水平方向
+            friendColor,
+            startSq,
+            eastOf,
+            westOf,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_HORIZONTAL,
         );
+
         executeRunsOneDirection(    // 垂直方向
             friendColor,
             startSq,
             northOf,
             southOf,
             gameBoard1StoneRunsVerticalArray,
+        );
+        executeGoLength(    // 垂直方向
+            friendColor,
+            startSq,
+            northOf,
+            southOf,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_VERTICAL,
         );
+
         executeRunsOneDirection(    // バロック対角線方向
             friendColor,
             startSq,
             northeastOf,
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
+        );
+        executeGoLength(    // バロック対角線方向
+            friendColor,
+            startSq,
+            northeastOf,
+            southwestOf,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
         );
+
         executeRunsOneDirection(    // シニスター対角線方向
             friendColor,
             startSq,
             southeastOf,
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
+        );
+        executeGoLength(    // シニスター対角線方向
+            friendColor,
+            startSq,
+            southeastOf,
+            northwestOf,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_SINISTER_DIAGONAL,
         );
@@ -1816,6 +1884,12 @@
                         nextOf,
                         backOf,
                         directionalRunsArray,
+                    );
+                    executeGoLength(  // 任意の方向
+                        opponentColor1,
+                        opponentStartSq,
+                        nextOf,
+                        backOf,
                         directionalStoneStateArray,
                         aliveDirection,
                     );
