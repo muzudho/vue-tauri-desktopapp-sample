@@ -878,6 +878,15 @@
             REV_DIRECTION,
         );
         console.log(`TEST: runs=${runs}`);
+
+        const isDeadRuns = checkDeadRuns(
+            BLACK,
+            START_SQ,
+            ONE_WING_MAX_LENGTH,
+            FWD_DIRECTION,
+            REV_DIRECTION,
+        );
+        console.log(`TEST: isDeadRuns=${isDeadRuns} color=${BLACK}`);
     }
 
 
@@ -1855,7 +1864,7 @@
         backOf: (sq: number)=>number,
     ) : number[] {
         // 順ウィング
-        const aWing = getOneWing(
+        const fwdWing = getOneWing(
             friendColor,
             startSq,
             oneWingMaxLength,
@@ -1863,20 +1872,20 @@
         );
 
         // 逆ウィング
-        const bWing = getOneWing(
+        const revWing = getOneWing(
             friendColor,
             startSq,
             oneWingMaxLength,
             backOf,
         );
 
-        return [...bWing.reverse(), startSq, ...aWing]; // 向きを揃えて１つの配列にする
+        return [...revWing.reverse(), startSq, ...fwdWing]; // 向きを揃えて１つの配列にする
     }
 
     /**
      * TODO: ［死に飛び石］判定
      * 
-     * 着手点、順ウィング、逆ウィングを合わせて［五］を作れないとき、［死に飛び石］だ。
+     * 着手点、順ウィング、逆ウィングを合わせて長さが５に満たないとき、［死に飛び石］だ。
      */
     function checkDeadRuns(
         friendColor: number,
@@ -1884,7 +1893,7 @@
         oneWingMaxLength: number,
         nextOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
-    ) : void {
+    ) : boolean {
         const runs = getRuns(
             friendColor,
             startSq,
@@ -1892,6 +1901,7 @@
             nextOf,
             backOf,
         );
+        return runs.length < 5;
     }
 
 
