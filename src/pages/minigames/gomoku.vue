@@ -928,12 +928,12 @@
         );
         console.log(`TEST: isDeadRuns=${isDeadRuns} color=${BLACK}`);
 
-        const isDeadStone = checkDeadStone(
+        const isDeadStone1 = isDeadStone(
             BLACK,
             START_SQ,
         );
-        console.log(`TEST: isDeadStone=${isDeadStone} color=${BLACK} startSq=${START_SQ}`);
-        // if (isDeadStone) {
+        console.log(`TEST: isDeadStone1=${isDeadStone1} color=${BLACK} startSq=${START_SQ}`);
+        // if (isDeadStone1) {
         // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
         // }
 
@@ -1596,52 +1596,17 @@
                 }
             }
 
-            // ++++++++++++++++++
-            // + ［死に石］判定 +
-            // ++++++++++++++++++
+            // ++++++++++++++++++++++
+            // + ［死に石］チェック +
+            // ++++++++++++++++++++++
 
             if (hasDeadCheck) {
-                // 死に石の判定対象となるのは：
-                //
-                // +--+--+--+--+--+--+--+--+--+
-                // |15|  |  |  |11|  |  |  | 7|
-                // +--+--+--+--+--+--+--+--+--+
-                // |  |14|  |  |10|  |  | 6|  |
-                // +--+--+--+--+--+--+--+--+--+
-                // |  |  |13|  | 9|  | 5|  |  |
-                // +--+--+--+--+--+--+--+--+--+
-                // |  |  |  |12| 8| 4|  |  |  |
-                // +--+--+--+--+--+--+--+--+--+
-                // |19|18|17|16| x| 0| 1| 2| 3|
-                // +--+--+--+--+--+--+--+--+--+
-                // |  |  |  |20|24|28|  |  |  |
-                // +--+--+--+--+--+--+--+--+--+
-                // |  |  |21|  |25|  |29|  |  |
-                // +--+--+--+--+--+--+--+--+--+
-                // |  |22|  |  |26|  |  |30|  |
-                // +--+--+--+--+--+--+--+--+--+
-                // |23|  |  |  |27|  |  |  |31|
-                // +--+--+--+--+--+--+--+--+--+
-                //
-                // 👆 x を自分の着手とするとき、上記の数字（xを含まない）の位置にある相手の石が対象。
-                // この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
-                //
-                const ONE_WING_MAX_LENGTH = 4;
-                const eightWayIntersection = getEightWayIntersection(
-                    opponentColor1,
-                    startSq,
-                    ONE_WING_MAX_LENGTH,
-                );
-                eightWayIntersection.forEach((sq, _index, _array)=>{
-                    const isDeadStone = checkDeadStone(
-                        opponentColor1,
-                        sq
-                    );
-                    if (isDeadStone) {
-                        directionalStoneStateArray.value[sq] = STONE_STATE_DEAD;
-                    }
-                });
+                checkDeadStones(friendColor, startSq, directionalStoneStateArray);
             }
+
+            // ++++++++++++++++++++++
+            // + ［飛び石］チェック +
+            // ++++++++++++++++++++++
 
             // （９つの切り取りマスの）各マスのランズ数を確定する：
             let sq;
@@ -1983,7 +1948,7 @@
      * 
      * ４方向（水平、垂直、バロック対角線、シニスター対角線）全てが［死に飛び石］のとき、［死に石］だ。
      */
-    function checkDeadStone(
+    function isDeadStone(
         friendColor: number,
         startSq: number,
     ) : boolean {
@@ -2017,6 +1982,57 @@
             northwestOf,
         );
         return horizontalIsDeadRuns && verticalIsDeadRuns && baroqueDiagonalIsDeadRuns && sinisterDiagonalIsDeadRuns;
+    }
+
+
+    /**
+     * 死に石の判定対象となるのは：
+     * +--+--+--+--+--+--+--+--+--+
+     * |15|  |  |  |11|  |  |  | 7|
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |14|  |  |10|  |  | 6|  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |13|  | 9|  | 5|  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |  |12| 8| 4|  |  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |19|18|17|16| x| 0| 1| 2| 3|
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |  |20|24|28|  |  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |21|  |25|  |29|  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |22|  |  |26|  |  |30|  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |23|  |  |  |27|  |  |  |31|
+     * +--+--+--+--+--+--+--+--+--+
+     * 👆 x を自分の着手とするとき、上記の数字（xを含まない）の位置にある相手の石が対象。
+     * この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
+     */
+    function checkDeadStones(
+        friendColor: number,
+        startSq: number,
+        directionalStoneStateArray: Ref<Array<number>>,
+    ) : void {
+        const opponentColor1 = opponentColor(friendColor);
+
+        const ONE_WING_MAX_LENGTH = 4;
+        const eightWayIntersection = getEightWayIntersection(
+            opponentColor1,
+            startSq,
+            ONE_WING_MAX_LENGTH,
+        );
+        eightWayIntersection.forEach((sq, _index, _array)=>{
+            if (gameBoard1StoneColorArray.value[sq] == friendColor) {
+                const isDeadStone1 = isDeadStone(
+                    opponentColor1,
+                    sq
+                );
+                if (isDeadStone1) {
+                    directionalStoneStateArray.value[sq] = STONE_STATE_DEAD;
+                }
+            }
+        });
     }
 
 
