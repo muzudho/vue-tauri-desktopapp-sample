@@ -872,6 +872,13 @@
             START_SQ,
         );
         console.log(`TEST: isDeadStone=${isDeadStone} color=${BLACK} startSq=${START_SQ}`);
+
+        const eightWayIntersection = getEightWayIntersection(
+            BLACK,
+            START_SQ,
+            ONE_WING_MAX_LENGTH,
+        );
+        console.log(`TEST: eightWayIntersection=${eightWayIntersection} color=${BLACK} startSq=${START_SQ} ONE_WING_MAX_LENGTH=${ONE_WING_MAX_LENGTH}`);
     }
 
 
@@ -1541,7 +1548,13 @@
                 // 👆 x を自分の着手とするとき、上記の t の位置にある相手の石が対象。
                 // この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
                 //
-                friendSqMap.forEach((sq, _index, _array)=>{
+                const ONE_WING_MAX_LENGTH = 4;
+                const eightWayIntersection = getEightWayIntersection(
+                    opponentColor1,
+                    startSq,
+                    ONE_WING_MAX_LENGTH,
+                );
+                eightWayIntersection.forEach((sq, _index, _array)=>{
                     const isDeadStone = checkDeadStone(
                         opponentColor1,
                         sq
@@ -1949,23 +1962,75 @@
      * |24|  |  |  |28|  |  |  |32|
      * +--+--+--+--+--+--+--+--+--+
      * 
-     * 👆 片翼の長さを 4、 [0]を自分の着手のマスとする。
+     * 👆  [0]を自分の着手のマスとする。例では片翼の長さを 4 とした。
      * この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
      * 
      */
-    // function getEightWayIntersection(
-    //     friendColor: number,
-    //     startSq: number,
-    // ) : number[] {
-    //     const runs = getRuns(
-    //         friendColor,
-    //         startSq,
-    //         oneWingMaxLength,
-    //         nextOf,
-    //         backOf,
-    //     );
-
-    // }
+    function getEightWayIntersection(
+        friendColor: number,
+        startSq: number,
+        oneWingMaxLength: number,
+    ) : number[] {
+        const eastWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            eastOf,
+        );
+        const northeastWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            northeastOf,
+        );
+        const northWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            northOf,
+        );
+        const northwestWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            northwestOf,
+        );
+        const westWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            westOf,
+        );
+        const southwestWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            southwestOf,
+        );
+        const southWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            southOf,
+        );
+        const southeastWing = getOneWing(
+            friendColor,
+            startSq,
+            oneWingMaxLength,
+            southeastOf,
+        );
+        return [
+            0,
+            ...eastWing,
+            ...northeastWing,
+            ...northWing,
+            ...northwestWing,
+            ...westWing,
+            ...southwestWing,
+            ...southWing,
+            ...southeastWing
+        ];
+    }
 
 
     function farthestNextFrom(
