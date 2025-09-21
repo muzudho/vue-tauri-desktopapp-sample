@@ -150,24 +150,22 @@
                         }"
                     >{{ gameBoard1FileNameArray[file - 1] }}</span>
 
-                    <!--
-                    <span style="
-                        position: absolute;
-                        left: 40px;
-                        top: 510px;
-                        color: white;
-                        font-size: 24px;
-                        z-index: 200;
-                    ">A</span>
-                    <span style="
-                        position: absolute;
-                        left: 74px;
-                        top: 510px;
-                        color: white;
-                        font-size: 24px;
-                        z-index: 200;
-                    ">B</span>
-                    -->
+                    <!-- 段の符号 -->
+                    <span
+                        v-for="rank in 15"
+                        :key="rank"
+                        :style="{
+                            position: 'absolute',
+                            left: '3px',
+                            top: `${(16-rank) * 32}px`,
+                            width: '20px',
+                            color: 'white',
+                            fontSize: '24px',
+                            zIndex: 200,
+                            textAlign: 'right',
+                        }"
+                    >{{ rank }}</span>
+
                 </div>
             </template>
         </game-machine-waratch2>
