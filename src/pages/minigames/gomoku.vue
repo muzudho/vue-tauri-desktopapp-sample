@@ -135,6 +135,39 @@
                         "
                         @click="onGameBoard1Clicked(sq)"
                     >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
+
+                    <!-- 筋の符号 -->
+                    <span
+                        v-for="file in gameBoard1FileNameArray.length"
+                        :key="file"
+                        :style="{
+                            position: 'absolute',
+                            left: `${file * 32 + 8}px`,
+                            top: '510px',
+                            color: 'white',
+                            fontSize: '24px',
+                            zIndex: 200,
+                        }"
+                    >{{ gameBoard1FileNameArray[file - 1] }}</span>
+
+                    <!--
+                    <span style="
+                        position: absolute;
+                        left: 40px;
+                        top: 510px;
+                        color: white;
+                        font-size: 24px;
+                        z-index: 200;
+                    ">A</span>
+                    <span style="
+                        position: absolute;
+                        left: 74px;
+                        top: 510px;
+                        color: white;
+                        font-size: 24px;
+                        z-index: 200;
+                    ">B</span>
+                    -->
                 </div>
             </template>
         </game-machine-waratch2>
@@ -381,6 +414,7 @@
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
+    const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
     const COLOR_EMPTY = 0; // 空きマス。石の色無し。
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
