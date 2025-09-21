@@ -1756,49 +1756,41 @@
         ) : void {
             const opponentColor1 = opponentColor(friendColor);
             const HAS_DEAD_CHECK = true;
+            const ONE_WING_MAX_LENGTH = 4;
             //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
 
-            // 順ウィング上の起点
-            const nextOpponentStartSq = farthestNextFrom(   // 自石から東へ
-                opponentColor1,
-                startSq,
-                4,
-                nextOf
-            );
-            //console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} startSq=${startSq} nextOpponentStartSq=${nextOpponentStartSq}`);
-            if (nextOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
-                checkGomokuRunsSingleLine(    // 水平方向
+            function checkOpponentOneWing(
+                friendStartSq: number,
+                nextOf: (sq: number)=>number,
+                backOf: (sq: number)=>number,
+            ) {
+                // 自石のウィング上の起点
+                const opponentStartSq = farthestNextFrom(   // 自石から東へ
                     opponentColor1,
-                    nextOpponentStartSq,
-                    nextOf,
-                    backOf,
-                    directionalRunsArray,
-                    directionalStoneStateArray,
-                    aliveDirection,
-                    HAS_DEAD_CHECK
+                    friendStartSq,
+                    ONE_WING_MAX_LENGTH,
+                    nextOf
                 );
+                //console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} friendStartSq=${friendStartSq} nextOpponentStartSq=${nextOpponentStartSq}`);
+                if (opponentStartSq != friendStartSq) {   // 移動距離 0 は自石なので、弾く
+                    checkGomokuRunsSingleLine(    // 水平方向
+                        opponentColor1,
+                        opponentStartSq,
+                        nextOf,
+                        backOf,
+                        directionalRunsArray,
+                        directionalStoneStateArray,
+                        aliveDirection,
+                        HAS_DEAD_CHECK
+                    );
+                }
             }
 
+            // 順ウィング上の起点
+            checkOpponentOneWing(startSq, nextOf, backOf);
+
             // 逆ウィング上の起点
-            const backOpponentStartSq = farthestNextFrom(   // 自石から西へ
-                opponentColor1,
-                startSq,
-                4,
-                backOf
-            );
-            //console.log(`DEBUG: [Opponent Wing 2] opponentColor1=${opponentColor1} startSq=${startSq} backOpponentStartSq=${backOpponentStartSq}`);
-            if (backOpponentStartSq != startSq) {   // 移動距離 0 は自石なので、弾く
-                checkGomokuRunsSingleLine(
-                    opponentColor1,
-                    backOpponentStartSq,
-                    nextOf,
-                    backOf,
-                    directionalRunsArray,
-                    directionalStoneStateArray,
-                    aliveDirection,
-                    HAS_DEAD_CHECK
-                );
-            }
+            checkOpponentOneWing(startSq, backOf, nextOf);
         }
 
         checkGomokuOpponentRuns(    // 水平方向
