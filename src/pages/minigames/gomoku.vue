@@ -415,6 +415,7 @@
     // ++++++++++++++++++++++++++++++++
 
     const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
+    const GO_LENGTH = 5;    // ［五］の長さ
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
     const COLOR_EMPTY = 0; // 空きマス。石の色無し。
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
@@ -1044,8 +1045,10 @@
         // sq を符号に変換したい。
         console.log(`DEBUG: [putStone] code=${sqToCode(sq)}`);
 
-        gameBoard1StoneColorArray.value[sq] = color;
-        checkGomokuRuns(sq);    // 石のつながりをチェックします
+        gameBoard1StoneColorArray.value[sq] = color;    // 盤上に石を置く
+
+        checkRuns(sq);  // 石のつながりをチェックします
+
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // （チェック後に）相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[color] += 1;
@@ -1432,255 +1435,241 @@
     }
 
 
-    function checkGomokuRunsSingleLine(
+    /**
+     * ［飛び石］チェック。一方向
+     * 
+     * 
+     *          ここに石を置いたら（仮定なので、空点でも構わない）
+     *          v
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|.|.|o|.|.|.|.|
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     * 少なくとも：
+     *
+     * +-+-+-+-+-+-+-+-+-+
+     * |w|w|w|w|w|.|.|.|.|  ウィンドウ０
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|w|w|w|w|w|.|.|.|  ウィンドウ１
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|w|w|w|w|w|.|.|  ウィンドウ２
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|.|w|w|w|w|w|.|  ウィンドウ３
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|.|.|w|w|w|w|w|  ウィンドウ４
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     * 以上の５つの範囲で、連の長さを数えなおす必要がある。
+     * ［累積和］か何か高速化技法が使えそうだが、とりあえず高速化せずに愚直に書いてみる。
+     *
+     *
+     * とりあえず長さ９の配列を用意し、[4] を打った石のマス番号とし、
+     *
+     *  0 1 2 3 4 5 6 7 8
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|.|.|o|.|.|.|.|  スクウェア・マップ
+     * +-+-+-+-+-+-+-+-+-+
+     *            1 2 3 4   順方向へ４つ
+     *  4 3 2 1             逆方向へ４つ
+     *
+     * 以上の９つのマス番号を探索する。
+     * 予めすべての９つのマスを作ってテーブルにしておけば高速化できそうだが、とりあえず高速化せずに愚直に書いてみる。
+     *
+     * （１）ウィンドウ１～５のランズ数を調べる
+     * （２）各マスには、ウィンドウ１～５の中の最大ランズ数を入れる。
+     *
+     * このとき、[4] を起点に端に向かって探索し、途中で［盤外］または［相手の石］とぶつかった場合は、そこで探索を終了する。
+     * nextLength, backLength のようなカウントをしておくといいかも。
+     * 例えば、相手の石（または盤外）が [1], [8] の位置にあるとき：
+     *
+     *  0 1 2 3 4 5 6 7 8
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|x|.|.|o|.|.|.|x|
+     * +-+-+-+-+-+-+-+-+-+
+     *
+     *      - - 
+     *       A    - - -
+     *              B
+     *
+     * B を nextLength、
+     * A を backLength と呼ぶとし、
+     * nextLength + backLength + 1 が 5 未満のとき、ランズ数は 0 とする。
+     * [dead] マーカーを付けてもいいかも。
+     *
+     * ウィンドウは３と４だけ調べれよい：
+     *
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|w|w|w|w|w|.|.|  ウィンドウ２
+     * +-+-+-+-+-+-+-+-+-+
+     * +-+-+-+-+-+-+-+-+-+
+     * |.|.|.|w|w|w|w|w|.|  ウィンドウ３
+     * +-+-+-+-+-+-+-+-+-+
+     * 
+     * @param friendColor 
+     * @param startSq 
+     * @param aNextOf 
+     * @param bNextOf 
+     * @param directionalRunsArray 
+     * @param directionalStoneStateArray 
+     * @param aliveDirection 
+     */
+    function checkRunsOneDirection(
         friendColor: number,    // 自石の色
         startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
-        aNextOf: (sq: number)=>number,
-        bNextOf: (sq: number)=>number,
+        nextOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
         directionalRunsArray: Ref<number[]>,
         directionalStoneStateArray: Ref<Array<number>>,
         aliveDirection: number,
-        hasDeadCheck: boolean,  // 死に石判定をするか
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
 
-        function checkDirectionalLineConnectionOfStones(
-            nextOf: (sq: number)=>number,
-            backOf: (sq: number)=>number,
-        ) : void {
-            //          ここに石を置いたら（仮定なので、空点でも構わない）
-            //          v
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|.|.|o|.|.|.|.|
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            // 少なくとも：
-            //
-            // +-+-+-+-+-+-+-+-+-+
-            // |w|w|w|w|w|.|.|.|.|  ウィンドウ０
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|w|w|w|w|w|.|.|.|  ウィンドウ１
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|w|w|w|w|w|.|.|  ウィンドウ２
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|.|w|w|w|w|w|.|  ウィンドウ３
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|.|.|w|w|w|w|w|  ウィンドウ４
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            // 以上の５つの範囲で、連の長さを数えなおす必要がある。
-            // ［累積和］か何か高速化技法が使えそうだが、とりあえず高速化せずに愚直に書いてみる。
-            //
-            //
-            // とりあえず長さ９の配列を用意し、[4] を打った石のマス番号とし、
-            //
-            //  0 1 2 3 4 5 6 7 8
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|.|.|o|.|.|.|.|  スクウェア・マップ
-            // +-+-+-+-+-+-+-+-+-+
-            //            1 2 3 4   順方向へ４つ
-            //  4 3 2 1             逆方向へ４つ
-            //
-            // 以上の９つのマス番号を探索する。
-            // 予めすべての９つのマスを作ってテーブルにしておけば高速化できそうだが、とりあえず高速化せずに愚直に書いてみる。
-            //
-            // （１）ウィンドウ１～５のランズ数を調べる
-            // （２）各マスには、ウィンドウ１～５の中の最大ランズ数を入れる。
-            //
-            // このとき、[4] を起点に端に向かって探索し、途中で［盤外］または［相手の石］とぶつかった場合は、そこで探索を終了する。
-            // nextLength, backLength のようなカウントをしておくといいかも。
-            // 例えば、相手の石（または盤外）が [1], [8] の位置にあるとき：
-            //
-            //  0 1 2 3 4 5 6 7 8
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|x|.|.|o|.|.|.|x|
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            //      - - 
-            //       A    - - -
-            //              B
-            //
-            // B を nextLength、
-            // A を backLength と呼ぶとし、
-            // nextLength + backLength + 1 が 5 未満のとき、ランズ数は 0 とする。
-            // [dead] マーカーを付けてもいいかも。
-            //
-            // ウィンドウは３と４だけ調べれよい：
-            //
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|w|w|w|w|w|.|.|  ウィンドウ２
-            // +-+-+-+-+-+-+-+-+-+
-            // +-+-+-+-+-+-+-+-+-+
-            // |.|.|.|w|w|w|w|w|.|  ウィンドウ３
-            // +-+-+-+-+-+-+-+-+-+
-            //
-            //
-            //
-            //
-            //
+        const friendSqMap: number[] = new Array(9).fill(-1);    // ランズと［生き石］を判定するのに使う
+        friendSqMap[4] = startSq;
 
-            const friendSqMap: number[] = new Array(9).fill(-1);    // ランズと［生き石］を判定するのに使う
-            friendSqMap[4] = startSq;
-
-            // 順ウィング
-            let nextFriendLength = 0; // 0 ～ 4
-            let nextSq: number;  // 隣
-            nextSq = startSq;  // 隣
-            for(let i:number=5; i<9; i++){  // 順方向
-                nextSq = nextOf(nextSq);
-                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
-                    break;  // 探索終了
-                }
-                // 空点または自石なら
-                friendSqMap[i] = nextSq;
-                nextFriendLength += 1;
+        // 順ウィング
+        let nextFriendLength = 0; // 0 ～ 4
+        let nextSq: number;  // 隣
+        nextSq = startSq;  // 隣
+        for(let i:number=5; i<9; i++){  // 順方向
+            nextSq = nextOf(nextSq);
+            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
+                break;  // 探索終了
             }
+            // 空点または自石なら
+            friendSqMap[i] = nextSq;
+            nextFriendLength += 1;
+        }
 
-            // 逆ウィング
-            let backFriendLength = 0; // 0 ～ 4
-            nextSq = startSq;  // 隣
-            for(let i:number=3; 0<=i; i--){  // 逆方向
-                nextSq = backOf(nextSq);
-                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
-                    break;
-                }
-                friendSqMap[i] = nextSq;
-                backFriendLength += 1;
+        // 逆ウィング
+        let backFriendLength = 0; // 0 ～ 4
+        nextSq = startSq;  // 隣
+        for(let i:number=3; 0<=i; i--){  // 逆方向
+            nextSq = backOf(nextSq);
+            if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {
+                break;
             }
-            //console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
+            friendSqMap[i] = nextSq;
+            backFriendLength += 1;
+        }
+        //console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
 
-            const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
-            const startFriendWindow = 4 - backFriendLength;
-            // ランズと［生き石］判定
-            for(let window:number=startFriendWindow; window<5; window++){
-                const friendWindowEnd = Math.min(window+5, 5+nextFriendLength); // end 自身を含まない
-                if (5 < friendWindowEnd - window) {   // TODO: 消す
-                    console.log(`
-                        ERROR: [Single Line] startWindow=${startFriendWindow} window=${window} windowEnd=${friendWindowEnd} nextLength=${nextFriendLength}
-                        window+5=${window+5}
-                        5+nextLength=${5+nextFriendLength}
-                    `);
+        const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
+        const startFriendWindow = 4 - backFriendLength;
+        // ランズと［生き石］判定
+        for(let window:number=startFriendWindow; window<5; window++){
+            const friendWindowEnd = Math.min(window+5, 5+nextFriendLength); // end 自身を含まない
+            if (5 < friendWindowEnd - window) {   // TODO: 消す
+                console.log(`
+                    ERROR: [Single Line] startWindow=${startFriendWindow} window=${window} windowEnd=${friendWindowEnd} nextLength=${nextFriendLength}
+                    window+5=${window+5}
+                    5+nextLength=${5+nextFriendLength}
+                `);
+            }
+            let aliveContinuity = true;  // 連続でつながっている自石が継続中
+            let aliveLength = 0;    // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
+            for(let i:number=window; i<friendWindowEnd; i++){
+                // 盤外、相手の石は含まない
+                const sq = friendSqMap[i];
+
+                // 空きマスなら（連続は途切れるが）続行
+                if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
+                    aliveContinuity = false;
+                    continue;
                 }
-                let aliveContinuity = true;  // 連続でつながっている自石が継続中
-                let aliveLength = 0;    // 連続でつながっている自石の長さ。［五］か否か判定するだけに使う
+
+                // 自石なら
+                windowRunsNum[window] += 1;
+                if (aliveContinuity) {
+                    aliveLength += 1;
+                }
+            }
+            
+            if (5<=aliveLength) {   // ［五］ができていたら
                 for(let i:number=window; i<friendWindowEnd; i++){
-                    // 盤外、相手の石は含まない
                     const sq = friendSqMap[i];
-
-                    // 空きマスなら（連続は途切れるが）続行
-                    if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
-                        aliveContinuity = false;
-                        continue;
-                    }
-
-                    // 自石なら
-                    windowRunsNum[window] += 1;
-                    if (aliveContinuity) {
-                        aliveLength += 1;
-                    }
+                    directionalStoneStateArray.value[sq] |= aliveDirection; // 論理和
                 }
-                
-                if (5<=aliveLength) {   // ［五］ができていたら
-                    for(let i:number=window; i<friendWindowEnd; i++){
-                        const sq = friendSqMap[i];
-                        directionalStoneStateArray.value[sq] |= aliveDirection; // 論理和
-                    }
-                }
-            }
-
-            // ++++++++++++++++++++++
-            // + ［死に石］チェック +
-            // ++++++++++++++++++++++
-
-            if (hasDeadCheck) {
-                checkOpponentDeadStones(friendColor, startSq, directionalStoneStateArray);
-            }
-
-            // ++++++++++++++++++++++
-            // + ［飛び石］チェック +
-            // ++++++++++++++++++++++
-
-            // （９つの切り取りマスの）各マスのランズ数を確定する：
-            let sq;
-            sq = friendSqMap[0];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
-                directionalRunsArray.value[sq] = windowRunsNum[0];
-            }
-
-            sq = friendSqMap[1];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
-            }
-
-            sq = friendSqMap[2];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
-            }
-
-            sq = friendSqMap[3];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
-            }
-
-            sq = friendSqMap[4];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
-            }
-
-            sq = friendSqMap[5];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
-            }
-
-            sq = friendSqMap[6];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
-            }
-
-            sq = friendSqMap[7];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
-                directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
-            }
-
-            sq = friendSqMap[8];
-            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-                //console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
-                directionalRunsArray.value[sq] = windowRunsNum[4];
             }
         }
 
+        // ++++++++++++++++++++++
+        // + ［飛び石］チェック +
+        // ++++++++++++++++++++++
 
-        checkDirectionalLineConnectionOfStones(
-            aNextOf,
-            bNextOf,
-        );
+        // （９つの切り取りマスの）各マスのランズ数を確定する：
+        let sq;
+        sq = friendSqMap[0];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
+            directionalRunsArray.value[sq] = windowRunsNum[0];
+        }
+
+        sq = friendSqMap[1];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
+        }
+
+        sq = friendSqMap[2];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
+        }
+
+        sq = friendSqMap[3];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
+        }
+
+        sq = friendSqMap[4];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
+        }
+
+        sq = friendSqMap[5];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
+        }
+
+        sq = friendSqMap[6];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
+        }
+
+        sq = friendSqMap[7];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
+            directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
+        }
+
+        sq = friendSqMap[8];
+        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+            //console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
+            directionalRunsArray.value[sq] = windowRunsNum[4];
+        }
     }
 
     /**
      * 石のつながりをチェックします
      * @param startSq 石を置いたマス番号
      */
-    function checkGomokuRuns(startSq: number) : void {
+    function checkRuns(startSq: number) : void {
         const friendColor = gameBoard1Turn.value;   // 自石の色
-        const HAS_NOT_DEAD_CHECK: boolean = false;
         // 自石のつながりを更新します
-        checkGomokuRunsSingleLine(    // 水平方向
+        checkRunsOneDirection(    // 水平方向
             friendColor,
             startSq,
             eastOf,
@@ -1688,9 +1677,8 @@
             gameBoard1StoneRunsHorizontalArray,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_HORIZONTAL,
-            HAS_NOT_DEAD_CHECK
         );
-        checkGomokuRunsSingleLine(    // 垂直方向
+        checkRunsOneDirection(    // 垂直方向
             friendColor,
             startSq,
             northOf,
@@ -1698,9 +1686,8 @@
             gameBoard1StoneRunsVerticalArray,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_VERTICAL,
-            HAS_NOT_DEAD_CHECK
         );
-        checkGomokuRunsSingleLine(    // バロック対角線方向
+        checkRunsOneDirection(    // バロック対角線方向
             friendColor,
             startSq,
             northeastOf,
@@ -1708,9 +1695,8 @@
             gameBoard1StoneRunsBaroqueDiagonalArray,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
-            HAS_NOT_DEAD_CHECK
         );
-        checkGomokuRunsSingleLine(    // シニスター対角線方向
+        checkRunsOneDirection(    // シニスター対角線方向
             friendColor,
             startSq,
             southeastOf,
@@ -1718,7 +1704,6 @@
             gameBoard1StoneRunsSinisterDiagonalArray,
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_SINISTER_DIAGONAL,
-            HAS_NOT_DEAD_CHECK
         );
 
         //
@@ -1780,7 +1765,7 @@
         // + （途切れた）相手の石のつながりをチェックします +
         // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        function checkGomokuOpponentRuns(
+        function checkRunsOneDirectionOpponent(
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
             directionalRunsArray: Ref<number[]>,
@@ -1788,7 +1773,6 @@
             aliveDirection: number,
         ) : void {
             const opponentColor1 = opponentColor(friendColor);
-            const HAS_DEAD_CHECK = true;
             //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
 
             function checkOpponentOneWing(
@@ -1805,7 +1789,7 @@
                 );
                 //console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} friendStartSq=${friendStartSq} nextOpponentStartSq=${nextOpponentStartSq}`);
                 if (opponentStartSq != friendStartSq) {   // 移動距離 0 は自石なので、弾く
-                    checkGomokuRunsSingleLine(    // 水平方向
+                    checkRunsOneDirection(  // 任意の方向
                         opponentColor1,
                         opponentStartSq,
                         nextOf,
@@ -1813,8 +1797,13 @@
                         directionalRunsArray,
                         directionalStoneStateArray,
                         aliveDirection,
-                        HAS_DEAD_CHECK
                     );
+
+                    // ++++++++++++++++++++++
+                    // + ［死に石］チェック +
+                    // ++++++++++++++++++++++
+
+                    checkOpponentDeadStones(friendColor, startSq, directionalRunsArray);
                 }
             }
 
@@ -1825,7 +1814,7 @@
             checkOpponentOneWing(startSq, backOf, nextOf);
         }
 
-        checkGomokuOpponentRuns(    // 水平方向
+        checkRunsOneDirectionOpponent(    // 水平方向
             eastOf,
             westOf,
             gameBoard1StoneRunsHorizontalArray,
@@ -1833,7 +1822,7 @@
             STONE_STATE_ALIVE_HORIZONTAL,
         );
 
-        checkGomokuOpponentRuns(    // 垂直方向
+        checkRunsOneDirectionOpponent(    // 垂直方向
             southOf,
             northOf,
             gameBoard1StoneRunsVerticalArray,
@@ -1841,7 +1830,7 @@
             STONE_STATE_ALIVE_VERTICAL,
         );
 
-        checkGomokuOpponentRuns(    // バロック対角線方向
+        checkRunsOneDirectionOpponent(    // バロック対角線方向
             northeastOf,
             southwestOf,
             gameBoard1StoneRunsBaroqueDiagonalArray,
@@ -1849,7 +1838,7 @@
             STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
         );
 
-        checkGomokuOpponentRuns(    // シニスター対角線方向
+        checkRunsOneDirectionOpponent(    // シニスター対角線方向
             southeastOf,
             northwestOf,
             gameBoard1StoneRunsSinisterDiagonalArray,
@@ -1922,7 +1911,7 @@
     /**
      * ［死に飛び石］判定
      * 
-     * 着手点、順ウィング、逆ウィングを合わせて長さが５に満たないとき、［死に飛び石］だ。
+     * ［飛び石］の長さが５に満たないとき、［死に飛び石］だ。
      */
     function checkDeadRuns(
         friendColor: number,
@@ -1938,7 +1927,7 @@
             nextOf,
             backOf,
         );
-        return runs.length < 5;
+        return runs.length < GO_LENGTH;
     }
 
 
@@ -1985,6 +1974,7 @@
 
     /**
      * 死に石の判定対象となるのは：
+     * 
      * +--+--+--+--+--+--+--+--+--+
      * |15|  |  |  |11|  |  |  | 7|
      * +--+--+--+--+--+--+--+--+--+
@@ -2004,6 +1994,7 @@
      * +--+--+--+--+--+--+--+--+--+
      * |23|  |  |  |27|  |  |  |31|
      * +--+--+--+--+--+--+--+--+--+
+     * 
      * 👆 x を自分の着手とするとき、上記の数字（xを含まない）の位置にある相手の石が対象。
      * この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
      */
