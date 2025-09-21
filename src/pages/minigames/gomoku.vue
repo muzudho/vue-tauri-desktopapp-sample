@@ -1523,7 +1523,7 @@
                 if (5<=aliveLength) {   // ［五］ができていたら
                     for(let i:number=window; i<friendWindowEnd; i++){
                         const sq = friendSqMap[i];
-                        directionalStoneStateArray.value[sq] = aliveDirection;
+                        directionalStoneStateArray.value[sq] |= aliveDirection; // 論理和
                     }
                 }
             }
