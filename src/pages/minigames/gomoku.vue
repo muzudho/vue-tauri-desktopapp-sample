@@ -142,11 +142,13 @@
                         :key="file"
                         :style="{
                             position: 'absolute',
-                            left: `${file * 32 + 8}px`,
+                            left: `${file * 32 + 6}px`,
                             top: '510px',
+                            width: '20px',
                             color: 'white',
                             fontSize: '24px',
                             zIndex: 200,
+                            textAlign: 'center',
                         }"
                     >{{ gameBoard1FileNameArray[file - 1] }}</span>
 
@@ -1017,6 +1019,15 @@
 
 
     /**
+     * TODO: sq を符号に変換
+     * @param sq 
+     */
+    function sqToCode(sq: number) : string {
+        return `${sq}`
+    }
+
+
+    /**
      * 石を置く
      * @param sq 
      * @param color 
@@ -1025,6 +1036,9 @@
         if (!gameBoard1StoneClickable.value(sq)) {  // 石を置けないマスなら
             return false;
         }
+
+        // sq を符号に変換したい。
+        console.log(`DEBUG: [putStone] code=${sqToCode(sq)}`);
 
         gameBoard1StoneColorArray.value[sq] = color;
         checkGomokuRuns(sq);    // 石のつながりをチェックします
