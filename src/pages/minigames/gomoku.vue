@@ -433,12 +433,115 @@
     }
     const gameBoard1StoneStateArray = ref<Array<number>>(new Array(gameBoard1Area.value).fill(STONE_STATE_NONE));
 
+    // ボタンの背景画像（のタイル位置の矩形）
     const gameBoard1SquareSrcTilemapRect = computed<
         (sq: number)=>Rectangle
     >(()=>{
         return (sq: number)=>{
 
-            function getRunsKey(
+            // ++++++++++++++++
+            // + 死に石タイル +
+            // ++++++++++++++++
+
+            if ((gameBoard1StoneStateArray.value[sq] & STONE_STATE_DEAD) == STONE_STATE_DEAD) {
+                function getKey(sq: number) : string {
+                    if (isNorthwestCorner(sq)) {    // 左上隅
+                        return 'bgDead-gridLines-06';
+                    }
+                    
+                    if (isNortheastCorner(sq)) {    // 右上隅
+                        return 'bgDead-gridLines-12';
+                    }
+
+                    if (isSouthwestCorner(sq)) {    // 左下隅
+                        return 'bgDead-gridLines-03';
+                    }
+                    
+                    if (isSoutheastCorner(sq)) {    // 右下隅
+                        return 'bgDead-gridLines-09';
+                    }
+                    
+                    if (isNorthEdge(sq)) {  // 上辺
+                        return 'bgDead-gridLines-14';
+                    }
+                    
+                    if (isWestEdge(sq)) {    // 左辺
+                        return 'bgDead-gridLines-07';
+                    }
+
+                    if (isEastEdge(sq)) {    // 右辺
+                        return 'bgDead-gridLines-13';
+                    }
+                    
+                    if (isSouthEdge(sq)) {  // 下辺
+                        return 'bgDead-gridLines-11';
+                    }
+
+                    // 盤中
+                    return 'bgDead-gridLines-15';
+                }
+
+                return gameBoard1SourceTilemap1Frames[getKey(sq)];
+            }
+
+            // ++++++++++++++++
+            // + 生き石タイル +
+            // ++++++++++++++++
+
+            if (isAliveStone(sq)) {
+                function getKey(sq: number) : string {
+                    if (isNorthwestCorner(sq)) {    // 左上隅
+                        return 'vacantLand-skyBlueMarker-gridLines-06';
+                    }
+                    
+                    if (isNortheastCorner(sq)) {    // 右上隅
+                        return 'vacantLand-skyBlueMarker-gridLines-12';
+                    }
+
+                    if (isSouthwestCorner(sq)) {    // 左下隅
+                        return 'vacantLand-skyBlueMarker-gridLines-03';
+                    }
+                    
+                    if (isSoutheastCorner(sq)) {    // 右下隅
+                        return 'vacantLand-skyBlueMarker-gridLines-09';
+                    }
+                    
+                    if (isNorthEdge(sq)) {  // 上辺
+                        return 'vacantLand-skyBlueMarker-gridLines-14';
+                    }
+                    
+                    if (isWestEdge(sq)) {    // 左辺
+                        return 'vacantLand-skyBlueMarker-gridLines-07';
+                    }
+
+                    if (isEastEdge(sq)) {    // 右辺
+                        return 'vacantLand-skyBlueMarker-gridLines-13';
+                    }
+                    
+                    if (isSouthEdge(sq)) {  // 下辺
+                        return 'vacantLand-skyBlueMarker-gridLines-11';
+                    }
+
+                    // 盤中
+                    return 'vacantLand-skyBlueMarker-gridLines-15';
+                }
+
+                return gameBoard1SourceTilemap1Frames[getKey(sq)];
+            }
+
+            // ++++++++++++++++
+            // + 飛び石タイル +
+            // ++++++++++++++++
+
+            // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
+            const conn = Math.max(
+                gameBoard1StoneRunsHorizontalArray.value[sq], // 水平
+                gameBoard1StoneRunsVerticalArray.value[sq],   // 垂直
+                gameBoard1StoneRunsBaroqueDiagonalArray.value[sq],    // バロック対角線
+                gameBoard1StoneRunsSinisterDiagonalArray.value[sq],   // シニスター対角線
+            );
+
+            function getKey(
                 sq: number,
                 conn: number,
             ) : string {
@@ -556,107 +659,7 @@
                 );
             }
 
-
-            function getKeyOfSolidLine(sq: number) : string {
-                // ［生き石］
-                if (isAliveStone(sq)) {
-                    if (isNorthwestCorner(sq)) {    // 左上隅
-                        return 'vacantLand-skyBlueMarker-gridLines-06';
-                    }
-                    
-                    if (isNortheastCorner(sq)) {    // 右上隅
-                        return 'vacantLand-skyBlueMarker-gridLines-12';
-                    }
-
-                    if (isSouthwestCorner(sq)) {    // 左下隅
-                        return 'vacantLand-skyBlueMarker-gridLines-03';
-                    }
-                    
-                    if (isSoutheastCorner(sq)) {    // 右下隅
-                        return 'vacantLand-skyBlueMarker-gridLines-09';
-                    }
-                    
-                    if (isNorthEdge(sq)) {  // 上辺
-                        return 'vacantLand-skyBlueMarker-gridLines-14';
-                    }
-                    
-                    if (isWestEdge(sq)) {    // 左辺
-                        return 'vacantLand-skyBlueMarker-gridLines-07';
-                    }
-
-                    if (isEastEdge(sq)) {    // 右辺
-                        return 'vacantLand-skyBlueMarker-gridLines-13';
-                    }
-                    
-                    if (isSouthEdge(sq)) {  // 下辺
-                        return 'vacantLand-skyBlueMarker-gridLines-11';
-                    }
-
-                    // 盤中
-                    return 'vacantLand-skyBlueMarker-gridLines-15';
-                    
-                // ［死に石］
-                } else if ((gameBoard1StoneStateArray.value[sq] & STONE_STATE_DEAD) == STONE_STATE_DEAD) {
-                    if (isNorthwestCorner(sq)) {    // 左上隅
-                        return 'bgDead-gridLines-06';
-                    }
-                    
-                    if (isNortheastCorner(sq)) {    // 右上隅
-                        return 'bgDead-gridLines-12';
-                    }
-
-                    if (isSouthwestCorner(sq)) {    // 左下隅
-                        return 'bgDead-gridLines-03';
-                    }
-                    
-                    if (isSoutheastCorner(sq)) {    // 右下隅
-                        return 'bgDead-gridLines-09';
-                    }
-                    
-                    if (isNorthEdge(sq)) {  // 上辺
-                        return 'bgDead-gridLines-14';
-                    }
-                    
-                    if (isWestEdge(sq)) {    // 左辺
-                        return 'bgDead-gridLines-07';
-                    }
-
-                    if (isEastEdge(sq)) {    // 右辺
-                        return 'bgDead-gridLines-13';
-                    }
-                    
-                    if (isSouthEdge(sq)) {  // 下辺
-                        return 'bgDead-gridLines-11';
-                    }
-
-                    // 盤中
-                    return 'bgDead-gridLines-15';
-                }
-
-                // ［どちらでもない］
-                return '';
-            }
-
-
-            // （途切れず）連続する石判定
-            let buttonImageKey = getKeyOfSolidLine(sq);
-            if (buttonImageKey != ''){
-                return gameBoard1SourceTilemap1Frames[buttonImageKey];
-            }
-
-            // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
-            const conn = Math.max(
-                gameBoard1StoneRunsHorizontalArray.value[sq], // 水平
-                gameBoard1StoneRunsVerticalArray.value[sq],   // 垂直
-                gameBoard1StoneRunsBaroqueDiagonalArray.value[sq],    // バロック対角線
-                gameBoard1StoneRunsSinisterDiagonalArray.value[sq],   // シニスター対角線
-            );            
-            buttonImageKey = getRunsKey(
-                sq,
-                conn
-            );
-            //console.log(`sq=${sq} key=${key} gameBoard1SourceTilemap1Frames[key]=${gameBoard1SourceTilemap1Frames[key]}`);
-            return gameBoard1SourceTilemap1Frames[buttonImageKey];
+            return gameBoard1SourceTilemap1Frames[getKey( sq, conn)];
         };
     });
     const gameBoard1SquareBackgroundPosition = computed<
