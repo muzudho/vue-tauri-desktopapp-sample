@@ -736,27 +736,6 @@
         'bgDead-gridLines-09'                   : {top: 1*gh + 3*h, left: 2*gw + 2*w, width: w, height: h},
     };
 
-    // /**
-    //  * 相手の石に隣接するマスだ
-    //  * @param sq 
-    //  */
-    // function isAdjacentToOpponentStone(sq: number) : boolean {
-    //     const northSq = northOf(sq);
-    //     const eastSq = eastOf(sq);
-    //     const southSq = southOf(sq);
-    //     const westSq = westOf(sq);
-    //     const northColor = northSq != -1 ? gameBoard1StoneColorArray.value[northSq] : 0;
-    //     const eastColor = eastSq != -1 ? gameBoard1StoneColorArray.value[eastSq] : 0;
-    //     const southColor = southSq != -1 ? gameBoard1StoneColorArray.value[southSq] : 0;
-    //     const westColor = westSq != -1 ? gameBoard1StoneColorArray.value[westSq] : 0;
-    //     const opponentColor1 = opponentColor(gameBoard1Turn.value);
-    //     return northColor == opponentColor1
-    //         || eastColor == opponentColor1
-    //         || southColor == opponentColor1
-    //         || westColor == opponentColor1
-    //         ;
-    // }
-
 
     // ######################
     // # イベントハンドラー #
@@ -859,7 +838,7 @@
         // test
         const BLACK = 1;    // 自石の色
         const START_SQ = 7; // 着手点
-        const ONE_WING_MAX_LENGTH = 5;  // 片翼の最大長さ
+        const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
         const FWD_DIRECTION = eastOf; // 順方向
         const REV_DIRECTION = westOf; // 逆方向
         const oneWing = getOneWing(
@@ -1464,13 +1443,10 @@
             //
 
             const friendSqMap: number[] = new Array(9).fill(-1);    // ランズと［生き石］を判定するのに使う
-            const opponentSqMap: number[] = new Array(9).fill(-1);  // ［死に石］を判定するのに使う
             friendSqMap[4] = startSq;
-            opponentSqMap[4] = startSq;
 
             // 順ウィング
             let nextFriendLength = 0; // 0 ～ 4
-            let nextOpponentLength = 0; // 0 ～ 4
             let nextSq: number;  // 隣
             nextSq = startSq;  // 隣
             for(let i:number=5; i<9; i++){  // 順方向
@@ -1482,20 +1458,9 @@
                 friendSqMap[i] = nextSq;
                 nextFriendLength += 1;
             }
-            nextSq = startSq;  // 隣
-            for(let i:number=5; i<9; i++){  // 順方向
-                nextSq = nextOf(nextSq);
-                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == friendColor) {  // 盤外、または自石なら
-                    break;  // 探索終了
-                }
-                // 空点または相手石なら
-                opponentSqMap[i] = nextSq;
-                nextOpponentLength += 1;
-            }
 
             // 逆ウィング
             let backFriendLength = 0; // 0 ～ 4
-            let backOpponentLength = 0; // 0 ～ 4
             nextSq = startSq;  // 隣
             for(let i:number=3; 0<=i; i--){  // 逆方向
                 nextSq = backOf(nextSq);
@@ -1504,15 +1469,6 @@
                 }
                 friendSqMap[i] = nextSq;
                 backFriendLength += 1;
-            }
-            nextSq = startSq;  // 隣
-            for(let i:number=3; 0<=i; i--){  // 逆方向
-                nextSq = backOf(nextSq);
-                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == friendColor) {
-                    break;
-                }
-                opponentSqMap[i] = nextSq;
-                backOpponentLength += 1;
             }
             //console.log(`DEBUG: [Single Line] squareMap: ${friendSqMap[0]} ${friendSqMap[1]} ${friendSqMap[2]} ${friendSqMap[3]} ${friendSqMap[4]} ${friendSqMap[5]} ${friendSqMap[6]} ${friendSqMap[7]} ${friendSqMap[8]}`);
 
@@ -1555,28 +1511,45 @@
                 }
             }
 
-            // ［死に石］判定
+            // ++++++++++++++++++
+            // + ［死に石］判定 +
+            // ++++++++++++++++++
+
             if (hasDeadCheck) {
-                const startOpponentWindow = 4 - backOpponentLength;
-                for(let window:number=startOpponentWindow; window<5; window++){
-                    const opponentWindowEnd = Math.min(window+5, 5+nextOpponentLength); // end 自身を含まない
-                    const spaceLength = opponentWindowEnd - startOpponentWindow;
-                    // TODO （両ウィング合わせて）空点が５つ無いのなら、［死に石］確定。
-                    if (spaceLength < 5) {
-                        //console.log(`DEBUG: [Single Line > 死に石判定] spaceLength=${spaceLength} window=${window} windowEnd=${opponentWindowEnd}`);
-                        for(let i:number=window; i<opponentWindowEnd; i++){
-                            // 盤外、自分の石は含まない
-                            const sq = opponentSqMap[i];
-
-                            // FIXME: 空きマスは、自分と相手のどちらのものとも言えない（言える場合もあるが）から無視。
-                            if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
-                                continue;
-                            }
-
-                            directionalSolidLineArray.value[sq] = 'Dead';
-                        }
+                // 死に石の判定対象となるのは：
+                //
+                // +-+-+-+-+-+-+-+-+-+
+                // |t| | | |t| | | |t|
+                // +-+-+-+-+-+-+-+-+-+
+                // | |t| | |t| | |t| |
+                // +-+-+-+-+-+-+-+-+-+
+                // | | |t| |t| |t| | |
+                // +-+-+-+-+-+-+-+-+-+
+                // | | | |t|t|t| | | |
+                // +-+-+-+-+-+-+-+-+-+
+                // |t|t|t|t|x|t|t|t|t|
+                // +-+-+-+-+-+-+-+-+-+
+                // | | | |t|t|t| | | |
+                // +-+-+-+-+-+-+-+-+-+
+                // | | |t| |t| |t| | |
+                // +-+-+-+-+-+-+-+-+-+
+                // | |t| | |t| | |t| |
+                // +-+-+-+-+-+-+-+-+-+
+                // |t| | | |t| | | |t|
+                // +-+-+-+-+-+-+-+-+-+
+                //
+                // 👆 x を自分の着手とするとき、上記の t の位置にある相手の石が対象。
+                // この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
+                //
+                friendSqMap.forEach((sq, _index, _array)=>{
+                    const isDeadStone = checkDeadStone(
+                        opponentColor1,
+                        sq
+                    );
+                    if (isDeadStone) {
+                        directionalSolidLineArray.value[sq] = 'Dead';
                     }
-                }
+                });
             }
 
             // （９つの切り取りマスの）各マスのランズ数を確定する：
@@ -1844,7 +1817,7 @@
         const opponentColor1 = opponentColor(friendColor);
 
         let nextSq: number = startSq;;  // 隣
-        for(let i:number=0; i<maxLength; i++){  // 順方向
+        for(let i:number=0; i<maxLength; i++){
             nextSq = nextOf(nextSq);
             if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {  // 盤外、または相手の石なら
                 break;  // 探索終了
@@ -1951,6 +1924,48 @@
         );
         return horizontalIsDeadRuns && verticalIsDeadRuns && baroqueDiagonalIsDeadRuns && sinisterDiagonalIsDeadRuns;
     }
+
+
+    /**
+     * TODO: 以下の数字の位置のマス番号を取得。
+     * 
+     * +--+--+--+--+--+--+--+--+--+
+     * |16|  |  |  |12|  |  |  | 8|
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |15|  |  |11|  |  | 7|  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |14|  |10|  | 6|  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |  |13| 9| 5|  |  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |20|19|18|17| 0| 1| 2| 3| 4|
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |  |21|25|29|  |  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |  |22|  |26|  |30|  |  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |  |23|  |  |27|  |  |31|  |
+     * +--+--+--+--+--+--+--+--+--+
+     * |24|  |  |  |28|  |  |  |32|
+     * +--+--+--+--+--+--+--+--+--+
+     * 
+     * 👆 片翼の長さを 4、 [0]を自分の着手のマスとする。
+     * この図形に名前はないが、８叉路（eight-way intersection）とでも呼ぶとする。
+     * 
+     */
+    // function getEightWayIntersection(
+    //     friendColor: number,
+    //     startSq: number,
+    // ) : number[] {
+    //     const runs = getRuns(
+    //         friendColor,
+    //         startSq,
+    //         oneWingMaxLength,
+    //         nextOf,
+    //         backOf,
+    //     );
+
+    // }
 
 
     function farthestNextFrom(
