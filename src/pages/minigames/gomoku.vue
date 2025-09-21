@@ -1521,7 +1521,7 @@
      * @param directionalStoneStateArray 
      * @param aliveDirection 
      */
-    function checkRunsOneDirection(
+    function executeRunsOneDirection(
         friendColor: number,    // 自石の色
         startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
         nextOf: (sq: number)=>number,
@@ -1564,7 +1564,39 @@
 
         const windowRunsNum: number[] = new Array(5).fill(0);    // ウィンドウ別のランズ数
         const startFriendWindow = 4 - backFriendLength;
-        // ランズと［生き石］判定
+
+        // ++++++++++++++++++++++
+        // + ［飛び石］チェック +
+        // ++++++++++++++++++++++
+
+        for(let window:number=startFriendWindow; window<5; window++){
+            const friendWindowEnd = Math.min(window+5, 5+nextFriendLength); // end 自身を含まない
+            if (5 < friendWindowEnd - window) {   // TODO: 消す
+                console.log(`
+                    ERROR: [Single Line] startWindow=${startFriendWindow} window=${window} windowEnd=${friendWindowEnd} nextLength=${nextFriendLength}
+                    window+5=${window+5}
+                    5+nextLength=${5+nextFriendLength}
+                `);
+            }
+
+            for(let i:number=window; i<friendWindowEnd; i++){
+                // 盤外、相手の石は含まない
+                const sq = friendSqMap[i];
+
+                // 空きマスなら（連続は途切れるが）続行
+                if (gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY) {
+                    continue;
+                }
+
+                // 自石なら
+                windowRunsNum[window] += 1;
+            }
+        }
+
+        // ++++++++++++++++++
+        // + ［五］チェック +
+        // ++++++++++++++++++
+
         for(let window:number=startFriendWindow; window<5; window++){
             const friendWindowEnd = Math.min(window+5, 5+nextFriendLength); // end 自身を含まない
             if (5 < friendWindowEnd - window) {   // TODO: 消す
@@ -1587,7 +1619,6 @@
                 }
 
                 // 自石なら
-                windowRunsNum[window] += 1;
                 if (aliveContinuity) {
                     aliveLength += 1;
                 }
@@ -1604,61 +1635,51 @@
         // ++++++++++++++++++++++
         // + ［飛び石］チェック +
         // ++++++++++++++++++++++
+        checkRunsOneDirection(friendColor, friendSqMap, windowRunsNum, directionalRunsArray);
+    }
 
+    
+
+    function checkRunsOneDirection(
+        friendColor: number,    // 自石の色
+        friendSqMap: number[],
+        windowRunsNum: number[],
+        directionalRunsArray: Ref<number[]>,
+    ) : void {
         // （９つの切り取りマスの）各マスのランズ数を確定する：
-        let sq;
-        sq = friendSqMap[0];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
-            directionalRunsArray.value[sq] = windowRunsNum[0];
-        }
+        for(let i:number=0; i<9; i++) {
+            const sq = friendSqMap[i];
+            if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
+                //console.log(`DEBUG: [Single Line] windowRunsNum[0]=${windowRunsNum[0]}`);
+                if (i==0) {
+                    directionalRunsArray.value[sq] = windowRunsNum[0];
+                
+                } else if (i==1) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
 
-        sq = friendSqMap[1];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[1]=${windowRunsNum[1]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1]);
-        }
+                } else if (i==2) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
 
-        sq = friendSqMap[2];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[2]=${windowRunsNum[2]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2]);
-        }
+                } else if (i==3) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
 
-        sq = friendSqMap[3];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[3]=${windowRunsNum[3]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3]);
-        }
+                } else if (i==4) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
 
-        sq = friendSqMap[4];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[4]=${windowRunsNum[4]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[0], windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
-        }
+                } else if (i==5) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
 
-        sq = friendSqMap[5];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[5]=${windowRunsNum[5]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[1], windowRunsNum[2], windowRunsNum[3], windowRunsNum[4])
-        }
+                } else if (i==6) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
 
-        sq = friendSqMap[6];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[6]=${windowRunsNum[6]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[2], windowRunsNum[3], windowRunsNum[4]);
-        }
+                } else if (i==7) {
+                    directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
 
-        sq = friendSqMap[7];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[7]=${windowRunsNum[7]}`);
-            directionalRunsArray.value[sq] = Math.max(windowRunsNum[3], windowRunsNum[4]);
-        }
+                } else {
+                    directionalRunsArray.value[sq] = windowRunsNum[4];
 
-        sq = friendSqMap[8];
-        if (sq != -1 && gameBoard1StoneColorArray.value[sq] == friendColor) {  // 自石なら
-            //console.log(`DEBUG: [Single Line] windowRunsNum[8]=${windowRunsNum[8]}`);
-            directionalRunsArray.value[sq] = windowRunsNum[4];
+                }
+            }
         }
     }
 
@@ -1669,7 +1690,7 @@
     function checkRuns(startSq: number) : void {
         const friendColor = gameBoard1Turn.value;   // 自石の色
         // 自石のつながりを更新します
-        checkRunsOneDirection(    // 水平方向
+        executeRunsOneDirection(    // 水平方向
             friendColor,
             startSq,
             eastOf,
@@ -1678,7 +1699,7 @@
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_HORIZONTAL,
         );
-        checkRunsOneDirection(    // 垂直方向
+        executeRunsOneDirection(    // 垂直方向
             friendColor,
             startSq,
             northOf,
@@ -1687,7 +1708,7 @@
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_VERTICAL,
         );
-        checkRunsOneDirection(    // バロック対角線方向
+        executeRunsOneDirection(    // バロック対角線方向
             friendColor,
             startSq,
             northeastOf,
@@ -1696,7 +1717,7 @@
             gameBoard1StoneStateArray,
             STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
         );
-        checkRunsOneDirection(    // シニスター対角線方向
+        executeRunsOneDirection(    // シニスター対角線方向
             friendColor,
             startSq,
             southeastOf,
@@ -1789,7 +1810,7 @@
                 );
                 //console.log(`DEBUG: [Opponent Wing 1] opponentColor1=${opponentColor1} friendStartSq=${friendStartSq} nextOpponentStartSq=${nextOpponentStartSq}`);
                 if (opponentStartSq != friendStartSq) {   // 移動距離 0 は自石なので、弾く
-                    checkRunsOneDirection(  // 任意の方向
+                    executeRunsOneDirection(  // 任意の方向
                         opponentColor1,
                         opponentStartSq,
                         nextOf,
