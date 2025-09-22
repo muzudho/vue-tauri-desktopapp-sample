@@ -542,7 +542,7 @@
     const STONE_STATE_ALIVE_VERTICAL = 2;
     const STONE_STATE_ALIVE_BAROQUE_DIAGONAL = 4;
     const STONE_STATE_ALIVE_SINISTER_DIAGONAL = 8;
-    const STONE_STATE_DEAD = 16;
+    const RUNS_SLIDING_WINDOW_DEAD = -1;
     function isAliveStone(sq: number) : boolean {
         return 1 <= gameBoard1StoneStateArray.value[sq] && gameBoard1StoneStateArray.value[sq] <= 15;
     }
@@ -558,7 +558,13 @@
             // + 死に石タイル +
             // ++++++++++++++++
 
-            if ((gameBoard1StoneStateArray.value[sq] & STONE_STATE_DEAD) == STONE_STATE_DEAD) {
+            if (
+                // 4方向が［死に方向］なら、［死に石］だ
+                gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                && gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                && gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                && gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+            ) {
                 function getKey(sq: number) : string {
                     if (isNorthwestCorner(sq)) {    // 左上隅
                         return 'bgDead-gridLines-06';
@@ -1013,11 +1019,11 @@
         );
         console.log(`TEST: isDeadRuns=${isDeadRuns1} color=${BLACK}`);
 
-        const aStoneIsDead1 = aStoneIsDead(
+        const aStoneIsDeadHorizontal1 = aStoneIsDeadHorizontal(
             BLACK,
             START_SQ,
         );
-        console.log(`TEST: aStoneIsDead1=${aStoneIsDead1} color=${BLACK} startSq=${START_SQ}`);
+        console.log(`TEST: aStoneIsDeadHorizontal1=${aStoneIsDeadHorizontal1} color=${BLACK} startSq=${START_SQ}`);
         // if (isDeadStone1) {
         // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
         // }
@@ -1590,7 +1596,6 @@
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
             directionalRunsArray: Ref<number[]>,
-            directionalStoneStateArray: Ref<number[]>,
         ) : void {
             //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
 
@@ -1607,7 +1612,7 @@
                 directionalRunsArray.value[opponentStoneSq] = maxAmount;
             });
             // 相手の［死に石］を記入
-            someStonesCheckDead(nextOpponentStones, opponentColor1, directionalStoneStateArray);
+            stonesCheckDead(nextOpponentStones, opponentColor1);
 
 
             backOpponentStones.forEach((opponentStoneSq, _index, _array)=>{
@@ -1623,7 +1628,7 @@
                 directionalRunsArray.value[opponentStoneSq] = maxAmount;
             });
             // 相手の［死に石］を記入
-            someStonesCheckDead(backOpponentStones, opponentColor1, directionalStoneStateArray);
+            stonesCheckDead(backOpponentStones, opponentColor1);
         }
 
         // 水平方向
@@ -1647,7 +1652,6 @@
             eastOf,
             westOf,
             gameBoard1StonesMaxAmountOfSlidingWindowHorizontal,
-            gameBoard1StoneStateArray,
         );
 
         // 垂直方向
@@ -1671,7 +1675,6 @@
             southOf,
             northOf,
             gameBoard1StonesMaxAmountOfSlidingWindowVertical,
-            gameBoard1StoneStateArray,
         );
 
         // バロック対角線方向
@@ -1695,7 +1698,6 @@
             northeastOf,
             southwestOf,
             gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal,
-            gameBoard1StoneStateArray,
         );
 
         // シニスター対角線方向
@@ -1719,7 +1721,6 @@
             southeastOf,
             northwestOf,
             gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal,
-            gameBoard1StoneStateArray,
         );
     }
 
@@ -1751,14 +1752,25 @@
      * @param friendColor 
      * @param directionalStoneStateArray 
      */
-    function someStonesCheckDead(
+    function stonesCheckDead(
         locations: number[],
         friendColor: number,
-        directionalStoneStateArray: Ref<Array<number>>,
     ) : void {
         locations.forEach((sq, _index, _array)=>{
-            if (aStoneIsDead(friendColor, sq)) {
-                directionalStoneStateArray.value[sq] = STONE_STATE_DEAD;
+            if (aStoneIsDeadHorizontal(friendColor, sq)) {
+                gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] = RUNS_SLIDING_WINDOW_DEAD;    // 論理和ではなくて、上書き。
+            }
+
+            if (aStoneIsDeadVertical(friendColor, sq)) {
+                gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] = RUNS_SLIDING_WINDOW_DEAD;
+            }
+
+            if (aStoneIsDeadBaroqueDiagonal(friendColor, sq)) {
+                gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] = RUNS_SLIDING_WINDOW_DEAD;
+            }
+
+            if (aStoneIsDeadSinisterDiagonal(friendColor, sq)) {
+                gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] = RUNS_SLIDING_WINDOW_DEAD;
             }
         });
     }
@@ -2446,11 +2458,11 @@
 
 
     /**
-     * ［死に石］判定
-     * 
-     * ４方向（水平、垂直、バロック対角線、シニスター対角線）全てが［死に飛び石］のとき、［死に石］だ。
+     * ［死に方向］判定
+     * @param friendColor 
+     * @param aStoneSq 
      */
-    function aStoneIsDead(
+    function aStoneIsDeadHorizontal(
         friendColor: number,
         aStoneSq: number,
     ) : boolean {
@@ -2463,6 +2475,22 @@
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
+
+        return isDeadCapacity(horizontalFriendRunsCapacity);
+    }
+
+
+    /**
+     * ［死に方向］判定
+     * @param friendColor 
+     * @param aStoneSq 
+     */
+    function aStoneIsDeadVertical(
+        friendColor: number,
+        aStoneSq: number,
+    ) : boolean {
+        const opponentColor1 = opponentColor(friendColor);
+
         const verticalFriendRunsCapacity = locateRunsCapacity(
             aStoneSq,
             southOf,
@@ -2470,6 +2498,22 @@
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
+
+        return isDeadCapacity(verticalFriendRunsCapacity);
+    }
+
+
+    /**
+     * ［死に方向］判定
+     * @param friendColor 
+     * @param aStoneSq 
+     */
+    function aStoneIsDeadBaroqueDiagonal(
+        friendColor: number,
+        aStoneSq: number,
+    ) : boolean {
+        const opponentColor1 = opponentColor(friendColor);
+
         const baroqueDiagonalFriendRunsCapacity = locateRunsCapacity(
             aStoneSq,
             northeastOf,
@@ -2477,6 +2521,22 @@
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
+
+        return isDeadCapacity(baroqueDiagonalFriendRunsCapacity);
+    }
+
+
+    /**
+     * ［死に方向］判定
+     * @param friendColor 
+     * @param aStoneSq 
+     */
+    function aStoneIsDeadSinisterDiagonal(
+        friendColor: number,
+        aStoneSq: number,
+    ) : boolean {
+        const opponentColor1 = opponentColor(friendColor);
+
         const sinisterDiagonalFriendRunsCapacity = locateRunsCapacity(
             aStoneSq,
             southeastOf,
@@ -2485,10 +2545,7 @@
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
 
-        return isDeadCapacity(horizontalFriendRunsCapacity)
-            && isDeadCapacity(verticalFriendRunsCapacity)
-            && isDeadCapacity(baroqueDiagonalFriendRunsCapacity)
-            && isDeadCapacity(sinisterDiagonalFriendRunsCapacity);
+        return isDeadCapacity(sinisterDiagonalFriendRunsCapacity);;
     }
 
 
