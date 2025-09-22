@@ -1611,8 +1611,6 @@
                 );
                 directionalRunsArray.value[opponentStoneSq] = maxAmount;
             });
-            // 相手の［死に石］を記入
-            stonesCheckDead(nextOpponentStones, opponentColor1);
 
 
             backOpponentStones.forEach((opponentStoneSq, _index, _array)=>{
@@ -1627,8 +1625,6 @@
                 );
                 directionalRunsArray.value[opponentStoneSq] = maxAmount;
             });
-            // 相手の［死に石］を記入
-            stonesCheckDead(backOpponentStones, opponentColor1);
         }
 
         // 水平方向
@@ -1653,6 +1649,9 @@
             westOf,
             gameBoard1StonesMaxAmountOfSlidingWindowHorizontal,
         );
+        // 相手の［死に石］を記入
+        stonesCheckDeadHorizontal(nextOpponentStones, opponentColor1);
+        stonesCheckDeadHorizontal(backOpponentStones, opponentColor1);
 
         // 垂直方向
         nextOpponentStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
@@ -1676,6 +1675,9 @@
             northOf,
             gameBoard1StonesMaxAmountOfSlidingWindowVertical,
         );
+        // 相手の［死に石］を記入
+        stonesCheckDeadVertical(nextOpponentStones, opponentColor1);
+        stonesCheckDeadVertical(backOpponentStones, opponentColor1);
 
         // バロック対角線方向
         nextOpponentStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
@@ -1699,6 +1701,9 @@
             southwestOf,
             gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal,
         );
+        // 相手の［死に石］を記入
+        stonesCheckDeadBaroqueDiagonal(nextOpponentStones, opponentColor1);
+        stonesCheckDeadBaroqueDiagonal(backOpponentStones, opponentColor1);
 
         // シニスター対角線方向
         nextOpponentStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
@@ -1722,6 +1727,9 @@
             northwestOf,
             gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal,
         );
+        // 相手の［死に石］を記入
+        stonesCheckDeadSinisterDiagonal(nextOpponentStones, opponentColor1);
+        stonesCheckDeadSinisterDiagonal(backOpponentStones, opponentColor1);
     }
 
 
@@ -1752,7 +1760,7 @@
      * @param friendColor 
      * @param directionalStoneStateArray 
      */
-    function stonesCheckDead(
+    function stonesCheckDeadHorizontal(
         locations: number[],
         friendColor: number,
     ) : void {
@@ -1760,15 +1768,57 @@
             if (aStoneIsDeadHorizontal(friendColor, sq)) {
                 gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] = RUNS_SLIDING_WINDOW_DEAD;    // 論理和ではなくて、上書き。
             }
+        });
+    }
 
+
+    /**
+     * ［死に石］の記入
+     * @param locations 
+     * @param friendColor 
+     * @param directionalStoneStateArray 
+     */
+    function stonesCheckDeadVertical(
+        locations: number[],
+        friendColor: number,
+    ) : void {
+        locations.forEach((sq, _index, _array)=>{
             if (aStoneIsDeadVertical(friendColor, sq)) {
                 gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] = RUNS_SLIDING_WINDOW_DEAD;
             }
+        });
+    }
 
+
+    /**
+     * ［死に石］の記入
+     * @param locations 
+     * @param friendColor 
+     * @param directionalStoneStateArray 
+     */
+    function stonesCheckDeadBaroqueDiagonal(
+        locations: number[],
+        friendColor: number,
+    ) : void {
+        locations.forEach((sq, _index, _array)=>{
             if (aStoneIsDeadBaroqueDiagonal(friendColor, sq)) {
                 gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] = RUNS_SLIDING_WINDOW_DEAD;
             }
+        });
+    }
 
+
+    /**
+     * ［死に石］の記入
+     * @param locations 
+     * @param friendColor 
+     * @param directionalStoneStateArray 
+     */
+    function stonesCheckDeadSinisterDiagonal(
+        locations: number[],
+        friendColor: number,
+    ) : void {
+        locations.forEach((sq, _index, _array)=>{
             if (aStoneIsDeadSinisterDiagonal(friendColor, sq)) {
                 gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] = RUNS_SLIDING_WINDOW_DEAD;
             }
