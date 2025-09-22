@@ -1584,7 +1584,7 @@
         // + （途切れた）相手の石のつながりをチェックします +
         // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        function opponentSumStonesCheckRunsOneDirection(
+        function opponentStonesCheckRunsOneDirection(
             nextOpponentStones: number[],
             backOpponentStones: number[],
             nextOf: (sq: number)=>number,
@@ -1641,7 +1641,7 @@
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(friendColor, sq),   // break 条件
         );
-        opponentSumStonesCheckRunsOneDirection(
+        opponentStonesCheckRunsOneDirection(
             nextOpponentStones,
             backOpponentStones,
             eastOf,
@@ -1665,7 +1665,7 @@
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(friendColor, sq),   // break 条件
         );
-        opponentSumStonesCheckRunsOneDirection(
+        opponentStonesCheckRunsOneDirection(
             nextOpponentStones,
             backOpponentStones,
             southOf,
@@ -1685,11 +1685,11 @@
         backOpponentStones = locateDirectionalLine(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
-            northeastOf,
+            southwestOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(friendColor, sq),   // break 条件
         );
-        opponentSumStonesCheckRunsOneDirection(
+        opponentStonesCheckRunsOneDirection(
             nextOpponentStones,
             backOpponentStones,
             northeastOf,
@@ -1709,11 +1709,11 @@
         backOpponentStones = locateDirectionalLine(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
-            southeastOf,
+            northwestOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(friendColor, sq),   // break 条件
         );
-        opponentSumStonesCheckRunsOneDirection(
+        opponentStonesCheckRunsOneDirection(
             nextOpponentStones,
             backOpponentStones,
             southeastOf,
