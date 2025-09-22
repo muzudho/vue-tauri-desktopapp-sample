@@ -992,34 +992,32 @@
         );
         console.log(`TEST: oneWing=${oneWing}`);
 
-        const runs = locateRuns(
+        const testNineRuns1 = locateRunsCapacity(
             START_SQ,
-            ONE_WING_MAX_LENGTH,
             FWD_DIRECTION,
             REV_DIRECTION,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(OPPONENT_COLOR, sq), // break 条件
         );
-        console.log(`TEST: runs=${runs}`);
+        console.log(`TEST: testRuns1=${testNineRuns1}`);
 
-        const runsSquares = locateRuns(
+        const testNineRunsSquares1 = locateRunsCapacity(
             START_SQ,
-            ONE_WING_MAX_LENGTH,
             FWD_DIRECTION,
             REV_DIRECTION,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(OPPONENT_COLOR, sq), // break 条件
         );
-        const isDeadRuns1 = isDeadRuns(
-            runsSquares,
+        const isDeadRuns1 = isDeadCapacity(
+            testNineRunsSquares1,
         );
         console.log(`TEST: isDeadRuns=${isDeadRuns1} color=${BLACK}`);
 
-        const isDeadStone1 = isDeadStone(
+        const aStoneIsDead1 = aStoneIsDead(
             BLACK,
             START_SQ,
         );
-        console.log(`TEST: isDeadStone1=${isDeadStone1} color=${BLACK} startSq=${START_SQ}`);
+        console.log(`TEST: aStoneIsDead1=${aStoneIsDead1} color=${BLACK} startSq=${START_SQ}`);
         // if (isDeadStone1) {
         // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
         // }
@@ -1458,9 +1456,8 @@
     ) : void {
         const opponentColor1 = opponentColor(friendColor);
 
-        const runsSquares = locateRuns(
+        const runsNineSquares = locateRunsCapacity(
             startSq,
-            ONE_WING_MAX_LENGTH,
             nextOf,
             backOf,
             (_sq: number) => false,  // continue 条件
@@ -1479,7 +1476,7 @@
             continuityStones.length = 0;    // クリアー
         }
 
-        runsSquares.forEach((sq, _index, _array)=>{
+        runsNineSquares.forEach((sq, _index, _array)=>{
             // 盤外、相手の石は含まない
 
             // 自石なら
@@ -1593,6 +1590,7 @@
             nextOf: (sq: number)=>number,
             backOf: (sq: number)=>number,
             directionalRunsArray: Ref<number[]>,
+            directionalStoneStateArray: Ref<number[]>,
         ) : void {
             //console.log(`DEBUG: [Opponent Wing] startSq=${startSq} friendColor=${friendColor} opponentColor1=${opponentColor1}`);
 
@@ -1609,7 +1607,7 @@
                 directionalRunsArray.value[opponentStoneSq] = maxAmount;
             });
             // 相手の［死に石］を記入
-            someStonesCheckDead(nextOpponentStones, opponentColor1, directionalRunsArray);
+            someStonesCheckDead(nextOpponentStones, opponentColor1, directionalStoneStateArray);
 
 
             backOpponentStones.forEach((opponentStoneSq, _index, _array)=>{
@@ -1625,7 +1623,7 @@
                 directionalRunsArray.value[opponentStoneSq] = maxAmount;
             });
             // 相手の［死に石］を記入
-            someStonesCheckDead(backOpponentStones, opponentColor1, directionalRunsArray);
+            someStonesCheckDead(backOpponentStones, opponentColor1, directionalStoneStateArray);
         }
 
         // 水平方向
@@ -1649,6 +1647,7 @@
             eastOf,
             westOf,
             gameBoard1StonesMaxAmountOfSlidingWindowHorizontal,
+            gameBoard1StoneStateArray,
         );
 
         // 垂直方向
@@ -1672,6 +1671,7 @@
             southOf,
             northOf,
             gameBoard1StonesMaxAmountOfSlidingWindowVertical,
+            gameBoard1StoneStateArray,
         );
 
         // バロック対角線方向
@@ -1695,6 +1695,7 @@
             northeastOf,
             southwestOf,
             gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal,
+            gameBoard1StoneStateArray,
         );
 
         // シニスター対角線方向
@@ -1718,6 +1719,7 @@
             southeastOf,
             northwestOf,
             gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal,
+            gameBoard1StoneStateArray,
         );
     }
 
@@ -1755,11 +1757,7 @@
         directionalStoneStateArray: Ref<Array<number>>,
     ) : void {
         locations.forEach((sq, _index, _array)=>{
-            const isDeadStone1 = isDeadStone(
-                friendColor,
-                sq
-            );
-            if (isDeadStone1) {
+            if (aStoneIsDead(friendColor, sq)) {
                 directionalStoneStateArray.value[sq] = STONE_STATE_DEAD;
             }
         });
@@ -2297,11 +2295,12 @@
      * ［飛び石］取得
      * 
      * ［逆ウィング］の逆順、着手点、順ウィングを合わせたものが［飛び石］だ。
-     * @returns マス番号の配列
+     * ９マス以下。
+     * 
+     * @returns ９つのマスの番号の配列
      */
-    function locateRuns(
+    function locateRunsCapacity(
         startSq: number,    // 着手点
-        oneWingMaxLength: number,
         nextOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
         isContinue: (sq: number)=>boolean,
@@ -2311,7 +2310,7 @@
         // 順ウィング
         const fwdWing = locateDirectionalLine(
             startSq,
-            oneWingMaxLength,
+            ONE_WING_MAX_LENGTH,
             nextOf,
             isContinue,
             isBreak,
@@ -2320,7 +2319,7 @@
         // 逆ウィング
         const revWing = locateDirectionalLine(
             startSq,
-            oneWingMaxLength,
+            ONE_WING_MAX_LENGTH,
             backOf,
             isContinue,
             isBreak,
@@ -2451,61 +2450,45 @@
      * 
      * ４方向（水平、垂直、バロック対角線、シニスター対角線）全てが［死に飛び石］のとき、［死に石］だ。
      */
-    function isDeadStone(
+    function aStoneIsDead(
         friendColor: number,
-        startSq: number,
+        aStoneSq: number,
     ) : boolean {
         const opponentColor1 = opponentColor(friendColor);
 
-        let runsSquares = locateRuns(
-            startSq,
-            ONE_WING_MAX_LENGTH,
+        const horizontalFriendRunsCapacity = locateRunsCapacity(
+            aStoneSq,
             eastOf,
             westOf,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
-        const horizontalIsDeadRuns = isDeadRuns(
-            runsSquares,
-        );
-
-        runsSquares = locateRuns(
-            startSq,
-            ONE_WING_MAX_LENGTH,
+        const verticalFriendRunsCapacity = locateRunsCapacity(
+            aStoneSq,
             southOf,
             northOf,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
-        const verticalIsDeadRuns = isDeadRuns(
-            runsSquares,
-        );
-
-        runsSquares = locateRuns(
-            startSq,
-            ONE_WING_MAX_LENGTH,
+        const baroqueDiagonalFriendRunsCapacity = locateRunsCapacity(
+            aStoneSq,
             northeastOf,
             southwestOf,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
-        const baroqueDiagonalIsDeadRuns = isDeadRuns(
-            runsSquares,
-        );
-
-        runsSquares = locateRuns(
-            startSq,
-            ONE_WING_MAX_LENGTH,
+        const sinisterDiagonalFriendRunsCapacity = locateRunsCapacity(
+            aStoneSq,
             southeastOf,
             northwestOf,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),   // break 条件
         );
-        const sinisterDiagonalIsDeadRuns = isDeadRuns(
-            runsSquares,
-        );
 
-        return horizontalIsDeadRuns && verticalIsDeadRuns && baroqueDiagonalIsDeadRuns && sinisterDiagonalIsDeadRuns;
+        return isDeadCapacity(horizontalFriendRunsCapacity)
+            && isDeadCapacity(verticalFriendRunsCapacity)
+            && isDeadCapacity(baroqueDiagonalFriendRunsCapacity)
+            && isDeadCapacity(sinisterDiagonalFriendRunsCapacity);
     }
 
 
@@ -2534,10 +2517,10 @@
      * 
      * ［飛び石］の長さが５に満たないとき、［死に飛び石］だ。
      */
-    function isDeadRuns(
-        runsSquares: number[],
+    function isDeadCapacity(
+        runsCapacity: number[],
     ) : boolean {
-        return runsSquares.length < GO_LENGTH;
+        return runsCapacity.length < GO_LENGTH;
     }
 
 </script>
