@@ -236,45 +236,107 @@
     </section>
     
     デバッグ：<br/>
-    Runs:<br/>
-    <span
-        v-for="i in range(0,15)"
-        :key="i"
+    <p>マス番号:</p>
+    <div
+        class="mb-6"
     >
-        {{ gameBoard1StonesMaxAmountOfSlidingWindowHorizontal[i] }}&nbsp;
-    </span><br/>
-    <span
-        v-for="i in range(15,30)"
-        :key="i"
-    >
-        {{ gameBoard1StonesMaxAmountOfSlidingWindowHorizontal[i] }}&nbsp;
-    </span><br/>
-
-    マス番号:<br/>
-    <p
-        v-for="rank in range(0, 15)"
-        :key="rank"
-    >
-        <span
-            v-for="sq in range(rank * 15, (rank + 1) * 15)"
-            :key="sq"
+        <p
+            v-for="rank in range(0, 15)"
+            :key="rank"
         >
-            {{ sq.toString().padStart(3, '0') }}&nbsp;
-        </span><br/>
-    </p>
+            <span
+                v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                :key="sq"
+            >
+                {{ sq.toString().padStart(3, '0') }}&nbsp;
+            </span><br/>
+        </p>
+    </div>
     
-    石の状態:<br/>
-    <p
-        v-for="rank in range(0, 15)"
-        :key="rank"
+    <p>石の状態:</p>
+    <div
+        class="mb-6"
     >
-        <span
-            v-for="sq in range(rank * 15, (rank + 1) * 15)"
-            :key="sq"
+        <p
+            v-for="rank in range(0, 15)"
+            :key="rank"
         >
-            {{ gameBoard1StoneStateArray[sq].toString().padStart(2, '0') }}&nbsp;
-        </span><br/>
-    </p>
+            <span
+                v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                :key="sq"
+            >
+                {{ gameBoard1StoneStateArray[sq].toString().padStart(2, '0') }}&nbsp;
+            </span><br/>
+        </p>
+    </div>
+
+    <p>［飛び石スライディング・ウィンドウ］の最大量　＞　水平方向:</p>
+    <div
+        class="mb-6"
+    >
+        <p
+            v-for="rank in range(0, 15)"
+            :key="rank"
+        >
+            <span
+                v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                :key="sq"
+            >
+                {{ gameBoard1StonesMaxAmountOfSlidingWindowHorizontal[sq].toString().padStart(2, '0') }}&nbsp;
+            </span><br/>
+        </p>
+    </div>
+
+    <p>［飛び石スライディング・ウィンドウ］の最大量　＞　垂直方向:</p>
+    <div
+        class="mb-6"
+    >
+        <p
+            v-for="rank in range(0, 15)"
+            :key="rank"
+        >
+            <span
+                v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                :key="sq"
+            >
+                {{ gameBoard1StonesMaxAmountOfSlidingWindowVertical[sq].toString().padStart(2, '0') }}&nbsp;
+            </span><br/>
+        </p>
+    </div>
+
+    <p>［飛び石スライディング・ウィンドウ］の最大量　＞　バロック対角線:</p>
+    <div
+        class="mb-6"
+    >
+        <p
+            v-for="rank in range(0, 15)"
+            :key="rank"
+        >
+            <span
+                v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                :key="sq"
+            >
+                {{ gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal[sq].toString().padStart(2, '0') }}&nbsp;
+            </span><br/>
+        </p>
+    </div>
+
+    <p>［飛び石スライディング・ウィンドウ］の最大量　＞　シニスター対角線:</p>
+    <div
+        class="mb-6"
+    >
+        <p
+            v-for="rank in range(0, 15)"
+            :key="rank"
+        >
+            <span
+                v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                :key="sq"
+            >
+                {{ gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal[sq].toString().padStart(2, '0') }}&nbsp;
+            </span><br/>
+        </p>
+    </div>
 
 
     <button-to-back-to-top class="sec-1 pt-6"/>
@@ -951,6 +1013,13 @@
             (sq: number) => isOutOfBoardOrOpponentStone(BLACK, sq), // break 条件
         );
         console.log(`TEST: eightWayIntersection=${eightWayIntersection} color=${BLACK} startSq=${START_SQ} ONE_WING_MAX_LENGTH=${ONE_WING_MAX_LENGTH}`);
+
+        const inputArray : number[] = locateForInputArray(
+            START_SQ,
+            FWD_DIRECTION,
+            REV_DIRECTION,
+        );
+        console.log(`TEST: inputArray=${inputArray}`);
     }
 
 
@@ -1041,25 +1110,44 @@
 
     /**
      * 石を置く
-     * @param sq 
+     * @param moveSq 
      * @param color 
      */
-    function putStone(sq: number, color: number) : boolean {
-        if (!gameBoard1StoneClickable.value(sq)) {  // 石を置けないマスなら
+    function putStone(moveSq: number, color: number) : boolean {
+        if (!gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
             return false;
         }
 
         // sq を符号に変換したい。
-        console.log(`DEBUG: [putStone] code=${sqToCode(sq)}`);
+        console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)}`);
 
-        gameBoard1StoneColorArray.value[sq] = color;    // 盤上に石を置く
+        gameBoard1StoneColorArray.value[moveSq] = color;    // 盤上に石を置く
 
-        runsStonesCheck(sq);  // 石のつながりをチェックします
+        const friendColor = gameBoard1Turn.value;   // 自石の色
+        const opponentColor1 = opponentColor(friendColor);
+
+        // チェックすべき自石が置いてあるマス。起点を含まない
+        const friendStoneLocations = locateEightWayIntersectionFriends(
+            moveSq,
+            ONE_WING_MAX_LENGTH,
+            (sq: number) => isEmptyPoint(sq),   // continue 条件
+            (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),    // break 条件
+        );
+        // ［飛び石スライディング・ウィンドウ］の最大数を記入します
+        [
+            moveSq,
+            ...friendStoneLocations
+        ].forEach((targetSq, _index, _array)=>{
+            aStoneCheckMaxAmountOfRunsSlidingWindowAllDirections(friendColor, targetSq);
+        });
+
+        // ［割り打ち］処理
+        // TODO executeWariuchi(friendColor, moveSq);
 
         // ［五］の処理
         fiveStonesProcessingAllDirections(
             color,  // 自石の色
-            sq,
+            moveSq,
         );
 
         gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // （チェック後に）相手の色に変更
@@ -1340,51 +1428,10 @@
     }
 
 
-    function getSlidingWindowArray(
-        inputArray: number[],
-        friendColor: number,    // 自石の色
-    ) : number[][] {
-        const slidingWindowArray : number[][] = [[],];
-        const opponentColor1 = opponentColor(friendColor);
-
-        for(let slidingWindowNum: number=0; slidingWindowNum < 5; slidingWindowNum++){
-            const backWingArray : number[] = [];
-            const nextWingArray : number[] = [];
-
-            // 逆ウィング（起点を含まない）を戻る
-            for(let i:number=3; 0<=i; i--){ // 3 ～ 0
-                const backSq = inputArray[i];
-                if (backSq == -1 || gameBoard1StoneColorArray.value[backSq] == opponentColor1) {    // 盤外、または敵の石
-                    break;
-                }
-
-                backWingArray.push(backSq);
-            }
-
-            // 順ウィング（起点を含まない）を進む
-            for(let i:number=5; i<9; i++){  // 5 ～ 8
-                const nextSq = inputArray[i];
-                if (nextSq == -1 || gameBoard1StoneColorArray.value[nextSq] == opponentColor1) {    // 盤外、または敵の石
-                    break;
-                }
-
-                nextWingArray.push(nextSq);
-            }
-
-            slidingWindowArray.push([
-                ...backWingArray.reverse(),
-                inputArray[4],
-                ...nextWingArray
-            ])
-        }
-
-        return slidingWindowArray;
-    }
-
     /**
      * 各石の［飛び石］の長さの数え上げ
      */
-    function countingMaxAmountOfSlidingWindowPerDirection(
+    function countingMaxAmountOfSlidingWindow(
         slidingWindowArray: number[][],
         friendColor: number,    // 自石の色
     ) : number {
@@ -1601,36 +1648,6 @@
     }
 
     
-    /**
-     * ［飛び石］について、石のつながりをチェックします
-     * @param moveSq 石を置いたマス番号
-     */
-    function runsStonesCheck(moveSq: number) : void {
-        const friendColor = gameBoard1Turn.value;   // 自石の色
-
-        // チェックすべき自石が置いてあるマス。起点を含まない
-        const friendStoneLocations = locateEightWayIntersectionFriends(
-            moveSq,
-            ONE_WING_MAX_LENGTH,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrOpponentStone(friendColor, sq),   // break 条件
-        );
-
-        [
-            moveSq,
-            ...friendStoneLocations
-        ].forEach((sq, _index, _array)=>{
-            // ［飛び石スライディング・ウィンドウ］の［最大量］の処理
-            // 自分
-            aStoneExecuteMaxAmountOfRunsSlidingWindowAllDirectionsFriends(friendColor, sq);
-
-        });
-
-        // ［割り打ち］処理
-        executeWariuchi(friendColor, moveSq);
-    }
-
-
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + サブルーチン　＞　ゲーム盤１　＞　１つの石を処理 +
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -1641,7 +1658,7 @@
      * @param friendColor 
      * @param aStoneSq 
      */
-    function aStoneExecuteMaxAmountOfRunsSlidingWindowAllDirectionsFriends(
+    function aStoneCheckMaxAmountOfRunsSlidingWindowAllDirections(
         friendColor: number,
         aStoneSq: number
     ) : void {
@@ -1886,17 +1903,18 @@
             backOf,
         );
 
-        const slidingWindowArray: number[][] = getSlidingWindowArray(
+        const opponentColor1 = opponentColor(friendColor);
+        const slidingWindowArray: number[][] = locateSlidingWindowArray(
             inputArray,
-            friendColor,    // 自石の色
+            (sq: number) => isOutOfBoardOrColor(opponentColor1, sq),    // break 条件
         );
 
-        const maxAmountOfSlidingWindowPerDirection = countingMaxAmountOfSlidingWindowPerDirection(
+        const maxAmountOfSlidingWindow = countingMaxAmountOfSlidingWindow(
             slidingWindowArray,
             friendColor
         );
 
-        return maxAmountOfSlidingWindowPerDirection;
+        return maxAmountOfSlidingWindow;
     }
 
 
@@ -2299,6 +2317,47 @@
         );
 
         return [...revWing.reverse(), startSq, ...fwdWing]; // 向きを揃えて１つの配列にする
+    }
+
+
+    function locateSlidingWindowArray(
+        inputArray: number[],
+        breakCondition: (sq: number) => boolean,
+    ) : number[][] {
+        const slidingWindowArray : number[][] = [];
+
+        for(let slidingWindowNum: number=0; slidingWindowNum < 5; slidingWindowNum++){
+            const backWingArray : number[] = [];
+            const nextWingArray : number[] = [];
+
+            // 逆ウィング（起点を含まない）を戻る
+            for(let i:number=3; 0<=i; i--){ // 3 ～ 0
+                const backSq = inputArray[i];
+                if (breakCondition(backSq)) {
+                    break;
+                }
+
+                backWingArray.push(backSq);
+            }
+
+            // 順ウィング（起点を含まない）を進む
+            for(let i:number=5; i<9; i++){  // 5 ～ 8
+                const nextSq = inputArray[i];
+                if (breakCondition(nextSq)) {
+                    break;
+                }
+
+                nextWingArray.push(nextSq);
+            }
+
+            slidingWindowArray.push([
+                ...backWingArray.reverse(),
+                inputArray[4],
+                ...nextWingArray
+            ])
+        }
+
+        return slidingWindowArray;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++
