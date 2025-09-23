@@ -657,18 +657,18 @@
         if (gridNumber == 7) {return [2, 0];}
         if (gridNumber == 15) {return [2, 1];}
         if (gridNumber == 13) {return [2, 2];}
-        if (gridNumber == 3) {return [2, 0];}
-        if (gridNumber == 11) {return [2, 1];}
+        if (gridNumber == 3) {return [3, 0];}
+        if (gridNumber == 11) {return [3, 1];}
         // if (gridNumber == 9) {
-        return [2, 2];
+        return [3, 2];
         //}
     }
 
 
     function getByBxAmount(bYWhiteAmount:number, bXBlackAmount:number) : [number, number] {
         return [
-            Math.max(5, bYWhiteAmount + 1),
-            Math.max(5, bXBlackAmount + 1),
+            Math.min(5, bYWhiteAmount),
+            Math.min(6, bXBlackAmount + 1)  // Dead 用に下駄を１履かせている
         ];
     }
 
@@ -684,8 +684,19 @@
         const [cY, cX] = getCColorCode(cColor);
         const [bY, bX] = getByBxAmount(bYWhiteAmount, bXBlackAmount);
         const [aY, aX] = getAyAxByGridNumber(aGridNumber);
+        const imageKey = `board-color-mark-grid-${cY}${cX}-${bY}${bX}-${aY}${aX}`;
 
-        return `board-color-mark-grid-${cY}${cX}-${bY}${bX}-${aY}${aX}`;
+        if (cY<0 || 1<cY) { console.log(`ERROR: cY=${cY}`)}
+        if (cX<0 || 1<cX) { console.log(`ERROR: cX=${cX}`)}
+        if (cX==1 && 0==cY) { console.log(`ERROR: cY=${cY} cx=${cX}`)}
+        if (bY<0 || 5<bY) { console.log(`ERROR: bY=${bY}`)}
+        if (bX<0 || 6<bX) { console.log(`ERROR: bX=${bX}`)}
+        if (bX==0 && (1<=bY && bY<=5)) { console.log(`ERROR: bY=${bY} bX=${bX}`)}
+        if (aY<0 || 4<aY) { console.log(`ERROR: aY=${aY}`)}
+        if (aX<0 || 3<aX) { console.log(`ERROR: aX=${aX}`)}
+        if ((1<=aX && aX<=2) && aY==0) { console.log(`ERROR: aY=${aY} aX=${aX}`)}
+
+        return imageKey;
     }
 
 
@@ -780,15 +791,18 @@
         const [cY, cX] = getCColorCode(cColor);
         const [bY, bX] = getByBxAmount(bYWhiteAmount, bXBlackAmount);
         const [aY, aX] = getAyAxByGridNumber(aGridNumber);
+        const imageKey = makeImageKey(cColor, bYWhiteAmount, bXBlackAmount, aGridNumber);
+        const rect = {
+            left: cX*bWidth + bX*aWidth + aX*tileBoard1TileWidth.value,
+            top: cY*bHeight + bY*aHeight + aY*tileBoard1TileHeight.value,
+            width: tileBoard1TileWidth.value,
+            height: tileBoard1TileHeight.value
+        };
+        console.log(`DEBUG: [makeKeyAndRectangle] imageKey=${imageKey}`);
 
         return [
-            makeImageKey(cColor, bYWhiteAmount, bXBlackAmount, aGridNumber),
-            {
-                left: cX*bWidth + bX*aWidth + aX*tileBoard1TileWidth.value,
-                top: cY*bHeight + bY*aHeight + aY*tileBoard1TileHeight.value,
-                width: tileBoard1TileWidth.value,
-                height: tileBoard1TileHeight.value
-            }
+            imageKey,
+            rect,
         ];
     }
 
