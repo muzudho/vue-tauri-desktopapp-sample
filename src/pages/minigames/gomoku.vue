@@ -558,58 +558,80 @@
     >(()=>{
         return (sq: number)=>{
 
-            const stoneColor = gameBoard1StoneColorArray.value[sq];
+            try {
+                const stoneColor = gameBoard1StoneColorArray.value[sq];
 
-            function getBoardGridNumber(sq: number) : number {
-                if (isNorthwestCorner(sq)) {return 6;}  // 左上隅
-                if (isNortheastCorner(sq)) {return 12;} // 右上隅
-                if (isSouthwestCorner(sq)) {return 3;}  // 左下隅
-                if (isSoutheastCorner(sq)) {return 9}   // 右下隅
-                if (isNorthEdge(sq))    {return 14;}    // 上辺
-                if (isWestEdge(sq)) {return 7;} // 左辺
-                if (isEastEdge(sq)) {return 13;}    // 右辺
-                if (isSouthEdge(sq))    {return 11;}    // 下辺
-                return 15;  // 盤中
+                function getBoardGridNumber(sq: number) : number {
+                    if (isNorthwestCorner(sq)) {return 6;}  // 左上隅
+                    if (isNortheastCorner(sq)) {return 12;} // 右上隅
+                    if (isSouthwestCorner(sq)) {return 3;}  // 左下隅
+                    if (isSoutheastCorner(sq)) {return 9}   // 右下隅
+                    if (isNorthEdge(sq))    {return 14;}    // 上辺
+                    if (isWestEdge(sq)) {return 7;} // 左辺
+                    if (isEastEdge(sq)) {return 13;}    // 右辺
+                    if (isSouthEdge(sq))    {return 11;}    // 下辺
+                    return 15;  // 盤中
+                }
+
+                // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
+                const conn = Math.max(
+                    gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq], // 水平
+                    gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq],   // 垂直
+                    gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq],    // バロック対角線
+                    gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq],   // シニスター対角線
+                );
+
+                // function getMarkerCode(conn: number) : string {
+                //     if (conn <= 0) { return '00'; }
+                //     if (conn <= 1) { return '01'; }
+                //     if (conn <= 2) { return '02'; }
+                //     if (conn <= 3) { return '03'; }
+
+                //     if (isAliveStone(sq)) {
+                //         return '05';
+                //     }
+
+                //     if (
+                //         // TODO 4方向が［死に方向］なら、［死に石］だ
+                //         gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                //         && gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                //         && gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                //         && gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+                //     ) {
+                //         return '06';
+                //     }
+
+                //     return '04';    // 連続していることが確認できなければ［五］にはなりません。
+                // }
+
+                // const markerCode = getMarkerCode(conn);
+
+                const bXBlackAmount = conn; // FIXME: 黒石と白石を分けること
+                const bYWhiteAmount = conn; // FIXME: 黒石と白石を分けること
+
+                // `-${markerCode}-${}`
+               
+
+                const aGridNumber = getBoardGridNumber(sq);
+                const imageKey = makeImageKey(stoneColor, bYWhiteAmount, bXBlackAmount, aGridNumber);
+                
+                if (!(imageKey in gameBoard1SourceTilemap1Frames)) {
+                    console.log(`ERROR: imageKey=${imageKey} stoneColor=${stoneColor} bYWhiteAmount=${bYWhiteAmount} bXBlackAmount=${bXBlackAmount} aGridNumber=${aGridNumber}`);
+                }
+
+                return gameBoard1SourceTilemap1Frames[imageKey];
+
+            } catch (err: unknown) {
+                const errorMessage = err instanceof Error ? err.message : String(err);
+                console.error('GomokuError:', errorMessage);
+                return {
+                    left: 0,
+                    top: 0,
+                    width: 0,
+                    height: 0,
+                } as Rectangle;
+
             }
-
-            // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
-            const conn = Math.max(
-                gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq], // 水平
-                gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq],   // 垂直
-                gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq],    // バロック対角線
-                gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq],   // シニスター対角線
-            );
-
-            // function getMarkerCode(conn: number) : string {
-            //     if (conn <= 0) { return '00'; }
-            //     if (conn <= 1) { return '01'; }
-            //     if (conn <= 2) { return '02'; }
-            //     if (conn <= 3) { return '03'; }
-
-            //     if (isAliveStone(sq)) {
-            //         return '05';
-            //     }
-
-            //     if (
-            //         // TODO 4方向が［死に方向］なら、［死に石］だ
-            //         gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-            //         && gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-            //         && gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-            //         && gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-            //     ) {
-            //         return '06';
-            //     }
-
-            //     return '04';    // 連続していることが確認できなければ［五］にはなりません。
-            // }
-
-            // const markerCode = getMarkerCode(conn);
-
-            const bXBlackAmount = conn; // FIXME: 黒石と白石を分けること
-            const bYWhiteAmount = conn; // FIXME: 黒石と白石を分けること
-
-            // `-${markerCode}-${}`
-            return gameBoard1SourceTilemap1Frames[makeImageKey(stoneColor, bYWhiteAmount, bXBlackAmount, getBoardGridNumber(sq))];
         };
     });
     const gameBoard1SquareBackgroundPosition = computed<
@@ -643,6 +665,14 @@
     }
 
 
+    function getByBxAmount(bYWhiteAmount:number, bXBlackAmount:number) : [number, number] {
+        return [
+            Math.max(5, bYWhiteAmount + 1),
+            Math.max(5, bXBlackAmount + 1),
+        ];
+    }
+
+
     function getCColorCode(dColor: number) : [number, number] {
         if (dColor == COLOR_EMPTY) {return [0, 0];}
         if (dColor == COLOR_BLACK) {return [1, 0];}
@@ -650,9 +680,9 @@
     }
 
 
-    function makeImageKey(cColor: number, bYWhiteAmount:number, bXBlackAmount:number, aGridNumber:number) : string {        const [cY, cX] = getCColorCode(cColor);
-        const bY = bYWhiteAmount + 1;
-        const bX = bXBlackAmount + 1;
+    function makeImageKey(cColor: number, bYWhiteAmount:number, bXBlackAmount:number, aGridNumber:number) : string {
+        const [cY, cX] = getCColorCode(cColor);
+        const [bY, bX] = getByBxAmount(bYWhiteAmount, bXBlackAmount);
         const [aY, aX] = getAyAxByGridNumber(aGridNumber);
 
         return `board-color-mark-grid-${cY}${cX}-${bY}${bX}-${aY}${aX}`;
@@ -748,8 +778,7 @@
     function makeKeyAndRectangle(cColor: number, bYWhiteAmount:number, bXBlackAmount:number, aGridNumber:number) : [string, Rectangle] {
 
         const [cY, cX] = getCColorCode(cColor);
-        const bY = bYWhiteAmount + 1;
-        const bX = bXBlackAmount + 1;
+        const [bY, bX] = getByBxAmount(bYWhiteAmount, bXBlackAmount);
         const [aY, aX] = getAyAxByGridNumber(aGridNumber);
 
         return [
@@ -765,8 +794,8 @@
 
     const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {};
     for(let cColor=0; cColor<3; cColor++) {
-        for(let bYWhiteAmount=-1; bYWhiteAmount<5; bYWhiteAmount++) {
-            for(let bXBlackAmount=-1; bXBlackAmount<5; bXBlackAmount++) {
+        for(let bYWhiteAmount=-1; bYWhiteAmount<6; bYWhiteAmount++) {
+            for(let bXBlackAmount=-1; bXBlackAmount<6; bXBlackAmount++) {
                 [0, 6, 14, 12, 7, 15, 13, 3, 11, 9].forEach((aGridNumber, _index, _array)=>{
                     const [key, rect] = makeKeyAndRectangle(cColor, bYWhiteAmount, bXBlackAmount, aGridNumber);
                     gameBoard1SourceTilemap1Frames[key] = rect;
@@ -874,66 +903,67 @@
         player1Input[" "] = true;
 
         gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
-        console.log(`TEST: gameBoard1Turn.value=${gameBoard1Turn.value}`);
+
+        // console.log(`TEST: gameBoard1Turn.value=${gameBoard1Turn.value}`);
         
-        // test
-        const TURN_COLOR = gameBoard1Turn.value;   // 手番の色
-        const OPPOSITE_TURN_COLOR = oppositeTurnColor(TURN_COLOR);
-        const START_SQ = 7; // 着手点
-        const FWD_DIRECTION = eastOf; // 順方向
-        const REV_DIRECTION = westOf; // 逆方向
-        const oneWing = locateDirectionalLine(
-            START_SQ,
-            ONE_WING_MAX_LENGTH,
-            FWD_DIRECTION,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
-        );
-        console.log(`TEST: oneWing=${oneWing}`);
+        // // test
+        // const TURN_COLOR = gameBoard1Turn.value;   // 手番の色
+        // const OPPOSITE_TURN_COLOR = oppositeTurnColor(TURN_COLOR);
+        // const START_SQ = 7; // 着手点
+        // const FWD_DIRECTION = eastOf; // 順方向
+        // const REV_DIRECTION = westOf; // 逆方向
+        // const oneWing = locateDirectionalLine(
+        //     START_SQ,
+        //     ONE_WING_MAX_LENGTH,
+        //     FWD_DIRECTION,
+        //     (_sq: number) => false,  // continue 条件
+        //     (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
+        // );
+        // console.log(`TEST: oneWing=${oneWing}`);
 
-        const testNineRuns1 = locateRunsCapacity(
-            START_SQ,
-            FWD_DIRECTION,
-            REV_DIRECTION,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
-        );
-        console.log(`TEST: testRuns1=${testNineRuns1}`);
+        // const testNineRuns1 = locateRunsCapacity(
+        //     START_SQ,
+        //     FWD_DIRECTION,
+        //     REV_DIRECTION,
+        //     (_sq: number) => false,  // continue 条件
+        //     (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
+        // );
+        // console.log(`TEST: testRuns1=${testNineRuns1}`);
 
-        const testNineRunsSquares1 = locateRunsCapacity(
-            START_SQ,
-            FWD_DIRECTION,
-            REV_DIRECTION,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
-        );
-        const isDeadRuns1 = isDeadCapacity(
-            testNineRunsSquares1,
-        );
-        console.log(`TEST: isDeadRuns=${isDeadRuns1} TURN_COLOR=${TURN_COLOR}`);
+        // const testNineRunsSquares1 = locateRunsCapacity(
+        //     START_SQ,
+        //     FWD_DIRECTION,
+        //     REV_DIRECTION,
+        //     (_sq: number) => false,  // continue 条件
+        //     (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
+        // );
+        // const isDeadRuns1 = isDeadCapacity(
+        //     testNineRunsSquares1,
+        // );
+        // console.log(`TEST: isDeadRuns=${isDeadRuns1} TURN_COLOR=${TURN_COLOR}`);
 
-        const aStoneIsDeadHorizontal1 = oppositeTurnStoneIsDeadHorizontal(
-            START_SQ,
-        );
-        console.log(`TEST: aStoneIsDeadHorizontal1=${aStoneIsDeadHorizontal1} TURN_COLOR=${TURN_COLOR} startSq=${START_SQ}`);
-        // if (isDeadStone1) {
-        // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
-        // }
+        // const aStoneIsDeadHorizontal1 = oppositeTurnStoneIsDeadHorizontal(
+        //     START_SQ,
+        // );
+        // console.log(`TEST: aStoneIsDeadHorizontal1=${aStoneIsDeadHorizontal1} TURN_COLOR=${TURN_COLOR} startSq=${START_SQ}`);
+        // // if (isDeadStone1) {
+        // // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
+        // // }
 
-        const controlWays = locateRadialEightWays(
-            START_SQ,
-            ONE_WING_MAX_LENGTH,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
-        );
-        console.log(`TEST: controlWays=${controlWays} TURN_COLOR=${TURN_COLOR} startSq=${START_SQ} ONE_WING_MAX_LENGTH=${ONE_WING_MAX_LENGTH}`);
+        // const controlWays = locateRadialEightWays(
+        //     START_SQ,
+        //     ONE_WING_MAX_LENGTH,
+        //     (_sq: number) => false,  // continue 条件
+        //     (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
+        // );
+        // console.log(`TEST: controlWays=${controlWays} TURN_COLOR=${TURN_COLOR} startSq=${START_SQ} ONE_WING_MAX_LENGTH=${ONE_WING_MAX_LENGTH}`);
 
-        const wings : number[] = locateForWings(
-            START_SQ,
-            FWD_DIRECTION,
-            REV_DIRECTION,
-        );
-        console.log(`TEST: wings=${wings}`);
+        // const wings : number[] = locateForWings(
+        //     START_SQ,
+        //     FWD_DIRECTION,
+        //     REV_DIRECTION,
+        // );
+        // console.log(`TEST: wings=${wings}`);
     }
 
 
@@ -1033,7 +1063,7 @@
         }
 
         // sq を符号に変換したい。
-        console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)}`);
+        console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)} moveSq=${moveSq} turnColor=${turnColor}`);
 
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
