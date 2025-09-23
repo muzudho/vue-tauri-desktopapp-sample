@@ -985,7 +985,7 @@
         // test
         const BLACK = 1;    // 自石の色
         const TURN_COLOR = BLACK;   // 手番の色
-        const OPPOSITE_TURN_COLOR = oppositeSiteColor(TURN_COLOR);
+        const OPPOSITE_TURN_COLOR = oppositeTurnColor(TURN_COLOR);
         const START_SQ = 7; // 着手点
         const FWD_DIRECTION = eastOf; // 順方向
         const REV_DIRECTION = westOf; // 逆方向
@@ -1027,7 +1027,7 @@
         // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
         // }
 
-        const fourWay = locateFourWayFriends(
+        const fourWay = locateFourWay(
             START_SQ,
             ONE_WING_MAX_LENGTH,
             (_sq: number) => false,  // continue 条件
@@ -1145,17 +1145,17 @@
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
         // チェックすべき自石が置いてあるマス。起点を含まない
-        const friendStoneLocations = locateFourWayFriends(
+        const turnStoneLocations = locateFourWay(
             moveSq,
             ONE_WING_MAX_LENGTH,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(oppositeSiteColor(gameBoard1Turn.value), sq),   // break 条件
+            (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(gameBoard1Turn.value), sq),   // break 条件
         );
 
         // ［飛び石スライディング・ウィンドウ］の最大数を記入します
         [
             moveSq,
-            ...friendStoneLocations
+            ...turnStoneLocations
         ].forEach((resonanceSq, _index, _array)=>{
             // 着手した石及び、着手によって影響を受ける自石を resonance と呼ぶことにして、それらのつながりを更新します
 
@@ -1209,7 +1209,7 @@
             moveSq,
         );
 
-        gameBoard1Turn.value = oppositeSiteColor(gameBoard1Turn.value); // （チェック後に）相手の色に変更
+        gameBoard1Turn.value = oppositeTurnColor(gameBoard1Turn.value); // （チェック後に）相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[turnColor] += 1;
         gameBoard1PassCount.value = 0;  // リセット
@@ -1385,7 +1385,7 @@
      * 相手の石の色に変更
      * @param color 自分の石の色
      */
-    function oppositeSiteColor(color: number) : number {
+    function oppositeTurnColor(color: number) : number {
         return color % 2 + 1;   // 1 なら 2 に、2 なら 1 に
     }
 
@@ -1449,7 +1449,7 @@
             foreOf,
             backOf,
             (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(oppositeSiteColor(gameBoard1Turn.value), sq),   // break 条件
+            (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(gameBoard1Turn.value), sq),   // break 条件
         );
 
         const continuityStones: number[] = [];  // 連続している自石のマス番号
@@ -1486,14 +1486,14 @@
      */
     function countingMaxAmountOfSlidingWindow(
         slidingWindowArray: number[][],
-        friendColor: number,    // 自石の色
+        color: number,
     ) : number {
         let maxCount = 0;
 
         slidingWindowArray.forEach((slidingWindow, _index, _array)=>{
             let count = 0;
             slidingWindow.forEach((sq, _index, _array)=>{
-                if (gameBoard1StoneColorArray.value[sq] == friendColor) {
+                if (gameBoard1StoneColorArray.value[sq] == color) {
                     count += 1;
                 }
             });
@@ -1564,7 +1564,7 @@
     function executeWariuchi(
         moveSq: number
     ) : void {
-        const oppositeTurnColor1 = oppositeSiteColor(gameBoard1Turn.value);
+        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
 
         // ++++++++++++++++++++++++++++++++++++++++++++++++++
         // + （途切れた）相手の石のつながりをチェックします +
@@ -1715,7 +1715,7 @@
     function gamePass() : void {
         gameBoard1Times.value += 1;
         gameBoard1PassCount.value += 1;
-        gameBoard1Turn.value = oppositeSiteColor(gameBoard1Turn.value);
+        gameBoard1Turn.value = oppositeTurnColor(gameBoard1Turn.value);
     }
 
 
@@ -1748,8 +1748,6 @@
     /**
      * ［死に石］の記入
      * @param locations 
-     * @param friendColor 
-     * @param directionalStoneStateArray 
      */
     function oppositeTurnStonesCheckDeadVertical(
         locations: number[],
@@ -1765,8 +1763,6 @@
     /**
      * ［死に石］の記入
      * @param locations 
-     * @param friendColor 
-     * @param directionalStoneStateArray 
      */
     function oppositeTurnStonesCheckDeadBaroqueDiagonal(
         locations: number[],
@@ -1978,7 +1974,7 @@
         const maxAmountOfSlidingWindow = countingMaxAmountOfSlidingWindow(
             aStoneWingsLocateSlidingWindowArray(
                 locations,
-                (sq: number) => isOutOfBoardOrColor(oppositeSiteColor(color), sq),  // break 条件
+                (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(color), sq),  // break 条件
             ),
             color
         );
@@ -2237,7 +2233,7 @@
      * この図形に名前はないが、４ウェイ（4t-way）とでも呼ぶとする。
      * 
      */
-    function locateFourWayFriends(
+    function locateFourWay(
         startSq: number,
         oneWingMaxLength: number,
         isContinue: (sq: number)=>boolean, 
@@ -2469,13 +2465,12 @@
 
     /**
      * ［死に方向］判定
-     * @param friendColor 
      * @param aStoneSq 
      */
     function oppositeTurnStoneIsDeadHorizontal(
         aStoneSq: number,
     ) : boolean {
-        const horizontalFriendRunsCapacity = locateRunsCapacity(
+        const horizontalRunsCapacity = locateRunsCapacity(
             aStoneSq,
             eastOf,
             westOf,
@@ -2483,7 +2478,7 @@
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
 
-        return isDeadCapacity(horizontalFriendRunsCapacity);
+        return isDeadCapacity(horizontalRunsCapacity);
     }
 
 
@@ -2494,7 +2489,7 @@
     function oppositeTurnStoneIsDeadVertical(
         aStoneSq: number,
     ) : boolean {
-        const verticalFriendRunsCapacity = locateRunsCapacity(
+        const verticalRunsCapacity = locateRunsCapacity(
             aStoneSq,
             southOf,
             northOf,
@@ -2502,19 +2497,18 @@
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
 
-        return isDeadCapacity(verticalFriendRunsCapacity);
+        return isDeadCapacity(verticalRunsCapacity);
     }
 
 
     /**
      * ［死に方向］判定
-     * @param friendColor 
      * @param aStoneSq 
      */
     function oppositeTurnStoneIsDeadBaroqueDiagonal(
         aStoneSq: number,
     ) : boolean {
-        const baroqueDiagonalFriendRunsCapacity = locateRunsCapacity(
+        const baroqueDiagonalRunsCapacity = locateRunsCapacity(
             aStoneSq,
             northeastOf,
             southwestOf,
@@ -2522,19 +2516,18 @@
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
 
-        return isDeadCapacity(baroqueDiagonalFriendRunsCapacity);
+        return isDeadCapacity(baroqueDiagonalRunsCapacity);
     }
 
 
     /**
      * ［死に方向］判定
-     * @param friendColor 
      * @param aStoneSq 
      */
     function oppositeTurnStoneIsDeadSinisterDiagonal(
         aStoneSq: number,
     ) : boolean {
-        const sinisterDiagonalFriendRunsCapacity = locateRunsCapacity(
+        const sinisterDiagonalRunsCapacity = locateRunsCapacity(
             aStoneSq,
             southeastOf,
             northwestOf,
@@ -2542,13 +2535,12 @@
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
 
-        return isDeadCapacity(sinisterDiagonalFriendRunsCapacity);;
+        return isDeadCapacity(sinisterDiagonalRunsCapacity);;
     }
 
 
     /**
      * 空点か
-     * @param friendColor 
      * @param sq 
      */
     function isEmptyPoint(sq: number) : boolean {
@@ -2558,7 +2550,7 @@
 
     /**
      * 盤の外、または指定の石の色か
-     * @param friendColor 
+     * @param color 
      * @param sq 
      */
     function isOutOfBoardOrColor(color: number, sq: number) : boolean {
