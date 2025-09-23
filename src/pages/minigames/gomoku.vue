@@ -134,7 +134,10 @@
                             z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
                         "
                         @click="onGameBoard1Clicked(sq)"
-                    >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
+                    ></v-btn>
+                    <!--
+                        TODO 廃止： {{ gameBoard1StoneShapeArray[sq] }}
+                    -->
 
                     <!-- 筋の符号 -->
                     <span
@@ -378,7 +381,7 @@
     // + インポート　＞　アセット +
     // ++++++++++++++++++++++++++++
 
-    import spriteBoard001Png from '@/assets/img/references/Sprite_Board_001.png';
+    import spriteBoard001Png from '@/assets/img/references/202509__warabenture__21-0649-spriteBoard002-o1o0.png';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -496,7 +499,9 @@
     const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
     const GO_LENGTH = 5;    // ［五］の長さ
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
-    const COLOR_EMPTY = 0; // 空きマス。石の色無し。
+    const COLOR_EMPTY = 0; // 空きマス。石の色無し
+    const COLOR_BLACK = 1; // 黒石
+    const COLOR_WHITE = 2; // 白石
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
@@ -553,105 +558,19 @@
     >(()=>{
         return (sq: number)=>{
 
-            // ++++++++++++++++
-            // + 死に石タイル +
-            // ++++++++++++++++
+            const stoneColor = gameBoard1StoneColorArray.value[sq];
 
-            if (
-                // 4方向が［死に方向］なら、［死に石］だ
-                gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                && gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                && gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                && gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-            ) {
-                function getKey(sq: number) : string {
-                    if (isNorthwestCorner(sq)) {    // 左上隅
-                        return 'bgDead-gridLines-06';
-                    }
-                    
-                    if (isNortheastCorner(sq)) {    // 右上隅
-                        return 'bgDead-gridLines-12';
-                    }
-
-                    if (isSouthwestCorner(sq)) {    // 左下隅
-                        return 'bgDead-gridLines-03';
-                    }
-                    
-                    if (isSoutheastCorner(sq)) {    // 右下隅
-                        return 'bgDead-gridLines-09';
-                    }
-                    
-                    if (isNorthEdge(sq)) {  // 上辺
-                        return 'bgDead-gridLines-14';
-                    }
-                    
-                    if (isWestEdge(sq)) {    // 左辺
-                        return 'bgDead-gridLines-07';
-                    }
-
-                    if (isEastEdge(sq)) {    // 右辺
-                        return 'bgDead-gridLines-13';
-                    }
-                    
-                    if (isSouthEdge(sq)) {  // 下辺
-                        return 'bgDead-gridLines-11';
-                    }
-
-                    // 盤中
-                    return 'bgDead-gridLines-15';
-                }
-
-                return gameBoard1SourceTilemap1Frames[getKey(sq)];
+            function getBoardGridNumber(sq: number) : number {
+                if (isNorthwestCorner(sq)) {return 6;}  // 左上隅
+                if (isNortheastCorner(sq)) {return 12;} // 右上隅
+                if (isSouthwestCorner(sq)) {return 3;}  // 左下隅
+                if (isSoutheastCorner(sq)) {return 9}   // 右下隅
+                if (isNorthEdge(sq))    {return 14;}    // 上辺
+                if (isWestEdge(sq)) {return 7;} // 左辺
+                if (isEastEdge(sq)) {return 13;}    // 右辺
+                if (isSouthEdge(sq))    {return 11;}    // 下辺
+                return 15;  // 盤中
             }
-
-            // ++++++++++++++++
-            // + 生き石タイル +
-            // ++++++++++++++++
-
-            if (isAliveStone(sq)) {
-                function getKey(sq: number) : string {
-                    if (isNorthwestCorner(sq)) {    // 左上隅
-                        return 'vacantLand-skyBlueMarker-gridLines-06';
-                    }
-                    
-                    if (isNortheastCorner(sq)) {    // 右上隅
-                        return 'vacantLand-skyBlueMarker-gridLines-12';
-                    }
-
-                    if (isSouthwestCorner(sq)) {    // 左下隅
-                        return 'vacantLand-skyBlueMarker-gridLines-03';
-                    }
-                    
-                    if (isSoutheastCorner(sq)) {    // 右下隅
-                        return 'vacantLand-skyBlueMarker-gridLines-09';
-                    }
-                    
-                    if (isNorthEdge(sq)) {  // 上辺
-                        return 'vacantLand-skyBlueMarker-gridLines-14';
-                    }
-                    
-                    if (isWestEdge(sq)) {    // 左辺
-                        return 'vacantLand-skyBlueMarker-gridLines-07';
-                    }
-
-                    if (isEastEdge(sq)) {    // 右辺
-                        return 'vacantLand-skyBlueMarker-gridLines-13';
-                    }
-                    
-                    if (isSouthEdge(sq)) {  // 下辺
-                        return 'vacantLand-skyBlueMarker-gridLines-11';
-                    }
-
-                    // 盤中
-                    return 'vacantLand-skyBlueMarker-gridLines-15';
-                }
-
-                return gameBoard1SourceTilemap1Frames[getKey(sq)];
-            }
-
-            // ++++++++++++++++
-            // + 飛び石タイル +
-            // ++++++++++++++++
 
             // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
             const conn = Math.max(
@@ -661,125 +580,36 @@
                 gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq],   // シニスター対角線
             );
 
-            function getKey(
-                sq: number,
-                conn: number,
-            ) : string {
+            // function getMarkerCode(conn: number) : string {
+            //     if (conn <= 0) { return '00'; }
+            //     if (conn <= 1) { return '01'; }
+            //     if (conn <= 2) { return '02'; }
+            //     if (conn <= 3) { return '03'; }
 
-                function getKeyByConn(
-                    conn: number,
-                    vanilla: string,
-                    yellowMarker: string,
-                    greenMarker: string,
-                    blueMarker: string
-                ) : string {
-                    if (conn <= 1) {
-                        return vanilla;
-                    }
+            //     if (isAliveStone(sq)) {
+            //         return '05';
+            //     }
 
-                    if (conn == 2) {
-                        return yellowMarker;
-                    }
+            //     if (
+            //         // TODO 4方向が［死に方向］なら、［死に石］だ
+            //         gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+            //         && gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+            //         && gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+            //         && gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
+            //     ) {
+            //         return '06';
+            //     }
 
-                    if (conn == 3) {
-                        return greenMarker;
-                    }
+            //     return '04';    // 連続していることが確認できなければ［五］にはなりません。
+            // }
 
-                    // ［四］以上は全部この色
-                    return blueMarker;
-                }
-                
-                if (isNorthwestCorner(sq)) {    // 左上隅
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-06',
-                        'vacantLand-yellowMarker-gridLines-06',
-                        'vacantLand-greenMarker-gridLines-06',
-                        'vacantLand-blueMarker-gridLines-06'
-                    );
-                }
-                
-                if (isNortheastCorner(sq)) {    // 右上隅
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-12',
-                        'vacantLand-yellowMarker-gridLines-12',
-                        'vacantLand-greenMarker-gridLines-12',
-                        'vacantLand-blueMarker-gridLines-12'
-                    );
-                }
+            // const markerCode = getMarkerCode(conn);
 
-                if (isSouthwestCorner(sq)) {    // 左下隅
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-03',
-                        'vacantLand-yellowMarker-gridLines-03',
-                        'vacantLand-greenMarker-gridLines-03',
-                        'vacantLand-blueMarker-gridLines-03'
-                    );
-                }
-                
-                if (isSoutheastCorner(sq)) {    // 右下隅
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-09',
-                        'vacantLand-yellowMarker-gridLines-09',
-                        'vacantLand-greenMarker-gridLines-09',
-                        'vacantLand-blueMarker-gridLines-09'
-                    );
-                }
-                
-                if (isNorthEdge(sq)) {  // 上辺
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-14',
-                        'vacantLand-yellowMarker-gridLines-14',
-                        'vacantLand-greenMarker-gridLines-14',
-                        'vacantLand-blueMarker-gridLines-14'
-                    );
-                }
-                
-                if (isWestEdge(sq)) {    // 左辺
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-07',
-                        'vacantLand-yellowMarker-gridLines-07',
-                        'vacantLand-greenMarker-gridLines-07',
-                        'vacantLand-blueMarker-gridLines-07'
-                    );
-                }
+            const bXBlackAmount = conn; // FIXME: 黒石と白石を分けること
+            const bYWhiteAmount = conn; // FIXME: 黒石と白石を分けること
 
-                if (isEastEdge(sq)) {    // 右辺
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-13',
-                        'vacantLand-yellowMarker-gridLines-13',
-                        'vacantLand-greenMarker-gridLines-13',
-                        'vacantLand-blueMarker-gridLines-13'
-                    );
-                }
-                
-                if (isSouthEdge(sq)) {  // 下辺
-                    return getKeyByConn(
-                        conn,
-                        'vacantLand-gridLines-11',
-                        'vacantLand-yellowMarker-gridLines-11',
-                        'vacantLand-greenMarker-gridLines-11',
-                        'vacantLand-blueMarker-gridLines-11'
-                    );
-                }
-                
-                // 盤中
-                return getKeyByConn(
-                    conn,
-                    'vacantLand-gridLines-15',
-                    'vacantLand-yellowMarker-gridLines-15',
-                    'vacantLand-greenMarker-gridLines-15',
-                    'vacantLand-blueMarker-gridLines-15'
-                );
-            }
-
-            return gameBoard1SourceTilemap1Frames[getKey(sq, conn)];
+            // `-${markerCode}-${}`
+            return gameBoard1SourceTilemap1Frames[makeImageKey(stoneColor, bYWhiteAmount, bXBlackAmount, getBoardGridNumber(sq))];
         };
     });
     const gameBoard1SquareBackgroundPosition = computed<
@@ -797,10 +627,40 @@
     // + オブジェクト　＞　ゲーム盤１　＞　元タイルマップ１ +
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const w = tileBoard1TileWidth.value;   // tlie width
-    const h = tileBoard1TileHeight.value;
-    const gw = 3 * w;   // tile group width
-    const gh = 4 * h;   // tile group height
+    function getAyAxByGridNumber(gridNumber: number) : [number, number] {
+        if (gridNumber == 0) {return [0, 0];}
+        if (gridNumber == 6) {return [1, 0];}
+        if (gridNumber == 14) {return [1, 1];}
+        if (gridNumber == 12) {return [1, 2];}
+        if (gridNumber == 7) {return [2, 0];}
+        if (gridNumber == 15) {return [2, 1];}
+        if (gridNumber == 13) {return [2, 2];}
+        if (gridNumber == 3) {return [2, 0];}
+        if (gridNumber == 11) {return [2, 1];}
+        // if (gridNumber == 9) {
+        return [2, 2];
+        //}
+    }
+
+
+    function getCColorCode(dColor: number) : [number, number] {
+        if (dColor == COLOR_EMPTY) {return [0, 0];}
+        if (dColor == COLOR_BLACK) {return [1, 0];}
+        return [1, 1];
+    }
+
+
+    function makeImageKey(cColor: number, bYWhiteAmount:number, bXBlackAmount:number, aGridNumber:number) : string {        const [cY, cX] = getCColorCode(cColor);
+        const bY = bYWhiteAmount + 1;
+        const bX = bXBlackAmount + 1;
+        const [aY, aX] = getAyAxByGridNumber(aGridNumber);
+
+        return `board-color-mark-grid-${cY}${cX}-${bY}${bX}-${aY}${aX}`;
+    }
+
+
+    //
+    // 理屈：
     //
     // 八方罫線魔法陣
     //
@@ -814,74 +674,106 @@
     // 08    02
     //    04
     //
-    const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {
-        // 0*gh 0*gw
-        'vacantLand-1'                          : {top: 0*gh + 0*h, left: 0*gw + 0*w, width: w, height: h},    // 更地
-        'vacantLand-gridLines-06'               : {top: 0*gh + 1*h, left: 0*gw + 0*w, width: w, height: h},  // ┌
-        'vacantLand-gridLines-14'               : {top: 0*gh + 1*h, left: 0*gw + 1*w, width: w, height: h},  // ┬
-        'vacantLand-gridLines-12'               : {top: 0*gh + 1*h, left: 0*gw + 2*w, width: w, height: h},  // ┐
-        'vacantLand-gridLines-07'               : {top: 0*gh + 2*h, left: 0*gw + 0*w, width: w, height: h},  // ├
-        'vacantLand-gridLines-15'               : {top: 0*gh + 2*h, left: 0*gw + 1*w, width: w, height: h},  // ┼
-        'vacantLand-gridLines-13'               : {top: 0*gh + 2*h, left: 0*gw + 2*w, width: w, height: h},  // ┤
-        'vacantLand-gridLines-03'               : {top: 0*gh + 3*h, left: 0*gw + 0*w, width: w, height: h},  // └
-        'vacantLand-gridLines-11'               : {top: 0*gh + 3*h, left: 0*gw + 1*w, width: w, height: h},  // ┴
-        'vacantLand-gridLines-09'               : {top: 0*gh + 3*h, left: 0*gw + 2*w, width: w, height: h},  // ┘
-        // 0*gh 1*gw
-        'vacantLand-yellowMarker-1'             : {top: 0*gh + 0*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-06'  : {top: 0*gh + 1*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-14'  : {top: 0*gh + 1*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-12'  : {top: 0*gh + 1*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-07'  : {top: 0*gh + 2*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-15'  : {top: 0*gh + 2*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-13'  : {top: 0*gh + 2*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-03'  : {top: 0*gh + 3*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-11'  : {top: 0*gh + 3*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-yellowMarker-gridLines-09'  : {top: 0*gh + 3*h, left: 1*gw + 2*w, width: w, height: h},
-        // 0*gh 2*gw
-        'vacantLand-greenMarker-1'              : {top: 0*gh + 0*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-06'   : {top: 0*gh + 1*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-14'   : {top: 0*gh + 1*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-12'   : {top: 0*gh + 1*h, left: 2*gw + 2*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-07'   : {top: 0*gh + 2*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-15'   : {top: 0*gh + 2*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-13'   : {top: 0*gh + 2*h, left: 2*gw + 2*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-03'   : {top: 0*gh + 3*h, left: 2*gw + 0*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-11'   : {top: 0*gh + 3*h, left: 2*gw + 1*w, width: w, height: h},
-        'vacantLand-greenMarker-gridLines-09'   : {top: 0*gh + 3*h, left: 2*gw + 2*w, width: w, height: h},
-        // 1*gh 0*gw
-        'vacantLand-blueMarker-1'               : {top: 1*gh + 0*h, left: 0*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-06'    : {top: 1*gh + 1*h, left: 0*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-14'    : {top: 1*gh + 1*h, left: 0*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-12'    : {top: 1*gh + 1*h, left: 0*gw + 2*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-07'    : {top: 1*gh + 2*h, left: 0*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-15'    : {top: 1*gh + 2*h, left: 0*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-13'    : {top: 1*gh + 2*h, left: 0*gw + 2*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-03'    : {top: 1*gh + 3*h, left: 0*gw + 0*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-11'    : {top: 1*gh + 3*h, left: 0*gw + 1*w, width: w, height: h},
-        'vacantLand-blueMarker-gridLines-09'    : {top: 1*gh + 3*h, left: 0*gw + 2*w, width: w, height: h},
-        // 1*gh 1*gw
-        'vacantLand-skyBlueMarker-1'            : {top: 1*gh + 0*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-06' : {top: 1*gh + 1*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-14' : {top: 1*gh + 1*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-12' : {top: 1*gh + 1*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-07' : {top: 1*gh + 2*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-15' : {top: 1*gh + 2*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-13' : {top: 1*gh + 2*h, left: 1*gw + 2*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-03' : {top: 1*gh + 3*h, left: 1*gw + 0*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-11' : {top: 1*gh + 3*h, left: 1*gw + 1*w, width: w, height: h},
-        'vacantLand-skyBlueMarker-gridLines-09' : {top: 1*gh + 3*h, left: 1*gw + 2*w, width: w, height: h},
-        // 1*gh 2*gw
-        'bgDead-1'                              : {top: 1*gh + 0*h, left: 2*gw + 0*w, width: w, height: h},
-        'bgDead-gridLines-06'                   : {top: 1*gh + 1*h, left: 2*gw + 0*w, width: w, height: h},
-        'bgDead-gridLines-14'                   : {top: 1*gh + 1*h, left: 2*gw + 1*w, width: w, height: h},
-        'bgDead-gridLines-12'                   : {top: 1*gh + 1*h, left: 2*gw + 2*w, width: w, height: h},
-        'bgDead-gridLines-07'                   : {top: 1*gh + 2*h, left: 2*gw + 0*w, width: w, height: h},
-        'bgDead-gridLines-15'                   : {top: 1*gh + 2*h, left: 2*gw + 1*w, width: w, height: h},
-        'bgDead-gridLines-13'                   : {top: 1*gh + 2*h, left: 2*gw + 2*w, width: w, height: h},
-        'bgDead-gridLines-03'                   : {top: 1*gh + 3*h, left: 2*gw + 0*w, width: w, height: h},
-        'bgDead-gridLines-11'                   : {top: 1*gh + 3*h, left: 2*gw + 1*w, width: w, height: h},
-        'bgDead-gridLines-09'                   : {top: 1*gh + 3*h, left: 2*gw + 2*w, width: w, height: h},
-    };
+    // 👇 ［タイル］は以下のようなサイズ。
+    //
+    //    0  32
+    //  0 +---+
+    //    |   |
+    // 32 +---+
+    //
+    // tileBoard1TileWidth.value
+    // tileBoard1TileHeight.value
+    //
+    // 👇 以下のように［タイル］が集まって［グループＡ］に固まっている。
+    //
+    // aY Pixels
+    //             0   1   2   ... aX
+    //           0  32  64  96 ... Pixels
+    //         0 +---+
+    // 0         |   |
+    //        32 +---+---+---+
+    // 1         |┌ |┬ |┐ |
+    //        64 +---+---+---+
+    // 2         |├ |┼ |┤ |
+    //        96 +---+---+---+
+    // 3         |└ |┴ |┘ |
+    //       128 +---+---+---+
+    //
+    const aWidth = 3 * tileBoard1TileWidth.value;
+    const aHeight = 4 * tileBoard1TileHeight.value;
+    //
+    // 👇 以下のように［グループＡ］が集まって［グループＢ］に固まっている。
+    //
+    // bY Pixels
+    //             0   1   2   3   4   5   6   ... bX
+    //           0  96 196 288 384 480 576 672 ... Pixels
+    //         0 +---+---+---+---+---+---+---+
+    //  0        |   |   |   |   |   |   |   |
+    //       128 +---+---+---+---+---+---+---+
+    //  1        |   |   |   |   |   |   |
+    //       256 +---+---+---+---+---+---+
+    //  2        |   |   |   |   |   |   |
+    //       384 +---+---+---+---+---+---+
+    //  3        |   |   |   |   |   |   |
+    //       512 +---+---+---+---+---+---+
+    //  4        |   |   |   |   |   |   |
+    //       640 +---+---+---+---+---+---+
+    //  5        |   |   |   |   |   |   |
+    //       768 +---+---+---+---+---+---+
+    //
+    const bWidth = 7 * aWidth;
+    const bHeight = 6 * aHeight;
+    //
+    // 👇 以下のように［グループＢ］が集まって［グループＣ］に固まっている。
+    //
+    // cY Pixels
+    //             0    1    ... cX
+    //           0  672 1344 ... Pixels
+    //         0 +----+    +
+    //  0        |    |
+    //       768 +----+----+
+    //  1        |    |    |
+    //      1536 +----+----+
+    // 
+    // const cWidth = 2 * bWidth;
+    // const cHeight = 2 * bHeight;
+    //
+    /**
+     * 
+     * @param cColor 
+     * @param bYWhiteAmount 
+     * @param bXBlackAmount 
+     * @param aGridNumber 
+     */
+    function makeKeyAndRectangle(cColor: number, bYWhiteAmount:number, bXBlackAmount:number, aGridNumber:number) : [string, Rectangle] {
+
+        const [cY, cX] = getCColorCode(cColor);
+        const bY = bYWhiteAmount + 1;
+        const bX = bXBlackAmount + 1;
+        const [aY, aX] = getAyAxByGridNumber(aGridNumber);
+
+        return [
+            makeImageKey(cColor, bYWhiteAmount, bXBlackAmount, aGridNumber),
+            {
+                left: cX*bWidth + bX*aWidth + aX*tileBoard1TileWidth.value,
+                top: cY*bHeight + bY*aHeight + aY*tileBoard1TileHeight.value,
+                width: tileBoard1TileWidth.value,
+                height: tileBoard1TileHeight.value
+            }
+        ];
+    }
+
+    const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {};
+    for(let cColor=0; cColor<3; cColor++) {
+        for(let bYWhiteAmount=-1; bYWhiteAmount<5; bYWhiteAmount++) {
+            for(let bXBlackAmount=-1; bXBlackAmount<5; bXBlackAmount++) {
+                [0, 6, 14, 12, 7, 15, 13, 3, 11, 9].forEach((aGridNumber, _index, _array)=>{
+                    const [key, rect] = makeKeyAndRectangle(cColor, bYWhiteAmount, bXBlackAmount, aGridNumber);
+                    gameBoard1SourceTilemap1Frames[key] = rect;
+                });
+            }
+        }
+    }
 
 
     // ######################
@@ -982,9 +874,10 @@
         player1Input[" "] = true;
 
         gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
+        console.log(`TEST: gameBoard1Turn.value=${gameBoard1Turn.value}`);
+        
         // test
-        const BLACK = 1;    // 自石の色
-        const TURN_COLOR = BLACK;   // 手番の色
+        const TURN_COLOR = gameBoard1Turn.value;   // 手番の色
         const OPPOSITE_TURN_COLOR = oppositeTurnColor(TURN_COLOR);
         const START_SQ = 7; // 着手点
         const FWD_DIRECTION = eastOf; // 順方向
@@ -1027,13 +920,13 @@
         // TODO:     directionalSolidLineArray.value[START_SQ] = 'Dead';
         // }
 
-        const fourWay = locateFourWay(
+        const controlWays = locateRadialEightWays(
             START_SQ,
             ONE_WING_MAX_LENGTH,
             (_sq: number) => false,  // continue 条件
             (sq: number) => isOutOfBoardOrColor(OPPOSITE_TURN_COLOR, sq), // break 条件
         );
-        console.log(`TEST: fourWay=${fourWay} TURN_COLOR=${TURN_COLOR} startSq=${START_SQ} ONE_WING_MAX_LENGTH=${ONE_WING_MAX_LENGTH}`);
+        console.log(`TEST: controlWays=${controlWays} TURN_COLOR=${TURN_COLOR} startSq=${START_SQ} ONE_WING_MAX_LENGTH=${ONE_WING_MAX_LENGTH}`);
 
         const wings : number[] = locateForWings(
             START_SQ,
@@ -1144,22 +1037,21 @@
 
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        // チェックすべき自石が置いてあるマス。起点を含まない
-        const turnStoneLocations = locateFourWay(
+        // 利きマスを取得。起点を含まない
+        const turnStoneControlWays = locateRadialEightWays(
             moveSq,
             ONE_WING_MAX_LENGTH,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
+            (_sq: number) => false, // continue 条件
             (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(gameBoard1Turn.value), sq),   // break 条件
         );
 
         // ［飛び石スライディング・ウィンドウ］の最大数を記入します
+        // 水平方向
         [
             moveSq,
-            ...turnStoneLocations
-        ].forEach((resonanceSq, _index, _array)=>{
-            // 着手した石及び、着手によって影響を受ける自石を resonance と呼ぶことにして、それらのつながりを更新します
-
-            // 水平方向
+            ...turnStoneControlWays[0],
+            ...turnStoneControlWays[4],
+        ].forEach((resonanceSq, _index, _array)=>{            
             // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
             gameBoard1StonesMaxAmountOfSlidingWindowHorizontal.value[resonanceSq] = aStoneWingsCountingMaxAmountOfSlidingWindow(
                 locateForWings(
@@ -1169,8 +1061,14 @@
                 ),
                 gameBoard1Turn.value,
             );;
+        });
 
-            // 垂直方向
+        // 垂直方向
+        [
+            moveSq,
+            ...turnStoneControlWays[2],
+            ...turnStoneControlWays[6],
+        ].forEach((resonanceSq, _index, _array)=>{            
             gameBoard1StonesMaxAmountOfSlidingWindowVertical.value[resonanceSq] = aStoneWingsCountingMaxAmountOfSlidingWindow(
                 locateForWings(
                     resonanceSq,
@@ -1179,8 +1077,14 @@
                 ),
                 gameBoard1Turn.value,
             );;
+        });
 
-            // バロック対角線方向
+        // バロック対角線方向
+        [
+            moveSq,
+            ...turnStoneControlWays[1],
+            ...turnStoneControlWays[5],
+        ].forEach((resonanceSq, _index, _array)=>{            
             gameBoard1StonesMaxAmountOfSlidingWindowBaroqueDiagonal.value[resonanceSq] = aStoneWingsCountingMaxAmountOfSlidingWindow(
                 locateForWings(
                     resonanceSq,
@@ -1189,8 +1093,14 @@
                 ),
                 gameBoard1Turn.value,
             );;
+        });
 
-            // シニスター対角線方向
+        // シニスター対角線方向
+        [
+            moveSq,
+            ...turnStoneControlWays[3],
+            ...turnStoneControlWays[7],
+        ].forEach((resonanceSq, _index, _array)=>{            
             gameBoard1StonesMaxAmountOfSlidingWindowSinisterDiagonal.value[resonanceSq] = aStoneWingsCountingMaxAmountOfSlidingWindow(
                 locateForWings(
                     resonanceSq,
@@ -2209,86 +2119,88 @@
     /**
      * 以下の数字の位置（x を含まない）のマス番号を取得。
      * 
-     * +--+--+--+--+--+--+--+--+--+
-     * |15|  |  |  |11|  |  |  | 7|
-     * +--+--+--+--+--+--+--+--+--+
-     * |  |14|  |  |10|  |  | 6|  |
-     * +--+--+--+--+--+--+--+--+--+
-     * |  |  |13|  | 9|  | 5|  |  |
-     * +--+--+--+--+--+--+--+--+--+
-     * |  |  |  |12| 8| 4|  |  |  |
-     * +--+--+--+--+--+--+--+--+--+
-     * |19|18|17|16| x| 0| 1| 2| 3|
-     * +--+--+--+--+--+--+--+--+--+
-     * |  |  |  |20|24|28|  |  |  |
-     * +--+--+--+--+--+--+--+--+--+
-     * |  |  |21|  |25|  |29|  |  |
-     * +--+--+--+--+--+--+--+--+--+
-     * |  |22|  |  |26|  |  |30|  |
-     * +--+--+--+--+--+--+--+--+--+
-     * |23|  |  |  |27|  |  |  |31|
-     * +--+--+--+--+--+--+--+--+--+
+     * (4)             (3)              (2)
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |15|  |  |  |11|  |  |  | 7|
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |  |14|  |  |10|  |  | 6|  |
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |  |  |13|  | 9|  | 5|  |  |
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |  |  |  |12| 8| 4|  |  |  |
+     *     +--+--+--+--+--+--+--+--+--+
+     * (5) |19|18|17|16| x| 0| 1| 2| 3| (1)
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |  |  |  |20|24|28|  |  |  |
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |  |  |21|  |25|  |29|  |  |
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |  |22|  |  |26|  |  |30|  |
+     *     +--+--+--+--+--+--+--+--+--+
+     *     |23|  |  |  |27|  |  |  |31|
+     *     +--+--+--+--+--+--+--+--+--+
+     * (6)             (7)              (8)
      * 
      * 👆  [0]を自分の着手のマスとする。例では片翼の長さを 4 とした。
      * この図形に名前はないが、４ウェイ（4t-way）とでも呼ぶとする。
      * 
      */
-    function locateFourWay(
+    function locateRadialEightWays(
         startSq: number,
         oneWingMaxLength: number,
         isContinue: (sq: number)=>boolean, 
         isBreak: (sq: number)=>boolean,
-    ) : number[] {
-        const eastWing = locateDirectionalLine(
+    ) : number[][] {
+        const eastWay = locateDirectionalLine( // (1)
             startSq,
             oneWingMaxLength,
             eastOf,
             isContinue,
             isBreak,
         );
-        const northeastWing = locateDirectionalLine(
+        const northeastWay = locateDirectionalLine(    // (2)
             startSq,
             oneWingMaxLength,
             northeastOf,
             isContinue,
             isBreak,
         );
-        const northWing = locateDirectionalLine(
+        const northWay = locateDirectionalLine(    // (3)
             startSq,
             oneWingMaxLength,
             northOf,
             isContinue,
             isBreak,
         );
-        const northwestWing = locateDirectionalLine(
+        const northwestWay = locateDirectionalLine(    // (4)
             startSq,
             oneWingMaxLength,
             northwestOf,
             isContinue,
             isBreak,
         );
-        const westWing = locateDirectionalLine(
+        const westWay = locateDirectionalLine( // (5)
             startSq,
             oneWingMaxLength,
             westOf,
             isContinue,
             isBreak,
         );
-        const southwestWing = locateDirectionalLine(
+        const southwestWay = locateDirectionalLine(    // (6)
             startSq,
             oneWingMaxLength,
             southwestOf,
             isContinue,
             isBreak,
         );
-        const southWing = locateDirectionalLine(
+        const southWay = locateDirectionalLine(    // (7)
             startSq,
             oneWingMaxLength,
             southOf,
             isContinue,
             isBreak,
         );
-        const southeastWing = locateDirectionalLine(
+        const southeastWay = locateDirectionalLine(    // (8)
             startSq,
             oneWingMaxLength,
             southeastOf,
@@ -2297,14 +2209,14 @@
         );
         return [
             // startSq を含まない
-            ...eastWing,
-            ...northeastWing,
-            ...northWing,
-            ...northwestWing,
-            ...westWing,
-            ...southwestWing,
-            ...southWing,
-            ...southeastWing
+            eastWay,
+            northeastWay,
+            northWay,
+            northwestWay,
+            westWay,
+            southwestWay,
+            southWay,
+            southeastWay
         ];
     }
 
