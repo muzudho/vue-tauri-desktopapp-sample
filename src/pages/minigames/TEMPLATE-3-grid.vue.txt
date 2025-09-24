@@ -341,10 +341,10 @@
     // ++++++++++++++++++++++++++++++++++
 
     // /**
-    //  * ［お好み設定パネル１］を開くボタン。
+    //  * ［環境設定パネル１］を開くボタン。
     //  */
-    // function onPreferences1ButtonPressed() : void {
-    //     gameMachine1PreferencesIsShowing.value = !gameMachine1PreferencesIsShowing.value;
+    // function onEnvironmentConfig1ButtonPressed() : void {
+    //     gameMachine1EnvironmentConfigIsShowing.value = !gameMachine1EnvironmentConfigIsShowing.value;
     // }
 
 
