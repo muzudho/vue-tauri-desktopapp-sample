@@ -1161,6 +1161,7 @@
      */
     function putStone(moveSq: number) : boolean {
         const turnColor = gameBoard1Turn.value;
+        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
 
         if (!gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
             return false;
@@ -1176,7 +1177,7 @@
             moveSq,
             ONE_WING_MAX_LENGTH,
             (_sq: number) => false, // continue 条件
-            (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(gameBoard1Turn.value), sq),   // break 条件
+            (sq: number) => isOutOfBoardOrColor(oppositeTurnColor1, sq),   // break 条件
         );
 
         // 置いた石の［最長］を記入します
@@ -1195,6 +1196,7 @@
                 ),
                 gameBoard1Turn.value,
             );
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;    // 交点に石を置かれたら、相手の最長を０クリアー
         });
 
         // 垂直方向
@@ -1211,6 +1213,7 @@
                 ),
                 gameBoard1Turn.value,
             );
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;
         });
 
         // バロック対角線方向
@@ -1227,6 +1230,7 @@
                 ),
                 gameBoard1Turn.value,
             );
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;
         });
 
         // シニスター対角線方向
@@ -1243,6 +1247,7 @@
                 ),
                 gameBoard1Turn.value,
             );
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;
         });
 
         // ［割り打ち］処理
