@@ -1178,7 +1178,7 @@
             moveSq,
             ONE_WING_MAX_LENGTH,
             (_sq: number) => false, // continue 条件
-            (sq: number) => isOutOfBoardOrColor(oppositeTurnColor1, sq),   // break 条件
+            (sq: number) => isOutOfBoard(sq),   // break 条件
         );
 
         // 置いた石の［最長］を記入します
@@ -2592,6 +2592,16 @@
         );
 
         return isDeadCapacity(sinisterDiagonalFieldCapacity);;
+    }
+
+
+    /**
+     * 盤の外か
+     * @param color 
+     * @param sq 
+     */
+    function isOutOfBoard(sq: number) : boolean {
+        return sq == -1;
     }
 
 
