@@ -1174,10 +1174,38 @@
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
         // 着手点の［最長］を記入します
-        gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor);   // 水平方向フィールド
-        gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor); // 垂直方向フィールド
-        gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor);  // バロック対角線方向フィールド
-        gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor); // シニスター対角線方向フィールド
+        gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = aLocationsCountingMaxLength(    // 水平方向フィールド
+            locateDirectionFieldFromCenter(
+                moveSq,
+                eastOf,
+                westOf,
+            ),
+            turnColor
+        );
+        gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = aLocationsCountingMaxLength(  // 垂直方向フィールド
+            locateDirectionFieldFromCenter(
+                moveSq,
+                northOf,
+                southOf,
+            ),
+            turnColor
+        );
+        gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength(   // バロック対角線方向フィールド
+            locateDirectionFieldFromCenter(
+                moveSq,
+                northeastOf,
+                southwestOf,
+            ),
+            turnColor
+        );
+        gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength(  // シニスター対角線方向フィールド
+            locateDirectionFieldFromCenter(
+                moveSq,
+                southeastOf,
+                northwestOf,
+            ),
+            turnColor
+        );
         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][moveSq] = 0; // 相手の［最長］に 0 を記入
         gameBoard1ColorsAndStonesMaxLengthVertical.value[oppositeTurnColor1][moveSq] = 0;   // 相手の［最長］に 0 を記入
         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[oppositeTurnColor1][moveSq] = 0;    // 相手の［最長］に 0 を記入
@@ -1197,8 +1225,12 @@
             ...turnStoneHalfDirectionFieldArray[0],
             ...turnStoneHalfDirectionFieldArray[4],
         ].forEach((resonanceSq, _index, _array)=>{
+            // 空点なら自分、相手ともに［最長］を更新。
+            // 手番の石なら、手番の［最長］だけを更新。
+            // 相手番の石なら、相手番の［最長］だけを更新。
             [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
+                const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
+                if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
                     gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
@@ -1218,7 +1250,8 @@
             ...turnStoneHalfDirectionFieldArray[6],
         ].forEach((resonanceSq, _index, _array)=>{
             [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
+                const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
+                if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
@@ -1237,7 +1270,8 @@
             ...turnStoneHalfDirectionFieldArray[5],
         ].forEach((resonanceSq, _index, _array)=>{
             [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
+                const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
+                if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
@@ -1256,7 +1290,8 @@
             ...turnStoneHalfDirectionFieldArray[7],
         ].forEach((resonanceSq, _index, _array)=>{
             [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
+                const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
+                if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
