@@ -620,7 +620,6 @@
         new Array(gameBoard1Area.value).fill(0),
         new Array(gameBoard1Area.value).fill(0),
     ]);
-    const gameBoard1WhiteStonesMaxLengthSinisterDiagonal = ref<number[]>(new Array(gameBoard1Area.value).fill(0));   // マス上の石の左上から右下に下がる体格線方向
 
     // 水平方向に並ぶ［五］の一部の石なら 1 を、
     // 垂直方向に並ぶ［五］の一部の石なら 2 を、
@@ -632,7 +631,7 @@
     const STONE_STATE_ALIVE_VERTICAL = 2;
     const STONE_STATE_ALIVE_BAROQUE_DIAGONAL = 4;
     const STONE_STATE_ALIVE_SINISTER_DIAGONAL = 8;
-    const RUNS_SLIDING_WINDOW_DEAD = -1;
+    const MAX_LENGTH_DEAD = -1;
     function isAliveStone(sq: number) : boolean {
         return 1 <= gameBoard1StoneStateArray.value[sq] && gameBoard1StoneStateArray.value[sq] <= 15;
     }
@@ -834,37 +833,39 @@
     // 👇 以下のように［グループＡ］が集まって［グループＢ］に固まっている。
     //
     // bY Pixels
-    //             0   1   2   3   4   5   6   ... bX
-    //           0  96 196 288 384 480 576 672 ... Pixels
-    //         0 +---+---+---+---+---+---+---+
-    //  0        |   |   |   |   |   |   |   |
-    //       128 +---+---+---+---+---+---+---+
-    //  1        |   |   |   |   |   |   |   |
-    //       256 +---+---+---+---+---+---+---+
-    //  2        |   |   |   |   |   |   |   |
-    //       384 +---+---+---+---+---+---+---+
-    //  3        |   |   |   |   |   |   |   |
-    //       512 +---+---+---+---+---+---+---+
-    //  4        |   |   |   |   |   |   |   |
-    //       640 +---+---+---+---+---+---+---+
-    //  5        |   |   |   |   |   |   |   |
-    //       768 +---+---+---+---+---+---+---+
-    //  6        |   |   |   |   |   |   |   |
-    //       896 +---+---+---+---+---+---+---+
+    //             0   1   2   3   4   5   6   7   ... bX
+    //           0  96 196 288 384 480 576 672 768 ... Pixels
+    //         0 +---+---+---+---+---+---+---+---+
+    //  0        |   |   |   |   |   |   |   |   |
+    //       128 +---+---+---+---+---+---+---+---+
+    //  1        |   |   |   |   |   |   |   |   |
+    //       256 +---+---+---+---+---+---+---+---+
+    //  2        |   |   |   |   |   |   |   |   |
+    //       384 +---+---+---+---+---+---+---+---+
+    //  3        |   |   |   |   |   |   |   |   |
+    //       512 +---+---+---+---+---+---+---+---+
+    //  4        |   |   |   |   |   |   |   |   |
+    //       640 +---+---+---+---+---+---+---+---+
+    //  5        |   |   |   |   |   |   |   |   |
+    //       768 +---+---+---+---+---+---+---+---+
+    //  6        |   |   |   |   |   |   |   |   |
+    //       896 +---+---+---+---+---+---+---+---+
+    //  7        |   |   |   |   |   |   |   |   |
+    //      1024 +---+---+---+---+---+---+---+---+
     //
-    const bWidth = 7 * aWidth;
-    const bHeight = 7 * aHeight;
+    const bWidth = 8 * aWidth;
+    const bHeight = 8 * aHeight;
     //
     // 👇 以下のように［グループＢ］が集まって［グループＣ］に固まっている。
     //
     // cY Pixels
     //             0    1    ... cX
-    //           0  672 1344 ... Pixels
+    //           0  768 1536 ... Pixels
     //         0 +----+    +
     //  0        |    |
-    //       896 +----+----+
+    //      1024 +----+----+
     //  1        |    |    |
-    //      1792 +----+----+
+    //      2048 +----+----+
     // 
     // const cWidth = 2 * bWidth;
     // const cHeight = 2 * bHeight;
@@ -1621,7 +1622,7 @@
         // + （途切れた）相手の石のつながりをチェックします +
         // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
-        function oppositeTurnStonesCheckFieldOneDirection(
+        function oppositeTurnStonesCheckField(
             foreOppositeTurnStones: number[],
             backOppositeTurnStones: number[],
             foreOf: (sq: number)=>number,
@@ -1669,7 +1670,7 @@
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        oppositeTurnStonesCheckFieldOneDirection(
+        oppositeTurnStonesCheckField(
             foreOppositeTurnStones,
             backOppositeTurnStones,
             eastOf,
@@ -1695,7 +1696,7 @@
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        oppositeTurnStonesCheckFieldOneDirection(
+        oppositeTurnStonesCheckField(
             foreOppositeTurnStones,
             backOppositeTurnStones,
             southOf,
@@ -1721,7 +1722,7 @@
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        oppositeTurnStonesCheckFieldOneDirection(
+        oppositeTurnStonesCheckField(
             foreOppositeTurnStones,
             backOppositeTurnStones,
             northeastOf,
@@ -1747,7 +1748,7 @@
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        oppositeTurnStonesCheckFieldOneDirection(
+        oppositeTurnStonesCheckField(
             foreOppositeTurnStones,
             backOppositeTurnStones,
             southeastOf,
@@ -1791,7 +1792,7 @@
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
         locations.forEach((sq, _index, _array)=>{
             if (oppositeTurnStoneIsDeadHorizontal(sq)) {
-                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = RUNS_SLIDING_WINDOW_DEAD;    // 論理和ではなくて、上書き。
+                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
             }
         });
     }
@@ -1807,7 +1808,7 @@
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
         locations.forEach((sq, _index, _array)=>{
             if (oppositeTurnStoneIsDeadVertical(sq)) {
-                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = RUNS_SLIDING_WINDOW_DEAD;
+                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
         });
     }
@@ -1823,7 +1824,7 @@
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
         locations.forEach((sq, _index, _array)=>{
             if (oppositeTurnStoneIsDeadBaroqueDiagonal(sq)) {
-                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = RUNS_SLIDING_WINDOW_DEAD;
+                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
         });
     }
@@ -1839,7 +1840,7 @@
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
         locations.forEach((sq, _index, _array)=>{
             if (oppositeTurnStoneIsDeadSinisterDiagonal(sq)) {
-                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = RUNS_SLIDING_WINDOW_DEAD;
+                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
         });
     }
