@@ -178,7 +178,7 @@
         </game-machine-waratch2>
         <!--
             NOTE: src属性は Vite が @/ を解決してくれるが、style="" の中までは解決してくれない。style="" の中を解決するのはブラウザー。だから、 import文を使う。
-            <img src="@/assets/img/references/Sprite_Board_001.png" />
+            <img src="@/assets/img/reference/Sprite_Board_001.png" />
             <v-btn :style="{
                 backgroundImage: `url('${spriteBoard001Png}')`,
             }"></v-btn>
@@ -463,7 +463,7 @@
     // + インポート　＞　アセット +
     // ++++++++++++++++++++++++++++
 
-    import spriteBoard001Png from '@/assets/img/references/202509__warabenture__21-0649-spriteBoard002-o1o0.png';
+    import spriteBoard001Png from '@/assets/img/reference/202509__warabenture__21-0649-spriteBoard002-o1o0.png';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
