@@ -1178,6 +1178,10 @@
         gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor); // 垂直方向フィールド
         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor);  // バロック対角線方向フィールド
         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor); // シニスター対角線方向フィールド
+        gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][moveSq] = 0; // 相手の［最長］に 0 を記入
+        gameBoard1ColorsAndStonesMaxLengthVertical.value[oppositeTurnColor1][moveSq] = 0;   // 相手の［最長］に 0 を記入
+        gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[oppositeTurnColor1][moveSq] = 0;    // 相手の［最長］に 0 を記入
+        gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[oppositeTurnColor1][moveSq] = 0;   // 相手の［最長］に 0 を記入
 
         // 利きマスを取得。着手点を含まない
         const turnStoneHalfDirectionFieldArray = locateRadialEightHalfDirectionFieldArray(
@@ -1193,8 +1197,8 @@
             ...turnStoneHalfDirectionFieldArray[0],
             ...turnStoneHalfDirectionFieldArray[4],
         ].forEach((resonanceSq, _index, _array)=>{
-            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
-                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
                     // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
                     gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
@@ -1204,8 +1208,8 @@
                         ),
                         color,
                     );
-                });
-            }
+                }
+            });
         });
 
         // 垂直方向フィールド
@@ -1213,8 +1217,8 @@
             ...turnStoneHalfDirectionFieldArray[2],
             ...turnStoneHalfDirectionFieldArray[6],
         ].forEach((resonanceSq, _index, _array)=>{
-            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
-                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
                     gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
@@ -1223,8 +1227,8 @@
                         ),
                         color,
                     );
-                });
-            }
+                }
+            });
         });
 
         // バロック対角線方向フィールド
@@ -1232,8 +1236,8 @@
             ...turnStoneHalfDirectionFieldArray[1],
             ...turnStoneHalfDirectionFieldArray[5],
         ].forEach((resonanceSq, _index, _array)=>{
-            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
-                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
                     gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
@@ -1242,8 +1246,8 @@
                         ),
                         color,
                     );
-                });
-            }
+                }
+            });
         });
 
         // シニスター対角線方向フィールド
@@ -1251,8 +1255,8 @@
             ...turnStoneHalfDirectionFieldArray[3],
             ...turnStoneHalfDirectionFieldArray[7],
         ].forEach((resonanceSq, _index, _array)=>{
-            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
-                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                if ([COLOR_EMPTY, turnColor].includes(gameBoard1StoneColorArray.value[resonanceSq])) {
                     gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
@@ -1261,8 +1265,8 @@
                         ),
                         color,
                     );
-                });
-            }
+                }
+            });
         });
 
         // ［割り打ち］処理
