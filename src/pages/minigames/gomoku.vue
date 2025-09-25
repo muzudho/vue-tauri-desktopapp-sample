@@ -565,11 +565,11 @@
     // ++++++++++++++++++++++++++++++++
 
     const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
-    const GO_LENGTH = 5;    // ［五］の長さ
+    const FIVE_LENGTH = 5;  // ［五］の長さ
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
-    const COLOR_EMPTY = 0; // 空きマス。石の色無し
-    const COLOR_BLACK = 1; // 黒石
-    const COLOR_WHITE = 2; // 白石
+    const COLOR_EMPTY = 0;  // 空きマス。石の色無し
+    const COLOR_BLACK = 1;  // 黒石
+    const COLOR_WHITE = 2;  // 白石
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
@@ -1177,32 +1177,40 @@
         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = aLocationsCountingMaxLength(    // 水平方向フィールド
             locateDirectionFieldFromCenter(
                 moveSq,
+                ONE_WING_MAX_LENGTH,
                 eastOf,
                 westOf,
+                isOutOfBoard,   // break 条件
             ),
             turnColor
         );
         gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = aLocationsCountingMaxLength(  // 垂直方向フィールド
             locateDirectionFieldFromCenter(
                 moveSq,
+                ONE_WING_MAX_LENGTH,
                 northOf,
                 southOf,
+                isOutOfBoard,   // break 条件
             ),
             turnColor
         );
         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength(   // バロック対角線方向フィールド
             locateDirectionFieldFromCenter(
                 moveSq,
+                ONE_WING_MAX_LENGTH,
                 northeastOf,
                 southwestOf,
+                isOutOfBoard,   // break 条件
             ),
             turnColor
         );
         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength(  // シニスター対角線方向フィールド
             locateDirectionFieldFromCenter(
                 moveSq,
+                ONE_WING_MAX_LENGTH,
                 southeastOf,
                 northwestOf,
+                isOutOfBoard,   // break 条件
             ),
             turnColor
         );
@@ -1235,8 +1243,10 @@
                     gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
+                            ONE_WING_MAX_LENGTH,
                             eastOf,
                             westOf,
+                            isOutOfBoard,   // break 条件
                         ),
                         color,
                     );
@@ -1255,8 +1265,10 @@
                     gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
+                            ONE_WING_MAX_LENGTH,
                             northOf,
                             southOf,
+                            isOutOfBoard,   // break 条件
                         ),
                         color,
                     );
@@ -1275,8 +1287,10 @@
                     gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
+                            ONE_WING_MAX_LENGTH,
                             northeastOf,
                             southwestOf,
+                            isOutOfBoard,   // break 条件
                         ),
                         color,
                     );
@@ -1295,8 +1309,10 @@
                     gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
                         locateDirectionFieldFromCenter(
                             resonanceSq,
+                            ONE_WING_MAX_LENGTH,
                             southeastOf,
                             northwestOf,
+                            isOutOfBoard,   // break 条件
                         ),
                         color,
                     );
@@ -1688,8 +1704,10 @@
                 colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = aLocationsCountingMaxLength(
                     locateDirectionFieldFromCenter(
                         oppositeTurnStoneSq,
+                        ONE_WING_MAX_LENGTH,
                         foreOf,
                         backOf,
+                        isOutOfBoard,   // break 条件
                     ),
                     oppositeTurnColor1,
                 );;
@@ -1700,8 +1718,10 @@
                 colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = aLocationsCountingMaxLength(
                     locateDirectionFieldFromCenter(
                         oppositeTurnStoneSq,
+                        ONE_WING_MAX_LENGTH,
                         foreOf,
                         backOf,
+                        isOutOfBoard,   // break 条件
                     ),
                     oppositeTurnColor1,
                 );;
@@ -1981,11 +2001,11 @@
      * |.|.|.|w|w|w|w|w|.|  ウィンドウ３
      * +-+-+-+-+-+-+-+-+-+
      * 
-     * @param locations 
+     * @param fieldLocations 
      * @param color 
      */
     function aLocationsCountingMaxLength(
-        locations: number[],
+        fieldLocations: number[],
         color: number,
     ) : number {
 
@@ -2080,9 +2100,14 @@
         // +-+-+-+-+-+-+-+-+-+
         //
 
+        // console.log(`DEBUG: [aLocationsCountingMaxLength] locations.length=${fieldLocations.length}`);
+        // if (fieldLocations.length < FIVE_LENGTH) { // ［五］を作れないなら［死に石］です
+        //     return MAX_LENGTH_DEAD;
+        // }
+
         return countingMaxLength(
             aStoneWingsLocateSlidingWindowArray(
-                locations,
+                fieldLocations,
                 (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(color), sq),  // break 条件
             ),
             color
@@ -2246,35 +2271,40 @@
      */
     function locateDirectionFieldFromCenter(
         centerSq: number,
+        maxLength: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
+        isBreak: (sq: number)=>boolean,
     ) : number[] {
-        const sqArray: number[] = new Array(9).fill(-1); // マス番号の配列。要素数９。
-        sqArray[4] = centerSq;
-
         // 逆ウィング（起点を含まない）を戻る
+        const backSqArray: number[] = [];
         let backSq = centerSq;  // 隣
-        for(let i:number=3; 0<=i; i--){ // 3 ～ 0
+        for(let i:number=0; i<maxLength; i++){
             backSq = backOf(backSq);
-            if (backSq == -1) {    // 盤外なら終了
+            if (isBreak(backSq)) {    // break 条件
                 break;
             }
 
-            sqArray[i] = backSq;
+            backSqArray.push(backSq);
         }
 
         // 順ウィング（起点を含まない）を進む
+        const foreSqArray: number[] = [];
         let foreSq = centerSq;  // 隣
-        for(let i:number=5; i<9; i++){  // 5 ～ 8
+        for(let i:number=0; i<maxLength; i++){
             foreSq = foreOf(foreSq);
-            if (foreSq == -1) {
+            if (isBreak(foreSq)) { // break 条件
                 break;
             }
 
-            sqArray[i] = foreSq;
+            foreSqArray.push(foreSq);
         }
 
-        return sqArray;
+        return [
+            ...backSqArray.reverse(),
+            centerSq,
+            ...foreSqArray,
+        ];
     }
 
 
@@ -2685,7 +2715,7 @@
     function isDeadCapacity(
         runsCapacity: number[],
     ) : boolean {
-        return runsCapacity.length < GO_LENGTH;
+        return runsCapacity.length < FIVE_LENGTH;
     }
 
 </script>
