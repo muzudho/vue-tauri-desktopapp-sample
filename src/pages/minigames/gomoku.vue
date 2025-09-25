@@ -1173,7 +1173,13 @@
 
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        // 利きマスを取得。起点を含まない
+        // 着手点の［最長］を記入します
+        gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor);   // 水平方向フィールド
+        gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor); // 垂直方向フィールド
+        gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor);  // バロック対角線方向フィールド
+        gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = aLocationsCountingMaxLength([moveSq], turnColor); // シニスター対角線方向フィールド
+
+        // 利きマスを取得。着手点を含まない
         const turnStoneHalfDirectionFieldArray = locateRadialEightHalfDirectionFieldArray(
             moveSq,
             ONE_WING_MAX_LENGTH,
@@ -1181,78 +1187,82 @@
             (sq: number) => isOutOfBoard(sq),   // break 条件
         );
 
-        // 置いた石の［最長］を記入します
+        // フィールドの各空点の［最長］を記入します
         // 水平方向フィールド
         [
-            moveSq,
             ...turnStoneHalfDirectionFieldArray[0],
             ...turnStoneHalfDirectionFieldArray[4],
         ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
-                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = aLocationsCountingMaxLength(
-                    locateDirectionFieldFromCenter(
-                        resonanceSq,
-                        eastOf,
-                        westOf,
-                    ),
-                    color,
-                );            
-            });
+            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
+                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                    // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
+                    gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                        locateDirectionFieldFromCenter(
+                            resonanceSq,
+                            eastOf,
+                            westOf,
+                        ),
+                        color,
+                    );
+                });
+            }
         });
 
         // 垂直方向フィールド
         [
-            moveSq,
             ...turnStoneHalfDirectionFieldArray[2],
             ...turnStoneHalfDirectionFieldArray[6],
         ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = aLocationsCountingMaxLength(
-                    locateDirectionFieldFromCenter(
-                        resonanceSq,
-                        northOf,
-                        southOf,
-                    ),
-                    color,
-                );
-            });
+            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
+                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                    gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                        locateDirectionFieldFromCenter(
+                            resonanceSq,
+                            northOf,
+                            southOf,
+                        ),
+                        color,
+                    );
+                });
+            }
         });
 
         // バロック対角線方向フィールド
         [
-            moveSq,
             ...turnStoneHalfDirectionFieldArray[1],
             ...turnStoneHalfDirectionFieldArray[5],
         ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
-                    locateDirectionFieldFromCenter(
-                        resonanceSq,
-                        northeastOf,
-                        southwestOf,
-                    ),
-                    color,
-                );
-            });
+            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
+                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                    gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                        locateDirectionFieldFromCenter(
+                            resonanceSq,
+                            northeastOf,
+                            southwestOf,
+                        ),
+                        color,
+                    );
+                });
+            }
         });
 
         // シニスター対角線方向フィールド
         [
-            moveSq,
             ...turnStoneHalfDirectionFieldArray[3],
             ...turnStoneHalfDirectionFieldArray[7],
         ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
-                gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
-                    locateDirectionFieldFromCenter(
-                        resonanceSq,
-                        southeastOf,
-                        northwestOf,
-                    ),
-                    color,
-                );
-            });
+            if (gameBoard1StoneColorArray.value[resonanceSq] == COLOR_EMPTY) {
+                [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                    gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                        locateDirectionFieldFromCenter(
+                            resonanceSq,
+                            southeastOf,
+                            northwestOf,
+                        ),
+                        color,
+                    );
+                });
+            }
         });
 
         // ［割り打ち］処理
