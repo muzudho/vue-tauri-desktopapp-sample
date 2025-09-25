@@ -14,6 +14,8 @@
     <h1>五目並べ</h1>
     <section class="sec-1 pt-6 mb-6">
 
+        <!-- 免責 -->
+        <v-alert type="warning" class="mb-6" title="免責！" text="画面は開発中のものだぜ（＾▽＾）！" closable />
 
         <!-- 外付けシステムボタン -->
         <section class="mb-6">
@@ -236,196 +238,208 @@
         <p>連続パス回数={{ gameBoard1PassCount }}</p>
         <p>{{ gameBoard1IsEnd ? (gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
+
+        <v-btn
+            class="code-key"
+            @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
+            @touchend="button1Ref?.release();"
+            @touchcancel="button1Ref?.release();"
+            @touchleave="button1Ref?.release();"
+            @mousedown.prevent="button1Ref?.handleMouseDown($event, onDebugInfoButtonPressed)"
+            @mouseup="button1Ref?.release();"
+            @mouseleave="button1Ref?.release();"
+        >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
+        <section v-if="debugInfo1IsShowing" class="sec-1">
+            デバッグ：<br/>
+            <p>マス番号:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ sq.toString().padStart(3, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>石の色:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1StoneColorArray[sq].toString().padStart(1, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+            
+            <p>石の状態:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1StoneStateArray[sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>黒石の最長　＞　水平方向:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthHorizontal[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>白石の最長　＞　水平方向:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthHorizontal[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>黒石の最長　＞　垂直方向:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthVertical[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>白石の最長　＞　垂直方向:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthVertical[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>黒石の最長　＞　バロック対角線:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>白石の最長　＞　バロック対角線:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>黒石の最長　＞　シニスター対角線:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>白石の最長　＞　シニスター対角線:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+        </section>
     </section>
     
-    デバッグ：<br/>
-    <p>マス番号:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ sq.toString().padStart(3, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>石の色:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1StoneColorArray[sq].toString().padStart(1, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-    
-    <p>石の状態:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1StoneStateArray[sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>黒石の最長　＞　水平方向:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthHorizontal[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>白石の最長　＞　水平方向:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthHorizontal[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>黒石の最長　＞　垂直方向:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthVertical[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>白石の最長　＞　垂直方向:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthVertical[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>黒石の最長　＞　バロック対角線:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>白石の最長　＞　バロック対角線:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>黒石の最長　＞　シニスター対角線:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal[COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
-    <p>白石の最長　＞　シニスター対角線:</p>
-    <div
-        class="mb-6"
-    >
-        <p
-            v-for="rank in range(0, 15)"
-            :key="rank"
-        >
-            <span
-                v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                :key="sq"
-            >
-                {{ gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal[COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
-            </span><br/>
-        </p>
-    </div>
-
 
     <button-to-back-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
@@ -910,6 +924,13 @@
     }
 
 
+    // ++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　デバッグ情報パネル１ +
+    // ++++++++++++++++++++++++++++++++++++++++++
+
+    const debugInfo1IsShowing = ref<boolean>(false);  // デバッグ情報を表示中
+
+
     // ######################
     // # イベントハンドラー #
     // ######################
@@ -1126,6 +1147,14 @@
      */
     function onEnvironmentConfig1ButtonPressed() : void {
         gameMachine1EnvironmentConfigIsShowing.value = !gameMachine1EnvironmentConfigIsShowing.value;
+    }
+
+
+    /**
+     * ［デバッグ情報を表示］ボタン。
+     */
+    function onDebugInfoButtonPressed() : void {
+        debugInfo1IsShowing.value = !debugInfo1IsShowing.value;
     }
 
     // ++++++++++++++++++++++++++++++++++++++
