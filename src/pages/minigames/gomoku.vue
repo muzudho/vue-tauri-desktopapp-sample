@@ -1174,7 +1174,7 @@
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
         // 利きマスを取得。起点を含まない
-        const turnStoneControlWays = locateRadialEightWays(
+        const turnStoneHalfDirectionFieldArray = locateRadialEightHalfDirectionFieldArray(
             moveSq,
             ONE_WING_MAX_LENGTH,
             (_sq: number) => false, // continue 条件
@@ -1182,73 +1182,77 @@
         );
 
         // 置いた石の［最長］を記入します
-        // 水平方向
+        // 水平方向フィールド
         [
             moveSq,
-            ...turnStoneControlWays[0],
-            ...turnStoneControlWays[4],
-        ].forEach((resonanceSq, _index, _array)=>{            
-            // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][resonanceSq] = aStoneWingsCountingMaxLength(
-                locateForWings(
-                    resonanceSq,
-                    eastOf,
-                    westOf,
-                ),
-                gameBoard1Turn.value,
-            );
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;    // 交点に石を置かれたら、相手の最長を０クリアー
+            ...turnStoneHalfDirectionFieldArray[0],
+            ...turnStoneHalfDirectionFieldArray[4],
+        ].forEach((resonanceSq, _index, _array)=>{
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                // TODO: ここで inputArray の長さが 4 以下なら［死に方向］判定にできないか？
+                gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                    locateDirectionFieldFromCenter(
+                        resonanceSq,
+                        eastOf,
+                        westOf,
+                    ),
+                    color,
+                );            
+            });
         });
 
-        // 垂直方向
+        // 垂直方向フィールド
         [
             moveSq,
-            ...turnStoneControlWays[2],
-            ...turnStoneControlWays[6],
+            ...turnStoneHalfDirectionFieldArray[2],
+            ...turnStoneHalfDirectionFieldArray[6],
         ].forEach((resonanceSq, _index, _array)=>{
-            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][resonanceSq] = aStoneWingsCountingMaxLength(
-                locateForWings(
-                    resonanceSq,
-                    northOf,
-                    southOf,
-                ),
-                gameBoard1Turn.value,
-            );
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                    locateDirectionFieldFromCenter(
+                        resonanceSq,
+                        northOf,
+                        southOf,
+                    ),
+                    color,
+                );
+            });
         });
 
-        // バロック対角線方向
+        // バロック対角線方向フィールド
         [
             moveSq,
-            ...turnStoneControlWays[1],
-            ...turnStoneControlWays[5],
+            ...turnStoneHalfDirectionFieldArray[1],
+            ...turnStoneHalfDirectionFieldArray[5],
         ].forEach((resonanceSq, _index, _array)=>{
-            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][resonanceSq] = aStoneWingsCountingMaxLength(
-                locateForWings(
-                    resonanceSq,
-                    northeastOf,
-                    southwestOf,
-                ),
-                gameBoard1Turn.value,
-            );
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                    locateDirectionFieldFromCenter(
+                        resonanceSq,
+                        northeastOf,
+                        southwestOf,
+                    ),
+                    color,
+                );
+            });
         });
 
-        // シニスター対角線方向
+        // シニスター対角線方向フィールド
         [
             moveSq,
-            ...turnStoneControlWays[3],
-            ...turnStoneControlWays[7],
+            ...turnStoneHalfDirectionFieldArray[3],
+            ...turnStoneHalfDirectionFieldArray[7],
         ].forEach((resonanceSq, _index, _array)=>{
-            gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][resonanceSq] = aStoneWingsCountingMaxLength(
-                locateForWings(
-                    resonanceSq,
-                    southeastOf,
-                    northwestOf,
-                ),
-                gameBoard1Turn.value,
-            );
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][resonanceSq] = 0;
+            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+                gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = aLocationsCountingMaxLength(
+                    locateDirectionFieldFromCenter(
+                        resonanceSq,
+                        southeastOf,
+                        northwestOf,
+                    ),
+                    color,
+                );
+            });
         });
 
         // ［割り打ち］処理
@@ -1632,8 +1636,8 @@
             //console.log(`DEBUG: [oppositeTurnStonesCheckFieldOneDirection] startSq=${startSq}`);
 
             foreOppositeTurnStones.forEach((oppositeTurnStoneSq, _index, _array)=>{
-                colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = aStoneWingsCountingMaxLength(
-                    locateForWings(
+                colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = aLocationsCountingMaxLength(
+                    locateDirectionFieldFromCenter(
                         oppositeTurnStoneSq,
                         foreOf,
                         backOf,
@@ -1644,8 +1648,8 @@
 
 
             backOppositeTurnStones.forEach((oppositeTurnStoneSq, _index, _array)=>{
-                colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = aStoneWingsCountingMaxLength(
-                    locateForWings(
+                colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = aLocationsCountingMaxLength(
+                    locateDirectionFieldFromCenter(
                         oppositeTurnStoneSq,
                         foreOf,
                         backOf,
@@ -1656,14 +1660,14 @@
         }
 
         // 水平方向の相手番の石
-        let foreOppositeTurnStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        let foreOppositeTurnStones = locateDirectionFieldFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             eastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        let backOppositeTurnStones = locateDirectionalLine(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        let backOppositeTurnStones = locateDirectionFieldFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             westOf,
@@ -1682,14 +1686,14 @@
         oppositeTurnStonesCheckDeadHorizontal(backOppositeTurnStones);
 
         // 垂直方向
-        foreOppositeTurnStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateDirectionFieldFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             southOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateDirectionalLine(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateDirectionFieldFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             northOf,
@@ -1708,14 +1712,14 @@
         oppositeTurnStonesCheckDeadVertical(backOppositeTurnStones);
 
         // バロック対角線方向
-        foreOppositeTurnStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateDirectionFieldFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             northeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateDirectionalLine(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateDirectionFieldFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             southwestOf,
@@ -1734,14 +1738,14 @@
         oppositeTurnStonesCheckDeadBaroqueDiagonal(backOppositeTurnStones);
 
         // シニスター対角線方向
-        foreOppositeTurnStones = locateDirectionalLine(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateDirectionFieldFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             southeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateDirectionalLine(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateDirectionFieldFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             ONE_WING_MAX_LENGTH,
             northwestOf,
@@ -1931,7 +1935,7 @@
      * @param locations 
      * @param color 
      */
-    function aStoneWingsCountingMaxLength(
+    function aLocationsCountingMaxLength(
         locations: number[],
         color: number,
     ) : number {
@@ -2187,41 +2191,41 @@
      * 
      * 着手点を含めた前後４マス、計９つのマスの番号の配列を返します。
      * 
-     * @param startSq 
+     * @param centerSq 
      * @param foreOf 
      * @param backOf 
      */
-    function locateForWings(
-        startSq: number,
+    function locateDirectionFieldFromCenter(
+        centerSq: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
     ) : number[] {
-        const inputArray: number[] = new Array(9).fill(-1); // マス番号の配列。要素数９。
-        inputArray[4] = startSq;
+        const sqArray: number[] = new Array(9).fill(-1); // マス番号の配列。要素数９。
+        sqArray[4] = centerSq;
 
         // 逆ウィング（起点を含まない）を戻る
-        let backSq = startSq;  // 隣
+        let backSq = centerSq;  // 隣
         for(let i:number=3; 0<=i; i--){ // 3 ～ 0
             backSq = backOf(backSq);
             if (backSq == -1) {    // 盤外なら終了
                 break;
             }
 
-            inputArray[i] = backSq;
+            sqArray[i] = backSq;
         }
 
         // 順ウィング（起点を含まない）を進む
-        let foreSq = startSq;  // 隣
+        let foreSq = centerSq;  // 隣
         for(let i:number=5; i<9; i++){  // 5 ～ 8
             foreSq = foreOf(foreSq);
             if (foreSq == -1) {
                 break;
             }
 
-            inputArray[i] = foreSq;
+            sqArray[i] = foreSq;
         }
 
-        return inputArray;
+        return sqArray;
     }
 
 
@@ -2232,8 +2236,8 @@
      * 
      * @returns マス番号の配列
      */
-    function locateDirectionalLine(
-        startSq: number,
+    function locateDirectionFieldFromEdge(
+        edgeSq: number,
         maxLength: number,
         foreOf: (sq: number)=>number,
         isContinue: (sq: number)=>boolean,
@@ -2241,7 +2245,7 @@
     ) : number[] {
         const sqArray: number[] = [];
 
-        let foreSq: number = startSq;;  // 隣
+        let foreSq: number = edgeSq;;  // 隣
         for(let i:number=0; i<maxLength; i++){
             foreSq = foreOf(foreSq);
 
@@ -2289,62 +2293,62 @@
      * この図形に名前はないが、４ウェイ（4t-way）とでも呼ぶとする。
      * 
      */
-    function locateRadialEightWays(
+    function locateRadialEightHalfDirectionFieldArray(
         startSq: number,
         oneWingMaxLength: number,
         isContinue: (sq: number)=>boolean, 
         isBreak: (sq: number)=>boolean,
     ) : number[][] {
-        const eastWay = locateDirectionalLine( // (1)
+        const eastWayField = locateDirectionFieldFromEdge( // (1)
             startSq,
             oneWingMaxLength,
             eastOf,
             isContinue,
             isBreak,
         );
-        const northeastWay = locateDirectionalLine(    // (2)
+        const northeastWayField = locateDirectionFieldFromEdge(    // (2)
             startSq,
             oneWingMaxLength,
             northeastOf,
             isContinue,
             isBreak,
         );
-        const northWay = locateDirectionalLine(    // (3)
+        const northWayField = locateDirectionFieldFromEdge(    // (3)
             startSq,
             oneWingMaxLength,
             northOf,
             isContinue,
             isBreak,
         );
-        const northwestWay = locateDirectionalLine(    // (4)
+        const northwestWayField = locateDirectionFieldFromEdge(    // (4)
             startSq,
             oneWingMaxLength,
             northwestOf,
             isContinue,
             isBreak,
         );
-        const westWay = locateDirectionalLine( // (5)
+        const westWayField = locateDirectionFieldFromEdge( // (5)
             startSq,
             oneWingMaxLength,
             westOf,
             isContinue,
             isBreak,
         );
-        const southwestWay = locateDirectionalLine(    // (6)
+        const southwestWayField = locateDirectionFieldFromEdge(    // (6)
             startSq,
             oneWingMaxLength,
             southwestOf,
             isContinue,
             isBreak,
         );
-        const southWay = locateDirectionalLine(    // (7)
+        const southWayField = locateDirectionFieldFromEdge(    // (7)
             startSq,
             oneWingMaxLength,
             southOf,
             isContinue,
             isBreak,
         );
-        const southeastWay = locateDirectionalLine(    // (8)
+        const southeastWayField = locateDirectionFieldFromEdge(    // (8)
             startSq,
             oneWingMaxLength,
             southeastOf,
@@ -2353,14 +2357,14 @@
         );
         return [
             // startSq を含まない
-            eastWay,
-            northeastWay,
-            northWay,
-            northwestWay,
-            westWay,
-            southwestWay,
-            southWay,
-            southeastWay
+            eastWayField,
+            northeastWayField,
+            northWayField,
+            northwestWayField,
+            westWayField,
+            southwestWayField,
+            southWayField,
+            southeastWayField
         ];
     }
 
@@ -2382,7 +2386,7 @@
     ) : number[] {
 
         // 順ウィング
-        const fwdWing = locateDirectionalLine(
+        const fwdWing = locateDirectionFieldFromEdge(
             startSq,
             ONE_WING_MAX_LENGTH,
             foreOf,
@@ -2391,7 +2395,7 @@
         );
 
         // 逆ウィング
-        const revWing = locateDirectionalLine(
+        const revWing = locateDirectionFieldFromEdge(
             startSq,
             ONE_WING_MAX_LENGTH,
             backOf,
