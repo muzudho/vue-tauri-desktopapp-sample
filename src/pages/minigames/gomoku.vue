@@ -302,6 +302,23 @@
                 </p>
             </div>
 
+            <p>ビンゴ:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, 15)"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        :key="sq"
+                    >
+                        {{ gameBoard1SquaresBingo[sq] }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
             <p>黒石の最長　＞　水平方向:</p>
             <div
                 class="mb-6"
@@ -1307,9 +1324,9 @@
         // ［五］を作れたら［五］です        
         if (
             FIVE_LENGTH <= locationsDiameterFiveControlHorizontal.length    // 水平方向の利き
-            || FIVE_LENGTH <= locationsDiameterNineControlVertical.length   // 垂直方向の利き
-            || FIVE_LENGTH <= locationsDiameterNineControlBaroqueDiagonal.length    // バロック対角線方向の利き
-            || FIVE_LENGTH <= locationsDiameterNineControlSinisterDiagonal.length   // シニスター対角線方向の利き
+            || FIVE_LENGTH <= locationsDiameterFiveControlVertical.length   // 垂直方向の利き
+            || FIVE_LENGTH <= locationsDiameterFiveControlBaroqueDiagonal.length    // バロック対角線方向の利き
+            || FIVE_LENGTH <= locationsDiameterFiveControlSinisterDiagonal.length   // シニスター対角線方向の利き
         ) { 
             gameBoard1SquaresBingo.value[moveSq] = turnColor as Color;
         }
@@ -1571,6 +1588,7 @@
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
             gameBoard1StoneStateArray.value[sq] = STONE_STATE_NONE;
+            gameBoard1SquaresBingo.value[sq] = COLOR_EMPTY as Color;
         }
 
         gameBoard1Times.value = 0;
