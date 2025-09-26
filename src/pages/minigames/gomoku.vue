@@ -1229,8 +1229,8 @@
      * @param moveSq 
      */
     function putStone(moveSq: number) : boolean {
-        const turnColor = gameBoard1Turn.value;
-        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
+        const turnColor = gameBoard1Turn.value as Color;
+        const oppositeTurnColor1 = oppositeTurnColor(turnColor);
 
         if (!gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
             return false;
@@ -1238,18 +1238,6 @@
 
         // sq を符号に変換したい。
         console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)} moveSq=${moveSq} turnColor=${turnColor}`);
-        // test
-        const slidingWindowArrayHorizontal = makeSlidingWindowArray(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            HALF_OPEN_RADIUS_OF_FIVE,
-            eastOf,
-            westOf,
-        );
-        console.log(`DEBUG: [putStone] slidingWindowArrayHorizontal.length=[${slidingWindowArrayHorizontal.length}]`);
-        slidingWindowArrayHorizontal.forEach((oneWindow, index, _array)=>{
-            console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
-        });
 
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
@@ -1257,45 +1245,85 @@
         // + 仕込み +
         // ++++++++++
 
-        // 直径５　＞　水平方向の利き
-        const locationsDiameterFiveControlHorizontal = locateDirectionFromCenter(
+        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
+        const slidingWindowArrayHorizontal = makeSlidingWindowArray(
             moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             HALF_OPEN_RADIUS_OF_FIVE,
             eastOf,
             westOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
+        // console.log(`DEBUG: [putStone] slidingWindowArrayHorizontal.length=[${slidingWindowArrayHorizontal.length}]`);
+        // slidingWindowArrayHorizontal.forEach((oneWindow, index, _array)=>{
+        //     console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
+        // });
 
-        // 直径５　＞　垂直方向の利き
-        const locationsDiameterFiveControlVertical = locateDirectionFromCenter(
+        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　垂直方向
+        const slidingWindowArrayVertical = makeSlidingWindowArray(
             moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             HALF_OPEN_RADIUS_OF_FIVE,
             northOf,
             southOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
-        // 直径５　＞　バロック対角線方向の利き
-        const locationsDiameterFiveControlBaroqueDiagonal = locateDirectionFromCenter(
+        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　バロック対角線方向の利き
+        const slidingWindowArrayBaroqueDiagonal = makeSlidingWindowArray(
             moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             HALF_OPEN_RADIUS_OF_FIVE,
             northeastOf,
             southwestOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
-        // 直径５　＞　シニスター対角線方向の利き
-        const locationsDiameterFiveControlSinisterDiagonal = locateDirectionFromCenter(
+        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　シニスター対角線方向の利き
+        const slidingWindowArraySinisterDiagonal = makeSlidingWindowArray(
             moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             HALF_OPEN_RADIUS_OF_FIVE,
             southeastOf,
             northwestOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
+
+        // // 直径５　＞　水平方向の利き
+        // const locationsDiameterFiveControlHorizontal = locateDirectionFromCenter(
+        //     moveSq,
+        //     HALF_OPEN_RADIUS_OF_FIVE,
+        //     eastOf,
+        //     westOf,
+        //     (_sq: number) => false,  // continue 条件
+        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
+        // );
+
+        // // 直径５　＞　垂直方向の利き
+        // const locationsDiameterFiveControlVertical = locateDirectionFromCenter(
+        //     moveSq,
+        //     HALF_OPEN_RADIUS_OF_FIVE,
+        //     northOf,
+        //     southOf,
+        //     (_sq: number) => false,  // continue 条件
+        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
+        // );
+
+        // // 直径５　＞　バロック対角線方向の利き
+        // const locationsDiameterFiveControlBaroqueDiagonal = locateDirectionFromCenter(
+        //     moveSq,
+        //     HALF_OPEN_RADIUS_OF_FIVE,
+        //     northeastOf,
+        //     southwestOf,
+        //     (_sq: number) => false,  // continue 条件
+        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
+        // );
+
+        // // 直径５　＞　シニスター対角線方向の利き
+        // const locationsDiameterFiveControlSinisterDiagonal = locateDirectionFromCenter(
+        //     moveSq,
+        //     HALF_OPEN_RADIUS_OF_FIVE,
+        //     southeastOf,
+        //     northwestOf,
+        //     (_sq: number) => false,  // continue 条件
+        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
+        // );
 
         // 直径９　＞　水平方向の利き
         const locationsDiameterNineControlHorizontal = locateDirectionFromCenter(
@@ -1343,10 +1371,10 @@
 
         // ［五］を作れたら［五］です        
         if (
-            FIVE_LENGTH <= locationsDiameterFiveControlHorizontal.length    // 水平方向の利き
-            || FIVE_LENGTH <= locationsDiameterFiveControlVertical.length   // 垂直方向の利き
-            || FIVE_LENGTH <= locationsDiameterFiveControlBaroqueDiagonal.length    // バロック対角線方向の利き
-            || FIVE_LENGTH <= locationsDiameterFiveControlSinisterDiagonal.length   // シニスター対角線方向の利き
+            containsAnyBingoWindow(slidingWindowArrayHorizontal, turnColor) // 水平方向にビンゴがあるか？
+            || containsAnyBingoWindow(slidingWindowArrayVertical, turnColor)
+            || containsAnyBingoWindow(slidingWindowArrayBaroqueDiagonal, turnColor)
+            || containsAnyBingoWindow(slidingWindowArraySinisterDiagonal, turnColor)
         ) { 
             gameBoard1SquaresBingo.value[moveSq] = turnColor as Color;
         }
@@ -2602,7 +2630,7 @@
 
         const amplitude = halfOpenRadiusOfInputArray - halfOpenRadiusOfWindow;  // 前後の振り幅
         const slidingWindowNum = 2 * amplitude + 1;
-        console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
+        //console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
 
         for (let iSlidingWindow: number=0; iSlidingWindow < slidingWindowNum; iSlidingWindow++) {
             slidingWindowArray.push(makeOneWindow(
@@ -2615,6 +2643,35 @@
         }
 
         return slidingWindowArray;
+    }
+
+    /**
+     * スライディング・ウィンドウの配列を与えたら、
+     * ウィンドウが全て自石でできているか確認し、
+     * そのようなウィンドウが１つでも有れば真となるような関数。
+     */
+    function containsAnyBingoWindow(
+        slidingWindowArray: number[][],
+        stoneColor: Color,
+    ) : boolean {
+        let anyBingo = false;
+
+        for (const aWindow of slidingWindowArray) {
+            let bingo = true;
+            for (const sq of aWindow) {
+                if (isOutOfBoard(sq) || gameBoard1StoneColorArray.value[sq] != stoneColor) {
+                    bingo = false;
+                    break;
+                }
+            }
+
+            if (bingo) {
+                anyBingo = true;
+                break;
+            }
+        }
+
+        return anyBingo;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++
