@@ -1238,6 +1238,18 @@
 
         // sq を符号に変換したい。
         console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)} moveSq=${moveSq} turnColor=${turnColor}`);
+        // test
+        const slidingWindowArrayHorizontal = makeSlidingWindowArray(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            HALF_OPEN_RADIUS_OF_FIVE,
+            eastOf,
+            westOf,
+        );
+        console.log(`DEBUG: [putStone] slidingWindowArrayHorizontal.length=[${slidingWindowArrayHorizontal.length}]`);
+        slidingWindowArrayHorizontal.forEach((oneWindow, index, _array)=>{
+            console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
+        });
 
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
@@ -1251,6 +1263,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             eastOf,
             westOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
@@ -1260,6 +1273,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             northOf,
             southOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
@@ -1269,6 +1283,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             northeastOf,
             southwestOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
@@ -1278,6 +1293,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             southeastOf,
             northwestOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
@@ -1287,6 +1303,7 @@
             HALF_OPEN_RADIUS_OF_NINE,
             eastOf,
             westOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
 
@@ -1296,6 +1313,7 @@
             HALF_OPEN_RADIUS_OF_NINE,
             northOf,
             southOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
 
@@ -1305,6 +1323,7 @@
             HALF_OPEN_RADIUS_OF_NINE,
             northeastOf,
             southwestOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
 
@@ -1314,6 +1333,7 @@
             HALF_OPEN_RADIUS_OF_NINE,
             southeastOf,
             northwestOf,
+            (_sq: number) => false,  // continue 条件
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
 
@@ -1405,6 +1425,7 @@
                         HALF_OPEN_RADIUS_OF_NINE,
                         eastOf,
                         westOf,
+                        (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
                     if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
@@ -1432,6 +1453,7 @@
                         HALF_OPEN_RADIUS_OF_NINE,
                         northOf,
                         southOf,
+                        (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
                     if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
@@ -1459,6 +1481,7 @@
                         HALF_OPEN_RADIUS_OF_NINE,
                         northeastOf,
                         southwestOf,
+                        (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
                     if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
@@ -1486,6 +1509,7 @@
                         HALF_OPEN_RADIUS_OF_NINE,
                         southeastOf,
                         northwestOf,
+                        (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
                     if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
@@ -1746,8 +1770,9 @@
         directionalStoneStateArray: Ref<Array<number>>,
         aliveDirection: number,
     ) : void {
-        const runsNineSquares = locateFieldCapacity(
+        const runsNineSquares = locateFieldCapacityFromCenter(
             startSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             foreOf,
             backOf,
             (_sq: number) => false,  // continue 条件
@@ -1908,6 +1933,7 @@
                     HALF_OPEN_RADIUS_OF_NINE,
                     foreOf,
                     backOf,
+                    (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
                 );
                 if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
@@ -1927,6 +1953,7 @@
                     HALF_OPEN_RADIUS_OF_NINE,
                     foreOf,
                     backOf,
+                    (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
                 );
                 if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
@@ -2271,60 +2298,6 @@
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     /**
-     * ［飛び石］の位置を調べるために。
-     * 
-     *  0 1 2 3 4 5 6 7 8
-     * +-+-+-+-+-+-+-+-+-+
-     * | | | | |x| | | | |
-     * +-+-+-+-+-+-+-+-+-+
-     * 
-     * 着手点を含めた前後４マス、計９つのマスの番号の配列を返します。
-     * 
-     * @param centerSq 
-     * @param halfOpenRadius 
-     * @param foreOf 
-     * @param backOf 
-     */
-    function locateDirectionFromCenter(
-        centerSq: number,
-        halfOpenRadius: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
-        isBreak: (sq: number)=>boolean,
-    ) : number[] {
-        // 逆ウィング（起点を含まない）を戻る
-        const backSqArray: number[] = [];
-        let backSq = centerSq;  // 隣
-        for(let i:number=0; i<halfOpenRadius; i++){
-            backSq = backOf(backSq);
-            if (isBreak(backSq)) {  // break 条件
-                break;
-            }
-
-            backSqArray.push(backSq);
-        }
-
-        // 順ウィング（起点を含まない）を進む
-        const foreSqArray: number[] = [];
-        let foreSq = centerSq;  // 隣
-        for(let i:number=0; i<halfOpenRadius; i++){
-            foreSq = foreOf(foreSq);
-            if (isBreak(foreSq)) {  // break 条件
-                break;
-            }
-
-            foreSqArray.push(foreSq);
-        }
-
-        return [
-            ...backSqArray.reverse(),
-            centerSq,
-            ...foreSqArray,
-        ];
-    }
-
-
-    /**
      * ［片翼］取得
      * 
      * 指定の向きの各マスをスキャン。起点を含まない。
@@ -2356,6 +2329,110 @@
         }
 
         return sqArray;
+    }
+
+
+    /**
+     * ［飛び石］の位置を調べるために。
+     * 
+     *  0 1 2 3 4 5 6 7 8
+     * +-+-+-+-+-+-+-+-+-+
+     * | | | | |x| | | | |
+     * +-+-+-+-+-+-+-+-+-+
+     * 
+     * 着手点を含めた前後４マス、計９つのマスの番号の配列を返します。
+     * 
+     * @param centerSq 
+     * @param halfOpenRadius 
+     * @param foreOf 
+     * @param backOf 
+     */
+    function locateDirectionFromCenter(
+        centerSq: number,
+        halfOpenRadius: number,
+        foreOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
+        isContinue: (sq: number)=>boolean,
+        isBreak: (sq: number)=>boolean,
+    ) : number[] {
+        // 逆ウィング（起点を含まない）を戻る
+        const backSqArray: number[] = [];
+        let backSq = centerSq;  // 隣
+        for(let i:number=0; i<halfOpenRadius; i++){
+            backSq = backOf(backSq);
+
+            if (isContinue(backSq)) {   // continue 条件
+                continue;
+            }
+
+            if (isBreak(backSq)) {  // break 条件
+                break;
+            }
+
+            backSqArray.push(backSq);
+        }
+
+        // 順ウィング（起点を含まない）を進む
+        const foreSqArray: number[] = [];
+        let foreSq = centerSq;  // 隣
+        for(let i:number=0; i<halfOpenRadius; i++){
+            foreSq = foreOf(foreSq);
+
+            if (isContinue(foreSq)) {   // continue 条件
+                continue;
+            }
+
+            if (isBreak(foreSq)) {  // break 条件
+                break;
+            }
+
+            foreSqArray.push(foreSq);
+        }
+
+        return [
+            ...backSqArray.reverse(),
+            centerSq,
+            ...foreSqArray,
+        ];
+    }
+
+
+    /**
+     * ［飛び石］取得
+     * 
+     * ［逆ウィング］の逆順、着手点、順ウィングを合わせたものが［飛び石］だ。
+     * ９マス以下。
+     * 
+     * @returns ９つのマスの番号の配列
+     */
+    function locateFieldCapacityFromCenter(
+        centerSq: number,    // 着手点
+        halfOpenRadius: number,
+        foreOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
+        isContinue: (sq: number)=>boolean,
+        isBreak: (sq: number)=>boolean,
+    ) : number[] {
+
+        // 順ウィング
+        const fwdWing = locateDirectionFromEdge(
+            centerSq,
+            halfOpenRadius,
+            foreOf,
+            isContinue,
+            isBreak,
+        );
+
+        // 逆ウィング
+        const revWing = locateDirectionFromEdge(
+            centerSq,
+            halfOpenRadius,
+            backOf,
+            isContinue,
+            isBreak,
+        );
+
+        return [...revWing.reverse(), centerSq, ...fwdWing]; // 向きを揃えて１つの配列にする
     }
 
 
@@ -2465,83 +2542,76 @@
 
 
     /**
-     * ［飛び石］取得
-     * 
-     * ［逆ウィング］の逆順、着手点、順ウィングを合わせたものが［飛び石］だ。
-     * ９マス以下。
-     * 
-     * @returns ９つのマスの番号の配列
+     * スライディング・ウィンドウの１ウィンドウ分
+     * @param startSq 
+     * @param foreOf 
+     * @param backOf 
      */
-    function locateFieldCapacity(
-        startSq: number,    // 着手点
+    function makeOneWindow(
+        startSq: number,
+        foreLength: number,
+        backLength: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
-        isContinue: (sq: number)=>boolean,
-        isBreak: (sq: number)=>boolean,
     ) : number[] {
+        const backLocations : number[] = [];
+        const foreLocations : number[] = [];
 
-        // 順ウィング
-        const fwdWing = locateDirectionFromEdge(
+        // 逆ウィング（起点を含まない）を戻る
+        let backSq = startSq;
+        for(let i:number=0; i<foreLength; i++){
+            backSq = backOf(backSq);
+            if (isOutOfBoard(backSq)) { // break 条件
+                break;
+            }
+
+            backLocations.push(backSq);
+        }
+
+        // 順ウィング（起点を含まない）を進む
+        let foreSq = startSq;
+        for(let i:number=0; i<backLength; i++){
+            foreSq = foreOf(foreSq);
+            if (isOutOfBoard(foreSq)) { // break 条件
+                break;
+            }
+
+            foreLocations.push(foreSq);
+        }
+
+        return [
+            ...backLocations.reverse(),
             startSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            foreOf,
-            isContinue,
-            isBreak,
-        );
-
-        // 逆ウィング
-        const revWing = locateDirectionFromEdge(
-            startSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            backOf,
-            isContinue,
-            isBreak,
-        );
-
-        return [...revWing.reverse(), startSq, ...fwdWing]; // 向きを揃えて１つの配列にする
+            ...foreLocations
+        ];
     }
 
-
     /**
-     * スライディング・ウィンドウ
-     * @param locations 
+     * TODO: スライディング・ウィンドウ作成
+     * @param inputArray 
      * @param isBreak 
      */
-    function aStoneWingsLocateSlidingWindowArray(
-        locations: number[],
-        isBreak: (sq: number) => boolean,
+    function makeSlidingWindowArray(
+        startSq: number,
+        halfOpenRadiusOfInputArray: number,
+        halfOpenRadiusOfWindow: number,
+        foreOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
     ) : number[][] {
         const slidingWindowArray : number[][] = [];
 
-        for(let slidingWindowNum: number=0; slidingWindowNum < 5; slidingWindowNum++){
-            const backWingArray : number[] = [];
-            const foreWingArray : number[] = [];
+        const amplitude = halfOpenRadiusOfInputArray - halfOpenRadiusOfWindow;  // 前後の振り幅
+        const slidingWindowNum = 2 * amplitude + 1;
+        console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
 
-            // 逆ウィング（起点を含まない）を戻る
-            for(let i:number=3; 0<=i; i--){ // 3 ～ 0
-                const sq = locations[i];
-                if (isBreak(sq)) {
-                    break;
-                }
-
-                backWingArray.push(sq);
-            }
-
-            // 順ウィング（起点を含まない）を進む
-            for(let i:number=5; i<9; i++){  // 5 ～ 8
-                const sq = locations[i];
-                if (isBreak(sq)) {
-                    break;
-                }
-
-                foreWingArray.push(sq);
-            }
-
-            slidingWindowArray.push([
-                ...backWingArray.reverse(),
-                locations[4],
-                ...foreWingArray
-            ])
+        for(let iSlidingWindow: number=0; iSlidingWindow < slidingWindowNum; iSlidingWindow++){
+            slidingWindowArray.push(makeOneWindow(
+                startSq,
+                halfOpenRadiusOfInputArray - iSlidingWindow,
+                iSlidingWindow,
+                foreOf,
+                backOf
+            ))
         }
 
         return slidingWindowArray;
@@ -2630,8 +2700,9 @@
     function oppositeTurnStoneIsDeadHorizontal(
         aStoneSq: number,
     ) : boolean {
-        const horizontalFieldCapacity = locateFieldCapacity(
+        const horizontalFieldCapacity = locateFieldCapacityFromCenter(
             aStoneSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             eastOf,
             westOf,
             (_sq: number) => false,  // continue 条件
@@ -2649,8 +2720,9 @@
     function oppositeTurnStoneIsDeadVertical(
         aStoneSq: number,
     ) : boolean {
-        const verticalFieldCapacity = locateFieldCapacity(
+        const verticalFieldCapacity = locateFieldCapacityFromCenter(
             aStoneSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             southOf,
             northOf,
             (_sq: number) => false,  // continue 条件
@@ -2668,8 +2740,9 @@
     function oppositeTurnStoneIsDeadBaroqueDiagonal(
         aStoneSq: number,
     ) : boolean {
-        const baroqueDiagonalFieldCapacity = locateFieldCapacity(
+        const baroqueDiagonalFieldCapacity = locateFieldCapacityFromCenter(
             aStoneSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             northeastOf,
             southwestOf,
             (_sq: number) => false,  // continue 条件
@@ -2687,8 +2760,9 @@
     function oppositeTurnStoneIsDeadSinisterDiagonal(
         aStoneSq: number,
     ) : boolean {
-        const sinisterDiagonalFieldCapacity = locateFieldCapacity(
+        const sinisterDiagonalFieldCapacity = locateFieldCapacityFromCenter(
             aStoneSq,
+            HALF_OPEN_RADIUS_OF_NINE,
             southeastOf,
             northwestOf,
             (_sq: number) => false,  // continue 条件
