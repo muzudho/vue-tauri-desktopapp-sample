@@ -2557,9 +2557,9 @@
         const backLocations : number[] = [];
         const foreLocations : number[] = [];
 
-        // 逆ウィング（起点を含まない）を戻る
+        // ウィンドウの後方（起点を含まない）
         let backSq = startSq;
-        for(let i:number=0; i<foreLength; i++){
+        for (let i:number=0; i<foreLength; i++) {
             backSq = backOf(backSq);
             if (isOutOfBoard(backSq)) { // break 条件
                 break;
@@ -2568,9 +2568,9 @@
             backLocations.push(backSq);
         }
 
-        // 順ウィング（起点を含まない）を進む
+        // ウィンドウの前方（起点を含まない）
         let foreSq = startSq;
-        for(let i:number=0; i<backLength; i++){
+        for (let i:number=0; i<backLength; i++) {
             foreSq = foreOf(foreSq);
             if (isOutOfBoard(foreSq)) { // break 条件
                 break;
@@ -2587,7 +2587,7 @@
     }
 
     /**
-     * TODO: スライディング・ウィンドウ作成
+     * スライディング・ウィンドウ作成
      * @param inputArray 
      * @param isBreak 
      */
@@ -2604,7 +2604,7 @@
         const slidingWindowNum = 2 * amplitude + 1;
         console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
 
-        for(let iSlidingWindow: number=0; iSlidingWindow < slidingWindowNum; iSlidingWindow++){
+        for (let iSlidingWindow: number=0; iSlidingWindow < slidingWindowNum; iSlidingWindow++) {
             slidingWindowArray.push(makeOneWindow(
                 startSq,
                 halfOpenRadiusOfInputArray - iSlidingWindow,
