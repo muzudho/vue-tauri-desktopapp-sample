@@ -706,34 +706,6 @@
                     gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[COLOR_WHITE][sq],   // シニスター対角線
                 );
 
-                // function getMarkerCode(conn: number) : string {
-                //     if (conn <= 0) { return '00'; }
-                //     if (conn <= 1) { return '01'; }
-                //     if (conn <= 2) { return '02'; }
-                //     if (conn <= 3) { return '03'; }
-
-                //     if (isAliveStone(sq)) {
-                //         return '05';
-                //     }
-
-                //     if (
-                //         // TODO 4方向が［死に方向］なら、［死に石］だ
-                //         gameBoard1StonesMaxLengthOfSlidingWindowHorizontal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                //         && gameBoard1StonesMaxLengthOfSlidingWindowVertical.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                //         && gameBoard1StonesMaxLengthOfSlidingWindowBaroqueDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                //         && gameBoard1StonesMaxLengthOfSlidingWindowSinisterDiagonal.value[sq] == RUNS_SLIDING_WINDOW_DEAD
-                //     ) {
-                //         return '06';
-                //     }
-
-                //     return '04';    // 連続していることが確認できなければ［五］にはなりません。
-                // }
-
-                // const markerCode = getMarkerCode(conn);
-
-                // `-${markerCode}-${}`
-               
-
                 const aGridNumber = getBoardGridNumber(sq);
                 const imageKey = makeImageKey(stoneColor, bYWhiteMaxLength, bXBlackMaxLength, aGridNumber);
                 
@@ -821,6 +793,9 @@
     }
 
 
+    const MAX_MAX_LENGTH = 6;
+
+
     function makeImageKey(cColor: number, bYWhiteMaxLength:number, bXBlackMaxLength:number, aGridNumber:number) : string {
         const [cY, cX] = getCColorCode(cColor);
         const [bY, bX] = getByBxMaxLength(bYWhiteMaxLength, bXBlackMaxLength);
@@ -830,8 +805,8 @@
         if (cY<0 || 1<cY) { console.log(`ERROR: cY=${cY}`)}
         if (cX<0 || 1<cX) { console.log(`ERROR: cX=${cX}`)}
         if (0==cY && cX==1) { console.log(`ERROR: cY=${cY} cx=${cX}`)}
-        if (bY<0 || 6<bY) { console.log(`ERROR: bY=${bY}`)}
-        if (bX<0 || 6<bX) { console.log(`ERROR: bX=${bX}`)}
+        if (bY<0 || (MAX_MAX_LENGTH + 1)<bY) { console.log(`ERROR: bY=${bY}`)}
+        if (bX<0 || (MAX_MAX_LENGTH + 1)<bX) { console.log(`ERROR: bX=${bX}`)}
         if (aY<0 || 4<aY) { console.log(`ERROR: aY=${aY}`)}
         if (aX<0 || 3<aX) { console.log(`ERROR: aX=${aX}`)}
         if ((1<=aX && aX<=2) && aY==0) { console.log(`ERROR: aY=${aY} aX=${aX}`)}
@@ -952,8 +927,8 @@
 
     const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {};
     for(let cColor=0; cColor<3; cColor++) {
-        for(let bYWhiteMaxLength=-1; bYWhiteMaxLength<6; bYWhiteMaxLength++) {
-            for(let bXBlackMaxLength=-1; bXBlackMaxLength<6; bXBlackMaxLength++) {
+        for(let bYWhiteMaxLength=-1; bYWhiteMaxLength<=MAX_MAX_LENGTH; bYWhiteMaxLength++) {
+            for(let bXBlackMaxLength=-1; bXBlackMaxLength<=MAX_MAX_LENGTH; bXBlackMaxLength++) {
                 [0, 6, 14, 12, 7, 15, 13, 3, 11, 9].forEach((aGridNumber, _index, _array)=>{
                     const [key, rect] = makeKeyAndRectangle(cColor, bYWhiteMaxLength, bXBlackMaxLength, aGridNumber);
                     gameBoard1SourceTilemap1Frames[key] = rect;
