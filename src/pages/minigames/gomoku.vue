@@ -579,13 +579,14 @@
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
-    const ONE_WING_MAX_LENGTH = 4;  // 片翼（着手点を含まない）の最大長さ
+    const HALF_OPEN_RADIUS_OF_NINE = 4;  // 直径 9 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼
     const FIVE_LENGTH = 5;  // ［五］の長さ
+    const HALF_OPEN_RADIUS_OF_FIVE = 2; // 直径 5 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
     const COLOR_EMPTY = 0;  // 空きマス。石の色無し
     const COLOR_BLACK = 1;  // 黒石
     const COLOR_WHITE = 2;  // 白石
-    type Color = COLOR_EMPTY|COLOR_BLACK|COLOR_WHITE;
+    type Color = typeof COLOR_EMPTY | typeof COLOR_BLACK | typeof COLOR_WHITE;
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
@@ -1223,74 +1224,136 @@
 
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        // ++++++++++++++++++++++++++
-        // + 着手点の［最長］を記入 +
-        // ++++++++++++++++++++++++++
+        // ++++++++++
+        // + 仕込み +
+        // ++++++++++
 
-        // 水平方向フィールド
-        const directionControlLocationsHorizontal = locateDirectionFromCenter(
+        // 直径５　＞　水平方向の利き
+        const locationsDiameterFiveControlHorizontal = locateDirectionFromCenter(
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_FIVE,
             eastOf,
             westOf,
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
-        if (isControlDirectionFieldDead(directionControlLocationsHorizontal)) { // ［五］を作れない方向なら［死に方向］です
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
-        } else {
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countStones(
-                directionControlLocationsHorizontal,
-                turnColor
-            );
-        }
 
-        // 垂直方向フィールド
-        const directionControlLocationsVertical = locateDirectionFromCenter(
+        // 直径５　＞　垂直方向の利き
+        const locationsDiameterFiveControlVertical = locateDirectionFromCenter(
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_FIVE,
             northOf,
             southOf,
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
-        if (isControlDirectionFieldDead(directionControlLocationsVertical)) { // ［五］を作れない方向なら［死に方向］です
-            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
-        } else {
-            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countStones(
-                directionControlLocationsVertical,
-                turnColor
-            );
-        }
 
-        // バロック対角線方向フィールド
-        const directionControlLocationsBaroqueDiagonal = locateDirectionFromCenter(
+        // 直径５　＞　バロック対角線方向の利き
+        const locationsDiameterFiveControlBaroqueDiagonal = locateDirectionFromCenter(
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_FIVE,
             northeastOf,
             southwestOf,
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
-        if (isControlDirectionFieldDead(directionControlLocationsBaroqueDiagonal)) { // ［五］を作れない方向なら［死に方向］です
-            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
-        } else {
-            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countStones(
-                directionControlLocationsBaroqueDiagonal,
-                turnColor
-            );
-        }
 
-        // シニスター対角線方向フィールド
-        const directionControlLocationsSinisterDiagonal = locateDirectionFromCenter(
+        // 直径５　＞　シニスター対角線方向の利き
+        const locationsDiameterFiveControlSinisterDiagonal = locateDirectionFromCenter(
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_FIVE,
             southeastOf,
             northwestOf,
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
-        if (isControlDirectionFieldDead(directionControlLocationsSinisterDiagonal)) { // ［五］を作れない方向なら［死に方向］です
+
+        // 直径９　＞　水平方向の利き
+        const locationsDiameterNineControlHorizontal = locateDirectionFromCenter(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            eastOf,
+            westOf,
+            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+        );
+
+        // 直径９　＞　垂直方向の利き
+        const locationsDiameterNineControlVertical = locateDirectionFromCenter(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            northOf,
+            southOf,
+            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+        );
+
+        // 直径９　＞　バロック対角線方向の利き
+        const locationsDiameterNineControlBaroqueDiagonal = locateDirectionFromCenter(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            northeastOf,
+            southwestOf,
+            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+        );
+
+        // 直径９　＞　シニスター対角線方向の利き
+        const locationsDiameterNineControlSinisterDiagonal = locateDirectionFromCenter(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            southeastOf,
+            northwestOf,
+            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+        );
+
+        // ++++++++++++++++++++++++++++++++++++++++++++++
+        // + 着手石と、それに隣接する自石が［五］か記入 +
+        // ++++++++++++++++++++++++++++++++++++++++++++++
+
+        // ［五］を作れたら［五］です        
+        if (
+            FIVE_LENGTH <= locationsDiameterFiveControlHorizontal.length    // 水平方向の利き
+            || FIVE_LENGTH <= locationsDiameterNineControlVertical.length   // 垂直方向の利き
+            || FIVE_LENGTH <= locationsDiameterNineControlBaroqueDiagonal.length    // バロック対角線方向の利き
+            || FIVE_LENGTH <= locationsDiameterNineControlSinisterDiagonal.length   // シニスター対角線方向の利き
+        ) { 
+            gameBoard1SquaresBingo.value[moveSq] = turnColor as Color;
+        }
+
+        // ++++++++++++++++++++++++++
+        // + 着手点の［最長］を記入 +
+        // ++++++++++++++++++++++++++
+
+        // 水平方向の利き
+        if (locationsDiameterNineControlHorizontal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
+        } else {
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countStones(
+                locationsDiameterNineControlHorizontal,
+                turnColor
+            );
+        }
+
+        // 垂直方向の利き
+        if (locationsDiameterNineControlVertical.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
+        } else {
+            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countStones(
+                locationsDiameterNineControlVertical,
+                turnColor
+            );
+        }
+
+        // バロック対角線方向の利き
+        if (locationsDiameterNineControlBaroqueDiagonal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
+        } else {
+            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countStones(
+                locationsDiameterNineControlBaroqueDiagonal,
+                turnColor
+            );
+        }
+
+        // シニスター対角線方向の利き
+        if (locationsDiameterNineControlSinisterDiagonal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = countStones(
-                directionControlLocationsSinisterDiagonal,
+                locationsDiameterNineControlSinisterDiagonal,
                 turnColor
             );
         }
@@ -1303,7 +1366,7 @@
         // 利きマスを取得。着手点を含まない
         const turnStoneHalfDirectionFieldArray = locateRadialEightHalfDirectionFieldArray(
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             (_sq: number) => false, // continue 条件
             (sq: number) => isOutOfBoard(sq),   // break 条件
         );
@@ -1322,12 +1385,12 @@
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        ONE_WING_MAX_LENGTH,
+                        HALF_OPEN_RADIUS_OF_NINE,
                         eastOf,
                         westOf,
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
+                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
                         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = countStones(
@@ -1349,12 +1412,12 @@
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        ONE_WING_MAX_LENGTH,
+                        HALF_OPEN_RADIUS_OF_NINE,
                         northOf,
                         southOf,
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
+                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
                         gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = countStones(
@@ -1376,12 +1439,12 @@
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        ONE_WING_MAX_LENGTH,
+                        HALF_OPEN_RADIUS_OF_NINE,
                         northeastOf,
                         southwestOf,
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
+                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
                         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = countStones(
@@ -1403,12 +1466,12 @@
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        ONE_WING_MAX_LENGTH,
+                        HALF_OPEN_RADIUS_OF_NINE,
                         southeastOf,
                         northwestOf,
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
+                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
                         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = countStones(
@@ -1824,12 +1887,12 @@
             foreOppositeTurnStones.forEach((oppositeTurnStoneSq, _index, _array)=>{
                 const directionControlLocations = locateDirectionFromCenter(
                     oppositeTurnStoneSq,
-                    ONE_WING_MAX_LENGTH,
+                    HALF_OPEN_RADIUS_OF_NINE,
                     foreOf,
                     backOf,
                     makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
                 );
-                if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
+                if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
                 } else {
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
@@ -1843,12 +1906,12 @@
             backOppositeTurnStones.forEach((oppositeTurnStoneSq, _index, _array)=>{
                 const directionControlLocations = locateDirectionFromCenter(
                     oppositeTurnStoneSq,
-                    ONE_WING_MAX_LENGTH,
+                    HALF_OPEN_RADIUS_OF_NINE,
                     foreOf,
                     backOf,
                     makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
                 );
-                if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
+                if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
                 } else {
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
@@ -1862,14 +1925,14 @@
         // 水平方向の相手番の石
         let foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             eastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
         let backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             westOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
@@ -1888,14 +1951,14 @@
         // 垂直方向
         foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             southOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
         backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             northOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
@@ -1914,14 +1977,14 @@
         // バロック対角線方向
         foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             northeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
         backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             southwestOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
@@ -1940,14 +2003,14 @@
         // シニスター対角線方向
         foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             southeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
         backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             northwestOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
@@ -2047,19 +2110,6 @@
                 gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
         });
-    }
-
-    
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + サブルーチン　＞　ゲーム盤１　＞　１つの石を処理 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    /**
-     * ［死に利き方向フィールド］判定
-     * @param controlLocations 
-     */
-    function isControlDirectionFieldDead(controlLocations: number[]) : boolean {
-        return controlLocations.length < FIVE_LENGTH;   // ［五］を作れない方向なら［死に方向］です
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2213,12 +2263,13 @@
      * 着手点を含めた前後４マス、計９つのマスの番号の配列を返します。
      * 
      * @param centerSq 
+     * @param halfOpenRadius 
      * @param foreOf 
      * @param backOf 
      */
     function locateDirectionFromCenter(
         centerSq: number,
-        maxLength: number,
+        halfOpenRadius: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
         isBreak: (sq: number)=>boolean,
@@ -2226,7 +2277,7 @@
         // 逆ウィング（起点を含まない）を戻る
         const backSqArray: number[] = [];
         let backSq = centerSq;  // 隣
-        for(let i:number=0; i<maxLength; i++){
+        for(let i:number=0; i<halfOpenRadius; i++){
             backSq = backOf(backSq);
             if (isBreak(backSq)) {  // break 条件
                 break;
@@ -2238,7 +2289,7 @@
         // 順ウィング（起点を含まない）を進む
         const foreSqArray: number[] = [];
         let foreSq = centerSq;  // 隣
-        for(let i:number=0; i<maxLength; i++){
+        for(let i:number=0; i<halfOpenRadius; i++){
             foreSq = foreOf(foreSq);
             if (isBreak(foreSq)) {  // break 条件
                 break;
@@ -2414,7 +2465,7 @@
         // 順ウィング
         const fwdWing = locateDirectionFromEdge(
             startSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             foreOf,
             isContinue,
             isBreak,
@@ -2423,7 +2474,7 @@
         // 逆ウィング
         const revWing = locateDirectionFromEdge(
             startSq,
-            ONE_WING_MAX_LENGTH,
+            HALF_OPEN_RADIUS_OF_NINE,
             backOf,
             isContinue,
             isBreak,
