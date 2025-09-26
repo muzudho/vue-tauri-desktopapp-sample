@@ -124,7 +124,7 @@
                             height: `${gameBoard1SquareSrcTilemapRect(sq).height}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                             backgroundImage: `url('${spriteBoard003Png}'), url('${spriteBoard002Png}')`,
-                            backgroundPosition: `-32px 0px, ${gameBoard1SquareBackgroundPosition(sq)}`,   // 元画像のスケールで逆向きシフトする
+                            backgroundPosition: `${gameBoard1SquaresBingoMarkerSrcTilemapPosition(sq)}, ${gameBoard1SquareBackgroundPosition(sq)}`,   // 元画像のスケールで逆向きシフトする
                             backgroundRepeat: 'no-repeat, no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
@@ -585,6 +585,7 @@
     const COLOR_EMPTY = 0;  // 空きマス。石の色無し
     const COLOR_BLACK = 1;  // 黒石
     const COLOR_WHITE = 2;  // 白石
+    type Color = COLOR_EMPTY|COLOR_BLACK|COLOR_WHITE;
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
@@ -745,6 +746,25 @@
 
             const rect = gameBoard1SquareSrcTilemapRect.value(sq);
             return `${-rect.left}px ${-rect.top}px`;
+        };
+    });
+    const gameBoard1SquaresBingo = ref<Array<Color>>(new Array(gameBoard1Area.value).fill(COLOR_EMPTY));
+    /**
+     * ビンゴならマーカーを可視化させます
+     */
+    const gameBoard1SquaresBingoMarkerSrcTilemapPosition = computed<
+        (sq: number)=>string
+    >(()=>{
+        return (sq: number)=>{
+            if (gameBoard1SquaresBingo.value[sq] == COLOR_EMPTY) {
+                return '0 0';
+            }
+
+            if (gameBoard1SquaresBingo.value[sq] == COLOR_BLACK) {
+                return `-32px 0px`;
+            }
+
+            return `-64px 0px`; // COLOR_WHITE
         };
     });
 
