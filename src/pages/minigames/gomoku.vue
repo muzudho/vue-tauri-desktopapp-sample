@@ -123,9 +123,9 @@
                             width: `${gameBoard1SquareSrcTilemapRect(sq).width}px`,
                             height: `${gameBoard1SquareSrcTilemapRect(sq).height}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                            backgroundImage: `url('${spriteBoard001Png}')`,
-                            backgroundPosition: gameBoard1SquareBackgroundPosition(sq),   // 元画像のスケールで逆向きシフトする
-                            backgroundRepeat: 'no-repeat',
+                            backgroundImage: `url('${spriteBoard003Png}'), url('${spriteBoard002Png}')`,
+                            backgroundPosition: `-32px 0px, ${gameBoard1SquareBackgroundPosition(sq)}`,   // 元画像のスケールで逆向きシフトする
+                            backgroundRepeat: 'no-repeat, no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
                         style="
@@ -463,7 +463,8 @@
     // + インポート　＞　アセット +
     // ++++++++++++++++++++++++++++
 
-    import spriteBoard001Png from '@/assets/img/reference/202509__warabenture__21-0649-spriteBoard002-o1o0.png';
+    import spriteBoard002Png from '@/assets/img/reference/202509__warabenture__21-0649-spriteBoard002-o1o0.png';
+    import spriteBoard003Png from '@/assets/img/reference/202509__warabenture__26-0959-spriteBoard003-bingoMarker-o1o0.png';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -1217,13 +1218,6 @@
         if (isControlDirectionFieldDead(directionControlLocationsHorizontal)) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            // const directionFieldHorizontal = locateDirectionFromCenter(
-            //     moveSq,
-            //     ONE_WING_MAX_LENGTH,
-            //     eastOf,
-            //     westOf,
-            //     isOutOfBoard,   // break 条件
-            // );
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countStones(
                 directionControlLocationsHorizontal,
                 turnColor
@@ -1241,13 +1235,6 @@
         if (isControlDirectionFieldDead(directionControlLocationsVertical)) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            // const directionFieldVertical = locateDirectionFromCenter(
-            //     moveSq,
-            //     ONE_WING_MAX_LENGTH,
-            //     northOf,
-            //     southOf,
-            //     isOutOfBoard,   // break 条件
-            // );
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countStones(
                 directionControlLocationsVertical,
                 turnColor
@@ -1265,13 +1252,6 @@
         if (isControlDirectionFieldDead(directionControlLocationsBaroqueDiagonal)) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            // const directionFieldBaroqueDiagonal = locateDirectionFromCenter(
-            //     moveSq,
-            //     ONE_WING_MAX_LENGTH,
-            //     northeastOf,
-            //     southwestOf,
-            //     isOutOfBoard,   // break 条件
-            // );
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countStones(
                 directionControlLocationsBaroqueDiagonal,
                 turnColor
@@ -1289,13 +1269,6 @@
         if (isControlDirectionFieldDead(directionControlLocationsSinisterDiagonal)) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            // const directionFieldSinisterDiagonal = locateDirectionFromCenter(
-            //     moveSq,
-            //     ONE_WING_MAX_LENGTH,
-            //     southeastOf,
-            //     northwestOf,
-            //     isOutOfBoard,   // break 条件
-            // );
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = countStones(
                 directionControlLocationsSinisterDiagonal,
                 turnColor
@@ -1337,13 +1310,6 @@
                     if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
-                        // const directionField = locateDirectionFromCenter(
-                        //     resonanceSq,
-                        //     ONE_WING_MAX_LENGTH,
-                        //     eastOf,
-                        //     westOf,
-                        //     isOutOfBoard,   // break 条件
-                        // );
                         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = countStones(
                             directionControlLocations,
                             color,
@@ -1371,13 +1337,6 @@
                     if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
-                        // const directionField = locateDirectionFromCenter(
-                        //     resonanceSq,
-                        //     ONE_WING_MAX_LENGTH,
-                        //     northOf,
-                        //     southOf,
-                        //     isOutOfBoard,   // break 条件
-                        // );
                         gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = countStones(
                             directionControlLocations,
                             color,
@@ -1405,13 +1364,6 @@
                     if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
-                        // const directionField = locateDirectionFromCenter(
-                        //     resonanceSq,
-                        //     ONE_WING_MAX_LENGTH,
-                        //     northeastOf,
-                        //     southwestOf,
-                        //     isOutOfBoard,   // break 条件
-                        // );
                         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = countStones(
                             directionControlLocations,
                             color,
@@ -1439,13 +1391,6 @@
                     if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
                     } else {
-                        // const directionField = locateDirectionFromCenter(
-                        //     resonanceSq,
-                        //     ONE_WING_MAX_LENGTH,
-                        //     southeastOf,
-                        //     northwestOf,
-                        //     isOutOfBoard,   // break 条件
-                        // );
                         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = countStones(
                             directionControlLocations,
                             color,
@@ -1867,13 +1812,6 @@
                 if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
                 } else {
-                    // const directionField = locateDirectionFromCenter(
-                    //     oppositeTurnStoneSq,
-                    //     ONE_WING_MAX_LENGTH,
-                    //     foreOf,
-                    //     backOf,
-                    //     isOutOfBoard,   // break 条件
-                    // );
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
                         directionControlLocations,
                         oppositeTurnColor1,
@@ -1893,13 +1831,6 @@
                 if (isControlDirectionFieldDead(directionControlLocations)) { // ［五］を作れない方向なら［死に方向］です
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
                 } else {
-                    // const directionField = locateDirectionFromCenter(
-                    //     oppositeTurnStoneSq,
-                    //     ONE_WING_MAX_LENGTH,
-                    //     foreOf,
-                    //     backOf,
-                    //     isOutOfBoard,   // break 条件
-                    // );
                     colorsAndStonesDirectionalFieldArray.value[oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
                         directionControlLocations,
                         oppositeTurnColor1,
