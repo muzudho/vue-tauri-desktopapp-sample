@@ -1369,14 +1369,15 @@
         // + 着手石と、それに隣接する自石が［五］か記入 +
         // ++++++++++++++++++++++++++++++++++++++++++++++
 
-        // ［五］を作れたら［五］です        
-        if (
-            containsAnyBingoWindow(slidingWindowArrayHorizontal, turnColor, FIVE_LENGTH) // 水平方向にビンゴがあるか？
-            || containsAnyBingoWindow(slidingWindowArrayVertical, turnColor, FIVE_LENGTH)
-            || containsAnyBingoWindow(slidingWindowArrayBaroqueDiagonal, turnColor, FIVE_LENGTH)
-            || containsAnyBingoWindow(slidingWindowArraySinisterDiagonal, turnColor, FIVE_LENGTH)
-        ) { 
-            gameBoard1SquaresBingo.value[moveSq] = turnColor as Color;
+        // ［五］を作れた石の集合
+        const bingoStoneSet = new Set<number>([
+            ...getBingoLocations(slidingWindowArrayHorizontal, turnColor, FIVE_LENGTH), // 水平方向にビンゴがあるか？
+            ...getBingoLocations(slidingWindowArrayVertical, turnColor, FIVE_LENGTH),
+            ...getBingoLocations(slidingWindowArrayBaroqueDiagonal, turnColor, FIVE_LENGTH),
+            ...getBingoLocations(slidingWindowArraySinisterDiagonal, turnColor, FIVE_LENGTH),
+        ]);
+        for (const stoneSq of bingoStoneSet) {
+            gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color;
         }
 
         // ++++++++++++++++++++++++++
@@ -2650,30 +2651,32 @@
      * ウィンドウが全て自石でできているか確認し、
      * そのようなウィンドウが１つでも有れば真となるような関数。
      */
-    function containsAnyBingoWindow(
+    function getBingoLocations(
         slidingWindowArray: number[][],
         stoneColor: Color,
         bingoNum: number,
-    ) : boolean {
+    ) : Set<number> {
+        let bingoLocations = new Set<number>();
+
         for (const aWindow of slidingWindowArray) {
-            console.log(`DEBUG: [containsAnyBingoWindow] aWindow.length=${aWindow.length} bingoNum=${bingoNum}`);
+            console.log(`DEBUG: [getBingoLocations] aWindow.length=${aWindow.length} bingoNum=${bingoNum}`);
             if (aWindow.length < bingoNum) {    // 長さが足りないからビンゴを作れない
                 continue;
             }
             
-            let stoneCount = 0;
+            const stones = new Set<number>();
             for (const sq of aWindow) {
                 if (!isOutOfBoard(sq) && gameBoard1StoneColorArray.value[sq] == stoneColor) {
-                    stoneCount += 1;
+                    stones.add(sq);
                 }
             }
 
-            if (bingoNum <= stoneCount) {
-                return true;    // 1つでもビンゴが含まれていればＯｋ
+            if (bingoNum <= stones.size) {
+                bingoLocations = new Set<number>([...bingoLocations, ...stones]);
             }
         }
 
-        return false;
+        return bingoLocations;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++
