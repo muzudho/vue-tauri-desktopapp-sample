@@ -297,7 +297,7 @@
                         v-for="sq in range(rank * 15, (rank + 1) * 15)"
                         :key="sq"
                     >
-                        {{ gameBoard1StoneStateArray[sq].toString().padStart(2, '0') }}&nbsp;
+                        {{ gameBoard1StonesState[sq].toString().padStart(2, '0') }}&nbsp;
                     </span><br/>
                 </p>
             </div>
@@ -667,9 +667,9 @@
     const STONE_STATE_ALIVE_SINISTER_DIAGONAL = 8;
     const MAX_LENGTH_DEAD = -1;
     function isAliveStone(sq: number) : boolean {
-        return 1 <= gameBoard1StoneStateArray.value[sq] && gameBoard1StoneStateArray.value[sq] <= 15;
+        return 1 <= gameBoard1StonesState.value[sq] && gameBoard1StonesState.value[sq] <= 15;
     }
-    const gameBoard1StoneStateArray = ref<Array<number>>(new Array(gameBoard1Area.value).fill(STONE_STATE_NONE));
+    const gameBoard1StonesState = ref<Array<number>>(new Array(gameBoard1Area.value).fill(STONE_STATE_NONE));
 
     // ボタンの背景画像（のタイル位置の矩形）
     const gameBoard1SquareSrcTilemapRect = computed<
@@ -1251,7 +1251,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             eastOf,
             westOf,
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
         // 直径５　＞　垂直方向の利き
@@ -1260,7 +1260,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             northOf,
             southOf,
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
         // 直径５　＞　バロック対角線方向の利き
@@ -1269,7 +1269,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             northeastOf,
             southwestOf,
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
         // 直径５　＞　シニスター対角線方向の利き
@@ -1278,7 +1278,7 @@
             HALF_OPEN_RADIUS_OF_FIVE,
             southeastOf,
             northwestOf,
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+            makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
         );
 
         // 直径９　＞　水平方向の利き
@@ -1587,7 +1587,7 @@
             });
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
-            gameBoard1StoneStateArray.value[sq] = STONE_STATE_NONE;
+            gameBoard1StonesState.value[sq] = STONE_STATE_NONE;
             gameBoard1SquaresBingo.value[sq] = COLOR_EMPTY as Color;
         }
 
@@ -1703,28 +1703,28 @@
             aStoneSq,
             eastOf,
             westOf,
-            gameBoard1StoneStateArray,
+            gameBoard1StonesState,
             STONE_STATE_ALIVE_HORIZONTAL,
         );
         fiveStonesProcessingOneDirection(    // 垂直方向
             aStoneSq,
             northOf,
             southOf,
-            gameBoard1StoneStateArray,
+            gameBoard1StonesState,
             STONE_STATE_ALIVE_VERTICAL,
         );
         fiveStonesProcessingOneDirection(    // バロック対角線方向
             aStoneSq,
             northeastOf,
             southwestOf,
-            gameBoard1StoneStateArray,
+            gameBoard1StonesState,
             STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
         );
         fiveStonesProcessingOneDirection(    // シニスター対角線方向
             aStoneSq,
             southeastOf,
             northwestOf,
-            gameBoard1StoneStateArray,
+            gameBoard1StonesState,
             STONE_STATE_ALIVE_SINISTER_DIAGONAL,
         );
     }
@@ -2737,6 +2737,19 @@
     {
         return (sq: number)=>{
             return sq == -1 || gameBoard1StoneColorArray.value[sq] == endColor;
+        }
+    }
+
+
+    /**
+     * 盤の外、または指定の石の色か
+     * @param endColor 
+     */
+    function makeIsOutOfBoardOrColors(endColors: number[]) :
+        (sq: number)=>boolean
+    {
+        return (sq: number)=>{
+            return sq == -1 || endColors.includes(gameBoard1StoneColorArray.value[sq]);
         }
     }
 
