@@ -597,6 +597,7 @@
     // ++++++++++++++++++++++++++++++++
 
     const HALF_OPEN_RADIUS_OF_NINE = 4;  // 直径 9 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼
+    //const HALF_OPEN_RADIUS_OF_ELEVEN = 5;  // 直径 11 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼。長連を調べるのに使う。
     const FIVE_LENGTH = 5;  // ［五］の長さ
     const HALF_OPEN_RADIUS_OF_FIVE = 2; // 直径 5 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
@@ -793,7 +794,7 @@
     }
 
 
-    const MAX_MAX_LENGTH = 6;
+    const MAX_MAX_LENGTH = 6;   // 長連を判定できるように、［六］も内部的に用意している
 
 
     function makeImageKey(cColor: number, bYWhiteMaxLength:number, bXBlackMaxLength:number, aGridNumber:number) : string {
@@ -929,10 +930,10 @@
     for(let cColor=0; cColor<3; cColor++) {
         for(let bYWhiteMaxLength=-1; bYWhiteMaxLength<=MAX_MAX_LENGTH; bYWhiteMaxLength++) {
             for(let bXBlackMaxLength=-1; bXBlackMaxLength<=MAX_MAX_LENGTH; bXBlackMaxLength++) {
-                [0, 6, 14, 12, 7, 15, 13, 3, 11, 9].forEach((aGridNumber, _index, _array)=>{
+                for (const aGridNumber of [0, 6, 14, 12, 7, 15, 13, 3, 11, 9]) {
                     const [key, rect] = makeKeyAndRectangle(cColor, bYWhiteMaxLength, bXBlackMaxLength, aGridNumber);
                     gameBoard1SourceTilemap1Frames[key] = rect;
-                });
+                }
             }
         }
     }
@@ -1363,8 +1364,8 @@
         if (locationsDiameterNineControlHorizontal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countStones(
-                locationsDiameterNineControlHorizontal,
+            gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countMaxStones(
+                slidingWindowArrayHorizontal,
                 turnColor
             );
         }
@@ -1373,8 +1374,8 @@
         if (locationsDiameterNineControlVertical.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countStones(
-                locationsDiameterNineControlVertical,
+            gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countMaxStones(
+                slidingWindowArrayVertical,
                 turnColor
             );
         }
@@ -1383,8 +1384,8 @@
         if (locationsDiameterNineControlBaroqueDiagonal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countStones(
-                locationsDiameterNineControlBaroqueDiagonal,
+            gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countMaxStones(
+                slidingWindowArrayBaroqueDiagonal,
                 turnColor
             );
         }
@@ -1393,8 +1394,8 @@
         if (locationsDiameterNineControlSinisterDiagonal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
-            gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = countStones(
-                locationsDiameterNineControlSinisterDiagonal,
+            gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = countMaxStones(
+                slidingWindowArraySinisterDiagonal,
                 turnColor
             );
         }
@@ -1414,14 +1415,14 @@
 
         // フィールドの各空点の［最長］を記入します
         // 水平方向フィールド
-        [
+        for (const resonanceSq of [
             ...turnStoneHalfDirectionFieldArray[0],
             ...turnStoneHalfDirectionFieldArray[4],
-        ].forEach((resonanceSq, _index, _array)=>{
-            // 空点なら自分、相手ともに［最長］を更新。
-            // 手番の石なら、手番の［最長］だけを更新。
-            // 相手番の石なら、相手番の［最長］だけを更新。
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+        ]) {
+            for (const color of [turnColor, oppositeTurnColor1]) {
+                // 空点なら自分、相手ともに［最長］を更新。
+                // 手番の石なら、手番の［最長］だけを更新。
+                // 相手番の石なら、相手番の［最長］だけを更新。
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
@@ -1441,15 +1442,15 @@
                         );
                     }
                 }
-            });
-        });
+            }
+        }
 
         // 垂直方向フィールド
-        [
+        for (const resonanceSq of [
             ...turnStoneHalfDirectionFieldArray[2],
             ...turnStoneHalfDirectionFieldArray[6],
-        ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+        ]) {
+            for (const color of [turnColor, oppositeTurnColor1]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
@@ -1469,15 +1470,15 @@
                         );
                     }
                 }
-            });
-        });
+            }
+        }
 
         // バロック対角線方向フィールド
-        [
+        for (const resonanceSq of [
             ...turnStoneHalfDirectionFieldArray[1],
             ...turnStoneHalfDirectionFieldArray[5],
-        ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+        ]) {
+            for (const color of [turnColor, oppositeTurnColor1]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
@@ -1497,15 +1498,15 @@
                         );
                     }
                 }
-            });
-        });
+            }
+        }
 
         // シニスター対角線方向フィールド
-        [
+        for (const resonanceSq of [
             ...turnStoneHalfDirectionFieldArray[3],
             ...turnStoneHalfDirectionFieldArray[7],
-        ].forEach((resonanceSq, _index, _array)=>{
-            [turnColor, oppositeTurnColor1].forEach((color, _index, _array)=>{
+        ]) {
+            for (const color of [turnColor, oppositeTurnColor1]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
                     const directionControlLocations = locateDirectionFromCenter(
@@ -1525,8 +1526,8 @@
                         );
                     }
                 }
-            });
-        });
+            }
+        }
 
         // ［割り打ち］処理
         executeWariuchi(moveSq);
@@ -1607,12 +1608,12 @@
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
 
             // マス上で自石が（飛び飛びでも）続いている数
-            [COLOR_BLACK, COLOR_WHITE].forEach((color, _index, _array)=>{
+            for (const color of [COLOR_BLACK, COLOR_WHITE]) {
                 gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][sq] = 0;
                 gameBoard1ColorsAndStonesMaxLengthVertical.value[color][sq] = 0;
                 gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][sq] = 0;
                 gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][sq] = 0;
-            });
+            }
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
             gameBoard1StonesState.value[sq] = STONE_STATE_NONE;
@@ -1787,15 +1788,15 @@
 
         function processingContinuityStones() : void {
             if (5 <= continuityStones.length) {   // ［五］ができていたら
-                continuityStones.forEach((sq, _index, _array)=>{
+                for (const sq of continuityStones) {
                     directionalStoneStateArray.value[sq] |= aliveDirection; // 論理和
-                });
+                }
             }
 
             continuityStones.length = 0;    // クリアー
         }
 
-        runsNineSquares.forEach((sq, _index, _array)=>{
+        for (const sq of runsNineSquares) {
             // 盤外、相手の石は含まない
 
             // 手番の石なら
@@ -1806,7 +1807,7 @@
             } else {
                 processingContinuityStones();
             }
-        });
+        }
 
         processingContinuityStones();
     }
@@ -1823,34 +1824,34 @@
     ) : number {
         let count = 0;
 
-        locations.forEach((sq, _index, _array)=>{
+        for (const sq of locations) {
             if (gameBoard1StoneColorArray.value[sq] == color) {
                 count += 1;
             }
-        });
+        }
 
         return count;
     }
 
 
     /**
-     * 各石の［飛び石］の長さの数え上げ
+     * 各ウィンドウの内、石の最大数を返す
      */
-    function countingMaxLengthInSlidingWindowArray(
+    function countMaxStones(
         slidingWindowArray: number[][],
-        color: number,
+        color: Color,
     ) : number {
         let maxCount = 0;
 
-        slidingWindowArray.forEach((slidingWindow, _index, _array)=>{
+        for (const slidingWindow of slidingWindowArray) {
             let count = 0;
-            slidingWindow.forEach((sq, _index, _array)=>{
+            for (const sq of slidingWindow) {
                 if (gameBoard1StoneColorArray.value[sq] == color) {
                     count += 1;
                 }
-            });
+            }
             maxCount = Math.max(count, maxCount);
-        });
+        }
 
         return maxCount;
     }
@@ -1931,7 +1932,7 @@
         ) : void {
             //console.log(`DEBUG: [oppositeTurnStonesCheckFieldOneDirection] startSq=${startSq}`);
 
-            foreOppositeTurnStones.forEach((oppositeTurnStoneSq, _index, _array)=>{
+            for (const oppositeTurnStoneSq of foreOppositeTurnStones) {
                 const directionControlLocations = locateDirectionFromCenter(
                     oppositeTurnStoneSq,
                     HALF_OPEN_RADIUS_OF_NINE,
@@ -1948,10 +1949,9 @@
                         oppositeTurnColor1,
                     );
                 }
-            });
+            }
 
-
-            backOppositeTurnStones.forEach((oppositeTurnStoneSq, _index, _array)=>{
+            for (const oppositeTurnStoneSq of backOppositeTurnStones) {
                 const directionControlLocations = locateDirectionFromCenter(
                     oppositeTurnStoneSq,
                     HALF_OPEN_RADIUS_OF_NINE,
@@ -1968,7 +1968,7 @@
                         oppositeTurnColor1,
                     );
                 }
-            });
+            }
         }
 
         // 水平方向の相手番の石
@@ -2106,11 +2106,12 @@
         locations: number[],
     ) : void {
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-        locations.forEach((sq, _index, _array)=>{
+
+        for (const sq of locations) {
             if (oppositeTurnStoneIsDeadHorizontal(sq)) {
                 gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
             }
-        });
+        }
     }
 
 
@@ -2122,11 +2123,12 @@
         locations: number[],
     ) : void {
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-        locations.forEach((sq, _index, _array)=>{
+
+        for (const sq of locations) {
             if (oppositeTurnStoneIsDeadVertical(sq)) {
                 gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
-        });
+        }
     }
 
 
@@ -2138,11 +2140,12 @@
         locations: number[],
     ) : void {
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-        locations.forEach((sq, _index, _array)=>{
+
+        for (const sq of locations) {
             if (oppositeTurnStoneIsDeadBaroqueDiagonal(sq)) {
                 gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
-        });
+        }
     }
 
 
@@ -2154,11 +2157,12 @@
         locations: number[],
     ) : void {
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-        locations.forEach((sq, _index, _array)=>{
+
+        for (const sq of locations) {
             if (oppositeTurnStoneIsDeadSinisterDiagonal(sq)) {
                 gameBoard1ColorsAndStonesMaxLengthHorizontal.value[oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
             }
-        });
+        }
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
