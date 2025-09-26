@@ -1371,10 +1371,10 @@
 
         // ［五］を作れたら［五］です        
         if (
-            containsAnyBingoWindow(slidingWindowArrayHorizontal, turnColor) // 水平方向にビンゴがあるか？
-            || containsAnyBingoWindow(slidingWindowArrayVertical, turnColor)
-            || containsAnyBingoWindow(slidingWindowArrayBaroqueDiagonal, turnColor)
-            || containsAnyBingoWindow(slidingWindowArraySinisterDiagonal, turnColor)
+            containsAnyBingoWindow(slidingWindowArrayHorizontal, turnColor, FIVE_LENGTH) // 水平方向にビンゴがあるか？
+            || containsAnyBingoWindow(slidingWindowArrayVertical, turnColor, FIVE_LENGTH)
+            || containsAnyBingoWindow(slidingWindowArrayBaroqueDiagonal, turnColor, FIVE_LENGTH)
+            || containsAnyBingoWindow(slidingWindowArraySinisterDiagonal, turnColor, FIVE_LENGTH)
         ) { 
             gameBoard1SquaresBingo.value[moveSq] = turnColor as Color;
         }
@@ -2653,25 +2653,27 @@
     function containsAnyBingoWindow(
         slidingWindowArray: number[][],
         stoneColor: Color,
+        bingoNum: number,
     ) : boolean {
-        let anyBingo = false;
-
         for (const aWindow of slidingWindowArray) {
-            let bingo = true;
+            console.log(`DEBUG: [containsAnyBingoWindow] aWindow.length=${aWindow.length} bingoNum=${bingoNum}`);
+            if (aWindow.length < bingoNum) {    // 長さが足りないからビンゴを作れない
+                continue;
+            }
+            
+            let stoneCount = 0;
             for (const sq of aWindow) {
-                if (isOutOfBoard(sq) || gameBoard1StoneColorArray.value[sq] != stoneColor) {
-                    bingo = false;
-                    break;
+                if (!isOutOfBoard(sq) && gameBoard1StoneColorArray.value[sq] == stoneColor) {
+                    stoneCount += 1;
                 }
             }
 
-            if (bingo) {
-                anyBingo = true;
-                break;
+            if (bingoNum <= stoneCount) {
+                return true;    // 1つでもビンゴが含まれていればＯｋ
             }
         }
 
-        return anyBingo;
+        return false;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++
