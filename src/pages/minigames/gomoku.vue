@@ -1213,7 +1213,11 @@
         moveSq: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
-    ) : [boolean | null, number[][]] {
+    ) : [boolean | null, number[][], number[]] {
+
+        // ++++++++++
+        // + 仕込み +
+        // ++++++++++
 
         // 着手点を中心とする直径９のスライディング・ウィンドウ
         const slidingWindowArray = makeSlidingWindowArray(
@@ -1228,7 +1232,19 @@
         //     console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
         // });
 
-        return [null, slidingWindowArray];
+        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value) as Color;
+
+        // 直径９　＞　利き
+        const locationsDiameterNineControl = locateDirectionFromCenter(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            foreOf,
+            backOf,
+            (_sq: number) => false,  // continue 条件
+            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+        );
+
+        return [null, slidingWindowArray, locationsDiameterNineControl];
     }
 
 
@@ -1248,103 +1264,20 @@
         const turnColor = gameBoard1Turn.value as Color;    // 手番の色　＝　置く石の色
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        const [itsOkH, slidingWindowArrayH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
-        const [itsOkV, slidingWindowArrayV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
-        const [itsOkB, slidingWindowArrayB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
-        const [itsOkS, slidingWindowArrayS] = putStoneOnDirection(moveSq, southwestOf, northeastOf); // シニスター対角線（S）
+        const [itsOkH, slidingWindowArrayH, locationsDiameterNineControlH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
+        const [itsOkV, slidingWindowArrayV, locationsDiameterNineControlV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
+        const [itsOkB, slidingWindowArrayB, locationsDiameterNineControlB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
+        const [itsOkS, slidingWindowArrayS, locationsDiameterNineControlS] = putStoneOnDirection(moveSq, southeastOf, northwestOf); // シニスター対角線（S）
 
         const itsOkArray = [itsOkH, itsOkV, itsOkB, itsOkS];
-        const itsOk = itsOkArray.includes(true);
-        if (itsOk != null) {
-            return itsOk;
+        if (!itsOkArray.includes(null)) {
+            const itsOk = itsOkArray.includes(true);
+            if (itsOk != null) {
+                return itsOk;
+            }
         }
 
-        const oppositeTurnColor1 = oppositeTurnColor(turnColor);
-
-
-        // ++++++++++
-        // + 仕込み +
-        // ++++++++++
-
-        // // 直径５　＞　水平方向の利き
-        // const locationsDiameterFiveControlHorizontal = locateDirectionFromCenter(
-        //     moveSq,
-        //     HALF_OPEN_RADIUS_OF_FIVE,
-        //     eastOf,
-        //     westOf,
-        //     (_sq: number) => false,  // continue 条件
-        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
-        // );
-
-        // // 直径５　＞　垂直方向の利き
-        // const locationsDiameterFiveControlVertical = locateDirectionFromCenter(
-        //     moveSq,
-        //     HALF_OPEN_RADIUS_OF_FIVE,
-        //     northOf,
-        //     southOf,
-        //     (_sq: number) => false,  // continue 条件
-        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
-        // );
-
-        // // 直径５　＞　バロック対角線方向の利き
-        // const locationsDiameterFiveControlBaroqueDiagonal = locateDirectionFromCenter(
-        //     moveSq,
-        //     HALF_OPEN_RADIUS_OF_FIVE,
-        //     northeastOf,
-        //     southwestOf,
-        //     (_sq: number) => false,  // continue 条件
-        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
-        // );
-
-        // // 直径５　＞　シニスター対角線方向の利き
-        // const locationsDiameterFiveControlSinisterDiagonal = locateDirectionFromCenter(
-        //     moveSq,
-        //     HALF_OPEN_RADIUS_OF_FIVE,
-        //     southeastOf,
-        //     northwestOf,
-        //     (_sq: number) => false,  // continue 条件
-        //     makeIsOutOfBoardOrColors([COLOR_EMPTY, oppositeTurnColor1]),    // break 条件
-        // );
-
-        // 直径９　＞　水平方向の利き
-        const locationsDiameterNineControlHorizontal = locateDirectionFromCenter(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            eastOf,
-            westOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
-        );
-
-        // 直径９　＞　垂直方向の利き
-        const locationsDiameterNineControlVertical = locateDirectionFromCenter(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            northOf,
-            southOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
-        );
-
-        // 直径９　＞　バロック対角線方向の利き
-        const locationsDiameterNineControlBaroqueDiagonal = locateDirectionFromCenter(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            northeastOf,
-            southwestOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
-        );
-
-        // 直径９　＞　シニスター対角線方向の利き
-        const locationsDiameterNineControlSinisterDiagonal = locateDirectionFromCenter(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            southeastOf,
-            northwestOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
-        );
+        const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
         // ++++++++++++++++++++++++++++++++++++++++++++++
         // + 着手石と、それに隣接する自石が［五］か記入 +
@@ -1366,7 +1299,7 @@
         // ++++++++++++++++++++++++++
 
         // 水平方向の利き
-        if (locationsDiameterNineControlHorizontal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+        if (locationsDiameterNineControlH.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countMaxStones(
@@ -1376,7 +1309,7 @@
         }
 
         // 垂直方向の利き
-        if (locationsDiameterNineControlVertical.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+        if (locationsDiameterNineControlV.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countMaxStones(
@@ -1386,7 +1319,7 @@
         }
 
         // バロック対角線方向の利き
-        if (locationsDiameterNineControlBaroqueDiagonal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+        if (locationsDiameterNineControlB.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countMaxStones(
@@ -1396,7 +1329,7 @@
         }
 
         // シニスター対角線方向の利き
-        if (locationsDiameterNineControlSinisterDiagonal.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+        if (locationsDiameterNineControlS.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = countMaxStones(
