@@ -1291,14 +1291,14 @@
         const ELEMENT_SLIDING_WINDOW_ARRAY = 1;
         const ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL = 2;
         const ELEMENT_BINGO_STONES = 3;
-        const ELEMENT_THIS_TURN_NONZERO_DIAMETER = 4;
-        type Element1 = typeof ELEMENT_EMPTY | typeof ELEMENT_SLIDING_WINDOW_ARRAY | typeof ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL | typeof ELEMENT_BINGO_STONES | typeof ELEMENT_THIS_TURN_NONZERO_DIAMETER;
+        const ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE = 4;
+        type Element1 = typeof ELEMENT_EMPTY | typeof ELEMENT_SLIDING_WINDOW_ARRAY | typeof ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL | typeof ELEMENT_BINGO_STONES | typeof ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE;
         const allDirections = [
             null,
             putStoneOnDirection(moveSq, eastOf, westOf),   // 水平（H）
             putStoneOnDirection(moveSq, northOf, southOf), // 垂直（V）
-            putStoneOnDirection(moveSq, northeastOf, southwestOf), // バロック対角線（B）
-            putStoneOnDirection(moveSq, southeastOf, northwestOf), // シニスター対角線（S）
+            putStoneOnDirection(moveSq, southwestOf, northeastOf), // バロック対角線（B）
+            putStoneOnDirection(moveSq, northwestOf, southeastOf), // シニスター対角線（S）
         ] as Elements1[];
         // const [nullH, slidingWindowArrayH, locationsDiameterNineControlH, thisTurnNonzeroDiameterH] = 
         // const [nullV, slidingWindowArrayV, locationsDiameterNineControlV, thisTurnNonzeroDiameterV] = 
@@ -1322,93 +1322,49 @@
             gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color;
         }
 
-        // ++++++++++++++++++++++++++++
-        // + 着手石が［死に石］か記入 +
-        // ++++++++++++++++++++++++++++
 
-        // 水平方向の利き
-        if (allDirections[DIRECTION_HORIZONTAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {   // ［五］を作れない方向なら［死に方向］です
-            gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
-        }
-        // 垂直方向の利き
-        if (allDirections[DIRECTION_VERTICAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {
-            gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
-        }
-        // バロック対角線方向の利き
-        if (allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {
-            gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
-        }
-        // シニスター対角線方向の利き
-        if (allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {
-            gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
-        }
+        const directionArray = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL];
 
-        // ++++++++++++++++++++++++++
-        // + 着手点の［最長］を記入 +
-        // ++++++++++++++++++++++++++
+        for (const direction of directionArray) {
 
-        // 水平方向の利き
-        if (gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
-            gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][turnColor][moveSq] = countMaxStones(
-                allDirections[DIRECTION_HORIZONTAL][ELEMENT_SLIDING_WINDOW_ARRAY],
-                turnColor
-            );
+            // ++++++++++++++++++++++++++++
+            // + 着手石が［死に石］か記入 +
+            // ++++++++++++++++++++++++++++
+            if (allDirections[direction][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {   // ［五］を作れない方向なら［死に方向］です
+                gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] = MAX_LENGTH_DEAD;
+            }
+
+            // ++++++++++++++++++++++++++
+            // + 着手点の［最長］を記入 +
+            // ++++++++++++++++++++++++++
+
+            // 水平方向の利き
+            if (gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
+                gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] = countMaxStones(
+                    allDirections[direction][ELEMENT_SLIDING_WINDOW_ARRAY],
+                    turnColor
+                );
+            }
+
+            // ++++++++++++++++++++++++++++++++++
+            // + 着手点は相手から見れば最長が 0 +
+            // ++++++++++++++++++++++++++++++++++
+
+            gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][moveSq] = 0;
         }
-
-        // 垂直方向の利き
-        if (gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
-            gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][turnColor][moveSq] = countMaxStones(
-                allDirections[DIRECTION_VERTICAL][ELEMENT_SLIDING_WINDOW_ARRAY],
-                turnColor
-            );
-        }
-
-        // バロック対角線方向の利き
-        if (gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
-            gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][turnColor][moveSq] = countMaxStones(
-                allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_SLIDING_WINDOW_ARRAY],
-                turnColor
-            );
-        }
-
-        // シニスター対角線方向の利き
-        if (gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
-            gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][turnColor][moveSq] = countMaxStones(
-                allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_SLIDING_WINDOW_ARRAY],
-                turnColor
-            );
-        }
-
-        // ++++++++++++++++++++++++++++++++++
-        // + 着手点は相手から見れば最長が 0 +
-        // ++++++++++++++++++++++++++++++++++
-
-        gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][oppositeTurnColor1][moveSq] = 0;
-        gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][oppositeTurnColor1][moveSq] = 0;
-        gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][oppositeTurnColor1][moveSq] = 0;
-        gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][oppositeTurnColor1][moveSq] = 0;
 
         // ++++++++++++++++++++++++++
         // + 以下、着手点を含まない +
         // ++++++++++++++++++++++++++
 
-        // 利きマスを取得。着手点を含まない
-        // TODO: ４方向に分解、まとめたい。
-        const thisTurnNonzeroDiameterArray = [
-            [],
-            allDirections[DIRECTION_HORIZONTAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
-            allDirections[DIRECTION_VERTICAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
-            allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
-            allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
-        ] as number[][];
-
+        // ［非零直径９］を取得。着手点を含まない
         // フィールドの各空点の［最長］を記入します
         function processing1(
             direction: Direction,
             foreOf: (sq: number) => number,
             backOf: (sq: number) => number,
         ) : void {
-            for (const resonanceSq of thisTurnNonzeroDiameterArray[direction]) {
+            for (const resonanceSq of allDirections[direction][ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE]) {
                 for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                     // 空点なら自分、相手ともに［最長］を更新。
                     // 手番の石なら、手番の［最長］だけを更新。
