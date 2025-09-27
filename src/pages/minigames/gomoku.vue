@@ -1380,10 +1380,7 @@
 
         // フィールドの各空点の［最長］を記入します
         // 水平方向フィールド
-        for (const resonanceSq of [
-            ...thisTurnStoneHalfDirectionFieldArray[0],
-            ...thisTurnStoneHalfDirectionFieldArray[4],
-        ]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[0]) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 // 空点なら自分、相手ともに［最長］を更新。
                 // 手番の石なら、手番の［最長］だけを更新。
@@ -1422,10 +1419,7 @@
         }
 
         // 垂直方向フィールド
-        for (const resonanceSq of [
-            ...thisTurnStoneHalfDirectionFieldArray[2],
-            ...thisTurnStoneHalfDirectionFieldArray[6],
-        ]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[2]) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
@@ -1461,10 +1455,7 @@
         }
 
         // バロック対角線方向フィールド
-        for (const resonanceSq of [
-            ...thisTurnStoneHalfDirectionFieldArray[1],
-            ...thisTurnStoneHalfDirectionFieldArray[5],
-        ]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[1]) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
@@ -1499,10 +1490,7 @@
         }
 
         // シニスター対角線方向フィールド
-        for (const resonanceSq of [
-            ...thisTurnStoneHalfDirectionFieldArray[3],
-            ...thisTurnStoneHalfDirectionFieldArray[7],
-        ]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[3]) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
@@ -2550,14 +2538,10 @@
         );
         return [
             // startSq を含まない
-            eastWayField,
-            northeastWayField,
-            northWayField,
-            northwestWayField,
-            westWayField,
-            southwestWayField,
-            southWayField,
-            southeastWayField
+            [...eastWayField, ...westWayField,],
+            [...northeastWayField, ...southwestWayField,],
+            [...northWayField, ...southWayField,],
+            [...northwestWayField, ...southeastWayField],
         ];
     }
 
