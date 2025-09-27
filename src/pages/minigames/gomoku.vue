@@ -1371,29 +1371,37 @@
 
         // 利きマスを取得。着手点を含まない
         // TODO: ４方向に分解、まとめたい。
-        const thisTurnStoneHalfDirectionFieldArray = [
+        const thisTurnFieldArray = [
             [],
-            locateRadialEightHalfDirectionFieldArrayH(
+            locateFieldFromCenter(  // 水平
                 moveSq,
                 HALF_OPEN_RADIUS_OF_NINE,
+                eastOf,
+                westOf,
                 (_sq: number) => false, // continue 条件
                 (sq: number) => isOutOfBoard(sq),   // break 条件
             ),
-            locateRadialEightHalfDirectionFieldArrayV(
+            locateFieldFromCenter(  // 垂直
                 moveSq,
                 HALF_OPEN_RADIUS_OF_NINE,
+                northOf,
+                southOf,
                 (_sq: number) => false, // continue 条件
                 (sq: number) => isOutOfBoard(sq),   // break 条件
             ),
-            locateRadialEightHalfDirectionFieldArrayB(
+            locateFieldFromCenter(  // バロック
                 moveSq,
                 HALF_OPEN_RADIUS_OF_NINE,
+                northeastOf,
+                southwestOf,
                 (_sq: number) => false, // continue 条件
                 (sq: number) => isOutOfBoard(sq),   // break 条件
             ),
-            locateRadialEightHalfDirectionFieldArrayS(
+            locateFieldFromCenter(  // シニスター
                 moveSq,
                 HALF_OPEN_RADIUS_OF_NINE,
+                northwestOf,
+                southeastOf,
                 (_sq: number) => false, // continue 条件
                 (sq: number) => isOutOfBoard(sq),   // break 条件
             ),
@@ -1405,7 +1413,7 @@
             foreOf: (sq: number) => number,
             backOf: (sq: number) => number,
         ) : void {
-            for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[direction]) {
+            for (const resonanceSq of thisTurnFieldArray[direction]) {
                 for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                     // 空点なら自分、相手ともに［最長］を更新。
                     // 手番の石なら、手番の［最長］だけを更新。
@@ -2414,9 +2422,11 @@
      * この図形に名前はないが、４ウェイ（4t-way）とでも呼ぶとする。
      * 
      */
-    function locateRadialEightHalfDirectionFieldArrayH(
+    function locateFieldFromCenter(
         startSq: number,
         oneWingMaxLength: number,
+        foreOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
         isContinue: (sq: number)=>boolean, 
         isBreak: (sq: number)=>boolean,
     ) : number[] {
@@ -2425,89 +2435,17 @@
             ...locateDirectionFromEdge( // (1)
                 startSq,
                 oneWingMaxLength,
-                eastOf,
+                foreOf,
                 isContinue,
                 isBreak,
             ),
             ...locateDirectionFromEdge( // (5)
                 startSq,
                 oneWingMaxLength,
-                westOf,
+                backOf,
                 isContinue,
                 isBreak,
             ),
-        ];
-    }
-    function locateRadialEightHalfDirectionFieldArrayV(
-        startSq: number,
-        oneWingMaxLength: number,
-        isContinue: (sq: number)=>boolean, 
-        isBreak: (sq: number)=>boolean,
-    ) : number[] {
-        // startSq を含まない
-        return [
-            ...locateDirectionFromEdge(    // (2)
-                startSq,
-                oneWingMaxLength,
-                northeastOf,
-                isContinue,
-                isBreak,
-            ),
-            ...locateDirectionFromEdge(    // (6)
-                startSq,
-                oneWingMaxLength,
-                southwestOf,
-                isContinue,
-                isBreak,
-            ),
-        ];
-    }
-    function locateRadialEightHalfDirectionFieldArrayB(
-        startSq: number,
-        oneWingMaxLength: number,
-        isContinue: (sq: number)=>boolean, 
-        isBreak: (sq: number)=>boolean,
-    ) : number[] {
-        // startSq を含まない
-        return [
-            ...locateDirectionFromEdge(    // (3)
-                startSq,
-                oneWingMaxLength,
-                northOf,
-                isContinue,
-                isBreak,
-            ),
-            ...locateDirectionFromEdge(    // (7)
-                startSq,
-                oneWingMaxLength,
-                southOf,
-                isContinue,
-                isBreak,
-            ),
-        ];
-    }
-    function locateRadialEightHalfDirectionFieldArrayS(
-        startSq: number,
-        oneWingMaxLength: number,
-        isContinue: (sq: number)=>boolean, 
-        isBreak: (sq: number)=>boolean,
-    ) : number[] {
-        // startSq を含まない
-        return [
-            ...locateDirectionFromEdge(    // (4)
-                startSq,
-                oneWingMaxLength,
-                northwestOf,
-                isContinue,
-                isBreak,
-            ),
-            ...locateDirectionFromEdge(    // (8)
-                startSq,
-                oneWingMaxLength,
-                southeastOf,
-                isContinue,
-                isBreak,
-            )
         ];
     }
 
