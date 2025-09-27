@@ -1223,7 +1223,7 @@
         moveSq: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
-    ) : [number[][], number[], Set<number>, number[]] {
+    ) : [any, number[][], number[], Set<number>, number[]] {
 
         // ++++++++++
         // + 仕込み +
@@ -1266,7 +1266,7 @@
                 (sq: number) => isOutOfBoard(sq),   // break 条件
             );
 
-        return [slidingWindowArray, locationsDiameterNineControl, bingoStones, thisTurnNonzeroDiameter];
+        return [null, slidingWindowArray, locationsDiameterNineControl, bingoStones, thisTurnNonzeroDiameter];
     }
 
 
@@ -1286,10 +1286,24 @@
         const turnColor = gameBoard1Turn.value as Color;    // 手番の色　＝　置く石の色
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        const [slidingWindowArrayH, locationsDiameterNineControlH, bingoStonesH, thisTurnNonzeroDiameterH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
-        const [slidingWindowArrayV, locationsDiameterNineControlV, bingoStonesV, thisTurnNonzeroDiameterV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
-        const [slidingWindowArrayB, locationsDiameterNineControlB, bingoStonesB, thisTurnNonzeroDiameterB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
-        const [slidingWindowArrayS, locationsDiameterNineControlS, bingoStonesS, thisTurnNonzeroDiameterS] = putStoneOnDirection(moveSq, southeastOf, northwestOf); // シニスター対角線（S）
+        type Elements1 = [any, number[][], number[], Set<number>, number[]];
+        const ELEMENT_EMPTY = 0;
+        const ELEMENT_SLIDING_WINDOW_ARRAY = 1;
+        const ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL = 2;
+        const ELEMENT_BINGO_STONES = 3;
+        const ELEMENT_THIS_TURN_NONZERO_DIAMETER = 4;
+        type Element1 = typeof ELEMENT_EMPTY | typeof ELEMENT_SLIDING_WINDOW_ARRAY | typeof ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL | typeof ELEMENT_BINGO_STONES | typeof ELEMENT_THIS_TURN_NONZERO_DIAMETER;
+        const allDirections = [
+            null,
+            putStoneOnDirection(moveSq, eastOf, westOf),   // 水平（H）
+            putStoneOnDirection(moveSq, northOf, southOf), // 垂直（V）
+            putStoneOnDirection(moveSq, northeastOf, southwestOf), // バロック対角線（B）
+            putStoneOnDirection(moveSq, southeastOf, northwestOf), // シニスター対角線（S）
+        ] as Elements1[];
+        // const [nullH, slidingWindowArrayH, locationsDiameterNineControlH, thisTurnNonzeroDiameterH] = 
+        // const [nullV, slidingWindowArrayV, locationsDiameterNineControlV, thisTurnNonzeroDiameterV] = 
+        // const [nullB, slidingWindowArrayB, locationsDiameterNineControlB, thisTurnNonzeroDiameterB] = 
+        // const [nullS, slidingWindowArrayS, locationsDiameterNineControlS, thisTurnNonzeroDiameterS] = 
 
         const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
@@ -1299,10 +1313,10 @@
 
         // ［五］を作れた石の集合
         const bingoStoneSet = new Set<number>([
-            ...bingoStonesH, // 水平方向にビンゴがあるか？
-            ...bingoStonesV,
-            ...bingoStonesB,
-            ...bingoStonesS,
+            ...allDirections[DIRECTION_HORIZONTAL][ELEMENT_BINGO_STONES], // 水平方向にビンゴがあるか？
+            ...allDirections[DIRECTION_VERTICAL][ELEMENT_BINGO_STONES],
+            ...allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_BINGO_STONES],
+            ...allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_BINGO_STONES],
         ]);
         for (const stoneSq of bingoStoneSet) {
             gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color;
@@ -1313,19 +1327,19 @@
         // ++++++++++++++++++++++++++++
 
         // 水平方向の利き
-        if (locationsDiameterNineControlH.length < FIVE_LENGTH) {   // ［五］を作れない方向なら［死に方向］です
+        if (allDirections[DIRECTION_HORIZONTAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {   // ［五］を作れない方向なら［死に方向］です
             gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
         }
         // 垂直方向の利き
-        if (locationsDiameterNineControlV.length < FIVE_LENGTH) {
+        if (allDirections[DIRECTION_VERTICAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {
             gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
         }
         // バロック対角線方向の利き
-        if (locationsDiameterNineControlB.length < FIVE_LENGTH) {
+        if (allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {
             gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
         }
         // シニスター対角線方向の利き
-        if (locationsDiameterNineControlS.length < FIVE_LENGTH) {
+        if (allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_LOCATIONS_DIAMETER_NINE_CONTROL].length < FIVE_LENGTH) {
             gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][turnColor][moveSq] = MAX_LENGTH_DEAD;
         }
 
@@ -1336,7 +1350,7 @@
         // 水平方向の利き
         if (gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
             gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayH,
+                allDirections[DIRECTION_HORIZONTAL][ELEMENT_SLIDING_WINDOW_ARRAY],
                 turnColor
             );
         }
@@ -1344,7 +1358,7 @@
         // 垂直方向の利き
         if (gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
             gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayV,
+                allDirections[DIRECTION_VERTICAL][ELEMENT_SLIDING_WINDOW_ARRAY],
                 turnColor
             );
         }
@@ -1352,7 +1366,7 @@
         // バロック対角線方向の利き
         if (gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
             gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayB,
+                allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_SLIDING_WINDOW_ARRAY],
                 turnColor
             );
         }
@@ -1360,7 +1374,7 @@
         // シニスター対角線方向の利き
         if (gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
             gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayS,
+                allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_SLIDING_WINDOW_ARRAY],
                 turnColor
             );
         }
@@ -1382,10 +1396,10 @@
         // TODO: ４方向に分解、まとめたい。
         const thisTurnNonzeroDiameterArray = [
             [],
-            thisTurnNonzeroDiameterH,
-            thisTurnNonzeroDiameterV,
-            thisTurnNonzeroDiameterB,
-            thisTurnNonzeroDiameterS,
+            allDirections[DIRECTION_HORIZONTAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
+            allDirections[DIRECTION_VERTICAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
+            allDirections[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
+            allDirections[DIRECTION_SINISTER_DIAGONAL][ELEMENT_THIS_TURN_NONZERO_DIAMETER],
         ] as number[][];
 
         // フィールドの各空点の［最長］を記入します
