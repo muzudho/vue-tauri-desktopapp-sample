@@ -1423,8 +1423,19 @@
             }
         }
 
-        // ［割り打ち］処理
-        executeWariuchi(moveSq);
+        // ++++++++++++++++++++
+        // + ［割り打ち］処理 +
+        // ++++++++++++++++++++
+        for (const direction of directionArray) {
+            const foreOf = foreOfArray[direction];
+            const backOf = backOfArray[direction];
+            executeWariuchiBasic(
+                moveSq,
+                direction,
+                foreOf,
+                backOf,
+            );
+        }
 
         const stoneStateAliveArray = [
             STONE_STATE_NONE,
@@ -1788,14 +1799,12 @@
      *
      * @param moveSq 着手点 
      */
-    function executeWariuchi(
-        moveSq: number
+    function executeWariuchiBasic(
+        moveSq: number,
+        direction: Direction,
+        foreOf: (sq: number) => number,
+        backOf: (sq: number) => number,
     ) : void {
-        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++
-        // + （途切れた）相手の石のつながりをチェックします +
-        // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
         function oppositeTurnStonesCheckField(
             foreOppositeTurnStones: number[],
@@ -1806,6 +1815,7 @@
             colorsAndStonesDirectionalFieldArray: Ref<number[][][]>,
         ) : void {
             //console.log(`DEBUG: [oppositeTurnStonesCheckFieldOneDirection] startSq=${startSq}`);
+            const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
 
             for (const oppositeTurnStoneSq of foreOppositeTurnStones) {
                 const directionControlLocations = locateFieldNonzeroFromCenter(
@@ -1850,109 +1860,28 @@
         let foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
-            eastOf,
+            foreOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
         let backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
-            westOf,
+            backOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
         oppositeTurnStonesCheckField(
             foreOppositeTurnStones,
             backOppositeTurnStones,
-            eastOf,
-            westOf,
-            DIRECTION_HORIZONTAL,
+            foreOf,
+            backOf,
+            direction,
             gameBoard1MaxLengthArray,
         );
         // 相手の［死に石］を記入
         oppositeTurnStonesCheckDeadHorizontal(foreOppositeTurnStones);
         oppositeTurnStonesCheckDeadHorizontal(backOppositeTurnStones);
-
-        // 垂直方向
-        foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            southOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            northOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        oppositeTurnStonesCheckField(
-            foreOppositeTurnStones,
-            backOppositeTurnStones,
-            southOf,
-            northOf,
-            DIRECTION_VERTICAL,
-            gameBoard1MaxLengthArray,
-        );
-        // 相手の［死に石］を記入
-        oppositeTurnStonesCheckDeadVertical(foreOppositeTurnStones);
-        oppositeTurnStonesCheckDeadVertical(backOppositeTurnStones);
-
-        // バロック対角線方向
-        foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            northeastOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            southwestOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        oppositeTurnStonesCheckField(
-            foreOppositeTurnStones,
-            backOppositeTurnStones,
-            northeastOf,
-            southwestOf,
-            DIRECTION_BAROQUE_DIAGONAL,
-            gameBoard1MaxLengthArray,
-        );
-        // 相手の［死に石］を記入
-        oppositeTurnStonesCheckDeadBaroqueDiagonal(foreOppositeTurnStones);
-        oppositeTurnStonesCheckDeadBaroqueDiagonal(backOppositeTurnStones);
-
-        // シニスター対角線方向
-        foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            southeastOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            northwestOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        oppositeTurnStonesCheckField(
-            foreOppositeTurnStones,
-            backOppositeTurnStones,
-            southeastOf,
-            northwestOf,
-            DIRECTION_SINISTER_DIAGONAL,
-            gameBoard1MaxLengthArray,
-        );
-        // 相手番の［死に石］を記入。石を置いて［死に石］になるのは、相手番の石だけ。
-        oppositeTurnStonesCheckDeadSinisterDiagonal(foreOppositeTurnStones);
-        oppositeTurnStonesCheckDeadSinisterDiagonal(backOppositeTurnStones);
     }
 
 
