@@ -1223,7 +1223,7 @@
         moveSq: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
-    ) : [number[][], number[], Set<number>] {
+    ) : [number[][], number[], Set<number>, number[]] {
 
         // ++++++++++
         // + 仕込み +
@@ -1257,7 +1257,16 @@
 
         const bingoStones : Set<number> = getBingoLocations(slidingWindowArray, turnColor, FIVE_LENGTH);
 
-        return [slidingWindowArray, locationsDiameterNineControl, bingoStones];
+        const thisTurnNonzeroDiameter = locateFieldFromCenter(
+                moveSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                foreOf,
+                backOf,
+                (_sq: number) => false, // continue 条件
+                (sq: number) => isOutOfBoard(sq),   // break 条件
+            );
+
+        return [slidingWindowArray, locationsDiameterNineControl, bingoStones, thisTurnNonzeroDiameter];
     }
 
 
@@ -1277,10 +1286,10 @@
         const turnColor = gameBoard1Turn.value as Color;    // 手番の色　＝　置く石の色
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        const [slidingWindowArrayH, locationsDiameterNineControlH, bingoStonesH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
-        const [slidingWindowArrayV, locationsDiameterNineControlV, bingoStonesV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
-        const [slidingWindowArrayB, locationsDiameterNineControlB, bingoStonesB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
-        const [slidingWindowArrayS, locationsDiameterNineControlS, bingoStonesS] = putStoneOnDirection(moveSq, southeastOf, northwestOf); // シニスター対角線（S）
+        const [slidingWindowArrayH, locationsDiameterNineControlH, bingoStonesH, thisTurnNonzeroDiameterH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
+        const [slidingWindowArrayV, locationsDiameterNineControlV, bingoStonesV, thisTurnNonzeroDiameterV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
+        const [slidingWindowArrayB, locationsDiameterNineControlB, bingoStonesB, thisTurnNonzeroDiameterB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
+        const [slidingWindowArrayS, locationsDiameterNineControlS, bingoStonesS, thisTurnNonzeroDiameterS] = putStoneOnDirection(moveSq, southeastOf, northwestOf); // シニスター対角線（S）
 
         const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
@@ -1371,40 +1380,12 @@
 
         // 利きマスを取得。着手点を含まない
         // TODO: ４方向に分解、まとめたい。
-        const thisTurnFieldArray = [
+        const thisTurnNonzeroDiameterArray = [
             [],
-            locateFieldFromCenter(  // 水平
-                moveSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                eastOf,
-                westOf,
-                (_sq: number) => false, // continue 条件
-                (sq: number) => isOutOfBoard(sq),   // break 条件
-            ),
-            locateFieldFromCenter(  // 垂直
-                moveSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                northOf,
-                southOf,
-                (_sq: number) => false, // continue 条件
-                (sq: number) => isOutOfBoard(sq),   // break 条件
-            ),
-            locateFieldFromCenter(  // バロック
-                moveSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                northeastOf,
-                southwestOf,
-                (_sq: number) => false, // continue 条件
-                (sq: number) => isOutOfBoard(sq),   // break 条件
-            ),
-            locateFieldFromCenter(  // シニスター
-                moveSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                northwestOf,
-                southeastOf,
-                (_sq: number) => false, // continue 条件
-                (sq: number) => isOutOfBoard(sq),   // break 条件
-            ),
+            thisTurnNonzeroDiameterH,
+            thisTurnNonzeroDiameterV,
+            thisTurnNonzeroDiameterB,
+            thisTurnNonzeroDiameterS,
         ] as number[][];
 
         // フィールドの各空点の［最長］を記入します
@@ -1413,7 +1394,7 @@
             foreOf: (sq: number) => number,
             backOf: (sq: number) => number,
         ) : void {
-            for (const resonanceSq of thisTurnFieldArray[direction]) {
+            for (const resonanceSq of thisTurnNonzeroDiameterArray[direction]) {
                 for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                     // 空点なら自分、相手ともに［最長］を更新。
                     // 手番の石なら、手番の［最長］だけを更新。
