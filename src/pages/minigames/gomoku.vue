@@ -625,6 +625,9 @@
         (sq: number) => boolean
     >(()=>{    // マスをクリック可能か
         return (sq: number)=>{
+            if (isOutOfBoard(sq)){  // 盤外なら
+                return false;
+            }
             const isEmptySquare = gameBoard1StoneColorArray.value[sq] == 0; // 空マスだ
             return isEmptySquare && !gameBoard1IsEnd.value;
         }
@@ -718,6 +721,7 @@
 
             } catch (err: unknown) {
                 const errorMessage = err instanceof Error ? err.message : String(err);
+                console.log('ERROR: GomokuError:', errorMessage);
                 console.error('GomokuError:', errorMessage);
                 return {
                     left: 0,
@@ -1203,63 +1207,64 @@
     /**
      * 石を置く
      * @param moveSq 
+     * @returns 石を置けたら true、石を置けなかったら false。不明なら null
+     */
+    function putStoneOnDirection(
+        moveSq: number,
+        foreOf: (sq: number)=>number,
+        backOf: (sq: number)=>number,
+    ) : [boolean | null, number[][]] {
+
+        // 着手点を中心とする直径９のスライディング・ウィンドウ
+        const slidingWindowArray = makeSlidingWindowArray(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            HALF_OPEN_RADIUS_OF_FIVE,
+            foreOf,
+            backOf,
+        );
+        // console.log(`DEBUG: [putStone] slidingWindowArrayH.length=[${slidingWindowArrayH.length}]`);
+        // slidingWindowArrayH.forEach((oneWindow, index, _array)=>{
+        //     console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
+        // });
+
+        return [null, slidingWindowArray];
+    }
+
+
+    /**
+     * 石を置く
+     * @param moveSq 
      */
     function putStone(moveSq: number) : boolean {
-        const turnColor = gameBoard1Turn.value as Color;
-        const oppositeTurnColor1 = oppositeTurnColor(turnColor);
+       
+        // sq を符号に変換したい。
+        console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)} moveSq=${moveSq} turn=${gameBoard1Turn.value}`);
 
-        if (!gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
+        if (!gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら（盤外含む）
             return false;
         }
 
-        // sq を符号に変換したい。
-        console.log(`DEBUG: [putStone] code=${sqToCode(moveSq)} moveSq=${moveSq} turnColor=${turnColor}`);
-
+        const turnColor = gameBoard1Turn.value as Color;    // 手番の色　＝　置く石の色
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
+
+        const [itsOkH, slidingWindowArrayH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
+        const [itsOkV, slidingWindowArrayV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
+        const [itsOkB, slidingWindowArrayB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
+        const [itsOkS, slidingWindowArrayS] = putStoneOnDirection(moveSq, southwestOf, northeastOf); // シニスター対角線（S）
+
+        const itsOkArray = [itsOkH, itsOkV, itsOkB, itsOkS];
+        const itsOk = itsOkArray.includes(true);
+        if (itsOk != null) {
+            return itsOk;
+        }
+
+        const oppositeTurnColor1 = oppositeTurnColor(turnColor);
+
 
         // ++++++++++
         // + 仕込み +
         // ++++++++++
-
-        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
-        const slidingWindowArrayHorizontal = makeSlidingWindowArray(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            HALF_OPEN_RADIUS_OF_FIVE,
-            eastOf,
-            westOf,
-        );
-        // console.log(`DEBUG: [putStone] slidingWindowArrayHorizontal.length=[${slidingWindowArrayHorizontal.length}]`);
-        // slidingWindowArrayHorizontal.forEach((oneWindow, index, _array)=>{
-        //     console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
-        // });
-
-        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　垂直方向
-        const slidingWindowArrayVertical = makeSlidingWindowArray(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            HALF_OPEN_RADIUS_OF_FIVE,
-            northOf,
-            southOf,
-        );
-
-        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　バロック対角線方向の利き
-        const slidingWindowArrayBaroqueDiagonal = makeSlidingWindowArray(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            HALF_OPEN_RADIUS_OF_FIVE,
-            northeastOf,
-            southwestOf,
-        );
-
-        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　シニスター対角線方向の利き
-        const slidingWindowArraySinisterDiagonal = makeSlidingWindowArray(
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            HALF_OPEN_RADIUS_OF_FIVE,
-            southeastOf,
-            northwestOf,
-        );
 
         // // 直径５　＞　水平方向の利き
         // const locationsDiameterFiveControlHorizontal = locateDirectionFromCenter(
@@ -1347,10 +1352,10 @@
 
         // ［五］を作れた石の集合
         const bingoStoneSet = new Set<number>([
-            ...getBingoLocations(slidingWindowArrayHorizontal, turnColor, FIVE_LENGTH), // 水平方向にビンゴがあるか？
-            ...getBingoLocations(slidingWindowArrayVertical, turnColor, FIVE_LENGTH),
-            ...getBingoLocations(slidingWindowArrayBaroqueDiagonal, turnColor, FIVE_LENGTH),
-            ...getBingoLocations(slidingWindowArraySinisterDiagonal, turnColor, FIVE_LENGTH),
+            ...getBingoLocations(slidingWindowArrayH, turnColor, FIVE_LENGTH), // 水平方向にビンゴがあるか？
+            ...getBingoLocations(slidingWindowArrayV, turnColor, FIVE_LENGTH),
+            ...getBingoLocations(slidingWindowArrayB, turnColor, FIVE_LENGTH),
+            ...getBingoLocations(slidingWindowArrayS, turnColor, FIVE_LENGTH),
         ]);
         for (const stoneSq of bingoStoneSet) {
             gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color;
@@ -1365,7 +1370,7 @@
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthHorizontal.value[turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayHorizontal,
+                slidingWindowArrayH,
                 turnColor
             );
         }
@@ -1375,7 +1380,7 @@
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthVertical.value[turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayVertical,
+                slidingWindowArrayV,
                 turnColor
             );
         }
@@ -1385,7 +1390,7 @@
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[turnColor][moveSq] = countMaxStones(
-                slidingWindowArrayBaroqueDiagonal,
+                slidingWindowArrayB,
                 turnColor
             );
         }
@@ -1395,7 +1400,7 @@
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = MAX_LENGTH_DEAD;
         } else {
             gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[turnColor][moveSq] = countMaxStones(
-                slidingWindowArraySinisterDiagonal,
+                slidingWindowArrayS,
                 turnColor
             );
         }
@@ -1419,25 +1424,36 @@
             ...turnStoneHalfDirectionFieldArray[0],
             ...turnStoneHalfDirectionFieldArray[4],
         ]) {
-            for (const color of [turnColor, oppositeTurnColor1]) {
+            for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 // 空点なら自分、相手ともに［最長］を更新。
                 // 手番の石なら、手番の［最長］だけを更新。
                 // 相手番の石なら、相手番の［最長］だけを更新。
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
-                    const directionControlLocations = locateDirectionFromCenter(
+                    const controlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        HALF_OPEN_RADIUS_OF_NINE,
+                        HALF_OPEN_RADIUS_OF_FIVE,
                         eastOf,
                         westOf,
                         (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+
+                    if (controlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
+
                     } else {
-                        gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = countStones(
-                            directionControlLocations,
+                        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
+                        const resonanceSlidingWindowArrayHorizontal = makeSlidingWindowArray(
+                            resonanceSq,
+                            HALF_OPEN_RADIUS_OF_NINE,
+                            HALF_OPEN_RADIUS_OF_FIVE,
+                            eastOf,
+                            westOf,
+                        );
+
+                        gameBoard1ColorsAndStonesMaxLengthHorizontal.value[color][resonanceSq] = countMaxStones(
+                            resonanceSlidingWindowArrayHorizontal,
                             color,
                         );
                     }
@@ -1450,22 +1466,33 @@
             ...turnStoneHalfDirectionFieldArray[2],
             ...turnStoneHalfDirectionFieldArray[6],
         ]) {
-            for (const color of [turnColor, oppositeTurnColor1]) {
+            for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
-                    const directionControlLocations = locateDirectionFromCenter(
+                    const controlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        HALF_OPEN_RADIUS_OF_NINE,
+                        HALF_OPEN_RADIUS_OF_FIVE,
                         northOf,
                         southOf,
                         (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+
+                    if (controlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = MAX_LENGTH_DEAD;
+
                     } else {
-                        gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = countStones(
-                            directionControlLocations,
+                        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　垂直方向
+                        const resonanceSlidingWindowArrayVertical = makeSlidingWindowArray(
+                            moveSq,
+                            HALF_OPEN_RADIUS_OF_NINE,
+                            HALF_OPEN_RADIUS_OF_FIVE,
+                            northOf,
+                            southOf,
+                        );
+
+                        gameBoard1ColorsAndStonesMaxLengthVertical.value[color][resonanceSq] = countMaxStones(
+                            resonanceSlidingWindowArrayVertical,
                             color,
                         );
                     }
@@ -1478,22 +1505,32 @@
             ...turnStoneHalfDirectionFieldArray[1],
             ...turnStoneHalfDirectionFieldArray[5],
         ]) {
-            for (const color of [turnColor, oppositeTurnColor1]) {
+            for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
-                    const directionControlLocations = locateDirectionFromCenter(
+                    const controlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        HALF_OPEN_RADIUS_OF_NINE,
+                        HALF_OPEN_RADIUS_OF_FIVE,
                         northeastOf,
                         southwestOf,
                         (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+
+                    if (controlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
+
                     } else {
-                        gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = countStones(
-                            directionControlLocations,
+                        const resonanceSlidingWindowArrayBaroqueDiagonal = makeSlidingWindowArray(
+                            moveSq,
+                            HALF_OPEN_RADIUS_OF_NINE,
+                            HALF_OPEN_RADIUS_OF_FIVE,
+                            northeastOf,
+                            southwestOf,
+                        );
+
+                        gameBoard1ColorsAndStonesMaxLengthBaroqueDiagonal.value[color][resonanceSq] = countMaxStones(
+                            resonanceSlidingWindowArrayBaroqueDiagonal,
                             color,
                         );
                     }
@@ -1506,22 +1543,33 @@
             ...turnStoneHalfDirectionFieldArray[3],
             ...turnStoneHalfDirectionFieldArray[7],
         ]) {
-            for (const color of [turnColor, oppositeTurnColor1]) {
+            for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
-                    const directionControlLocations = locateDirectionFromCenter(
+                    const controlLocations = locateDirectionFromCenter(
                         resonanceSq,
-                        HALF_OPEN_RADIUS_OF_NINE,
+                        HALF_OPEN_RADIUS_OF_FIVE,
                         southeastOf,
                         northwestOf,
                         (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                     );
-                    if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+
+                    if (controlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = MAX_LENGTH_DEAD;
+
                     } else {
-                        gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = countStones(
-                            directionControlLocations,
+                        // 着手点を中心とする直径９のスライディング・ウィンドウ　＞　シニスター対角線方向の利き
+                        const resonanceSlidingWindowArraySinisterDiagonal = makeSlidingWindowArray(
+                            moveSq,
+                            HALF_OPEN_RADIUS_OF_NINE,
+                            HALF_OPEN_RADIUS_OF_FIVE,
+                            southeastOf,
+                            northwestOf,
+                        );
+
+                        gameBoard1ColorsAndStonesMaxLengthSinisterDiagonal.value[color][resonanceSq] = countMaxStones(
+                            resonanceSlidingWindowArraySinisterDiagonal,
                             color,
                         );
                     }
@@ -2613,13 +2661,15 @@
         //console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
 
         for (let iSlidingWindow: number=0; iSlidingWindow < slidingWindowNum; iSlidingWindow++) {
-            slidingWindowArray.push(makeOneWindow(
+            const oneWindow = makeOneWindow(
                 startSq,
                 halfOpenRadiusOfInputArray - iSlidingWindow,
                 iSlidingWindow,
                 foreOf,
                 backOf
-            ))
+            );
+            console.log(`DEBUG: [makeSlidingWindowArray] (${iSlidingWindow}) oneWindow=${oneWindow} startSq=${startSq}`);
+            slidingWindowArray.push(oneWindow)
         }
 
         return slidingWindowArray;
