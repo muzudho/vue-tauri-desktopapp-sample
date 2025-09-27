@@ -679,6 +679,7 @@
     const STONE_STATE_ALIVE_VERTICAL = 2;
     const STONE_STATE_ALIVE_BAROQUE_DIAGONAL = 4;
     const STONE_STATE_ALIVE_SINISTER_DIAGONAL = 8;
+    type StoneState = typeof STONE_STATE_NONE | typeof STONE_STATE_ALIVE_HORIZONTAL | typeof STONE_STATE_ALIVE_VERTICAL | typeof STONE_STATE_ALIVE_BAROQUE_DIAGONAL | typeof STONE_STATE_ALIVE_SINISTER_DIAGONAL;
     const MAX_LENGTH_DEAD = -1;
     function isAliveStone(sq: number) : boolean {
         return 1 <= gameBoard1StonesState.value[sq] && gameBoard1StonesState.value[sq] <= 15;
@@ -1329,7 +1330,7 @@
         }
 
 
-        const directionArray = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL];
+        const directionArray = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
 
         for (const direction of directionArray) {
 
@@ -1363,13 +1364,26 @@
         // + 以下、着手点を含まない +
         // ++++++++++++++++++++++++++
 
+        const foreOfArray = [
+            (_sq: number) => { return 0; }, // 不使用
+            eastOf,
+            northOf,
+            northeastOf,
+            southeastOf,
+        ];
+        const backOfArray = [
+            (_sq: number) => { return 0; }, // 不使用
+            westOf,
+            southOf,
+            southwestOf,
+            northwestOf,
+        ];
+
         // ［非零直径９］を取得。着手点を含まない
         // フィールドの各空点の［最長］を記入します
-        function processing1(
-            direction: Direction,
-            foreOf: (sq: number) => number,
-            backOf: (sq: number) => number,
-        ) : void {
+        for (const direction of directionArray) {
+            const foreOf = foreOfArray[direction];
+            const backOf = backOfArray[direction];
             for (const resonanceSq of allDirections[direction][ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE]) {
                 for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                     // 空点なら自分、相手ともに［最長］を更新。
@@ -1409,36 +1423,29 @@
             }
         }
 
-        processing1(
-            DIRECTION_HORIZONTAL,   // 水平方向フィールド
-            eastOf,
-            westOf,
-        );
-        processing1(
-            DIRECTION_VERTICAL,
-            northOf,
-            southOf,
-        );
-        processing1(
-            DIRECTION_BAROQUE_DIAGONAL,
-            northeastOf,
-            southwestOf,
-        );
-        processing1(
-            DIRECTION_SINISTER_DIAGONAL,
-            southeastOf,
-            northwestOf,
-        );
-
         // ［割り打ち］処理
         executeWariuchi(moveSq);
 
-        // ［五］の処理
-        fiveStonesProcessingAllDirections(
-            moveSq,
-        );
+        const stoneStateAliveArray = [
+            STONE_STATE_NONE,
+            STONE_STATE_ALIVE_HORIZONTAL,
+            STONE_STATE_ALIVE_VERTICAL,
+            STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
+            STONE_STATE_ALIVE_SINISTER_DIAGONAL,
+        ] as StoneState[];
 
-        gameBoard1Turn.value = oppositeTurnColor(gameBoard1Turn.value); // （チェック後に）相手の色に変更
+        // ［五］の処理。［五］ができているかどうかは、手番でだけ確認すれば構いません。
+        for (const direction of directionArray) {
+            fiveStonesProcessingOneDirection(    // 水平方向
+                moveSq,
+                foreOfArray[direction],
+                backOfArray[direction],
+                gameBoard1StonesState,
+                stoneStateAliveArray[direction],
+            );
+        }
+
+        gameBoard1Turn.value = oppositeTurnColor1; // （チェック後に）相手の色に変更
         gameBoard1Times.value += 1;
         gameBoard1StoneCount.value[turnColor] += 1;
         gameBoard1PassCount.value = 0;  // リセット
@@ -1621,43 +1628,6 @@
         return color % 2 + 1;   // 1 なら 2 に、2 なら 1 に
     }
 
-
-    /**
-     * ［五］ができているかどうかは、手番でだけ確認すれば構いません。
-     * @param aStoneSq 
-     */
-    function fiveStonesProcessingAllDirections(
-        aStoneSq: number,   // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
-    ) : void {
-        fiveStonesProcessingOneDirection(    // 水平方向
-            aStoneSq,
-            eastOf,
-            westOf,
-            gameBoard1StonesState,
-            STONE_STATE_ALIVE_HORIZONTAL,
-        );
-        fiveStonesProcessingOneDirection(    // 垂直方向
-            aStoneSq,
-            northOf,
-            southOf,
-            gameBoard1StonesState,
-            STONE_STATE_ALIVE_VERTICAL,
-        );
-        fiveStonesProcessingOneDirection(    // バロック対角線方向
-            aStoneSq,
-            northeastOf,
-            southwestOf,
-            gameBoard1StonesState,
-            STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
-        );
-        fiveStonesProcessingOneDirection(    // シニスター対角線方向
-            aStoneSq,
-            southeastOf,
-            northwestOf,
-            gameBoard1StonesState,
-            STONE_STATE_ALIVE_SINISTER_DIAGONAL,
-        );
-    }
 
     /**
      * ［五］の処理。
