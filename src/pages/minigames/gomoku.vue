@@ -1213,7 +1213,7 @@
         moveSq: number,
         foreOf: (sq: number)=>number,
         backOf: (sq: number)=>number,
-    ) : [boolean | null, number[][], number[]] {
+    ) : [number[][], number[], Set<number>] {
 
         // ++++++++++
         // + 仕込み +
@@ -1232,7 +1232,8 @@
         //     console.log(`DEBUG: [putStone] window[${index}] ${oneWindow}`);
         // });
 
-        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value) as Color;
+        const turnColor = gameBoard1Turn.value as Color;
+        const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
         // 直径９　＞　利き
         const locationsDiameterNineControl = locateDirectionFromCenter(
@@ -1244,7 +1245,9 @@
             makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
         );
 
-        return [null, slidingWindowArray, locationsDiameterNineControl];
+        const bingoLocations : Set<number> = getBingoLocations(slidingWindowArray, turnColor, FIVE_LENGTH);
+
+        return [slidingWindowArray, locationsDiameterNineControl, bingoLocations];
     }
 
 
@@ -1264,18 +1267,10 @@
         const turnColor = gameBoard1Turn.value as Color;    // 手番の色　＝　置く石の色
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        const [itsOkH, slidingWindowArrayH, locationsDiameterNineControlH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
-        const [itsOkV, slidingWindowArrayV, locationsDiameterNineControlV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
-        const [itsOkB, slidingWindowArrayB, locationsDiameterNineControlB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
-        const [itsOkS, slidingWindowArrayS, locationsDiameterNineControlS] = putStoneOnDirection(moveSq, southeastOf, northwestOf); // シニスター対角線（S）
-
-        const itsOkArray = [itsOkH, itsOkV, itsOkB, itsOkS];
-        if (!itsOkArray.includes(null)) {
-            const itsOk = itsOkArray.includes(true);
-            if (itsOk != null) {
-                return itsOk;
-            }
-        }
+        const [slidingWindowArrayH, locationsDiameterNineControlH, bingoLocationsH] = putStoneOnDirection(moveSq, eastOf, westOf);   // 水平（H）
+        const [slidingWindowArrayV, locationsDiameterNineControlV, bingoLocationsV] = putStoneOnDirection(moveSq, northOf, southOf); // 垂直（V）
+        const [slidingWindowArrayB, locationsDiameterNineControlB, bingoLocationsB] = putStoneOnDirection(moveSq, northeastOf, southwestOf); // バロック対角線（B）
+        const [slidingWindowArrayS, locationsDiameterNineControlS, bingoLocationsS] = putStoneOnDirection(moveSq, southeastOf, northwestOf); // シニスター対角線（S）
 
         const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
@@ -1285,10 +1280,10 @@
 
         // ［五］を作れた石の集合
         const bingoStoneSet = new Set<number>([
-            ...getBingoLocations(slidingWindowArrayH, turnColor, FIVE_LENGTH), // 水平方向にビンゴがあるか？
-            ...getBingoLocations(slidingWindowArrayV, turnColor, FIVE_LENGTH),
-            ...getBingoLocations(slidingWindowArrayB, turnColor, FIVE_LENGTH),
-            ...getBingoLocations(slidingWindowArrayS, turnColor, FIVE_LENGTH),
+            ...bingoLocationsH, // 水平方向にビンゴがあるか？
+            ...bingoLocationsV,
+            ...bingoLocationsB,
+            ...bingoLocationsS,
         ]);
         for (const stoneSq of bingoStoneSet) {
             gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color;
