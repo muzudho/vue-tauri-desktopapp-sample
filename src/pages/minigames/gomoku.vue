@@ -1371,7 +1371,25 @@
 
         // 利きマスを取得。着手点を含まない
         // TODO: ４方向に分解、まとめたい。
-        const thisTurnStoneHalfDirectionFieldArray = locateRadialEightHalfDirectionFieldArray(
+        const thisTurnStoneHalfDirectionFieldArrayH = locateRadialEightHalfDirectionFieldArrayH(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            (_sq: number) => false, // continue 条件
+            (sq: number) => isOutOfBoard(sq),   // break 条件
+        );
+        const thisTurnStoneHalfDirectionFieldArrayV = locateRadialEightHalfDirectionFieldArrayV(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            (_sq: number) => false, // continue 条件
+            (sq: number) => isOutOfBoard(sq),   // break 条件
+        );
+        const thisTurnStoneHalfDirectionFieldArrayB = locateRadialEightHalfDirectionFieldArrayB(
+            moveSq,
+            HALF_OPEN_RADIUS_OF_NINE,
+            (_sq: number) => false, // continue 条件
+            (sq: number) => isOutOfBoard(sq),   // break 条件
+        );
+        const thisTurnStoneHalfDirectionFieldArrayS = locateRadialEightHalfDirectionFieldArrayS(
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             (_sq: number) => false, // continue 条件
@@ -1380,7 +1398,7 @@
 
         // フィールドの各空点の［最長］を記入します
         // 水平方向フィールド
-        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[0]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArrayH) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 // 空点なら自分、相手ともに［最長］を更新。
                 // 手番の石なら、手番の［最長］だけを更新。
@@ -1419,7 +1437,7 @@
         }
 
         // 垂直方向フィールド
-        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[2]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArrayV) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
@@ -1455,7 +1473,7 @@
         }
 
         // バロック対角線方向フィールド
-        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[1]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArrayB) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
@@ -1490,7 +1508,7 @@
         }
 
         // シニスター対角線方向フィールド
-        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArray[3]) {
+        for (const resonanceSq of thisTurnStoneHalfDirectionFieldArrayS) {
             for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
                 const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                 if ([COLOR_EMPTY, color].includes(stoneColor)) {
@@ -2474,74 +2492,100 @@
      * この図形に名前はないが、４ウェイ（4t-way）とでも呼ぶとする。
      * 
      */
-    function locateRadialEightHalfDirectionFieldArray(
+    function locateRadialEightHalfDirectionFieldArrayH(
         startSq: number,
         oneWingMaxLength: number,
         isContinue: (sq: number)=>boolean, 
         isBreak: (sq: number)=>boolean,
-    ) : number[][] {
-        const eastWayField = locateDirectionFromEdge( // (1)
-            startSq,
-            oneWingMaxLength,
-            eastOf,
-            isContinue,
-            isBreak,
-        );
-        const northeastWayField = locateDirectionFromEdge(    // (2)
-            startSq,
-            oneWingMaxLength,
-            northeastOf,
-            isContinue,
-            isBreak,
-        );
-        const northWayField = locateDirectionFromEdge(    // (3)
-            startSq,
-            oneWingMaxLength,
-            northOf,
-            isContinue,
-            isBreak,
-        );
-        const northwestWayField = locateDirectionFromEdge(    // (4)
-            startSq,
-            oneWingMaxLength,
-            northwestOf,
-            isContinue,
-            isBreak,
-        );
-        const westWayField = locateDirectionFromEdge( // (5)
-            startSq,
-            oneWingMaxLength,
-            westOf,
-            isContinue,
-            isBreak,
-        );
-        const southwestWayField = locateDirectionFromEdge(    // (6)
-            startSq,
-            oneWingMaxLength,
-            southwestOf,
-            isContinue,
-            isBreak,
-        );
-        const southWayField = locateDirectionFromEdge(    // (7)
-            startSq,
-            oneWingMaxLength,
-            southOf,
-            isContinue,
-            isBreak,
-        );
-        const southeastWayField = locateDirectionFromEdge(    // (8)
-            startSq,
-            oneWingMaxLength,
-            southeastOf,
-            isContinue,
-            isBreak,
-        );
+    ) : number[] {
+        // startSq を含まない
         return [
-            // startSq を含まない
-            [...eastWayField, ...westWayField,],
-            [...northeastWayField, ...southwestWayField,],
-            [...northWayField, ...southWayField,],
-            [...northwestWayField, ...southeastWayField],
+            ...locateDirectionFromEdge( // (1)
+                startSq,
+                oneWingMaxLength,
+                eastOf,
+                isContinue,
+                isBreak,
+            ),
+            ...locateDirectionFromEdge( // (5)
+                startSq,
+                oneWingMaxLength,
+                westOf,
+                isContinue,
+                isBreak,
+            ),
+        ];
+    }
+    function locateRadialEightHalfDirectionFieldArrayV(
+        startSq: number,
+        oneWingMaxLength: number,
+        isContinue: (sq: number)=>boolean, 
+        isBreak: (sq: number)=>boolean,
+    ) : number[] {
+        // startSq を含まない
+        return [
+            ...locateDirectionFromEdge(    // (2)
+                startSq,
+                oneWingMaxLength,
+                northeastOf,
+                isContinue,
+                isBreak,
+            ),
+            ...locateDirectionFromEdge(    // (6)
+                startSq,
+                oneWingMaxLength,
+                southwestOf,
+                isContinue,
+                isBreak,
+            ),
+        ];
+    }
+    function locateRadialEightHalfDirectionFieldArrayB(
+        startSq: number,
+        oneWingMaxLength: number,
+        isContinue: (sq: number)=>boolean, 
+        isBreak: (sq: number)=>boolean,
+    ) : number[] {
+        // startSq を含まない
+        return [
+            ...locateDirectionFromEdge(    // (3)
+                startSq,
+                oneWingMaxLength,
+                northOf,
+                isContinue,
+                isBreak,
+            ),
+            ...locateDirectionFromEdge(    // (7)
+                startSq,
+                oneWingMaxLength,
+                southOf,
+                isContinue,
+                isBreak,
+            ),
+        ];
+    }
+    function locateRadialEightHalfDirectionFieldArrayS(
+        startSq: number,
+        oneWingMaxLength: number,
+        isContinue: (sq: number)=>boolean, 
+        isBreak: (sq: number)=>boolean,
+    ) : number[] {
+        // startSq を含まない
+        return [
+            ...locateDirectionFromEdge(    // (4)
+                startSq,
+                oneWingMaxLength,
+                northwestOf,
+                isContinue,
+                isBreak,
+            ),
+            ...locateDirectionFromEdge(    // (8)
+                startSq,
+                oneWingMaxLength,
+                southeastOf,
+                isContinue,
+                isBreak,
+            )
         ];
     }
 
