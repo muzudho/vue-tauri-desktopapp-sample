@@ -1230,7 +1230,7 @@
         // + 仕込み +
         // ++++++++++
 
-        // 着手点を中心とする直径９のスライディング・ウィンドウ
+        // 着手点を中心とする直径９のスライディング・ウィンドウ。［五］を判定するのに使う
         const slidingWindowArray = makeSlidingWindowArray(
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
@@ -1294,7 +1294,7 @@
 
     type Elements1 = [any, number[][], number[], number[], number[], Set<number>];
     const ELEMENT_EMPTY = 0;
-    const ELEMENT_SLIDING_WINDOW_ARRAY = 1;
+    const ELEMENT_SLIDING_WINDOW_ARRAY = 1; // ［五］を判定するのに使う
     const ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE = 2;
     const ELEMENT_LOCATIONS_CONTROL = 3;
     const ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL = 4;
@@ -1332,10 +1332,6 @@
             putStoneOnDirection(moveSq, southwestOf, northeastOf), // バロック対角線（B）
             putStoneOnDirection(moveSq, northwestOf, southeastOf), // シニスター対角線（S）
         ] as Elements1[];
-        // const [nullH, slidingWindowArrayH, locationsDiameterNineControlH, thisTurnNonzeroDiameterH] = 
-        // const [nullV, slidingWindowArrayV, locationsDiameterNineControlV, thisTurnNonzeroDiameterV] = 
-        // const [nullB, slidingWindowArrayB, locationsDiameterNineControlB, thisTurnNonzeroDiameterB] = 
-        // const [nullS, slidingWindowArrayS, locationsDiameterNineControlS, thisTurnNonzeroDiameterS] = 
 
         const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
@@ -1379,33 +1375,26 @@
         ] as StoneState[];
 
         for (const direction of directionArray) {
+            const foreOf = foreOfArray[direction];
+            const backOf = backOfArray[direction];
 
-            // ++++++++++++++++++++++++++++
-            // + 着手石が［死に石］か記入 +
-            // ++++++++++++++++++++++++++++
+            // ++++++++++
+            // + 着手点 +
+            // ++++++++++
+
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+            // + 着手点　＞　［死に石］か［最長］のどちらかを記入。相手は 0 +
+            // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
             if (allDirections[direction][ELEMENT_LOCATIONS_CONTROL].length < FIVE_LENGTH) {   // ［五］を作れない方向なら［死に方向］です
                 gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] = MAX_LENGTH_DEAD;
-            }
-
-            // ++++++++++++++++++++++++++
-            // + 着手点の［最長］を記入 +
-            // ++++++++++++++++++++++++++
-
-            if (gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] != MAX_LENGTH_DEAD) { 
+            } else {
                 gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] = countMaxStones(
                     allDirections[direction][ELEMENT_SLIDING_WINDOW_ARRAY],
                     turnColor
                 );
             }
 
-            // ++++++++++++++++++++++++++++++++++
-            // + 着手点は相手から見れば最長が 0 +
-            // ++++++++++++++++++++++++++++++++++
-
             gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][moveSq] = 0;
-
-            const foreOf = foreOfArray[direction];
-            const backOf = backOfArray[direction];
 
             // ++++++++++++++++++++++++++
             // + 以下、着手点を含まない +
@@ -2250,6 +2239,8 @@
 
     /**
      * スライディング・ウィンドウ作成
+     * ［五］を判定するのに使う。
+     * 
      * @param inputArray 
      * @param isBreak 
      */
