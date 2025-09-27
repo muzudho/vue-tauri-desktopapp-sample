@@ -1246,7 +1246,7 @@
         const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
 
         // 直径９　＞　利き
-        const locationsDiameterNineControl = locateDirectionFromCenter(
+        const locationsDiameterNineControl = locateFieldNonzeroFromCenter(
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             foreOf,
@@ -1257,7 +1257,7 @@
 
         const bingoStones : Set<number> = getBingoLocations(slidingWindowArray, turnColor, FIVE_LENGTH);
 
-        const thisTurnNonzeroDiameter = locateFieldFromCenter(
+        const thisTurnNonzeroDiameter = locateFieldNonzeroFromCenter(
                 moveSq,
                 HALF_OPEN_RADIUS_OF_NINE,
                 foreOf,
@@ -1377,7 +1377,7 @@
                     // 相手番の石なら、相手番の［最長］だけを更新。
                     const stoneColor = gameBoard1StoneColorArray.value[resonanceSq];
                     if ([COLOR_EMPTY, color].includes(stoneColor)) {
-                        const controlLocations = locateDirectionFromCenter(
+                        const controlLocations = locateFieldNonzeroFromCenter(
                             resonanceSq,
                             HALF_OPEN_RADIUS_OF_FIVE,
                             foreOf,
@@ -1386,7 +1386,7 @@
                             makeIsOutOfBoardOrColor(oppositeTurnColor(color)),    // break 条件
                         );
 
-                        if (controlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                        if (controlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                             gameBoard1MaxLengthArray.value[direction][color][resonanceSq] = MAX_LENGTH_DEAD;
 
                         } else {
@@ -1676,14 +1676,17 @@
         directionalStoneStateArray: Ref<Array<number>>,
         aliveDirection: number,
     ) : void {
-        const runsNineSquares = locateFieldCapacityFromCenter(
+        const runsNineSquares = [
             startSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            foreOf,
-            backOf,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(gameBoard1Turn.value), sq),   // break 条件
-        );
+            ...locateFieldNonzeroFromCenter(
+                startSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                foreOf,
+                backOf,
+                (_sq: number) => false,  // continue 条件
+                (sq: number) => isOutOfBoardOrColor(oppositeTurnColor(gameBoard1Turn.value), sq),   // break 条件
+            ),
+        ];
 
         const continuityStones: number[] = [];  // 連続している自石のマス番号
 
@@ -1835,7 +1838,7 @@
             //console.log(`DEBUG: [oppositeTurnStonesCheckFieldOneDirection] startSq=${startSq}`);
 
             for (const oppositeTurnStoneSq of foreOppositeTurnStones) {
-                const directionControlLocations = locateDirectionFromCenter(
+                const directionControlLocations = locateFieldNonzeroFromCenter(
                     oppositeTurnStoneSq,
                     HALF_OPEN_RADIUS_OF_NINE,
                     foreOf,
@@ -1843,7 +1846,7 @@
                     (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
                 );
-                if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                if (directionControlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                     colorsAndStonesDirectionalFieldArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
                 } else {
                     colorsAndStonesDirectionalFieldArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
@@ -1854,7 +1857,7 @@
             }
 
             for (const oppositeTurnStoneSq of backOppositeTurnStones) {
-                const directionControlLocations = locateDirectionFromCenter(
+                const directionControlLocations = locateFieldNonzeroFromCenter(
                     oppositeTurnStoneSq,
                     HALF_OPEN_RADIUS_OF_NINE,
                     foreOf,
@@ -1862,7 +1865,7 @@
                     (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
                 );
-                if (directionControlLocations.length < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                if (directionControlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                     colorsAndStonesDirectionalFieldArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
                 } else {
                     colorsAndStonesDirectionalFieldArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
@@ -1874,14 +1877,14 @@
         }
 
         // 水平方向の相手番の石
-        let foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        let foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             eastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        let backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        let backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             westOf,
@@ -1901,14 +1904,14 @@
         oppositeTurnStonesCheckDeadHorizontal(backOppositeTurnStones);
 
         // 垂直方向
-        foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             southOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             northOf,
@@ -1928,14 +1931,14 @@
         oppositeTurnStonesCheckDeadVertical(backOppositeTurnStones);
 
         // バロック対角線方向
-        foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             northeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             southwestOf,
@@ -1955,14 +1958,14 @@
         oppositeTurnStonesCheckDeadBaroqueDiagonal(backOppositeTurnStones);
 
         // シニスター対角線方向
-        foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             southeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             northwestOf,
@@ -2214,11 +2217,12 @@
     /**
      * ［片翼］取得
      * 
-     * 指定の向きの各マスをスキャン。起点を含まない。
+     * 指定の向きの各マスをスキャン。
+     * 着手点を含めない（Non-zero）。
      * 
      * @returns マス番号の配列
      */
-    function locateFieldBasic(
+    function locateFieldNonzeroBasic(
         startSq: number,
         maxLength: number,
         nextOf: (sq: number)=>number,
@@ -2254,14 +2258,15 @@
      * | | | | |x| | | | |
      * +-+-+-+-+-+-+-+-+-+
      * 
-     * 着手点を含めた前後４マス、計９つのマスの番号の配列を返します。
+     * 着手点を含めない（Non-zero）。
+     * 中央から両端へ向かって（From center）。
      * 
      * @param centerSq 
      * @param halfOpenRadius 
      * @param foreOf 
      * @param backOf 
      */
-    function locateDirectionFromCenter(
+    function locateFieldNonzeroFromCenter(
         centerSq: number,
         halfOpenRadius: number,
         foreOf: (sq: number)=>number,
@@ -2270,7 +2275,7 @@
         isBreak: (sq: number)=>boolean,
     ) : number[] {
         // ［逆半開半径］を戻る
-        const backSqArray: number[] = locateFieldBasic(
+        const backSqArray: number[] = locateFieldNonzeroBasic(
             centerSq,
             halfOpenRadius,
             backOf,
@@ -2279,7 +2284,7 @@
         );
 
         // 順ウィング（起点を含まない）を進む
-        const foreSqArray: number[] = locateFieldBasic(
+        const foreSqArray: number[] = locateFieldNonzeroBasic(
             centerSq,
             halfOpenRadius,
             foreOf,
@@ -2287,106 +2292,10 @@
             isBreak,
         );
 
-        return [
+        return [    // 向きを揃えて１つの配列にする
             ...backSqArray.reverse(),
-            centerSq,
+            // centerSq を含まない,
             ...foreSqArray,
-        ];
-    }
-
-
-    /**
-     * ［飛び石］取得
-     * 
-     * ［逆ウィング］の逆順、着手点、順ウィングを合わせたものが［飛び石］だ。
-     * ９マス以下。
-     * 
-     * @returns ９つのマスの番号の配列
-     */
-    function locateFieldCapacityFromCenter(
-        centerSq: number,    // 着手点
-        halfOpenRadius: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
-        isContinue: (sq: number)=>boolean,
-        isBreak: (sq: number)=>boolean,
-    ) : number[] {
-
-        // 順ウィング
-        const fwdWing = locateFieldBasic(
-            centerSq,
-            halfOpenRadius,
-            foreOf,
-            isContinue,
-            isBreak,
-        );
-
-        // 逆ウィング
-        const revWing = locateFieldBasic(
-            centerSq,
-            halfOpenRadius,
-            backOf,
-            isContinue,
-            isBreak,
-        );
-
-        return [...revWing.reverse(), centerSq, ...fwdWing]; // 向きを揃えて１つの配列にする
-    }
-
-
-    /**
-     * 以下の数字の位置（x を含まない）のマス番号を取得。
-     * 
-     * (4)             (3)              (2)
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |15|  |  |  |11|  |  |  | 7|
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |  |14|  |  |10|  |  | 6|  |
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |  |  |13|  | 9|  | 5|  |  |
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |  |  |  |12| 8| 4|  |  |  |
-     *     +--+--+--+--+--+--+--+--+--+
-     * (5) |19|18|17|16| x| 0| 1| 2| 3| (1)
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |  |  |  |20|24|28|  |  |  |
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |  |  |21|  |25|  |29|  |  |
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |  |22|  |  |26|  |  |30|  |
-     *     +--+--+--+--+--+--+--+--+--+
-     *     |23|  |  |  |27|  |  |  |31|
-     *     +--+--+--+--+--+--+--+--+--+
-     * (6)             (7)              (8)
-     * 
-     * 👆  [0]を自分の着手のマスとする。例では片翼の長さを 4 とした。
-     * この図形に名前はないが、４ウェイ（4t-way）とでも呼ぶとする。
-     * 
-     */
-    function locateFieldFromCenter(
-        startSq: number,
-        oneWingMaxLength: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
-        isContinue: (sq: number)=>boolean, 
-        isBreak: (sq: number)=>boolean,
-    ) : number[] {
-        // startSq を含まない
-        return [
-            ...locateFieldBasic( // (1)
-                startSq,
-                oneWingMaxLength,
-                foreOf,
-                isContinue,
-                isBreak,
-            ),
-            ...locateFieldBasic( // (5)
-                startSq,
-                oneWingMaxLength,
-                backOf,
-                isContinue,
-                isBreak,
-            ),
         ];
     }
 
@@ -2585,14 +2494,17 @@
     function oppositeTurnStoneIsDeadHorizontal(
         aStoneSq: number,
     ) : boolean {
-        const horizontalFieldCapacity = locateFieldCapacityFromCenter(
+        const horizontalFieldCapacity = [
             aStoneSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            eastOf,
-            westOf,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
+            ...locateFieldNonzeroFromCenter(
+                aStoneSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                eastOf,
+                westOf,
+                (_sq: number) => false,  // continue 条件
+                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
+            ),
+        ];
 
         return isDeadCapacity(horizontalFieldCapacity);
     }
@@ -2605,14 +2517,17 @@
     function oppositeTurnStoneIsDeadVertical(
         aStoneSq: number,
     ) : boolean {
-        const verticalFieldCapacity = locateFieldCapacityFromCenter(
+        const verticalFieldCapacity = [
             aStoneSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            southOf,
-            northOf,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
+            ...locateFieldNonzeroFromCenter(
+                aStoneSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                southOf,
+                northOf,
+                (_sq: number) => false,  // continue 条件
+                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
+            ),
+        ];
 
         return isDeadCapacity(verticalFieldCapacity);
     }
@@ -2625,14 +2540,17 @@
     function oppositeTurnStoneIsDeadBaroqueDiagonal(
         aStoneSq: number,
     ) : boolean {
-        const baroqueDiagonalFieldCapacity = locateFieldCapacityFromCenter(
+        const baroqueDiagonalFieldCapacity = [
             aStoneSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            northeastOf,
-            southwestOf,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
+            ...locateFieldNonzeroFromCenter(
+                aStoneSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                northeastOf,
+                southwestOf,
+                (_sq: number) => false,  // continue 条件
+                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
+            ),
+        ];
 
         return isDeadCapacity(baroqueDiagonalFieldCapacity);
     }
@@ -2645,14 +2563,17 @@
     function oppositeTurnStoneIsDeadSinisterDiagonal(
         aStoneSq: number,
     ) : boolean {
-        const sinisterDiagonalFieldCapacity = locateFieldCapacityFromCenter(
+        const sinisterDiagonalFieldCapacity = [
             aStoneSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            southeastOf,
-            northwestOf,
-            (_sq: number) => false,  // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
+            ...locateFieldNonzeroFromCenter(
+                aStoneSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                southeastOf,
+                northwestOf,
+                (_sq: number) => false,  // continue 条件
+                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
+            ),
+        ];
 
         return isDeadCapacity(sinisterDiagonalFieldCapacity);;
     }
