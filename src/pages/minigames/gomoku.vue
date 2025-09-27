@@ -1266,7 +1266,13 @@
                 (sq: number) => isOutOfBoard(sq),   // break 条件
             );
 
-        return [null, slidingWindowArray, locationsDiameterNineControl, bingoStones, thisTurnNonzeroDiameter];
+        return [
+            null,
+            slidingWindowArray,
+            locationsDiameterNineControl,
+            bingoStones,
+            thisTurnNonzeroDiameter
+        ];
     }
 
 
@@ -1868,14 +1874,14 @@
         }
 
         // 水平方向の相手番の石
-        let foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        let foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             eastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        let backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        let backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             westOf,
@@ -1895,14 +1901,14 @@
         oppositeTurnStonesCheckDeadHorizontal(backOppositeTurnStones);
 
         // 垂直方向
-        foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             southOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             northOf,
@@ -1922,14 +1928,14 @@
         oppositeTurnStonesCheckDeadVertical(backOppositeTurnStones);
 
         // バロック対角線方向
-        foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             northeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             southwestOf,
@@ -1949,14 +1955,14 @@
         oppositeTurnStonesCheckDeadBaroqueDiagonal(backOppositeTurnStones);
 
         // シニスター対角線方向
-        foreOppositeTurnStones = locateDirectionFromEdge(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        foreOppositeTurnStones = locateFieldBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             southeastOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
         );
-        backOppositeTurnStones = locateDirectionFromEdge(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        backOppositeTurnStones = locateFieldBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             northwestOf,
@@ -2212,31 +2218,31 @@
      * 
      * @returns マス番号の配列
      */
-    function locateDirectionFromEdge(
-        edgeSq: number,
+    function locateFieldBasic(
+        startSq: number,
         maxLength: number,
-        foreOf: (sq: number)=>number,
+        nextOf: (sq: number)=>number,
         isContinue: (sq: number)=>boolean,
         isBreak: (sq: number)=>boolean,
     ) : number[] {
-        const sqArray: number[] = [];
+        const locations: number[] = [];
 
-        let foreSq: number = edgeSq;;  // 隣
+        let nextSq: number = startSq;;  // 隣
         for(let i:number=0; i<maxLength; i++){
-            foreSq = foreOf(foreSq);
+            nextSq = nextOf(nextSq);
 
-            if (isContinue(foreSq)) {   // 無視条件
+            if (isContinue(nextSq)) {   // 無視条件
                 continue;
             }
 
-            if (isBreak(foreSq)) {   // 終了条件
+            if (isBreak(nextSq)) {   // 終了条件
                 break;
             }
 
-            sqArray.push(foreSq);
+            locations.push(nextSq);
         }
 
-        return sqArray;
+        return locations;
     }
 
 
@@ -2263,39 +2269,23 @@
         isContinue: (sq: number)=>boolean,
         isBreak: (sq: number)=>boolean,
     ) : number[] {
-        // 逆ウィング（起点を含まない）を戻る
-        const backSqArray: number[] = [];
-        let backSq = centerSq;  // 隣
-        for(let i:number=0; i<halfOpenRadius; i++){
-            backSq = backOf(backSq);
-
-            if (isContinue(backSq)) {   // continue 条件
-                continue;
-            }
-
-            if (isBreak(backSq)) {  // break 条件
-                break;
-            }
-
-            backSqArray.push(backSq);
-        }
+        // ［逆半開半径］を戻る
+        const backSqArray: number[] = locateFieldBasic(
+            centerSq,
+            halfOpenRadius,
+            backOf,
+            isContinue,
+            isBreak,
+        );
 
         // 順ウィング（起点を含まない）を進む
-        const foreSqArray: number[] = [];
-        let foreSq = centerSq;  // 隣
-        for(let i:number=0; i<halfOpenRadius; i++){
-            foreSq = foreOf(foreSq);
-
-            if (isContinue(foreSq)) {   // continue 条件
-                continue;
-            }
-
-            if (isBreak(foreSq)) {  // break 条件
-                break;
-            }
-
-            foreSqArray.push(foreSq);
-        }
+        const foreSqArray: number[] = locateFieldBasic(
+            centerSq,
+            halfOpenRadius,
+            foreOf,
+            isContinue,
+            isBreak,
+        );
 
         return [
             ...backSqArray.reverse(),
@@ -2323,7 +2313,7 @@
     ) : number[] {
 
         // 順ウィング
-        const fwdWing = locateDirectionFromEdge(
+        const fwdWing = locateFieldBasic(
             centerSq,
             halfOpenRadius,
             foreOf,
@@ -2332,7 +2322,7 @@
         );
 
         // 逆ウィング
-        const revWing = locateDirectionFromEdge(
+        const revWing = locateFieldBasic(
             centerSq,
             halfOpenRadius,
             backOf,
@@ -2383,14 +2373,14 @@
     ) : number[] {
         // startSq を含まない
         return [
-            ...locateDirectionFromEdge( // (1)
+            ...locateFieldBasic( // (1)
                 startSq,
                 oneWingMaxLength,
                 foreOf,
                 isContinue,
                 isBreak,
             ),
-            ...locateDirectionFromEdge( // (5)
+            ...locateFieldBasic( // (5)
                 startSq,
                 oneWingMaxLength,
                 backOf,
