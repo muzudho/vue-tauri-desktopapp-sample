@@ -631,7 +631,6 @@
         southwestOf,
         northwestOf,
     ];
-    type FiveSquares = [number, number, number, number, number];   // 長さ 5 のウィンドウ
     const MOVE_STONE_NUM = 1;   // 着手点の石１個
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
@@ -709,9 +708,6 @@
         DIRECTION_BITFLAG_SINISTER_DIAGONAL,
     ] as DirectionBitflag[];
     const MAX_LENGTH_DEAD = -1;
-    function isAliveStone(sq: number) : boolean {
-        return 1 <= gameBoard1StonesState.value[sq] && gameBoard1StonesState.value[sq] <= 15;
-    }
     const gameBoard1StonesState = ref<Array<number>>(new Array(gameBoard1Area.value).fill(DIRECTION_BITFLAG_NONE));
 
     // ボタンの背景画像（のタイル位置の矩形）
@@ -1265,15 +1261,6 @@
 
         const turnColor = gameBoard1Turn.value as Color;
 
-        /**
-         * arr2 に含まれる要素を、 arr1 から除外した配列を返す
-         * @param arr1 
-         * @param arr2 
-         */
-        function arraySubtract(arr1: number[], arr2: number[]) {
-            return arr1.filter((item: number) => !arr2.includes(item));
-        }
-
         // ビンゴ
         const bingoStones : Set<number> = locateBingo(slidingWindowArray, turnColor, FIVE_LENGTH);
 
@@ -1298,18 +1285,11 @@
     }
 
     type Elements1 = [any, Set<number>, number[], number[], number[]];
-    const ELEMENT_EMPTY = 0;
+    //const ELEMENT_EMPTY = 0;
     const ELEMENT_BINGO_STONES = 1;
     const ELEMENT_THIS_TURN_FIELD_STONES = 2;
     const ELEMENT_OPPOSITE_TURN_FIELD_STONES = 3;
     const ELEMENT_BOTH_TURN_FIELD_EMPTIES = 4;
-    type Element1 =
-        typeof ELEMENT_EMPTY
-        | typeof ELEMENT_BINGO_STONES
-        | typeof ELEMENT_THIS_TURN_FIELD_STONES
-        | typeof ELEMENT_OPPOSITE_TURN_FIELD_STONES
-        | typeof ELEMENT_BOTH_TURN_FIELD_EMPTIES
-        ;
 
 
     /**
@@ -1777,30 +1757,6 @@
 
 
     /**
-     * 各ウィンドウの内、石の最大数を返す
-     */
-    function countMaxStones(
-        slidingWindowArray: number[][],
-        color: Color,
-    ) : number {
-        let maxCount = 0;
-
-        for (const slidingWindow of slidingWindowArray) {
-            let count = 0;
-            for (const sq of slidingWindow) {
-                if (gameBoard1StoneColorArray.value[sq] == color) {
-                    count += 1;
-                }
-            }
-            maxCount = Math.max(count, maxCount);
-        }
-
-        console.log(`DEBUG: [countMaxStones] maxCount=${maxCount}`);
-        return maxCount;
-    }
-
-
-    /**
      * 各ウィンドウの内、色の最大数を返す
      */
     function countMaxColors(
@@ -1825,101 +1781,6 @@
 
 
     /**
-     * ［割り打ちの石］処理
-     *
-     * 例えば、相手に次のような［四］ができているところへ、
-     *
-     *  0 1 2 3 4 5 6 7 8
-     * +-+-+-+-+-+-+-+-+-+
-     * |.|o|o|o|.|o|.|.|.|
-     * +-+-+-+-+-+-+-+-+-+
-     *
-     * 以下のように [4] に割り打てば、［三］と［一］に減らせるはずです。
-     *
-     *  0 1 2 3 4 5 6 7 8
-     * +-+-+-+-+-+-+-+-+-+
-     * |.|o|o|o|x|o|.|.|.|
-     * +-+-+-+-+-+-+-+-+-+
-     * 
-     * この仕掛けとしては、
-     *
-     *          0 1 2 3 4 5 6 7 8
-     *         +-+-+-+-+-+-+-+-+-+
-     *         |.|o|o|o|x|o|.|.|.|
-     *         +-+-+-+-+-+-+-+-+-+
-     * -4-3-2-1 0 1 2 3 4
-     * +-+-+-+-+-+-+-+-+-+
-     * |.|.|.|.|O|.|.|.|.|
-     * +-+-+-+-+-+-+-+-+-+
-     *                    5 6 7 8 9101112
-     *                 +-+-+-+-+-+-+-+-+-+
-     *                 |.|.|.|.|O|.|.|.|.|
-     *                 +-+-+-+-+-+-+-+-+-+
-     *
-     * [0] と [8] のマスを起点に相手側の［飛び石スライディング・ウィンドウ］の最長数を更新すればよいはずです。
-     * ただし、以下の局面では：
-     *
-     *  0 1 2 3 4 5 6 7 8
-     * +-+-+-+-+-+-+-+-+-+
-     * |.|x|o|o|.|o|.|.|.|
-     * +-+-+-+-+-+-+-+-+-+
-     *
-     * [4] に割り打てば、［零］と［一］に減らせるはずです。
-     * この仕掛けとしては、
-     *
-     *          0 1 2 3 4 5 6 7 8
-     *         +-+-+-+-+-+-+-+-+-+
-     *         |.|x|o|o|x|o|.|.|.|
-     *         +-+-+-+-+-+-+-+-+-+
-     *     -2-1 0 1 2 3 4 5 6
-     *     +-+-+-+-+-+-+-+-+-+
-     *     |.|.|.|.|O|.|.|.|.|
-     *     +-+-+-+-+-+-+-+-+-+
-     *
-     * [0] ではなく、例えば [2] を起点とするべきです。
-     * [0] では肝心の [2], [3] が更新されません。
-     *
-     * @param moveSq 着手点 
-     */
-    function executeWariuchiOppositeTurnOneDirection(
-        complementaryControl: number[], // ［補利き］。着手点を含まない
-        direction: Direction,
-    ) : void {
-        const oppositeTurnColor1 = oppositeColor(gameBoard1Turn.value);
-        const foreOf = allDirectionsForeOf[direction];
-        const backOf = allDirectionsBackOf[direction];
-
-        for (const complementaryControlStoneSq of complementaryControl) {
-            if (gameBoard1StoneColorArray.value[complementaryControlStoneSq] != oppositeTurnColor1) {
-                continue;
-            }
-
-            const complementaryControlOppositeTurnStoneSq = complementaryControlStoneSq;    // ［補利き］の中の相手石
-
-            const oppositeTurnControl = locateFieldNonzeroFromCenter(   // 起点を含まない
-                complementaryControlOppositeTurnStoneSq,
-                NONZERO_RADIUS_OF_DIAMETER_NINE,
-                direction,
-                (_sq: number) => false,  // continue 条件
-                makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
-            );
-
-            if (controlIsDead(oppositeTurnControl)) { // ［五］を作れない方向なら［死に方向］です
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][complementaryControlOppositeTurnStoneSq] = MAX_LENGTH_DEAD;
-            } else {
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][complementaryControlOppositeTurnStoneSq] = 1 + countStones(
-                    oppositeTurnControl,
-                    oppositeTurnColor1,
-                );
-            }
-        }
-
-        // 相手の［死に石］を記入
-        oppositeTurnStonesCheckDeadOnDirection(direction, complementaryControl);
-    }
-
-
-    /**
      * パス
      */
     function gamePass() : void {
@@ -1934,27 +1795,6 @@
      */
     function gameIsFullCapacity() : boolean {
         return gameBoard1Area.value <= gameBoard1StoneCount.value[1] + gameBoard1StoneCount.value[2];
-    }
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + サブルーチン　＞　ゲーム盤１　＞　複数の石を処理 +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    /**
-     * ［死に石］の記入
-     * @param stones 
-     */
-    function oppositeTurnStonesCheckDeadOnDirection(
-        direction: Direction,
-        stones: number[],
-    ) : void {
-        const oppositeTurnColor1 = oppositeColor(gameBoard1Turn.value);
-
-        for (const stoneSq of stones) {
-            if (stonesIsDead(getOppositeTurnStoneFromCenter(direction, stoneSq))) {
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
-            }
-        }
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -2246,7 +2086,6 @@
         direction: Direction,
     ) : number[][] {
         const slidingWindowArray : number[][] = [];
-
         const amplitude = halfOpenRadiusOfInputArray - halfOpenRadiusOfWindow;  // 前後の振り幅
         const slidingWindowNum = 2 * amplitude + 1;
         //console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
@@ -2308,7 +2147,6 @@
         const thisTurnFieldStones: number[] = []; // 手番野石
         const oppositeTurnFieldStones: number[] = []; // 相手番野石
         const bothTurnFieldEmpties: number[] = [];    // 両手番野空点
-
         const oppositeTurnColor1 = oppositeColor(gameBoard1Turn.value);
 
         let nextSq = moveSq;
@@ -2320,6 +2158,7 @@
             const iStone = gameBoard1StoneColorArray.value[nextSq];
             if (isOutOfBoard(nextSq)) { // 盤外
                 break;
+
             } else if (iStone == COLOR_EMPTY) {    // 両手番野空点
                 bothTurnFieldEmpties.push(nextSq);
 
@@ -2340,6 +2179,7 @@
                 const iStone = gameBoard1StoneColorArray.value[nextSq];
                 if (isOutOfBoard(nextSq)) { // 盤外
                     break;
+
                 } else if (iStone == COLOR_EMPTY) {    // 両手番野空点
                     bothTurnFieldEmpties.push(nextSq);
 
@@ -2480,15 +2320,6 @@
 
 
     /**
-     * 空点か
-     * @param sq 
-     */
-    function isEmptyPoint(sq: number) : boolean {
-        return sq != -1 && gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY;
-    }
-
-
-    /**
      * 盤の外、または指定の石の色か
      * @param color 
      * @param sq 
@@ -2508,60 +2339,6 @@
         return (sq: number)=>{
             return sq == -1 || gameBoard1StoneColorArray.value[sq] == endColor;
         }
-    }
-
-
-    /**
-     * 盤の外、または指定の石の色か
-     * @param endColor 
-     */
-    function makeIsOutOfBoardOrColors(endColors: number[]) :
-        (sq: number)=>boolean
-    {
-        return (sq: number)=>{
-            return sq == -1 || endColors.includes(gameBoard1StoneColorArray.value[sq]);
-        }
-    }
-
-
-    /**
-     * ［死に方向］判定
-     * @param direction
-     * @param stoneSq 
-     */
-    function getOppositeTurnStoneFromCenter(
-        direction: Direction,
-        stoneSq: number,
-    ) : number[] {
-        return [
-            stoneSq,
-            ...locateFieldNonzeroFromCenter(
-                stoneSq,
-                NONZERO_RADIUS_OF_DIAMETER_NINE,
-                direction,
-                (_sq: number) => false,  // continue 条件
-                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-            ),
-        ];
-    }
-
-
-    /**
-     * ［死に飛び石］判定
-     * 
-     * ［飛び石］の長さが５に満たないとき、［死に飛び石］だ。
-     */
-    function stonesIsDead(
-        stones: number[],
-    ) : boolean {
-        return stones.length < FIVE_LENGTH;
-    }
-
-
-    function controlIsDead(
-        control: number[]
-    ) : boolean {
-        return control.length + 1 < FIVE_LENGTH;   // 利きは起点を含まないので、起点の分 1 増やす
     }
 
 </script>

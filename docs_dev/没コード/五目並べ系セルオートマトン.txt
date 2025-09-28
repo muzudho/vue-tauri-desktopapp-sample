@@ -1,0 +1,87 @@
+
+
+    /**
+     * ［死に飛び石］判定
+     * 
+     * ［飛び石］の長さが５に満たないとき、［死に飛び石］だ。
+     */
+    function stonesIsDead(
+        stones: number[],
+    ) : boolean {
+        return stones.length < FIVE_LENGTH;
+    }
+
+
+    function controlIsDead(
+        control: number[]
+    ) : boolean {
+        return control.length + 1 < FIVE_LENGTH;   // 利きは起点を含まないので、起点の分 1 増やす
+    }
+
+
+    /**
+     * arr2 に含まれる要素を、 arr1 から除外した配列を返す
+     * @param arr1 
+     * @param arr2 
+     */
+    function arraySubtract(arr1: number[], arr2: number[]) {
+        return arr1.filter((item: number) => !arr2.includes(item));
+    }
+
+
+    /**
+     * 盤の外、または指定の石の色か
+     * @param endColor 
+     */
+    function makeIsOutOfBoardOrColors(endColors: number[]) :
+        (sq: number)=>boolean
+    {
+        return (sq: number)=>{
+            return sq == -1 || endColors.includes(gameBoard1StoneColorArray.value[sq]);
+        }
+    }
+
+
+    /**
+     * 空点か
+     * @param sq 
+     */
+    function isEmptyPoint(sq: number) : boolean {
+        return sq != -1 && gameBoard1StoneColorArray.value[sq] == COLOR_EMPTY;
+    }
+
+
+    /**
+     * 各ウィンドウの内、石の最大数を返す
+     */
+    function countMaxStones(
+        slidingWindowArray: number[][],
+        color: Color,
+    ) : number {
+        let maxCount = 0;
+
+        for (const slidingWindow of slidingWindowArray) {
+            let count = 0;
+            for (const sq of slidingWindow) {
+                if (gameBoard1StoneColorArray.value[sq] == color) {
+                    count += 1;
+                }
+            }
+            maxCount = Math.max(count, maxCount);
+        }
+
+        console.log(`DEBUG: [countMaxStones] maxCount=${maxCount}`);
+        return maxCount;
+    }
+
+
+    type Element1 =
+        typeof ELEMENT_EMPTY
+        | typeof ELEMENT_BINGO_STONES
+        | typeof ELEMENT_THIS_TURN_FIELD_STONES
+        | typeof ELEMENT_OPPOSITE_TURN_FIELD_STONES
+        | typeof ELEMENT_BOTH_TURN_FIELD_EMPTIES
+        ;
+
+
+    type FiveSquares = [number, number, number, number, number];   // 長さ 5 のウィンドウ
