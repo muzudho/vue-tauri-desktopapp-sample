@@ -130,7 +130,7 @@
                 color: gameBoard1StoneColorNameMap[2],
             }">●</span>の数={{ gameBoard1StoneCount[2] }}</p>
         <p>連続パス回数={{ gameBoard1PassCount }}</p>
-        <p>{{ gameBoard1IsEnd ? (gameSoft1Ref?.gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
+        <p>{{ gameSoft1Ref?.gameBoard1IsEnd ? (gameSoft1Ref?.gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
     </section>
 
@@ -278,7 +278,6 @@
     const gameBoard1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
-    const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
 
 
     // ######################
@@ -487,20 +486,7 @@
         gameBoard1StoneCount.value[1] = 2;
         gameBoard1StoneCount.value[2] = 2;
         gameBoard1PassCount.value = 0;
-        gameBoard1IsEnd.value = false;
     }
-
-    // ++++++++++++++++++++++++++++++++
-    // + サブルーチン　＞　ゲーム盤１ +
-    // ++++++++++++++++++++++++++++++++
-
-
-    // /**
-    //  * 満局か
-    //  */
-    // function gameIsFullCapacity() : boolean {
-    //     return gameBoard1Area.value <= gameBoard1StoneCount.value[1] + gameBoard1StoneCount.value[2];
-    // }
 
 </script>
 

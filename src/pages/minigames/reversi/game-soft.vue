@@ -681,6 +681,7 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
+        gameBoard1IsEnd,
         gameIsFullCapacity,
     });
 
