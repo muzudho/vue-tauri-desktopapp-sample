@@ -85,3 +85,33 @@
 
 
     type FiveSquares = [number, number, number, number, number];   // 長さ 5 のウィンドウ
+
+
+    /**
+     * 盤の外、または指定の石の色か
+     * @param color 
+     * @param sq 
+     */
+    function isOutOfBoardOrColor(color: number, sq: number) : boolean {
+        return sq == -1 || gameBoard1StoneColorArray.value[sq] == color;
+    }
+
+
+    // 水平方向に並ぶ［五］の一部の石なら 1 を、
+    // 垂直方向に並ぶ［五］の一部の石なら 2 を、
+    // バロック対角線方向に並ぶ［五］の一部の石なら 4 を、
+    // シニスター対角線方向に並ぶ［五］の一部の石なら 8 を、
+    // ［死に石］なら 16 を入れる。
+    const DIRECTION_BITFLAG_NONE = 0;
+    const DIRECTION_BITFLAG_HORIZONTAL = 1;
+    const DIRECTION_BITFLAG_VERTICAL = 2;
+    const DIRECTION_BITFLAG_BAROQUE_DIAGONAL = 4;
+    const DIRECTION_BITFLAG_SINISTER_DIAGONAL = 8;
+    type DirectionBitflag = typeof DIRECTION_BITFLAG_NONE | typeof DIRECTION_BITFLAG_HORIZONTAL | typeof DIRECTION_BITFLAG_VERTICAL | typeof DIRECTION_BITFLAG_BAROQUE_DIAGONAL | typeof DIRECTION_BITFLAG_SINISTER_DIAGONAL;
+    const directionBitflagArray = [
+        DIRECTION_BITFLAG_NONE,
+        DIRECTION_BITFLAG_HORIZONTAL,
+        DIRECTION_BITFLAG_VERTICAL,
+        DIRECTION_BITFLAG_BAROQUE_DIAGONAL,
+        DIRECTION_BITFLAG_SINISTER_DIAGONAL,
+    ] as DirectionBitflag[];

@@ -285,23 +285,6 @@
                 </p>
             </div>
             
-            <p>石の状態:</p>
-            <div
-                class="mb-6"
-            >
-                <p
-                    v-for="rank in range(0, 15)"
-                    :key="rank"
-                >
-                    <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
-                        :key="sq"
-                    >
-                        {{ gameBoard1StonesState[sq].toString().padStart(2, '0') }}&nbsp;
-                    </span><br/>
-                </p>
-            </div>
-
             <p>ビンゴ:</p>
             <div
                 class="mb-6"
@@ -474,7 +457,6 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
-    import type { Ref } from 'vue';
 
     // ++++++++++++++++++++++++++++
     // + インポート　＞　アセット +
@@ -689,26 +671,7 @@
         new Array(gameBoard1Area.value).fill(0),
     ];
 
-    // 水平方向に並ぶ［五］の一部の石なら 1 を、
-    // 垂直方向に並ぶ［五］の一部の石なら 2 を、
-    // バロック対角線方向に並ぶ［五］の一部の石なら 4 を、
-    // シニスター対角線方向に並ぶ［五］の一部の石なら 8 を、
-    // ［死に石］なら 16 を入れる。
-    const DIRECTION_BITFLAG_NONE = 0;
-    const DIRECTION_BITFLAG_HORIZONTAL = 1;
-    const DIRECTION_BITFLAG_VERTICAL = 2;
-    const DIRECTION_BITFLAG_BAROQUE_DIAGONAL = 4;
-    const DIRECTION_BITFLAG_SINISTER_DIAGONAL = 8;
-    type DirectionBitflag = typeof DIRECTION_BITFLAG_NONE | typeof DIRECTION_BITFLAG_HORIZONTAL | typeof DIRECTION_BITFLAG_VERTICAL | typeof DIRECTION_BITFLAG_BAROQUE_DIAGONAL | typeof DIRECTION_BITFLAG_SINISTER_DIAGONAL;
-    const directionBitflagArray = [
-        DIRECTION_BITFLAG_NONE,
-        DIRECTION_BITFLAG_HORIZONTAL,
-        DIRECTION_BITFLAG_VERTICAL,
-        DIRECTION_BITFLAG_BAROQUE_DIAGONAL,
-        DIRECTION_BITFLAG_SINISTER_DIAGONAL,
-    ] as DirectionBitflag[];
     const MAX_LENGTH_DEAD = -1;
-    const gameBoard1StonesState = ref<Array<number>>(new Array(gameBoard1Area.value).fill(DIRECTION_BITFLAG_NONE));
 
     // ボタンの背景画像（のタイル位置の矩形）
     const gameBoard1SquareSrcTilemapRect = computed<
@@ -1470,29 +1433,6 @@
                     gameBoard1MaxLengthArray.value[direction][color][emptySq] = maxLength;
                 }
             }
-
-            // TODO: 割り打ち処理は、要らないのでは？
-            // // ++++++++++++++++++++
-            // // + ［割り打ち］処理 +
-            // // ++++++++++++++++++++
-            // executeWariuchiOppositeTurnOneDirection(
-            //     allDirections[ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL],
-            //     direction,
-            // );
-
-            // ++++++++++++++++
-            // + ［五］の処理 +
-            // ++++++++++++++++
-            //
-            // ［五］ができているかどうかは、手番でだけ確認すれば構いません。
-            //
-
-            fiveStonesProcessingOneDirection(
-                moveSq,
-                direction,
-                gameBoard1StonesState,
-                directionBitflagArray[direction],
-            );
         }
 
         gameBoard1Turn.value = oppositeTurnColor1; // （チェック後に）相手の色に変更
@@ -1573,7 +1513,6 @@
             }
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
-            gameBoard1StonesState.value[sq] = DIRECTION_BITFLAG_NONE;
             gameBoard1SquaresBingo.value[sq] = COLOR_EMPTY as Color;
         }
 
@@ -1583,10 +1522,6 @@
         gameBoard1StoneCount.value[2] = 0;
         gameBoard1PassCount.value = 0;
         gameBoard1IsEnd.value = false;
-
-        //gameMachine1Score.value = 0;
-        //gameMachine1ScheduleStep.value = 0;
-        //star1Visibility.value = 'hidden';
     }
 
 
@@ -1675,63 +1610,6 @@
      */
     function oppositeColor(color: number) : number {
         return color % 2 + 1;   // 1 なら 2 に、2 なら 1 に
-    }
-
-
-    /**
-     * ［五］の処理。
-     * 内訳は、走査（スキャン）、判定（ジャッジメント）、記入（チェック）
-     * 
-     * @param startSq 
-     * @param foreOf 
-     * @param backOf 
-     * @param directionalStoneStateArray 
-     * @param aliveDirection 
-     */
-    function fiveStonesProcessingOneDirection(
-        startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
-        direction: Direction,
-        directionalStoneStateArray: Ref<Array<number>>,
-        aliveDirection: number,
-    ) : void {
-
-        const control = [
-            startSq,
-            ...locateFieldNonzeroFromCenter(
-                startSq,
-                NONZERO_RADIUS_OF_DIAMETER_NINE,
-                direction,
-                (_sq: number) => false,  // continue 条件
-                (sq: number) => isOutOfBoardOrColor(oppositeColor(gameBoard1Turn.value), sq),   // break 条件
-            ),
-        ];
-
-        const continuityStones: number[] = [];  // 連続している自石のマス番号
-
-        function processingContinuityStones() : void {
-            if (5 <= continuityStones.length) {   // ［五］ができていたら
-                for (const sq of continuityStones) {
-                    directionalStoneStateArray.value[sq] |= aliveDirection; // 論理和
-                }
-            }
-
-            continuityStones.length = 0;    // クリアー
-        }
-
-        for (const controlSq of control) {
-            // 盤外、相手の石は含まない
-
-            // 手番の石なら
-            if (gameBoard1StoneColorArray.value[controlSq] == gameBoard1Turn.value) {
-                continuityStones.push(controlSq);
-
-            // 自石でなければ
-            } else {
-                processingContinuityStones();
-            }
-        }
-
-        processingContinuityStones();
     }
 
 
@@ -2316,16 +2194,6 @@
      */
     function isOutOfBoard(sq: number) : boolean {
         return sq == -1;
-    }
-
-
-    /**
-     * 盤の外、または指定の石の色か
-     * @param color 
-     * @param sq 
-     */
-    function isOutOfBoardOrColor(color: number, sq: number) : boolean {
-        return sq == -1 || gameBoard1StoneColorArray.value[sq] == color;
     }
 
 
