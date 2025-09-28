@@ -579,7 +579,6 @@
     // ++++++++++++++++++++++++++++++++
 
     const NONZERO_RADIUS_OF_DIAMETER_NINE = 4;  // ［直径９の非零半径］。直径 9 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼
-    //const NONZERO_RADIUS_OF_DIAMETER_ELEVEN = 5;  // ［直径１１の非零半径］。直径 11 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼。長連を調べるのに使う。
     const FIVE_LENGTH = 5;  // ［五］の長さ
     const NONZERO_RADIUS_OF_DIAMETER_FIVE = 2; // ［直径５の非零半径］。直径 5 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
