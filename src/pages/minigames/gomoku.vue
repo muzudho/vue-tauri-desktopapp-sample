@@ -1246,7 +1246,7 @@
         // ++++++++++
 
         // 着手点を中心とする直径９のスライディング・ウィンドウ。［五］を判定するのに使う
-        const slidingWindowArray = makeSlidingWindowArray(
+        const slidingWindowArray = locateSlidingWindowArray(
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             HALF_OPEN_RADIUS_OF_FIVE,
@@ -1424,7 +1424,7 @@
 
                         } else {
                             // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
-                            const resonanceSlidingWindowArray: number[][] = makeSlidingWindowArray(
+                            const resonanceSlidingWindowArray: number[][] = locateSlidingWindowArray(
                                 resonanceSq,
                                 HALF_OPEN_RADIUS_OF_NINE,
                                 HALF_OPEN_RADIUS_OF_FIVE,
@@ -1816,17 +1816,10 @@
         foreOf: (sq: number) => number,
         backOf: (sq: number) => number,
     ) : void {
-        // 相手番の石
-        let foreOppositeTurnStones = locateFieldNonzeroBasic(   // 順ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
+        const oppositeTurnStonesNonzero = locateFieldNonzeroFromCenter(
             moveSq,
             HALF_OPEN_RADIUS_OF_NINE,
             foreOf,
-            (sq: number) => isEmptyPoint(sq),   // continue 条件
-            (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        );
-        let backOppositeTurnStones = locateFieldNonzeroBasic(   // 逆ウィング側。着手点と、挟んでいる自石の間にある相手石を探す
-            moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
             backOf,
             (sq: number) => isEmptyPoint(sq),   // continue 条件
             (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
@@ -1835,9 +1828,9 @@
         //console.log(`DEBUG: [oppositeTurnStonesCheckFieldOneDirection] startSq=${startSq}`);
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
 
-        for (const oppositeTurnStoneSq of foreOppositeTurnStones) {
+        for (const oppositeTurnStoneSqNonzero of oppositeTurnStonesNonzero) {
             const directionControlLocations = locateFieldNonzeroFromCenter(
-                oppositeTurnStoneSq,
+                oppositeTurnStoneSqNonzero,
                 HALF_OPEN_RADIUS_OF_NINE,
                 foreOf,
                 backOf,
@@ -1845,28 +1838,9 @@
                 makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
             );
             if (directionControlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
+                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSqNonzero] = MAX_LENGTH_DEAD;
             } else {
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
-                    directionControlLocations,
-                    oppositeTurnColor1,
-                );
-            }
-        }
-
-        for (const oppositeTurnStoneSq of backOppositeTurnStones) {
-            const directionControlLocations = locateFieldNonzeroFromCenter(
-                oppositeTurnStoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                foreOf,
-                backOf,
-                (_sq: number) => false,  // continue 条件
-                makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
-            );
-            if (directionControlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = MAX_LENGTH_DEAD;
-            } else {
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSq] = countStones(
+                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][oppositeTurnStoneSqNonzero] = countStones(
                     directionControlLocations,
                     oppositeTurnColor1,
                 );
@@ -1874,8 +1848,7 @@
         }
 
         // 相手の［死に石］を記入
-        oppositeTurnStonesCheckDeadOnDirection(direction, foreOppositeTurnStones);
-        oppositeTurnStonesCheckDeadOnDirection(direction, backOppositeTurnStones);
+        oppositeTurnStonesCheckDeadOnDirection(direction, oppositeTurnStonesNonzero);
     }
 
 
@@ -1902,17 +1875,17 @@
 
     /**
      * ［死に石］の記入
-     * @param locations 
+     * @param stones 
      */
     function oppositeTurnStonesCheckDeadOnDirection(
         direction: Direction,
-        locations: number[],
+        stones: number[],
     ) : void {
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
 
-        for (const sq of locations) {
-            if (oppositeTurnStoneIsDead(direction, sq)) {
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
+        for (const stoneSq of stones) {
+            if (stonesIsDead(getOppositeTurnStoneFromCenter(direction, stoneSq))) {
+                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
             }
         }
     }
@@ -2065,7 +2038,7 @@
      * 
      * @returns マス番号の配列
      */
-    function locateFieldNonzeroBasic(
+    function locateFieldNonzeroOneWay(
         startSq: number,
         maxLength: number,
         nextOf: (sq: number)=>number,
@@ -2118,7 +2091,7 @@
         isBreak: (sq: number)=>boolean,
     ) : number[] {
         // ［逆半開半径］を戻る
-        const backSqArray: number[] = locateFieldNonzeroBasic(
+        const backLocations: number[] = locateFieldNonzeroOneWay(
             centerSq,
             halfOpenRadius,
             backOf,
@@ -2127,7 +2100,7 @@
         );
 
         // 順ウィング（起点を含まない）を進む
-        const foreSqArray: number[] = locateFieldNonzeroBasic(
+        const foreLocations: number[] = locateFieldNonzeroOneWay(
             centerSq,
             halfOpenRadius,
             foreOf,
@@ -2136,9 +2109,9 @@
         );
 
         return [    // 向きを揃えて１つの配列にする
-            ...backSqArray.reverse(),
+            ...backLocations.reverse(),
             // centerSq を含まない,
-            ...foreSqArray,
+            ...foreLocations,
         ];
     }
 
@@ -2149,7 +2122,7 @@
      * @param foreOf 
      * @param backOf 
      */
-    function makeOneWindow(
+    function locateOneWindow(
         startSq: number,
         foreLength: number,
         backLength: number,
@@ -2195,7 +2168,7 @@
      * @param inputArray 
      * @param isBreak 
      */
-    function makeSlidingWindowArray(
+    function locateSlidingWindowArray(
         startSq: number,
         halfOpenRadiusOfInputArray: number,
         halfOpenRadiusOfWindow: number,
@@ -2209,7 +2182,7 @@
         //console.log(`DEBUG: [makeSlidingWindowArray] amplitude=${amplitude} slidingWindowNum=${slidingWindowNum}`);
 
         for (let iSlidingWindow: number=0; iSlidingWindow < slidingWindowNum; iSlidingWindow++) {
-            const oneWindow = makeOneWindow(
+            const oneWindow = locateOneWindow(
                 startSq,
                 halfOpenRadiusOfInputArray - iSlidingWindow,
                 iSlidingWindow,
@@ -2333,34 +2306,6 @@
 
 
     /**
-     * ［死に方向］判定
-     * @param direction
-     * @param stoneSq 
-     */
-    function oppositeTurnStoneIsDead(
-        direction: Direction,
-        stoneSq: number,
-    ) : boolean {
-        const nonzeroDiameterNine = [
-            stoneSq,
-            ...locateFieldNonzeroFromCenter(
-                stoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                allDirectionsForeOf[direction],
-                allDirectionsBackOf[direction],
-                (_sq: number) => false,  // continue 条件
-                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-            ),
-        ];
-
-        return stonesIsDead([
-            stoneSq,
-            ...nonzeroDiameterNine
-        ]);
-    }
-
-
-    /**
      * 盤の外か
      * @param color 
      * @param sq 
@@ -2412,6 +2357,29 @@
         return (sq: number)=>{
             return sq == -1 || endColors.includes(gameBoard1StoneColorArray.value[sq]);
         }
+    }
+
+
+    /**
+     * ［死に方向］判定
+     * @param direction
+     * @param stoneSq 
+     */
+    function getOppositeTurnStoneFromCenter(
+        direction: Direction,
+        stoneSq: number,
+    ) : number[] {
+        return [
+            stoneSq,
+            ...locateFieldNonzeroFromCenter(
+                stoneSq,
+                HALF_OPEN_RADIUS_OF_NINE,
+                allDirectionsForeOf[direction],
+                allDirectionsBackOf[direction],
+                (_sq: number) => false,  // continue 条件
+                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
+            ),
+        ];
     }
 
 
