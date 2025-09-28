@@ -4,118 +4,95 @@
     <button-20250822 ref="button1Ref"/>
 
 
-    <!-- ゲームマシン１ -->
-    <game-machine-waratch2
+    <!-- ゲーム画面の全体サイズと、切り抜き領域 -->
+    <div
         :style="{
-            left: '0px',
-            top: '0px',
+            visibility: gameMachine1Visibility,
+            width: `${gameMachine1Width}px`,
+            height: `${gameMachine1Height}px`,
+            zoom: gameMachine1Zoom,
         }"
-        :screenWidth="gameMachine1Zoom * gameMachine1Width"
-        :screenHeight="gameMachine1Zoom * gameMachine1Height"
-        :powerOn="gameMachine1IsPowerOn"
-        v-on:onLeftButtonPressed="onLeftButtonPressed"
-        v-on:onLeftButtonReleased="onLeftButtonReleased"
-        v-on:onUpButtonPressed="onUpButtonPressed"
-        v-on:onUpButtonReleased="onUpButtonReleased"
-        v-on:onRightButtonPressed="onRightButtonPressed"
-        v-on:onRightButtonReleased="onRightButtonReleased"
-        v-on:onDownButtonPressed="onDownButtonPressed"
-        v-on:onDownButtonReleased="onDownButtonReleased"
-        v-on:onSpaceButtonPressed="onSpaceButtonPressed"
-        v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+        style="
+            position:relative;
+            left: 0;
+            top: 0;
+            background-color: #303030;  /* 黒背景 */
+        "
     >
-        <template #default>
-            <!-- ゲーム画面の全体サイズと、切り抜き領域 -->
-            <div
-                :style="{
-                    visibility: gameMachine1Visibility,
-                    width: `${gameMachine1Width}px`,
-                    height: `${gameMachine1Height}px`,
-                    zoom: gameMachine1Zoom,
-                }"
-                style="
-                    position:relative;
-                    left: 0;
-                    top: 0;
-                    background-color: #303030;  /* 黒背景 */
-                "
-            >
-                <!-- グリッド -->
-                <div
-                    v-for="sq in tileBoard1Area"
-                    :key="sq"
-                    :style="{
-                        top: `${Math.floor((sq - 1) / tileBoard1FileNum) * tileBoard1TileHeight}px`,
-                        left: `${((sq - 1) % tileBoard1FileNum) * tileBoard1TileWidth}px`,
-                        width: `${tileBoard1TileWidth}px`,
-                        height: `${tileBoard1TileHeight}px`,
-                    }"
-                    style="
-                        position: absolute;
-                        border: solid 1px gray;
-                    "
-                ></div>
+        <!-- グリッド -->
+        <div
+            v-for="sq in tileBoard1Area"
+            :key="sq"
+            :style="{
+                top: `${Math.floor((sq - 1) / tileBoard1FileNum) * tileBoard1TileHeight}px`,
+                left: `${((sq - 1) % tileBoard1FileNum) * tileBoard1TileWidth}px`,
+                width: `${tileBoard1TileWidth}px`,
+                height: `${tileBoard1TileHeight}px`,
+            }"
+            style="
+                position: absolute;
+                border: solid 1px gray;
+            "
+        ></div>
 
-                <!-- マス -->
-                <v-btn
-                    v-for="sq in range(0, gameBoard1Area)"
-                    :key="sq"
-                    :style="{
-                        left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
-                        top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
-                        minWidth: `${tileBoard1TileWidth}px`,
-                        width: `${tileBoard1TileWidth}px`,
-                        height: `${tileBoard1TileHeight}px`,
-                        color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                        backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
-                        pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
-                    }"
-                    style="
-                        position: absolute;
-                        font-size: 24px;
-                        line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
-                        z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
-                    "
-                    @click="onGameBoard1Clicked(sq)"
-                >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
+        <!-- マス -->
+        <v-btn
+            v-for="sq in range(0, gameBoard1Area)"
+            :key="sq"
+            :style="{
+                left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
+                top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
+                minWidth: `${tileBoard1TileWidth}px`,
+                width: `${tileBoard1TileWidth}px`,
+                height: `${tileBoard1TileHeight}px`,
+                color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
+                backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
+            }"
+            style="
+                position: absolute;
+                font-size: 24px;
+                line-height: 90%;   /* 目視確認で石がマスの真ん中にくるよう調整 */
+                z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
+            "
+            @click="onGameBoard1Clicked(sq)"
+        >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
 
 
-                <!-- 筋の符号 -->
-                <span
-                    v-for="file in gameBoard1FileNameArray.length"
-                    :key="file"
-                    :style="{
-                        position: 'absolute',
-                        left: `${file * tileBoard1TileWidth + 6}px`,
-                        top: `${0 * tileBoard1TileHeight}px`,
-                        width: '20px',
-                        color: 'white',
-                        fontSize: '24px',
-                        zIndex: 200,
-                        textAlign: 'center',
-                    }"
-                >{{ gameBoard1FileNameArray[file - 1] }}</span>
+        <!-- 筋の符号 -->
+        <span
+            v-for="file in gameBoard1FileNameArray.length"
+            :key="file"
+            :style="{
+                position: 'absolute',
+                left: `${file * tileBoard1TileWidth + 6}px`,
+                top: `${0 * tileBoard1TileHeight}px`,
+                width: '20px',
+                color: 'white',
+                fontSize: '24px',
+                zIndex: 200,
+                textAlign: 'center',
+            }"
+        >{{ gameBoard1FileNameArray[file - 1] }}</span>
 
 
-                <!-- 段の符号 -->
-                <span
-                    v-for="rank in 8"
-                    :key="rank"
-                    :style="{
-                        position: 'absolute',
-                        left: '3px',
-                        top: `${rank * tileBoard1TileHeight}px`,
-                        width: '20px',
-                        color: 'white',
-                        fontSize: '24px',
-                        zIndex: 200,
-                        textAlign: 'right',
-                    }"
-                >{{ rank }}</span>
+        <!-- 段の符号 -->
+        <span
+            v-for="rank in 8"
+            :key="rank"
+            :style="{
+                position: 'absolute',
+                left: '3px',
+                top: `${rank * tileBoard1TileHeight}px`,
+                width: '20px',
+                color: 'white',
+                fontSize: '24px',
+                zIndex: 200,
+                textAlign: 'right',
+            }"
+        >{{ rank }}</span>
 
-            </div>
-        </template>
-    </game-machine-waratch2>
+    </div>
 
 </template>
 
@@ -134,7 +111,6 @@
     // アルファベット順
     import Button20250822 from '@/components/Button20250822.vue';
     import Comment from '@/components/Comment.vue';
-    import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import Stopwatch from '@/components/Stopwatch.vue';
 
     // ++++++++++++++++++++++++++++++++++
@@ -300,75 +276,6 @@
         gamePowerOn();  // 電源を入れる演出
         gameLoopStart();    // 入力処理、描画を行います
     });
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++
-    // + イベントハンドラー　＞　ゲームマシン・ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++
-
-    /**
-     * 左。
-     */
-    function onLeftButtonPressed() : void {
-        player1Input.ArrowLeft = true;
-    }
-
-
-    function onLeftButtonReleased() : void {
-        player1Input.ArrowLeft = false;
-    }
-
-
-    /**
-     * 上。
-     */
-    function onUpButtonPressed() : void {
-        player1Input.ArrowUp = true;
-    }
-
-
-    function onUpButtonReleased() : void {
-        player1Input.ArrowUp = false;
-    }
-
-
-    /**
-     * 右。
-     */
-    function onRightButtonPressed() : void {
-        player1Input.ArrowRight = true;
-    }
-
-
-    function onRightButtonReleased() : void {
-        player1Input.ArrowRight = false;
-    }
-
-
-    /**
-     * 下。
-     */
-    function onDownButtonPressed() : void {
-        player1Input.ArrowDown = true;
-    }
-
-
-    function onDownButtonReleased() : void {
-        player1Input.ArrowDown = false;
-    }
-
-
-    /**
-     * スペース・キー。
-     */
-    function onSpaceButtonPressed() : void {
-        player1Input[" "] = true;
-        //gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
-    }
-
-
-    function onSpaceButtonReleased() : void {
-        player1Input[" "] = false;
-    }
 
     // ++++++++++++++++++++++++++++++++++++++
     // + イベントハンドラー　＞　ゲーム盤１ +

@@ -57,10 +57,6 @@
         </section>
 
 
-        <!-- ゲームソフト１ -->
-        <game-soft></game-soft>
-
-        
         <!-- ゲームマシン１ -->
         <game-machine-waratch2
             :style="{
@@ -221,6 +217,16 @@
 
     </section>
     
+
+    <h2>リバーシ（２号機開発中）</h2>
+    <section class="sec-2 pt-6 mb-6">
+
+        <!-- ゲームソフト１ -->
+        <game-soft></game-soft>
+
+    </section>
+
+
     <button-to-back-to-top class="sec-1 pt-6"/>
     <h2>ソースコード</h2>
     <section class="sec-2">
