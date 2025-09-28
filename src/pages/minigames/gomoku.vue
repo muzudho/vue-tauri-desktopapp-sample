@@ -1419,7 +1419,7 @@
             // + 相手番野石 +
             // ++++++++++++++
 
-            /*
+            //*
             for (const stoneSq of directionData[ELEMENT_OPPOSITE_TURN_FIELD_STONES]) {
                 // 影響点を中心とする直径９のスライディング・ウィンドウ
                 const slidingWindowArray: number[][] = locateSlidingWindowArray(
