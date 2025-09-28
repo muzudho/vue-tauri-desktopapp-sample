@@ -596,10 +596,10 @@
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
-    const HALF_OPEN_RADIUS_OF_NINE = 4;  // 直径 9 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼
-    //const HALF_OPEN_RADIUS_OF_ELEVEN = 5;  // 直径 11 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼。長連を調べるのに使う。
+    const NONZERO_RADIUS_OF_DIAMETER_NINE = 4;  // ［直径９の非零半径］。直径 9 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼
+    //const NONZERO_RADIUS_OF_DIAMETER_ELEVEN = 5;  // ［直径１１の非零半径］。直径 11 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径。片翼。長連を調べるのに使う。
     const FIVE_LENGTH = 5;  // ［五］の長さ
-    const HALF_OPEN_RADIUS_OF_FIVE = 2; // 直径 5 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径
+    const NONZERO_RADIUS_OF_DIAMETER_FIVE = 2; // ［直径５の非零半径］。直径 5 から原点（着手点）の 1 引いて 2 で割ったもの。原点を抜いた半径
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
     const COLOR_EMPTY = 0;  // 空きマス。石の色無し
     const COLOR_BLACK = 1;  // 黒石
@@ -1237,9 +1237,10 @@
      */
     function putStoneOnDirection(
         moveSq: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
+        direction: Direction,
     ) : Elements1 {
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
 
         // ++++++++++
         // + 仕込み +
@@ -1248,8 +1249,8 @@
         // 着手点を中心とする直径９のスライディング・ウィンドウ。［五］を判定するのに使う
         const slidingWindowArray = locateSlidingWindowArray(
             moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
-            HALF_OPEN_RADIUS_OF_FIVE,
+            NONZERO_RADIUS_OF_DIAMETER_NINE,
+            NONZERO_RADIUS_OF_DIAMETER_FIVE,
             foreOf,
             backOf,
         );
@@ -1264,7 +1265,7 @@
         // ［非零直径９］
         const locationsNonzeroDiameter = locateFieldNonzeroFromCenter(
             moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
+            NONZERO_RADIUS_OF_DIAMETER_NINE,
             foreOf,
             backOf,
             (_sq: number) => false, // continue 条件
@@ -1274,7 +1275,7 @@
         // ［両側利き９］
         const locationsControl = locateFieldNonzeroFromCenter(
             moveSq,
-            HALF_OPEN_RADIUS_OF_NINE,
+            NONZERO_RADIUS_OF_DIAMETER_NINE,
             foreOf,
             backOf,
             (_sq: number) => false,  // continue 条件
@@ -1296,6 +1297,16 @@
         // ビンゴ
         const bingoStones : Set<number> = locateBingo(slidingWindowArray, turnColor, FIVE_LENGTH);
 
+        const [
+            thisTurnFieldStones,
+            oppositeTurnFieldStones,
+            bothTurnFieldEmpties,
+        ] = locateParseControl(
+            moveSq, // 着手点
+            NONZERO_RADIUS_OF_DIAMETER_NINE,    // 直径９の非零半径の長さ
+            direction,
+        );
+
         return [
             null,
             slidingWindowArray,
@@ -1303,17 +1314,22 @@
             locationsControl,
             locationsComplementaryControl,
             bingoStones,
+            thisTurnFieldStones,
+            oppositeTurnFieldStones,
+            bothTurnFieldEmpties,
         ];
     }
 
-
-    type Elements1 = [any, number[][], number[], number[], number[], Set<number>];
+    type Elements1 = [any, number[][], number[], number[], number[], Set<number>, number[], number[], number[]];
     const ELEMENT_EMPTY = 0;
     const ELEMENT_SLIDING_WINDOW_ARRAY = 1; // ［五］を判定するのに使う
     const ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE = 2;
     const ELEMENT_LOCATIONS_CONTROL = 3;
     const ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL = 4;
     const ELEMENT_BINGO_STONES = 5;
+    const ELEMENT_THIS_TURN_FIELD_STONES = 6;
+    const ELEMENT_OPPOSITE_TURN_FIELD_STONES = 7;
+    const ELEMENT_BOTH_TURN_FIELD_EMPTIES = 8;
     type Element1 =
         typeof ELEMENT_EMPTY
         | typeof ELEMENT_SLIDING_WINDOW_ARRAY
@@ -1321,6 +1337,9 @@
         | typeof ELEMENT_LOCATIONS_CONTROL
         | typeof ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL
         | typeof ELEMENT_BINGO_STONES
+        | typeof ELEMENT_THIS_TURN_FIELD_STONES
+        | typeof ELEMENT_OPPOSITE_TURN_FIELD_STONES
+        | typeof ELEMENT_BOTH_TURN_FIELD_EMPTIES
         ;
 
 
@@ -1342,10 +1361,10 @@
 
         const allDirections = [
             null,
-            putStoneOnDirection(moveSq, eastOf, westOf),   // 水平（H）
-            putStoneOnDirection(moveSq, northOf, southOf), // 垂直（V）
-            putStoneOnDirection(moveSq, southwestOf, northeastOf), // バロック対角線（B）
-            putStoneOnDirection(moveSq, northwestOf, southeastOf), // シニスター対角線（S）
+            putStoneOnDirection(moveSq, DIRECTION_HORIZONTAL),   // 水平（H）
+            putStoneOnDirection(moveSq, DIRECTION_VERTICAL), // 垂直（V）
+            putStoneOnDirection(moveSq, DIRECTION_BAROQUE_DIAGONAL), // バロック対角線（B）
+            putStoneOnDirection(moveSq, DIRECTION_SINISTER_DIAGONAL), // シニスター対角線（S）
         ] as Elements1[];
 
         const oppositeTurnColor1 = oppositeTurnColor(turnColor) as Color;
@@ -1397,13 +1416,6 @@
 
             gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][moveSq] = 0;
 
-            // TODO:
-    //         locateParseControl(
-    //     moveSq: number, // 着手点
-    //     nonzeroRadiusLength: number,    // 非零半径の長さ
-    //     direction: Direction,
-    // ) : [number[], number[], number[]]
-
             // ++++++++++++++++++++++++++
             // + 以下、着手点を含まない +
             // ++++++++++++++++++++++++++
@@ -1419,7 +1431,7 @@
                     if ([COLOR_EMPTY, color].includes(stoneColor)) {
                         const controlLocations = locateFieldNonzeroFromCenter(
                             resonanceSq,
-                            HALF_OPEN_RADIUS_OF_FIVE,
+                            NONZERO_RADIUS_OF_DIAMETER_FIVE,
                             foreOf,
                             backOf,
                             (_sq: number) => false,  // continue 条件
@@ -1433,8 +1445,8 @@
                             // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
                             const resonanceSlidingWindowArray: number[][] = locateSlidingWindowArray(
                                 resonanceSq,
-                                HALF_OPEN_RADIUS_OF_NINE,
-                                HALF_OPEN_RADIUS_OF_FIVE,
+                                NONZERO_RADIUS_OF_DIAMETER_NINE,
+                                NONZERO_RADIUS_OF_DIAMETER_FIVE,
                                 foreOf,
                                 backOf,
                             );
@@ -1678,7 +1690,7 @@
             startSq,
             ...locateFieldNonzeroFromCenter(
                 startSq,
-                HALF_OPEN_RADIUS_OF_NINE,
+                NONZERO_RADIUS_OF_DIAMETER_NINE,
                 foreOf,
                 backOf,
                 (_sq: number) => false,  // continue 条件
@@ -1833,7 +1845,7 @@
 
             const oppositeTurnControl = locateFieldNonzeroFromCenter(   // 起点を含まない
                 complementaryControlOppositeTurnStoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
+                NONZERO_RADIUS_OF_DIAMETER_NINE,
                 foreOf,
                 backOf,
                 (_sq: number) => false,  // continue 条件
@@ -2472,7 +2484,7 @@
             stoneSq,
             ...locateFieldNonzeroFromCenter(
                 stoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
+                NONZERO_RADIUS_OF_DIAMETER_NINE,
                 allDirectionsForeOf[direction],
                 allDirectionsBackOf[direction],
                 (_sq: number) => false,  // continue 条件
