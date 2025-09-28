@@ -679,6 +679,7 @@
         vision1Height,
         vision1Visibility,
         vision1Width,
+        gameMachine1Zoom,
     });
 
 </script>
