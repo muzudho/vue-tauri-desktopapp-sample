@@ -124,7 +124,7 @@
                             height: `${gameBoard1SquareSrcTilemapRect(sq).height}px`,
                             color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                             backgroundImage: `url('${spriteBoard003Png}'), url('${spriteBoard002Png}')`,
-                            backgroundPosition: `${gameBoard1SquaresBingoMarkerSrcTilemapPosition(sq)}, ${gameBoard1SquareBackgroundPosition(sq)}`,   // 元画像のスケールで逆向きシフトする
+                            backgroundPosition: `${gameBoard1SquaresBingoMarkerSrcTilemapPosition(sq)}, ${gameBoard1SquareBackgroundPosition(sq)}`,   // 元画像のスケールで逆向きシフトする。カンマリストの左の方が前景
                             backgroundRepeat: 'no-repeat, no-repeat',
                             pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
                         }"
@@ -822,8 +822,8 @@
 
     function getByBxMaxLength(bYWhiteMaxLength:number, bXBlackMaxLength:number) : [number, number] {
         return [
-            Math.min(6, bYWhiteMaxLength + 1), // ［死に石］が -1 なので、下駄を１履かせている
-            Math.min(6, bXBlackMaxLength + 1), // ［死に石］が -1 なので、下駄を１履かせている
+            Math.min(7, bYWhiteMaxLength + 1), // ［死に石］が -1 なので、下駄を１履かせている。内部的には 最長6 まで画像を用意している。
+            Math.min(7, bXBlackMaxLength + 1),
         ];
     }
 
@@ -969,8 +969,8 @@
 
     const gameBoard1SourceTilemap1Frames : Record<string, Rectangle> = {};
     for(let cColor=0; cColor<3; cColor++) {
-        for(let bYWhiteMaxLength=-1; bYWhiteMaxLength<=MAX_MAX_LENGTH; bYWhiteMaxLength++) {
-            for(let bXBlackMaxLength=-1; bXBlackMaxLength<=MAX_MAX_LENGTH; bXBlackMaxLength++) {
+        for(let bYWhiteMaxLength=MAX_LENGTH_DEAD; bYWhiteMaxLength<=MAX_MAX_LENGTH; bYWhiteMaxLength++) {
+            for(let bXBlackMaxLength=MAX_LENGTH_DEAD; bXBlackMaxLength<=MAX_MAX_LENGTH; bXBlackMaxLength++) {
                 for (const aGridNumber of [0, 6, 14, 12, 7, 15, 13, 3, 11, 9]) {
                     const [key, rect] = makeKeyAndRectangle(cColor, bYWhiteMaxLength, bXBlackMaxLength, aGridNumber);
                     gameBoard1SourceTilemap1Frames[key] = rect;
@@ -1309,7 +1309,7 @@
         const bingoStones : Set<number> = locateBingo(slidingWindowArray, turnColor, FIVE_LENGTH);
 
         const [
-            thisTurnFieldStones,
+            thisTurnFieldStonesNonzero,
             oppositeTurnFieldStones,
             bothTurnFieldEmpties,
         ] = locateParseControl(
@@ -1318,7 +1318,7 @@
             direction,
         );
 
-        console.log(`DEBUG: [putStoneOnDirection] slidingWindowArray=${slidingWindowArray} locationsNonzeroDiameter=${locationsNonzeroDiameter} locationsControl=${locationsControl} locationsComplementaryControl=${locationsComplementaryControl} bingoStones=${[...bingoStones]} thisTurnFieldStones=${thisTurnFieldStones} oppositeTurnFieldStones=${oppositeTurnFieldStones} bothTurnFieldEmpties=${bothTurnFieldEmpties}`);
+        console.log(`DEBUG: [putStoneOnDirection] slidingWindowArray=${slidingWindowArray} locationsNonzeroDiameter=${locationsNonzeroDiameter} locationsControl=${locationsControl} locationsComplementaryControl=${locationsComplementaryControl} bingoStones=${[...bingoStones]} thisTurnFieldStonesNonzero=${thisTurnFieldStonesNonzero} oppositeTurnFieldStones=${oppositeTurnFieldStones} bothTurnFieldEmpties=${bothTurnFieldEmpties}`);
         return [
             null,
             slidingWindowArray,
@@ -1326,7 +1326,7 @@
             locationsControl,
             locationsComplementaryControl,
             bingoStones,
-            thisTurnFieldStones,
+            thisTurnFieldStonesNonzero,
             oppositeTurnFieldStones,
             bothTurnFieldEmpties,
         ];
@@ -1469,7 +1469,7 @@
                     );
                 }
 
-                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = 0; // 手番の石が置いてあるところに、相手番は石を置けない。
+                //gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = 0; // 手番の石が置いてあるところに、相手番は石を置けない。
             }
 
             // ++++++++++++++
@@ -1505,7 +1505,7 @@
                     );
                 }
 
-                gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = 0; // 相手番の石が置いてあるところに、手番は石を置けない。
+                //gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = 0; // 相手番の石が置いてあるところに、手番は石を置けない。
             }
 
             // ++++++++++++++++
@@ -1560,7 +1560,7 @@
             // ［五］ができているかどうかは、手番でだけ確認すれば構いません。
             //
 
-            fiveStonesProcessingOneDirection(    // 水平方向
+            fiveStonesProcessingOneDirection(
                 moveSq,
                 direction,
                 gameBoard1StonesState,
@@ -1852,6 +1852,7 @@
             maxCount = Math.max(count, maxCount);
         }
 
+        console.log(`DEBUG: [countMaxStones] maxCount=${maxCount}`);
         return maxCount;
     }
 
