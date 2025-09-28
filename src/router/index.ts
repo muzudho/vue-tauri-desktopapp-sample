@@ -103,7 +103,7 @@ const routes = [
     {
         name: 'MiniGames_Reversi',
         path: '/minigames/reversi',
-        component: () => import('../pages/minigames/reversi.vue'),
+        component: () => import('../pages/minigames/reversi/index.vue'),
     },
     {
         name: 'MiniGames_Gomoku',
