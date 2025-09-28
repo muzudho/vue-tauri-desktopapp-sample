@@ -1271,27 +1271,6 @@
         // });
 
         const turnColor = gameBoard1Turn.value as Color;
-        const oppositeTurnColor1 = oppositeColor(turnColor) as Color;
-
-        // ［非零直径９］
-        const locationsNonzeroDiameter = locateFieldNonzeroFromCenter(
-            moveSq,
-            NONZERO_RADIUS_OF_DIAMETER_NINE,
-            foreOf,
-            backOf,
-            (_sq: number) => false, // continue 条件
-            (sq: number) => isOutOfBoard(sq),   // break 条件
-        );
-
-        // ［両側利き９］
-        const locationsControl = locateFieldNonzeroFromCenter(
-            moveSq,
-            NONZERO_RADIUS_OF_DIAMETER_NINE,
-            foreOf,
-            backOf,
-            (_sq: number) => false,  // continue 条件
-            makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
-        );
 
         /**
          * arr2 に含まれる要素を、 arr1 から除外した配列を返す
@@ -1301,9 +1280,6 @@
         function arraySubtract(arr1: number[], arr2: number[]) {
             return arr1.filter((item: number) => !arr2.includes(item));
         }
-
-        // ［両側補利き９］
-        const locationsComplementaryControl = arraySubtract(locationsNonzeroDiameter, locationsControl);
 
         // ビンゴ
         const bingoStones : Set<number> = locateBingo(slidingWindowArray, turnColor, FIVE_LENGTH);
@@ -1318,13 +1294,9 @@
             direction,
         );
 
-        console.log(`DEBUG: [putStoneOnDirection] slidingWindowArray=${slidingWindowArray} locationsNonzeroDiameter=${locationsNonzeroDiameter} locationsControl=${locationsControl} locationsComplementaryControl=${locationsComplementaryControl} bingoStones=${[...bingoStones]} thisTurnFieldStonesNonzero=${thisTurnFieldStonesNonzero} oppositeTurnFieldStones=${oppositeTurnFieldStones} bothTurnFieldEmpties=${bothTurnFieldEmpties}`);
+        console.log(`DEBUG: [putStoneOnDirection] bingoStones=${[...bingoStones]} thisTurnFieldStonesNonzero=${thisTurnFieldStonesNonzero} oppositeTurnFieldStones=${oppositeTurnFieldStones} bothTurnFieldEmpties=${bothTurnFieldEmpties}`);
         return [
             null,
-            slidingWindowArray,
-            locationsNonzeroDiameter,
-            locationsControl,
-            locationsComplementaryControl,
             bingoStones,
             thisTurnFieldStonesNonzero,
             oppositeTurnFieldStones,
@@ -1332,22 +1304,14 @@
         ];
     }
 
-    type Elements1 = [any, number[][], number[], number[], number[], Set<number>, number[], number[], number[]];
+    type Elements1 = [any, Set<number>, number[], number[], number[]];
     const ELEMENT_EMPTY = 0;
-    const ELEMENT_SLIDING_WINDOW_ARRAY = 1; // ［五］を判定するのに使う
-    const ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE = 2;
-    const ELEMENT_LOCATIONS_CONTROL = 3;
-    const ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL = 4;
-    const ELEMENT_BINGO_STONES = 5;
-    const ELEMENT_THIS_TURN_FIELD_STONES = 6;
-    const ELEMENT_OPPOSITE_TURN_FIELD_STONES = 7;
-    const ELEMENT_BOTH_TURN_FIELD_EMPTIES = 8;
+    const ELEMENT_BINGO_STONES = 1;
+    const ELEMENT_THIS_TURN_FIELD_STONES = 2;
+    const ELEMENT_OPPOSITE_TURN_FIELD_STONES = 3;
+    const ELEMENT_BOTH_TURN_FIELD_EMPTIES = 4;
     type Element1 =
         typeof ELEMENT_EMPTY
-        | typeof ELEMENT_SLIDING_WINDOW_ARRAY
-        | typeof ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE
-        | typeof ELEMENT_LOCATIONS_CONTROL
-        | typeof ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL
         | typeof ELEMENT_BINGO_STONES
         | typeof ELEMENT_THIS_TURN_FIELD_STONES
         | typeof ELEMENT_OPPOSITE_TURN_FIELD_STONES
