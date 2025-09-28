@@ -221,8 +221,33 @@
     <h2>リバーシ（２号機開発中）</h2>
     <section class="sec-2 pt-6 mb-6">
 
-        <!-- ゲームソフト１ -->
-        <game-soft></game-soft>
+
+        <!-- ゲームマシン２ -->
+        <game-machine-waratch2
+            :style="{
+                left: '0px',
+                top: '0px',
+            }"
+            :screenWidth="gameMachine1Zoom * gameMachine1Width"
+            :screenHeight="gameMachine1Zoom * gameMachine1Height"
+            :powerOn="gameMachine1IsPowerOn"
+            v-on:onLeftButtonPressed="onLeftButtonPressed"
+            v-on:onLeftButtonReleased="onLeftButtonReleased"
+            v-on:onUpButtonPressed="onUpButtonPressed"
+            v-on:onUpButtonReleased="onUpButtonReleased"
+            v-on:onRightButtonPressed="onRightButtonPressed"
+            v-on:onRightButtonReleased="onRightButtonReleased"
+            v-on:onDownButtonPressed="onDownButtonPressed"
+            v-on:onDownButtonReleased="onDownButtonReleased"
+            v-on:onSpaceButtonPressed="onSpaceButtonPressed"
+            v-on:onSpaceButtonReleased="onSpaceButtonReleased"
+        >
+            <template #default>
+                <!-- ゲームソフト１ -->
+                <game-soft></game-soft>
+            </template>
+        </game-machine-waratch2>
+
 
     </section>
 
