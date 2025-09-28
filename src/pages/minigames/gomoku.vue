@@ -613,8 +613,8 @@
     const DIRECTION_SIZE = 5;   // Empty 含む
 
     // 方向を絞ってデバッグできるように配慮してある。
-    const activeDirections = [DIRECTION_HORIZONTAL, /*DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL*/] as Direction[];
-    //const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
+    //const activeDirections = [DIRECTION_HORIZONTAL, /*DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL*/] as Direction[];
+    const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
 
     type Direction = typeof DIRECTION_EMPTY | typeof DIRECTION_HORIZONTAL | typeof DIRECTION_VERTICAL | typeof DIRECTION_BAROQUE_DIAGONAL | typeof DIRECTION_SINISTER_DIAGONAL;
     const allDirectionsForeOf = [
@@ -1349,31 +1349,32 @@
             // ++++++++++
 
             {
-                const control = locateFieldNonzeroFromCenter(
+                // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
+                const slidingWindowArray: number[][] = locateSlidingWindowArray(
                     moveSq,
                     NONZERO_RADIUS_OF_DIAMETER_NINE,
+                    NONZERO_RADIUS_OF_DIAMETER_FIVE,
                     direction,
-                    (_sq: number) => false,  // continue 条件
-                    makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+                );
+                const bestLength = countMaxColors(
+                    slidingWindowArray,
+                    [COLOR_EMPTY, turnColor],
                 );
 
                 let maxLength: number;
-                if (control.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                if (bestLength < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                     maxLength = MAX_LENGTH_DEAD;
 
                 } else {
-                    // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
-                    const slidingWindowArray: number[][] = locateSlidingWindowArray(
+                    const control = locateFieldNonzeroFromCenter(
                         moveSq,
                         NONZERO_RADIUS_OF_DIAMETER_NINE,
-                        NONZERO_RADIUS_OF_DIAMETER_FIVE,
                         direction,
+                        (_sq: number) => false,  // continue 条件
+                        makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
                     );
 
-                    maxLength = countMaxStones(
-                        slidingWindowArray,
-                        turnColor,
-                    );
+                    maxLength = MOVE_STONE_NUM + countStones(control, turnColor);
                 }
                 gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] = maxLength;
 
