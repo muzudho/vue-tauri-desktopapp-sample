@@ -612,6 +612,21 @@
     const DIRECTION_SINISTER_DIAGONAL = 4;
     const DIRECTION_SIZE = 5;   // Empty 含む
     type Direction = typeof DIRECTION_EMPTY | typeof DIRECTION_HORIZONTAL | typeof DIRECTION_VERTICAL | typeof DIRECTION_BAROQUE_DIAGONAL | typeof DIRECTION_SINISTER_DIAGONAL;
+    const allDirectionsForeOf = [
+        (_sq: number) => { return 0; }, // 不使用
+        eastOf,
+        northOf,
+        northeastOf,
+        southeastOf,
+    ];
+    const allDirectionsBackOf = [
+        (_sq: number) => { return 0; }, // 不使用
+        westOf,
+        southOf,
+        southwestOf,
+        northwestOf,
+    ];
+    type FiveSquares = [number, number, number, number, number];   // 長さ 5 のウィンドウ
     const gameBoard1FileNum = ref<number>(15);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(15);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
@@ -1352,20 +1367,6 @@
 
 
         const directionArray = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
-        const foreOfArray = [
-            (_sq: number) => { return 0; }, // 不使用
-            eastOf,
-            northOf,
-            northeastOf,
-            southeastOf,
-        ];
-        const backOfArray = [
-            (_sq: number) => { return 0; }, // 不使用
-            westOf,
-            southOf,
-            southwestOf,
-            northwestOf,
-        ];
         const stoneStateAliveArray = [
             STONE_STATE_NONE,
             STONE_STATE_ALIVE_HORIZONTAL,
@@ -1375,8 +1376,8 @@
         ] as StoneState[];
 
         for (const direction of directionArray) {
-            const foreOf = foreOfArray[direction];
-            const backOf = backOfArray[direction];
+            const foreOf = allDirectionsForeOf[direction];
+            const backOf = allDirectionsBackOf[direction];
 
             // ++++++++++
             // + 着手点 +
@@ -1459,8 +1460,8 @@
 
             fiveStonesProcessingOneDirection(    // 水平方向
                 moveSq,
-                foreOfArray[direction],
-                backOfArray[direction],
+                allDirectionsForeOf[direction],
+                allDirectionsBackOf[direction],
                 gameBoard1StonesState,
                 stoneStateAliveArray[direction],
             );
@@ -1873,8 +1874,8 @@
         }
 
         // 相手の［死に石］を記入
-        oppositeTurnStonesCheckDeadHorizontal(foreOppositeTurnStones);
-        oppositeTurnStonesCheckDeadHorizontal(backOppositeTurnStones);
+        oppositeTurnStonesCheckDeadOnDirection(direction, foreOppositeTurnStones);
+        oppositeTurnStonesCheckDeadOnDirection(direction, backOppositeTurnStones);
     }
 
 
@@ -1903,65 +1904,15 @@
      * ［死に石］の記入
      * @param locations 
      */
-    function oppositeTurnStonesCheckDeadHorizontal(
+    function oppositeTurnStonesCheckDeadOnDirection(
+        direction: Direction,
         locations: number[],
     ) : void {
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
 
         for (const sq of locations) {
-            if (oppositeTurnStoneIsDeadHorizontal(sq)) {
-                gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
-            }
-        }
-    }
-
-
-    /**
-     * ［死に石］の記入
-     * @param locations 
-     */
-    function oppositeTurnStonesCheckDeadVertical(
-        locations: number[],
-    ) : void {
-        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-
-        for (const sq of locations) {
-            if (oppositeTurnStoneIsDeadVertical(sq)) {
-                gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
-            }
-        }
-    }
-
-
-    /**
-     * ［死に石］の記入
-     * @param locations 
-     */
-    function oppositeTurnStonesCheckDeadBaroqueDiagonal(
-        locations: number[],
-    ) : void {
-        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-
-        for (const sq of locations) {
-            if (oppositeTurnStoneIsDeadBaroqueDiagonal(sq)) {
-                gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
-            }
-        }
-    }
-
-
-    /**
-     * ［死に石］の記入
-     * @param locations
-     */
-    function oppositeTurnStonesCheckDeadSinisterDiagonal(
-        locations: number[],
-    ) : void {
-        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
-
-        for (const sq of locations) {
-            if (oppositeTurnStoneIsDeadSinisterDiagonal(sq)) {
-                gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;
+            if (oppositeTurnStoneIsDead(direction, sq)) {
+                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][sq] = MAX_LENGTH_DEAD;    // 論理和ではなくて、上書き。
             }
         }
     }
@@ -2383,93 +2334,29 @@
 
     /**
      * ［死に方向］判定
-     * @param aStoneSq 
+     * @param direction
+     * @param stoneSq 
      */
-    function oppositeTurnStoneIsDeadHorizontal(
-        aStoneSq: number,
+    function oppositeTurnStoneIsDead(
+        direction: Direction,
+        stoneSq: number,
     ) : boolean {
-        const horizontalFieldCapacity = [
-            aStoneSq,
+        const nonzeroDiameterNine = [
+            stoneSq,
             ...locateFieldNonzeroFromCenter(
-                aStoneSq,
+                stoneSq,
                 HALF_OPEN_RADIUS_OF_NINE,
-                eastOf,
-                westOf,
+                allDirectionsForeOf[direction],
+                allDirectionsBackOf[direction],
                 (_sq: number) => false,  // continue 条件
                 (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
             ),
         ];
 
-        return isDeadCapacity(horizontalFieldCapacity);
-    }
-
-
-    /**
-     * ［死に方向］判定
-     * @param aStoneSq 
-     */
-    function oppositeTurnStoneIsDeadVertical(
-        aStoneSq: number,
-    ) : boolean {
-        const verticalFieldCapacity = [
-            aStoneSq,
-            ...locateFieldNonzeroFromCenter(
-                aStoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                southOf,
-                northOf,
-                (_sq: number) => false,  // continue 条件
-                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-            ),
-        ];
-
-        return isDeadCapacity(verticalFieldCapacity);
-    }
-
-
-    /**
-     * ［死に方向］判定
-     * @param aStoneSq 
-     */
-    function oppositeTurnStoneIsDeadBaroqueDiagonal(
-        aStoneSq: number,
-    ) : boolean {
-        const baroqueDiagonalFieldCapacity = [
-            aStoneSq,
-            ...locateFieldNonzeroFromCenter(
-                aStoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                northeastOf,
-                southwestOf,
-                (_sq: number) => false,  // continue 条件
-                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-            ),
-        ];
-
-        return isDeadCapacity(baroqueDiagonalFieldCapacity);
-    }
-
-
-    /**
-     * ［死に方向］判定
-     * @param aStoneSq 
-     */
-    function oppositeTurnStoneIsDeadSinisterDiagonal(
-        aStoneSq: number,
-    ) : boolean {
-        const sinisterDiagonalFieldCapacity = [
-            aStoneSq,
-            ...locateFieldNonzeroFromCenter(
-                aStoneSq,
-                HALF_OPEN_RADIUS_OF_NINE,
-                southeastOf,
-                northwestOf,
-                (_sq: number) => false,  // continue 条件
-                (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-            ),
-        ];
-
-        return isDeadCapacity(sinisterDiagonalFieldCapacity);;
+        return stonesIsDead([
+            stoneSq,
+            ...nonzeroDiameterNine
+        ]);
     }
 
 
@@ -2533,10 +2420,10 @@
      * 
      * ［飛び石］の長さが５に満たないとき、［死に飛び石］だ。
      */
-    function isDeadCapacity(
-        runsCapacity: number[],
+    function stonesIsDead(
+        stones: number[],
     ) : boolean {
-        return runsCapacity.length < FIVE_LENGTH;
+        return stones.length < FIVE_LENGTH;
     }
 
 </script>
