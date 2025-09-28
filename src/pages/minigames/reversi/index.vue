@@ -131,6 +131,23 @@
                         "
                         @click="onGameBoard1Clicked(sq)"
                     >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
+
+
+                    <!-- 筋の符号 -->
+                    <span
+                        v-for="file in gameBoard1FileNameArray.length"
+                        :key="file"
+                        :style="{
+                            position: 'absolute',
+                            left: `${file * tileBoard1TileWidth + 6}px`,
+                            top: `${0 * tileBoard1TileHeight}px`,
+                            width: '20px',
+                            color: 'white',
+                            fontSize: '24px',
+                            zIndex: 200,
+                            textAlign: 'center',
+                        }"
+                    >{{ gameBoard1FileNameArray[file - 1] }}</span>
                 </div>
             </template>
         </game-machine-waratch2>
@@ -306,6 +323,7 @@
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
+    const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
     const gameBoard1FileNum = ref<number>(8);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
