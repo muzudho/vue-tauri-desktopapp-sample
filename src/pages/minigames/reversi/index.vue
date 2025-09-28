@@ -244,7 +244,9 @@
         >
             <template #default>
                 <!-- ゲームソフト１ -->
-                <game-soft></game-soft>
+                <game-soft
+                    :player1Input="gameMachine2Player1Input"
+                ></game-soft>
             </template>
         </game-machine-waratch2>
 
@@ -295,6 +297,8 @@
     // ++++++++++++++++++++++++++
 
     import GameSoft from '@/pages/minigames/reversi/game-soft.vue';
+    import type { Player1Input } from '@/pages/minigames/reversi/game-soft.vue';
+
     import TheAppHeader from '@/pages/the-app-header.vue';
 
 
@@ -351,11 +355,20 @@
 
     const gameMachine1EnvironmentConfigIsShowing = ref<boolean>(false);
 
-    // ++++++++++++++++++++++++++++
-    // + オブジェクト　＞　自機１ +
-    // ++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン１　＞　自機１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
 
-    const player1Input = <Record<string, boolean>>{                     // 入力
+    const gameMachine1Player1Input = <Player1Input>{ // 入力
+        // アルファベット順
+        " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
+    };
+
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ゲームマシン２　＞　自機１ +
+    // ++++++++++++++++++++++++++++++++++++++++++++++++
+
+    const gameMachine2Player1Input = <Player1Input>{ // 入力
         // アルファベット順
         " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
     };
@@ -453,12 +466,12 @@
             }
 
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = true;
+                gameMachine1Player1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = false;
+                gameMachine1Player1Input[e.key] = false;
             }
         });
 
@@ -474,12 +487,14 @@
      * 左。
      */
     function onLeftButtonPressed() : void {
-        player1Input.ArrowLeft = true;
+        gameMachine1Player1Input.ArrowLeft = true;
+        gameMachine2Player1Input.ArrowLeft = true;
     }
 
 
     function onLeftButtonReleased() : void {
-        player1Input.ArrowLeft = false;
+        gameMachine1Player1Input.ArrowLeft = false;
+        gameMachine2Player1Input.ArrowLeft = false;
     }
 
 
@@ -487,12 +502,14 @@
      * 上。
      */
     function onUpButtonPressed() : void {
-        player1Input.ArrowUp = true;
+        gameMachine1Player1Input.ArrowUp = true;
+        gameMachine2Player1Input.ArrowUp = true;
     }
 
 
     function onUpButtonReleased() : void {
-        player1Input.ArrowUp = false;
+        gameMachine1Player1Input.ArrowUp = false;
+        gameMachine2Player1Input.ArrowUp = false;
     }
 
 
@@ -500,12 +517,14 @@
      * 右。
      */
     function onRightButtonPressed() : void {
-        player1Input.ArrowRight = true;
+        gameMachine1Player1Input.ArrowRight = true;
+        gameMachine2Player1Input.ArrowRight = true;
     }
 
 
     function onRightButtonReleased() : void {
-        player1Input.ArrowRight = false;
+        gameMachine1Player1Input.ArrowRight = false;
+        gameMachine2Player1Input.ArrowRight = false;
     }
 
 
@@ -513,12 +532,14 @@
      * 下。
      */
     function onDownButtonPressed() : void {
-        player1Input.ArrowDown = true;
+        gameMachine1Player1Input.ArrowDown = true;
+        gameMachine2Player1Input.ArrowDown = true;
     }
 
 
     function onDownButtonReleased() : void {
-        player1Input.ArrowDown = false;
+        gameMachine1Player1Input.ArrowDown = false;
+        gameMachine2Player1Input.ArrowDown = false;
     }
 
 
@@ -526,13 +547,15 @@
      * スペース・キー。
      */
     function onSpaceButtonPressed() : void {
-        player1Input[" "] = true;
+        gameMachine1Player1Input[" "] = true;
+        gameMachine2Player1Input[" "] = true;
         //gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
     }
 
 
     function onSpaceButtonReleased() : void {
-        player1Input[" "] = false;
+        gameMachine1Player1Input[" "] = false;
+        gameMachine2Player1Input[" "] = false;
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -690,10 +713,6 @@
         gameBoard1StoneCount.value[2] = 2;
         gameBoard1PassCount.value = 0;
         gameBoard1IsEnd.value = false;
-
-        //gameMachine1Score.value = 0;
-        //gameMachine1ScheduleStep.value = 0;
-        //star1Visibility.value = 'hidden';
     }
 
 
@@ -715,7 +734,7 @@
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
 
-            if (player1Input[' ']) {
+            if (gameMachine1Player1Input[' ']) {
                 if (!gameBoard1IsEnd.value) { // 終局していたら、何もしない
                     const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
                     let itsOk = false;
@@ -758,7 +777,7 @@
                     }
                 }
 
-                player1Input[' '] = false;
+                gameMachine1Player1Input[' '] = false;
             }
 
             // ++++++++++++++++++++++++++++++

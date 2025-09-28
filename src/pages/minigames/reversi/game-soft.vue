@@ -123,6 +123,31 @@
 
 
     // ################
+    // # エクスポート #
+    // ################
+
+    export type Player1Input = { // 入力
+        // アルファベット順
+        " ": boolean;
+        ArrowDown: boolean;
+        ArrowLeft: boolean;
+        ArrowUp: boolean;
+        ArrowRight: boolean;
+    };
+
+
+    // ####################################
+    // # このコンポーネントが受け取る引数 #
+    // ####################################
+    
+    interface Props {
+        player1Input: Player1Input; // 入力
+    }
+    // デフォルト値を設定
+    const props = defineProps<Props>();
+
+
+    // ################
     // # オブジェクト #
     // ################
 
@@ -162,15 +187,6 @@
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const gameMachine1GameStartButton1Enabled = ref<boolean>(false);
-
-    // ++++++++++++++++++++++++++++
-    // + オブジェクト　＞　自機１ +
-    // ++++++++++++++++++++++++++++
-
-    const player1Input = <Record<string, boolean>>{                     // 入力
-        // アルファベット順
-        " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
-    };
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -264,12 +280,12 @@
             }
 
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = true;
+                props.player1Input[e.key] = true;
             }
         });
         window.addEventListener('keyup', (e) => {
             if (isPlayerInputKey(e.key)) {  // 型ガード
-                player1Input[e.key] = false;
+                props.player1Input[e.key] = false;
             }
         });
 
@@ -356,10 +372,6 @@
         gameBoard1StoneCount.value[2] = 2;
         gameBoard1PassCount.value = 0;
         gameBoard1IsEnd.value = false;
-
-        //gameMachine1Score.value = 0;
-        //gameMachine1ScheduleStep.value = 0;
-        //star1Visibility.value = 'hidden';
     }
 
 
@@ -381,7 +393,7 @@
             // + キー入力をモーションに変換 +
             // ++++++++++++++++++++++++++++++
 
-            if (player1Input[' ']) {
+            if (props.player1Input[' ']) {
                 if (!gameBoard1IsEnd.value) { // 終局していたら、何もしない
                     const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
                     let itsOk = false;
@@ -424,7 +436,7 @@
                     }
                 }
 
-                player1Input[' '] = false;
+                props.player1Input[' '] = false;
             }
 
             // ++++++++++++++++++++++++++++++
