@@ -161,7 +161,7 @@
                         :style="{
                             position: 'absolute',
                             left: '3px',
-                            top: `${(16-rank) * 32}px`,
+                            top: `${(16-rank) * tileBoard1TileHeight}px`,
                             width: '20px',
                             color: 'white',
                             fontSize: '24px',

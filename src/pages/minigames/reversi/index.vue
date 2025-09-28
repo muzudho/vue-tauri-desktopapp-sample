@@ -148,6 +148,24 @@
                             textAlign: 'center',
                         }"
                     >{{ gameBoard1FileNameArray[file - 1] }}</span>
+
+
+                    <!-- 段の符号 -->
+                    <span
+                        v-for="rank in 8"
+                        :key="rank"
+                        :style="{
+                            position: 'absolute',
+                            left: '3px',
+                            top: `${rank * tileBoard1TileHeight}px`,
+                            width: '20px',
+                            color: 'white',
+                            fontSize: '24px',
+                            zIndex: 200,
+                            textAlign: 'right',
+                        }"
+                    >{{ rank }}</span>
+
                 </div>
             </template>
         </game-machine-waratch2>
