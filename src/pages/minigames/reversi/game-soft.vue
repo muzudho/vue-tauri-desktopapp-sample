@@ -122,9 +122,9 @@
     import { range } from '@/composables/range';
 
 
-    // ################
-    // # エクスポート #
-    // ################
+    // ##################
+    // # エクスポート型 #
+    // ##################
 
     export type Player1Input = { // 入力
         // アルファベット順
@@ -673,6 +673,16 @@
     function gameIsFullCapacity() : boolean {
         return gameBoard1Area.value <= gameBoard1StoneCount.value[1] + gameBoard1StoneCount.value[2];
     }
+
+
+    // ####################
+    // # エクスポート関数 #
+    // ####################
+
+    // 親に公開する関数をdefineExposeで指定
+    defineExpose({
+        gameIsFullCapacity,
+    });
 
 </script>
 
