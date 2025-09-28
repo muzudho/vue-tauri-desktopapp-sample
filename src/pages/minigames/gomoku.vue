@@ -1417,13 +1417,85 @@
 
             gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][moveSq] = 0;
 
+            // ++++++++++++
+            // + 手番野石 +
+            // ++++++++++++
+
+            for (const stoneSq of allDirections[direction][ELEMENT_THIS_TURN_FIELD_STONES]) {
+                const control = locateFieldNonzeroFromCenter(
+                    stoneSq,
+                    NONZERO_RADIUS_OF_DIAMETER_NINE,
+                    foreOf,
+                    backOf,
+                    (_sq: number) => false,  // continue 条件
+                    makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
+                );
+
+                if (control.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                    gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = MAX_LENGTH_DEAD;
+
+                } else {
+                    // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
+                    const slidingWindowArray: number[][] = locateSlidingWindowArray(
+                        stoneSq,
+                        NONZERO_RADIUS_OF_DIAMETER_NINE,
+                        NONZERO_RADIUS_OF_DIAMETER_FIVE,
+                        foreOf,
+                        backOf,
+                    );
+
+                    gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = countMaxStones(
+                        slidingWindowArray,
+                        turnColor,
+                    );
+                }
+
+                gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = 0; // 手番の石が置いてあるところに、相手番は石を置けない。
+            }
+
+            // ++++++++++++++
+            // + 相手番野石 +
+            // ++++++++++++++
+
+            for (const stoneSq of allDirections[direction][ELEMENT_OPPOSITE_TURN_FIELD_STONES]) {
+                const control = locateFieldNonzeroFromCenter(
+                    stoneSq,
+                    NONZERO_RADIUS_OF_DIAMETER_NINE,
+                    foreOf,
+                    backOf,
+                    (_sq: number) => false,  // continue 条件
+                    makeIsOutOfBoardOrColor(turnColor),    // break 条件
+                );
+
+                if (control.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                    gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = MAX_LENGTH_DEAD;
+
+                } else {
+                    // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
+                    const slidingWindowArray: number[][] = locateSlidingWindowArray(
+                        stoneSq,
+                        NONZERO_RADIUS_OF_DIAMETER_NINE,
+                        NONZERO_RADIUS_OF_DIAMETER_FIVE,
+                        foreOf,
+                        backOf,
+                    );
+
+                    gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = countMaxStones(
+                        slidingWindowArray,
+                        oppositeTurnColor1,
+                    );
+                }
+
+                gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = 0; // 相手番の石が置いてあるところに、手番は石を置けない。
+            }
+
             // ++++++++++++++++
             // + 両手番野空点 +
             // ++++++++++++++++
 
             for (const emptySq of allDirections[direction][ELEMENT_BOTH_TURN_FIELD_EMPTIES]) {
                 for (const color of [COLOR_BLACK, COLOR_WHITE] as Color[]) {   // 空点の［最長］は、黒番側、白番側の両方が有ります。
-                    const thisColorControlLocations = locateFieldNonzeroFromCenter(
+                    const control = locateFieldNonzeroFromCenter(
                         emptySq,
                         NONZERO_RADIUS_OF_DIAMETER_NINE,
                         foreOf,
@@ -1432,12 +1504,12 @@
                         makeIsOutOfBoardOrColor(oppositeColor(color)),    // break 条件
                     );
 
-                    if (thisColorControlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
+                    if (control.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
                         gameBoard1MaxLengthArray.value[direction][color][emptySq] = MAX_LENGTH_DEAD;
 
                     } else {
                         // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
-                        const emptySqSlidingWindowArray: number[][] = locateSlidingWindowArray(
+                        const slidingWindowArray: number[][] = locateSlidingWindowArray(
                             emptySq,
                             NONZERO_RADIUS_OF_DIAMETER_NINE,
                             NONZERO_RADIUS_OF_DIAMETER_FIVE,
@@ -1446,64 +1518,21 @@
                         );
 
                         gameBoard1MaxLengthArray.value[direction][color][emptySq] = countMaxStones(
-                            emptySqSlidingWindowArray,
+                            slidingWindowArray,
                             color,
                         );
                     }
                 }
             }
 
-            // ++++++++++++++++++++++++++
-            // + 以下、着手点を含まない +
-            // ++++++++++++++++++++++++++
-            //
-            // ［非零直径９］を取得。着手点を含まない。両手番野空点を含まない。
-            // フィールドの各空点の［最長］を記入します
-            for (const resonanceSq of allDirections[direction][ELEMENT_THIS_TURN_NONZERO_DIAMETER_NINE]) {
-                for (const color of [turnColor, oppositeTurnColor1] as Color[]) {
-                    // 空点なら自分、相手ともに［最長］を更新。
-                    // 手番の石なら、手番の［最長］だけを更新。
-                    // 相手番の石なら、相手番の［最長］だけを更新。
-                    const actualStoneColor = gameBoard1StoneColorArray.value[resonanceSq];
-                    if (color == actualStoneColor) {
-                        const controlLocations = locateFieldNonzeroFromCenter(
-                            resonanceSq,
-                            NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                            foreOf,
-                            backOf,
-                            (_sq: number) => false,  // continue 条件
-                            makeIsOutOfBoardOrColor(oppositeColor(color)),    // break 条件
-                        );
-
-                        if (controlLocations.length + 1 < FIVE_LENGTH) { // ［五］を作れない方向なら［死に方向］です
-                            gameBoard1MaxLengthArray.value[direction][color][resonanceSq] = MAX_LENGTH_DEAD;
-
-                        } else {
-                            // 影響点を中心とする直径９のスライディング・ウィンドウ　＞　水平方向
-                            const resonanceSlidingWindowArray: number[][] = locateSlidingWindowArray(
-                                resonanceSq,
-                                NONZERO_RADIUS_OF_DIAMETER_NINE,
-                                NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                                foreOf,
-                                backOf,
-                            );
-
-                            gameBoard1MaxLengthArray.value[direction][color][resonanceSq] = countMaxStones(
-                                resonanceSlidingWindowArray,
-                                color,
-                            );
-                        }
-                    }
-                }
-            }
-
-            // ++++++++++++++++++++
-            // + ［割り打ち］処理 +
-            // ++++++++++++++++++++
-            executeWariuchiOppositeTurnOneDirection(
-                allDirections[ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL],
-                direction,
-            );
+            // TODO: 割り打ち処理は、要らないのでは？
+            // // ++++++++++++++++++++
+            // // + ［割り打ち］処理 +
+            // // ++++++++++++++++++++
+            // executeWariuchiOppositeTurnOneDirection(
+            //     allDirections[ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL],
+            //     direction,
+            // );
 
             // ++++++++++++++++
             // + ［五］の処理 +
