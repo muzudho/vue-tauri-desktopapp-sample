@@ -734,18 +734,12 @@
                 }
 
                 // 水平、垂直、バロック対角線、シニスター対角線のうち、最も接続数の多いもの：
-                const bXBlackMaxLength = Math.max(
-                    gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][COLOR_BLACK][sq], // 水平
-                    gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][COLOR_BLACK][sq],   // 垂直
-                    gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][COLOR_BLACK][sq],    // バロック対角線
-                    gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][COLOR_BLACK][sq],   // シニスター対角線
-                );
-                const bYWhiteMaxLength = Math.max(
-                    gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][COLOR_WHITE][sq], // 水平
-                    gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][COLOR_WHITE][sq],   // 垂直
-                    gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][COLOR_WHITE][sq],    // バロック対角線
-                    gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][COLOR_WHITE][sq],   // シニスター対角線
-                );
+                let bXBlackMaxLength = MAX_LENGTH_DEAD;
+                let bYWhiteMaxLength = MAX_LENGTH_DEAD;
+                for (const direction of activeDirections) {
+                    bXBlackMaxLength = Math.max(bXBlackMaxLength, gameBoard1MaxLengthArray.value[direction][COLOR_BLACK][sq]);
+                    bYWhiteMaxLength = Math.max(bYWhiteMaxLength, gameBoard1MaxLengthArray.value[direction][COLOR_WHITE][sq]);
+                }
 
                 const aGridNumber = getBoardGridNumber(sq);
                 const imageKey = makeImageKey(stoneColor, bYWhiteMaxLength, bXBlackMaxLength, aGridNumber);
@@ -1580,10 +1574,9 @@
 
             // マス上で自石が（飛び飛びでも）続いている数
             for (const color of [COLOR_BLACK, COLOR_WHITE]) {
-                gameBoard1MaxLengthArray.value[DIRECTION_HORIZONTAL][color][sq] = 0;
-                gameBoard1MaxLengthArray.value[DIRECTION_VERTICAL][color][sq] = 0;
-                gameBoard1MaxLengthArray.value[DIRECTION_BAROQUE_DIAGONAL][color][sq] = 0;
-                gameBoard1MaxLengthArray.value[DIRECTION_SINISTER_DIAGONAL][color][sq] = 0;
+                for (const direction of activeDirections) {
+                    gameBoard1MaxLengthArray.value[direction][color][sq] = 0;
+                }
             }
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
