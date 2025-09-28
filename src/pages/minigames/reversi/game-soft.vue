@@ -227,6 +227,7 @@
     const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const gameBoard1PassCount = ref<number>(0); // 連続パス回数
     const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
+    const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
 
     /**
@@ -661,7 +662,13 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
+        gameBoard1DebugMessage,
         gameBoard1IsEnd,
+        gameBoard1PassCount,
+        gameBoard1StoneColorNameMap,
+        gameBoard1StoneCount,
+        gameBoard1Times,
+        gameBoard1Turn,
         gameInit,
         gameIsFullCapacity,
         gameMachine1Height,

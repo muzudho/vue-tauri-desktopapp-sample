@@ -116,20 +116,20 @@
         </section>
 
         <!-- 各種表示 -->
-        <p>{{ gameBoard1DebugMessage }}</p>
-        <p>次の手数={{ gameBoard1Times+1 }}</p>
+        <p>{{ gameSoft1Ref?.gameBoard1DebugMessage }}</p>
+        <p>次の手数={{ (gameSoft1Ref?.gameBoard1Times ?? 0) + 1 }}</p>
         <p>次の手番=<span :style="{
-            color: gameBoard1StoneColorNameMap[gameBoard1Turn],
+            color: gameSoft1Ref?.gameBoard1StoneColorNameMap[gameSoft1Ref?.gameBoard1Turn],
         }">●</span></p>
         <p><span
             :style="{
-                color: gameBoard1StoneColorNameMap[1],
-            }">●</span>の数={{ gameBoard1StoneCount[1] }}</p>
+                color: gameSoft1Ref?.gameBoard1StoneColorNameMap[1],
+            }">●</span>の数={{ gameSoft1Ref?.gameBoard1StoneCount[1] }}</p>
         <p><span
             :style="{
-                color: gameBoard1StoneColorNameMap[2],
-            }">●</span>の数={{ gameBoard1StoneCount[2] }}</p>
-        <p>連続パス回数={{ gameBoard1PassCount }}</p>
+                color: gameSoft1Ref?.gameBoard1StoneColorNameMap[2],
+            }">●</span>の数={{ gameSoft1Ref?.gameBoard1StoneCount[2] }}</p>
+        <p>連続パス回数={{ gameSoft1Ref?.gameBoard1PassCount }}</p>
         <p>{{ gameSoft1Ref?.gameBoard1IsEnd ? (gameSoft1Ref?.gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
     </section>
@@ -150,7 +150,7 @@
     // # インポート #
     // ##############
 
-    import { computed, onMounted, ref } from 'vue';
+    import { onMounted, ref } from 'vue';
 
     // ++++++++++++++++++++++++++++++++++
     // + インポート　＞　コンポーネント +
@@ -235,30 +235,6 @@
         " ": false, ArrowDown: false, ArrowLeft: false, ArrowUp: false, ArrowRight: false,
     };
 
-    // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲーム盤１ +
-    // ++++++++++++++++++++++++++++++++
-
-    const gameBoard1FileNum = ref<number>(8);  // 盤が横に何マスか
-    const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
-    const gameBoard1Area = computed(()=>{
-        return gameBoard1FileNum.value * gameBoard1RankNum.value;
-    })
-    const gameBoard1StoneShapeArray = ref<string[]>(new Array(gameBoard1Area.value).fill(''));    // 石の形
-    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-        gameBoard1StoneShapeArray.value[sq] = '●'
-    }
-    const gameBoard1StoneColorNameMap: Record<number, string> = {
-        0: 'transparent',
-        1: '#C86868', // 明るい茶色
-        2: '#289028', // 暗い緑
-    }
-    const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
-    const gameBoard1Turn = ref<number>(0);
-    const gameBoard1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
-    const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
-    const gameBoard1PassCount = ref<number>(0); // 連続パス回数
-
 
     // ######################
     // # イベントハンドラー #
@@ -333,7 +309,7 @@
      */
     function onSpaceButtonPressed() : void {
         gameMachine1Player1Input[" "] = true;
-        //gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
+        //gameSoft1Ref?.gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
     }
 
 
