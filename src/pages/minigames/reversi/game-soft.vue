@@ -7,9 +7,9 @@
     <!-- ゲーム画面の全体サイズと、切り抜き領域 -->
     <div
         :style="{
-            visibility: gameMachine1Visibility,
-            width: `${gameMachine1Width}px`,
-            height: `${gameMachine1Height}px`,
+            visibility: vision1Visibility,
+            width: `${vision1Width}px`,
+            height: `${vision1Height}px`,
             zoom: gameMachine1Zoom,
         }"
         style="
@@ -157,22 +157,27 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
 
+    // ++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　ビジョン１ +
+    // ++++++++++++++++++++++++++++++++
+
+    const vision1Height = computed(()=>{
+        //return 512;
+        return tileBoard1RankNum.value * tileBoard1TileHeight.value;
+    });
+    const vision1Width = computed(()=>{
+        //return 512;
+        return tileBoard1FileNum.value * tileBoard1TileWidth.value;
+    });
+    const vision1Visibility = ref<string>('hidden');
+
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１ +
     // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1Zoom = ref<number>(0.5);    // ズーム
-    const gameMachine1Width = computed(()=>{
-        //return 512;
-        return tileBoard1FileNum.value * tileBoard1TileWidth.value;
-    });
-    const gameMachine1Height = computed(()=>{
-        //return 512;
-        return tileBoard1RankNum.value * tileBoard1TileHeight.value;
-    });
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
-    const gameMachine1Visibility = ref<string>('hidden');
     const gameMachineRandomLimit: number = 2 * Math.PI * Math.E;    // 偏りのない乱数なら、マスをランダムに指定しても、マス目の数 × 2πe回試行すれば、すべてのマスをだいたい１回は訪問するという経験則（＾～＾）確率論の［クーポン収集問題（Coupon Collector's Problem）］よりでかい数。
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -671,9 +676,9 @@
         gameBoard1Turn,
         gameInit,
         gameIsFullCapacity,
-        gameMachine1Height,
-        gameMachine1Visibility,
-        gameMachine1Width,
+        vision1Height,
+        vision1Visibility,
+        vision1Width,
     });
 
 </script>

@@ -63,8 +63,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="gameMachine1Zoom * (gameSoft1Ref?.gameMachine1Width ?? 100)"
-            :screenHeight="gameMachine1Zoom * (gameSoft1Ref?.gameMachine1Height ?? 100)"
+            :screenWidth="gameMachine1Zoom * (gameSoft1Ref?.vision1Width ?? 100)"
+            :screenHeight="gameMachine1Zoom * (gameSoft1Ref?.vision1Height ?? 100)"
             :powerOn="gameMachine1IsPowerOn"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -381,7 +381,7 @@
     function gamePowerOn() : void {
         gameMachine1GameStartButton1Enabled.value = true;
         if (gameSoft1Ref.value) {
-            gameSoft1Ref.value.gameMachine1Visibility = 'visible';
+            gameSoft1Ref.value.vision1Visibility = 'visible';
         }
         gameMachine1IsPowerOn.value = true;
 
@@ -396,7 +396,7 @@
 
         gameMachine1GameStartButton1Enabled.value = false;
         if (gameSoft1Ref.value) {
-            gameSoft1Ref.value.gameMachine1Visibility = 'hidden';
+            gameSoft1Ref.value.vision1Visibility = 'hidden';
         }
         gameMachine1IsPowerOn.value = false;
     }
