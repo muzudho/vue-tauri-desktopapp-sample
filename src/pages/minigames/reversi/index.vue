@@ -114,8 +114,8 @@
                         v-for="sq in range(0, gameBoard1Area)"
                         :key="sq"
                         :style="{
-                            left: `${(sq % gameBoard1FileNum + 2) * tileBoard1TileWidth}px`,
-                            top: `${(Math.floor(sq / gameBoard1FileNum) + 2) * tileBoard1TileHeight}px`,
+                            left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
+                            top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
                             minWidth: `${tileBoard1TileWidth}px`,
                             width: `${tileBoard1TileWidth}px`,
                             height: `${tileBoard1TileHeight}px`,
@@ -296,8 +296,8 @@
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1FileNum = ref<number>(12);  // 盤が横に何マスか
-    const tileBoard1RankNum = ref<number>(12);  // 盤が縦に何マスか
+    const tileBoard1FileNum = ref<number>(10);  // 盤が横に何マスか
+    const tileBoard1RankNum = ref<number>(10);  // 盤が縦に何マスか
     const tileBoard1Area = computed(()=>{   // 盤のマス数
         return tileBoard1FileNum.value * tileBoard1RankNum.value;
     });

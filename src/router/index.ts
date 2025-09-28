@@ -101,14 +101,14 @@ const routes = [
         component: () => import('../pages/minigames/shooting-star-reactive.vue'),
     },
     {
-        name: 'MiniGames_Reversi',
+        name: 'MiniGames_Reversi_Index',
         path: '/minigames/reversi',
         component: () => import('../pages/minigames/reversi/index.vue'),
     },
     {
-        name: 'MiniGames_Gomoku',
+        name: 'MiniGames_Gomoku_Index',
         path: '/minigames/gomoku',
-        component: () => import('../pages/minigames/gomoku.vue'),
+        component: () => import('../pages/minigames/gomoku/index.vue'),
     },
     // {
     //     name: 'Maze',
