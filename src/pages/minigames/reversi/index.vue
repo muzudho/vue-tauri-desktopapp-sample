@@ -63,8 +63,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="gameMachine1Zoom * gameMachine1Width"
-            :screenHeight="gameMachine1Zoom * gameMachine1Height"
+            :screenWidth="gameMachine1Zoom * (gameSoft1Ref?.gameMachine1Width ?? 100)"
+            :screenHeight="gameMachine1Zoom * (gameSoft1Ref?.gameMachine1Height ?? 100)"
             :powerOn="gameMachine1IsPowerOn"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -198,14 +198,6 @@
     // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1Zoom = ref<number>(0.5);    // ズーム
-    const gameMachine1Width = computed(()=>{
-        //return 512;
-        return tileBoard1FileNum.value * tileBoard1TileWidth.value;
-    });
-    const gameMachine1Height = computed(()=>{
-        //return 512;
-        return tileBoard1RankNum.value * tileBoard1TileHeight.value;
-    });
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
@@ -244,16 +236,6 @@
     };
 
     // ++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　タイル盤１ +
-    // ++++++++++++++++++++++++++++++++
-
-    // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
-    const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
-    const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1FileNum = ref<number>(10);  // 盤が横に何マスか
-    const tileBoard1RankNum = ref<number>(10);  // 盤が縦に何マスか
-
-    // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
 
@@ -266,7 +248,6 @@
     for(let sq: number=0; sq<gameBoard1Area.value; sq++){
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
-    const gameBoard1StoneColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
     const gameBoard1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
         1: '#C86868', // 明るい茶色

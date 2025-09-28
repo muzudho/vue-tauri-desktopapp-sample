@@ -170,7 +170,6 @@
         //return 512;
         return tileBoard1RankNum.value * tileBoard1TileHeight.value;
     });
-    const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
     const gameMachine1Visibility = ref<string>('hidden');
@@ -181,12 +180,6 @@
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const gameMachine1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン１ +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const gameMachine1GameStartButton1Enabled = ref<boolean>(false);
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -671,7 +664,9 @@
         gameBoard1IsEnd,
         gameInit,
         gameIsFullCapacity,
+        gameMachine1Height,
         gameMachine1Visibility,
+        gameMachine1Width,
     });
 
 </script>
