@@ -1413,15 +1413,13 @@
                     maxLength = MOVE_STONE_NUM + countStones(control, turnColor);
                 }
                 gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = maxLength;
-
-                //gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = 0; // 手番の石が置いてあるところに、相手番は石を置けない。
             }
 
             // ++++++++++++++
             // + 相手番野石 +
             // ++++++++++++++
 
-            //*
+            /*
             for (const stoneSq of directionData[ELEMENT_OPPOSITE_TURN_FIELD_STONES]) {
                 // 影響点を中心とする直径９のスライディング・ウィンドウ
                 const slidingWindowArray: number[][] = locateSlidingWindowArray(
@@ -1459,14 +1457,15 @@
             // ++++++++++++++++
 
             for (const emptySq of directionData[ELEMENT_BOTH_TURN_FIELD_EMPTIES]) {
+                // 影響点を中心とする直径９のスライディング・ウィンドウ
+                const slidingWindowArray: number[][] = locateSlidingWindowArray(
+                    emptySq,
+                    NONZERO_RADIUS_OF_DIAMETER_NINE,
+                    NONZERO_RADIUS_OF_DIAMETER_FIVE,
+                    direction,
+                );
+
                 for (const color of [COLOR_BLACK, COLOR_WHITE] as Color[]) {   // 空点の［最長］は、黒番側、白番側の両方が有ります。
-                    // 影響点を中心とする直径９のスライディング・ウィンドウ
-                    const slidingWindowArray: number[][] = locateSlidingWindowArray(
-                        emptySq,
-                        NONZERO_RADIUS_OF_DIAMETER_NINE,
-                        NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                        direction,
-                    );
                     const bestLength = countMaxColors(
                         slidingWindowArray,
                         [COLOR_EMPTY, color],
@@ -1485,7 +1484,7 @@
                             makeIsOutOfBoardOrColor(oppositeColor(color)),    // break 条件
                         );
 
-                        maxLength = MOVE_STONE_NUM + countStones(control, color);
+                        maxLength = countStones(control, color);
                     }
                     gameBoard1MaxLengthArray.value[direction][color][emptySq] = maxLength;
                 }
