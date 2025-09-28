@@ -1250,8 +1250,6 @@
         moveSq: number,
         direction: Direction,
     ) : Elements1 {
-        const foreOf = allDirectionsForeOf[direction];
-        const backOf = allDirectionsBackOf[direction];
 
         // ++++++++++
         // + 仕込み +
@@ -1262,8 +1260,7 @@
             moveSq,
             NONZERO_RADIUS_OF_DIAMETER_NINE,
             NONZERO_RADIUS_OF_DIAMETER_FIVE,
-            foreOf,
-            backOf,
+            direction,
         );
         // console.log(`DEBUG: [putStone] slidingWindowArrayH.length=[${slidingWindowArrayH.length}]`);
         // slidingWindowArrayH.forEach((oneWindow, index, _array)=>{
@@ -1335,34 +1332,21 @@
         const turnColor = gameBoard1Turn.value as Color;    // 手番の色　＝　置く石の色
         gameBoard1StoneColorArray.value[moveSq] = turnColor;    // 盤上に石を置く
 
-        const allDirectionsData = [
-            null,
-            putStoneOnDirection(moveSq, DIRECTION_HORIZONTAL),   // 水平（H）
-            putStoneOnDirection(moveSq, DIRECTION_VERTICAL), // 垂直（V）
-            putStoneOnDirection(moveSq, DIRECTION_BAROQUE_DIAGONAL), // バロック対角線（B）
-            putStoneOnDirection(moveSq, DIRECTION_SINISTER_DIAGONAL), // シニスター対角線（S）
-        ] as Elements1[];
-
         const oppositeTurnColor1 = oppositeColor(turnColor) as Color;
 
-        // ++++++++++++++++++++++++++++++++++++++++++++++
-        // + 着手石と、それに隣接する自石が［五］か記入 +
-        // ++++++++++++++++++++++++++++++++++++++++++++++
-
-        // ［五］を作れた石の集合
-        const bingoStoneSet = new Set<number>([
-            ...allDirectionsData[DIRECTION_HORIZONTAL][ELEMENT_BINGO_STONES], // 水平方向にビンゴがあるか？
-            ...allDirectionsData[DIRECTION_VERTICAL][ELEMENT_BINGO_STONES],
-            ...allDirectionsData[DIRECTION_BAROQUE_DIAGONAL][ELEMENT_BINGO_STONES],
-            ...allDirectionsData[DIRECTION_SINISTER_DIAGONAL][ELEMENT_BINGO_STONES],
-        ]);
-        for (const stoneSq of bingoStoneSet) {
-            gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color; // どちらのプレイヤーのビンゴか記入
-        }
-
+        // １方向だけのテストができるように配慮している。
         for (const direction of activeDirections) {
-            const foreOf = allDirectionsForeOf[direction];
-            const backOf = allDirectionsBackOf[direction];
+
+            const directionData: Elements1 = putStoneOnDirection(moveSq, direction);
+
+            // ++++++++++++++++++++++++++++++++++++++++++++++
+            // + 着手石と、それに隣接する自石が［五］か記入 +
+            // ++++++++++++++++++++++++++++++++++++++++++++++
+
+            // ［五］を作れた石の集合
+            for (const stoneSq of directionData[ELEMENT_BINGO_STONES]) {
+                gameBoard1SquaresBingo.value[stoneSq] = turnColor as Color; // どちらのプレイヤーのビンゴか記入
+            }
 
             // ++++++++++
             // + 着手点 +
@@ -1372,8 +1356,7 @@
                 const control = locateFieldNonzeroFromCenter(
                     moveSq,
                     NONZERO_RADIUS_OF_DIAMETER_NINE,
-                    foreOf,
-                    backOf,
+                    direction,
                     (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
                 );
@@ -1387,8 +1370,7 @@
                         moveSq,
                         NONZERO_RADIUS_OF_DIAMETER_NINE,
                         NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                        foreOf,
-                        backOf,
+                        direction,
                     );
 
                     gameBoard1MaxLengthArray.value[direction][turnColor][moveSq] = countMaxStones(
@@ -1404,12 +1386,11 @@
             // + 手番野石 +
             // ++++++++++++
 
-            for (const stoneSq of allDirectionsData[direction][ELEMENT_THIS_TURN_FIELD_STONES]) {
+            for (const stoneSq of directionData[ELEMENT_THIS_TURN_FIELD_STONES]) {
                 const control = locateFieldNonzeroFromCenter(
                     stoneSq,
                     NONZERO_RADIUS_OF_DIAMETER_NINE,
-                    foreOf,
-                    backOf,
+                    direction,
                     (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(oppositeTurnColor1),    // break 条件
                 );
@@ -1423,8 +1404,7 @@
                         stoneSq,
                         NONZERO_RADIUS_OF_DIAMETER_NINE,
                         NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                        foreOf,
-                        backOf,
+                        direction,
                     );
 
                     gameBoard1MaxLengthArray.value[direction][turnColor][stoneSq] = countMaxStones(
@@ -1440,12 +1420,11 @@
             // + 相手番野石 +
             // ++++++++++++++
 
-            for (const stoneSq of allDirectionsData[direction][ELEMENT_OPPOSITE_TURN_FIELD_STONES]) {
+            for (const stoneSq of directionData[ELEMENT_OPPOSITE_TURN_FIELD_STONES]) {
                 const control = locateFieldNonzeroFromCenter(
                     stoneSq,
                     NONZERO_RADIUS_OF_DIAMETER_NINE,
-                    foreOf,
-                    backOf,
+                    direction,
                     (_sq: number) => false,  // continue 条件
                     makeIsOutOfBoardOrColor(turnColor),    // break 条件
                 );
@@ -1459,8 +1438,7 @@
                         stoneSq,
                         NONZERO_RADIUS_OF_DIAMETER_NINE,
                         NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                        foreOf,
-                        backOf,
+                        direction,
                     );
 
                     gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][stoneSq] = countMaxStones(
@@ -1476,13 +1454,12 @@
             // + 両手番野空点 +
             // ++++++++++++++++
 
-            for (const emptySq of allDirectionsData[direction][ELEMENT_BOTH_TURN_FIELD_EMPTIES]) {
+            for (const emptySq of directionData[ELEMENT_BOTH_TURN_FIELD_EMPTIES]) {
                 for (const color of [COLOR_BLACK, COLOR_WHITE] as Color[]) {   // 空点の［最長］は、黒番側、白番側の両方が有ります。
                     const control = locateFieldNonzeroFromCenter(
                         emptySq,
                         NONZERO_RADIUS_OF_DIAMETER_NINE,
-                        foreOf,
-                        backOf,
+                        direction,
                         (_sq: number) => false,  // continue 条件
                         makeIsOutOfBoardOrColor(oppositeColor(color)),    // break 条件
                     );
@@ -1496,8 +1473,7 @@
                             emptySq,
                             NONZERO_RADIUS_OF_DIAMETER_NINE,
                             NONZERO_RADIUS_OF_DIAMETER_FIVE,
-                            foreOf,
-                            backOf,
+                            direction,
                         );
 
                         gameBoard1MaxLengthArray.value[direction][color][emptySq] = countMaxStones(
@@ -1732,16 +1708,13 @@
         directionalStoneStateArray: Ref<Array<number>>,
         aliveDirection: number,
     ) : void {
-        const foreOf = allDirectionsForeOf[direction];
-        const backOf = allDirectionsBackOf[direction];
 
         const control = [
             startSq,
             ...locateFieldNonzeroFromCenter(
                 startSq,
                 NONZERO_RADIUS_OF_DIAMETER_NINE,
-                foreOf,
-                backOf,
+                direction,
                 (_sq: number) => false,  // continue 条件
                 (sq: number) => isOutOfBoardOrColor(oppositeColor(gameBoard1Turn.value), sq),   // break 条件
             ),
@@ -1896,8 +1869,7 @@
             const oppositeTurnControl = locateFieldNonzeroFromCenter(   // 起点を含まない
                 complementaryControlOppositeTurnStoneSq,
                 NONZERO_RADIUS_OF_DIAMETER_NINE,
-                foreOf,
-                backOf,
+                direction,
                 (_sq: number) => false,  // continue 条件
                 makeIsOutOfBoardOrColor(gameBoard1Turn.value),  // break 条件
             );
@@ -2150,12 +2122,14 @@
     function locateFieldNonzeroFromCenter(
         centerSq: number,
         nonzeroRadius: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
+        direction: Direction,
         isContinue: (sq: number)=>boolean,
         isBreak: (sq: number)=>boolean,
     ) : number[] {
-        // ［逆半開半径］を戻る
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
+
+        // ［後方非零半径］を戻る
         const backLocations: number[] = locateFieldNonzeroOneWay(
             centerSq,
             nonzeroRadius,
@@ -2164,7 +2138,7 @@
             isBreak,
         );
 
-        // 順ウィング（起点を含まない）を進む
+        // ［前方非零半径］を進む
         const foreLocations: number[] = locateFieldNonzeroOneWay(
             centerSq,
             nonzeroRadius,
@@ -2191,9 +2165,10 @@
         startSq: number,
         foreLength: number,
         backLength: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
+        direction: Direction,
     ) : number[] {
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
         const backLocations : number[] = [];
         const foreLocations : number[] = [];
 
@@ -2238,8 +2213,7 @@
         startSq: number,
         halfOpenRadiusOfInputArray: number,
         halfOpenRadiusOfWindow: number,
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
+        direction: Direction,
     ) : number[][] {
         const slidingWindowArray : number[][] = [];
 
@@ -2252,8 +2226,7 @@
                 startSq,
                 halfOpenRadiusOfInputArray - iSlidingWindow,
                 iSlidingWindow,
-                foreOf,
-                backOf
+                direction,
             );
             console.log(`DEBUG: [makeSlidingWindowArray] (${iSlidingWindow}) oneWindow=${oneWindow} startSq=${startSq}`);
             slidingWindowArray.push(oneWindow)
@@ -2535,8 +2508,7 @@
             ...locateFieldNonzeroFromCenter(
                 stoneSq,
                 NONZERO_RADIUS_OF_DIAMETER_NINE,
-                allDirectionsForeOf[direction],
-                allDirectionsBackOf[direction],
+                direction,
                 (_sq: number) => false,  // continue 条件
                 (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
             ),
