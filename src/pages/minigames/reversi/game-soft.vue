@@ -289,7 +289,6 @@
             }
         });
 
-        gamePowerOn();  // 電源を入れる演出
         gameLoopStart();    // 入力処理、描画を行います
     });
 
@@ -326,18 +325,6 @@
     // ################
     // # サブルーチン #
     // ################
-
-    // ++++++++++++++++++++++++++++++++++++++++++
-    // + サブルーチン　＞　外付けシステムボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++
-
-    function gamePowerOn() : void {
-        gameMachine1GameStartButton1Enabled.value = true;
-        gameMachine1Visibility.value = 'visible';
-        gameMachine1IsPowerOn.value = true;
-
-        gameInit(); // ゲームの初期化
-    }
 
     // ++++++++++++++++++++++++++++
     // + サブルーチン　＞　ゲーム +
@@ -682,7 +669,9 @@
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
         gameBoard1IsEnd,
+        gameInit,
         gameIsFullCapacity,
+        gameMachine1Visibility,
     });
 
 </script>

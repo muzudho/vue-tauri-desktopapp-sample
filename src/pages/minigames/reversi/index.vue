@@ -209,7 +209,6 @@
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
-    const gameMachine1Visibility = ref<string>('hidden');
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１　＞　ストップウォッチ１ +
@@ -424,10 +423,12 @@
 
     function gamePowerOn() : void {
         gameMachine1GameStartButton1Enabled.value = true;
-        gameMachine1Visibility.value = 'visible';
+        if (gameSoft1Ref.value) {
+            gameSoft1Ref.value.gameMachine1Visibility = 'visible';
+        }
         gameMachine1IsPowerOn.value = true;
 
-        gameInit(); // ゲームの初期化
+        gameSoft1Ref.value?.gameInit(); // ゲームの初期化
     }
 
 
@@ -437,7 +438,9 @@
         }
 
         gameMachine1GameStartButton1Enabled.value = false;
-        gameMachine1Visibility.value = 'hidden';
+        if (gameSoft1Ref.value) {
+            gameSoft1Ref.value.gameMachine1Visibility = 'hidden';
+        }
         gameMachine1IsPowerOn.value = false;
     }
 
@@ -451,41 +454,7 @@
 
     function gameStop() : void {
         gameMachine1GamePauseButton1Enabled.value = false;
-        gameInit(); // ゲームは終了したので、初期状態に戻します
-    }
-
-    // ++++++++++++++++++++++++++++
-    // + サブルーチン　＞　ゲーム +
-    // ++++++++++++++++++++++++++++
-
-    /**
-     * ゲームの初期化
-     */
-    function gameInit() : void {
-        //gameBoard1DebugMessage.value = "ゲームの初期化";
-        gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
-
-        // 外付けシステムボタンをリセット
-        gameMachine1IsPlaying.value = false;
-        gameMachine1IsPlayingPause.value = false;
-
-        // ++++++++++++++++++++++++++
-        // + ゲームデータをリセット +
-        // ++++++++++++++++++++++++++
-
-        // 盤の初期化
-        for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-            gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
-        }
-        gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
-        gameBoard1StoneColorArray.value[28] = 2;
-        gameBoard1StoneColorArray.value[35] = 2;
-        gameBoard1StoneColorArray.value[36] = 1;
-        gameBoard1Times.value = 4;
-        gameBoard1Turn.value = 1;
-        gameBoard1StoneCount.value[1] = 2;
-        gameBoard1StoneCount.value[2] = 2;
-        gameBoard1PassCount.value = 0;
+        gameSoft1Ref.value?.gameInit(); // ゲームは終了したので、初期状態に戻します
     }
 
 </script>
