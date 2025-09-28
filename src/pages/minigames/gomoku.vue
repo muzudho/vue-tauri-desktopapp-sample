@@ -1294,7 +1294,7 @@
         const locationsComplementaryControl = arraySubtract(locationsNonzeroDiameter, locationsControl);
 
         // ビンゴ
-        const bingoStones : Set<number> = getBingoLocations(slidingWindowArray, turnColor, FIVE_LENGTH);
+        const bingoStones : Set<number> = locateBingo(slidingWindowArray, turnColor, FIVE_LENGTH);
 
         return [
             null,
@@ -1396,6 +1396,13 @@
             }
 
             gameBoard1MaxLengthArray.value[direction][oppositeTurnColor1][moveSq] = 0;
+
+            // TODO:
+    //         locateParseControl(
+    //     moveSq: number, // 着手点
+    //     nonzeroRadiusLength: number,    // 非零半径の長さ
+    //     direction: Direction,
+    // ) : [number[], number[], number[]]
 
             // ++++++++++++++++++++++++++
             // + 以下、着手点を含まない +
@@ -2157,6 +2164,7 @@
         ];
     }
 
+
     /**
      * スライディング・ウィンドウ作成
      * ［五］を判定するのに使う。
@@ -2192,12 +2200,13 @@
         return slidingWindowArray;
     }
 
+
     /**
      * スライディング・ウィンドウの配列を与えたら、
      * ウィンドウが全て自石でできているか確認し、
      * そのようなウィンドウが１つでも有れば真となるような関数。
      */
-    function getBingoLocations(
+    function locateBingo(
         slidingWindowArray: number[][],
         stoneColor: Color,
         bingoNum: number,
@@ -2223,6 +2232,100 @@
         }
 
         return bingoLocations;
+    }
+
+
+    function locateParseControlOneWay(
+        moveSq: number, // 着手点
+        nonzeroRadiusLength: number,    // 非零半径の長さ
+        nextOf: (sq: number)=>number,
+    ) : [number[], number[], number[]] {
+        const thisTurnFieldStones: number[] = []; // 手番野石
+        const oppositeTurnFieldStones: number[] = []; // 相手番野石
+        const bothTurnFieldEmpties: number[] = [];    // 両手番野空点
+
+        const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
+
+        let nextSq = moveSq;
+        let i: number=0;
+        let isOppositeTurnField = false;
+        for (; i<nonzeroRadiusLength; i++) {
+            nextSq = nextOf(moveSq);
+
+            const iStone = gameBoard1StoneColorArray.value[nextSq];
+            if (isOutOfBoard(nextSq)) { // 盤外
+                break;
+            } else if (iStone == COLOR_EMPTY) {    // 両手番野空点
+                bothTurnFieldEmpties.push(nextSq);
+
+            } else if (iStone == gameBoard1Turn.value) {  // 手番野石
+                thisTurnFieldStones.push(nextSq);
+
+            } else if (iStone == oppositeTurnColor1) {  // 相手番野石
+                oppositeTurnFieldStones.push(nextSq);
+                isOppositeTurnField = true;
+                break;
+            }
+        }
+
+        if (isOppositeTurnField) {
+            for (; i<nonzeroRadiusLength; i++) {
+                nextSq = nextOf(moveSq);
+
+                const iStone = gameBoard1StoneColorArray.value[nextSq];
+                if (isOutOfBoard(nextSq)) { // 盤外
+                    break;
+                } else if (iStone == COLOR_EMPTY) {    // 両手番野空点
+                    bothTurnFieldEmpties.push(nextSq);
+
+                } else if (iStone == oppositeTurnColor1) {  // 相手番野石
+                    oppositeTurnFieldStones.push(nextSq);
+
+                } else if (iStone == gameBoard1Turn.value) {  // 手番野石
+                    break;
+                }
+            }
+        }
+
+        return [
+            thisTurnFieldStones,
+            oppositeTurnFieldStones,
+            bothTurnFieldEmpties,
+        ];
+    }
+
+
+    function locateParseControl(
+        moveSq: number, // 着手点
+        nonzeroRadiusLength: number,    // 非零半径の長さ
+        direction: Direction,
+    ) : [number[], number[], number[]] {
+
+        const foreField = locateParseControlOneWay(
+            moveSq,
+            nonzeroRadiusLength,
+            allDirectionsForeOf[direction],
+        );
+        const backField = locateParseControlOneWay(
+            moveSq,
+            nonzeroRadiusLength,
+            allDirectionsBackOf[direction],
+        );
+
+        return [
+            [
+                ...foreField[0],
+                ...backField[0],
+            ],
+            [
+                ...foreField[1],
+                ...backField[1],
+            ],
+            [
+                ...foreField[2],
+                ...backField[2],
+            ],
+        ];
     }
 
     // ++++++++++++++++++++++++++++++++++++++++++++++
