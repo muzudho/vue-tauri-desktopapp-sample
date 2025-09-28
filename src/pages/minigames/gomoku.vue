@@ -689,17 +689,17 @@
     // バロック対角線方向に並ぶ［五］の一部の石なら 4 を、
     // シニスター対角線方向に並ぶ［五］の一部の石なら 8 を、
     // ［死に石］なら 16 を入れる。
-    const STONE_STATE_NONE = 0;
-    const STONE_STATE_ALIVE_HORIZONTAL = 1;
-    const STONE_STATE_ALIVE_VERTICAL = 2;
-    const STONE_STATE_ALIVE_BAROQUE_DIAGONAL = 4;
-    const STONE_STATE_ALIVE_SINISTER_DIAGONAL = 8;
-    type StoneState = typeof STONE_STATE_NONE | typeof STONE_STATE_ALIVE_HORIZONTAL | typeof STONE_STATE_ALIVE_VERTICAL | typeof STONE_STATE_ALIVE_BAROQUE_DIAGONAL | typeof STONE_STATE_ALIVE_SINISTER_DIAGONAL;
+    const DIRECTION_BITFLAG_NONE = 0;
+    const DIRECTION_BITFLAG_HORIZONTAL = 1;
+    const DIRECTION_BITFLAG_VERTICAL = 2;
+    const DIRECTION_BITFLAG_BAROQUE_DIAGONAL = 4;
+    const DIRECTION_BITFLAG_SINISTER_DIAGONAL = 8;
+    type DirectionBitflag = typeof DIRECTION_BITFLAG_NONE | typeof DIRECTION_BITFLAG_HORIZONTAL | typeof DIRECTION_BITFLAG_VERTICAL | typeof DIRECTION_BITFLAG_BAROQUE_DIAGONAL | typeof DIRECTION_BITFLAG_SINISTER_DIAGONAL;
     const MAX_LENGTH_DEAD = -1;
     function isAliveStone(sq: number) : boolean {
         return 1 <= gameBoard1StonesState.value[sq] && gameBoard1StonesState.value[sq] <= 15;
     }
-    const gameBoard1StonesState = ref<Array<number>>(new Array(gameBoard1Area.value).fill(STONE_STATE_NONE));
+    const gameBoard1StonesState = ref<Array<number>>(new Array(gameBoard1Area.value).fill(DIRECTION_BITFLAG_NONE));
 
     // ボタンの背景画像（のタイル位置の矩形）
     const gameBoard1SquareSrcTilemapRect = computed<
@@ -1366,16 +1366,16 @@
         }
 
 
-        const directionArray = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
+        const directionArrayWithoutNone = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
         const stoneStateAliveArray = [
-            STONE_STATE_NONE,
-            STONE_STATE_ALIVE_HORIZONTAL,
-            STONE_STATE_ALIVE_VERTICAL,
-            STONE_STATE_ALIVE_BAROQUE_DIAGONAL,
-            STONE_STATE_ALIVE_SINISTER_DIAGONAL,
-        ] as StoneState[];
+            DIRECTION_BITFLAG_NONE,
+            DIRECTION_BITFLAG_HORIZONTAL,
+            DIRECTION_BITFLAG_VERTICAL,
+            DIRECTION_BITFLAG_BAROQUE_DIAGONAL,
+            DIRECTION_BITFLAG_SINISTER_DIAGONAL,
+        ] as DirectionBitflag[];
 
-        for (const direction of directionArray) {
+        for (const direction of directionArrayWithoutNone) {
             const foreOf = allDirectionsForeOf[direction];
             const backOf = allDirectionsBackOf[direction];
 
@@ -1445,11 +1445,8 @@
             // + ［割り打ち］処理 +
             // ++++++++++++++++++++
             executeWariuchiOppositeTurnOneDirection(
-                moveSq,
                 allDirections[ELEMENT_LOCATIONS_COMPLEMENTARY_CONTROL],
                 direction,
-                foreOf,
-                backOf,
             );
 
             // ++++++++++++++++
@@ -1461,8 +1458,7 @@
 
             fiveStonesProcessingOneDirection(    // 水平方向
                 moveSq,
-                allDirectionsForeOf[direction],
-                allDirectionsBackOf[direction],
+                direction,
                 gameBoard1StonesState,
                 stoneStateAliveArray[direction],
             );
@@ -1547,7 +1543,7 @@
             }
 
             // マス上で自石が（隙間なく）連続しているとみたときの状態
-            gameBoard1StonesState.value[sq] = STONE_STATE_NONE;
+            gameBoard1StonesState.value[sq] = DIRECTION_BITFLAG_NONE;
             gameBoard1SquaresBingo.value[sq] = COLOR_EMPTY as Color;
         }
 
@@ -1664,12 +1660,14 @@
      */
     function fiveStonesProcessingOneDirection(
         startSq: number,    // 打った場所。自石が置いている前提。 FIXME: 空点の場所のケースもある
-        foreOf: (sq: number)=>number,
-        backOf: (sq: number)=>number,
+        direction: Direction,
         directionalStoneStateArray: Ref<Array<number>>,
         aliveDirection: number,
     ) : void {
-        const runsNineSquares = [
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
+
+        const control = [
             startSq,
             ...locateFieldNonzeroFromCenter(
                 startSq,
@@ -1693,12 +1691,12 @@
             continuityStones.length = 0;    // クリアー
         }
 
-        for (const sq of runsNineSquares) {
+        for (const controlSq of control) {
             // 盤外、相手の石は含まない
 
             // 手番の石なら
-            if (gameBoard1StoneColorArray.value[sq] == gameBoard1Turn.value) {
-                continuityStones.push(sq);
+            if (gameBoard1StoneColorArray.value[controlSq] == gameBoard1Turn.value) {
+                continuityStones.push(controlSq);
 
             // 自石でなければ
             } else {
@@ -1812,31 +1810,19 @@
      * @param moveSq 着手点 
      */
     function executeWariuchiOppositeTurnOneDirection(
-        moveSq: number,
-        complementaryControl: number[],
+        complementaryControl: number[], // ［補利き］。着手点を含まない
         direction: Direction,
-        foreOf: (sq: number) => number,
-        backOf: (sq: number) => number,
     ) : void {
-        // // FIXME: ［補利き］を使いたい
-        // const oppositeTurnStonesNonzero = locateFieldNonzeroFromCenter(
-        //     moveSq,
-        //     HALF_OPEN_RADIUS_OF_NINE,
-        //     foreOf,
-        //     backOf,
-        //     (sq: number) => isEmptyPoint(sq),   // continue 条件
-        //     (sq: number) => isOutOfBoardOrColor(gameBoard1Turn.value, sq),   // break 条件
-        // );
-
-        //console.log(`DEBUG: [oppositeTurnStonesCheckFieldOneDirection] startSq=${startSq}`);
         const oppositeTurnColor1 = oppositeTurnColor(gameBoard1Turn.value);
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
 
         for (const complementaryControlStoneSq of complementaryControl) {
             if (gameBoard1StoneColorArray.value[complementaryControlStoneSq] != oppositeTurnColor1) {
                 continue;
             }
 
-            const complementaryControlOppositeTurnStoneSq = complementaryControlStoneSq;
+            const complementaryControlOppositeTurnStoneSq = complementaryControlStoneSq;    // ［補利き］の中の相手石
 
             const oppositeTurnControl = locateFieldNonzeroFromCenter(   // 起点を含まない
                 complementaryControlOppositeTurnStoneSq,
