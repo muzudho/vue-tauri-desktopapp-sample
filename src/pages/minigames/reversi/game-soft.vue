@@ -46,7 +46,7 @@
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
                 color: game1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
+                backgroundColor: gameBoard1BackGroundColor(sq, gameBoard1FileNum),  /* 盤の色 */
                 pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
             }"
             style="
@@ -257,6 +257,17 @@
     gameBoard1CanMove.value[COLOR_WHITE][codeToSq('C4')] = true;
     gameBoard1CanMove.value[COLOR_WHITE][codeToSq('F5')] = true;
     gameBoard1CanMove.value[COLOR_WHITE][codeToSq('E6')] = true;
+
+    const gameBoard1BackGroundColor = computed<
+        (sq: number, gameBoard1FileNum: number)=>string
+    >(()=>{
+        return (sq: number, gameBoard1FileNum: number)=>{
+            if (game1Turn.value == COLOR_BLACK) {
+                return `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`;
+            }
+            return `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#C0F0E0' : '#50F0C0'}`;
+        };
+    });
 
     const DIRECTION_EMPTY = 0;
     const DIRECTION_EAST = 1;
