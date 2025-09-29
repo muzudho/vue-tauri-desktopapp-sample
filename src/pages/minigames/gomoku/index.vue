@@ -496,7 +496,7 @@
     // ++++++++++++++++++++++++++
 
     import TheAppHeader from '@/pages/the-app-header.vue';
-    import { SQ_OUT_OF_BOARD } from '@/pages/minigames/gomoku/spec.ts';
+    //import { SQ_OUT_OF_BOARD } from '@/pages/minigames/gomoku/spec.ts';
 
 
     // ################
