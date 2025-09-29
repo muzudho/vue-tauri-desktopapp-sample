@@ -389,8 +389,10 @@
         // 着手点に石は置けなくなる。
         gameBoard1CanMove.value[game1Turn.value][moveSq] = false;
 
+        let allDirectionsTargetStones: number[] = [];
         for (const direction of activeDirections) {
             const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
+            allDirectionsTargetStones.push(...targetStones);
             reverseStones(targetStones);    // 挟んだ石をひっくり返します。
 
             const [
@@ -398,7 +400,7 @@
                 foreCapSq,
                 backCapColor,
                 backCapSq,
-            ] = generateMoveOnDirection(moveSq, direction);
+            ] = generateMoveOnDirection(moveSq, direction); // 指し手生成
 
             if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
                 gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
@@ -408,6 +410,29 @@
                 gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
             }
         }
+
+        for (const targetStoneSq of allDirectionsTargetStones) {
+            for (const direction of activeDirections) {
+                const [
+                    foreCapColor,
+                    foreCapSq,
+                    backCapColor,
+                    backCapSq,
+                ] = generateMoveOnDirection(targetStoneSq, direction); // 指し手生成
+
+                if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
+                    gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                }
+
+                if (backCapColor == COLOR_EMPTY && foreCapColor == oppositeTurnColor1) {
+                    gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                }
+            }            
+        }
+
+        // TODO: 指し手が消えるパターン
+
+
 
         game1Turn.value = oppositeTurnColor1; // 相手の色に変更
         game1Times.value += 1;
