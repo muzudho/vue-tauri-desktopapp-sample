@@ -45,3 +45,20 @@ export function codeToSq(code: string, boardFileNum: number) : number {
     const file = getFile(letter);
     return (rank - 1) * boardFileNum + (file - 1);
 }
+
+
+// ++++++++++++++++++++++++++
+// + オブジェクト　＞　方向 +
+// ++++++++++++++++++++++++++
+
+export const DIRECTION_EMPTY = 0;
+export const DIRECTION_HORIZONTAL = 1;
+export const DIRECTION_VERTICAL = 2;
+export const DIRECTION_BAROQUE_DIAGONAL = 3;
+export const DIRECTION_SINISTER_DIAGONAL = 4;
+export type Direction = typeof DIRECTION_EMPTY
+    | typeof DIRECTION_HORIZONTAL
+    | typeof DIRECTION_VERTICAL
+    | typeof DIRECTION_BAROQUE_DIAGONAL
+    | typeof DIRECTION_SINISTER_DIAGONAL
+    ;
