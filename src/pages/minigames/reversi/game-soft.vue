@@ -403,11 +403,15 @@
             ] = generateMoveOnDirection(moveSq, direction); // 指し手生成
 
             if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
-                gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                if (foreCapSq != SQ_OUT_OF_BOARD) {
+                    gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                }
             }
 
             if (backCapColor == COLOR_EMPTY && foreCapColor == oppositeTurnColor1) {
-                gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                if (backCapSq != SQ_OUT_OF_BOARD) {
+                    gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                }
             }
         }
 
@@ -420,12 +424,28 @@
                     backCapSq,
                 ] = generateMoveOnDirection(targetStoneSq, direction); // 指し手生成
 
-                if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
-                    gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                if (foreCapColor == COLOR_EMPTY) {
+                    if (backCapColor == COLOR_EMPTY) {
+                        if (foreCapSq != SQ_OUT_OF_BOARD) {
+                            gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = false;
+                        }
+                        if (backCapSq != SQ_OUT_OF_BOARD) {
+                            gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = false;
+                        }
+
+                    } else if (backCapColor == oppositeTurnColor1) {
+                        if (foreCapSq != SQ_OUT_OF_BOARD) {
+                            gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                        }
+                    }
                 }
 
-                if (backCapColor == COLOR_EMPTY && foreCapColor == oppositeTurnColor1) {
-                    gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                if (backCapColor == COLOR_EMPTY) {
+                    if (foreCapColor == oppositeTurnColor1) {
+                        if (backCapSq != SQ_OUT_OF_BOARD) {
+                            gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                        }
+                    }
                 }
             }            
         }
@@ -775,7 +795,7 @@
     function generateMoveOnDirection (
         startSq: number,
         direction: Direction,
-    ): [number, number, number, number] {
+    ): [Color, number, Color, number] {
         const foreOf = allDirectionsForeOf[direction];
         const backOf = allDirectionsBackOf[direction];
         let foreCapColor: Color;
