@@ -163,6 +163,40 @@
                 </p>
             </div>
 
+            <p>可動　＞　黒番:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoard1RankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ gameSoft1Ref?.gameBoard1CanMove[COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>可動　＞　白番:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoard1RankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ gameSoft1Ref?.gameBoard1CanMove[COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
         </section>
 
     </section>
@@ -210,6 +244,7 @@
 
     import GameSoft from '@/pages/minigames/reversi/game-soft.vue';
     import type { Player1Input } from '@/pages/minigames/reversi/game-soft.vue';
+    import { COLOR_BLACK, COLOR_WHITE } from '@/pages/minigames/reversi/spec.ts';
 
     import TheAppHeader from '@/pages/the-app-header.vue';
 

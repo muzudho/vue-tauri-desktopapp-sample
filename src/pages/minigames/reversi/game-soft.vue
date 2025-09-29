@@ -121,6 +121,12 @@
     import { isPlayerInputKey } from '@/composables/player-controller';
     import { range } from '@/composables/range';
 
+    // ++++++++++++++++++++++++++
+    // + インポート　＞　ページ +
+    // ++++++++++++++++++++++++++
+
+    import { COLOR_BLACK, COLOR_WHITE, COLOR_SIZE } from '@/pages/minigames/reversi/spec.ts';
+
 
     // ##################
     // # エクスポート型 #
@@ -236,15 +242,6 @@
             return isEmptySquare && isAdjacentToOpponentStone(sq) && !game1IsEnd.value;
         }
     });
-
-    const COLOR_EMPTY = 0;
-    const COLOR_BLACK = 1;
-    const COLOR_WHITE = 2;
-    const COLOR_SIZE = 3;
-    type Color = typeof COLOR_EMPTY
-        | typeof COLOR_BLACK
-        | typeof COLOR_WHITE
-        ;
 
     const gameBoard1CanMove = ref<boolean[][]>(
         new Array(COLOR_SIZE)
@@ -708,6 +705,7 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
+        gameBoard1CanMove,
         gameBoard1FileNum,
         gameBoard1RankNum,
         game1DebugMessage,
