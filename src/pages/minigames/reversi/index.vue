@@ -39,7 +39,7 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1StartOrEndButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ gameMachine1IsPlaying ? "⏹" : "▶" }}</v-btn>
+            >{{ gameSoft1Ref?.gameMachine1IsPlaying ? "⏹" : "▶" }}</v-btn>
 
 
             <v-btn
@@ -51,7 +51,7 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1PauseOrRestartButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ gameMachine1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
+            >{{ gameSoft1Ref?.gameMachine1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
 
 
         </section>
@@ -163,7 +163,6 @@
     import Comment from '@/components/Comment.vue';
     import GameMachineWaratch2 from '@/components/GameMachineWaratch2.vue';
     import SourceLink from '@/components/SourceLink.vue';
-    import Stopwatch from '@/components/Stopwatch.vue';
 
     // ++++++++++++++++++++++++++
     // + インポート　＞　ページ +
@@ -198,20 +197,8 @@
     // ++++++++++++++++++++++++++++++++++++
 
     const gameMachine1IsPowerOn = ref<boolean>(false);  // 電源ボタンは演出です
-    const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
-    const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン１ +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const gameMachine1GameStartButton1Enabled = ref<boolean>(false);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　一時停止／再開ボタン +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const gameMachine1GamePauseButton1Enabled = ref<boolean>(false);
+    const gameMachine1GameStartButton1Enabled = ref<boolean>(false);    // 開始／終了ボタン１
+    const gameMachine1GamePauseButton1Enabled = ref<boolean>(false);    // 一時停止／再開ボタン
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１　＞　環境設定 +
@@ -341,7 +328,7 @@
      * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
      */
     function onGameMachine1StartOrEndButtonPushed() : void {
-        if(gameMachine1IsPlaying.value) {
+        if(gameSoft1Ref.value?.gameMachine1IsPlaying) {
             gameMachine1Stop();
             return;
         }
@@ -354,7 +341,7 @@
      * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
      */
     function onGameMachine1PauseOrRestartButtonPushed() : void {
-        if(gameMachine1IsPlayingPause.value) {
+        if(gameSoft1Ref.value?.gameMachine1IsPlayingPause) {
             // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
             if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
                 gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStart();  // タイマーをスタート
@@ -365,7 +352,9 @@
             }
         }
 
-        gameMachine1IsPlayingPause.value = !gameMachine1IsPlayingPause.value;
+        if(gameSoft1Ref.value?.gameMachine1IsPlayingPause) {
+            gameSoft1Ref.value.gameMachine1IsPlayingPause = !gameSoft1Ref.value.gameMachine1IsPlayingPause;
+        }
     }
 
 
@@ -397,7 +386,7 @@
 
 
     function gameMachine1PowerOff() : void {
-        if(gameMachine1IsPlaying.value) {    // ゲーム中なら、停止させます
+        if(gameSoft1Ref.value?.gameMachine1IsPlaying) {    // ゲーム中なら、停止させます
             gameMachine1Stop();
         }
 
@@ -414,7 +403,10 @@
             gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStart();  // タイマーをスタート
         }
         gameMachine1GamePauseButton1Enabled.value = true;
-        gameMachine1IsPlaying.value = !gameMachine1IsPlaying.value;
+
+        if (gameSoft1Ref.value?.gameMachine1IsPlaying) {
+            gameSoft1Ref.value.gameMachine1IsPlaying = !gameSoft1Ref.value.gameMachine1IsPlaying;
+        }
     }
 
 

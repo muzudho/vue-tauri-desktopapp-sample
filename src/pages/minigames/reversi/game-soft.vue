@@ -672,6 +672,8 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
+        gameMachine1IsPlaying,
+        gameMachine1IsPlayingPause,
         gameMachine1Stopwatch1Ref,
         game1DebugMessage,
         game1IsEnd,
