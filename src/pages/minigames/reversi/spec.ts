@@ -71,6 +71,30 @@ export type Way = typeof WAY_EMPTY
     ;
 export const oppositeWays = [WAY_EMPTY, WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST] as Way[];    // 反対方向
 
+// ++++++++++++++++++++++++++
+// + オブジェクト　＞　方向 +
+// ++++++++++++++++++++++++++
+
+export const DIRECTION_EMPTY = 0;
+export const DIRECTION_HORIZONTAL = 1;
+export const DIRECTION_VERTICAL = 2;
+export const DIRECTION_BAROQUE_DIAGONAL = 3;
+export const DIRECTION_SINISTER_DIAGONAL = 4;
+export type Direction = typeof DIRECTION_EMPTY
+    | typeof DIRECTION_HORIZONTAL
+    | typeof DIRECTION_VERTICAL
+    | typeof DIRECTION_BAROQUE_DIAGONAL
+    | typeof DIRECTION_SINISTER_DIAGONAL
+    ;
+
+export const waysOnDirection = [
+    [WAY_EMPTY, WAY_EMPTY],
+    [WAY_EAST, WAY_WEST],
+    [WAY_SOUTH, WAY_NORTH],
+    [WAT_NORTHEAST, WAY_SOUTHWEST],
+    [WAY_SOUTHEAST, WAY_NORTHWEST],
+] as Way[][];
+
 // ++++++++++++++++++++++++
 // + オブジェクト　＞　色 +
 // ++++++++++++++++++++++++

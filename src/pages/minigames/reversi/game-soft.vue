@@ -131,7 +131,7 @@
         // マス
         SQ_OUT_OF_BOARD, makeCodeToSq,
         // 路
-        WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way, oppositeWays,
+        WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way, oppositeWays, waysOnDirection,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -379,52 +379,16 @@
         // 着手点に石は置けなくなる。
         gameBoard1CanMove.value[game1Turn.value][moveSq] = false;
 
-        for (const way of activeWays) {
-            const isGetHitBack = reverseStonesOnWay(moveSq, way);  // できれば、石をひっくり返します
-
-            //*
-            function checkNextMoveStep1(
-                moveSq: number,
-                way: Way,
-                isGetHitBack: boolean,
-            ) {
-                const oppositeTurnColor1 = opponentColor(game1Turn.value);
-                // TODO: 石を置けるかどうかを更新します。
-                const nextOf = allWaysNextOf[way];
-                let nextSq = nextOf(moveSq);
-                let countOfSteppingOverOppositeTurnStones = 0;  // 跨いだ相手番石の数
-                while (true) {
-
-                    if (nextSq == SQ_OUT_OF_BOARD) {    // 盤外ならループを抜ける
-                        break;
-                    }
-
-                    const nextColor: number = gameBoard1StoneColorArray.value[nextSq];
-
-                    if (nextColor == COLOR_EMPTY) { // 空マスなら
-                        if (0 < countOfSteppingOverOppositeTurnStones) {   // 相手石をいくつか跨いで空マスに到達したら、手番はそこに石を置けます
-                            gameBoard1CanMove.value[game1Turn.value][nextSq] = true;
-                            gameBoard1CanMove.value[oppositeTurnColor1][nextSq] = isGetHitBack; // 相手番が石を置けるかどうかは、反対側を調べた結果を使います
-                        }
-
-                        break;  // 空マスに到達したら終わり
-                    }
-
-                    if (nextColor == game1Turn.value) { // 手番石に到達したら、手番はそこに石を置けません。
-                        gameBoard1CanMove.value[oppositeTurnColor1][nextSq] = isGetHitBack; // 相手番が石を置けるかどうかは、反対側を調べた結果を使います
-                        break;  // 手番石に到達したら終わり
-                    }
-
-                    // 隣が相手番石なら跨いで続行。
-                    countOfSteppingOverOppositeTurnStones += 1;
-                    nextSq = nextOf(nextSq);
-                }
-                // TODO: 隣が手番石なら、手番は石を置けない。相手番は石を置ける可能性がある。
+        for (const wayPair of waysOnDirection) {
+            function executeOnWay(way: Way) : void {
+                const isGetHitBack = reverseStonesOnWay(moveSq, way);  // できれば、石をひっくり返します
+                checkNextMoveStep1(moveSq, oppositeWays[way], isGetHitBack);
             }
-            checkNextMoveStep1(moveSq, oppositeWays[way], isGetHitBack);
-            // */
-        }
 
+            for (const way of wayPair) {
+                executeOnWay(way);
+            }
+        }
 
         game1Turn.value = opponentColor(game1Turn.value); // 相手の色に変更
         game1Times.value += 1;
@@ -772,6 +736,46 @@
         }
 
         return 0 < countOfSteppingOverThisTurnStones;
+    }
+
+
+    function checkNextMoveStep1(
+        moveSq: number,
+        way: Way,
+        isGetHitBack: boolean,
+    ) {
+        const oppositeTurnColor1 = opponentColor(game1Turn.value);
+        // TODO: 石を置けるかどうかを更新します。
+        const nextOf = allWaysNextOf[way];
+        let nextSq = nextOf(moveSq);
+        let countOfSteppingOverOppositeTurnStones = 0;  // 跨いだ相手番石の数
+        while (true) {
+
+            if (nextSq == SQ_OUT_OF_BOARD) {    // 盤外ならループを抜ける
+                break;
+            }
+
+            const nextColor: number = gameBoard1StoneColorArray.value[nextSq];
+
+            if (nextColor == COLOR_EMPTY) { // 空マスなら
+                if (0 < countOfSteppingOverOppositeTurnStones) {   // 相手石をいくつか跨いで空マスに到達したら、手番はそこに石を置けます
+                    gameBoard1CanMove.value[game1Turn.value][nextSq] = true;
+                    gameBoard1CanMove.value[oppositeTurnColor1][nextSq] = isGetHitBack; // 相手番が石を置けるかどうかは、反対側を調べた結果を使います
+                }
+
+                break;  // 空マスに到達したら終わり
+            }
+
+            if (nextColor == game1Turn.value) { // 手番石に到達したら、手番はそこに石を置けません。
+                gameBoard1CanMove.value[oppositeTurnColor1][nextSq] = isGetHitBack; // 相手番が石を置けるかどうかは、反対側を調べた結果を使います
+                break;  // 手番石に到達したら終わり
+            }
+
+            // 隣が相手番石なら跨いで続行。
+            countOfSteppingOverOppositeTurnStones += 1;
+            nextSq = nextOf(nextSq);
+        }
+        // TODO: 隣が手番石なら、手番は石を置けない。相手番は石を置ける可能性がある。
     }
 
 
