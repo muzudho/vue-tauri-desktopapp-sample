@@ -46,7 +46,7 @@
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
                 color: game1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                backgroundColor: gameBoard1BackGroundColor(sq, gameBoard1FileNum),  /* 盤の色 */
+                backgroundColor: getGameBoard1BackGroundColor(sq, gameBoard1FileNum),  /* 盤の色 */
                 pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
             }"
             style="
@@ -125,7 +125,7 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import { makeCodeToSq, COLOR_BLACK, COLOR_WHITE, COLOR_SIZE } from '@/pages/minigames/reversi/spec.ts';
+    import { makeCodeToSq, COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY } from '@/pages/minigames/reversi/spec.ts';
 
 
     // ##################
@@ -258,14 +258,28 @@
     gameBoard1CanMove.value[COLOR_WHITE][codeToSq('F5')] = true;
     gameBoard1CanMove.value[COLOR_WHITE][codeToSq('E6')] = true;
 
-    const gameBoard1BackGroundColor = computed<
+    const getGameBoard1BackGroundColor = computed<
         (sq: number, gameBoard1FileNum: number)=>string
     >(()=>{
         return (sq: number, gameBoard1FileNum: number)=>{
-            if (game1Turn.value == COLOR_BLACK) {
-                return `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`;
+            if (game1Turn.value == COLOR_EMPTY) {   // まだ読込完了していないケース
+                return '#000000';
             }
-            return `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#C0F0E0' : '#50F0C0'}`;
+            
+            console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum=${gameBoard1FileNum}`);
+            const checkeredFlag: boolean = (sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0; // 市松模様フラグ
+            const canMove: boolean = gameBoard1CanMove.value[game1Turn.value][sq];
+
+            if (game1Turn.value == COLOR_BLACK) {
+                if (canMove) {
+                    return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
+                }
+                return checkeredFlag ? '#C0B090' : '#C09020';  // 黒番の濃い色
+            }
+            if (canMove) {
+                return checkeredFlag ? '#C0F0E0' : '#50F0C0';  // 白番の薄い色
+            }
+            return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
         };
     });
 
