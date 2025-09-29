@@ -178,22 +178,17 @@
 
     const game1Turn = ref<number>(0);
     const game1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
-    const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
-    const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
+    const game1IsPlaying = ref<boolean>(false);  // ゲーム中
+    const game1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
     const game1PassCount = ref<number>(0); // 連続パス回数
     const game1IsEnd = ref<boolean>(false);    // 終局しているか
+    const game1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);    // ストップウォッチ１
 
     // ++++++++++++++++++++++++++++
     // + オブジェクト　＞　思考部 +
     // ++++++++++++++++++++++++++++
 
     const gameMachineRandomLimit: number = 2 * Math.PI * Math.E;    // 偏りのない乱数なら、マスをランダムに指定しても、マス目の数 × 2πe回試行すれば、すべてのマスをだいたい１回は訪問するという経験則（＾～＾）確率論の［クーポン収集問題（Coupon Collector's Problem）］よりでかい数。
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　ストップウォッチ１ +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const gameMachine1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -339,11 +334,11 @@
      */
     function gameInit() : void {
         //game1DebugMessage.value = "ゲームの初期化";
-        gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
+        game1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
         // 外付けシステムボタンをリセット
-        gameMachine1IsPlaying.value = false;
-        gameMachine1IsPlayingPause.value = false;
+        game1IsPlaying.value = false;
+        game1IsPlayingPause.value = false;
 
         // ++++++++++++++++++++++++++
         // + ゲームデータをリセット +
@@ -672,14 +667,14 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
-        gameMachine1IsPlaying,
-        gameMachine1IsPlayingPause,
-        gameMachine1Stopwatch1Ref,
         game1DebugMessage,
         game1IsEnd,
+        game1IsPlaying,
+        game1IsPlayingPause,
         game1PassCount,
         game1StoneColorNameMap,
         game1StoneCount,
+        game1Stopwatch1Ref,
         game1Times,
         game1Turn,
         gameInit,

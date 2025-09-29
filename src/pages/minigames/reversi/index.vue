@@ -39,7 +39,7 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1StartOrEndButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ gameSoft1Ref?.gameMachine1IsPlaying ? "⏹" : "▶" }}</v-btn>
+            >{{ gameSoft1Ref?.game1IsPlaying ? "⏹" : "▶" }}</v-btn>
 
 
             <v-btn
@@ -51,7 +51,7 @@
                 @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1PauseOrRestartButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
-            >{{ gameSoft1Ref?.gameMachine1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
+            >{{ gameSoft1Ref?.game1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
 
 
         </section>
@@ -328,7 +328,7 @@
      * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
      */
     function onGameMachine1StartOrEndButtonPushed() : void {
-        if(gameSoft1Ref.value?.gameMachine1IsPlaying) {
+        if(gameSoft1Ref.value?.game1IsPlaying) {
             gameMachine1Stop();
             return;
         }
@@ -341,19 +341,19 @@
      * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
      */
     function onGameMachine1PauseOrRestartButtonPushed() : void {
-        if(gameSoft1Ref.value?.gameMachine1IsPlayingPause) {
+        if(gameSoft1Ref.value?.game1IsPlayingPause) {
             // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
-            if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
-                gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStart();  // タイマーをスタート
+            if (gameSoft1Ref.value?.game1Stopwatch1Ref) {
+                gameSoft1Ref.value.game1Stopwatch1Ref.timerStart();  // タイマーをスタート
             }
         } else {
-            if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
-                gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStop();   // タイマーをストップ
+            if (gameSoft1Ref.value?.game1Stopwatch1Ref) {
+                gameSoft1Ref.value.game1Stopwatch1Ref.timerStop();   // タイマーをストップ
             }
         }
 
-        if(gameSoft1Ref.value?.gameMachine1IsPlayingPause) {
-            gameSoft1Ref.value.gameMachine1IsPlayingPause = !gameSoft1Ref.value.gameMachine1IsPlayingPause;
+        if(gameSoft1Ref.value?.game1IsPlayingPause) {
+            gameSoft1Ref.value.game1IsPlayingPause = !gameSoft1Ref.value.game1IsPlayingPause;
         }
     }
 
@@ -386,7 +386,7 @@
 
 
     function gameMachine1PowerOff() : void {
-        if(gameSoft1Ref.value?.gameMachine1IsPlaying) {    // ゲーム中なら、停止させます
+        if(gameSoft1Ref.value?.game1IsPlaying) {    // ゲーム中なら、停止させます
             gameMachine1Stop();
         }
 
@@ -399,13 +399,13 @@
 
 
     function gameMachine1Start() : void {
-        if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
-            gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStart();  // タイマーをスタート
+        if (gameSoft1Ref.value?.game1Stopwatch1Ref) {
+            gameSoft1Ref.value.game1Stopwatch1Ref.timerStart();  // タイマーをスタート
         }
         gameMachine1GamePauseButton1Enabled.value = true;
 
-        if (gameSoft1Ref.value?.gameMachine1IsPlaying) {
-            gameSoft1Ref.value.gameMachine1IsPlaying = !gameSoft1Ref.value.gameMachine1IsPlaying;
+        if (gameSoft1Ref.value?.game1IsPlaying) {
+            gameSoft1Ref.value.game1IsPlaying = !gameSoft1Ref.value.game1IsPlaying;
         }
     }
 
