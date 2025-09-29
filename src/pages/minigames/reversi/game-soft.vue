@@ -125,8 +125,14 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import { makeCodeToSq, COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY } from '@/pages/minigames/reversi/spec.ts';
-import { SQ_OUT_OF_BOARD } from '../gomoku/spec';
+    import {
+        // 色
+        COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY,
+        // マス
+        SQ_OUT_OF_BOARD, makeCodeToSq,
+        // 路
+        WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way, oppositeWays,
+    } from '@/pages/minigames/reversi/spec.ts';
 
 
     // ##################
@@ -284,27 +290,7 @@ import { SQ_OUT_OF_BOARD } from '../gomoku/spec';
         };
     });
 
-    const WAY_EMPTY = 0;
-    const WAY_EAST = 1;
-    const WAY_WEST = 2;
-    const WAY_SOUTH = 3;
-    const WAY_NORTH = 4;
-    const WAT_NORTHEAST = 5;
-    const WAY_SOUTHWEST = 6;
-    const WAY_SOUTHEAST = 7;
-    const WAY_NORTHWEST = 8;
-    type Way = typeof WAY_EMPTY
-        | typeof WAY_EAST
-        | typeof WAY_WEST
-        | typeof WAY_SOUTH
-        | typeof WAY_NORTH
-        | typeof WAT_NORTHEAST
-        | typeof WAY_SOUTHWEST
-        | typeof WAY_SOUTHEAST
-        | typeof WAY_NORTHWEST
-        ;
     const allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
-    const oppositeWays = [WAY_EMPTY, WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST] as Way[];    // 反対方向
     // 指定の方向に絞り込んでデバッグできるよう配慮しています
     const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
 

@@ -46,6 +46,30 @@ export function makeCodeToSq(
     };
 }
 
+// ++++++++++++++++++++++++
+// + オブジェクト　＞　路 +
+// ++++++++++++++++++++++++
+
+export const WAY_EMPTY = 0;
+export const WAY_EAST = 1;
+export const WAY_WEST = 2;
+export const WAY_SOUTH = 3;
+export const WAY_NORTH = 4;
+export const WAT_NORTHEAST = 5;
+export const WAY_SOUTHWEST = 6;
+export const WAY_SOUTHEAST = 7;
+export const WAY_NORTHWEST = 8;
+export type Way = typeof WAY_EMPTY
+    | typeof WAY_EAST
+    | typeof WAY_WEST
+    | typeof WAY_SOUTH
+    | typeof WAY_NORTH
+    | typeof WAT_NORTHEAST
+    | typeof WAY_SOUTHWEST
+    | typeof WAY_SOUTHEAST
+    | typeof WAY_NORTHWEST
+    ;
+export const oppositeWays = [WAY_EMPTY, WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST] as Way[];    // 反対方向
 
 // ++++++++++++++++++++++++
 // + オブジェクト　＞　色 +
