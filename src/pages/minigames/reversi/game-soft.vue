@@ -184,11 +184,11 @@
     const game1IsEnd = ref<boolean>(false);    // 終局しているか
     const game1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);    // ストップウォッチ１
 
-    // ++++++++++++++++++++++++++++
-    // + オブジェクト　＞　思考部 +
-    // ++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　思考エンジン +
+    // ++++++++++++++++++++++++++++++++++
 
-    const gameMachineRandomLimit: number = 2 * Math.PI * Math.E;    // 偏りのない乱数なら、マスをランダムに指定しても、マス目の数 × 2πe回試行すれば、すべてのマスをだいたい１回は訪問するという経験則（＾～＾）確率論の［クーポン収集問題（Coupon Collector's Problem）］よりでかい数。
+    const engine1RandomLimit: number = 2 * Math.PI * Math.E;    // 偏りのない乱数なら、マスをランダムに指定しても、マス目の数 × 2πe回試行すれば、すべてのマスをだいたい１回は訪問するという経験則（＾～＾）確率論の［クーポン収集問題（Coupon Collector's Problem）］よりでかい数。
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　タイル盤１ +
@@ -235,24 +235,48 @@
     const game1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
 
+    const DIRECTION_EMPTY = 0;
+    const DIRECTION_EAST = 1;
+    const DIRECTION_WEST = 2;
+    const DIRECTION_SOUTH = 3;
+    const DIRECTION_NORTH = 4;
+    const DIRECTION_NORTHEAST = 5;
+    const DIRECTION_SOUTHWEST = 6;
+    const DIRECTION_SOUTHEAST = 7;
+    const DIRECTION_NORTHWEST = 8;
+    type Direction = typeof DIRECTION_EMPTY
+        | typeof DIRECTION_EAST
+        | typeof DIRECTION_WEST
+        | typeof DIRECTION_SOUTH
+        | typeof DIRECTION_NORTH
+        | typeof DIRECTION_NORTHEAST
+        | typeof DIRECTION_SOUTHWEST
+        | typeof DIRECTION_SOUTHEAST
+        | typeof DIRECTION_NORTHWEST
+        ;
+    const allDirectionsNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
+
+
     /**
      * 相手の石に隣接するマスだ
      * @param sq 
      */
     function isAdjacentToOpponentStone(sq: number) : boolean {
-        const northSq = northOf(sq);
-        const eastSq = eastOf(sq);
-        const southSq = southOf(sq);
-        const westSq = westOf(sq);
-        const northColor = northSq != -1 ? gameBoard1StoneColorArray.value[northSq] : 0;
-        const eastColor = eastSq != -1 ? gameBoard1StoneColorArray.value[eastSq] : 0;
-        const southColor = southSq != -1 ? gameBoard1StoneColorArray.value[southSq] : 0;
-        const westColor = westSq != -1 ? gameBoard1StoneColorArray.value[westSq] : 0;
-        const opponentColor1 = opponentColor(game1Turn.value);
-        return northColor == opponentColor1
-            || eastColor == opponentColor1
-            || southColor == opponentColor1
-            || westColor == opponentColor1
+        function executeOneDirection(
+            direction: Direction,
+        ) {
+            const actualAdjacentStoneColor = allDirectionsNextOf[direction](sq) != -1 ? gameBoard1StoneColorArray.value[allDirectionsNextOf[direction](sq)] : 0;
+            return actualAdjacentStoneColor == opponentColor(game1Turn.value);
+        }
+
+        return executeOneDirection(DIRECTION_EAST)
+            || executeOneDirection(DIRECTION_WEST)
+            || executeOneDirection(DIRECTION_SOUTH)
+            || executeOneDirection(DIRECTION_NORTH)
+            || executeOneDirection(DIRECTION_NORTHEAST)
+            || executeOneDirection(DIRECTION_SOUTHWEST)
+            || executeOneDirection(DIRECTION_SOUTHEAST)
+            || executeOneDirection(DIRECTION_NORTHWEST)
             ;
     }
 
@@ -384,7 +408,7 @@
                     const color = game1Turn.value;   // Math.floor(Math.random() * 2) + 1;
                     let itsOk = false;
                     let count = 0;
-                    while(!itsOk && count <= gameMachineRandomLimit) {
+                    while(!itsOk && count <= engine1RandomLimit) {
                         // 適当に石を置く
                         const sq = Math.floor(Math.random() * gameBoard1Area.value);
                         itsOk = putStone(sq, color);
