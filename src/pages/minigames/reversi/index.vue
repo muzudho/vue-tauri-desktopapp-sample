@@ -158,7 +158,7 @@
                         v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
                         :key="sq"
                     >
-                        {{ sq.toString().padStart(3, '0') }}&nbsp;
+                        {{ sq.toString().padStart(2, '0') }}&nbsp;
                     </span><br/>
                 </p>
             </div>

@@ -496,6 +496,7 @@
     // ++++++++++++++++++++++++++
 
     import TheAppHeader from '@/pages/the-app-header.vue';
+    import { SQ_OUT_OF_BOARD } from '@/pages/minigames/gomoku/spec.ts';
 
 
     // ################
@@ -1189,11 +1190,9 @@
      * @param sq 
      */
     function sqToCode(sq: number) : string {
-        const BOARD_WIDTH = 15;
-        const BOARD_HEIGHT = 15;
-        const file = sq % BOARD_WIDTH;
-        const rank = Math.floor(sq / BOARD_WIDTH);
-        return `${gameBoard1FileNameArray[file]}${BOARD_HEIGHT-rank}`
+        const file = sq % BOARD_FILE_NUM;
+        const rank = Math.floor(sq / BOARD_FILE_NUM);
+        return `${gameBoard1FileNameArray[file]}${BOARD_RANK_NUM-rank}`
     }
 
 

@@ -125,7 +125,7 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
-    import { COLOR_BLACK, COLOR_WHITE, COLOR_SIZE } from '@/pages/minigames/reversi/spec.ts';
+    import { makeCodeToSq, COLOR_BLACK, COLOR_WHITE, COLOR_SIZE } from '@/pages/minigames/reversi/spec.ts';
 
 
     // ##################
@@ -248,6 +248,15 @@
     );
     gameBoard1CanMove.value[COLOR_BLACK] = new Array<boolean>(gameBoard1Area.value).fill(false);
     gameBoard1CanMove.value[COLOR_WHITE] = new Array<boolean>(gameBoard1Area.value).fill(false);
+    const codeToSq = makeCodeToSq(gameBoard1FileNum.value);
+    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('E3')] = true;
+    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('F4')] = true;
+    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('C5')] = true;
+    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('D6')] = true;
+    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('D3')] = true;
+    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('C4')] = true;
+    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('F5')] = true;
+    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('E6')] = true;
 
     const DIRECTION_EMPTY = 0;
     const DIRECTION_EAST = 1;
