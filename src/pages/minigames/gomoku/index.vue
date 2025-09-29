@@ -236,6 +236,7 @@
         <p>{{ gameBoard1IsEnd ? (gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
 
+        <!-- デバッグ情報 -->
         <v-btn
             class="code-key"
             @touchstart.prevent="button1Ref?.press($event, onDebugInfoButtonPressed);"
@@ -247,17 +248,18 @@
             @mouseleave="button1Ref?.release();"
         >{{ debugInfo1IsShowing ? '⚙️デバッグ情報を終わる' : '⚙️デバッグ情報を表示' }}</v-btn>
         <section v-if="debugInfo1IsShowing" class="sec-1">
-            デバッグ：<br/>
+            <p>デバッグ：</p>
+
             <p>マス番号:</p>
             <div
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ sq.toString().padStart(3, '0') }}&nbsp;
@@ -270,11 +272,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1StoneColorArray[sq].toString().padStart(1, '0') }}&nbsp;
@@ -287,11 +289,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1SquaresBingo[sq] }}&nbsp;
@@ -304,11 +306,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_HORIZONTAL][COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
@@ -321,11 +323,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_HORIZONTAL][COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
@@ -338,11 +340,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_VERTICAL][COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
@@ -355,11 +357,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_VERTICAL][COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
@@ -372,11 +374,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_BAROQUE_DIAGONAL][COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
@@ -389,11 +391,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_BAROQUE_DIAGONAL][COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
@@ -406,11 +408,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_SINISTER_DIAGONAL][COLOR_BLACK][sq].toString().padStart(2, '0') }}&nbsp;
@@ -423,11 +425,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, 15)"
+                    v-for="rank in range(0, BOARD_RANK_NUM)"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * 15, (rank + 1) * 15)"
+                        v-for="sq in range(rank * BOARD_FILE_NUM, (rank + 1) * BOARD_FILE_NUM)"
                         :key="sq"
                     >
                         {{ gameBoard1MaxLengthArray[DIRECTION_SINISTER_DIAGONAL][COLOR_WHITE][sq].toString().padStart(2, '0') }}&nbsp;
@@ -562,11 +564,14 @@
     // + オブジェクト　＞　タイル盤１ +
     // ++++++++++++++++++++++++++++++++
 
+    const BOARD_FILE_NUM = 15;
+    const BOARD_RANK_NUM = 15;
+
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1FileNum = ref<number>(15 + 2);  // 盤が横に何マスか
-    const tileBoard1RankNum = ref<number>(15 + 2);  // 盤が縦に何マスか
+    const tileBoard1FileNum = ref<number>(BOARD_FILE_NUM + 2);  // 盤が横に何マスか
+    const tileBoard1RankNum = ref<number>(BOARD_RANK_NUM + 2);  // 盤が縦に何マスか
     const tileBoard1Area = computed(()=>{   // 盤のマス数
         return tileBoard1FileNum.value * tileBoard1RankNum.value;
     });

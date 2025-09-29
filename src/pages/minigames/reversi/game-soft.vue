@@ -183,6 +183,13 @@
     const game1PassCount = ref<number>(0); // 連続パス回数
     const game1IsEnd = ref<boolean>(false);    // 終局しているか
     const game1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);    // ストップウォッチ１
+    const game1StoneColorNameMap: Record<number, string> = {
+        0: 'transparent',
+        1: '#C86868', // 明るい茶色
+        2: '#289028', // 暗い緑
+    }
+    const game1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
+    const game1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
     // ++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　思考エンジン +
@@ -218,22 +225,32 @@
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
     const gameBoard1StoneColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
-    const game1StoneColorNameMap: Record<number, string> = {
-        0: 'transparent',
-        1: '#C86868', // 明るい茶色
-        2: '#289028', // 暗い緑
-    }
     const gameBoard1StoneClickable = computed<
         (sq: number) => boolean
     >(()=>{    // マスをクリック可能か
         return (sq: number)=>{
+            // TODO: 石を置くことで、相手の石をひっくり返せるか？
+            // TODO: 相手の石をひっくり返せない場合はパス
+            // TODO: パスするボタンが欲しい
             const isEmptySquare = gameBoard1StoneColorArray.value[sq] == 0; // 空マスだ
             return isEmptySquare && isAdjacentToOpponentStone(sq) && !game1IsEnd.value;
         }
     });
-    const game1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
-    const game1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
+    const COLOR_EMPTY = 0;
+    const COLOR_BLACK = 1;
+    const COLOR_WHITE = 2;
+    const COLOR_SIZE = 3;
+    type Color = typeof COLOR_EMPTY
+        | typeof COLOR_BLACK
+        | typeof COLOR_WHITE
+        ;
+
+    const gameBoard1CanMove = ref<boolean[][]>(
+        new Array(COLOR_SIZE)
+    );
+    gameBoard1CanMove.value[COLOR_BLACK] = new Array<boolean>(gameBoard1Area.value).fill(false);
+    gameBoard1CanMove.value[COLOR_WHITE] = new Array<boolean>(gameBoard1Area.value).fill(false);
 
     const DIRECTION_EMPTY = 0;
     const DIRECTION_EAST = 1;
@@ -691,6 +708,8 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
+        gameBoard1FileNum,
+        gameBoard1RankNum,
         game1DebugMessage,
         game1IsEnd,
         game1IsPlaying,
