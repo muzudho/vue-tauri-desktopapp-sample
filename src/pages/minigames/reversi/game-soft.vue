@@ -10,7 +10,7 @@
             visibility: vision1Visibility,
             width: `${vision1Width}px`,
             height: `${vision1Height}px`,
-            zoom: gameMachine1Zoom,
+            zoom: vision1Zoom,
         }"
         style="
             position:relative;
@@ -45,7 +45,7 @@
                 minWidth: `${tileBoard1TileWidth}px`,
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
-                color: gameBoard1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
+                color: game1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
                 backgroundColor: `${(sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0 ? '#F0E0C0' : '#F0C050'}`,  /* 盤の色 */
                 pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
             }"
@@ -170,14 +170,23 @@
         return tileBoard1FileNum.value * tileBoard1TileWidth.value;
     });
     const vision1Visibility = ref<string>('hidden');
+    const vision1Zoom = ref<number>(0.5);    // ズーム
 
-    // ++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１ +
-    // ++++++++++++++++++++++++++++++++++++
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　対局１ +
+    // ++++++++++++++++++++++++++++
 
-    const gameMachine1Zoom = ref<number>(0.5);    // ズーム
+    const game1Turn = ref<number>(0);
+    const game1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
     const gameMachine1IsPlaying = ref<boolean>(false);  // ゲーム中
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
+    const game1PassCount = ref<number>(0); // 連続パス回数
+    const game1IsEnd = ref<boolean>(false);    // 終局しているか
+
+    // ++++++++++++++++++++++++++++
+    // + オブジェクト　＞　思考部 +
+    // ++++++++++++++++++++++++++++
+
     const gameMachineRandomLimit: number = 2 * Math.PI * Math.E;    // 偏りのない乱数なら、マスをランダムに指定しても、マス目の数 × 2πe回試行すれば、すべてのマスをだいたい１回は訪問するという経験則（＾～＾）確率論の［クーポン収集問題（Coupon Collector's Problem）］よりでかい数。
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -214,7 +223,7 @@
         gameBoard1StoneShapeArray.value[sq] = '●'
     }
     const gameBoard1StoneColorArray = ref<number[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
-    const gameBoard1StoneColorNameMap: Record<number, string> = {
+    const game1StoneColorNameMap: Record<number, string> = {
         0: 'transparent',
         1: '#C86868', // 明るい茶色
         2: '#289028', // 暗い緑
@@ -224,15 +233,11 @@
     >(()=>{    // マスをクリック可能か
         return (sq: number)=>{
             const isEmptySquare = gameBoard1StoneColorArray.value[sq] == 0; // 空マスだ
-            return isEmptySquare && isAdjacentToOpponentStone(sq) && !gameBoard1IsEnd.value;
+            return isEmptySquare && isAdjacentToOpponentStone(sq) && !game1IsEnd.value;
         }
     });
-    const gameBoard1Turn = ref<number>(0);
-    const gameBoard1Times = ref<number>(0); // 何手目を終えたか。リバーシでは盤上の石の数に等しい
-    const gameBoard1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
-    const gameBoard1PassCount = ref<number>(0); // 連続パス回数
-    const gameBoard1IsEnd = ref<boolean>(false);    // 終局しているか
-    const gameBoard1DebugMessage = ref<string>('');   // デバッグ用メッセージ
+    const game1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
+    const game1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
 
     /**
@@ -248,7 +253,7 @@
         const eastColor = eastSq != -1 ? gameBoard1StoneColorArray.value[eastSq] : 0;
         const southColor = southSq != -1 ? gameBoard1StoneColorArray.value[southSq] : 0;
         const westColor = westSq != -1 ? gameBoard1StoneColorArray.value[westSq] : 0;
-        const opponentColor1 = opponentColor(gameBoard1Turn.value);
+        const opponentColor1 = opponentColor(game1Turn.value);
         return northColor == opponentColor1
             || eastColor == opponentColor1
             || southColor == opponentColor1
@@ -300,9 +305,9 @@
      * @param sq （0から始まる）マス番号
      */
     function onGameBoard1Clicked(sq: number) : void {
-        //gameBoard1DebugMessage.value = `sq=${sq}`;
+        //game1DebugMessage.value = `sq=${sq}`;
 
-        const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+        const color = game1Turn.value;   // Math.floor(Math.random() * 2) + 1;
         putStone(sq, color);  // 石を置くのに失敗しても何もしません
     }
 
@@ -314,10 +319,10 @@
 
         gameBoard1StoneColorArray.value[sq] = color;
         reverseStones(sq);
-        gameBoard1Turn.value = opponentColor(gameBoard1Turn.value); // 相手の色に変更
-        gameBoard1Times.value += 1;
-        gameBoard1StoneCount.value[color] += 1;
-        gameBoard1PassCount.value = 0;  // リセット
+        game1Turn.value = opponentColor(game1Turn.value); // 相手の色に変更
+        game1Times.value += 1;
+        game1StoneCount.value[color] += 1;
+        game1PassCount.value = 0;  // リセット
         return true;
     }
 
@@ -333,7 +338,7 @@
      * ゲームの初期化
      */
     function gameInit() : void {
-        //gameBoard1DebugMessage.value = "ゲームの初期化";
+        //game1DebugMessage.value = "ゲームの初期化";
         gameMachine1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
         // 外付けシステムボタンをリセット
@@ -352,12 +357,12 @@
         gameBoard1StoneColorArray.value[28] = 2;
         gameBoard1StoneColorArray.value[35] = 2;
         gameBoard1StoneColorArray.value[36] = 1;
-        gameBoard1Times.value = 4;
-        gameBoard1Turn.value = 1;
-        gameBoard1StoneCount.value[1] = 2;
-        gameBoard1StoneCount.value[2] = 2;
-        gameBoard1PassCount.value = 0;
-        gameBoard1IsEnd.value = false;
+        game1Times.value = 4;
+        game1Turn.value = 1;
+        game1StoneCount.value[1] = 2;
+        game1StoneCount.value[2] = 2;
+        game1PassCount.value = 0;
+        game1IsEnd.value = false;
     }
 
 
@@ -380,8 +385,8 @@
             // ++++++++++++++++++++++++++++++
 
             if (props.player1Input[' ']) {
-                if (!gameBoard1IsEnd.value) { // 終局していたら、何もしない
-                    const color = gameBoard1Turn.value;   // Math.floor(Math.random() * 2) + 1;
+                if (!game1IsEnd.value) { // 終局していたら、何もしない
+                    const color = game1Turn.value;   // Math.floor(Math.random() * 2) + 1;
                     let itsOk = false;
                     let count = 0;
                     while(!itsOk && count <= gameMachineRandomLimit) {
@@ -403,9 +408,9 @@
                         if (lastSq==-1) {   // どこにも石を置けなかった
                             gamePass(); // パス
 
-                            if (2 <= gameBoard1PassCount.value) {
+                            if (2 <= game1PassCount.value) {
                                 // パスが２回続いたら終局
-                                gameBoard1IsEnd.value = true;
+                                game1IsEnd.value = true;
                             }
 
                         } else {
@@ -418,7 +423,7 @@
 
                     if (gameIsFullCapacity()) {
                         // 満局なら終局
-                        gameBoard1IsEnd.value = true;
+                        game1IsEnd.value = true;
                     }
                 }
 
@@ -602,7 +607,7 @@
 
             const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
             //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
-            if (nextColor == gameBoard1Turn.value) {    // 自分の石に当たったら、ループを抜ける
+            if (nextColor == game1Turn.value) {    // 自分の石に当たったら、ループを抜ける
                 break;
             }
 
@@ -616,13 +621,13 @@
         }
 
         // 石の数を数える
-        gameBoard1StoneCount.value[gameBoard1Turn.value] += reverseSqArray.length;
-        gameBoard1StoneCount.value[opponentColor(gameBoard1Turn.value)] -= reverseSqArray.length;
+        game1StoneCount.value[game1Turn.value] += reverseSqArray.length;
+        game1StoneCount.value[opponentColor(game1Turn.value)] -= reverseSqArray.length;
 
         // ひっくり返す
         for(let i=0; i<reverseSqArray.length; i++) {
             const sq = reverseSqArray[i];
-            gameBoard1StoneColorArray.value[sq] = gameBoard1Turn.value;
+            gameBoard1StoneColorArray.value[sq] = game1Turn.value;
         }
     }
 
@@ -647,9 +652,9 @@
      * パス
      */
     function gamePass() : void {
-        gameBoard1Times.value += 1;
-        gameBoard1PassCount.value += 1;
-        gameBoard1Turn.value = opponentColor(gameBoard1Turn.value);
+        game1Times.value += 1;
+        game1PassCount.value += 1;
+        game1Turn.value = opponentColor(game1Turn.value);
     }
 
 
@@ -657,7 +662,7 @@
      * 満局か
      */
     function gameIsFullCapacity() : boolean {
-        return gameBoard1Area.value <= gameBoard1StoneCount.value[1] + gameBoard1StoneCount.value[2];
+        return gameBoard1Area.value <= game1StoneCount.value[1] + game1StoneCount.value[2];
     }
 
 
@@ -667,19 +672,20 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
-        gameBoard1DebugMessage,
-        gameBoard1IsEnd,
-        gameBoard1PassCount,
-        gameBoard1StoneColorNameMap,
-        gameBoard1StoneCount,
-        gameBoard1Times,
-        gameBoard1Turn,
+        gameMachine1Stopwatch1Ref,
+        game1DebugMessage,
+        game1IsEnd,
+        game1PassCount,
+        game1StoneColorNameMap,
+        game1StoneCount,
+        game1Times,
+        game1Turn,
         gameInit,
         gameIsFullCapacity,
         vision1Height,
         vision1Visibility,
         vision1Width,
-        gameMachine1Zoom,
+        vision1Zoom,
     });
 
 </script>

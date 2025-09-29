@@ -20,11 +20,11 @@
 
             
             <v-btn
-                @touchstart.prevent="button1Ref?.press($event, onGamePowerOnButtonPushed, {repeat: false});"
+                @touchstart.prevent="button1Ref?.press($event, onGameMachine1PowerOnButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
                 @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePowerOnButtonPushed, {repeat: false})"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1PowerOnButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >{{ gameMachine1IsPowerOn ? "Off" : "On" }}</v-btn>
@@ -32,11 +32,11 @@
             
             <v-btn
                 :disabled="!gameMachine1GameStartButton1Enabled"
-                @touchstart.prevent="button1Ref?.press($event, onGameStartOrEndButtonPushed, {repeat: false});"
+                @touchstart.prevent="button1Ref?.press($event, onGameMachine1StartOrEndButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
                 @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameStartOrEndButtonPushed, {repeat: false})"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1StartOrEndButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >{{ gameMachine1IsPlaying ? "⏹" : "▶" }}</v-btn>
@@ -44,11 +44,11 @@
 
             <v-btn
                 :disabled="!gameMachine1GamePauseButton1Enabled"
-                @touchstart.prevent="button1Ref?.press($event, onGamePauseOrRestartButtonPushed, {repeat: false});"
+                @touchstart.prevent="button1Ref?.press($event, onGameMachine1PauseOrRestartButtonPushed, {repeat: false});"
                 @touchend="button1Ref?.release();"
                 @touchcancel="button1Ref?.release();"
                 @touchleave="button1Ref?.release();"
-                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGamePauseOrRestartButtonPushed, {repeat: false})"
+                @mousedown.prevent="button1Ref?.handleMouseDown($event, onGameMachine1PauseOrRestartButtonPushed, {repeat: false})"
                 @mouseup="button1Ref?.release();"
                 @mouseleave="button1Ref?.release();"
             >{{ gameMachine1IsPlayingPause ? "⏯" : "⏸" }}</v-btn>
@@ -63,8 +63,8 @@
                 left: '0px',
                 top: '0px',
             }"
-            :screenWidth="(gameSoft1Ref?.gameMachine1Zoom ?? 1) * (gameSoft1Ref?.vision1Width ?? 100)"
-            :screenHeight="(gameSoft1Ref?.gameMachine1Zoom ?? 1) * (gameSoft1Ref?.vision1Height ?? 100)"
+            :screenWidth="(gameSoft1Ref?.vision1Zoom ?? 1) * (gameSoft1Ref?.vision1Width ?? 100)"
+            :screenHeight="(gameSoft1Ref?.vision1Zoom ?? 1) * (gameSoft1Ref?.vision1Height ?? 100)"
             :powerOn="gameMachine1IsPowerOn"
             v-on:onLeftButtonPressed="onLeftButtonPressed"
             v-on:onLeftButtonReleased="onLeftButtonReleased"
@@ -106,7 +106,7 @@
             >
                 <v-slider
                     label="ズーム"
-                    v-model="gameMachine1Zoom"
+                    v-model="vision1Zoom"
                     :min="0.375"
                     :max="4"
                     step="0.125"
@@ -116,21 +116,21 @@
         </section>
 
         <!-- 各種表示 -->
-        <p>{{ gameSoft1Ref?.gameBoard1DebugMessage }}</p>
-        <p>次の手数={{ (gameSoft1Ref?.gameBoard1Times ?? 0) + 1 }}</p>
+        <p>{{ gameSoft1Ref?.game1DebugMessage }}</p>
+        <p>次の手数={{ (gameSoft1Ref?.game1Times ?? 0) + 1 }}</p>
         <p>次の手番=<span :style="{
-            color: gameSoft1Ref?.gameBoard1StoneColorNameMap[gameSoft1Ref?.gameBoard1Turn],
+            color: gameSoft1Ref?.game1StoneColorNameMap[gameSoft1Ref?.game1Turn],
         }">●</span></p>
         <p><span
             :style="{
-                color: gameSoft1Ref?.gameBoard1StoneColorNameMap[1],
-            }">●</span>の数={{ gameSoft1Ref?.gameBoard1StoneCount[1] }}</p>
+                color: gameSoft1Ref?.game1StoneColorNameMap[1],
+            }">●</span>の数={{ gameSoft1Ref?.game1StoneCount[1] }}</p>
         <p><span
             :style="{
-                color: gameSoft1Ref?.gameBoard1StoneColorNameMap[2],
-            }">●</span>の数={{ gameSoft1Ref?.gameBoard1StoneCount[2] }}</p>
-        <p>連続パス回数={{ gameSoft1Ref?.gameBoard1PassCount }}</p>
-        <p>{{ gameSoft1Ref?.gameBoard1IsEnd ? (gameSoft1Ref?.gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
+                color: gameSoft1Ref?.game1StoneColorNameMap[2],
+            }">●</span>の数={{ gameSoft1Ref?.game1StoneCount[2] }}</p>
+        <p>連続パス回数={{ gameSoft1Ref?.game1PassCount }}</p>
+        <p>{{ gameSoft1Ref?.game1IsEnd ? (gameSoft1Ref?.gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
     </section>
 
@@ -202,12 +202,6 @@
     const gameMachine1IsPlayingPause = ref<boolean>(false); // ゲームは一時停止中
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-    // + オブジェクト　＞　ゲームマシン１　＞　ストップウォッチ１ +
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-    const gameMachine1Stopwatch1Ref = ref<InstanceType<typeof Stopwatch> | null>(null);
-
-    // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１　＞　開始／終了ボタン１ +
     // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -224,13 +218,13 @@
     // ++++++++++++++++++++++++++++++++++++++++++++++++++
 
     const gameMachine1EnvironmentConfigIsShowing = ref<boolean>(false);
-    const gameMachine1Zoom = computed<number>({
+    const vision1Zoom = computed<number>({
         get: ()=>{
-            return gameSoft1Ref.value?.gameMachine1Zoom ?? 1;
+            return gameSoft1Ref.value?.vision1Zoom ?? 1;
         },
         set: (value: number)=>{
             if (gameSoft1Ref.value) {
-                return gameSoft1Ref.value.gameMachine1Zoom = value;
+                return gameSoft1Ref.value.vision1Zoom = value;
             }
         }
     });
@@ -254,7 +248,7 @@
     // ++++++++++++++++++++++++++++++++++++++
 
     onMounted(()=>{
-        // TODO
+        gameMachine1PowerOn();  // 電源を入れる演出
     });
 
     // ++++++++++++++++++++++++++++++++++++++++++++++++
@@ -318,7 +312,7 @@
      */
     function onSpaceButtonPressed() : void {
         gameMachine1Player1Input[" "] = true;
-        //gameSoft1Ref?.gameBoard1DebugMessage.value = `スペース・キーを押下しました。`;
+        //gameSoft1Ref?.game1DebugMessage.value = `スペース・キーを押下しました。`;
     }
 
 
@@ -333,38 +327,42 @@
     /**
      * 電源ボタン押下時
      */
-    function onGamePowerOnButtonPushed() : void {
+    function onGameMachine1PowerOnButtonPushed() : void {
         if(gameMachine1IsPowerOn.value) {
-            gamePowerOff();
+            gameMachine1PowerOff();
             return;
         }
 
-        gamePowerOn();
+        gameMachine1PowerOn();
     }
 
 
     /**
      * ［▶］（再生）または［⏹］（停止）ボタン押下時。（状態により切り替わります）
      */
-    function onGameStartOrEndButtonPushed() : void {
+    function onGameMachine1StartOrEndButtonPushed() : void {
         if(gameMachine1IsPlaying.value) {
-            gameStop();
+            gameMachine1Stop();
             return;
         }
 
-        gameStart();
+        gameMachine1Start();
     }
 
 
     /**
      * ［⏸］（一時停止）または［⏯］（再開）ボタン押下時。（状態により切り替わります）
      */
-    function onGamePauseOrRestartButtonPushed() : void {
+    function onGameMachine1PauseOrRestartButtonPushed() : void {
         if(gameMachine1IsPlayingPause.value) {
             // FIXME: ゲーム終了時にリスタートすると、タイマーが負に進んでしまう。
-            gameMachine1Stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+            if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
+                gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStart();  // タイマーをスタート
+            }
         } else {
-            gameMachine1Stopwatch1Ref.value?.timerStop();  // タイマーをストップ
+            if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
+                gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStop();   // タイマーをストップ
+            }
         }
 
         gameMachine1IsPlayingPause.value = !gameMachine1IsPlayingPause.value;
@@ -387,7 +385,7 @@
     // + サブルーチン　＞　外付けシステムボタン +
     // ++++++++++++++++++++++++++++++++++++++++++
 
-    function gamePowerOn() : void {
+    function gameMachine1PowerOn() : void {
         gameMachine1GameStartButton1Enabled.value = true;
         if (gameSoft1Ref.value) {
             gameSoft1Ref.value.vision1Visibility = 'visible';
@@ -398,9 +396,9 @@
     }
 
 
-    function gamePowerOff() : void {
+    function gameMachine1PowerOff() : void {
         if(gameMachine1IsPlaying.value) {    // ゲーム中なら、停止させます
-            gameStop();
+            gameMachine1Stop();
         }
 
         gameMachine1GameStartButton1Enabled.value = false;
@@ -411,14 +409,16 @@
     }
 
 
-    function gameStart() : void {
-        gameMachine1Stopwatch1Ref.value?.timerStart();  // タイマーをスタート
+    function gameMachine1Start() : void {
+        if (gameSoft1Ref.value?.gameMachine1Stopwatch1Ref) {
+            gameSoft1Ref.value.gameMachine1Stopwatch1Ref.timerStart();  // タイマーをスタート
+        }
         gameMachine1GamePauseButton1Enabled.value = true;
         gameMachine1IsPlaying.value = !gameMachine1IsPlaying.value;
     }
 
 
-    function gameStop() : void {
+    function gameMachine1Stop() : void {
         gameMachine1GamePauseButton1Enabled.value = false;
         gameSoft1Ref.value?.gameInit(); // ゲームは終了したので、初期状態に戻します
     }
