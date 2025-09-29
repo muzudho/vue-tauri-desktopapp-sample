@@ -292,7 +292,10 @@
         };
     });
 
+    const allDirectionsForeOf = [(_sq: number) => { return -1; }, eastOf, southOf, northeastOf, southeastOf];
+    const allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, northOf, southwestOf, northwestOf];
     const allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
+    // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
     // 指定のウェイに絞り込んでデバッグできるよう配慮しています
     // NOTE: リバーシは、方向で分けるより、ウェイで分けた方がよさそう
     const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
@@ -307,6 +310,7 @@
         function executeOneWay(
             way: Way,
         ) {
+            // ８方向の石を取得
             const actualAdjacentStoneColor = allWaysNextOf[way](sq) != -1 ? gameBoard1StoneColorArray.value[allWaysNextOf[way](sq)] : 0;
             return actualAdjacentStoneColor == opponentColor(game1Turn.value);
         }
@@ -378,25 +382,36 @@
             return false;
         }
 
+        const oppositeTurnColor1 = opponentColor(game1Turn.value);
+
         gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
 
         // 着手点に石は置けなくなる。
         gameBoard1CanMove.value[game1Turn.value][moveSq] = false;
 
         for (const direction of activeDirections) {
-            const ways = waysOnDirection[direction];
-            const [foreTargetStones, foreCapSq] = locateTargetStones(moveSq, ways[0]);
-            const [backTargetStones, backCapSq] = locateTargetStones(moveSq, ways[1]);
+            const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
+            reverseStones(targetStones);    // 挟んだ石をひっくり返します。
 
-            reverseStones([
-                ...foreTargetStones,
-                ...backTargetStones,
-            ]);
+            const [
+                foreCapColor,
+                foreCapSq,
+                backCapColor,
+                backCapSq,
+            ] = generateMoveOnDirection(moveSq, direction);
+
+            if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
+                gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+            }
+
+            if (backCapColor == COLOR_EMPTY && foreCapColor == oppositeTurnColor1) {
+                gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+            }
 
             // checkNextMoveStep1(moveSq, oppositeWays[way], isGetHitBack);
         }
 
-        game1Turn.value = opponentColor(game1Turn.value); // 相手の色に変更
+        game1Turn.value = oppositeTurnColor1; // 相手の色に変更
         game1Times.value += 1;
         game1StoneCount.value[color] += 1;
         game1PassCount.value = 0;  // リセット
@@ -667,12 +682,10 @@
     /**
      * ひっくり返す対象の石を取得
      */
-    function locateTargetStones(
+    function locateTargetStonesOneWay(
         startSq: number,
-        way: Way,
-    ) : [number[], number] {
-        const nextOf = allWaysNextOf[way];
-
+        nextOf: (sq: number) => number,
+    ) : number[] {
         const steppingOverOppositeTurnStones : number[] = [];  // ［跨いだ相手番の石］
         let nextSq = nextOf(startSq);   // 隣のマス番号
         while (true) {  // 一次ループ
@@ -689,7 +702,7 @@
                 break;
             }
 
-            if (nextColor == game1Turn.value) {    // 手番の石に当たったら、一次ループを抜けて、二次ループに進む
+            if (nextColor == game1Turn.value) {    // 手番の石に当たったら、一次ループを抜ける
                 // canGoTOSecondaryLoop = true;
                 break;
             }
@@ -698,7 +711,23 @@
             nextSq = nextOf(nextSq);
         }
 
-        return [steppingOverOppositeTurnStones, nextSq];
+        return steppingOverOppositeTurnStones;
+    }
+
+
+    /**
+     * ひっくり返す対象の石を取得
+     */
+    function locateTargetStones(
+        startSq: number,
+        direction: Direction,
+    ) : number[] {
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
+        return [
+            ...locateTargetStonesOneWay(startSq, foreOf),
+            ...locateTargetStonesOneWay(startSq, backOf),
+        ];
     }
 
 
@@ -719,6 +748,74 @@
         }
     }
 
+
+    function generateMoveOnDirection (
+        startSq: number,
+        direction: Direction,
+    ): [number, number, number, number] {
+        const foreOf = allDirectionsForeOf[direction];
+        const backOf = allDirectionsBackOf[direction];
+        let foreCapColor: number;
+        let foreCapSq: number;
+        let backCapColor: number;
+        let backCapSq: number;
+        const oppositeTurnColor1 = opponentColor(game1Turn.value);
+
+        // ［前向きループ］処理
+        let nextSq = foreOf(startSq);   // 着手点の前方からスタート
+        while (true) {
+            if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
+                return [COLOR_EMPTY, SQ_OUT_OF_BOARD, COLOR_EMPTY, SQ_OUT_OF_BOARD];
+            }
+
+            const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
+
+            if (
+                [
+                    COLOR_EMPTY,    // ［空マス］に突き当たったら、［前方キャップ］に［空マス］とそのマス番号を記録して［後ろ向きループ］処理へ
+                    oppositeTurnColor1, // ［相手番石］に突き当たったら、［前方キャップ］に［相手番石］とそのマス番号を記録して［後ろ向きループ］処理へ
+                ].includes(nextColor)
+            ) {
+                foreCapColor = nextColor;
+                foreCapSq = nextSq;
+                break;
+            }
+
+            // ［手番石］に突き当たったら、続行
+            nextSq = foreOf(nextSq);
+        }
+
+        // ［後ろ向きループ］処理
+        nextSq = backOf(startSq);   // 着手点の前方からスタート
+        while (true) {
+            if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
+                return [COLOR_EMPTY, SQ_OUT_OF_BOARD, COLOR_EMPTY, SQ_OUT_OF_BOARD];
+            }
+
+            const nextColor = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
+
+            if (
+                [
+                    COLOR_EMPTY,    // ［空マス］に突き当たったら、［後方キャップ］に［空マス］とそのマス番号を記録して処理終了
+                    oppositeTurnColor1, // ［相手番石］に突き当たったら、［後方キャップ］に［相手番石］とそのマス番号を記録して処理終了
+                ].includes(nextColor)
+            ) {
+                backCapColor = nextColor;
+                backCapSq = nextSq;
+                break;
+            }
+
+            // ［手番石］に突き当たったら、続行
+            nextSq = foreOf(nextSq);
+        }
+
+        return [
+            foreCapColor,
+            foreCapSq,
+            backCapColor,
+            backCapSq,
+        ];
+    }
     // /**
     //  * 隣に連続する相手の石（A）があり、その次に自分の石があるとき、A をひっくり返します
     //  * @param startSq 石を置いたマス番号
