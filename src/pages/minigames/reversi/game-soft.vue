@@ -132,6 +132,11 @@
         SQ_OUT_OF_BOARD, makeCodeToSq,
         // 路
         WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way, oppositeWays, waysOnDirection,
+        DIRECTION_HORIZONTAL,
+        DIRECTION_VERTICAL,
+        DIRECTION_BAROQUE_DIAGONAL,
+        DIRECTION_SINISTER_DIAGONAL,
+        Direction,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -292,6 +297,7 @@
 
     const allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
     // 指定の方向に絞り込んでデバッグできるよう配慮しています
+    const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
     const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
 
 
@@ -379,7 +385,9 @@
         // 着手点に石は置けなくなる。
         gameBoard1CanMove.value[game1Turn.value][moveSq] = false;
 
-        for (const wayPair of waysOnDirection) {
+        for (const direction of activeDirections) {
+            const wayPair = waysOnDirection[direction];
+
             function executeOnWay(way: Way) : void {
                 const isGetHitBack = reverseStonesOnWay(moveSq, way);  // できれば、石をひっくり返します
                 checkNextMoveStep1(moveSq, oppositeWays[way], isGetHitBack);
