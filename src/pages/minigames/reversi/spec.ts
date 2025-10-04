@@ -87,6 +87,13 @@ export type Direction = typeof DIRECTION_EMPTY
     | typeof DIRECTION_BAROQUE_DIAGONAL
     | typeof DIRECTION_SINISTER_DIAGONAL
     ;
+export const DIRECTION_TITLES = {    // 表示名
+    [DIRECTION_EMPTY]: '',
+    [DIRECTION_HORIZONTAL]: '水平',
+    [DIRECTION_VERTICAL]: '垂直',
+    [DIRECTION_BAROQUE_DIAGONAL]: '右肩上',
+    [DIRECTION_SINISTER_DIAGONAL]: '右肩下',
+};
 // ライブラリー利用者側で定義すること：
 // export const activeDirections = [
 //     DIRECTION_HORIZONTAL,

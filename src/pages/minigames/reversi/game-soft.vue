@@ -133,7 +133,7 @@
         // 路
         WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way,
         // 方向
-        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, DIRECTION_SIZE,
+        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, DIRECTION_SIZE, DIRECTION_TITLES,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -244,7 +244,7 @@
     function sqToCode(sq: number) : string {
         const file = sq % gameBoard1FileNum.value;
         const rank = Math.floor(sq / gameBoard1FileNum.value);
-        const code = `${gameBoard1FileNameArray[file]}${gameBoard1RankNum.value-(rank+1)}`;
+        const code = `${gameBoard1FileNameArray[file]}${rank+1}`;
         //console.log(`DEBUG: [sqToCode] sq=${sq} gameBoard1FileNum.value=${gameBoard1FileNum.value} file=${file} rank=${rank} gameBoard1RankNum.value=${gameBoard1RankNum.value} code=${code}`);
         return code;
     }
@@ -271,6 +271,7 @@
     // NOTE: リバーシは、方向で分けるより、ウェイで分けた方がよさそう
     //const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
     const activeDirections = [DIRECTION_HORIZONTAL, /*DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL*/] as Direction[];
+    const activeSecondDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
     //const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
     const activeColors = [COLOR_BLACK, COLOR_WHITE] as Color[];
 
@@ -462,16 +463,18 @@
                 console.log(`DEBUG: [putStone] 対象石 ${sqToCode(stoneTargetedSq)} をひっくり返せる。`)
 
                 // TODO: ４方向調べたい
-                const [
-                    foresideStonesTargeted,
-                    foresideSecondCapSq,
-                    foresideSecondCapColor,
-                    backsideStonesTargeted,
-                    backsideSecondCapSq,
-                    backsideSecondCapColor,
-                ] = stoneTargetedGenerateMoveOnDirection(stoneTargetedSq, direction); // 指し手生成
-                console.log(`DEBUG: [putStone] 　　前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
-                console.log(`DEBUG: [putStone]     後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
+                for (const secondDirection of activeSecondDirections) {
+                    const [
+                        foresideStonesTargeted,
+                        foresideSecondCapSq,
+                        foresideSecondCapColor,
+                        backsideStonesTargeted,
+                        backsideSecondCapSq,
+                        backsideSecondCapColor,
+                    ] = stoneTargetedGenerateMoveOnDirection(stoneTargetedSq, secondDirection);
+                    console.log(`DEBUG: [putStone] 　　第２${DIRECTION_TITLES[secondDirection]} 前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
+                    console.log(`DEBUG: [putStone] 　　第２${DIRECTION_TITLES[secondDirection]} 後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
+                }
 
                 /*
                 // ステップ３：　キャップ判定
@@ -945,6 +948,7 @@
             stoneTargetedSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
+            //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] stoneTargetedSq=${sqToCode(stoneTargetedSq)}`);
             const oppositeTurnColor1 = oppositeColor(game1Turn.value);
             let stonesTargeted: number[] = [];
             let capSq: number;
@@ -952,6 +956,7 @@
 
             // ［手番石］を読み飛ばす：
             let nextSq = nextOf(stoneTargetedSq);   // ［狙われた石］の前方からスタート
+            //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] nextSq=${sqToCode(nextSq)}`);
             while (true) {
                 if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
                     return [stonesTargeted, SQ_OUT_OF_BOARD, COLOR_EMPTY];
@@ -965,6 +970,7 @@
 
                 // ［手番石］に突き当たったら、続行
                 nextSq = nextOf(nextSq);
+                //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] nextSq=${sqToCode(nextSq)}`);
             }
 
             // ［相手番石］を跨ぐ：
@@ -984,6 +990,7 @@
                 // ［相手番石］に突き当たったら、続行
                 stonesTargeted.push(nextSq);
                 nextSq = nextOf(nextSq);
+                //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] nextSq=${sqToCode(nextSq)}`);
             }
 
             return [stonesTargeted, capSq, capColor];
