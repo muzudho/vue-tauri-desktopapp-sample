@@ -163,7 +163,7 @@
                 </p>
             </div>
 
-            <p>可動　＞　黒番:</p>
+            <p>水平方向　＞　可動　＞　黒番:</p>
             <div
                 class="mb-6"
             >
@@ -175,12 +175,12 @@
                         v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
                         :key="sq"
                     >
-                        {{ gameSoft1Ref?.gameBoard1CanMove[COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
+                        {{ gameSoft1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
                     </span><br/>
                 </p>
             </div>
 
-            <p>可動　＞　白番:</p>
+            <p>水平方向　＞　可動　＞　白番:</p>
             <div
                 class="mb-6"
             >
@@ -192,7 +192,7 @@
                         v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
                         :key="sq"
                     >
-                        {{ gameSoft1Ref?.gameBoard1CanMove[COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;
+                        {{ gameSoft1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;
                     </span><br/>
                 </p>
             </div>
@@ -247,6 +247,7 @@
     import { COLOR_BLACK, COLOR_WHITE } from '@/pages/minigames/reversi/spec.ts';
 
     import TheAppHeader from '@/pages/the-app-header.vue';
+import { DIRECTION_HORIZONTAL } from '../gomoku/spec';
 
 
     // ####################

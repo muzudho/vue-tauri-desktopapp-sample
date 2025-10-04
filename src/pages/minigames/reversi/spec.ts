@@ -116,3 +116,12 @@ export type Color =
     | typeof COLOR_BLACK
     | typeof COLOR_WHITE
     ;
+const colorToCode1 = {
+    [COLOR_EMPTY]: ' ',
+    [COLOR_BLACK]: 'x',
+    [COLOR_WHITE]: 'o',
+} as Record<Color, string>;
+
+export function colorToCode(color: Color) : string {
+    return colorToCode1[color];
+}

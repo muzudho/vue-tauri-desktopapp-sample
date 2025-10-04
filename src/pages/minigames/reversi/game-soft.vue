@@ -127,7 +127,7 @@
 
     import {
         // 色
-        COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY, Color,
+        COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY, Color, colorToCode,
         // マス
         SQ_OUT_OF_BOARD, makeCodeToSq,
         // 路
@@ -235,6 +235,21 @@
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     })
+
+
+    /**
+     * sq を符号に変換
+     * @param sq 
+     */
+    function sqToCode(sq: number) : string {
+        const file = sq % gameBoard1FileNum.value;
+        const rank = Math.floor(sq / gameBoard1FileNum.value);
+        const code = `${gameBoard1FileNameArray[file]}${gameBoard1RankNum.value-(rank+1)}`;
+        console.log(`DEBUG: [sqToCode] sq=${sq} gameBoard1FileNum.value=${gameBoard1FileNum.value} file=${file} rank=${rank} gameBoard1RankNum.value=${gameBoard1RankNum.value} code=${code}`);
+        return code;
+    }
+
+
     const gameBoard1StoneShapeArray = ref<string[]>(new Array(gameBoard1Area.value).fill(''));    // 石の形
     for(let sq: number=0; sq<gameBoard1Area.value; sq++){
         gameBoard1StoneShapeArray.value[sq] = '●'
@@ -254,7 +269,8 @@
 
     // 指定のウェイに絞り込んでデバッグできるよう配慮しています
     // NOTE: リバーシは、方向で分けるより、ウェイで分けた方がよさそう
-    const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
+    //const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
+    const activeDirections = [DIRECTION_HORIZONTAL, /*DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL*/] as Direction[];
     //const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
 
     // FIXME: Direction別にする必要があるのでは？
@@ -407,21 +423,22 @@
             reverseStones(targetStones);    // 挟んだ石をひっくり返します。
 
             const [
-                foreCapColor,
-                foreCapSq,
-                backCapColor,
-                backCapSq,
+                foresideCapColor,
+                foresideCapSq,
+                backsideCapColor,
+                backsideCapSq,
             ] = generateMoveOnDirection(moveSq, direction); // 指し手生成
+            console.log(`DEBUG: [putStone] moveSq=${sqToCode(moveSq)} foresideCapColor=${colorToCode(foresideCapColor)} foresideCapSq=${sqToCode(foresideCapSq)} backsideCapColor=${colorToCode(backsideCapColor)} backsideCapSq=${sqToCode(backsideCapSq)}`)
 
-            if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
-                if (foreCapSq != SQ_OUT_OF_BOARD) {
-                    gameBoard1CanMove.value[direction][oppositeTurnColor1][foreCapSq] = true;
+            if (foresideCapColor == COLOR_EMPTY && backsideCapColor == oppositeTurnColor1) {
+                if (foresideCapSq != SQ_OUT_OF_BOARD) {
+                    gameBoard1CanMove.value[direction][oppositeTurnColor1][foresideCapSq] = true;   // ［相手番］は、［前側キャップ］に石を置ける。
                 }
             }
 
-            if (backCapColor == COLOR_EMPTY && foreCapColor == oppositeTurnColor1) {
-                if (backCapSq != SQ_OUT_OF_BOARD) {
-                    gameBoard1CanMove.value[direction][oppositeTurnColor1][backCapSq] = true;
+            if (backsideCapColor == COLOR_EMPTY && foresideCapColor == oppositeTurnColor1) {
+                if (backsideCapSq != SQ_OUT_OF_BOARD) {
+                    gameBoard1CanMove.value[direction][oppositeTurnColor1][backsideCapSq] = true;   // ［相手番］は、［後ろ側キャップ］に石を置ける。
                 }
             }
         }
@@ -525,8 +542,8 @@
         //console.log(`DEBUG: [gameInit] codeToSq('D4')=${codeToSq('D4')}`);
         putStone(codeToSq('D4'), game1Turn.value, false);   // 第３引数：禁じ手チェックを行わない
         putStone(codeToSq('E4'), game1Turn.value, false);
-        putStone(codeToSq('E5'), game1Turn.value, false);
-        putStone(codeToSq('D5'), game1Turn.value, false);
+        // putStone(codeToSq('E5'), game1Turn.value, false);
+        // putStone(codeToSq('D5'), game1Turn.value, false);
     }
 
 
@@ -827,10 +844,10 @@
     ): [Color, number, Color, number] {
         const foreOf = allDirectionsForeOf[direction];
         const backOf = allDirectionsBackOf[direction];
-        let foreCapColor: Color;
-        let foreCapSq: number;
-        let backCapColor: Color;
-        let backCapSq: number;
+        let foresideCapColor: Color;
+        let foresideCapSq: number;
+        let backsideCapColor: Color;
+        let backsideCapSq: number;
         const oppositeTurnColor1 = opponentColor(game1Turn.value);
 
         // ［前向きループ］処理
@@ -848,8 +865,8 @@
                     oppositeTurnColor1, // ［相手番石］に突き当たったら、［前方キャップ］に［相手番石］とそのマス番号を記録して［後ろ向きループ］処理へ
                 ].includes(nextColor)
             ) {
-                foreCapColor = nextColor;
-                foreCapSq = nextSq;
+                foresideCapColor = nextColor;
+                foresideCapSq = nextSq;
                 break;
             }
 
@@ -872,8 +889,8 @@
                     oppositeTurnColor1, // ［相手番石］に突き当たったら、［後方キャップ］に［相手番石］とそのマス番号を記録して処理終了
                 ].includes(nextColor)
             ) {
-                backCapColor = nextColor;
-                backCapSq = nextSq;
+                backsideCapColor = nextColor;
+                backsideCapSq = nextSq;
                 break;
             }
 
@@ -882,10 +899,10 @@
         }
 
         return [
-            foreCapColor,
-            foreCapSq,
-            backCapColor,
-            backCapSq,
+            foresideCapColor,
+            foresideCapSq,
+            backsideCapColor,
+            backsideCapSq,
         ];
     }
 
