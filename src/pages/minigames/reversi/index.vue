@@ -175,7 +175,7 @@
                         v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
                         :key="sq"
                     >
-                        {{ gameSoft1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
+                        {{ gameSoft1Ref?.generationMoveModel1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
                     </span><br/>
                 </p>
             </div>
@@ -192,7 +192,7 @@
                         v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
                         :key="sq"
                     >
-                        {{ gameSoft1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;
+                        {{ gameSoft1Ref?.generationMoveModel1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;
                     </span><br/>
                 </p>
             </div>
