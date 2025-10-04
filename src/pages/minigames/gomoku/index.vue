@@ -916,7 +916,7 @@
             width: tileBoard1TileWidth.value,
             height: tileBoard1TileHeight.value
         };
-        console.log(`DEBUG: [makeKeyAndRectangle] imageKey=${imageKey}`);
+        //console.log(`DEBUG: [makeKeyAndRectangle] imageKey=${imageKey}`);
 
         return [
             imageKey,
@@ -1975,7 +1975,7 @@
                 iSlidingWindow,
                 direction,
             );
-            console.log(`DEBUG: [makeSlidingWindowArray] (${iSlidingWindow}) oneWindow=${oneWindow} startSq=${startSq}`);
+            //console.log(`DEBUG: [makeSlidingWindowArray] (${iSlidingWindow}) oneWindow=${oneWindow} startSq=${startSq}`);
             slidingWindowArray.push(oneWindow)
         }
 

@@ -252,20 +252,12 @@
         }
     });
 
-    const gameBoard1CanMove = ref<boolean[][]>(
+    // FIXME: Direction別にする必要があるのでは？
+    const gameBoard1CanMove = ref<boolean[][]>( // [Color]{Square]}
         new Array(COLOR_SIZE)
     );
     gameBoard1CanMove.value[COLOR_BLACK] = new Array<boolean>(gameBoard1Area.value).fill(false);
     gameBoard1CanMove.value[COLOR_WHITE] = new Array<boolean>(gameBoard1Area.value).fill(false);
-    const codeToSq = makeCodeToSq(gameBoard1FileNum.value);
-    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('E3')] = true;
-    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('F4')] = true;
-    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('C5')] = true;
-    gameBoard1CanMove.value[COLOR_BLACK][codeToSq('D6')] = true;
-    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('D3')] = true;
-    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('C4')] = true;
-    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('F5')] = true;
-    gameBoard1CanMove.value[COLOR_WHITE][codeToSq('E6')] = true;
 
     const getGameBoard1BackGroundColor = computed<
         (sq: number, gameBoard1FileNum: number)=>string
@@ -275,7 +267,7 @@
                 return '#000000';
             }
 
-            console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum=${gameBoard1FileNum}`);
+            //console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum=${gameBoard1FileNum}`);
             const checkeredFlag: boolean = (sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0; // 市松模様フラグ
             const canMove: boolean = gameBoard1CanMove.value[game1Turn.value][sq];
 
@@ -373,12 +365,16 @@
         //game1DebugMessage.value = `sq=${sq}`;
 
         const color: Color = game1Turn.value;   // Math.floor(Math.random() * 2) + 1;
-        putStone(sq, color);  // 石を置くのに失敗しても何もしません
+        putStone(sq, color, true);  // 石を置くのに失敗しても何もしません
     }
 
 
-    function putStone(moveSq: number, color: Color) : boolean {
-        if (!gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
+    function putStone(
+        moveSq: number,
+        color: Color,
+        hasForbidenMoveCheck: boolean,
+    ) : boolean {
+        if (hasForbidenMoveCheck && !gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
             return false;
         }
 
@@ -386,7 +382,7 @@
 
         gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
 
-        // 着手点に石は置けなくなる。
+        // （全方向について）着手点に石は置けなくなる。
         gameBoard1CanMove.value[game1Turn.value][moveSq] = false;
 
         let allDirectionsTargetStones: number[] = [];
@@ -473,6 +469,7 @@
      * ゲームの初期化
      */
     function gameInit() : void {
+        console.log(`DEBUG: [gameInit] ゲームの初期化。`);
         //game1DebugMessage.value = "ゲームの初期化";
         game1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
@@ -488,16 +485,45 @@
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
         }
-        gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
-        gameBoard1StoneColorArray.value[28] = 2;
-        gameBoard1StoneColorArray.value[35] = 2;
-        gameBoard1StoneColorArray.value[36] = 1;
-        game1Times.value = 4;
-        game1Turn.value = 1;
-        game1StoneCount.value[1] = 2;
-        game1StoneCount.value[2] = 2;
+
+        game1Times.value = 0;
+        game1Turn.value = COLOR_BLACK;
+        game1StoneCount.value[1] = 0;
+        game1StoneCount.value[2] = 0;
         game1PassCount.value = 0;
         game1IsEnd.value = false;
+
+        //
+        // 以下のような初期局面を作成：
+        //
+        //   ABCDEFGH
+        // 1 ........
+        // 2 ........
+        // 3 ........
+        // 4 ...xo...
+        // 5 ...ox...
+        // 6 ........
+        // 7 ........
+        // 8 ........
+        //
+        const codeToSq = makeCodeToSq(gameBoard1FileNum.value);
+        console.log(`DEBUG: [gameInit] codeToSq('D4')=${codeToSq('D4')}`);
+        putStone(codeToSq('D4'), game1Turn.value, false);
+        putStone(codeToSq('E4'), game1Turn.value, false);
+        putStone(codeToSq('E5'), game1Turn.value, false);
+        putStone(codeToSq('D5'), game1Turn.value, false);
+        // gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
+        // gameBoard1StoneColorArray.value[28] = 2;
+        // gameBoard1StoneColorArray.value[35] = 2;
+        // gameBoard1StoneColorArray.value[36] = 1;
+        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('E3')] = true;
+        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('F4')] = true;
+        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('C5')] = true;
+        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('D6')] = true;
+        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('D3')] = true;
+        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('C4')] = true;
+        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('F5')] = true;
+        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('E6')] = true;
     }
 
 
@@ -527,7 +553,7 @@
                     while(!itsOk && count <= engine1RandomLimit) {
                         // 適当に石を置く
                         const sq = Math.floor(Math.random() * gameBoard1Area.value);
-                        itsOk = putStone(sq, color);
+                        itsOk = putStone(sq, color, true);
                         count += 1;
                     }
 
@@ -549,7 +575,7 @@
                             }
 
                         } else {
-                            itsOk = putStone(lastSq, color);    // 必ず置けるはず
+                            itsOk = putStone(lastSq, color, true);    // 必ず置けるはず
                             if (!itsOk) {
                                 throw Error(`石を置けなかった。 lastSq=${lastSq} color=${color}`);
                             }

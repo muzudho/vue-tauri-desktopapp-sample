@@ -317,6 +317,7 @@
     // ++++++++++++++++++++++++++++++++++++++
 
     onMounted(()=>{
+        console.log(`DEBUG: [onMounted] 開始。`);
         gameMachine1PowerOn();  // 電源を入れる演出
     });
 
@@ -471,6 +472,7 @@
         }
         gameMachine1IsPowerOn.value = true;
 
+        console.log(`DEBUG: [gameMachine1PowerOn] ゲームの初期化を行いたい。`);
         gameSoft1Ref.value?.gameInit(); // ゲームの初期化
     }
 
