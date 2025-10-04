@@ -129,6 +129,16 @@ const colorToCode1 = {
     [COLOR_WHITE]: 'o',
 } as Record<Color, string>;
 
+
+/**
+ * 相手の石の色に変更
+ * @param color 自分の石の色
+ */
+export function oppositeColor(color: Color) : Color {
+    return (color % 2 + 1) as Color;    // 1 なら 2 に、2 なら 1 に
+}
+
+
 export function colorToCode(color: Color) : string {
     return colorToCode1[color];
 }
