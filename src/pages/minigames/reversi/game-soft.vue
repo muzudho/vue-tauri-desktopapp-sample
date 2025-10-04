@@ -656,12 +656,11 @@
         game1IsEnd.value = false;
 
         // ［指し手生成］を初期化
-        for (const direction of activeDirections) {
-            if (generationMoveModel1Ref?.value) {
-                generationMoveModel1Ref.value.gameBoard1CanMove[direction] = new Array<boolean[]>(COLOR_SIZE);
-                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK] = new Array<boolean>(gameBoard1Area.value).fill(false);
-                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE] = new Array<boolean>(gameBoard1Area.value).fill(false);
-            }
+        if (generationMoveModel1Ref?.value) {
+            generationMoveModel1Ref?.value.generationMoveModelInit(
+                activeDirections,
+                gameBoard1Area.value,
+            );
         }
 
         //
