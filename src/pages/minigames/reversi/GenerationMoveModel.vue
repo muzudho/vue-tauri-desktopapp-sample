@@ -27,6 +27,7 @@
         Direction,
     } from '@/pages/minigames/reversi/spec.ts';
 
+    
     // ################
     // # オブジェクト #
     // ################

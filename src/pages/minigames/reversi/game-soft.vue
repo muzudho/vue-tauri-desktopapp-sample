@@ -2,6 +2,7 @@
 
     <comment>機能</comment>
     <button-20250822 ref="button1Ref"/>
+    <game-board-model-1 ref="gameBoardModel1Ref"/>
     <generation-move-model-1 ref="generationMoveModel1Ref"/>
 
 
@@ -25,8 +26,8 @@
             v-for="sq in tileBoard1Area"
             :key="sq"
             :style="{
-                top: `${Math.floor((sq - 1) / tileBoard1FileNum) * tileBoard1TileHeight}px`,
-                left: `${((sq - 1) % tileBoard1FileNum) * tileBoard1TileWidth}px`,
+                top: `${Math.floor((sq - 1) / (gameBoardModel1Ref?.tileBoard1FileNum ?? 100)) * tileBoard1TileHeight}px`,
+                left: `${((sq - 1) % (gameBoardModel1Ref?.tileBoard1FileNum ?? 100)) * tileBoard1TileWidth}px`,
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
             }"
@@ -126,6 +127,7 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
+    import GameBoardModel1 from './GameBoardModel.vue';
     import GenerationMoveModel1 from './GenerationMoveModel.vue';
     import {
         // 色
@@ -173,6 +175,7 @@
     // ++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
+    const gameBoardModel1Ref = ref<InstanceType<typeof GameBoardModel1> | null>(null);
     const generationMoveModel1Ref = ref<InstanceType<typeof GenerationMoveModel1> | null>(null);
 
     // ++++++++++++++++++++++++++++++++
@@ -184,8 +187,11 @@
         return tileBoard1RankNum.value * tileBoard1TileHeight.value;
     });
     const vision1Width = computed(()=>{
-        //return 512;
-        return tileBoard1FileNum.value * tileBoard1TileWidth.value;
+        if (gameBoardModel1Ref?.value) {
+            return gameBoardModel1Ref.value.tileBoard1FileNum * tileBoard1TileWidth.value;
+        }
+        
+        return 512; // dammy
     });
     const vision1Visibility = ref<string>('hidden');
     const vision1Zoom = ref<number>(0.5);    // ズーム
@@ -222,10 +228,13 @@
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1FileNum = ref<number>(10);  // 盤が横に何マスか
     const tileBoard1RankNum = ref<number>(10);  // 盤が縦に何マスか
     const tileBoard1Area = computed(()=>{   // 盤のマス数
-        return tileBoard1FileNum.value * tileBoard1RankNum.value;
+        if (gameBoardModel1Ref?.value) {
+            return gameBoardModel1Ref.value.tileBoard1FileNum * tileBoard1RankNum.value;
+        }
+
+        return 100; // dammy
     });
 
     // ++++++++++++++++++++++++++++++++
