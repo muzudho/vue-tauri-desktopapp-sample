@@ -129,13 +129,13 @@
     import GenerationMoveModel1 from './GenerationMoveModel.vue';
     import {
         // 色
-        COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY, Color, colorToCode, oppositeColor,
+        COLOR_BLACK, COLOR_EMPTY, Color, oppositeColor,
         // マス
         SQ_OUT_OF_BOARD, makeCodeToSq,
         // 路
         WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way,
         // 方向
-        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, DIRECTION_SIZE, DIRECTION_TITLES,
+        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -263,7 +263,7 @@
     //const activeDirections = [DIRECTION_HORIZONTAL, /*DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL*/] as Direction[];
     const activeSecondDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
     //const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
-    const activeColors = [COLOR_BLACK, COLOR_WHITE] as Color[];
+    //const activeColors = [COLOR_BLACK, COLOR_WHITE] as Color[];
 
 
     const getGameBoard1BackGroundColor = computed<

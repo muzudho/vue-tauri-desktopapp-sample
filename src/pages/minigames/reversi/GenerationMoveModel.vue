@@ -13,13 +13,10 @@
         COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY, colorToCode, oppositeColor,
 
         // マス
-        SQ_OUT_OF_BOARD, makeCodeToSq,
-
-        // 路
-        WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way,
+        SQ_OUT_OF_BOARD,
 
         // 方向
-        DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, DIRECTION_SIZE, DIRECTION_TITLES,
+        DIRECTION_SIZE, DIRECTION_TITLES,
     } from '@/pages/minigames/reversi/spec.ts';
 
     import type {
