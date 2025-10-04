@@ -14,21 +14,21 @@
     // # オブジェクト #
     // ################
 
-    const tileBoard1FileNum = ref<number>(10);  // 盤が横に何マスか
-    const tileBoard1RankNum = ref<number>(10);  // 盤が縦に何マスか
-    const tileBoard1Area = computed(()=>{   // 盤のマス数
-        return tileBoard1FileNum.value * tileBoard1RankNum.value;
-    });
+    // const gameBoard1FileNum = ref<number>(8);  // 盤が横に何マスか
+    // const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
+    // const gameBoard1Area = computed(()=>{
+    //     return gameBoard1FileNum.value * gameBoard1RankNum.value;
+    // })
 
 
     // ################
     // # エクスポーズ #
     // ################
 
-    defineExpose({
-        tileBoard1Area,
-        tileBoard1FileNum,
-        tileBoard1RankNum,
-    });
+    // defineExpose({
+    //     gameBoard1Area,
+    //     gameBoard1FileNum,
+    //     gameBoard1RankNum,
+    // });
 
 </script>

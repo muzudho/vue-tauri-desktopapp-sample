@@ -23,11 +23,11 @@
     >
         <!-- グリッド -->
         <div
-            v-for="sq in gameBoardModel1Ref?.tileBoard1Area"
+            v-for="sq in vision1TileBoard1Area"
             :key="sq"
             :style="{
-                top: `${Math.floor((sq - 1) / (gameBoardModel1Ref?.tileBoard1FileNum ?? 100)) * tileBoard1TileHeight}px`,
-                left: `${((sq - 1) % (gameBoardModel1Ref?.tileBoard1FileNum ?? 100)) * tileBoard1TileWidth}px`,
+                top: `${Math.floor((sq - 1) / (vision1TileBoard1FileNum ?? 100)) * tileBoard1TileHeight}px`,
+                left: `${((sq - 1) % (vision1TileBoard1FileNum ?? 100)) * tileBoard1TileWidth}px`,
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
             }"
@@ -182,19 +182,16 @@
     // + オブジェクト　＞　ビジョン１ +
     // ++++++++++++++++++++++++++++++++
 
+    const vision1TileBoard1FileNum = ref<number>(10);  // 盤が横に何マスか
+    const vision1TileBoard1RankNum = ref<number>(10);  // 盤が縦に何マスか
+    const vision1TileBoard1Area = computed(()=>{   // 盤のマス数
+        return vision1TileBoard1FileNum.value * vision1TileBoard1RankNum.value;
+    });
     const vision1Height = computed(()=>{
-        if (gameBoardModel1Ref?.value) {
-            return gameBoardModel1Ref.value.tileBoard1RankNum * tileBoard1TileHeight.value;
-        }
-        
-        return 512; // dammy
+        return vision1TileBoard1RankNum.value * tileBoard1TileHeight.value;
     });
     const vision1Width = computed(()=>{
-        if (gameBoardModel1Ref?.value) {
-            return gameBoardModel1Ref.value.tileBoard1FileNum * tileBoard1TileWidth.value;
-        }
-        
-        return 512; // dammy
+        return vision1TileBoard1FileNum.value * tileBoard1TileWidth.value;
     });
     const vision1Visibility = ref<string>('hidden');
     const vision1Zoom = ref<number>(0.5);    // ズーム
@@ -241,13 +238,8 @@
     const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
-    })
-
-
-    const gameBoard1StoneShapeArray = ref<string[]>(new Array(gameBoard1Area.value).fill(''));    // 石の形
-    for(let sq: number=0; sq<gameBoard1Area.value; sq++){
-        gameBoard1StoneShapeArray.value[sq] = '●'
-    }
+    });
+    const gameBoard1StoneShapeArray = ref<string[]>(new Array(0));  // 空っぽ
     const gameBoard1StoneColorArray = ref<Color[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
     const gameBoard1StoneClickable = computed<
         (sq: number) => boolean
@@ -467,6 +459,12 @@
         game1StoneCount.value[2] = 0;
         game1PassCount.value = 0;
         game1IsEnd.value = false;
+
+        // 石の形
+        gameBoard1StoneShapeArray.value = new Array(gameBoard1Area.value).fill('');
+        for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+            gameBoard1StoneShapeArray.value[sq] = '●'
+        }
 
         // ［指し手生成］を初期化
         if (generationMoveModel1Ref?.value) {
