@@ -234,13 +234,16 @@
     // ++++++++++++++++++++++++++++++++
 
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
+
+    // TODO: この３つと、eastOf とかを GameBoardModel.vue へ移行したい。
     const gameBoard1FileNum = ref<number>(8);  // 盤が横に何マスか
     const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
     const gameBoard1Area = computed(()=>{
         return gameBoard1FileNum.value * gameBoard1RankNum.value;
     });
+
     const gameBoard1StoneShapeArray = ref<string[]>(new Array(0));  // 空っぽ
-    const gameBoard1StoneColorArray = ref<Color[]>(new Array(gameBoard1Area.value).fill(0));    // 石の色
+    const gameBoard1StoneColorArray = ref<Color[]>(new Array(0));   // 空っぽ
     const gameBoard1StoneClickable = computed<
         (sq: number) => boolean
     >(()=>{    // マスをクリック可能か
@@ -263,15 +266,15 @@
 
 
     const getGameBoard1BackGroundColor = computed<
-        (sq: number, gameBoard1FileNum: number)=>string
+        (sq: number, gameBoard1FileNum1: number)=>string
     >(()=>{
-        return (sq: number, gameBoard1FileNum: number)=>{
+        return (sq: number, gameBoard1FileNum1: number)=>{
             if (game1Turn.value == COLOR_EMPTY) {   // まだ読込完了していないケース
                 return '#000000';
             }
 
-            //console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum=${gameBoard1FileNum}`);
-            const checkeredFlag: boolean = (sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0; // 市松模様フラグ
+            //console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum1=${gameBoard1FileNum1}`);
+            const checkeredFlag: boolean = (sq % gameBoard1FileNum1 + Math.floor(sq/gameBoard1FileNum1))%2==0; // 市松模様フラグ
 
             if (generationMoveModel1Ref?.value) {
                 const canMove1: boolean = generationMoveModel1Ref.value.canMove(activeDirections, game1Turn.value, sq);
@@ -460,11 +463,17 @@
         game1PassCount.value = 0;
         game1IsEnd.value = false;
 
+
         // 石の形
         gameBoard1StoneShapeArray.value = new Array(gameBoard1Area.value).fill('');
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
             gameBoard1StoneShapeArray.value[sq] = '●'
         }
+
+
+        // 石の色
+        gameBoard1StoneColorArray.value = new Array(gameBoard1Area.value).fill(0);
+
 
         // ［指し手生成］を初期化
         if (generationMoveModel1Ref?.value) {
@@ -473,6 +482,7 @@
                 gameBoard1Area.value,
             );
         }
+
 
         //
         // 以下のような初期局面を作成：
