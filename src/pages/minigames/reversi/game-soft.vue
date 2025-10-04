@@ -402,17 +402,28 @@
 
         gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
 
+        // ++++++++++++++++++++++++
+        // + 石をひっくり返します +
+        // ++++++++++++++++++++++++
+
+        let allDirectionsStonesTargeted: number[] = []; // ［ひっくり返せる石］
+
+        for (const direction of activeDirections) {
+            const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
+            allDirectionsStonesTargeted.push(...targetStones);
+            reverseStones(targetStones);    // 挟んだ石をひっくり返します。
+        }
+
+        // ++++++++++++++
+        // + 指し手生成 +
+        // ++++++++++++++
+
         if (generationMoveModel1Ref?.value) {
-            let allDirectionsStonesTargeted: number[] = []; // ［ひっくり返せる石］
             let allDirectionsOverSteppingStones: number[][] = new Array<number[]>(DIRECTION_SIZE);
             for (const direction of activeDirections) {
                 allDirectionsOverSteppingStones[direction] = new Array<number>();
 
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][game1Turn.value][moveSq] = false;    // 着手点に石は置けなくなる。
-
-                const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
-                allDirectionsStonesTargeted.push(...targetStones);
-                reverseStones(targetStones);    // 挟んだ石をひっくり返します。
 
                 // ステップ１：
                 const [
