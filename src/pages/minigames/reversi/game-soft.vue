@@ -23,7 +23,7 @@
     >
         <!-- グリッド -->
         <div
-            v-for="sq in tileBoard1Area"
+            v-for="sq in gameBoardModel1Ref?.tileBoard1Area"
             :key="sq"
             :style="{
                 top: `${Math.floor((sq - 1) / (gameBoardModel1Ref?.tileBoard1FileNum ?? 100)) * tileBoard1TileHeight}px`,
@@ -231,13 +231,6 @@
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1Area = computed(()=>{   // 盤のマス数
-        if (gameBoardModel1Ref?.value) {
-            return gameBoardModel1Ref.value.tileBoard1FileNum * gameBoardModel1Ref.value.tileBoard1RankNum;
-        }
-
-        return 100; // dammy
-    });
 
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲーム盤１ +
