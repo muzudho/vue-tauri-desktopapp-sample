@@ -183,8 +183,11 @@
     // ++++++++++++++++++++++++++++++++
 
     const vision1Height = computed(()=>{
-        //return 512;
-        return tileBoard1RankNum.value * tileBoard1TileHeight.value;
+        if (gameBoardModel1Ref?.value) {
+            return gameBoardModel1Ref.value.tileBoard1RankNum * tileBoard1TileHeight.value;
+        }
+        
+        return 512; // dammy
     });
     const vision1Width = computed(()=>{
         if (gameBoardModel1Ref?.value) {
@@ -228,10 +231,9 @@
     // NOTE: ソース画像マップと、表示画面のスケールは等倍とします。変えると難しい。
     const tileBoard1TileWidth = ref<number>(32);    // マスの横幅（ピクセル）
     const tileBoard1TileHeight = ref<number>(32);   // マスの縦幅（ピクセル）
-    const tileBoard1RankNum = ref<number>(10);  // 盤が縦に何マスか
     const tileBoard1Area = computed(()=>{   // 盤のマス数
         if (gameBoardModel1Ref?.value) {
-            return gameBoardModel1Ref.value.tileBoard1FileNum * tileBoard1RankNum.value;
+            return gameBoardModel1Ref.value.tileBoard1FileNum * gameBoardModel1Ref.value.tileBoard1RankNum;
         }
 
         return 100; // dammy
