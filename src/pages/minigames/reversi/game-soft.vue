@@ -414,52 +414,56 @@
 
         gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
 
-        let allDirectionsStonesTargeted: number[] = [];
+        let allDirectionsStonesTargetedOLD: number[] = [];
+        let allDirectionsStonesTargetedNew: number[][] = new Array(DIRECTION_SIZE);
         for (const direction of activeDirections) {
+            allDirectionsStonesTargetedNew[direction] = new Array();
             gameBoard1CanMove.value[direction][game1Turn.value][moveSq] = false;    // 着手点に石は置けなくなる。
 
             const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
-            allDirectionsStonesTargeted.push(...targetStones);
+            allDirectionsStonesTargetedOLD.push(...targetStones);
             reverseStones(targetStones);    // 挟んだ石をひっくり返します。
 
             // ステップ１：
             const [
-                foresideStoneTargetedCount,
+                foresideStonesTargeted,
                 foresideCapSq,
                 foresideCapColor,
-                backsideStoneTargetedCount,
+                backsideStonesTargeted,
                 backsideCapSq,
                 backsideCapColor,
             ] = movedStoneGenerateMoveOnDirection(moveSq, direction); // 指し手生成
-            console.log(`DEBUG: [putStone(1)] moveSq=${sqToCode(moveSq)} foresideCap Cnt=${foresideStoneTargetedCount} Sq=${sqToCode(foresideCapSq)} Color=${colorToCode(foresideCapColor)} backsideCap Cnt=${backsideStoneTargetedCount} Sq=${sqToCode(backsideCapSq)} Color=${colorToCode(backsideCapColor)}`)
+            console.log(`DEBUG: [putStone(1)] moveSq=${sqToCode(moveSq)} foreside StonesTargetd=${foresideStonesTargeted.map((x)=>sqToCode(x))} CapSq=${sqToCode(foresideCapSq)} CapColor=${colorToCode(foresideCapColor)} backside StonesTargeted=${backsideStonesTargeted.map((x)=>sqToCode(x))} CapSq=${sqToCode(backsideCapSq)} CapColor=${colorToCode(backsideCapColor)}`)
+            allDirectionsStonesTargetedNew.push([
+                ...foresideStonesTargeted,
+                ...backsideStonesTargeted,
+            ]);
 
-            if (foresideCapColor == COLOR_EMPTY && 0 < foresideStoneTargetedCount && foresideCapSq != SQ_OUT_OF_BOARD) {
+            if (foresideCapColor == COLOR_EMPTY && 0 < foresideStonesTargeted.length && foresideCapSq != SQ_OUT_OF_BOARD) {
                 gameBoard1CanMove.value[direction][game1Turn.value][foresideCapSq] = true;   // ［相手番］は、［前側キャップ］に石を置ける。
             }
 
-            if (backsideCapColor == COLOR_EMPTY && 0 < backsideStoneTargetedCount && backsideCapSq != SQ_OUT_OF_BOARD) {
+            if (backsideCapColor == COLOR_EMPTY && 0 < backsideStonesTargeted.length && backsideCapSq != SQ_OUT_OF_BOARD) {
                 gameBoard1CanMove.value[direction][game1Turn.value][backsideCapSq] = true;   // ［相手番］は、［後ろ側キャップ］に石を置ける。
             }
-        }
 
-        console.log(`DEBUG: [putStone(2)] allDirectionsStonesTargeted.length=${allDirectionsStonesTargeted.length}`)
+            console.log(`DEBUG: [putStone(2)] allDirectionsStonesTargetedOLD.length=${allDirectionsStonesTargetedOLD.length} allDirectionsStonesTargetedNew[direction].length=${allDirectionsStonesTargetedNew[direction].length}`)
 
-        // ひっくり返される各［相手番石］について：
-        for (const stoneTargetedSq of allDirectionsStonesTargeted) {
-            for (const direction of activeDirections) {
+            // ひっくり返される各［相手番石］について：
+            for (const stoneTargetedSq of allDirectionsStonesTargetedNew[direction]) {
                 const [
-                    foresideStoneTargetedCount,
+                    foresideStonesTargeted,
                     foresideCapSq,
                     foresideCapColor,
-                    backsideStoneTargetedCount,
+                    backsideStonesTargeted,
                     backsideCapSq,
                     backsideCapColor,
                 ] = stoneTargetedGenerateMoveOnDirection(stoneTargetedSq, direction); // 指し手生成
-                console.log(`DEBUG: [putStone(3)] moveSq=${sqToCode(moveSq)} foresideCap Cnt=${foresideStoneTargetedCount} Sq=${sqToCode(foresideCapSq)} Color=${colorToCode(foresideCapColor)} backsideCap Cnt=${backsideStoneTargetedCount} Sq=${sqToCode(backsideCapSq)} Color=${colorToCode(backsideCapColor)}`)
+                console.log(`DEBUG: [putStone(3)] moveSq=${sqToCode(moveSq)} foreside StonesTargeted=${foresideStonesTargeted.map((x)=>sqToCode(x))} CapSq=${sqToCode(foresideCapSq)} CapColor=${colorToCode(foresideCapColor)} backside StonesTargetd=${backsideStonesTargeted.map((x)=>sqToCode(x))} CapSq=${sqToCode(backsideCapSq)} CapColor=${colorToCode(backsideCapColor)}`)
 
                 if (
                     foresideCapSq != SQ_OUT_OF_BOARD && foresideCapColor == COLOR_EMPTY // 前方のキャップが空マスで
-                    && 0 < foresideStoneTargetedCount   // ひっくり返る石があるなら
+                    && 0 < foresideStonesTargeted.length   // ひっくり返る石があるなら
                 ) {
                     // FIXME: フィールドに２つの島があるとき、反対側の島で置けるなら、置けるのでは？
                     // xooo.xxo
@@ -471,13 +475,15 @@
 
                 if (
                     backsideCapSq != SQ_OUT_OF_BOARD && backsideCapColor == COLOR_EMPTY // 後方のキャップが空マスで
-                    && 0 < backsideStoneTargetedCount   // ひっくり返る石があるなら
+                    && 0 < backsideStonesTargeted.length   // ひっくり返る石があるなら
                 ) {
                     gameBoard1CanMove.value[direction][game1Turn.value][backsideCapSq] = true;
                     gameBoard1CanMove.value[direction][oppositeTurnColor1][backsideCapSq] = false;
                 }
-            }            
+            }
         }
+
+
 
         // TODO: 指し手が消えるパターン
 
@@ -847,21 +853,21 @@
     function movedStoneGenerateMoveOnDirection (
         moveSq: number,
         direction: Direction,
-    ): [number, number, Color, number, number, Color] {
+    ): [number[], number, Color, number[], number, Color] {
 
         function executeNext(
             moveSq: number,
             nextOf: (sq: number)=>number,
-        ) : [number, number, Color] {
-            let stoneTargetedCount: number = 0;
+        ) : [number[], number, Color] {
+            let stonesTargeted: number[] = [];
             let capSq: number;
             let capColor: Color;
 
-            // ［前向きループ］処理
+            // ［ループ］処理
             let nextSq = nextOf(moveSq);   // 着手点の前方からスタート
             while (true) {
                 if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
-                    return [stoneTargetedCount, SQ_OUT_OF_BOARD, COLOR_EMPTY];
+                    return [stonesTargeted, SQ_OUT_OF_BOARD, COLOR_EMPTY];
                 }
 
                 const nextColor: Color = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
@@ -873,21 +879,21 @@
                 }
 
                 // ［相手番石］に突き当たったら、続行
-                stoneTargetedCount += 1;
+                stonesTargeted.push(nextSq);
                 nextSq = nextOf(nextSq);
             }
 
-            return [stoneTargetedCount, capSq, capColor];
+            return [stonesTargeted, capSq, capColor];
         }
 
-        const [foresideTargetStoneCount, foresideCapSq, foresideCapColor] = executeNext(moveSq, allDirectionsForeOf[direction]);  // ［前向きループ］処理
-        const [backsideTargetStoneCount, backsideCapSq, backsideCapColor] = executeNext(moveSq, allDirectionsBackOf[direction]);  // ［後ろ向きループ］処理
+        const [foresideStonesTargeted, foresideCapSq, foresideCapColor] = executeNext(moveSq, allDirectionsForeOf[direction]);  // ［前向きループ］処理
+        const [backsideStonesTargeted, backsideCapSq, backsideCapColor] = executeNext(moveSq, allDirectionsBackOf[direction]);  // ［後ろ向きループ］処理
 
         return [
-            foresideTargetStoneCount,
+            foresideStonesTargeted,
             foresideCapSq,
             foresideCapColor,
-            backsideTargetStoneCount,
+            backsideStonesTargeted,
             backsideCapSq,
             backsideCapColor,
         ];
@@ -902,14 +908,14 @@
     function stoneTargetedGenerateMoveOnDirection (
         stoneTargetedSq: number,
         direction: Direction,
-    ): [number, number, Color, number, number, Color] {
+    ): [number[], number, Color, number[], number, Color] {
 
         function executeNext(
             stoneTargetedSq: number,
             nextOf: (sq: number)=>number,
-        ) : [number, number, Color] {
+        ) : [number[], number, Color] {
             const oppositeTurnColor1 = oppositeColor(game1Turn.value);
-            let stoneTargetedCount: number = 0;
+            let stoneTargeted: number[] = [];
             let capSq: number;
             let capColor: Color;
 
@@ -917,7 +923,7 @@
             let nextSq = nextOf(stoneTargetedSq);   // ［狙われた石］の前方からスタート
             while (true) {
                 if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
-                    return [stoneTargetedCount, SQ_OUT_OF_BOARD, COLOR_EMPTY];
+                    return [stoneTargeted, SQ_OUT_OF_BOARD, COLOR_EMPTY];
                 }
 
                 const nextColor: Color = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
@@ -933,7 +939,7 @@
             // ［相手番石］を跨ぐ：
             while (true) {
                 if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
-                    return [stoneTargetedCount, SQ_OUT_OF_BOARD, COLOR_EMPTY];
+                    return [stoneTargeted, SQ_OUT_OF_BOARD, COLOR_EMPTY];
                 }
 
                 const nextColor: Color = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
@@ -945,21 +951,21 @@
                 }
 
                 // ［相手番石］に突き当たったら、続行
-                stoneTargetedCount += 1;
+                stoneTargeted.push(nextSq);
                 nextSq = nextOf(nextSq);
             }
 
-            return [stoneTargetedCount, capSq, capColor];
+            return [stoneTargeted, capSq, capColor];
         }
 
-        const [foresideStoneTargetedCount, foresideCapSq, foresideCapColor] = executeNext(stoneTargetedSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
-        const [backsideStoneTargetedCount, backsideCapSq, backsideCapColor] = executeNext(stoneTargetedSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
+        const [foresideStoneTargeted, foresideCapSq, foresideCapColor] = executeNext(stoneTargetedSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
+        const [backsideStoneTargeted, backsideCapSq, backsideCapColor] = executeNext(stoneTargetedSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
 
         return [
-            foresideStoneTargetedCount,
+            foresideStoneTargeted,
             foresideCapSq,
             foresideCapColor,
-            backsideStoneTargetedCount,
+            backsideStoneTargeted,
             backsideCapSq,
             backsideCapColor,
         ];
