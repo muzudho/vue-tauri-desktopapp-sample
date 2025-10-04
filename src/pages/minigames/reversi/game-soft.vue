@@ -279,19 +279,6 @@
     const activeColors = [COLOR_BLACK, COLOR_WHITE] as Color[];
 
 
-    function canMove(sq: number) : boolean {
-        if (generationMoveModel1Ref?.value) {
-            for (const direction of activeDirections) {
-                if (generationMoveModel1Ref.value.gameBoard1CanMove[direction][game1Turn.value][sq]) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
-
     const getGameBoard1BackGroundColor = computed<
         (sq: number, gameBoard1FileNum: number)=>string
     >(()=>{
@@ -302,17 +289,21 @@
 
             //console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum=${gameBoard1FileNum}`);
             const checkeredFlag: boolean = (sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0; // 市松模様フラグ
-            const canMove1: boolean = canMove(sq);
 
-            if (game1Turn.value == COLOR_BLACK) {
-                if (canMove1) {
-                    return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
+            if (generationMoveModel1Ref?.value) {
+                const canMove1: boolean = generationMoveModel1Ref.value.canMove(activeDirections, game1Turn.value, sq);
+
+                if (game1Turn.value == COLOR_BLACK) {
+                    if (canMove1) {
+                        return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
+                    }
+                    return checkeredFlag ? '#C0B090' : '#C09020';  // 黒番の濃い色
                 }
-                return checkeredFlag ? '#C0B090' : '#C09020';  // 黒番の濃い色
+                if (canMove1) {
+                    return checkeredFlag ? '#C0F0E0' : '#50F0C0';  // 白番の薄い色
+                }
             }
-            if (canMove1) {
-                return checkeredFlag ? '#C0F0E0' : '#50F0C0';  // 白番の薄い色
-            }
+
             return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
         };
     });
@@ -1282,7 +1273,6 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
-        //gameBoard1CanMove,
         generationMoveModel1Ref,
         gameBoard1FileNum,
         gameBoard1RankNum,

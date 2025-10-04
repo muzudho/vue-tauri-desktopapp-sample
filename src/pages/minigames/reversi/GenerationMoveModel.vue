@@ -15,7 +15,13 @@
         // 方向
         DIRECTION_SIZE,
     } from '@/pages/minigames/reversi/spec.ts';
-    import type { Direction } from '@/pages/minigames/reversi/spec.ts';
+    import type {
+        // 色
+        Color,
+
+        // 方向
+        Direction,
+    } from '@/pages/minigames/reversi/spec.ts';
 
     // ################
     // # オブジェクト #
@@ -41,11 +47,28 @@
         }
     }
 
+
+    function canMove(
+        activeDirections: Direction[],
+        thisTurn: Color,
+        sq: number
+    ) : boolean {
+        for (const direction of activeDirections) {
+            if (gameBoard1CanMove.value[direction][thisTurn][sq]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
     // ################
     // # エクスポーズ #
     // ################
 
     defineExpose({
+        canMove,
         gameBoard1CanMove,
         generationMoveModelInit,
     });
