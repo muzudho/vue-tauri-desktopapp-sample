@@ -133,7 +133,7 @@
         // 路
         WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way,
         // 方向
-        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
+        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, DIRECTION_SIZE,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -252,12 +252,32 @@
         }
     });
 
+    // 指定のウェイに絞り込んでデバッグできるよう配慮しています
+    // NOTE: リバーシは、方向で分けるより、ウェイで分けた方がよさそう
+    const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
+    //const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
+
     // FIXME: Direction別にする必要があるのでは？
-    const gameBoard1CanMove = ref<boolean[][]>( // [Color]{Square]}
-        new Array(COLOR_SIZE)
+    const gameBoard1CanMove = ref<boolean[][][]>( // [Direction][Color][Square]
+        new Array(DIRECTION_SIZE)
     );
-    gameBoard1CanMove.value[COLOR_BLACK] = new Array<boolean>(gameBoard1Area.value).fill(false);
-    gameBoard1CanMove.value[COLOR_WHITE] = new Array<boolean>(gameBoard1Area.value).fill(false);
+    for (const direction of activeDirections) {
+        gameBoard1CanMove.value[direction] = new Array<boolean[]>(COLOR_SIZE);
+        gameBoard1CanMove.value[direction][COLOR_BLACK] = new Array<boolean>(gameBoard1Area.value).fill(false);
+        gameBoard1CanMove.value[direction][COLOR_WHITE] = new Array<boolean>(gameBoard1Area.value).fill(false);
+    }
+
+
+    function canMove(sq: number) : boolean {
+        for (const direction of activeDirections) {
+            if (gameBoard1CanMove.value[direction][game1Turn.value][sq]) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
 
     const getGameBoard1BackGroundColor = computed<
         (sq: number, gameBoard1FileNum: number)=>string
@@ -269,15 +289,15 @@
 
             //console.log(`DEBUG: [getGameBoard1BackGroundColor] game1Turn.value=${game1Turn.value} sq=${sq} gameBoard1FileNum=${gameBoard1FileNum}`);
             const checkeredFlag: boolean = (sq % gameBoard1FileNum + Math.floor(sq/gameBoard1FileNum))%2==0; // 市松模様フラグ
-            const canMove: boolean = gameBoard1CanMove.value[game1Turn.value][sq];
+            const canMove1: boolean = canMove(sq);
 
             if (game1Turn.value == COLOR_BLACK) {
-                if (canMove) {
+                if (canMove1) {
                     return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
                 }
                 return checkeredFlag ? '#C0B090' : '#C09020';  // 黒番の濃い色
             }
-            if (canMove) {
+            if (canMove1) {
                 return checkeredFlag ? '#C0F0E0' : '#50F0C0';  // 白番の薄い色
             }
             return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
@@ -288,10 +308,6 @@
     const allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, northOf, southwestOf, northwestOf];
     const allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
     // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
-    // 指定のウェイに絞り込んでデバッグできるよう配慮しています
-    // NOTE: リバーシは、方向で分けるより、ウェイで分けた方がよさそう
-    const activeDirections = [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL] as Direction[];
-    //const activeWays = [WAY_EAST, WAY_WEST, WAY_SOUTH, WAY_NORTH, WAT_NORTHEAST, WAY_SOUTHWEST, WAY_SOUTHEAST, WAY_NORTHWEST] as Way[];
 
 
     /**
@@ -382,11 +398,10 @@
 
         gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
 
-        // （全方向について）着手点に石は置けなくなる。
-        gameBoard1CanMove.value[game1Turn.value][moveSq] = false;
-
         let allDirectionsTargetStones: number[] = [];
         for (const direction of activeDirections) {
+            gameBoard1CanMove.value[direction][game1Turn.value][moveSq] = false;    // 着手点に石は置けなくなる。
+
             const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
             allDirectionsTargetStones.push(...targetStones);
             reverseStones(targetStones);    // 挟んだ石をひっくり返します。
@@ -400,13 +415,13 @@
 
             if (foreCapColor == COLOR_EMPTY && backCapColor == oppositeTurnColor1) {
                 if (foreCapSq != SQ_OUT_OF_BOARD) {
-                    gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                    gameBoard1CanMove.value[direction][oppositeTurnColor1][foreCapSq] = true;
                 }
             }
 
             if (backCapColor == COLOR_EMPTY && foreCapColor == oppositeTurnColor1) {
                 if (backCapSq != SQ_OUT_OF_BOARD) {
-                    gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                    gameBoard1CanMove.value[direction][oppositeTurnColor1][backCapSq] = true;
                 }
             }
         }
@@ -423,15 +438,15 @@
                 if (foreCapColor == COLOR_EMPTY) {
                     if (backCapColor == COLOR_EMPTY) {
                         if (foreCapSq != SQ_OUT_OF_BOARD) {
-                            gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = false;
+                            gameBoard1CanMove.value[direction][oppositeTurnColor1][foreCapSq] = false;
                         }
                         if (backCapSq != SQ_OUT_OF_BOARD) {
-                            gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = false;
+                            gameBoard1CanMove.value[direction][oppositeTurnColor1][backCapSq] = false;
                         }
 
                     } else if (backCapColor == oppositeTurnColor1) {
                         if (foreCapSq != SQ_OUT_OF_BOARD) {
-                            gameBoard1CanMove.value[oppositeTurnColor1][foreCapSq] = true;
+                            gameBoard1CanMove.value[direction][oppositeTurnColor1][foreCapSq] = true;
                         }
                     }
                 }
@@ -439,7 +454,7 @@
                 if (backCapColor == COLOR_EMPTY) {
                     if (foreCapColor == oppositeTurnColor1) {
                         if (backCapSq != SQ_OUT_OF_BOARD) {
-                            gameBoard1CanMove.value[oppositeTurnColor1][backCapSq] = true;
+                            gameBoard1CanMove.value[direction][oppositeTurnColor1][backCapSq] = true;
                         }
                     }
                 }
@@ -507,23 +522,11 @@
         // 8 ........
         //
         const codeToSq = makeCodeToSq(gameBoard1FileNum.value);
-        console.log(`DEBUG: [gameInit] codeToSq('D4')=${codeToSq('D4')}`);
-        putStone(codeToSq('D4'), game1Turn.value, false);
+        //console.log(`DEBUG: [gameInit] codeToSq('D4')=${codeToSq('D4')}`);
+        putStone(codeToSq('D4'), game1Turn.value, false);   // 第３引数：禁じ手チェックを行わない
         putStone(codeToSq('E4'), game1Turn.value, false);
         putStone(codeToSq('E5'), game1Turn.value, false);
         putStone(codeToSq('D5'), game1Turn.value, false);
-        // gameBoard1StoneColorArray.value[27] = 1;    // 石の初期位置
-        // gameBoard1StoneColorArray.value[28] = 2;
-        // gameBoard1StoneColorArray.value[35] = 2;
-        // gameBoard1StoneColorArray.value[36] = 1;
-        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('E3')] = true;
-        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('F4')] = true;
-        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('C5')] = true;
-        // gameBoard1CanMove.value[COLOR_BLACK][codeToSq('D6')] = true;
-        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('D3')] = true;
-        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('C4')] = true;
-        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('F5')] = true;
-        // gameBoard1CanMove.value[COLOR_WHITE][codeToSq('E6')] = true;
     }
 
 

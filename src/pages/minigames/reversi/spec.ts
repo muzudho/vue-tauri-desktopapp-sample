@@ -80,12 +80,21 @@ export const DIRECTION_HORIZONTAL = 1;
 export const DIRECTION_VERTICAL = 2;
 export const DIRECTION_BAROQUE_DIAGONAL = 3;
 export const DIRECTION_SINISTER_DIAGONAL = 4;
+export const DIRECTION_SIZE = 5;
 export type Direction = typeof DIRECTION_EMPTY
     | typeof DIRECTION_HORIZONTAL
     | typeof DIRECTION_VERTICAL
     | typeof DIRECTION_BAROQUE_DIAGONAL
     | typeof DIRECTION_SINISTER_DIAGONAL
     ;
+// ライブラリー利用者側で定義すること：
+// export const activeDirections = [
+//     DIRECTION_HORIZONTAL,
+//     DIRECTION_VERTICAL,
+//     DIRECTION_BAROQUE_DIAGONAL,
+//     DIRECTION_SINISTER_DIAGONAL,
+// ] as Direction[];
+
 export const waysOnDirection = [
     [WAY_EMPTY, WAY_EMPTY],
     [WAY_EAST, WAY_WEST],
