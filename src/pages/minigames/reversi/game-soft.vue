@@ -408,9 +408,10 @@
         color: Color,
         hasForbidenMoveCheck: boolean,
     ) : boolean {
-        if (hasForbidenMoveCheck && !gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
-            return false;
-        }
+        // TODO: 有効にする
+        // if (hasForbidenMoveCheck && !gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
+        //     return false;
+        // }
 
         const oppositeTurnColor1 = oppositeColor(game1Turn.value);
 
@@ -608,8 +609,8 @@
         //console.log(`DEBUG: [gameInit] codeToSq('D4')=${codeToSq('D4')}`);
         putStone(codeToSq('D4'), game1Turn.value, false);   // 第３引数：禁じ手チェックを行わない
         putStone(codeToSq('E4'), game1Turn.value, false);
-        // putStone(codeToSq('E5'), game1Turn.value, false);
-        // putStone(codeToSq('D5'), game1Turn.value, false);
+        putStone(codeToSq('E5'), game1Turn.value, false);
+        putStone(codeToSq('D5'), game1Turn.value, false);
     }
 
 
