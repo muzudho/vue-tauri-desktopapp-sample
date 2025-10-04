@@ -416,9 +416,9 @@
         gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
 
         let allDirectionsStonesTargetedOLD: number[] = [];
-        let allDirectionsStonesTargetedNew: number[][] = new Array(DIRECTION_SIZE);
+        let allDirectionsStonesTargetedNew: number[][] = new Array<number[]>(DIRECTION_SIZE);
         for (const direction of activeDirections) {
-            allDirectionsStonesTargetedNew[direction] = new Array();
+            allDirectionsStonesTargetedNew[direction] = new Array<number>();
             gameBoard1CanMove.value[direction][game1Turn.value][moveSq] = false;    // 着手点に石は置けなくなる。
 
             const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
@@ -435,10 +435,10 @@
                 backsideFirstCapColor,
             ] = movedStoneGenerateMoveOnDirection(moveSq, direction); // 指し手生成
             console.log(`DEBUG: [putStone] ${sqToCode(moveSq)}へ石を置いた。`)
-            allDirectionsStonesTargetedNew.push([
+            allDirectionsStonesTargetedNew[direction].push(
                 ...foresideStonesTargeted,
                 ...backsideStonesTargeted,
-            ]);
+            );
 
             console.log(`DEBUG: [putStone] 　　前方第１キャップは ${sqToCode(foresideFirstCapSq)} ${colorToCode(foresideFirstCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`)
             if (foresideFirstCapSq != SQ_OUT_OF_BOARD && foresideFirstCapColor == COLOR_EMPTY) {
@@ -459,6 +459,9 @@
 
             // ステップ２：　ひっくり返される各［相手番石］について：
             for (const stoneTargetedSq of allDirectionsStonesTargetedNew[direction]) {
+                console.log(`DEBUG: [putStone] 対象石 ${sqToCode(stoneTargetedSq)} をひっくり返せる。`)
+
+                // TODO: ４方向調べたい
                 const [
                     foresideStonesTargeted,
                     foresideSecondCapSq,
@@ -467,8 +470,10 @@
                     backsideSecondCapSq,
                     backsideSecondCapColor,
                 ] = stoneTargetedGenerateMoveOnDirection(stoneTargetedSq, direction); // 指し手生成
-                console.log(`DEBUG: [putStone] ステップ２ moveSq=${sqToCode(moveSq)} foreside StonesTargeted=${foresideStonesTargeted.map((x)=>sqToCode(x))} SecondCapSq=${sqToCode(foresideSecondCapSq)} SecondCapColor=${colorToCode(foresideSecondCapColor)} backside StonesTargetd=${backsideStonesTargeted.map((x)=>sqToCode(x))} SecondCapSq=${sqToCode(backsideSecondCapSq)} SecondCapColor=${colorToCode(backsideSecondCapColor)}`)
+                console.log(`DEBUG: [putStone] 　　前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
+                console.log(`DEBUG: [putStone]     後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
 
+                /*
                 // ステップ３：　キャップ判定
                 //
                 // xooo.xxo
@@ -505,6 +510,7 @@
                     executeSide(foresideSecondCapSq, direction, targetTurn);    // foreside
                     executeSide(backsideSecondCapSq, direction, targetTurn);    // backside
                 }
+                */
             }
         }
 
