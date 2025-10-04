@@ -245,7 +245,7 @@
         const file = sq % gameBoard1FileNum.value;
         const rank = Math.floor(sq / gameBoard1FileNum.value);
         const code = `${gameBoard1FileNameArray[file]}${gameBoard1RankNum.value-(rank+1)}`;
-        console.log(`DEBUG: [sqToCode] sq=${sq} gameBoard1FileNum.value=${gameBoard1FileNum.value} file=${file} rank=${rank} gameBoard1RankNum.value=${gameBoard1RankNum.value} code=${code}`);
+        //console.log(`DEBUG: [sqToCode] sq=${sq} gameBoard1FileNum.value=${gameBoard1FileNum.value} file=${file} rank=${rank} gameBoard1RankNum.value=${gameBoard1RankNum.value} code=${code}`);
         return code;
     }
 
@@ -434,21 +434,28 @@
                 backsideFirstCapSq,
                 backsideFirstCapColor,
             ] = movedStoneGenerateMoveOnDirection(moveSq, direction); // 指し手生成
-            console.log(`DEBUG: [putStone(1)] moveSq=${sqToCode(moveSq)} foreside StonesTargetd=${foresideStonesTargeted.map((x)=>sqToCode(x))} FirstCapSq=${sqToCode(foresideFirstCapSq)} FirstCapColor=${colorToCode(foresideFirstCapColor)} backside StonesTargeted=${backsideStonesTargeted.map((x)=>sqToCode(x))} FirstCapSq=${sqToCode(backsideFirstCapSq)} FirstCapColor=${colorToCode(backsideFirstCapColor)}`)
+            console.log(`DEBUG: [putStone] ${sqToCode(moveSq)}へ石を置いた。`)
             allDirectionsStonesTargetedNew.push([
                 ...foresideStonesTargeted,
                 ...backsideStonesTargeted,
             ]);
 
-            if (foresideFirstCapColor == COLOR_EMPTY && 0 < foresideStonesTargeted.length && foresideFirstCapSq != SQ_OUT_OF_BOARD) {
-                gameBoard1CanMove.value[direction][game1Turn.value][foresideFirstCapSq] = true;   // ［相手番］は、［前側キャップ］に石を置ける。
+            console.log(`DEBUG: [putStone] 　　前方第１キャップは ${sqToCode(foresideFirstCapSq)} ${colorToCode(foresideFirstCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`)
+            if (foresideFirstCapSq != SQ_OUT_OF_BOARD && foresideFirstCapColor == COLOR_EMPTY) {
+                const canMove1 = 0 < foresideStonesTargeted.length;
+                gameBoard1CanMove.value[direction][game1Turn.value][foresideFirstCapSq] = canMove1;   // 前方第１キャップに石を置けるか？
+                console.log(`DEBUG: [putStone] 　　前方第１キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
             }
 
-            if (backsideFirstCapColor == COLOR_EMPTY && 0 < backsideStonesTargeted.length && backsideFirstCapSq != SQ_OUT_OF_BOARD) {
-                gameBoard1CanMove.value[direction][game1Turn.value][backsideFirstCapSq] = true;   // ［相手番］は、［後ろ側キャップ］に石を置ける。
+            console.log(`DEBUG: [putStone] 　　後方第１キャップは ${sqToCode(backsideFirstCapSq)} ${colorToCode(backsideFirstCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`)
+            if (backsideFirstCapSq != SQ_OUT_OF_BOARD && backsideFirstCapColor == COLOR_EMPTY) {
+                const canMove1 = 0 < backsideStonesTargeted.length;
+                gameBoard1CanMove.value[direction][game1Turn.value][backsideFirstCapSq] = canMove1;   // 後方第１キャップに石を置けるか？
+                console.log(`DEBUG: [putStone] 　　後方第１キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
             }
 
-            console.log(`DEBUG: [putStone(2)] allDirectionsStonesTargetedOLD.length=${allDirectionsStonesTargetedOLD.length} allDirectionsStonesTargetedNew[direction].length=${allDirectionsStonesTargetedNew[direction].length}`)
+            console.log(`DEBUG: [putStone(2)] allDirectionsStonesTargetedNew[direction].length=${allDirectionsStonesTargetedNew[direction].length}`)
+            // allDirectionsStonesTargetedOLD.length=${allDirectionsStonesTargetedOLD.length}
 
             // ステップ２：　ひっくり返される各［相手番石］について：
             for (const stoneTargetedSq of allDirectionsStonesTargetedNew[direction]) {
@@ -460,7 +467,7 @@
                     backsideSecondCapSq,
                     backsideSecondCapColor,
                 ] = stoneTargetedGenerateMoveOnDirection(stoneTargetedSq, direction); // 指し手生成
-                console.log(`DEBUG: [putStone(3)] moveSq=${sqToCode(moveSq)} foreside StonesTargeted=${foresideStonesTargeted.map((x)=>sqToCode(x))} SecondCapSq=${sqToCode(foresideSecondCapSq)} SecondCapColor=${colorToCode(foresideSecondCapColor)} backside StonesTargetd=${backsideStonesTargeted.map((x)=>sqToCode(x))} SecondCapSq=${sqToCode(backsideSecondCapSq)} SecondCapColor=${colorToCode(backsideSecondCapColor)}`)
+                console.log(`DEBUG: [putStone] ステップ２ moveSq=${sqToCode(moveSq)} foreside StonesTargeted=${foresideStonesTargeted.map((x)=>sqToCode(x))} SecondCapSq=${sqToCode(foresideSecondCapSq)} SecondCapColor=${colorToCode(foresideSecondCapColor)} backside StonesTargetd=${backsideStonesTargeted.map((x)=>sqToCode(x))} SecondCapSq=${sqToCode(backsideSecondCapSq)} SecondCapColor=${colorToCode(backsideSecondCapColor)}`)
 
                 // ステップ３：　キャップ判定
                 //
@@ -474,6 +481,7 @@
                         direction: Direction,
                         targetTurn: Color,
                     ) : void {
+                        console.log(`DEBUG: [putStone] ステップ３ 第２キャップ=${sqToCode(secondCapSq)}`);
                         const [
                             secondCapForesideStonesTargeted,
                             secondCapForesideSecondCapSq,
