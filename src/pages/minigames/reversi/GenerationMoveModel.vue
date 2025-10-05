@@ -173,7 +173,7 @@
                         backsideStonesTargeted,
                         backsideSecondCapSq,
                         backsideSecondCapColor,
-                    ] = stoneTargetedGenerateMoveOnDirection(stoneTargetedSq, secondDirection, thisTurn, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
+                    ] = sandwichedStoneGenerateMoveOnDirection(stoneTargetedSq, secondDirection, thisTurn, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
 
 
                     // ［手番］
@@ -296,8 +296,6 @@
     }
 
 
-
-
     /**
      * 石を置いたところから見て、次に石を置けるところの検出。
      * @param moveSq 
@@ -312,7 +310,8 @@
         allDirectionsBackOf: ((sq: number) => number)[],
     ): [number[], number, Color, number[], number, Color] {
 
-        function executeNext(
+        // TODO: locate() と getCap() に分けたい
+        function locateStonesOverSteppedAndGetCap(
             moveSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
@@ -343,8 +342,8 @@
             return [overSteppingStones, capSq, capColor];
         }
 
-        const [foresideOverSteppingStones, foresideCapSq, foresideCapColor] = executeNext(moveSq, allDirectionsForeOf[direction]);  // ［前向きループ］処理
-        const [backsideOverSteppingStones, backsideCapSq, backsideCapColor] = executeNext(moveSq, allDirectionsBackOf[direction]);  // ［後ろ向きループ］処理
+        const [foresideOverSteppingStones, foresideCapSq, foresideCapColor] = locateStonesOverSteppedAndGetCap(moveSq, allDirectionsForeOf[direction]);  // ［前向きループ］処理
+        const [backsideOverSteppingStones, backsideCapSq, backsideCapColor] = locateStonesOverSteppedAndGetCap(moveSq, allDirectionsBackOf[direction]);  // ［後ろ向きループ］処理
 
         return [
             foresideOverSteppingStones,
@@ -358,12 +357,12 @@
 
 
     /**
-     * これからひっくり返して手番の色になる石（［狙われた石］）から見て、次に石を置けるところの検出。
-     * @param stoneTargetedSq 
+     * これからひっくり返して手番の色になる石（［挟めた石］）から見て、次に石を置けるところの検出。
+     * @param sandwichedStoneSq 
      * @param direction 
      */
-    function stoneTargetedGenerateMoveOnDirection (
-        stoneTargetedSq: number,
+    function sandwichedStoneGenerateMoveOnDirection (
+        sandwichedStoneSq: number,
         direction: Direction,
         thisTurn: Color,
         gameBoard1StoneColorArray: Color[],
@@ -371,7 +370,8 @@
         allDirectionsBackOf: ((sq: number) => number)[],
     ): [number[], number, Color, number[], number, Color] {
 
-        function executeNext(
+        // TODO: locate() と getCap() に分けたい
+        function locateStonesAndGetCap(
             stoneTargetedSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
@@ -423,8 +423,8 @@
             return [stonesTargeted, capSq, capColor];
         }
 
-        const [foresideStonesTargeted, foresideCapSq, foresideCapColor] = executeNext(stoneTargetedSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
-        const [backsideStonesTargeted, backsideCapSq, backsideCapColor] = executeNext(stoneTargetedSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
+        const [foresideStonesTargeted, foresideCapSq, foresideCapColor] = locateStonesAndGetCap(sandwichedStoneSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
+        const [backsideStonesTargeted, backsideCapSq, backsideCapColor] = locateStonesAndGetCap(sandwichedStoneSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
 
         return [
             foresideStonesTargeted,
@@ -451,7 +451,8 @@
         allDirectionsBackOf: ((sq: number) => number)[],
     ): [number[], number, Color, number[], number, Color] {
 
-        function executeNext(
+        // TODO: locate() と getCap() に分けたい
+        function locateStonesAndGetCap(
             secondCapSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
@@ -499,8 +500,8 @@
             return [stonesTargeted, capSq, capColor];
         }
 
-        const [foresideStoneTargeted, foresideCapSq, foresideCapColor] = executeNext(secondCapSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
-        const [backsideStoneTargeted, backsideCapSq, backsideCapColor] = executeNext(secondCapSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
+        const [foresideStoneTargeted, foresideCapSq, foresideCapColor] = locateStonesAndGetCap(secondCapSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
+        const [backsideStoneTargeted, backsideCapSq, backsideCapColor] = locateStonesAndGetCap(secondCapSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
 
         return [
             foresideStoneTargeted,
@@ -548,7 +549,8 @@
         allDirectionsBackOf: ((sq: number) => number)[],
     ): [number[], number, Color, number[], number, Color] {
 
-        function executeNext(
+        // TODO: locate() と getCap() に分けたい
+        function locateStonesAndGetCap(
             secondCapSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
@@ -580,8 +582,8 @@
             return [stonesTargeted, capSq, capColor];
         }
 
-        const [foresideStoneTargeted, foresideCapSq, foresideCapColor] = executeNext(secondCapSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
-        const [backsideStoneTargeted, backsideCapSq, backsideCapColor] = executeNext(secondCapSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
+        const [foresideStoneTargeted, foresideCapSq, foresideCapColor] = locateStonesAndGetCap(secondCapSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
+        const [backsideStoneTargeted, backsideCapSq, backsideCapColor] = locateStonesAndGetCap(secondCapSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
 
         return [
             foresideStoneTargeted,
