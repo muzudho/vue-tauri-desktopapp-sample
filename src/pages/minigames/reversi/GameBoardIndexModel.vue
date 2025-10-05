@@ -9,6 +9,7 @@
     
     interface Props {
         fileNum: number;
+        area: number;
     }
     // デフォルト値を設定
     const props = defineProps<Props>();
@@ -49,6 +50,21 @@
 
 
     /**
+     * 南側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function southOf(sq: number) : number {
+        const southSq = sq + props.fileNum;
+        if (props.area <= southSq) {  // 盤を飛び出たら
+            return -1;
+        }
+
+        return southSq;
+    }
+
+
+    /**
      * 北側のマス番号。
      * @param sq 
      * @returns 該当がなければ -1
@@ -70,6 +86,7 @@
     defineExpose({
         eastOf,
         westOf,
+        southOf,
         northOf,
     });
 

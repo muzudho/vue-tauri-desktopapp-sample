@@ -5,6 +5,7 @@
     <game-board-index-model-1
         ref="gameBoardIndexModel1Ref"
         :fileNum="gameBoard1FileNum"
+        :area="gameBoard1Area"
     />
     <game-board-model-1 ref="gameBoardModel1Ref"/>
     <generation-move-model-1 ref="generationMoveModel1Ref"/>
@@ -466,7 +467,7 @@
         allDirectionsForeOf = [
             (_sq: number) => { return -1; },
             gameBoardIndexModel1Ref.value.eastOf,
-            southOf,
+            gameBoardIndexModel1Ref.value.southOf,
             northeastOf,
             southeastOf,
         ] as ((sq: number) => number)[];
@@ -481,7 +482,7 @@
             (_sq: number) => { return -1; },
             gameBoardIndexModel1Ref.value.eastOf,
             gameBoardIndexModel1Ref.value.westOf,
-            southOf,
+            gameBoardIndexModel1Ref.value.southOf,
             gameBoardIndexModel1Ref.value.northOf,
             northeastOf,
             southwestOf,
@@ -669,21 +670,6 @@
         }
 
         return southeastSq;
-    }
-
-
-    /**
-     * 南側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function southOf(sq: number) : number {
-        const southSq = sq + gameBoard1FileNum.value;
-        if (gameBoard1Area.value <= southSq) {  // 盤を飛び出たら
-            return -1;
-        }
-
-        return southSq;
     }
 
 
