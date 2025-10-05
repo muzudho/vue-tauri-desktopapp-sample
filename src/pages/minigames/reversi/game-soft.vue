@@ -2,6 +2,10 @@
 
     <comment>機能</comment>
     <button-20250822 ref="button1Ref"/>
+    <game-board-index-model-1
+        ref="gameBoardModelIndex1Ref"
+        :fileNum="gameBoard1FileNum"
+    />
     <game-board-model-1 ref="gameBoardModel1Ref"/>
     <generation-move-model-1 ref="generationMoveModel1Ref"/>
 
@@ -127,6 +131,7 @@
     // + インポート　＞　ページ +
     // ++++++++++++++++++++++++++
 
+    import GameBoardIndexModel1 from './GameBoardIndexModel.vue';
     import GameBoardModel1 from './GameBoardModel.vue';
     import GenerationMoveModel1 from './GenerationMoveModel.vue';
     import {
@@ -175,6 +180,7 @@
     // ++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
+    const gameBoardIndexModel1Ref = ref<InstanceType<typeof GameBoardIndexModel1> | null>(null);
     const gameBoardModel1Ref = ref<InstanceType<typeof GameBoardModel1> | null>(null);
     const generationMoveModel1Ref = ref<InstanceType<typeof GenerationMoveModel1> | null>(null);
 
@@ -294,10 +300,10 @@
         };
     });
 
-    const allDirectionsForeOf = [(_sq: number) => { return -1; }, eastOf, southOf, northeastOf, southeastOf] as ((sq: number) => number)[];
-    const allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, northOf, southwestOf, northwestOf] as ((sq: number) => number)[];
-    const allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
-    // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
+    let allDirectionsForeOf = [] as ((sq: number) => number)[];
+    let allDirectionsBackOf = [] as ((sq: number) => number)[];
+    let allWaysNextOf = [] as ((sq: number) => number)[];
+    // const allWaysBackOf = [] as ((sq: number) => number)[];
 
 
     /**
@@ -450,6 +456,11 @@
         // ++++++++++++++++++++++++++
         // + ゲームデータをリセット +
         // ++++++++++++++++++++++++++
+
+        allDirectionsForeOf = [(_sq: number) => { return -1; }, eastOf, southOf, northeastOf, southeastOf] as ((sq: number) => number)[];
+        allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, northOf, southwestOf, northwestOf] as ((sq: number) => number)[];
+        allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
+        // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
 
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
