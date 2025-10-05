@@ -79,15 +79,91 @@
     }
 
 
+    /**
+     * 北東側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function northeastOf(sq: number) : number {
+        const northeastSq = sq - props.fileNum + 1;
+        if (
+            northeastSq < 0 // 盤を飛び出たら
+            || northeastSq % props.fileNum == 0    // 世界一周したら
+        ) {  
+            return -1;
+        }
+
+        return northeastSq;
+    }
+
+
+    /**
+     * 南西側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function southwestOf(sq: number) : number {
+        const southwestSq = sq + props.fileNum - 1;
+        if (
+            props.area <= southwestSq // 盤を飛び出たら
+            || southwestSq % props.fileNum == props.fileNum- 1 // 世界一周したら
+        ) { 
+            return -1;
+        }
+
+        return southwestSq;
+    }
+
+
+    /**
+     * 南東側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function southeastOf(sq: number) : number {
+        const southeastSq = sq + props.fileNum + 1;
+        if (
+            southeastSq % props.fileNum == 0  // 世界一周したら
+            || props.area <= southeastSq  // 盤を飛び出たら
+        ) {   
+            return -1;
+        }
+
+        return southeastSq;
+    }
+
+
+    /**
+     * 北西側のマス番号。
+     * @param sq 
+     * @returns 該当がなければ -1
+     */
+    function northwestOf(sq: number) : number {
+        const northwestSq = sq - props.fileNum - 1;
+        if (
+            northwestSq % props.fileNum == props.fileNum - 1    // 世界一周したら
+            || northwestSq < 0  // 盤を飛び出たら
+        ) { 
+            return -1;
+        }
+
+        return northwestSq;
+    }
+
+
     // ################
     // # エクスポーズ #
     // ################
 
     defineExpose({
-        eastOf,
+        eastOf, // 水平方向
         westOf,
-        southOf,
+        southOf,    // 垂直方向
         northOf,
+        northeastOf,    // 右肩上がり方向
+        southwestOf,
+        southeastOf,    // 右肩下がり方向
+        northwestOf,
     });
 
 </script>

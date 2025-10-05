@@ -466,28 +466,28 @@
 
         allDirectionsForeOf = [
             (_sq: number) => { return -1; },
-            gameBoardIndexModel1Ref.value.eastOf,
-            gameBoardIndexModel1Ref.value.southOf,
-            northeastOf,
-            southeastOf,
+            gameBoardIndexModel1Ref.value.eastOf,   // 水平方向
+            gameBoardIndexModel1Ref.value.southOf,  // 垂直方向
+            gameBoardIndexModel1Ref.value.northeastOf,  // 右肩上がり方向
+            gameBoardIndexModel1Ref.value.southeastOf,  // 右肩下がり方向
         ] as ((sq: number) => number)[];
         allDirectionsBackOf = [
             (_sq: number) => { return -1; },
             gameBoardIndexModel1Ref.value.westOf,
             gameBoardIndexModel1Ref.value.northOf,
-            southwestOf,
-            northwestOf,
+            gameBoardIndexModel1Ref.value.southwestOf,
+            gameBoardIndexModel1Ref.value.northwestOf,
         ] as ((sq: number) => number)[];
         allWaysNextOf = [
             (_sq: number) => { return -1; },
-            gameBoardIndexModel1Ref.value.eastOf,
+            gameBoardIndexModel1Ref.value.eastOf,   // 水平方向
             gameBoardIndexModel1Ref.value.westOf,
-            gameBoardIndexModel1Ref.value.southOf,
+            gameBoardIndexModel1Ref.value.southOf,  // 垂直方向
             gameBoardIndexModel1Ref.value.northOf,
-            northeastOf,
-            southwestOf,
-            southeastOf,
-            northwestOf,
+            gameBoardIndexModel1Ref.value.northeastOf,  // 右肩上がり方向
+            gameBoardIndexModel1Ref.value.southwestOf,
+            gameBoardIndexModel1Ref.value.southeastOf,  // 右肩下がり方向
+            gameBoardIndexModel1Ref.value.northwestOf,
         ];
         // const allWaysBackOf = [
         //  (_sq: number) => { return -1; },
@@ -635,78 +635,6 @@
     // ++++++++++++++++++++++++++++++++
     // + サブルーチン　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
-
-
-    /**
-     * 北東側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function northeastOf(sq: number) : number {
-        const northeastSq = sq - gameBoard1FileNum.value + 1;
-        if (
-            northeastSq < 0 // 盤を飛び出たら
-            || northeastSq % gameBoard1FileNum.value == 0    // 世界一周したら
-        ) {  
-            return -1;
-        }
-
-        return northeastSq;
-    }
-
-
-    /**
-     * 南東側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function southeastOf(sq: number) : number {
-        const southeastSq = sq + gameBoard1FileNum.value + 1;
-        if (
-            southeastSq % gameBoard1FileNum.value == 0  // 世界一周したら
-            || gameBoard1Area.value <= southeastSq  // 盤を飛び出たら
-        ) {   
-            return -1;
-        }
-
-        return southeastSq;
-    }
-
-
-    /**
-     * 南西側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function southwestOf(sq: number) : number {
-        const southwestSq = sq + gameBoard1FileNum.value - 1;
-        if (
-            gameBoard1Area.value <= southwestSq // 盤を飛び出たら
-            || southwestSq % gameBoard1FileNum.value == gameBoard1FileNum.value - 1 // 世界一周したら
-        ) { 
-            return -1;
-        }
-
-        return southwestSq;
-    }
-
-
-    /**
-     * 北西側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function northwestOf(sq: number) : number {
-        const northwestSq = sq - gameBoard1FileNum.value - 1;
-        if (
-            northwestSq % gameBoard1FileNum.value == gameBoard1FileNum.value - 1    // 世界一周したら
-            || northwestSq < 0  // 盤を飛び出たら
-        ) { 
-            return -1;
-        }
-
-        return northwestSq;
-    }
 
 
     /**
