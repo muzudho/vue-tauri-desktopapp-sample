@@ -139,7 +139,7 @@
         // 色
         COLOR_BLACK, COLOR_EMPTY, Color, oppositeColor,
         // マス
-        SQ_OUT_OF_BOARD, makeCodeToSq,
+        makeCodeToSq,
         // 方向
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
         COLOR_WHITE,
@@ -636,56 +636,18 @@
 
 
     /**
-     * ひっくり返す対象の石を取得
-     */
-    function locateTargetStonesOneWay(
-        startSq: number,
-        nextOf: (sq: number) => number,
-    ) : number[] {
-        if (!gameBoardContentModel1Ref?.value) {
-            console.error("ERROR: [locateTargetStonesOneWay] 初期化不備： gameBoardContentModel1Ref 。");
-            return [];
-        } 
-
-        const steppingOverOppositeTurnStones : number[] = [];  // ［跨いだ相手番の石］
-        console.log(`DEBUG: [locateTargetStonesOneWay] nextOf=${nextOf}`);
-        let nextSq = nextOf(startSq);   // 隣のマス番号
-        while (true) {  // 一次ループ
-            if (nextSq == SQ_OUT_OF_BOARD) {    // 盤外に突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
-                steppingOverOppositeTurnStones.length = 0;
-                break;
-            }
-
-            const nextColor: Color = gameBoardContentModel1Ref.value.stonesColor[nextSq];  // 隣の石の色
-            //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
-
-            if (nextColor == COLOR_EMPTY) { // 空マスに突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
-                steppingOverOppositeTurnStones.length = 0;
-                break;
-            }
-
-            if (nextColor == game1Turn.value) {    // 手番の石に当たったら、一次ループを抜ける
-                // canGoTOSecondaryLoop = true;
-                break;
-            }
-
-            steppingOverOppositeTurnStones.push(nextSq);    // 跨いだ相手番の石はマス番号を記録
-            nextSq = nextOf(nextSq);
-        }
-
-        return steppingOverOppositeTurnStones;
-    }
-
-
-    /**
-     * ひっくり返す対象の石を取得
+     * ひっくり返す対象の石のマス番号を取得
      */
     function locateTargetStones(
         startSq: number,
         direction: Direction,
     ) : number[] {
         if (!gameBoardIndexModel1Ref?.value) {
-            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref。");
+            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref -。");
+            return [];  // エラー
+        } 
+        if (!gameBoardContentModel1Ref?.value) {
+            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardContentModel1Ref 。");
             return [];  // エラー
         } 
 
@@ -693,8 +655,8 @@
         const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
         const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
         return [
-            ...locateTargetStonesOneWay(startSq, foreOf),
-            ...locateTargetStonesOneWay(startSq, backOf),
+            ...gameBoardContentModel1Ref.value.locateOppositeTurnStonesOverSteppedOneWay(game1Turn.value, startSq, foreOf),
+            ...gameBoardContentModel1Ref.value.locateOppositeTurnStonesOverSteppedOneWay(game1Turn.value, startSq, backOf),
         ];
     }
 
