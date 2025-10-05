@@ -140,8 +140,6 @@
         COLOR_BLACK, COLOR_EMPTY, Color, oppositeColor,
         // マス
         SQ_OUT_OF_BOARD, makeCodeToSq,
-        // 路
-        WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way,
         // 方向
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
     } from '@/pages/minigames/reversi/spec.ts';
@@ -307,27 +305,27 @@
      * @param sq 
      */
     function isAdjacentToOpponentStone(sq: number) : boolean {
-        function executeOneWay(
-            way: Way,
-        ) {
-            if (!gameBoardIndexModel1Ref?.value) {
-                console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref。");
-                return false;  // エラー
-            } 
+        if (!gameBoardIndexModel1Ref?.value) {
+            console.error("ERROR: [isAdjacentToOpponentStone] 初期化不備： gameBoardIndexModel1Ref。");
+            return false;  // エラー
+        } 
 
+        function executeOneWay(
+            nextOf: (sq: number)=>number,
+        ) {
             // ８方向の石を取得
-            const actualAdjacentStoneColor: Color = gameBoardIndexModel1Ref.value.allWaysNextOf[way](sq) != -1 ? gameBoard1StoneColorArray.value[gameBoardIndexModel1Ref.value.allWaysNextOf[way](sq)] : 0;
+            const actualAdjacentStoneColor: Color = nextOf(sq) != -1 ? gameBoard1StoneColorArray.value[nextOf(sq)] : 0;
             return actualAdjacentStoneColor == oppositeColor(game1Turn.value);
         }
 
-        return executeOneWay(WAY_EAST)
-            || executeOneWay(WAY_WEST)
-            || executeOneWay(WAY_SOUTH)
-            || executeOneWay(WAY_NORTH)
-            || executeOneWay(WAT_NORTHEAST)
-            || executeOneWay(WAY_SOUTHWEST)
-            || executeOneWay(WAY_SOUTHEAST)
-            || executeOneWay(WAY_NORTHWEST)
+        return executeOneWay(gameBoardIndexModel1Ref.value.eastOf)  // 水平方向
+            || executeOneWay(gameBoardIndexModel1Ref.value.westOf)
+            || executeOneWay(gameBoardIndexModel1Ref.value.southOf) // 垂直方向
+            || executeOneWay(gameBoardIndexModel1Ref.value.northOf)
+            || executeOneWay(gameBoardIndexModel1Ref.value.northeastOf) // 右肩上がり方向
+            || executeOneWay(gameBoardIndexModel1Ref.value.southwestOf)
+            || executeOneWay(gameBoardIndexModel1Ref.value.southeastOf) // 右肩下がり方向
+            || executeOneWay(gameBoardIndexModel1Ref.value.northwestOf)
             ;
     }
 

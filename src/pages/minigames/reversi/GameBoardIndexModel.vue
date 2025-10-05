@@ -28,7 +28,7 @@
 
     const allDirectionsForeOf = ref<((sq: number) => number)[]>([]);
     const allDirectionsBackOf = ref<((sq: number) => number)[]>([]);
-    const allWaysNextOf = ref<((sq: number) => number)[]>([]);
+    // const allWaysNextOf = ref<((sq: number) => number)[]>([]);
     // const allWaysBackOf = ref<((sq: number) => number)[]>([]);
 
 
@@ -53,17 +53,17 @@
             southwestOf,
             northwestOf,
         ] as ((sq: number) => number)[];
-        allWaysNextOf.value = [   // FIXME: これが無くてもアルゴリズム作れないか？
-            (_sq: number) => { return -1; },
-            eastOf,   // 水平方向
-            westOf,
-            southOf,  // 垂直方向
-            northOf,
-            northeastOf,  // 右肩上がり方向
-            southwestOf,
-            southeastOf,  // 右肩下がり方向
-            northwestOf,
-        ];
+        // allWaysNextOf.value = [   // FIXME: これが無くてもアルゴリズム作れないか？
+        //     (_sq: number) => { return -1; },
+        //     eastOf,   // 水平方向
+        //     westOf,
+        //     southOf,  // 垂直方向
+        //     northOf,
+        //     northeastOf,  // 右肩上がり方向
+        //     southwestOf,
+        //     southeastOf,  // 右肩下がり方向
+        //     northwestOf,
+        // ];
         // allWaysBackOf.value = [
         //  (_sq: number) => { return -1; },
         //  westOf,
@@ -230,7 +230,7 @@
 
         allDirectionsForeOf,
         allDirectionsBackOf,
-        allWaysNextOf,
+        // allWaysNextOf,
     });
 
 </script>
