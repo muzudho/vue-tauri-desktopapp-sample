@@ -16,7 +16,7 @@
         SQ_OUT_OF_BOARD,
 
         // 方向
-        DIRECTION_SIZE, DIRECTION_TITLES,
+        DIRECTION_SIZE, directionToTitle,
     } from '@/pages/minigames/reversi/spec.ts';
 
     import type {
@@ -203,7 +203,7 @@
                                 // console.log(`DEBUG: [putStone]1     secondCapForesideSecondCapSq=${secondCapForesideSecondCapSq}`);
                                 // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]}`);
                                 // console.log(`DEBUG: [putStone]1     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${DIRECTION_TITLES[secondDirection]} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+                                console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${directionToTitle(secondDirection)} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
                                 gameBoard1CanMove.value[secondDirection][thisTurn][secondCapForesideSecondCapSq] = canMove1;
                             }
                         }
@@ -220,7 +220,7 @@
                                 // console.log(`DEBUG: [putStone]2     secondCapBacksideSecondCapSq=${secondCapBacksideSecondCapSq}`);
                                 // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]}`);
                                 // console.log(`DEBUG: [putStone]2     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${DIRECTION_TITLES[secondDirection]} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+                                console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${directionToTitle(secondDirection)} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
                                 gameBoard1CanMove.value[secondDirection][thisTurn][secondCapBacksideSecondCapSq] = canMove1;
                             }
                         }
@@ -254,7 +254,7 @@
                                 // console.log(`DEBUG: [putStone]1     secondCapForesideSecondCapSq=${secondCapForesideSecondCapSq}`);
                                 // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]}`);
                                 // console.log(`DEBUG: [putStone]1     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${DIRECTION_TITLES[secondDirection]} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+                                console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${directionToTitle(secondDirection)} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
                                 gameBoard1CanMove.value[secondDirection][oppositeTurnColor1][secondCapForesideSecondCapSq] = canMove1;
                             }
                         }
@@ -271,7 +271,7 @@
                                 // console.log(`DEBUG: [putStone]2     secondCapBacksideSecondCapSq=${secondCapBacksideSecondCapSq}`);
                                 // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]}`);
                                 // console.log(`DEBUG: [putStone]2     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${DIRECTION_TITLES[secondDirection]} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+                                console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${directionToTitle(secondDirection)} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
                                 gameBoard1CanMove.value[secondDirection][oppositeTurnColor1][secondCapBacksideSecondCapSq] = canMove1;
                             }
                         }
@@ -283,11 +283,11 @@
                     // xooo.xxo
                     //     ^
                     //     xもoも置けることに注意
-                    console.log(`DEBUG: [putStone] 　　第２${DIRECTION_TITLES[secondDirection]} 前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
+                    console.log(`DEBUG: [putStone] 　　第２${directionToTitle(secondDirection)} 前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
                     executeThisTurnSide(foresideSecondCapSq, secondDirection);    // foreside
                     executeOppositeTurnSide(foresideSecondCapSq, secondDirection);
 
-                    console.log(`DEBUG: [putStone] 　　第２${DIRECTION_TITLES[secondDirection]} 後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
+                    console.log(`DEBUG: [putStone] 　　第２${directionToTitle(secondDirection)} 後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
                     executeThisTurnSide(backsideSecondCapSq, secondDirection);    // backside
                     executeOppositeTurnSide(backsideSecondCapSq, secondDirection);
                 }

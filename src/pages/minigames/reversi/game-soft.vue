@@ -143,7 +143,7 @@
         // 路
         WAY_WEST, WAY_EAST, WAY_NORTH, WAY_SOUTH, WAY_SOUTHWEST, WAT_NORTHEAST, WAY_NORTHWEST, WAY_SOUTHEAST, Way,
         // 方向
-        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
+        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -301,10 +301,6 @@
         };
     });
 
-    let allDirectionsBackOf = [] as ((sq: number) => number)[];
-    let allWaysNextOf = [] as ((sq: number) => number)[];
-    // const allWaysBackOf = [] as ((sq: number) => number)[];
-
 
     /**
      * 相手の石に隣接するマスだ
@@ -314,8 +310,13 @@
         function executeOneWay(
             way: Way,
         ) {
+            if (!gameBoardIndexModel1Ref?.value) {
+                console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref。");
+                return false;  // エラー
+            } 
+
             // ８方向の石を取得
-            const actualAdjacentStoneColor: Color = allWaysNextOf[way](sq) != -1 ? gameBoard1StoneColorArray.value[allWaysNextOf[way](sq)] : 0;
+            const actualAdjacentStoneColor: Color = gameBoardIndexModel1Ref.value.allWaysNextOf[way](sq) != -1 ? gameBoard1StoneColorArray.value[gameBoardIndexModel1Ref.value.allWaysNextOf[way](sq)] : 0;
             return actualAdjacentStoneColor == oppositeColor(game1Turn.value);
         }
 
@@ -432,7 +433,7 @@
                 gameBoard1FileNameArray,
                 gameBoard1StoneColorArray.value,
                 gameBoardIndexModel1Ref.value.allDirectionsForeOf,
-                allDirectionsBackOf,
+                gameBoardIndexModel1Ref.value.allDirectionsBackOf,
             );
         }
 
@@ -474,37 +475,6 @@
         // ++++++++++++++++++++++++++
         // + ゲームデータをリセット +
         // ++++++++++++++++++++++++++
-
-        // ゲーム盤インデックス：
-        allDirectionsBackOf = [
-            (_sq: number) => { return -1; },
-            gameBoardIndexModel1Ref.value.westOf,
-            gameBoardIndexModel1Ref.value.northOf,
-            gameBoardIndexModel1Ref.value.southwestOf,
-            gameBoardIndexModel1Ref.value.northwestOf,
-        ] as ((sq: number) => number)[];
-        allWaysNextOf = [
-            (_sq: number) => { return -1; },
-            gameBoardIndexModel1Ref.value.eastOf,   // 水平方向
-            gameBoardIndexModel1Ref.value.westOf,
-            gameBoardIndexModel1Ref.value.southOf,  // 垂直方向
-            gameBoardIndexModel1Ref.value.northOf,
-            gameBoardIndexModel1Ref.value.northeastOf,  // 右肩上がり方向
-            gameBoardIndexModel1Ref.value.southwestOf,
-            gameBoardIndexModel1Ref.value.southeastOf,  // 右肩下がり方向
-            gameBoardIndexModel1Ref.value.northwestOf,
-        ];
-        // const allWaysBackOf = [
-        //  (_sq: number) => { return -1; },
-        //  westOf,
-        //  gameBoardIndexModel1Ref.value.eastOf,
-        //  gameBoardIndexModel1Ref.value.northOf,
-        //  southOf,
-        //  southwestOf,
-        //  northeastOf,
-        //  northwestOf,
-        //  southeastOf
-        // ];
 
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
@@ -650,6 +620,7 @@
         nextOf: (sq: number) => number,
     ) : number[] {
         const steppingOverOppositeTurnStones : number[] = [];  // ［跨いだ相手番の石］
+        console.log(`DEBUG: [locateTargetStonesOneWay] nextOf=${nextOf}`);
         let nextSq = nextOf(startSq);   // 隣のマス番号
         while (true) {  // 一次ループ
             if (nextSq == SQ_OUT_OF_BOARD) {    // 盤外に突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
@@ -690,8 +661,9 @@
             return [];  // エラー
         } 
 
+        console.log(`DEBUG: [locateTargetStones] direction=${directionToTitle(direction)} gameBoardIndexModel1Ref.value.allDirectionsForeOf.length=${gameBoardIndexModel1Ref.value.allDirectionsForeOf.length}`);
         const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
-        const backOf = allDirectionsBackOf[direction];
+        const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
         return [
             ...locateTargetStonesOneWay(startSq, foreOf),
             ...locateTargetStonesOneWay(startSq, backOf),

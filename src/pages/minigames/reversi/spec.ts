@@ -88,12 +88,22 @@ export type Direction = typeof DIRECTION_EMPTY
     | typeof DIRECTION_SINISTER_DIAGONAL
     ;
 export const DIRECTION_TITLES = {    // 表示名
-    [DIRECTION_EMPTY]: '',
+    [DIRECTION_EMPTY]: '空っぽ',
     [DIRECTION_HORIZONTAL]: '水平',
     [DIRECTION_VERTICAL]: '垂直',
     [DIRECTION_BAROQUE_DIAGONAL]: '右肩上',
     [DIRECTION_SINISTER_DIAGONAL]: '右肩下',
 };
+
+
+export function directionToTitle(direction: Direction) : string {
+    if (!(direction in DIRECTION_TITLES)) {
+        return '範囲外';
+    }
+    return DIRECTION_TITLES[direction];
+}
+
+
 // ライブラリー利用者側で定義すること：
 // export const activeDirections = [
 //     DIRECTION_HORIZONTAL,

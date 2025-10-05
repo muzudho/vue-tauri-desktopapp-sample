@@ -7,7 +7,7 @@
     // # インポート #
     // ##############
 
-    import { onMounted } from 'vue';
+    import { onMounted, ref } from 'vue';
 
 
     // ####################################
@@ -26,7 +26,10 @@
     // # オブジェクト #
     // ################
 
-    let allDirectionsForeOf = [] as ((sq: number) => number)[];
+    const allDirectionsForeOf = ref<((sq: number) => number)[]>([]);
+    const allDirectionsBackOf = ref<((sq: number) => number)[]>([]);
+    const allWaysNextOf = ref<((sq: number) => number)[]>([]);
+    // const allWaysBackOf = ref<((sq: number) => number)[]>([]);
 
 
     // ##############
@@ -34,14 +37,44 @@
     // ##############
 
     onMounted(()=>{
+        console.log(`DEBUG: [GameBoardIndexModel.vue onMounted] 開始。`);
         // ゲーム盤インデックス：
-        allDirectionsForeOf = [
+        allDirectionsForeOf.value = [
             (_sq: number) => { return -1; },
             eastOf,   // 水平方向
             southOf,  // 垂直方向
             northeastOf,  // 右肩上がり方向
             southeastOf,  // 右肩下がり方向
         ] as ((sq: number) => number)[];
+        allDirectionsBackOf.value = [
+            (_sq: number) => { return -1; },
+            westOf,
+            northOf,
+            southwestOf,
+            northwestOf,
+        ] as ((sq: number) => number)[];
+        allWaysNextOf.value = [   // FIXME: これが無くてもアルゴリズム作れないか？
+            (_sq: number) => { return -1; },
+            eastOf,   // 水平方向
+            westOf,
+            southOf,  // 垂直方向
+            northOf,
+            northeastOf,  // 右肩上がり方向
+            southwestOf,
+            southeastOf,  // 右肩下がり方向
+            northwestOf,
+        ];
+        // allWaysBackOf.value = [
+        //  (_sq: number) => { return -1; },
+        //  westOf,
+        //  eastOf,
+        //  northOf,
+        //  southOf,
+        //  southwestOf,
+        //  northeastOf,
+        //  northwestOf,
+        //  southeastOf
+        // ];
     });
 
 
@@ -194,8 +227,10 @@
         southwestOf,
         southeastOf,    // 右肩下がり方向
         northwestOf,
-        
+
         allDirectionsForeOf,
+        allDirectionsBackOf,
+        allWaysNextOf,
     });
 
 </script>
