@@ -7,19 +7,23 @@
     // # インポート #
     // ##############
 
-    //import { computed, ref } from 'vue';
+    import { computed, ref } from 'vue';
+    import { Color } from '@/pages/minigames/reversi/spec.ts';
 
 
     // ################
     // # オブジェクト #
     // ################
 
+    const stonesColor = ref<Color[]>(new Array(0));   // 空っぽ
+
 
     // ################
     // # エクスポーズ #
     // ################
 
-    // defineExpose({
-    // });
+    defineExpose({
+        stonesColor,
+    });
 
 </script>

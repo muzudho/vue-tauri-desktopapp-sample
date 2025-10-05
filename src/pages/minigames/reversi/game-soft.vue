@@ -52,7 +52,7 @@
                 minWidth: `${tileBoard1TileWidth}px`,
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
-                color: game1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
+                color: game1StoneColorNameMap[(gameBoardContentModel1Ref?.stonesColor[sq] ?? 0)],    /* 石の色 */
                 backgroundColor: getGameBoard1BackGroundColor(sq, (gameBoardIndexModel1Ref?.fileNum ?? 0)),  /* 盤の色 */
                 pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
             }"
@@ -63,7 +63,7 @@
                 z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
             "
             @click="onGameBoard1Clicked(sq)"
-        >{{ colorToShape(gameBoard1StoneColorArray[sq]) }}</v-btn>
+        >{{ colorToShape(gameBoardContentModel1Ref?.stonesColor[sq] ?? 0) }}</v-btn>
 
 
         <!-- 筋の符号 -->
@@ -257,15 +257,19 @@
     }
 
 
-    const gameBoard1StoneColorArray = ref<Color[]>(new Array(0));   // 空っぽ
     const gameBoard1StoneClickable = computed<
         (sq: number) => boolean
     >(()=>{    // マスをクリック可能か
         return (sq: number)=>{
+            if (!gameBoardContentModel1Ref?.value) {
+                console.error("ERROR: [gameBoard1StoneClickable] 初期化不備： gameBoardContentModel1Ref 。");
+                return false;  // エラー
+            } 
+
             // TODO: 石を置くことで、相手の石をひっくり返せるか？
             // TODO: 相手の石をひっくり返せない場合はパス
             // TODO: パスするボタンが欲しい
-            const isEmptySquare = gameBoard1StoneColorArray.value[sq] == 0; // 空マスだ
+            const isEmptySquare = gameBoardContentModel1Ref.value.stonesColor[sq] == 0; // 空マスだ
             return isEmptySquare && isAdjacentToOpponentStone(sq) && !game1IsEnd.value;
         }
     });
@@ -322,8 +326,13 @@
         function executeOneWay(
             nextOf: (sq: number)=>number,
         ) {
+            if (!gameBoardContentModel1Ref?.value) {
+                console.error("ERROR: [isAdjacentToOpponentStone] 初期化不備： gameBoardContentModel1Ref 。");
+                return false;  // エラー
+            } 
+
             // ８方向の石を取得
-            const actualAdjacentStoneColor: Color = nextOf(sq) != -1 ? gameBoard1StoneColorArray.value[nextOf(sq)] : 0;
+            const actualAdjacentStoneColor: Color = nextOf(sq) != -1 ? gameBoardContentModel1Ref.value.stonesColor[nextOf(sq)] : 0;
             return actualAdjacentStoneColor == oppositeColor(game1Turn.value);
         }
 
@@ -405,6 +414,10 @@
             console.error("ERROR: [putStone] 初期化不備： gameBoardIndexModel1Ref。");
             return false;  // エラー
         } 
+        if (!gameBoardContentModel1Ref?.value) {
+            console.error("ERROR: [putStone] 初期化不備： gameBoardContentModel1Ref 。");
+            return false;  // エラー
+        } 
         if (!generationMoveModel1Ref?.value) {
             console.error("ERROR: [putStone] 初期化不備： generationMoveModel1Ref。");
             return false;  // エラー
@@ -416,7 +429,7 @@
 
         const oppositeTurnColor1 = oppositeColor(game1Turn.value);
 
-        gameBoard1StoneColorArray.value[moveSq] = color;    // 石を置きます
+        gameBoardContentModel1Ref.value.stonesColor[moveSq] = color;    // 石を置きます
 
         // ++++++++++++++++++++++++
         // + 石をひっくり返します +
@@ -441,7 +454,7 @@
             moveSq,
             gameBoardIndexModel1Ref.value.fileNum,
             gameBoard1FileNameArray,
-            gameBoard1StoneColorArray.value,
+            gameBoardContentModel1Ref.value.stonesColor,
             gameBoardIndexModel1Ref.value.allDirectionsForeOf,
             gameBoardIndexModel1Ref.value.allDirectionsBackOf,
         );
@@ -473,6 +486,10 @@
             console.error(`ERROR: [gameInit] 初期化不備： gameBoardIndexModel1Ref。`);
             return;
         }
+        if (!gameBoardContentModel1Ref?.value) {
+            console.error("ERROR: [putStone] 初期化不備： gameBoardContentModel1Ref 。");
+            return;
+        } 
 
         //game1DebugMessage.value = "ゲームの初期化";
         game1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
@@ -487,7 +504,7 @@
 
         // 盤の初期化
         for(let sq: number=0; sq<gameBoardIndexModel1Ref.value.area; sq++){
-            gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
+            gameBoardContentModel1Ref.value.stonesColor[sq] = 0;    // 空マス
         }
 
         game1Times.value = 0;
@@ -499,7 +516,7 @@
 
 
         // 石の色
-        gameBoard1StoneColorArray.value = new Array(gameBoardIndexModel1Ref.value.area).fill(0);
+        gameBoardContentModel1Ref.value.stonesColor = new Array(gameBoardIndexModel1Ref.value.area).fill(0);
 
 
         // ［指し手生成］を初期化
@@ -626,6 +643,11 @@
         startSq: number,
         nextOf: (sq: number) => number,
     ) : number[] {
+        if (!gameBoardContentModel1Ref?.value) {
+            console.error("ERROR: [locateTargetStonesOneWay] 初期化不備： gameBoardContentModel1Ref 。");
+            return [];
+        } 
+
         const steppingOverOppositeTurnStones : number[] = [];  // ［跨いだ相手番の石］
         console.log(`DEBUG: [locateTargetStonesOneWay] nextOf=${nextOf}`);
         let nextSq = nextOf(startSq);   // 隣のマス番号
@@ -635,7 +657,7 @@
                 break;
             }
 
-            const nextColor: Color = gameBoard1StoneColorArray.value[nextSq];  // 隣の石の色
+            const nextColor: Color = gameBoardContentModel1Ref.value.stonesColor[nextSq];  // 隣の石の色
             //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
 
             if (nextColor == COLOR_EMPTY) { // 空マスに突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
@@ -685,13 +707,18 @@
     function reverseStones(
         targetStones: number[],
     ) : void {
+        if (!gameBoardContentModel1Ref?.value) {
+            console.error("ERROR: [reverseStones] 初期化不備： gameBoardContentModel1Ref 。");
+            return;
+        } 
+
         // 石の数を更新
         game1StoneCount.value[game1Turn.value] += targetStones.length;
         game1StoneCount.value[oppositeColor(game1Turn.value)] -= targetStones.length;
 
         // ［跨いだ相手番の石］をひっくり返す
         for (const targetStoneSq of targetStones) {
-            gameBoard1StoneColorArray.value[targetStoneSq] = game1Turn.value;
+            gameBoardContentModel1Ref.value.stonesColor[targetStoneSq] = game1Turn.value;
         }
     }
 
