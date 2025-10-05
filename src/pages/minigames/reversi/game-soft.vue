@@ -463,10 +463,42 @@
         // + ゲームデータをリセット +
         // ++++++++++++++++++++++++++
 
-        allDirectionsForeOf = [(_sq: number) => { return -1; }, eastOf, southOf, northeastOf, southeastOf] as ((sq: number) => number)[];
-        allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, gameBoardIndexModel1Ref.value.northOf, southwestOf, northwestOf] as ((sq: number) => number)[];
-        allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, gameBoardIndexModel1Ref.value.northOf, northeastOf, southwestOf, southeastOf, northwestOf];
-        // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, gameBoardIndexModel1Ref.value.northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
+        allDirectionsForeOf = [
+            (_sq: number) => { return -1; },
+            gameBoardIndexModel1Ref.value.eastOf,
+            southOf,
+            northeastOf,
+            southeastOf,
+        ] as ((sq: number) => number)[];
+        allDirectionsBackOf = [
+            (_sq: number) => { return -1; },
+            gameBoardIndexModel1Ref.value.westOf,
+            gameBoardIndexModel1Ref.value.northOf,
+            southwestOf,
+            northwestOf,
+        ] as ((sq: number) => number)[];
+        allWaysNextOf = [
+            (_sq: number) => { return -1; },
+            gameBoardIndexModel1Ref.value.eastOf,
+            gameBoardIndexModel1Ref.value.westOf,
+            southOf,
+            gameBoardIndexModel1Ref.value.northOf,
+            northeastOf,
+            southwestOf,
+            southeastOf,
+            northwestOf,
+        ];
+        // const allWaysBackOf = [
+        //  (_sq: number) => { return -1; },
+        //  westOf,
+        //  gameBoardIndexModel1Ref.value.eastOf,
+        //  gameBoardIndexModel1Ref.value.northOf,
+        //  southOf,
+        //  southwestOf,
+        //  northeastOf,
+        //  northwestOf,
+        //  southeastOf
+        // ];
 
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
@@ -623,21 +655,6 @@
 
 
     /**
-     * 東側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function eastOf(sq: number) : number {
-        const eastSq = sq + 1;
-        if (eastSq % gameBoard1FileNum.value == 0) {   // 世界一周したら
-            return -1;
-        }
-
-        return eastSq;
-    }
-
-
-    /**
      * 南東側のマス番号。
      * @param sq 
      * @returns 該当がなければ -1
@@ -685,21 +702,6 @@
         }
 
         return southwestSq;
-    }
-
-
-    /**
-     * 西側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function westOf(sq: number) : number {
-        const westSq = sq - 1;
-        if (westSq % gameBoard1FileNum.value == gameBoard1FileNum.value - 1) {  // 世界一周したら
-            return -1;
-        }
-
-        return westSq;
     }
 
 
