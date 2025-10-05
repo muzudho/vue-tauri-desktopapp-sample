@@ -3,7 +3,7 @@
     <comment>機能</comment>
     <button-20250822 ref="button1Ref"/>
     <game-board-index-model-1
-        ref="gameBoardModelIndex1Ref"
+        ref="gameBoardIndexModel1Ref"
         :fileNum="gameBoard1FileNum"
     />
     <game-board-model-1 ref="gameBoardModel1Ref"/>
@@ -446,6 +446,12 @@
      */
     function gameInit() : void {
         console.log(`DEBUG: [gameInit] ゲームの初期化。`);
+
+        if (!gameBoardIndexModel1Ref?.value) {
+            console.error(`ERROR: [gameInit] ゲームの初期化に失敗。`);
+            return;
+        }
+
         //game1DebugMessage.value = "ゲームの初期化";
         game1Stopwatch1Ref.value?.timerReset();  // タイマーをリセット
 
@@ -458,9 +464,9 @@
         // ++++++++++++++++++++++++++
 
         allDirectionsForeOf = [(_sq: number) => { return -1; }, eastOf, southOf, northeastOf, southeastOf] as ((sq: number) => number)[];
-        allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, northOf, southwestOf, northwestOf] as ((sq: number) => number)[];
-        allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, northOf, northeastOf, southwestOf, southeastOf, northwestOf];
-        // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
+        allDirectionsBackOf = [(_sq: number) => { return -1; }, westOf, gameBoardIndexModel1Ref.value.northOf, southwestOf, northwestOf] as ((sq: number) => number)[];
+        allWaysNextOf = [(_sq: number) => { return -1; }, eastOf, westOf, southOf, gameBoardIndexModel1Ref.value.northOf, northeastOf, southwestOf, southeastOf, northwestOf];
+        // const allWaysBackOf = [(_sq: number) => { return -1; }, westOf, eastOf, gameBoardIndexModel1Ref.value.northOf, southOf, southwestOf, northeastOf, northwestOf, southeastOf];
 
         // 盤の初期化
         for(let sq: number=0; sq<gameBoard1Area.value; sq++){
@@ -596,21 +602,6 @@
     // ++++++++++++++++++++++++++++++++
     // + サブルーチン　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
-
-
-    /**
-     * 北側のマス番号。
-     * @param sq 
-     * @returns 該当がなければ -1
-     */
-    function northOf(sq: number) : number {
-        const northSq = sq - gameBoard1FileNum.value;
-        if (northSq < 0) {  // 盤を飛び出たら
-            return -1;
-        }
-
-        return northSq;
-    }
 
 
     /**
