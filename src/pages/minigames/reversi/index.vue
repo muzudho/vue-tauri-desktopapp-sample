@@ -124,11 +124,11 @@
         <p><span
             :style="{
                 color: gameSoft1Ref?.game1StoneColorNameMap[1],
-            }">●</span>の数={{ gameSoft1Ref?.game1StoneCount[1] }}</p>
+            }">●</span>の数={{ gameSoft1Ref?.gameBoardContentModel1Ref?.stoneCounts[1] }}</p>
         <p><span
             :style="{
                 color: gameSoft1Ref?.game1StoneColorNameMap[2],
-            }">●</span>の数={{ gameSoft1Ref?.game1StoneCount[2] }}</p>
+            }">●</span>の数={{ gameSoft1Ref?.gameBoardContentModel1Ref?.stoneCounts[2] }}</p>
         <p>連続パス回数={{ gameSoft1Ref?.game1PassCount }}</p>
         <p>{{ gameSoft1Ref?.game1IsEnd ? (gameSoft1Ref?.gameIsFullCapacity() ? '満局' : '終局') : '' }}</p>
 
@@ -151,11 +151,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, (gameSoft1Ref?.gameBoard1RankNum ?? 1))"
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
                         :key="sq"
                     >
                         {{ sq.toString().padStart(2, '0') }}&nbsp;
@@ -168,11 +168,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, (gameSoft1Ref?.gameBoard1RankNum ?? 1))"
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
                         :key="sq"
                     >
                         {{ gameSoft1Ref?.generationMoveModel1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
@@ -185,11 +185,11 @@
                 class="mb-6"
             >
                 <p
-                    v-for="rank in range(0, (gameSoft1Ref?.gameBoard1RankNum ?? 1))"
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
                     :key="rank"
                 >
                     <span
-                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoard1FileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoard1FileNum ?? 1))"
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
                         :key="sq"
                     >
                         {{ gameSoft1Ref?.generationMoveModel1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;

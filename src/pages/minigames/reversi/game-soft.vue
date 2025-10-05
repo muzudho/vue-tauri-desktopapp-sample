@@ -218,7 +218,6 @@
         1: '#C86868', // 明るい茶色
         2: '#289028', // 暗い緑
     }
-    const game1StoneCount = ref<number[]>([0, 0, 0]);   // 盤上のプレイヤーの石の数。[0] は未使用
     const game1DebugMessage = ref<string>('');   // デバッグ用メッセージ
 
     // ++++++++++++++++++++++++++++++++++
@@ -438,9 +437,9 @@
         let allDirectionsStonesTargeted: number[] = []; // ［ひっくり返せる石］
 
         for (const direction of activeDirections) {
-            const targetStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
-            allDirectionsStonesTargeted.push(...targetStones);
-            reverseStones(targetStones);    // 挟んだ石をひっくり返します。
+            const sandwichedStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
+            allDirectionsStonesTargeted.push(...sandwichedStones);
+            gameBoardContentModel1Ref.value.reverseStones(game1Turn.value, sandwichedStones);   // ［挟んだ石］をひっくり返します。
         }
 
         // ++++++++++++++
@@ -463,7 +462,7 @@
 
         game1Turn.value = oppositeTurnColor1; // 相手の色に変更
         game1Times.value += 1;
-        game1StoneCount.value[color] += 1;
+        gameBoardContentModel1Ref.value.stoneCounts[color] += 1;
         game1PassCount.value = 0;  // リセット
         return true;
     }
@@ -509,8 +508,8 @@
 
         game1Times.value = 0;
         game1Turn.value = COLOR_BLACK;
-        game1StoneCount.value[1] = 0;
-        game1StoneCount.value[2] = 0;
+        gameBoardContentModel1Ref.value.stoneCounts[1] = 0;
+        gameBoardContentModel1Ref.value.stoneCounts[2] = 0;
         game1PassCount.value = 0;
         game1IsEnd.value = false;
 
@@ -701,29 +700,6 @@
 
 
     /**
-     * 指定の石をひっくり返す
-     * @param targetStones 
-     */
-    function reverseStones(
-        targetStones: number[],
-    ) : void {
-        if (!gameBoardContentModel1Ref?.value) {
-            console.error("ERROR: [reverseStones] 初期化不備： gameBoardContentModel1Ref 。");
-            return;
-        } 
-
-        // 石の数を更新
-        game1StoneCount.value[game1Turn.value] += targetStones.length;
-        game1StoneCount.value[oppositeColor(game1Turn.value)] -= targetStones.length;
-
-        // ［跨いだ相手番の石］をひっくり返す
-        for (const targetStoneSq of targetStones) {
-            gameBoardContentModel1Ref.value.stonesColor[targetStoneSq] = game1Turn.value;
-        }
-    }
-
-
-    /**
      * パス
      */
     function gamePass() : void {
@@ -738,11 +714,15 @@
      */
     function gameIsFullCapacity() : boolean {
         if (!gameBoardIndexModel1Ref?.value) {
-            console.error(`ERROR: [gameIsFullCapacity] 初期化不備： gameBoardIndexModel1Ref。`);
+            console.error(`ERROR: [gameIsFullCapacity] 初期化不備： gameBoardIndexModel1Ref 。`);
+            return false;
+        }
+        if (!gameBoardContentModel1Ref?.value) {
+            console.error(`ERROR: [gameIsFullCapacity] 初期化不備： gameBoardContentModel1Ref 。`);
             return false;
         }
 
-        return gameBoardIndexModel1Ref.value.area <= game1StoneCount.value[1] + game1StoneCount.value[2];
+        return gameBoardIndexModel1Ref.value.area <= gameBoardContentModel1Ref.value.stoneCounts[1] + gameBoardContentModel1Ref.value.stoneCounts[2];
     }
 
 
@@ -753,6 +733,7 @@
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
         gameBoardIndexModel1Ref,
+        gameBoardContentModel1Ref,
         generationMoveModel1Ref,
         game1DebugMessage,
         game1IsEnd,
@@ -760,7 +741,6 @@
         game1IsPlayingPause,
         game1PassCount,
         game1StoneColorNameMap,
-        game1StoneCount,
         game1Stopwatch1Ref,
         game1Times,
         game1Turn,
