@@ -7,7 +7,7 @@
     // # インポート #
     // ##############
 
-    import { onMounted, ref } from 'vue';
+    import { computed, onMounted, ref } from 'vue';
 
 
     // ####################################
@@ -15,8 +15,8 @@
     // ####################################
     
     interface Props {
-        fileNum: number;
-        area: number;
+        fileNum: number;    // 盤が横に何マスか
+        rankNum: number;    // 盤が縦に何マスか
     }
     // デフォルト値を設定
     const props = defineProps<Props>();
@@ -26,6 +26,12 @@
     // # オブジェクト #
     // ################
 
+    // サイズ類：
+    const area = computed(()=>{
+        return props.fileNum * props.rankNum;
+    });
+
+    // 方向類：
     const allDirectionsForeOf = ref<((sq: number) => number)[]>([]);
     const allDirectionsBackOf = ref<((sq: number) => number)[]>([]);
     // const allWaysNextOf = ref<((sq: number) => number)[]>([]);
@@ -119,7 +125,7 @@
      */
     function southOf(sq: number) : number {
         const southSq = sq + props.fileNum;
-        if (props.area <= southSq) {  // 盤を飛び出たら
+        if (area.value <= southSq) {  // 盤を飛び出たら
             return -1;
         }
 
@@ -168,7 +174,7 @@
     function southwestOf(sq: number) : number {
         const southwestSq = sq + props.fileNum - 1;
         if (
-            props.area <= southwestSq // 盤を飛び出たら
+            area.value <= southwestSq // 盤を飛び出たら
             || southwestSq % props.fileNum == props.fileNum- 1 // 世界一周したら
         ) { 
             return -1;
@@ -187,7 +193,7 @@
         const southeastSq = sq + props.fileNum + 1;
         if (
             southeastSq % props.fileNum == 0  // 世界一周したら
-            || props.area <= southeastSq  // 盤を飛び出たら
+            || area.value <= southeastSq  // 盤を飛び出たら
         ) {   
             return -1;
         }
@@ -219,6 +225,12 @@
     // ################
 
     defineExpose({
+        // サイズ類：
+        fileNum: props.fileNum,
+        rankNum: props.rankNum,
+        area,
+
+        // 方向類：
         eastOf, // 水平方向
         westOf,
         southOf,    // 垂直方向

@@ -4,8 +4,8 @@
     <button-20250822 ref="button1Ref"/>
     <game-board-index-model-1
         ref="gameBoardIndexModel1Ref"
-        :fileNum="gameBoard1FileNum"
-        :area="gameBoard1Area"
+        :fileNum="8"
+        :rankNum="8"
     />
     <game-board-model-1 ref="gameBoardModel1Ref"/>
     <generation-move-model-1 ref="generationMoveModel1Ref"/>
@@ -44,16 +44,16 @@
 
         <!-- マス -->
         <v-btn
-            v-for="sq in range(0, gameBoard1Area)"
+            v-for="sq in range(0, (gameBoardIndexModel1Ref?.area ?? 0))"
             :key="sq"
             :style="{
-                left: `${(sq % gameBoard1FileNum + 1) * tileBoard1TileWidth}px`,
-                top: `${(Math.floor(sq / gameBoard1FileNum) + 1) * tileBoard1TileHeight}px`,
+                left: `${(sq % (gameBoardIndexModel1Ref?.fileNum ?? 0) + 1) * tileBoard1TileWidth}px`,
+                top: `${(Math.floor(sq / (gameBoardIndexModel1Ref?.fileNum ?? 0)) + 1) * tileBoard1TileHeight}px`,
                 minWidth: `${tileBoard1TileWidth}px`,
                 width: `${tileBoard1TileWidth}px`,
                 height: `${tileBoard1TileHeight}px`,
                 color: game1StoneColorNameMap[gameBoard1StoneColorArray[sq]],    /* 石の色 */
-                backgroundColor: getGameBoard1BackGroundColor(sq, gameBoard1FileNum),  /* 盤の色 */
+                backgroundColor: getGameBoard1BackGroundColor(sq, (gameBoardIndexModel1Ref?.fileNum ?? 0)),  /* 盤の色 */
                 pointerEvents: gameBoard1StoneClickable(sq) ? 'auto' : 'none',  /* 石が置いてあったら、クリックを無視する */
             }"
             style="
@@ -240,13 +240,6 @@
 
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
-    // TODO: この３つと、eastOf とかを GameBoardModel.vue へ移行したい。
-    const gameBoard1FileNum = ref<number>(8);  // 盤が横に何マスか
-    const gameBoard1RankNum = ref<number>(8);  // 盤が縦に何マスか
-    const gameBoard1Area = computed(()=>{
-        return gameBoard1FileNum.value * gameBoard1RankNum.value;
-    });
-
     const gameBoard1StoneShapeArray = ref<string[]>(new Array(0));  // 空っぽ
     const gameBoard1StoneColorArray = ref<Color[]>(new Array(0));   // 空っぽ
     const gameBoard1StoneClickable = computed<
@@ -393,7 +386,11 @@
         hasForbidenMoveCheck: boolean,
     ) : boolean {
         if (!gameBoardIndexModel1Ref?.value) {
-            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref。");
+            console.error("ERROR: [putStone] 初期化不備： gameBoardIndexModel1Ref。");
+            return false;  // エラー
+        } 
+        if (!generationMoveModel1Ref?.value) {
+            console.error("ERROR: [putStone] 初期化不備： generationMoveModel1Ref。");
             return false;  // エラー
         } 
 
@@ -421,19 +418,17 @@
         // + 指し手生成 +
         // ++++++++++++++
 
-        if (generationMoveModel1Ref?.value) {
-            generationMoveModel1Ref.value.makeGenerationMoves(
-                activeDirections,
-                activeSecondDirections,
-                game1Turn.value,
-                moveSq,
-                gameBoard1FileNum.value,
-                gameBoard1FileNameArray,
-                gameBoard1StoneColorArray.value,
-                gameBoardIndexModel1Ref.value.allDirectionsForeOf,
-                gameBoardIndexModel1Ref.value.allDirectionsBackOf,
-            );
-        }
+        generationMoveModel1Ref.value.makeGenerationMoves(
+            activeDirections,
+            activeSecondDirections,
+            game1Turn.value,
+            moveSq,
+            gameBoardIndexModel1Ref.value.fileNum,
+            gameBoard1FileNameArray,
+            gameBoard1StoneColorArray.value,
+            gameBoardIndexModel1Ref.value.allDirectionsForeOf,
+            gameBoardIndexModel1Ref.value.allDirectionsBackOf,
+        );
 
         // TODO: 指し手が消えるパターン
 
@@ -459,7 +454,7 @@
         console.log(`DEBUG: [gameInit] ゲームの初期化。`);
 
         if (!gameBoardIndexModel1Ref?.value) {
-            console.error(`ERROR: [gameInit] ゲームの初期化に失敗。`);
+            console.error(`ERROR: [gameInit] 初期化不備： gameBoardIndexModel1Ref。`);
             return;
         }
 
@@ -475,7 +470,7 @@
         // ++++++++++++++++++++++++++
 
         // 盤の初期化
-        for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+        for(let sq: number=0; sq<gameBoardIndexModel1Ref.value.area; sq++){
             gameBoard1StoneColorArray.value[sq] = 0;    // 空マス
         }
 
@@ -488,21 +483,21 @@
 
 
         // 石の形
-        gameBoard1StoneShapeArray.value = new Array(gameBoard1Area.value).fill('');
-        for(let sq: number=0; sq<gameBoard1Area.value; sq++){
+        gameBoard1StoneShapeArray.value = new Array(gameBoardIndexModel1Ref.value.area).fill('');
+        for(let sq: number=0; sq<gameBoardIndexModel1Ref.value.area; sq++){
             gameBoard1StoneShapeArray.value[sq] = '●'
         }
 
 
         // 石の色
-        gameBoard1StoneColorArray.value = new Array(gameBoard1Area.value).fill(0);
+        gameBoard1StoneColorArray.value = new Array(gameBoardIndexModel1Ref.value.area).fill(0);
 
 
         // ［指し手生成］を初期化
         if (generationMoveModel1Ref?.value) {
             generationMoveModel1Ref?.value.generationMoveModelInit(
                 activeDirections,
-                gameBoard1Area.value,
+                gameBoardIndexModel1Ref.value.area,
             );
         }
 
@@ -520,7 +515,7 @@
         // 7 ........
         // 8 ........
         //
-        const codeToSq = makeCodeToSq(gameBoard1FileNum.value);
+        const codeToSq = makeCodeToSq(gameBoardIndexModel1Ref.value.fileNum);
         //console.log(`DEBUG: [gameInit] codeToSq('D4')=${codeToSq('D4')}`);
         putStone(codeToSq('D4'), game1Turn.value, false);   // 第３引数：禁じ手チェックを行わない
         putStone(codeToSq('E4'), game1Turn.value, false);
@@ -534,6 +529,11 @@
      */
     function gameLoopStart() : void {
         const update = () => {
+
+            if (!gameBoardIndexModel1Ref?.value) {
+                console.error(`ERROR: [gameLoopStart] 初期化不備： gameBoardIndexModel1Ref。`);
+                return;
+            }
 
             // ++++++++++++++++++++++++
             // + モーション・タイマー +
@@ -554,14 +554,14 @@
                     let count = 0;
                     while(!itsOk && count <= engine1RandomLimit) {
                         // 適当に石を置く
-                        const sq = Math.floor(Math.random() * gameBoard1Area.value);
+                        const sq = Math.floor(Math.random() * gameBoardIndexModel1Ref.value.area);
                         itsOk = putStone(sq, color, true);
                         count += 1;
                     }
 
                     if (!itsOk) {   // 確率的に置けなかったら、本当に置けないか確認
                         let lastSq = -1;
-                        for(let sq: number=0; sq<gameBoard1Area.value; sq++) {
+                        for(let sq: number=0; sq<gameBoardIndexModel1Ref.value.area; sq++) {
                             if (gameBoard1StoneClickable.value(sq)) {   // クリック可能（石を置ける）
                                 lastSq = sq;
                                 break;
@@ -701,7 +701,12 @@
      * 満局か
      */
     function gameIsFullCapacity() : boolean {
-        return gameBoard1Area.value <= game1StoneCount.value[1] + game1StoneCount.value[2];
+        if (!gameBoardIndexModel1Ref?.value) {
+            console.error(`ERROR: [gameIsFullCapacity] 初期化不備： gameBoardIndexModel1Ref。`);
+            return false;
+        }
+
+        return gameBoardIndexModel1Ref.value.area <= game1StoneCount.value[1] + game1StoneCount.value[2];
     }
 
 
@@ -711,9 +716,8 @@
 
     // 親に公開する関数をdefineExposeで指定
     defineExpose({
+        gameBoardIndexModel1Ref,
         generationMoveModel1Ref,
-        gameBoard1FileNum,
-        gameBoard1RankNum,
         game1DebugMessage,
         game1IsEnd,
         game1IsPlaying,
