@@ -301,7 +301,6 @@
         };
     });
 
-    let allDirectionsForeOf = [] as ((sq: number) => number)[];
     let allDirectionsBackOf = [] as ((sq: number) => number)[];
     let allWaysNextOf = [] as ((sq: number) => number)[];
     // const allWaysBackOf = [] as ((sq: number) => number)[];
@@ -382,11 +381,23 @@
     }
 
 
+    /**
+     * 
+     * @param moveSq 
+     * @param color 
+     * @param hasForbidenMoveCheck 
+     * @returns 石を置けたかどうか
+     */
     function putStone(
         moveSq: number,
         color: Color,
         hasForbidenMoveCheck: boolean,
     ) : boolean {
+        if (!gameBoardIndexModel1Ref?.value) {
+            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref。");
+            return false;  // エラー
+        } 
+
         if (hasForbidenMoveCheck && !gameBoard1StoneClickable.value(moveSq)) {  // 石を置けないマスなら
             return false;
         }
@@ -420,7 +431,7 @@
                 gameBoard1FileNum.value,
                 gameBoard1FileNameArray,
                 gameBoard1StoneColorArray.value,
-                allDirectionsForeOf,
+                gameBoardIndexModel1Ref.value.allDirectionsForeOf,
                 allDirectionsBackOf,
             );
         }
@@ -464,13 +475,7 @@
         // + ゲームデータをリセット +
         // ++++++++++++++++++++++++++
 
-        allDirectionsForeOf = [
-            (_sq: number) => { return -1; },
-            gameBoardIndexModel1Ref.value.eastOf,   // 水平方向
-            gameBoardIndexModel1Ref.value.southOf,  // 垂直方向
-            gameBoardIndexModel1Ref.value.northeastOf,  // 右肩上がり方向
-            gameBoardIndexModel1Ref.value.southeastOf,  // 右肩下がり方向
-        ] as ((sq: number) => number)[];
+        // ゲーム盤インデックス：
         allDirectionsBackOf = [
             (_sq: number) => { return -1; },
             gameBoardIndexModel1Ref.value.westOf,
@@ -680,7 +685,12 @@
         startSq: number,
         direction: Direction,
     ) : number[] {
-        const foreOf = allDirectionsForeOf[direction];
+        if (!gameBoardIndexModel1Ref?.value) {
+            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref。");
+            return [];  // エラー
+        } 
+
+        const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
         const backOf = allDirectionsBackOf[direction];
         return [
             ...locateTargetStonesOneWay(startSq, foreOf),

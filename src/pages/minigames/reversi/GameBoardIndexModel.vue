@@ -3,6 +3,13 @@
 
 <script setup lang="ts">
 
+    // ##############
+    // # インポート #
+    // ##############
+
+    import { onMounted } from 'vue';
+
+
     // ####################################
     // # このコンポーネントが受け取る引数 #
     // ####################################
@@ -13,6 +20,29 @@
     }
     // デフォルト値を設定
     const props = defineProps<Props>();
+
+
+    // ################
+    // # オブジェクト #
+    // ################
+
+    let allDirectionsForeOf = [] as ((sq: number) => number)[];
+
+
+    // ##############
+    // # 開始／終了 #
+    // ##############
+
+    onMounted(()=>{
+        // ゲーム盤インデックス：
+        allDirectionsForeOf = [
+            (_sq: number) => { return -1; },
+            eastOf,   // 水平方向
+            southOf,  // 垂直方向
+            northeastOf,  // 右肩上がり方向
+            southeastOf,  // 右肩下がり方向
+        ] as ((sq: number) => number)[];
+    });
 
 
     // ################
@@ -164,6 +194,8 @@
         southwestOf,
         southeastOf,    // 右肩下がり方向
         northwestOf,
+        
+        allDirectionsForeOf,
     });
 
 </script>
