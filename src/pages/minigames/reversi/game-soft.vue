@@ -7,7 +7,7 @@
         :fileNum="8"
         :rankNum="8"
     />
-    <game-board-model-1 ref="gameBoardModel1Ref"/>
+    <game-board-content-model-1 ref="gameBoardContentModel1Ref"/>
     <generation-move-model-1 ref="generationMoveModel1Ref"/>
 
 
@@ -63,7 +63,7 @@
                 z-index: 120;   /* 目に見えませんが、ボタンが光景に沈んでいるので、前景にします */
             "
             @click="onGameBoard1Clicked(sq)"
-        >{{ gameBoard1StoneShapeArray[sq] }}</v-btn>
+        >{{ colorToShape(gameBoard1StoneColorArray[sq]) }}</v-btn>
 
 
         <!-- 筋の符号 -->
@@ -133,7 +133,7 @@
     // ++++++++++++++++++++++++++
 
     import GameBoardIndexModel1 from './GameBoardIndexModel.vue';
-    import GameBoardModel1 from './GameBoardModel.vue';
+    import GameBoardContentModel1 from './GameBoardContentModel.vue';
     import GenerationMoveModel1 from './GenerationMoveModel.vue';
     import {
         // 色
@@ -142,6 +142,7 @@
         SQ_OUT_OF_BOARD, makeCodeToSq,
         // 方向
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
+        COLOR_WHITE,
     } from '@/pages/minigames/reversi/spec.ts';
 
 
@@ -180,7 +181,7 @@
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
     const gameBoardIndexModel1Ref = ref<InstanceType<typeof GameBoardIndexModel1> | null>(null);
-    const gameBoardModel1Ref = ref<InstanceType<typeof GameBoardModel1> | null>(null);
+    const gameBoardContentModel1Ref = ref<InstanceType<typeof GameBoardContentModel1> | null>(null);
     const generationMoveModel1Ref = ref<InstanceType<typeof GenerationMoveModel1> | null>(null);
 
     // ++++++++++++++++++++++++++++++++
@@ -240,7 +241,22 @@
 
     const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
-    const gameBoard1StoneShapeArray = ref<string[]>(new Array(0));  // 空っぽ
+    // 石の形
+    const STONES_SHAPE = {
+        [COLOR_EMPTY]: '　',
+        [COLOR_BLACK]: '●', // 色で区別するので、黒と白が同形で構わない
+        [COLOR_WHITE]: '●',
+    } as Record<Color, string>;
+
+
+    function colorToShape(color: Color) : string {
+        if (!(color in STONES_SHAPE)) {
+            return `${color}範囲外`;
+        }
+        return STONES_SHAPE[color];
+    }
+
+
     const gameBoard1StoneColorArray = ref<Color[]>(new Array(0));   // 空っぽ
     const gameBoard1StoneClickable = computed<
         (sq: number) => boolean
@@ -480,13 +496,6 @@
         game1StoneCount.value[2] = 0;
         game1PassCount.value = 0;
         game1IsEnd.value = false;
-
-
-        // 石の形
-        gameBoard1StoneShapeArray.value = new Array(gameBoardIndexModel1Ref.value.area).fill('');
-        for(let sq: number=0; sq<gameBoardIndexModel1Ref.value.area; sq++){
-            gameBoard1StoneShapeArray.value[sq] = '●'
-        }
 
 
         // 石の色
