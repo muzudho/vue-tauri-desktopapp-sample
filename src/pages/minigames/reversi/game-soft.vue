@@ -144,7 +144,7 @@
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
         COLOR_WHITE,
     } from '@/pages/minigames/reversi/spec.ts';
-
+    import { gameBoard1FileNameArray } from '@/pages/minigames/reversi/game-board-index-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -237,8 +237,6 @@
     // ++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
-
-    const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
     // 石の形
     const STONES_SHAPE = {
@@ -452,7 +450,6 @@
             game1Turn.value,
             moveSq,
             gameBoardIndexModel1Ref.value.fileNum,
-            gameBoard1FileNameArray,
             gameBoardContentModel1Ref.value.stonesColor,
             gameBoardIndexModel1Ref.value.allDirectionsForeOf,
             gameBoardIndexModel1Ref.value.allDirectionsBackOf,

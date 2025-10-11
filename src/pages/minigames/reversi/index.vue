@@ -151,12 +151,16 @@
                 v-model="debug1MoveSq"
             />
             <p class="mb-6">{{ debug1MoveSq }} から東方向へ手番石をスキップした先は {{
-                locateThisTurnStonesSkipped(
-                    gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
-                    gameSoft1Ref?.game1Turn ?? 0,
-                    makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? 0,
-                    gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
-                ) }}。</p>
+                makeSqToCode(
+                    gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0,
+                )(
+                    locateThisTurnStonesSkipped(
+                        gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                        gameSoft1Ref?.game1Turn ?? 0,
+                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? 0,
+                        gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                    )
+                )}}。</p>
 
             <p>マス番号:</p>
             <div
@@ -261,6 +265,7 @@
     import TheAppHeader from '@/pages/the-app-header.vue';
     import { DIRECTION_HORIZONTAL, SQ_OUT_OF_BOARD } from '../gomoku/spec';
 
+    import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
     import { locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
 

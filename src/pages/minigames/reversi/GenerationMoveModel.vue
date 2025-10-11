@@ -27,6 +27,7 @@
         Direction,
     } from '@/pages/minigames/reversi/spec.ts';
 
+    import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
     import { locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     
@@ -55,34 +56,6 @@
     }
 
 
-    function makeSqToCode(
-        fileNum: number,
-        fileNameArray: string[],
-    ) :
-        (sq: number)=>string
-    {
-        return (sq: number) => {
-            const file = sq % fileNum;
-            const rank = Math.floor(sq / fileNum);
-            const code = `${fileNameArray[file]}${rank+1}`;
-            //console.log(`DEBUG: [sqToCode] sq=${sq} gameBoard1FileNum.value=${gameBoard1FileNum.value} file=${file} rank=${rank} gameBoard1RankNum.value=${gameBoard1RankNum.value} code=${code}`);
-            return code;
-        };
-    }
-
-    // /**
-    //  * sq を符号に変換
-    //  * @param sq 
-    //  */
-    // function sqToCode(sq: number) : string {
-    //     const file = sq % gameBoard1FileNum.value;
-    //     const rank = Math.floor(sq / gameBoard1FileNum.value);
-    //     const code = `${gameBoard1FileNameArray[file]}${rank+1}`;
-    //     //console.log(`DEBUG: [sqToCode] sq=${sq} gameBoard1FileNum.value=${gameBoard1FileNum.value} file=${file} rank=${rank} gameBoard1RankNum.value=${gameBoard1RankNum.value} code=${code}`);
-    //     return code;
-    // }
-
-
     function canMove(
         activeDirections: Direction[],
         thisTurn: Color,
@@ -104,14 +77,13 @@
         thisTurn: Color,
         moveSq: number,
         fileNum: number,
-        fileNameArray: string[],
         gameBoard1StoneColorArray: Color[],
         allDirectionsForeOf: ((sq: number) => number)[],
         allDirectionsBackOf: ((sq: number) => number)[],
     ) : void {
 
         const oppositeTurnColor1 = oppositeColor(thisTurn);
-        const sqToCode = makeSqToCode(fileNum, fileNameArray);
+        const sqToCode = makeSqToCode(fileNum);
 
         let allDirectionsOverSteppingStones: number[][] = new Array<number[]>(DIRECTION_SIZE);
         for (const direction of activeDirections) {

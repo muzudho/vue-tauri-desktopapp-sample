@@ -25,7 +25,6 @@ export function locateThisTurnStonesSkipped(
 ) : number {
     // ［手番石］を読み飛ばす：
     let nextSq = startSq;
-    //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] nextSq=${sqToCode(nextSq)}`);
     while (true) {
         if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
             return nextSq;
@@ -39,7 +38,6 @@ export function locateThisTurnStonesSkipped(
 
         // ［手番石］に突き当たったら、続行
         nextSq = nextOf(nextSq);
-        //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] nextSq=${sqToCode(nextSq)}`);
     }
 
     return nextSq;
