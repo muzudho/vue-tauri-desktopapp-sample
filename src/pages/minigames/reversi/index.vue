@@ -150,6 +150,7 @@
                 label="着手点"
                 v-model="debug1MoveSq"
             />
+
             <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ手番石をスキップした先は {{
                 makeSqToCode(
                     gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0,
@@ -157,9 +158,21 @@
                     locateThisTurnStonesSkipped(
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                         gameSoft1Ref?.game1Turn ?? 0,
-                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? 0,
+                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? SQ_OUT_OF_BOARD,
                         gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
                     )
+                )}}（キャップ点）。</p>
+            
+            <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ跨いだ相手番石は {{
+                locateHoppedoverStones(
+                    gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                    gameSoft1Ref?.game1Turn ?? 0,
+                    (gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD))(
+                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq)
+                    ),
+                    gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                ).map((sq: number) =>
+                    makeSqToCode(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(sq)
                 )}}（キャップ点）。</p>
 
             <p>マス番号:</p>
@@ -266,7 +279,7 @@
     import { DIRECTION_HORIZONTAL, SQ_OUT_OF_BOARD } from '../gomoku/spec';
 
     import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
 
     // ####################

@@ -62,12 +62,12 @@ export function locateHoppedoverStones(
     let nextSq = startSq;
     while (true) {
         if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
-            return hoppedoverStones;
+            break;
         }
 
         const nextColor: Color = gameBoard1StoneColorArray[nextSq];  // 隣の石の色
 
-        if ([COLOR_EMPTY, thisTurn].includes(nextColor)) { // ［空マス］,［相手番石］に突き当たったら、［前方キャップ］に［空マス］とそのマス番号を記録して［後ろ向きループ］処理へ
+        if ([COLOR_EMPTY, thisTurn].includes(nextColor)) { // ［空マス］,［手番石］に突き当たったら終了
             break;
         }
 
