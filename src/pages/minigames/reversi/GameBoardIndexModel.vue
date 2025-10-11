@@ -8,6 +8,7 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
+import { SQ_OUT_OF_BOARD } from './spec';
 
 
     // ####################################
@@ -36,6 +37,32 @@
     const allDirectionsBackOf = ref<((sq: number) => number)[]>([]);
     // const allWaysNextOf = ref<((sq: number) => number)[]>([]);
     // const allWaysBackOf = ref<((sq: number) => number)[]>([]);
+
+
+    function getForeOf(
+        direction: number
+    ) :
+        (sq: number) => number
+    {
+        if (!(direction in allDirectionsForeOf.value)) {
+            return (_sq: number) => { return SQ_OUT_OF_BOARD;};
+        }
+
+        return allDirectionsForeOf.value[direction];
+    }
+
+
+    function getBackOf(
+        direction: number
+    ) :
+        (sq: number) => number
+    {
+        if (!(direction in allDirectionsBackOf.value)) {
+            return (_sq: number) => { return SQ_OUT_OF_BOARD;};
+        }
+
+        return allDirectionsBackOf.value[direction];
+    }
 
 
     // ##############
@@ -240,6 +267,8 @@
         southeastOf,    // 右肩下がり方向
         northwestOf,
 
+        getForeOf,
+        getBackOf,
         allDirectionsForeOf,
         allDirectionsBackOf,
         // allWaysNextOf,

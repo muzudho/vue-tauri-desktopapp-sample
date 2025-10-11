@@ -146,6 +146,18 @@
         <section v-if="debugInfo1IsShowing" class="sec-1">
             <p>デバッグ：</p>
 
+            <v-text-field
+                label="着手点"
+                v-model="debug1MoveSq"
+            />
+            <p class="mb-6">{{ debug1MoveSq }} から東方向へ手番石をスキップした先は {{
+                locateThisTurnStonesSkipped(
+                    gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                    gameSoft1Ref?.game1Turn ?? 0,
+                    makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? 0,
+                    gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                ) }}。</p>
+
             <p>マス番号:</p>
             <div
                 class="mb-6"
@@ -244,10 +256,12 @@
 
     import GameSoft from '@/pages/minigames/reversi/game-soft.vue';
     import type { Player1Input } from '@/pages/minigames/reversi/game-soft.vue';
-    import { COLOR_BLACK, COLOR_WHITE } from '@/pages/minigames/reversi/spec.ts';
+    import { COLOR_BLACK, COLOR_WHITE, makeCodeToSq } from '@/pages/minigames/reversi/spec.ts';
 
     import TheAppHeader from '@/pages/the-app-header.vue';
-import { DIRECTION_HORIZONTAL } from '../gomoku/spec';
+    import { DIRECTION_HORIZONTAL, SQ_OUT_OF_BOARD } from '../gomoku/spec';
+
+    import { locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
 
     // ####################
@@ -267,6 +281,12 @@ import { DIRECTION_HORIZONTAL } from '../gomoku/spec';
     // ++++++++++++++++++++++++++++++
 
     const button1Ref = ref<InstanceType<typeof Button20250822> | null>(null);
+
+    // ++++++++++++++++++++++++++++++++++++
+    // + オブジェクト　＞　デバッグ用変数 +
+    // ++++++++++++++++++++++++++++++++++++
+
+    const debug1MoveSq = ref<string>('D4');  // デバッグ用：着手点
 
     // ++++++++++++++++++++++++++++++++++++
     // + オブジェクト　＞　ゲームマシン１ +
