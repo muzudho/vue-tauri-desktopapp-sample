@@ -150,7 +150,7 @@
                 label="着手点"
                 v-model="debug1MoveSq"
             />
-            <p class="mb-6">{{ debug1MoveSq }} から東方向へ手番石をスキップした先は {{
+            <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ手番石をスキップした先は {{
                 makeSqToCode(
                     gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0,
                 )(
@@ -160,7 +160,7 @@
                         makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? 0,
                         gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
                     )
-                )}}。</p>
+                )}}（キャップ点）。</p>
 
             <p>マス番号:</p>
             <div

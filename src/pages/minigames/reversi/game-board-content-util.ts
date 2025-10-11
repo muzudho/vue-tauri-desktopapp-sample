@@ -2,7 +2,7 @@
 // # インポート #
 // ##############
 
-import { Color, SQ_OUT_OF_BOARD } from "@/pages/minigames/reversi/spec.ts";
+import { COLOR_EMPTY, Color, SQ_OUT_OF_BOARD } from "@/pages/minigames/reversi/spec.ts";
 
 
 // ################
@@ -41,4 +41,40 @@ export function locateThisTurnStonesSkipped(
     }
 
     return nextSq;
+}
+
+
+/**
+ * 
+ * @param startSq 
+ * @param nextOf 
+ * @returns ［跨いだ相手番石］。着手点に近い方から順に並ぶ
+ */
+export function locateHoppedoverStones(
+    gameBoard1StoneColorArray: Color[],
+    thisTurn: Color,
+    startSq: number,
+    nextOf: (sq: number)=>number,
+) : number[] {
+    let hoppedoverStones: number[] = [];  // ［跨いだ石］。まだ［ひっくり返せる石］かどうかは決まらない。
+
+    // ［相手番石］を跨ぐ
+    let nextSq = startSq;
+    while (true) {
+        if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
+            return hoppedoverStones;
+        }
+
+        const nextColor: Color = gameBoard1StoneColorArray[nextSq];  // 隣の石の色
+
+        if ([COLOR_EMPTY, thisTurn].includes(nextColor)) { // ［空マス］,［相手番石］に突き当たったら、［前方キャップ］に［空マス］とそのマス番号を記録して［後ろ向きループ］処理へ
+            break;
+        }
+
+        // ［相手番石］に突き当たったら、続行
+        hoppedoverStones.push(nextSq);
+        nextSq = nextOf(nextSq);
+    }
+
+    return hoppedoverStones;
 }
