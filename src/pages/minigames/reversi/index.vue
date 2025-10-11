@@ -151,6 +151,8 @@
                 v-model="debug1MoveSq"
             />
 
+            <p class="mb-6">{{ debug1MoveSq }}（着手点）はマス番号で言うと {{ makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) }}。</p>
+
             <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ手番石をスキップした先は {{
                 makeSqToCode(
                     gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0,
@@ -158,7 +160,7 @@
                     locateThisTurnStonesSkipped(
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                         gameSoft1Ref?.game1Turn ?? 0,
-                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq) ?? SQ_OUT_OF_BOARD,
+                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                         gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
                     )
                 )}}（キャップ点）。</p>
