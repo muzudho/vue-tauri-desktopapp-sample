@@ -165,7 +165,7 @@
                     )
                 )}}（キャップ点）。</p>
             
-            <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ跨いだ相手番石は {{
+            <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ跨いだ相手番石（…a）は {{
                 locateHoppedoverStones(
                     gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                     gameSoft1Ref?.game1Turn ?? 0,
@@ -176,6 +176,34 @@
                 ).map((sq: number) =>
                     makeSqToCode(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(sq)
                 )}}（キャップ点）。</p>
+
+            <p class="mb-6"> a のキャップは {{
+                makeSqToCode(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(
+                    getCap(
+                        gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                        locateHoppedoverStones(
+                            gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                            gameSoft1Ref?.game1Turn ?? 0,
+                            (gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD))(
+                                makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq)
+                            ),
+                            gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                        ),
+                        gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                    )[0]
+                )}}（マス） {{
+                getCap(
+                    gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                    locateHoppedoverStones(
+                        gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                        gameSoft1Ref?.game1Turn ?? 0,
+                        (gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD))(
+                            makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq)
+                        ),
+                        gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                    ),
+                    gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
+                )[1]}}（色）。</p>
 
             <p>マス番号:</p>
             <div
@@ -281,7 +309,7 @@
     import { DIRECTION_HORIZONTAL, SQ_OUT_OF_BOARD } from '../gomoku/spec';
 
     import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { getCap, locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
 
     // ####################

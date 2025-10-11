@@ -28,7 +28,7 @@
     } from '@/pages/minigames/reversi/spec.ts';
 
     import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { getCap, locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     
     // ################
@@ -269,29 +269,6 @@
         }
     }
 
-    function getCap(
-        gameBoard1StoneColorArray: Color[],
-        hoppedoverStones: number[],
-        nextOf: (sq: number)=>number,
-    ) : [number, Color] {
-        let capSq = nextOf(hoppedoverStones[hoppedoverStones.length]);   // 最後尾の次へ
-        if (capSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
-            return [SQ_OUT_OF_BOARD, COLOR_EMPTY];
-        }
-        const capColor: Color = gameBoard1StoneColorArray[capSq];  // 隣の石の色
-        return [capSq, capColor];
-    }
-
-    function locateHoppedoverStonesAndGetCap(
-        gameBoard1StoneColorArray: Color[],
-        thisTurn: Color,
-        nextSq: number,
-        nextOf: (sq: number)=>number,
-    ) : [number[], number, Color] {
-        const hoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, nextSq, nextOf);
-        return [hoppedoverStones, ...getCap(gameBoard1StoneColorArray, hoppedoverStones, nextOf)];
-    }
-
 
     /**
      * 石を置いたところから見て、次に石を置けるところの検出。
@@ -307,17 +284,21 @@
         allDirectionsBackOf: ((sq: number) => number)[],
     ): [number[], number, Color, number[], number, Color] {
 
-        const foreSq = allDirectionsForeOf[direction](moveSq);   // ［手番石］を読み飛ばす
-        const [foresideOverSteppingStones, foresideCapSq, foresideCapColor] = locateHoppedoverStonesAndGetCap(gameBoard1StoneColorArray, thisTurn, foreSq, allDirectionsForeOf[direction]);  // ［前向きループ］処理
+        const foreOf = allDirectionsForeOf[direction];
+        const foreSq = foreOf(moveSq);   // ［手番石］を読み飛ばす
+        const foreHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);
+        const [foresideCapSq, foresideCapColor] = getCap(gameBoard1StoneColorArray, foreHoppedoverStones, foreOf)
 
-        const backSq = allDirectionsBackOf[direction](moveSq);   // ［手番石］を読み飛ばす
-        const [backsideOverSteppingStones, backsideCapSq, backsideCapColor] = locateHoppedoverStonesAndGetCap(gameBoard1StoneColorArray, thisTurn, backSq, allDirectionsBackOf[direction]);  // ［後ろ向きループ］処理
+        const backOf = allDirectionsBackOf[direction];
+        const backSq = backOf(moveSq);   // ［手番石］を読み飛ばす
+        const backHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);
+        const [backsideCapSq, backsideCapColor] = getCap(gameBoard1StoneColorArray, backHoppedoverStones, backOf);
 
         return [
-            foresideOverSteppingStones,
+            foreHoppedoverStones,
             foresideCapSq,
             foresideCapColor,
-            backsideOverSteppingStones,
+            backHoppedoverStones,
             backsideCapSq,
             backsideCapColor,
         ];
@@ -342,12 +323,11 @@
         function locateStonesAndGetCap(
             gameBoard1StoneColorArray: Color[],
             thisTurn: Color,
-            startSq: number,
+            nextSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
             //console.log(`DEBUG: [stoneTargetedGenerateMoveOnDirection] stoneTargetedSq=${sqToCode(stoneTargetedSq)}`);
 
-            let nextSq = nextOf(startSq);   // ［手番石］を読み飛ばす：
             nextSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, thisTurn, nextSq, nextOf);
 
             // ［相手番石］を跨ぐ：
@@ -357,8 +337,13 @@
             return [hoppedoverStones, capSq, capColor];
         }
 
-        const [foresideStonesTargeted, foresideCapSq, foresideCapColor] = locateStonesAndGetCap(gameBoard1StoneColorArray, thisTurn, sandwichedStoneSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
-        const [backsideStonesTargeted, backsideCapSq, backsideCapColor] = locateStonesAndGetCap(gameBoard1StoneColorArray, thisTurn, sandwichedStoneSq, allDirectionsBackOf[direction]); // ［後ろ向きループ］処理
+        const foreOf = allDirectionsForeOf[direction];
+        let foreSq = foreOf(sandwichedStoneSq);   // ［手番石］を読み飛ばす：
+        const [foresideStonesTargeted, foresideCapSq, foresideCapColor] = locateStonesAndGetCap(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf); // ［前向きループ］処理
+
+        const backOf = allDirectionsBackOf[direction];
+        let backSq = backOf(sandwichedStoneSq);   // ［手番石］を読み飛ばす：
+        const [backsideStonesTargeted, backsideCapSq, backsideCapColor] = locateStonesAndGetCap(gameBoard1StoneColorArray, thisTurn, backSq, backOf); // ［後ろ向きループ］処理
 
         return [
             foresideStonesTargeted,

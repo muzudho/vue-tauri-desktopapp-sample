@@ -1,5 +1,13 @@
+// ################
+// # オブジェクト #
+// ################
+
 export const gameBoard1FileNameArray = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'];
 
+
+// ################
+// # サブルーチン #
+// ################
 
 export function makeSqToCode(
     fileNum: number,

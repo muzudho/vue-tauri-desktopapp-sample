@@ -8,7 +8,7 @@
     // ##############
 
     import { computed, onMounted, ref } from 'vue';
-import { SQ_OUT_OF_BOARD } from './spec';
+    import { SQ_OUT_OF_BOARD } from './spec';
 
 
     // ####################################
