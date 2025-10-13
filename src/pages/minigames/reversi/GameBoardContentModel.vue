@@ -12,6 +12,7 @@
         // 色類：
         oppositeColor, Color,
     } from '@/pages/minigames/reversi/spec.ts';
+    import { makeGetColor } from './game-board-content-util.ts';
 
 
     // ################
@@ -25,6 +26,8 @@
     // ################
     // # サブルーチン #
     // ################
+
+    const getColor = makeGetColor(stonesColor.value);
 
     /**
      * ［跨いだ相手番の石］をひっくり返す
@@ -51,6 +54,7 @@
     // ################
 
     defineExpose({
+        getColor,
         stonesColor,
         stoneCounts,
         reverseStones,

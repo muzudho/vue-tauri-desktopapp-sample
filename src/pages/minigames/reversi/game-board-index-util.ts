@@ -59,6 +59,10 @@ export function makeEastOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const eastSq = sq + 1;
         if (eastSq % fileNum == 0) {   // 世界一周したら
             return SQ_OUT_OF_BOARD;
@@ -85,6 +89,10 @@ export function makeWestOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const westSq = sq - 1;
         if (westSq % fileNum == fileNum - 1) {  // 世界一周したら
             return SQ_OUT_OF_BOARD;
@@ -113,6 +121,10 @@ export function makeSouthOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const southSq = sq + fileNum;
         if (area <= southSq) {  // 盤を飛び出たら
             return SQ_OUT_OF_BOARD;
@@ -139,6 +151,10 @@ export function makeNorthOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const northSq = sq - fileNum;
         if (northSq < 0) {  // 盤を飛び出たら
             return SQ_OUT_OF_BOARD;
@@ -165,6 +181,10 @@ export function makeNortheastOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const northeastSq = sq - fileNum + 1;
         if (
             northeastSq < 0 // 盤を飛び出たら
@@ -196,6 +216,10 @@ export function makeSouthwestOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const southwestSq = sq + fileNum - 1;
         if (
             area <= southwestSq // 盤を飛び出たら
@@ -227,6 +251,10 @@ export function makeSoutheastOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const southeastSq = sq + fileNum + 1;
         if (
             southeastSq % fileNum == 0  // 世界一周したら
@@ -257,6 +285,10 @@ export function makeNorthwestOf(
      * @returns 該当がなければ SQ_OUT_OF_BOARD
      */
     return (sq: number) : number => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return SQ_OUT_OF_BOARD;
+        }
+
         const northwestSq = sq - fileNum - 1;
         if (
             northwestSq % fileNum == fileNum - 1    // 世界一周したら

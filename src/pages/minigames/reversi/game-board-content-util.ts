@@ -80,44 +80,40 @@ export function locateHoppedoverOppositeTurnStones(
 }
 
 
-// /**
-//  * ［相手番石］を跨ぎます。［盤外］、［空マス］、［手番石］は跨げません。
-//  * @returns ［跨いだ石］のあるマス番号
-//  */
-// export function locateHoppedoverOppositeTurnStonesOneWay(
-//     gameBoard1StoneColorArray: Color[],
-//     thisTurn: Color,
-//     startSq: number,
-//     nextOf: (sq: number) => number,
-// ) : [number[], number] {
-//     const hoppedoverStones : number[] = [];  // ［跨いだ相手番石］
+/**
+ * 石の色を返す関数を生成する。
+ * @param gameBoard1StoneColorArray 盤上の石の色配列
+ * @returns 石の色を返す関数
+ */
+export function makeGetColor(
+    gameBoard1StoneColorArray: Color[],
+) :
+    (sq: number)=>Color
+{
+    /**
+     * 石の色を返す。
+     * @param sq マス番号
+     * @return 石の色
+     */
+    return (sq: number) : Color => {
+        if (sq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
+            return COLOR_EMPTY;
+        }
 
-//     let nextSq = startSq;
-//     while (true) {  // 一次ループ
-//         if (nextSq == SQ_OUT_OF_BOARD) {    // 盤外に突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
-//             hoppedoverStones.length = 0;
-//             break;
-//         }
+        return gameBoard1StoneColorArray[sq];  // 隣の石の色
+    };
+}
 
-//         const nextColor: Color = gameBoard1StoneColorArray[nextSq];  // 隣の石の色
-//         //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
 
-//         if (nextColor == COLOR_EMPTY) { // 空マスに突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
-//             hoppedoverStones.length = 0;
-//             break;
-//         }
+export function getLastSq(
+    stones: number[],
+) : number {
+    if (stones.length == 0) {
+        return SQ_OUT_OF_BOARD;
+    }
 
-//         if (nextColor == thisTurn) {    // 手番の石に当たったら、一次ループを抜ける
-//             // canGoTOSecondaryLoop = true;
-//             break;
-//         }
-
-//         hoppedoverStones.push(nextSq);    // 跨いだ相手番の石はマス番号を記録
-//         nextSq = nextOf(nextSq);
-//     }
-
-//     return [hoppedoverStones, nextSq];
-// }
+    return stones[stones.length - 1];   // 跨いだ石の最後
+}
 
 
 export function getCap(
