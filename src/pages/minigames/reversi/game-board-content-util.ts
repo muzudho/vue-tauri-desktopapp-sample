@@ -118,29 +118,31 @@ export function getLastSq(
 
 /**
  * 
- * @param nextMoveSq 起点の次のマス
  * @param gameBoard1StoneColorArray 
- * @param hoppedoverStones 
+ * @param startSq 起点マス
+ * @param hoppedoverStones 跨いだ石
  * @param nextOf 
  * @returns 
  */
 export function getCap(
     gameBoard1StoneColorArray: Color[],
-    nextMoveSq: number,
+    startSq: number,
     hoppedoverStones: number[],
     nextOf: (sq: number)=>number,
 ) : [number, Color] {
     let capSq: number;
-    if (0 < hoppedoverStones.length) {
-        capSq = nextOf(getLastSq(hoppedoverStones));   // 跨いだ石の最後の次へ
 
+    // 跨いだ石が無い場合、起点の次のマスがキャップ
+    if (hoppedoverStones.length == 0) {
+        capSq = nextOf(startSq); // 起点の次のマスがキャップ
     } else {
-        capSq = nextMoveSq;   // 起点の次のマスがキャップ
+        capSq = nextOf(getLastSq(hoppedoverStones));   // 跨いだ石の最後の次へ
     }
 
     if (capSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
         return [SQ_OUT_OF_BOARD, COLOR_EMPTY];
     }
+    
     const capColor: Color = gameBoard1StoneColorArray[capSq];  // 隣の石の色
     return [capSq, capColor];
 }
