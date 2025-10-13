@@ -139,13 +139,13 @@
         // 色
         COLOR_BLACK, COLOR_EMPTY, Color, oppositeColor,
         // マス
-        makeCodeToSq,
+        SQ_OUT_OF_BOARD, makeCodeToSq,
         // 方向
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
         COLOR_WHITE,
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateOppositeTurnStonesOverSteppedOneWay } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateHoppedoverOppositeTurnStones } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -654,9 +654,20 @@
         //console.log(`DEBUG: [locateTargetStones] direction=${directionToTitle(direction)} gameBoardIndexModel1Ref.value.allDirectionsForeOf.length=${gameBoardIndexModel1Ref.value.allDirectionsForeOf.length}`);
         const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
         const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
+
+        let [foresideHoppedoverStones, foresideNextSq] = locateHoppedoverOppositeTurnStones(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, foreOf(startSq), foreOf);
+        if (foresideNextSq == SQ_OUT_OF_BOARD || gameBoardContentModel1Ref.value.stonesColor[foresideNextSq] == COLOR_EMPTY) {
+            foresideHoppedoverStones.length = 0;    // ひっくり返せる石はない
+        }
+
+        let [backsideHoppedoverStones, backsideNextSq] = locateHoppedoverOppositeTurnStones(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, backOf(startSq), backOf);
+        if (backsideNextSq == SQ_OUT_OF_BOARD || gameBoardContentModel1Ref.value.stonesColor[backsideNextSq] == COLOR_EMPTY) {
+            backsideHoppedoverStones.length = 0;    // ひっくり返せる石はない
+        }
+
         return [
-            ...locateOppositeTurnStonesOverSteppedOneWay(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, startSq, foreOf),
-            ...locateOppositeTurnStonesOverSteppedOneWay(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, startSq, backOf),
+            ...foresideHoppedoverStones,
+            ...backsideHoppedoverStones,
         ];
     }
 

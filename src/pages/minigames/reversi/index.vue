@@ -173,7 +173,7 @@
                         makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq)
                     ),
                     gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
-                ).map((sq: number) =>
+                )[0].map((sq: number) =>
                     makeSqToCode(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(sq)
                 )}}（キャップ点）。</p>
 
@@ -189,7 +189,7 @@
                                 makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq)
                             ),
                             gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
-                        ),
+                        )[0],
                         gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
                     )[0]
                 )}}（マス） {{
@@ -203,7 +203,7 @@
                             makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq)
                         ),
                         gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
-                    ),
+                    )[0],
                     gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD)
                 )[1]}}（色）。</p>
 
