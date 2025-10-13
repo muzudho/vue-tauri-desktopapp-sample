@@ -368,9 +368,8 @@
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
             let nextSq = nextOf(secondCapSq);   // ［起点］を読み飛ばす
-            nextSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, nextSq, nextOf);  // ［手番石］を読み飛ばす
-
-            let hoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, nextSq, nextOf);   // ［相手番石］を跨ぐ
+            nextSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, nextSq, nextOf);  // ［対象番石］を読み飛ばす
+            let hoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, nextSq, nextOf);   // ［相対象番石］を跨ぐ
             const [capSq, capColor] = getCap(gameBoard1StoneColorArray, hoppedoverStones, nextOf);  // キャップを取得
 
             return [hoppedoverStones, capSq, capColor];
@@ -430,32 +429,12 @@
             secondCapSq: number,
             nextOf: (sq: number)=>number,
         ) : [number[], number, Color] {
-            const oppositeTurnColor1 = oppositeColor(targetTurn);
-            let stonesTargeted: number[] = [];
-            let capSq: number;
-            let capColor: Color;
+            let nextSq = nextOf(secondCapSq);   // ［起点］を読み飛ばす
+            nextSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, nextSq, nextOf);  // ［対象番石］を読み飛ばす
+            let hoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, nextSq, nextOf);   // ［相対象番石］を跨ぐ
+            const [capSq, capColor] = getCap(gameBoard1StoneColorArray, hoppedoverStones, nextOf);  // キャップを取得
 
-            // ［相手番石］を跨ぐ：
-            let nextSq = nextOf(secondCapSq);   // ［狙われた石］の前方からスタート
-            while (true) {
-                if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
-                    return [stonesTargeted, SQ_OUT_OF_BOARD, COLOR_EMPTY];
-                }
-
-                const nextColor: Color = gameBoard1StoneColorArray[nextSq];  // 隣の石の色
-
-                if (nextColor != oppositeTurnColor1) { // ［相手番石］以外は終了。
-                    capSq = nextSq;
-                    capColor = nextColor;
-                    break;
-                }
-
-                // ［相手番石］に突き当たったら、続行
-                stonesTargeted.push(nextSq);
-                nextSq = nextOf(nextSq);
-            }
-
-            return [stonesTargeted, capSq, capColor];
+            return [hoppedoverStones, capSq, capColor];
         }
 
         const [foresideStoneTargeted, foresideCapSq, foresideCapColor] = locateStonesAndGetCap(secondCapSq, allDirectionsForeOf[direction]); // ［前向きループ］処理
