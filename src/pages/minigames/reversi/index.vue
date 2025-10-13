@@ -166,7 +166,7 @@
                 )}}（キャップ点）。</p>
             
             <p class="mb-6">{{ debug1MoveSq }}（着手点）から東方向へ跨いだ相手番石（…a）は {{
-                locateHoppedoverStones(
+                locateHoppedoverOppositeTurnStones(
                     gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                     gameSoft1Ref?.game1Turn ?? 0,
                     (gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD))(
@@ -182,7 +182,7 @@
                     getCap(
                         makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
-                        locateHoppedoverStones(
+                        locateHoppedoverOppositeTurnStones(
                             gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                             gameSoft1Ref?.game1Turn ?? 0,
                             (gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD))(
@@ -196,7 +196,7 @@
                 getCap(
                     makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                     gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
-                    locateHoppedoverStones(
+                    locateHoppedoverOppositeTurnStones(
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                         gameSoft1Ref?.game1Turn ?? 0,
                         (gameSoft1Ref?.gameBoardIndexModel1Ref?.getForeOf(DIRECTION_HORIZONTAL) ?? ((_sq) => SQ_OUT_OF_BOARD))(
@@ -311,7 +311,7 @@
     import { DIRECTION_HORIZONTAL, SQ_OUT_OF_BOARD } from '../gomoku/spec';
 
     import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { getCap, locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { getCap, locateHoppedoverOppositeTurnStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
 
     // ####################

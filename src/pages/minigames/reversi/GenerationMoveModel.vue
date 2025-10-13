@@ -28,7 +28,7 @@
     } from '@/pages/minigames/reversi/spec.ts';
 
     import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { getCap, locateHoppedoverStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { getCap, locateHoppedoverOppositeTurnStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     
     // ################
@@ -89,6 +89,7 @@
         // ############################
 
         for (const direction of activeDirections) {
+            console.log(`DEBUG: [putStone] 手番＝${colorToCode(thisTurn)}　１階　＞　${directionToTitle(direction)}　＞　${sqToCode(moveSq)}へ石を置いた。`)
             gameBoard1CanMove.value[direction][thisTurn][moveSq] = false;
         }
 
@@ -108,25 +109,24 @@
                 backsideHoppedoverStones,
                 backsideFirstCapSq,
                 backsideFirstCapColor,
-            ] = movedStoneGenerateMoveOnDirection(moveSq, direction, gameBoard1StoneColorArray, thisTurn, allDirectionsForeOf, allDirectionsBackOf); // 指し手生成
-            console.log(`DEBUG: [putStone] １階　＞　${directionToTitle(direction)}　＞　${sqToCode(moveSq)}へ石を置いた。`)
+            ] = movedStoneGenerateMoveOnDirection(moveSq, direction, gameBoard1StoneColorArray, thisTurn, allDirectionsForeOf, allDirectionsBackOf); // ［相手番石］を跨ぐ
             allDirectionsHoppedoverStones[direction].push(
                 ...foresideHoppedoverStones,
                 ...backsideHoppedoverStones,
             );
 
-            console.log(`DEBUG: [putStone]     １階　＞　${directionToTitle(direction)}　＞　前方キャップは ${sqToCode(foresideFirstCapSq)} ${colorToCode(foresideFirstCapColor)}。 挟める石：${foresideHoppedoverStones.map((x)=>sqToCode(x))}`)
+            console.log(`DEBUG: [putStone] 手番＝${colorToCode(thisTurn)}　    １階　＞　${directionToTitle(direction)}　＞　相手番石跨ぎ　＞　前方キャップは ${sqToCode(foresideFirstCapSq)} ${colorToCode(foresideFirstCapColor)}。 挟める石：${foresideHoppedoverStones.map((x)=>sqToCode(x))}`)
             if (foresideFirstCapSq != SQ_OUT_OF_BOARD && foresideFirstCapColor == COLOR_EMPTY) {
                 const canMove1 = 0 < foresideHoppedoverStones.length;
                 gameBoard1CanMove.value[direction][thisTurn][foresideFirstCapSq] = canMove1;   // 前方第１キャップに石を置けるか？
-                console.log(`DEBUG: [putStone]         １階　＞　${directionToTitle(direction)}　＞　前方キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
+                console.log(`DEBUG: [putStone] 手番＝${colorToCode(thisTurn)}　        １階　＞　${directionToTitle(direction)}　＞　相手番石跨ぎ　＞　前方キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
             }
 
-            console.log(`DEBUG: [putStone]     １階　＞　${directionToTitle(direction)}　＞　後方キャップは ${sqToCode(backsideFirstCapSq)} ${colorToCode(backsideFirstCapColor)}。 挟める石：${backsideHoppedoverStones.map((x)=>sqToCode(x))}`)
+            console.log(`DEBUG: [putStone] 手番＝${colorToCode(thisTurn)}　    １階　＞　${directionToTitle(direction)}　＞　相手番石跨ぎ　＞　後方キャップは ${sqToCode(backsideFirstCapSq)} ${colorToCode(backsideFirstCapColor)}。 挟める石：${backsideHoppedoverStones.map((x)=>sqToCode(x))}`)
             if (backsideFirstCapSq != SQ_OUT_OF_BOARD && backsideFirstCapColor == COLOR_EMPTY) {
                 const canMove1 = 0 < backsideHoppedoverStones.length;
                 gameBoard1CanMove.value[direction][thisTurn][backsideFirstCapSq] = canMove1;   // 後方第１キャップに石を置けるか？
-                console.log(`DEBUG: [putStone]         １階　＞　${directionToTitle(direction)}　＞　後方キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
+                console.log(`DEBUG: [putStone] 手番＝${colorToCode(thisTurn)}　        １階　＞　${directionToTitle(direction)}　＞　相手番石跨ぎ　＞　後方キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
             }
         }
 
@@ -307,13 +307,13 @@
     ): [number[], number, Color, number[], number, Color] {
 
         const foreOf = allDirectionsForeOf[direction];
-        const foreSq = foreOf(moveSq);   // ［手番石］を読み飛ばす
-        const foresideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);
+        const foreSq = foreOf(moveSq);   // ［着手点］を読み飛ばす
+        const foresideHoppedoverStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf); // ［相手番石］を跨ぐ
         const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);
 
         const backOf = allDirectionsBackOf[direction];
-        const backSq = backOf(moveSq);   // ［手番石］を読み飛ばす
-        const backsideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);
+        const backSq = backOf(moveSq);   // ［着手点］を読み飛ばす
+        const backsideHoppedoverStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);
         const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);
 
         return [
@@ -344,13 +344,13 @@
         const foreOf = allDirectionsForeOf[direction];
         let foreSq = foreOf(sandwichedStoneSq);   // ［手番石］を読み飛ばす：
         foreSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);  // ［手番石］を読み飛ばす
-        let foresideHoppedoferStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);   // ［相手番石］を跨ぐ
+        let foresideHoppedoferStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);   // ［相手番石］を跨ぐ
         const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoferStones, foreOf);  // キャップを取得
 
         const backOf = allDirectionsBackOf[direction];
         let backSq = backOf(sandwichedStoneSq);   // ［手番石］を読み飛ばす：
         backSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, thisTurn, backSq, backOf);  // ［手番石］を読み飛ばす
-        let backsideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);   // ［相手番石］を跨ぐ
+        let backsideHoppedoverStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);   // ［相手番石］を跨ぐ
         const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);  // キャップを取得
 
         return [
@@ -381,13 +381,13 @@
         const foreOf = allDirectionsForeOf[direction];
         let foreSq = foreOf(secondCapSq);   // ［起点］を読み飛ばす
         foreSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);  // ［対象番石］を読み飛ばす
-        let foresideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);   // ［相対象番石］を跨ぐ
+        let foresideHoppedoverStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);   // ［相対象番石］を跨ぐ
         const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);  // キャップを取得
 
         const backOf = allDirectionsBackOf[direction];
         let backSq = backOf(secondCapSq);   // ［起点］を読み飛ばす
         backSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, backSq, backOf);  // ［対象番石］を読み飛ばす
-        let backsideStoneTargeted: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, backSq, backOf);   // ［相対象番石］を跨ぐ
+        let backsideStoneTargeted: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, targetTurn, backSq, backOf);   // ［相対象番石］を跨ぐ
         const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideStoneTargeted, backOf);  // キャップを取得
 
         return [
@@ -438,13 +438,13 @@
         const foreOf = allDirectionsForeOf[direction];
         let foreSq = foreOf(secondCapSq);   // ［起点］を読み飛ばす
         foreSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);  // ［対象番石］を読み飛ばす
-        let foresideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);   // ［相対象番石］を跨ぐ
+        let foresideHoppedoverStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);   // ［相対象番石］を跨ぐ
         const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);  // キャップを取得
 
         const backOf = allDirectionsBackOf[direction];
         let backSq = backOf(secondCapSq);   // ［起点］を読み飛ばす
         backSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, backSq, backOf);  // ［対象番石］を読み飛ばす
-        let backsideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, backSq, backOf);   // ［相対象番石］を跨ぐ
+        let backsideHoppedoverStones: number[] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, targetTurn, backSq, backOf);   // ［相対象番石］を跨ぐ
         const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);  // キャップを取得
 
         return [

@@ -46,12 +46,12 @@ export function locateThisTurnStonesSkipped(
 
 
 /**
- * 
+ * ［相手番石］を跨ぐ
  * @param startSq 
  * @param nextOf 
  * @returns ［跨いだ相手番石］。着手点に近い方から順に並ぶ
  */
-export function locateHoppedoverStones(
+export function locateHoppedoverOppositeTurnStones(
     gameBoard1StoneColorArray: Color[],
     thisTurn: Color,
     startSq: number,

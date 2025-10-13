@@ -144,7 +144,7 @@
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL, directionToTitle,
         COLOR_WHITE,
     } from '@/pages/minigames/reversi/spec.ts';
-    import { gameBoard1FileNameArray } from '@/pages/minigames/reversi/game-board-index-util.ts';
+    import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -434,9 +434,11 @@
 
         let allDirectionsStonesTargeted: number[] = []; // ［ひっくり返せる石］
 
+        const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
         for (const direction of activeDirections) {
             const sandwichedStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
             allDirectionsStonesTargeted.push(...sandwichedStones);
+            console.log(`DEBUG: [putStone] direction=${directionToTitle(direction)} sandwichedStones=${sandwichedStones.map((sq)=> sqToCode(sq)).join(',')}`);
             gameBoardContentModel1Ref.value.reverseStones(game1Turn.value, sandwichedStones);   // ［挟んだ石］をひっくり返します。
         }
 
