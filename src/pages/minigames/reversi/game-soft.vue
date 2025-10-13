@@ -145,6 +145,7 @@
         COLOR_WHITE,
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
+    import { locateOppositeTurnStonesOverSteppedOneWay } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -654,8 +655,8 @@
         const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
         const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
         return [
-            ...gameBoardContentModel1Ref.value.locateOppositeTurnStonesOverSteppedOneWay(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, startSq, foreOf),
-            ...gameBoardContentModel1Ref.value.locateOppositeTurnStonesOverSteppedOneWay(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, startSq, backOf),
+            ...locateOppositeTurnStonesOverSteppedOneWay(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, startSq, foreOf),
+            ...locateOppositeTurnStonesOverSteppedOneWay(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, startSq, backOf),
         ];
     }
 
