@@ -203,6 +203,7 @@ export function locateSandwichedStones(
     let [foresideHoppedoverStones, foresideNextSq] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, foreOf(startSq), foreOf);
     if (foresideNextSq == SQ_OUT_OF_BOARD || gameBoard1StoneColorArray[foresideNextSq] == COLOR_EMPTY) {
         foresideHoppedoverStones.length = 0;    // ひっくり返せる石はない
+        foresideNextSq = startSq;
     }
     if (0 < foresideHoppedoverStones.length) {
         foresideNextSq = backOf(getLastSq(foresideHoppedoverStones)); // 跨いだ石の最後の次へ
@@ -212,6 +213,7 @@ export function locateSandwichedStones(
     let [backsideHoppedoverStones, backsideNextSq] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, backOf(startSq), backOf);
     if (backsideNextSq == SQ_OUT_OF_BOARD || gameBoard1StoneColorArray[backsideNextSq] == COLOR_EMPTY) {
         backsideHoppedoverStones.length = 0;    // ひっくり返せる石はない
+        backsideNextSq = startSq;
     }
     if (0 < backsideHoppedoverStones.length) {
         backsideNextSq = backOf(getLastSq(backsideHoppedoverStones)); // 跨いだ石の最後の次へ
