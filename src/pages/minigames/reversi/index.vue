@@ -180,6 +180,7 @@
             <p class="mb-6"> a のキャップは {{
                 makeSqToCode(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(
                     getCap(
+                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                         locateHoppedoverStones(
                             gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
@@ -193,6 +194,7 @@
                     )[0]
                 )}}（マス） {{
                 getCap(
+                    makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                     gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                     locateHoppedoverStones(
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],

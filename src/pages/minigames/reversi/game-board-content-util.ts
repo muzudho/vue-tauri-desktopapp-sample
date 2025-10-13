@@ -81,11 +81,19 @@ export function locateHoppedoverStones(
 
 
 export function getCap(
+    startSq: number,
     gameBoard1StoneColorArray: Color[],
     hoppedoverStones: number[],
     nextOf: (sq: number)=>number,
 ) : [number, Color] {
-    let capSq = nextOf(hoppedoverStones[hoppedoverStones.length - 1]);   // 最後尾の次へ
+    let lastSq: number;
+    if (0 < hoppedoverStones.length) {
+        lastSq = hoppedoverStones[hoppedoverStones.length - 1]; // 跨いだ石の最後
+    } else {
+        lastSq = startSq;   // 起点
+    }
+
+    let capSq = nextOf(lastSq);   // 跨いだ石の最後の次へ
     if (capSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
         return [SQ_OUT_OF_BOARD, COLOR_EMPTY];
     }

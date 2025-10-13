@@ -82,197 +82,213 @@
         allDirectionsBackOf: ((sq: number) => number)[],
     ) : void {
 
-        const oppositeTurnColor1 = oppositeColor(thisTurn);
         const sqToCode = makeSqToCode(fileNum);
 
-        let allDirectionsOverSteppingStones: number[][] = new Array<number[]>(DIRECTION_SIZE);
+        // ############################
+        // # 着手点に石は置けなくなる #
+        // ############################
+
         for (const direction of activeDirections) {
-            allDirectionsOverSteppingStones[direction] = new Array<number>();
+            gameBoard1CanMove.value[direction][thisTurn][moveSq] = false;
+        }
 
-            gameBoard1CanMove.value[direction][thisTurn][moveSq] = false;    // 着手点に石は置けなくなる。
 
-            // ステップ１：
+        // ##################
+        // # １階の跨いだ石 #
+        // ##################
+
+        let allDirectionsHoppedoverStones: number[][] = new Array<number[]>(DIRECTION_SIZE);
+        for (const direction of activeDirections) {
+            allDirectionsHoppedoverStones[direction] = new Array<number>();
+
             const [
-                foresideOverSteppingStones,
+                foresideHoppedoverStones,
                 foresideFirstCapSq,
                 foresideFirstCapColor,
-                backsideOverSteppingStones,
+                backsideHoppedoverStones,
                 backsideFirstCapSq,
                 backsideFirstCapColor,
             ] = movedStoneGenerateMoveOnDirection(moveSq, direction, gameBoard1StoneColorArray, thisTurn, allDirectionsForeOf, allDirectionsBackOf); // 指し手生成
-            console.log(`DEBUG: [putStone] ${sqToCode(moveSq)}へ石を置いた。`)
-            allDirectionsOverSteppingStones[direction].push(
-                ...foresideOverSteppingStones,
-                ...backsideOverSteppingStones,
+            console.log(`DEBUG: [putStone] １階　＞　${directionToTitle(direction)}　＞　${sqToCode(moveSq)}へ石を置いた。`)
+            allDirectionsHoppedoverStones[direction].push(
+                ...foresideHoppedoverStones,
+                ...backsideHoppedoverStones,
             );
 
-            console.log(`DEBUG: [putStone]     前方第１キャップは ${sqToCode(foresideFirstCapSq)} ${colorToCode(foresideFirstCapColor)}。 挟める石：${foresideOverSteppingStones.map((x)=>sqToCode(x))}`)
+            console.log(`DEBUG: [putStone]     １階　＞　${directionToTitle(direction)}　＞　前方キャップは ${sqToCode(foresideFirstCapSq)} ${colorToCode(foresideFirstCapColor)}。 挟める石：${foresideHoppedoverStones.map((x)=>sqToCode(x))}`)
             if (foresideFirstCapSq != SQ_OUT_OF_BOARD && foresideFirstCapColor == COLOR_EMPTY) {
-                const canMove1 = 0 < foresideOverSteppingStones.length;
+                const canMove1 = 0 < foresideHoppedoverStones.length;
                 gameBoard1CanMove.value[direction][thisTurn][foresideFirstCapSq] = canMove1;   // 前方第１キャップに石を置けるか？
-                console.log(`DEBUG: [putStone]         前方第１キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
+                console.log(`DEBUG: [putStone]         １階　＞　${directionToTitle(direction)}　＞　前方キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
             }
 
-            console.log(`DEBUG: [putStone]     後方第１キャップは ${sqToCode(backsideFirstCapSq)} ${colorToCode(backsideFirstCapColor)}。 挟める石：${backsideOverSteppingStones.map((x)=>sqToCode(x))}`)
+            console.log(`DEBUG: [putStone]     １階　＞　${directionToTitle(direction)}　＞　後方キャップは ${sqToCode(backsideFirstCapSq)} ${colorToCode(backsideFirstCapColor)}。 挟める石：${backsideHoppedoverStones.map((x)=>sqToCode(x))}`)
             if (backsideFirstCapSq != SQ_OUT_OF_BOARD && backsideFirstCapColor == COLOR_EMPTY) {
-                const canMove1 = 0 < backsideOverSteppingStones.length;
+                const canMove1 = 0 < backsideHoppedoverStones.length;
                 gameBoard1CanMove.value[direction][thisTurn][backsideFirstCapSq] = canMove1;   // 後方第１キャップに石を置けるか？
-                console.log(`DEBUG: [putStone]         後方第１キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
-            }
-
-            //console.log(`DEBUG: [putStone(2)] allDirectionsStonesTargetedNew[direction].length=${allDirectionsStonesTargetedNew[direction].length}`)
-            // allDirectionsStonesTargetedOLD.length=${allDirectionsStonesTargetedOLD.length}
-
-            //
-            // ++++++++++++++++++++++++++++++++++++++++++
-            // + ［ひっくり返せる石］をひっくり返します +
-            // ++++++++++++++++++++++++++++++++++++++++++
-            //
-            // console.log(`DEBUG: [putStone] ひっくり返せる石をひっくり返します： ${allDirectionsStonesTargeted.map((sq)=>sqToCode(sq))}`)
-            // for (const stoneTargetedSq of allDirectionsStonesTargeted) {
-            //     gameBoard1StoneColorArray.value[stoneTargetedSq] = thisTurn;
-            // }
-
-
-            // ステップ２：　ひっくり返される各［相手番石］について：
-            for (const stoneTargetedSq of allDirectionsOverSteppingStones[direction]) {
-                console.log(`DEBUG: [putStone] 対象石 ${sqToCode(stoneTargetedSq)} をひっくり返せる。`)
-
-                // ４方向調べたい
-                for (const secondDirection of activeSecondDirections) {
-                    const [
-                        foresideStonesTargeted,
-                        foresideSecondCapSq,
-                        foresideSecondCapColor,
-                        backsideStonesTargeted,
-                        backsideSecondCapSq,
-                        backsideSecondCapColor,
-                    ] = sandwichedStoneGenerateMoveOnDirection(stoneTargetedSq, secondDirection, thisTurn, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
-
-
-                    // ［手番］
-                    // NOTE: この関数を実行する前に、石はひっくりかえしておくこと。
-                    function executeThisTurnSide(
-                        secondCapSq: number,
-                        secondDirection: Direction,
-                    ) : void {
-                        const [
-                            secondCapForesideStonesTargeted,
-                            secondCapForesideSecondCapSq,
-                            secondCapForesideSecondCapColor,
-                            secondCapBacksideStonesTargeted,
-                            secondCapBacksideSecondCapSq,
-                            secondCapBacksideSecondCapColor,
-                        ] = thisTurnSecondCapGenerateMoveOnDirection(secondCapSq, secondDirection, thisTurn, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
-
-                        if (secondCapForesideSecondCapSq != SQ_OUT_OF_BOARD) {
-                            let canMove1 =
-                                    secondCapForesideSecondCapColor == COLOR_EMPTY   // 前方のキャップが空マスで
-                                &&  0 < secondCapForesideStonesTargeted.length; // ひっくり返る石があるなら
-                            if (secondDirection in gameBoard1CanMove.value) {
-                                // console.log(`DEBUG: [putStone]1     secondDirection=${secondDirection}`);
-                                // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
-                                // console.log(`DEBUG: [putStone]1     targetTurn=${targetTurn}`);
-                                // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
-                                // console.log(`DEBUG: [putStone]1     secondCapForesideSecondCapSq=${secondCapForesideSecondCapSq}`);
-                                // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]}`);
-                                // console.log(`DEBUG: [putStone]1     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${directionToTitle(secondDirection)} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
-                                gameBoard1CanMove.value[secondDirection][thisTurn][secondCapForesideSecondCapSq] = canMove1;
-                            }
-                        }
-
-                        if (secondCapBacksideSecondCapSq != SQ_OUT_OF_BOARD) {
-                            let canMove1 = 
-                                    secondCapBacksideSecondCapColor == COLOR_EMPTY // 後方のキャップが空マスで
-                                &&  0 < secondCapBacksideStonesTargeted.length;  // ひっくり返る石があるなら
-                            if (secondDirection in gameBoard1CanMove.value) {
-                                // console.log(`DEBUG: [putStone]2     secondDirection=${secondDirection}`);
-                                // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
-                                // console.log(`DEBUG: [putStone]2     targetTurn=${targetTurn}`);
-                                // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
-                                // console.log(`DEBUG: [putStone]2     secondCapBacksideSecondCapSq=${secondCapBacksideSecondCapSq}`);
-                                // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]}`);
-                                // console.log(`DEBUG: [putStone]2     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${directionToTitle(secondDirection)} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
-                                gameBoard1CanMove.value[secondDirection][thisTurn][secondCapBacksideSecondCapSq] = canMove1;
-                            }
-                        }
-                    }
-
-
-                    // ［相手番］
-                    // NOTE: この関数を実行する前に、石はひっくりかえしておくこと。
-                    function executeOppositeTurnSide(
-                        secondCapSq: number,
-                        secondDirection: Direction,
-                    ) : void {
-                        const [
-                            secondCapForesideStonesTargeted,
-                            secondCapForesideSecondCapSq,
-                            secondCapForesideSecondCapColor,
-                            secondCapBacksideStonesTargeted,
-                            secondCapBacksideSecondCapSq,
-                            secondCapBacksideSecondCapColor,
-                        ] = oppositeTurnSecondCapGenerateMoveOnDirection(secondCapSq, secondDirection, oppositeTurnColor1, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
-
-                        if (secondCapForesideSecondCapSq != SQ_OUT_OF_BOARD) {
-                            let canMove1 =
-                                    secondCapForesideSecondCapColor == COLOR_EMPTY   // 前方のキャップが空マスで
-                                &&  0 < secondCapForesideStonesTargeted.length; // ひっくり返る石があるなら
-                            if (secondDirection in gameBoard1CanMove.value) {
-                                // console.log(`DEBUG: [putStone]1     secondDirection=${secondDirection}`);
-                                // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
-                                // console.log(`DEBUG: [putStone]1     targetTurn=${targetTurn}`);
-                                // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
-                                // console.log(`DEBUG: [putStone]1     secondCapForesideSecondCapSq=${secondCapForesideSecondCapSq}`);
-                                // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]}`);
-                                // console.log(`DEBUG: [putStone]1     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${directionToTitle(secondDirection)} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
-                                gameBoard1CanMove.value[secondDirection][oppositeTurnColor1][secondCapForesideSecondCapSq] = canMove1;
-                            }
-                        }
-
-                        if (secondCapBacksideSecondCapSq != SQ_OUT_OF_BOARD) {
-                            let canMove1 = 
-                                    secondCapBacksideSecondCapColor == COLOR_EMPTY // 後方のキャップが空マスで
-                                &&  0 < secondCapBacksideStonesTargeted.length;  // ひっくり返る石があるなら
-                            if (secondDirection in gameBoard1CanMove.value) {
-                                // console.log(`DEBUG: [putStone]2     secondDirection=${secondDirection}`);
-                                // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
-                                // console.log(`DEBUG: [putStone]2     targetTurn=${targetTurn}`);
-                                // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
-                                // console.log(`DEBUG: [putStone]2     secondCapBacksideSecondCapSq=${secondCapBacksideSecondCapSq}`);
-                                // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]}`);
-                                // console.log(`DEBUG: [putStone]2     canMove1=${canMove1}`);
-                                console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${directionToTitle(secondDirection)} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
-                                gameBoard1CanMove.value[secondDirection][oppositeTurnColor1][secondCapBacksideSecondCapSq] = canMove1;
-                            }
-                        }
-                    }
-
-
-                    // ステップ３：　第２キャップ判定
-                    //
-                    // xooo.xxo
-                    //     ^
-                    //     xもoも置けることに注意
-                    console.log(`DEBUG: [putStone] 　　第２${directionToTitle(secondDirection)} 前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
-                    if (!foresideSecondCapSq) {
-                        continue;
-                    }
-                    executeThisTurnSide(foresideSecondCapSq, secondDirection);    // foreside
-                    executeOppositeTurnSide(foresideSecondCapSq, secondDirection);
-
-                    console.log(`DEBUG: [putStone] 　　第２${directionToTitle(secondDirection)} 後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
-                    if(!backsideSecondCapSq){
-                        continue;
-                    }
-                    executeThisTurnSide(backsideSecondCapSq, secondDirection);    // backside
-                    executeOppositeTurnSide(backsideSecondCapSq, secondDirection);
-                }
+                console.log(`DEBUG: [putStone]         １階　＞　${directionToTitle(direction)}　＞　後方キャップに石 ${canMove1 ? 'を置ける' : 'は置けない'}`)
             }
         }
+
+
+        // ########
+        // # 以降 #
+        // ########
+
+        const oppositeTurnColor1 = oppositeColor(thisTurn);
+
+        // for (const direction of activeDirections) {
+
+        //     //
+        //     // ++++++++++++++++++++++++++++++++++++++++++
+        //     // + ［ひっくり返せる石］をひっくり返します +
+        //     // ++++++++++++++++++++++++++++++++++++++++++
+        //     //
+        //     // console.log(`DEBUG: [putStone] ひっくり返せる石をひっくり返します： ${allDirectionsStonesTargeted.map((sq)=>sqToCode(sq))}`)
+        //     // for (const stoneTargetedSq of allDirectionsStonesTargeted) {
+        //     //     gameBoard1StoneColorArray.value[stoneTargetedSq] = thisTurn;
+        //     // }
+
+
+        //     // ステップ２：　ひっくり返される各［相手番石］について：
+        //     for (const stoneTargetedSq of allDirectionsHoppedoverStones[direction]) {
+        //         console.log(`DEBUG: [putStone] 対象石 ${sqToCode(stoneTargetedSq)} をひっくり返せる。`)
+
+        //         // ４方向調べたい
+        //         for (const secondDirection of activeSecondDirections) {
+        //             const [
+        //                 foresideStonesTargeted,
+        //                 foresideSecondCapSq,
+        //                 foresideSecondCapColor,
+        //                 backsideStonesTargeted,
+        //                 backsideSecondCapSq,
+        //                 backsideSecondCapColor,
+        //             ] = sandwichedStoneGenerateMoveOnDirection(stoneTargetedSq, secondDirection, thisTurn, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
+
+
+        //             // ［手番］
+        //             // NOTE: この関数を実行する前に、石はひっくりかえしておくこと。
+        //             function executeThisTurnSide(
+        //                 secondCapSq: number,
+        //                 secondDirection: Direction,
+        //             ) : void {
+        //                 const [
+        //                     secondCapForesideStonesTargeted,
+        //                     secondCapForesideSecondCapSq,
+        //                     secondCapForesideSecondCapColor,
+        //                     secondCapBacksideStonesTargeted,
+        //                     secondCapBacksideSecondCapSq,
+        //                     secondCapBacksideSecondCapColor,
+        //                 ] = thisTurnSecondCapGenerateMoveOnDirection(secondCapSq, secondDirection, thisTurn, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
+
+        //                 if (secondCapForesideSecondCapSq != SQ_OUT_OF_BOARD) {
+        //                     let canMove1 =
+        //                             secondCapForesideSecondCapColor == COLOR_EMPTY   // 前方のキャップが空マスで
+        //                         &&  0 < secondCapForesideStonesTargeted.length; // ひっくり返る石があるなら
+        //                     if (secondDirection in gameBoard1CanMove.value) {
+        //                         // console.log(`DEBUG: [putStone]1     secondDirection=${secondDirection}`);
+        //                         // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
+        //                         // console.log(`DEBUG: [putStone]1     targetTurn=${targetTurn}`);
+        //                         // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
+        //                         // console.log(`DEBUG: [putStone]1     secondCapForesideSecondCapSq=${secondCapForesideSecondCapSq}`);
+        //                         // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]}`);
+        //                         // console.log(`DEBUG: [putStone]1     canMove1=${canMove1}`);
+        //                         console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${directionToTitle(secondDirection)} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+        //                         gameBoard1CanMove.value[secondDirection][thisTurn][secondCapForesideSecondCapSq] = canMove1;
+        //                     }
+        //                 }
+
+        //                 if (secondCapBacksideSecondCapSq != SQ_OUT_OF_BOARD) {
+        //                     let canMove1 = 
+        //                             secondCapBacksideSecondCapColor == COLOR_EMPTY // 後方のキャップが空マスで
+        //                         &&  0 < secondCapBacksideStonesTargeted.length;  // ひっくり返る石があるなら
+        //                     if (secondDirection in gameBoard1CanMove.value) {
+        //                         // console.log(`DEBUG: [putStone]2     secondDirection=${secondDirection}`);
+        //                         // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
+        //                         // console.log(`DEBUG: [putStone]2     targetTurn=${targetTurn}`);
+        //                         // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
+        //                         // console.log(`DEBUG: [putStone]2     secondCapBacksideSecondCapSq=${secondCapBacksideSecondCapSq}`);
+        //                         // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]}`);
+        //                         // console.log(`DEBUG: [putStone]2     canMove1=${canMove1}`);
+        //                         console.log(`DEBUG: [putStone]     ［手番］${colorToCode(thisTurn)} 第２${directionToTitle(secondDirection)} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+        //                         gameBoard1CanMove.value[secondDirection][thisTurn][secondCapBacksideSecondCapSq] = canMove1;
+        //                     }
+        //                 }
+        //             }
+
+
+        //             // ［相手番］
+        //             // NOTE: この関数を実行する前に、石はひっくりかえしておくこと。
+        //             function executeOppositeTurnSide(
+        //                 secondCapSq: number,
+        //                 secondDirection: Direction,
+        //             ) : void {
+        //                 const [
+        //                     secondCapForesideStonesTargeted,
+        //                     secondCapForesideSecondCapSq,
+        //                     secondCapForesideSecondCapColor,
+        //                     secondCapBacksideStonesTargeted,
+        //                     secondCapBacksideSecondCapSq,
+        //                     secondCapBacksideSecondCapColor,
+        //                 ] = oppositeTurnSecondCapGenerateMoveOnDirection(secondCapSq, secondDirection, oppositeTurnColor1, gameBoard1StoneColorArray, allDirectionsForeOf, allDirectionsBackOf);
+
+        //                 if (secondCapForesideSecondCapSq != SQ_OUT_OF_BOARD) {
+        //                     let canMove1 =
+        //                             secondCapForesideSecondCapColor == COLOR_EMPTY   // 前方のキャップが空マスで
+        //                         &&  0 < secondCapForesideStonesTargeted.length; // ひっくり返る石があるなら
+        //                     if (secondDirection in gameBoard1CanMove.value) {
+        //                         // console.log(`DEBUG: [putStone]1     secondDirection=${secondDirection}`);
+        //                         // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
+        //                         // console.log(`DEBUG: [putStone]1     targetTurn=${targetTurn}`);
+        //                         // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
+        //                         // console.log(`DEBUG: [putStone]1     secondCapForesideSecondCapSq=${secondCapForesideSecondCapSq}`);
+        //                         // console.log(`DEBUG: [putStone]1     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapForesideSecondCapSq]}`);
+        //                         // console.log(`DEBUG: [putStone]1     canMove1=${canMove1}`);
+        //                         console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${directionToTitle(secondDirection)} 前方第２キャップ=${sqToCode(secondCapForesideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+        //                         gameBoard1CanMove.value[secondDirection][oppositeTurnColor1][secondCapForesideSecondCapSq] = canMove1;
+        //                     }
+        //                 }
+
+        //                 if (secondCapBacksideSecondCapSq != SQ_OUT_OF_BOARD) {
+        //                     let canMove1 = 
+        //                             secondCapBacksideSecondCapColor == COLOR_EMPTY // 後方のキャップが空マスで
+        //                         &&  0 < secondCapBacksideStonesTargeted.length;  // ひっくり返る石があるなら
+        //                     if (secondDirection in gameBoard1CanMove.value) {
+        //                         // console.log(`DEBUG: [putStone]2     secondDirection=${secondDirection}`);
+        //                         // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection].length=${gameBoard1CanMove.value[secondDirection].length}`);
+        //                         // console.log(`DEBUG: [putStone]2     targetTurn=${targetTurn}`);
+        //                         // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn].length=${gameBoard1CanMove.value[secondDirection][targetTurn].length}`);
+        //                         // console.log(`DEBUG: [putStone]2     secondCapBacksideSecondCapSq=${secondCapBacksideSecondCapSq}`);
+        //                         // console.log(`DEBUG: [putStone]2     gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]=${gameBoard1CanMove.value[secondDirection][targetTurn][secondCapBacksideSecondCapSq]}`);
+        //                         // console.log(`DEBUG: [putStone]2     canMove1=${canMove1}`);
+        //                         console.log(`DEBUG: [putStone]     ［相手番］${colorToCode(oppositeTurnColor1)} 第２${directionToTitle(secondDirection)} 後方第２キャップ=${sqToCode(secondCapBacksideSecondCapSq)} ${canMove1 ? 'は置ける。' : 'は置けない。'}`);
+        //                         gameBoard1CanMove.value[secondDirection][oppositeTurnColor1][secondCapBacksideSecondCapSq] = canMove1;
+        //                     }
+        //                 }
+        //             }
+
+
+        //             // ステップ３：　第２キャップ判定
+        //             //
+        //             // xooo.xxo
+        //             //     ^
+        //             //     xもoも置けることに注意
+        //             console.log(`DEBUG: [putStone] 　　第２${directionToTitle(secondDirection)} 前方第２キャップは ${sqToCode(foresideSecondCapSq)} ${colorToCode(foresideSecondCapColor)}。 挟める石：${foresideStonesTargeted.map((x)=>sqToCode(x))}`);
+        //             if (!foresideSecondCapSq) {
+        //                 continue;
+        //             }
+        //             executeThisTurnSide(foresideSecondCapSq, secondDirection);    // foreside
+        //             executeOppositeTurnSide(foresideSecondCapSq, secondDirection);
+
+        //             console.log(`DEBUG: [putStone] 　　第２${directionToTitle(secondDirection)} 後方第２キャップは ${sqToCode(backsideSecondCapSq)} ${colorToCode(backsideSecondCapColor)}。 挟める石：${backsideStonesTargeted.map((x)=>sqToCode(x))}`);
+        //             if(!backsideSecondCapSq){
+        //                 continue;
+        //             }
+        //             executeThisTurnSide(backsideSecondCapSq, secondDirection);    // backside
+        //             executeOppositeTurnSide(backsideSecondCapSq, secondDirection);
+        //         }
+        //     }
+        // }
     }
 
 
@@ -292,19 +308,19 @@
 
         const foreOf = allDirectionsForeOf[direction];
         const foreSq = foreOf(moveSq);   // ［手番石］を読み飛ばす
-        const foreHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);
-        const [foresideCapSq, foresideCapColor] = getCap(gameBoard1StoneColorArray, foreHoppedoverStones, foreOf)
+        const foresideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);
+        const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);
 
         const backOf = allDirectionsBackOf[direction];
         const backSq = backOf(moveSq);   // ［手番石］を読み飛ばす
-        const backHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);
-        const [backsideCapSq, backsideCapColor] = getCap(gameBoard1StoneColorArray, backHoppedoverStones, backOf);
+        const backsideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);
+        const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);
 
         return [
-            foreHoppedoverStones,
+            foresideHoppedoverStones,
             foresideCapSq,
             foresideCapColor,
-            backHoppedoverStones,
+            backsideHoppedoverStones,
             backsideCapSq,
             backsideCapColor,
         ];
@@ -329,13 +345,13 @@
         let foreSq = foreOf(sandwichedStoneSq);   // ［手番石］を読み飛ばす：
         foreSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);  // ［手番石］を読み飛ばす
         let foresideHoppedoferStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, foreSq, foreOf);   // ［相手番石］を跨ぐ
-        const [foresideCapSq, foresideCapColor] = getCap(gameBoard1StoneColorArray, foresideHoppedoferStones, foreOf);  // キャップを取得
+        const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoferStones, foreOf);  // キャップを取得
 
         const backOf = allDirectionsBackOf[direction];
         let backSq = backOf(sandwichedStoneSq);   // ［手番石］を読み飛ばす：
         backSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, thisTurn, backSq, backOf);  // ［手番石］を読み飛ばす
         let backsideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, thisTurn, backSq, backOf);   // ［相手番石］を跨ぐ
-        const [backsideCapSq, backsideCapColor] = getCap(gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);  // キャップを取得
+        const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);  // キャップを取得
 
         return [
             foresideHoppedoferStones,
@@ -366,13 +382,13 @@
         let foreSq = foreOf(secondCapSq);   // ［起点］を読み飛ばす
         foreSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);  // ［対象番石］を読み飛ばす
         let foresideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);   // ［相対象番石］を跨ぐ
-        const [foresideCapSq, foresideCapColor] = getCap(gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);  // キャップを取得
+        const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);  // キャップを取得
 
         const backOf = allDirectionsBackOf[direction];
         let backSq = backOf(secondCapSq);   // ［起点］を読み飛ばす
         backSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, backSq, backOf);  // ［対象番石］を読み飛ばす
         let backsideStoneTargeted: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, backSq, backOf);   // ［相対象番石］を跨ぐ
-        const [backsideCapSq, backsideCapColor] = getCap(gameBoard1StoneColorArray, backsideStoneTargeted, backOf);  // キャップを取得
+        const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideStoneTargeted, backOf);  // キャップを取得
 
         return [
             foresideHoppedoverStones,
@@ -423,13 +439,13 @@
         let foreSq = foreOf(secondCapSq);   // ［起点］を読み飛ばす
         foreSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);  // ［対象番石］を読み飛ばす
         let foresideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, foreSq, foreOf);   // ［相対象番石］を跨ぐ
-        const [foresideCapSq, foresideCapColor] = getCap(gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);  // キャップを取得
+        const [foresideCapSq, foresideCapColor] = getCap(foreSq, gameBoard1StoneColorArray, foresideHoppedoverStones, foreOf);  // キャップを取得
 
         const backOf = allDirectionsBackOf[direction];
         let backSq = backOf(secondCapSq);   // ［起点］を読み飛ばす
         backSq = locateThisTurnStonesSkipped(gameBoard1StoneColorArray, targetTurn, backSq, backOf);  // ［対象番石］を読み飛ばす
         let backsideHoppedoverStones: number[] = locateHoppedoverStones(gameBoard1StoneColorArray, targetTurn, backSq, backOf);   // ［相対象番石］を跨ぐ
-        const [backsideCapSq, backsideCapColor] = getCap(gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);  // キャップを取得
+        const [backsideCapSq, backsideCapColor] = getCap(backSq, gameBoard1StoneColorArray, backsideHoppedoverStones, backOf);  // キャップを取得
 
         return [
             foresideHoppedoverStones,

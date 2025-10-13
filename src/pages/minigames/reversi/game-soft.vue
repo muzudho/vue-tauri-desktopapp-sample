@@ -648,7 +648,7 @@
             return [];  // エラー
         } 
 
-        console.log(`DEBUG: [locateTargetStones] direction=${directionToTitle(direction)} gameBoardIndexModel1Ref.value.allDirectionsForeOf.length=${gameBoardIndexModel1Ref.value.allDirectionsForeOf.length}`);
+        //console.log(`DEBUG: [locateTargetStones] direction=${directionToTitle(direction)} gameBoardIndexModel1Ref.value.allDirectionsForeOf.length=${gameBoardIndexModel1Ref.value.allDirectionsForeOf.length}`);
         const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
         const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
         return [
