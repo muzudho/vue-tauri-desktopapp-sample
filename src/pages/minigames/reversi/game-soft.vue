@@ -144,7 +144,7 @@
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,        
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateSandwichedStones } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateSandwichedStones, locateStonesCap } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -436,12 +436,17 @@
 
         //const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
         for (const direction of activeDirections) {
-            const [sandwichedStones, _foresideSandwitchedCapSq, _backsideSandwichedCapSq] = locateSandwichedStones( // ひっくり返す対象の石のマス番号を取得します
-                gameBoardContentModel1Ref.value.stonesColor,
+            const gameBoard1StoneColorArray: Color[] = gameBoardContentModel1Ref.value.stonesColor;
+            const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
+            const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
+            const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
+
+            const [sandwichedStones, foresideSandwitchedCapSq, backsideSandwichedCapSq] = locateSandwichedStones( // ひっくり返す対象の石のマス番号を取得します
+                gameBoard1StoneColorArray,
                 game1Turn.value,
-                gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction],
-                gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction],
-                makeSqToCode(gameBoardIndexModel1Ref.value.fileNum),
+                foreOf,
+                backOf,
+                sqToCode,
                 moveSq,
                 direction
             );
@@ -453,6 +458,17 @@
             // TODO: 石がひっくり返ったあと、その方向の両キャップの位置を取得、そこに手番石、相手番石を置けるかどうかを更新したい。
             // TODO: １階キャップ（_foresideFirstCapSq, _backsideFirstCapSq）を起点として、さらに延長１階キャップを探索できるか？
             //  空点でなければ延長すればいいか？
+            const foresideStonesCapSq = locateStonesCap(
+                gameBoard1StoneColorArray,
+                foresideSandwitchedCapSq,
+                foreOf,
+            );
+            const backsideStonesCapSq = locateStonesCap(
+                gameBoard1StoneColorArray,
+                backsideSandwichedCapSq,
+                backOf,
+            );
+            console.log(`DEBUG: [putStone] ストーンズ・キャップ　前方＝${sqToCode(foresideStonesCapSq)}　後方＝${sqToCode(backsideStonesCapSq)}`);
         }
 
         // ++++++++++++++
@@ -645,10 +661,6 @@
     // ++++++++++++++++++++++++++++++++
     // + サブルーチン　＞　ゲーム盤１ +
     // ++++++++++++++++++++++++++++++++
-
-    function locateStonesCap() : void {
-    }
-
 
     /**
      * パス
