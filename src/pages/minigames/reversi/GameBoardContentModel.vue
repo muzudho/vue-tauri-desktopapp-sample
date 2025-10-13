@@ -54,6 +54,7 @@
      * @returns ［跨いだ石］のあるマス番号
      */
     function locateOppositeTurnStonesOverSteppedOneWay(
+        gameBoard1StoneColorArray: Color[],
         thisTurn: Color,
         startSq: number,
         nextOf: (sq: number) => number,
@@ -67,7 +68,7 @@
                 break;
             }
 
-            const nextColor: Color = stonesColor.value[nextSq];  // 隣の石の色
+            const nextColor: Color = gameBoard1StoneColorArray[nextSq];  // 隣の石の色
             //console.log(`nextSq=${nextSq} nextColor=${nextColor} opponentColor1=${opponentColor1}`);
 
             if (nextColor == COLOR_EMPTY) { // 空マスに突き当たったら、［跨いだ相手番の石］リストを空にして一次ループを抜ける
