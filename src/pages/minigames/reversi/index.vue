@@ -180,8 +180,8 @@
             <p class="mb-6"> a のキャップは {{
                 makeSqToCode(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(
                     getCap(
-                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                        makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                         locateHoppedoverOppositeTurnStones(
                             gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                             gameSoft1Ref?.game1Turn ?? 0,
@@ -194,8 +194,8 @@
                     )[0]
                 )}}（マス） {{
                 getCap(
-                    makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                     gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
+                    makeCodeToSq(gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 0)(debug1MoveSq),
                     locateHoppedoverOppositeTurnStones(
                         gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor ?? [],
                         gameSoft1Ref?.game1Turn ?? 0,
