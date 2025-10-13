@@ -2,7 +2,14 @@
 // # インポート #
 // ##############
 
-import { COLOR_EMPTY, Color, oppositeColor, SQ_OUT_OF_BOARD } from "@/pages/minigames/reversi/spec.ts";
+import {
+    // 色
+    COLOR_EMPTY, Color, oppositeColor,
+    // マス
+    SQ_OUT_OF_BOARD,
+    // 方向
+    Direction, directionToTitle,
+} from "@/pages/minigames/reversi/spec.ts";
 
 
 // ################
@@ -145,4 +152,37 @@ export function getCap(
     
     const capColor: Color = gameBoard1StoneColorArray[capSq];  // 隣の石の色
     return [capSq, capColor];
+}
+
+
+/**
+ * ［ひっくり返す対象の石］のマス番号を取得
+ */
+export function locateSandwichedStones(
+    gameBoard1StoneColorArray: Color[],
+    thisTurn: Color,
+    foreOf: (sq: number)=>number,
+    backOf: (sq: number)=>number,
+    sqToCode: (sq: number)=>string,
+    startSq: number,
+    direction: Direction,
+) : [number[], number, number] {
+    //console.log(`DEBUG: [locateSandwichedStones] direction=${directionToTitle(direction)}`);
+
+    let [foresideHoppedoverStones, foresideNextSq] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, foreOf(startSq), foreOf);
+    if (foresideNextSq == SQ_OUT_OF_BOARD || gameBoard1StoneColorArray[foresideNextSq] == COLOR_EMPTY) {
+        foresideHoppedoverStones.length = 0;    // ひっくり返せる石はない
+    }
+    console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の前方　の相手石跨ぎの終端　${sqToCode(foresideNextSq)}（１階キャップ）　挟んだ石＝${foresideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}`);
+
+    let [backsideHoppedoverStones, backsideNextSq] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, backOf(startSq), backOf);
+    console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の後方　の相手石跨ぎの終端　${sqToCode(backsideNextSq)}（１階キャップ）　挟んだ石＝${backsideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}`);
+    if (backsideNextSq == SQ_OUT_OF_BOARD || gameBoard1StoneColorArray[backsideNextSq] == COLOR_EMPTY) {
+        backsideHoppedoverStones.length = 0;    // ひっくり返せる石はない
+    }
+
+    return [[
+        ...foresideHoppedoverStones,
+        ...backsideHoppedoverStones,
+    ], foresideNextSq, backsideNextSq];
 }
