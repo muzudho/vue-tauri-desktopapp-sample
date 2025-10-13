@@ -65,14 +65,14 @@
         return allDirectionsBackOf.value[direction];
     }
 
-    const eastOf = makeEastOf(props.fileNum);
-    const westOf = makeWestOf(props.fileNum);
-    const southOf = makeSouthOf(props.fileNum, area.value);
-    const northOf = makeNorthOf(props.fileNum);
-    const northeastOf = makeNortheastOf(props.fileNum);
-    const southwestOf = makeSouthwestOf(props.fileNum, area.value);
-    const southeastOf = makeSoutheastOf(props.fileNum, area.value);
-    const northwestOf = makeNorthwestOf(props.fileNum);
+    const eastOf = makeEastOf(props.fileNum);   // 水平方向
+    const westOf = makeWestOf(props.fileNum);   // 水平方向
+    const southOf = makeSouthOf(props.fileNum, area.value);   // 垂直方向
+    const northOf = makeNorthOf(props.fileNum);   // 垂直方向
+    const northeastOf = makeNortheastOf(props.fileNum);   // 右肩上がり方向
+    const southwestOf = makeSouthwestOf(props.fileNum, area.value);   // 右肩上がり方向
+    const southeastOf = makeSoutheastOf(props.fileNum, area.value);   // 右肩下がり方向
+    const northwestOf = makeNorthwestOf(props.fileNum);   // 右肩下がり方向
 
 
     // ##############

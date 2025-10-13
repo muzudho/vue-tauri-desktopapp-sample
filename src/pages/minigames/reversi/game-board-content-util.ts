@@ -208,7 +208,7 @@ export function locateSandwichedStones(
     if (0 < foresideHoppedoverStones.length) {
         foresideNextSq = backOf(getLastSq(foresideHoppedoverStones)); // 跨いだ石の最後の次へ
     }
-    console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の前方　のサンドイッチ・キャップ　${sqToCode(foresideNextSq)}　挟んだ石＝${foresideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}`);
+    console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の前方　のサンドイッチ・キャップ　${sqToCode(foresideNextSq)}　挟んだ石＝${foresideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}　長さ＝${foresideHoppedoverStones.length}`);
 
     let [backsideHoppedoverStones, backsideNextSq] = locateHoppedoverOppositeTurnStones(gameBoard1StoneColorArray, thisTurn, backOf(startSq), backOf);
     if (backsideNextSq == SQ_OUT_OF_BOARD || gameBoard1StoneColorArray[backsideNextSq] == COLOR_EMPTY) {
@@ -218,7 +218,7 @@ export function locateSandwichedStones(
     if (0 < backsideHoppedoverStones.length) {
         backsideNextSq = backOf(getLastSq(backsideHoppedoverStones)); // 跨いだ石の最後の次へ
     }
-    console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の後方　のサンドイッチ・キャップ　${sqToCode(backsideNextSq)}　挟んだ石＝${backsideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}`);
+    console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の後方　のサンドイッチ・キャップ　${sqToCode(backsideNextSq)}　挟んだ石＝${backsideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}　長さ＝${backsideHoppedoverStones.length}`);
 
     return [[
         ...foresideHoppedoverStones,
