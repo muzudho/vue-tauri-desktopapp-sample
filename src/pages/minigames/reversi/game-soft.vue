@@ -437,7 +437,7 @@
 
         const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
         for (const direction of activeDirections) {
-            const sandwichedStones = locateTargetStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
+            const sandwichedStones = locateSandwichedStones(moveSq, direction); // ひっくり返す対象の石のマス番号を取得します
             allDirectionsStonesTargeted.push(...sandwichedStones);
             console.log(`DEBUG: [putStone] direction=${directionToTitle(direction)} sandwichedStones=${sandwichedStones.map((sq)=> sqToCode(sq)).join(',')}`);
             gameBoardContentModel1Ref.value.reverseStones(game1Turn.value, sandwichedStones);   // ［挟んだ石］をひっくり返します。
@@ -638,29 +638,32 @@
     /**
      * ひっくり返す対象の石のマス番号を取得
      */
-    function locateTargetStones(
+    function locateSandwichedStones(
         startSq: number,
         direction: Direction,
     ) : number[] {
         if (!gameBoardIndexModel1Ref?.value) {
-            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardIndexModel1Ref -。");
+            console.error("ERROR: [locateSandwichedStones] 初期化不備： gameBoardIndexModel1Ref -。");
             return [];  // エラー
         } 
         if (!gameBoardContentModel1Ref?.value) {
-            console.error("ERROR: [locateTargetStones] 初期化不備： gameBoardContentModel1Ref 。");
+            console.error("ERROR: [locateSandwichedStones] 初期化不備： gameBoardContentModel1Ref 。");
             return [];  // エラー
         } 
 
-        //console.log(`DEBUG: [locateTargetStones] direction=${directionToTitle(direction)} gameBoardIndexModel1Ref.value.allDirectionsForeOf.length=${gameBoardIndexModel1Ref.value.allDirectionsForeOf.length}`);
+        //console.log(`DEBUG: [locateSandwichedStones] direction=${directionToTitle(direction)} gameBoardIndexModel1Ref.value.allDirectionsForeOf.length=${gameBoardIndexModel1Ref.value.allDirectionsForeOf.length}`);
         const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
         const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
+        const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
 
         let [foresideHoppedoverStones, foresideNextSq] = locateHoppedoverOppositeTurnStones(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, foreOf(startSq), foreOf);
         if (foresideNextSq == SQ_OUT_OF_BOARD || gameBoardContentModel1Ref.value.stonesColor[foresideNextSq] == COLOR_EMPTY) {
             foresideHoppedoverStones.length = 0;    // ひっくり返せる石はない
         }
+        console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の前方　の相手石跨ぎの終端　${sqToCode(foresideNextSq)}　挟んだ石＝${foresideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}`);
 
         let [backsideHoppedoverStones, backsideNextSq] = locateHoppedoverOppositeTurnStones(gameBoardContentModel1Ref.value.stonesColor, game1Turn.value, backOf(startSq), backOf);
+        console.log(`DEBUG: [locateSandwichedStones] ${sqToCode(startSq)}　から見て　${directionToTitle(direction)}の後方　の相手石跨ぎの終端　${sqToCode(backsideNextSq)}　挟んだ石＝${backsideHoppedoverStones.map((sq)=> sqToCode(sq)).join(',')}`);
         if (backsideNextSq == SQ_OUT_OF_BOARD || gameBoardContentModel1Ref.value.stonesColor[backsideNextSq] == COLOR_EMPTY) {
             backsideHoppedoverStones.length = 0;    // ひっくり返せる石はない
         }
