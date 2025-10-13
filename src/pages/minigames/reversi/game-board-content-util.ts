@@ -86,14 +86,14 @@ export function getCap(
     hoppedoverStones: number[],
     nextOf: (sq: number)=>number,
 ) : [number, Color] {
-    let lastSq: number;
+    let capSq: number;
     if (0 < hoppedoverStones.length) {
-        lastSq = hoppedoverStones[hoppedoverStones.length - 1]; // 跨いだ石の最後
+        capSq = nextOf(hoppedoverStones[hoppedoverStones.length - 1]);   // 跨いだ石の最後の次へ
+
     } else {
-        lastSq = startSq;   // 起点
+        capSq = startSq;   // 起点がキャップ
     }
 
-    let capSq = nextOf(lastSq);   // 跨いだ石の最後の次へ
     if (capSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
         return [SQ_OUT_OF_BOARD, COLOR_EMPTY];
     }
