@@ -268,10 +268,9 @@ export function locateSandwichedStones(
 
 export function getColorList(
     gameBoard1StoneColorArray: Color[],
-    initialColor: Color,
     extendStones: number[],
 ) : Color[] {
-    const colorList: Color[] = [initialColor];
+    const colorList: Color[] = [];
     for (const sq of extendStones) {
         const color: Color = gameBoard1StoneColorArray[sq];
         if (color != colorList[colorList.length - 1])  { // 直前の色と違うなら追加
