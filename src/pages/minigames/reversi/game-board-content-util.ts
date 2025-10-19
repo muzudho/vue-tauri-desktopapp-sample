@@ -119,6 +119,39 @@ export function locateStonesCap(
 
 
 /**
+ * ［サンドイッチ石］から連続する石のマス番号を返す
+ * @param gameBoard1StoneColorArray 
+ * @param sandwichedCapSq 
+ * @param nextOf
+ */
+export function locateStonesFromSandwichStone(
+    gameBoard1StoneColorArray: Color[],
+    sandwichedCapSq: number,
+    nextOf: (sq: number)=>number,
+) : number[] {
+    let nextSq = sandwichedCapSq;
+    const resultLocations: number[] = [];
+    while (true) {
+        if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了
+            break;
+        }
+
+        const nextColor: Color = gameBoard1StoneColorArray[nextSq];  // 隣の石の色
+
+        if (nextColor == COLOR_EMPTY) { // ［空マス］に突き当たったら終了
+            break;
+        }
+
+        // ［手番石］、［相手番石］に突き当たったら、続行
+        resultLocations.push(nextSq);
+        nextSq = nextOf(nextSq);
+    }
+
+    return resultLocations;
+}
+
+
+/**
  * 石の色を返す関数を生成する。
  * @param gameBoard1StoneColorArray 盤上の石の色配列
  * @returns 石の色を返す関数

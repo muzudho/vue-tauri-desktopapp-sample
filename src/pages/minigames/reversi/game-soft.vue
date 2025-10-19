@@ -144,7 +144,7 @@
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,        
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateSandwichedStones, locateStonesCap } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateSandwichedStones, locateStonesCap, locateStonesFromSandwichStone as locateExtendStones } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -469,6 +469,36 @@
                 backOf,
             );
             console.log(`DEBUG: [putStone] ストーンズ・キャップ　前方＝${sqToCode(foresideStonesCapSq)}　後方＝${sqToCode(backsideStonesCapSq)}`);
+            const foresideExtendStones = locateExtendStones(
+                gameBoard1StoneColorArray,
+                foreOf(foresideSandwitchedCapSq),
+                foreOf,
+            );
+            const backsideExtendStones = locateExtendStones(
+                gameBoard1StoneColorArray,
+                backOf(backsideSandwichedCapSq),
+                backOf,
+            );
+            console.log(`DEBUG: [putStone] エクステンド・ストーンズ　${sqToCode(foresideSandwitchedCapSq)}より前方＝${foresideExtendStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideExtendStones.map((sq)=> sqToCode(sq)).join(',')}`);
+
+            // TODO: ストーンズ・キャップに石を置けるかどうか判定するには？
+            // TODO: サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
+            function getColorList(
+                initialColor: Color,
+                extendStones: number[],
+            ) : Color[] {
+                const colorList: Color[] = [initialColor];
+                for (const sq of extendStones) {
+                    const color: Color = gameBoard1StoneColorArray[sq];
+                    if (color != colorList[colorList.length - 1])  { // 直前の色と違うなら追加
+                        colorList.push(color);
+                    }
+                }
+                return colorList;
+            }
+            const foresideColorList = getColorList(color, foresideExtendStones);
+            const backsideColorList = getColorList(color, backsideExtendStones);
+            console.log(`DEBUG: [putStone] エクステンド・ストーンズ色　前方＝${foresideColorList.join(',')}　後方＝${backsideColorList.join(',')}`);
         }
 
         // ++++++++++++++
