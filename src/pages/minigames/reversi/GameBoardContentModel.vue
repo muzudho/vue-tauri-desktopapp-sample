@@ -8,11 +8,12 @@
     // ##############
 
     import { ref } from 'vue';
+    import type { Color } from '@/pages/minigames/reversi/spec';
     import {
         // 色類：
-        oppositeColor, Color,
-    } from '@/pages/minigames/reversi/spec.ts';
-    import { makeGetColor } from './game-board-content-util.ts';
+        oppositeColor,
+    } from '@/pages/minigames/reversi/spec';
+    import { makeGetColor } from './game-board-content-util';
 
 
     // ################

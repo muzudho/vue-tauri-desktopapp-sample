@@ -323,12 +323,12 @@
     import {
         // 色
         COLOR_BLACK, COLOR_WHITE,
-
-        // マス
-        makeCodeToSq, SQ_OUT_OF_BOARD,
-
+        
         // 方角
         DIRECTION_HORIZONTAL,
+
+        // マス番号
+        makeCodeToSq, SQ_OUT_OF_BOARD,
     } from '@/pages/minigames/reversi/spec';
 
     import TheAppHeader from '@/pages/the-app-header.vue';

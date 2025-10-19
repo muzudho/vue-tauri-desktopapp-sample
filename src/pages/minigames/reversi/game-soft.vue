@@ -135,16 +135,17 @@
     import GameBoardIndexModel1 from './GameBoardIndexModel.vue';
     import GameBoardContentModel1 from './GameBoardContentModel.vue';
     import GenerationMoveModel1 from './GenerationMoveModel.vue';
+    import type { Color, Direction } from '@/pages/minigames/reversi/spec';
     import {
         // 色
-        COLOR_EMPTY, COLOR_BLACK, COLOR_WHITE, Color, oppositeColor, colorToCode,
+        COLOR_EMPTY, COLOR_BLACK, COLOR_WHITE, oppositeColor, colorToCode,
         // マス
         makeCodeToSq,
         // 方向
-        Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
-    } from '@/pages/minigames/reversi/spec.ts';
-    import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateSandwichedStones, locateStones, getColorList, getLastSq } from '@/pages/minigames/reversi/game-board-content-util.ts';
+        DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
+    } from '@/pages/minigames/reversi/spec';
+    import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util';
+    import { locateSandwichedStones, locateStones, getColorList, getLastSq } from '@/pages/minigames/reversi/game-board-content-util';
 
     // ##################
     // # エクスポート型 #

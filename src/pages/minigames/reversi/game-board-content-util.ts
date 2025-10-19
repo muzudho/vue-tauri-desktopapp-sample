@@ -2,14 +2,15 @@
 // # インポート #
 // ##############
 
+import type { Color, Direction } from "@/pages/minigames/reversi/spec";
 import {
     // 色
-    COLOR_EMPTY, Color, oppositeColor,
+    COLOR_EMPTY, oppositeColor,
     // マス
     SQ_OUT_OF_BOARD,
     // 方向
-    Direction, directionToTitle,
-} from "@/pages/minigames/reversi/spec.ts";
+    directionToTitle,
+} from "@/pages/minigames/reversi/spec";
 
 
 // ################

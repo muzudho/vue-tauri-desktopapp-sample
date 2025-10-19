@@ -8,6 +8,7 @@
     // ##############
 
     import { ref } from 'vue';
+    import type {Color, Direction} from '@/pages/minigames/reversi/spec.ts';
     import {
         // 色
         COLOR_BLACK, COLOR_WHITE, COLOR_SIZE, COLOR_EMPTY, colorToCode, oppositeColor,
@@ -17,18 +18,9 @@
 
         // 方向
         DIRECTION_SIZE, directionToTitle,
-    } from '@/pages/minigames/reversi/spec.ts';
-
-    import type {
-        // 色
-        Color,
-
-        // 方向
-        Direction,
-    } from '@/pages/minigames/reversi/spec.ts';
-
-    import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { getCap, locateHoppedoverOppositeTurnStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    } from '@/pages/minigames/reversi/spec';
+    import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util';
+    import { getCap, locateHoppedoverOppositeTurnStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util';
 
     
     // ################
