@@ -124,7 +124,7 @@ export function locateStonesCap(
  * @param sandwichedCapSq 
  * @param nextOf
  */
-export function locateStonesFromSandwichStone(
+export function locateExtendStones(
     gameBoard1StoneColorArray: Color[],
     sandwichedCapSq: number,
     nextOf: (sq: number)=>number,
@@ -263,4 +263,20 @@ export function locateSandwichedStones(
     ],
     foresideSandwichedCapSq,    // サンドイッチ・キャップ（前方）
     backsideSandwichedCapSq];   // サンドイッチ・キャップ（後方）
+}
+
+
+export function getColorList(
+    gameBoard1StoneColorArray: Color[],
+    initialColor: Color,
+    extendStones: number[],
+) : Color[] {
+    const colorList: Color[] = [initialColor];
+    for (const sq of extendStones) {
+        const color: Color = gameBoard1StoneColorArray[sq];
+        if (color != colorList[colorList.length - 1])  { // 直前の色と違うなら追加
+            colorList.push(color);
+        }
+    }
+    return colorList;
 }

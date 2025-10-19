@@ -144,7 +144,7 @@
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,        
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateSandwichedStones, locateStonesCap, locateStonesFromSandwichStone as locateExtendStones } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateSandwichedStones, locateStonesCap, locateExtendStones, getColorList } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -481,42 +481,47 @@
             );
             console.log(`DEBUG: [putStone] エクステンド・ストーンズ　${sqToCode(foresideSandwitchedCapSq)}より前方＝${foresideExtendStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideExtendStones.map((sq)=> sqToCode(sq)).join(',')}`);
 
+            // ++++++++++++++
+            // + 指し手生成 +
+            // ++++++++++++++
+
             // TODO: ストーンズ・キャップに石を置けるかどうか判定するには？
             // TODO: サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
-            function getColorList(
-                initialColor: Color,
-                extendStones: number[],
-            ) : Color[] {
-                const colorList: Color[] = [initialColor];
-                for (const sq of extendStones) {
-                    const color: Color = gameBoard1StoneColorArray[sq];
-                    if (color != colorList[colorList.length - 1])  { // 直前の色と違うなら追加
-                        colorList.push(color);
-                    }
-                }
-                return colorList;
-            }
-            const foresideColorList = getColorList(color, foresideExtendStones);
-            const backsideColorList = getColorList(color, backsideExtendStones);
+            const foresideColorList = getColorList(gameBoard1StoneColorArray, color, foresideExtendStones);
+            const backsideColorList = getColorList(gameBoard1StoneColorArray, color, backsideExtendStones);
             console.log(`DEBUG: [putStone] エクステンド・ストーンズ色　前方＝${foresideColorList.join(',')}　後方＝${backsideColorList.join(',')}`);
+
+            // TODO: 石が置ける条件は、色リストの末尾が [1, 2] なら 1。 [2, 1] なら 2。その他は置けない。
+            const foresideSliced = foresideColorList.slice(foresideColorList.length - 2);
+            if (foresideSliced[0] == 1 && foresideSliced[1] == 2) { // 置ける
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = true;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
+            } else if (foresideSliced[0] == 2 && foresideSliced[1] == 1) { // 置ける
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = true;
+            } else {    // 置けない
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
+            }
         }
+
 
         // ++++++++++++++
         // + 指し手生成 +
         // ++++++++++++++
 
-        generationMoveModel1Ref.value.makeGenerationMoves(
-            activeDirections,
-            activeSecondDirections,
-            game1Turn.value,
-            moveSq,
-            gameBoardIndexModel1Ref.value.fileNum,
-            gameBoardContentModel1Ref.value.stonesColor,
-            gameBoardIndexModel1Ref.value.allDirectionsForeOf,
-            gameBoardIndexModel1Ref.value.allDirectionsBackOf,
-        );
+        // generationMoveModel1Ref.value.makeGenerationMoves(
+        //     activeDirections,
+        //     activeSecondDirections,
+        //     game1Turn.value,
+        //     moveSq,
+        //     gameBoardIndexModel1Ref.value.fileNum,
+        //     gameBoardContentModel1Ref.value.stonesColor,
+        //     gameBoardIndexModel1Ref.value.allDirectionsForeOf,
+        //     gameBoardIndexModel1Ref.value.allDirectionsBackOf,
+        // );
 
-        // TODO: 指し手が消えるパターン
+        // // TODO: 指し手が消えるパターン
 
         game1Turn.value = oppositeTurnColor1; // 相手の色に変更
         game1Times.value += 1;
