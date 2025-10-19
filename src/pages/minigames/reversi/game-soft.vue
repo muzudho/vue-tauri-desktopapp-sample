@@ -441,6 +441,48 @@
         // + 石をひっくり返します +
         // ++++++++++++++++++++++++
 
+        const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
+
+        function generationMoveFirstLevel(
+            generationMoveModel1Ref: any,
+            direction: Direction,
+            stonesCapSq: number,
+            colorList: Color[],
+        ) : void {
+            // TODO: ストーンズ・キャップに石を置けるかどうか判定するには？
+            // TODO: サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
+            
+            console.log(`DEBUG: [putStone] レスト・ストーンズ色　色リスト＝${colorList.map(x=>colorToCode(x)).join(',')}`);
+
+            // TODO: 石が置ける条件は、色リストの末尾が [1, 2] なら 1。 [2, 1] なら 2。その他は置けない。
+            const sliced = colorList.slice(colorList.length - 2);
+            console.log(`DEBUG: [putStone] レスト・ストーンズ色　末尾２つ＝${sliced.map(x=>colorToCode(x)).join(',')}`);
+            if (sliced[0] == 1 && sliced[1] == 2) { // 置ける
+                console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に黒だけ置ける`);
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = true;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = false;
+            } else if (sliced[0] == 2 && sliced[1] == 1) { // 置ける
+                console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に白だけ置ける`);
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = false;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = true;
+            } else {    // 置けない
+                console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に石は置けない`);
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = false;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = false;
+            }
+        }
+
+        function getStonesCap(
+            restStones: number[],
+            alternativeStartSq: number,
+            nextOf: (sq: number)=>number,
+        ) : number {
+            if (restStones.length == 0) {
+                return nextOf(alternativeStartSq);
+            }
+            return nextOf(getLastSq(restStones));
+        }
+
         let allDirectionsSandwichedStones: number[] = []; // ［ひっくり返せる石］
 
         //const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
@@ -448,7 +490,6 @@
             const gameBoard1StoneColorArray: Color[] = gameBoardContentModel1Ref.value.stonesColor;
             const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
             const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
-            const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
 
             const [sandwichedStones, foresideSandwichedCapSq, backsideSandwichedCapSq] = locateSandwichedStones( // ひっくり返す対象の石のマス番号を取得します
                 gameBoard1StoneColorArray,
@@ -483,16 +524,6 @@
             );
             console.log(`DEBUG: [putStone] レスト・ストーンズ　${sqToCode(foresideSandwichedCapSq)}より前方＝${foresideRestStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideRestStones.map((sq)=> sqToCode(sq)).join(',')}`);
 
-            function getStonesCap(
-                restStones: number[],
-                alternativeStartSq: number,
-                nextOf: (sq: number)=>number,
-            ) : number {
-                if (restStones.length == 0) {
-                    return nextOf(alternativeStartSq);
-                }
-                return nextOf(getLastSq(restStones));
-            }
             const foresideStonesCapSq = getStonesCap(foresideRestStones, foresideSandwichedCapSq, foreOf);
             const backsideStonesCapSq = getStonesCap(backsideRestStones, backsideSandwichedCapSq, backOf);
             console.log(`DEBUG: [putStone] ストーンズ・キャップ　前方＝${sqToCode(foresideStonesCapSq)}　後方＝${sqToCode(backsideStonesCapSq)}`);
@@ -505,41 +536,15 @@
             ];
             console.log(`DEBUG: [putStone] オーダー色リスト＝${orderColorList.map(x=>colorToCode(x)).join(',')}`);
 
-            function generationMoveFirstLevel(
-                generationMoveModel1Ref: any,
-                stonesCapSq: number,
-                colorList: Color[],
-            ) : void {
-                // TODO: ストーンズ・キャップに石を置けるかどうか判定するには？
-                // TODO: サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
-                
-                console.log(`DEBUG: [putStone] レスト・ストーンズ色　色リスト＝${colorList.map(x=>colorToCode(x)).join(',')}`);
-
-                // TODO: 石が置ける条件は、色リストの末尾が [1, 2] なら 1。 [2, 1] なら 2。その他は置けない。
-                const sliced = colorList.slice(colorList.length - 2);
-                console.log(`DEBUG: [putStone] レスト・ストーンズ色　末尾２つ＝${sliced.map(x=>colorToCode(x)).join(',')}`);
-                if (sliced[0] == 1 && sliced[1] == 2) { // 置ける
-                    console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に黒だけ置ける`);
-                    generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = true;
-                    generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = false;
-                } else if (sliced[0] == 2 && sliced[1] == 1) { // 置ける
-                    console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に白だけ置ける`);
-                    generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = false;
-                    generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = true;
-                } else {    // 置けない
-                    console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に石は置けない`);
-                    generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = false;
-                    generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = false;
-                }
-            }
-
             generationMoveFirstLevel(
                 generationMoveModel1Ref,
+                direction,
                 foresideStonesCapSq,
                 orderColorList,
             );
             generationMoveFirstLevel(
                 generationMoveModel1Ref,
+                direction,
                 backsideStonesCapSq,
                 orderColorList.reverse(),
             );
@@ -549,8 +554,47 @@
         // + TODO ２階の指し手生成 +
         // ++++++++++++++++++++
 
-        for (const secondSandwichedStoneSq in allDirectionsSandwichedStones) {
+        for (const secondSandwichedStoneSq of allDirectionsSandwichedStones) {
+            for (const direction of activeDirections) {
+                const gameBoard1StoneColorArray: Color[] = gameBoardContentModel1Ref.value.stonesColor;
+                const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
+                const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
 
+                const foresideRestStones = locateStones(
+                    gameBoard1StoneColorArray,
+                    foreOf(secondSandwichedStoneSq),
+                    foreOf,
+                );
+                const backsideRestStones = locateStones(
+                    gameBoard1StoneColorArray,
+                    backOf(secondSandwichedStoneSq),
+                    backOf,
+                );
+
+                const orderStonesList: number[] = [
+                    ...backsideRestStones.reverse(),
+                    secondSandwichedStoneSq,
+                    ...foresideRestStones,
+                ];
+
+                const foresideStonesCapSq = getStonesCap(foresideRestStones, secondSandwichedStoneSq, foreOf);
+                const backsideStonesCapSq = getStonesCap(backsideRestStones, secondSandwichedStoneSq, backOf);
+
+                const orderColorList: Color[] = orderStonesList.map((sq)=> gameBoard1StoneColorArray[sq]);
+
+                generationMoveFirstLevel(
+                    generationMoveModel1Ref,
+                    direction,
+                    foresideStonesCapSq,
+                    orderColorList,
+                );
+                generationMoveFirstLevel(
+                    generationMoveModel1Ref,
+                    direction,
+                    backsideStonesCapSq,
+                    orderColorList.reverse(),
+                );
+            }
         }
 
 
