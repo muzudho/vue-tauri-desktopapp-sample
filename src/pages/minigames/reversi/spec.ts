@@ -134,7 +134,7 @@ export type Color =
     | typeof COLOR_WHITE
     ;
 const colorToCode1 = {
-    [COLOR_EMPTY]: ' ',
+    [COLOR_EMPTY]: '.',
     [COLOR_BLACK]: 'x',
     [COLOR_WHITE]: 'o',
 } as Record<Color, string>;

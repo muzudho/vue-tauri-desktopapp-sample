@@ -21,7 +21,14 @@ export function makeSqToCode(
 ) :
     (sq: number)=>string
 {
+    /**
+     * sq を符号に変換。一致しなければ '-'
+     * @param sq
+     */
     return (sq: number) => {
+        if (sq == SQ_OUT_OF_BOARD) {
+            return '-';
+        }
         const file = sq % fileNum;
         const rank = Math.floor(sq / fileNum);
         const code = `${gameBoard1FileNameArray[file]}${rank+1}`;

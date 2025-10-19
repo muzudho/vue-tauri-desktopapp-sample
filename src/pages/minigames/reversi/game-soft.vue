@@ -137,14 +137,14 @@
     import GenerationMoveModel1 from './GenerationMoveModel.vue';
     import {
         // 色
-        COLOR_EMPTY, COLOR_BLACK, COLOR_WHITE, Color, oppositeColor,
+        COLOR_EMPTY, COLOR_BLACK, COLOR_WHITE, Color, oppositeColor, colorToCode,
         // マス
         makeCodeToSq,
         // 方向
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateSandwichedStones, locateStonesCap, locateStones, getColorList } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateSandwichedStones, locateStones, getColorList, getLastSq } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -441,7 +441,7 @@
             const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
             const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
 
-            const [sandwichedStones, foresideSandwitchedCapSq, backsideSandwichedCapSq] = locateSandwichedStones( // ひっくり返す対象の石のマス番号を取得します
+            const [sandwichedStones, foresideSandwichedCapSq, backsideSandwichedCapSq] = locateSandwichedStones( // ひっくり返す対象の石のマス番号を取得します
                 gameBoard1StoneColorArray,
                 game1Turn.value,
                 foreOf,
@@ -462,20 +462,9 @@
             // TODO: 石がひっくり返ったあと、その方向の両キャップの位置を取得、そこに手番石、相手番石を置けるかどうかを更新したい。
             // TODO: １階キャップ（_foresideFirstCapSq, _backsideFirstCapSq）を起点として、さらに延長１階キャップを探索できるか？
             //  空点でなければ延長すればいいか？
-            const foresideStonesCapSq = locateStonesCap(
-                gameBoard1StoneColorArray,
-                foresideSandwitchedCapSq,
-                foreOf,
-            );
-            const backsideStonesCapSq = locateStonesCap(
-                gameBoard1StoneColorArray,
-                backsideSandwichedCapSq,
-                backOf,
-            );
-            console.log(`DEBUG: [putStone] ストーンズ・キャップ　前方＝${sqToCode(foresideStonesCapSq)}　後方＝${sqToCode(backsideStonesCapSq)}`);
             const foresideRestStones = locateStones(
                 gameBoard1StoneColorArray,
-                foreOf(foresideSandwitchedCapSq),
+                foreOf(foresideSandwichedCapSq),
                 foreOf,
             );
             const backsideRestStones = locateStones(
@@ -483,13 +472,29 @@
                 backOf(backsideSandwichedCapSq),
                 backOf,
             );
-            console.log(`DEBUG: [putStone] レスト・ストーンズ　${sqToCode(foresideSandwitchedCapSq)}より前方＝${foresideRestStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideRestStones.map((sq)=> sqToCode(sq)).join(',')}`);
+            console.log(`DEBUG: [putStone] レスト・ストーンズ　${sqToCode(foresideSandwichedCapSq)}より前方＝${foresideRestStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideRestStones.map((sq)=> sqToCode(sq)).join(',')}`);
 
-            const orderColorList = [
+            function getStonesCap(
+                restStones: number[],
+                alternativeStartSq: number,
+                nextOf: (sq: number)=>number,
+            ) : number {
+                if (restStones.length == 0) {
+                    return nextOf(alternativeStartSq);
+                }
+                return nextOf(getLastSq(restStones));
+            }
+            const foresideStonesCapSq = getStonesCap(foresideRestStones, foresideSandwichedCapSq, foreOf);
+            const backsideStonesCapSq = getStonesCap(backsideRestStones, backsideSandwichedCapSq, backOf);
+            console.log(`DEBUG: [putStone] ストーンズ・キャップ　前方＝${sqToCode(foresideStonesCapSq)}　後方＝${sqToCode(backsideStonesCapSq)}`);
+
+
+            const orderColorList: Color[] = [
                 ...getColorList(gameBoard1StoneColorArray, backsideRestStones).reverse(),
                 color,
                 ...getColorList(gameBoard1StoneColorArray, foresideRestStones),
             ];
+            console.log(`DEBUG: [putStone] オーダー色リスト＝${orderColorList.map(x=>colorToCode(x)).join(',')}`);
 
             function generationMoveFirstLevel(
                 generationMoveModel1Ref: any,
@@ -499,11 +504,11 @@
                 // TODO: ストーンズ・キャップに石を置けるかどうか判定するには？
                 // TODO: サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
                 
-                console.log(`DEBUG: [putStone] エクステンド・ストーンズ色　色リスト＝${colorList.join(',')}`);
+                console.log(`DEBUG: [putStone] レスト・ストーンズ色　色リスト＝${colorList.map(x=>colorToCode(x)).join(',')}`);
 
                 // TODO: 石が置ける条件は、色リストの末尾が [1, 2] なら 1。 [2, 1] なら 2。その他は置けない。
                 const sliced = colorList.slice(colorList.length - 2);
-                console.log(`DEBUG: [putStone] エクステンド・ストーンズ色　末尾２つ＝${sliced.join(',')}`);
+                console.log(`DEBUG: [putStone] レスト・ストーンズ色　末尾２つ＝${sliced.map(x=>colorToCode(x)).join(',')}`);
                 if (sliced[0] == 1 && sliced[1] == 2) { // 置ける
                     console.log(`DEBUG: [putStone] ${sqToCode(stonesCapSq)}に黒だけ置ける`);
                     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = true;
