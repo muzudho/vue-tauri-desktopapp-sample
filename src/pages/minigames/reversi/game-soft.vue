@@ -493,25 +493,33 @@
 
             // TODO: 石が置ける条件は、色リストの末尾が [1, 2] なら 1。 [2, 1] なら 2。その他は置けない。
             const foresideSliced = foresideColorList.slice(foresideColorList.length - 2);
+            console.log(`DEBUG: [putStone] エクステンド・ストーンズ色末尾２つ　前方＝${foresideSliced.join(',')}`);
             if (foresideSliced[0] == 1 && foresideSliced[1] == 2) { // 置ける
+                console.log(`DEBUG: [putStone] ${sqToCode(foresideStonesCapSq)}に黒だけ置ける`);
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = true;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
             } else if (foresideSliced[0] == 2 && foresideSliced[1] == 1) { // 置ける
+                console.log(`DEBUG: [putStone] ${sqToCode(foresideStonesCapSq)}に白だけ置ける`);
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = true;
             } else {    // 置けない
+                console.log(`DEBUG: [putStone] ${sqToCode(foresideStonesCapSq)}に石は置けない`);
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
             }
 
             const backsideSliced = backsideColorList.slice(backsideColorList.length - 2);
+            console.log(`DEBUG: [putStone] エクステンド・ストーンズ色末尾２つ　後方＝${backsideSliced.join(',')}`);
             if (backsideSliced[0] == 1 && backsideSliced[1] == 2) { // 置ける
+                console.log(`DEBUG: [putStone] ${sqToCode(backsideStonesCapSq)}に黒だけ置ける`);
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = true;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = false;
             } else if (backsideSliced[0] == 2 && backsideSliced[1] == 1) { // 置ける
+                console.log(`DEBUG: [putStone] ${sqToCode(backsideStonesCapSq)}に白だけ置ける`);
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = false;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = true;
             } else {    // 置けない
+                console.log(`DEBUG: [putStone] ${sqToCode(backsideStonesCapSq)}に石は置けない`);
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = false;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = false;
             }
