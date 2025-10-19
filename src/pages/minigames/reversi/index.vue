@@ -320,13 +320,21 @@
 
     import GameSoft from '@/pages/minigames/reversi/game-soft.vue';
     import type { Player1Input } from '@/pages/minigames/reversi/game-soft.vue';
-    import { COLOR_BLACK, COLOR_WHITE, makeCodeToSq } from '@/pages/minigames/reversi/spec.ts';
+    import {
+        // 色
+        COLOR_BLACK, COLOR_WHITE,
+
+        // マス
+        makeCodeToSq, SQ_OUT_OF_BOARD,
+
+        // 方角
+        DIRECTION_HORIZONTAL,
+    } from '@/pages/minigames/reversi/spec';
 
     import TheAppHeader from '@/pages/the-app-header.vue';
-    import { DIRECTION_HORIZONTAL, SQ_OUT_OF_BOARD } from '../gomoku/spec';
 
-    import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { getCap, locateHoppedoverOppositeTurnStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util';
+    import { getCap, locateHoppedoverOppositeTurnStones, locateThisTurnStonesSkipped } from '@/pages/minigames/reversi/game-board-content-util';
 
 
     // ####################
