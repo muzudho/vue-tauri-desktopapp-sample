@@ -426,7 +426,16 @@
 
         const oppositeTurnColor1 = oppositeColor(game1Turn.value);
 
+        // ++++++++++
+        // + 着手点 +
+        // ++++++++++
+
         gameBoardContentModel1Ref.value.stonesColor[moveSq] = color;    // 石を置きます
+        for (const direction of activeDirections) {
+            // 着手点に石は置けません
+            generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][moveSq] = false;
+            generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][moveSq] = false;
+        }
 
         // ++++++++++++++++++++++++
         // + 石をひっくり返します +
@@ -537,7 +546,7 @@
         }
 
         // ++++++++++++++++++++
-        // + ２階の指し手生成 +
+        // + TODO ２階の指し手生成 +
         // ++++++++++++++++++++
 
         for (const secondSandwichedStoneSq in allDirectionsSandwichedStones) {
