@@ -121,15 +121,15 @@ export function locateStonesCap(
 /**
  * ［サンドイッチ石］から連続する石のマス番号を返す
  * @param gameBoard1StoneColorArray 
- * @param sandwichedCapSq 
+ * @param startSq 
  * @param nextOf
  */
-export function locateExtendStones(
+export function locateStones(
     gameBoard1StoneColorArray: Color[],
-    sandwichedCapSq: number,
+    startSq: number,
     nextOf: (sq: number)=>number,
 ) : number[] {
-    let nextSq = sandwichedCapSq;
+    let nextSq = startSq;
     const resultLocations: number[] = [];
     while (true) {
         if (nextSq == SQ_OUT_OF_BOARD) {    // ［盤外］に突き当たったら、処理終了

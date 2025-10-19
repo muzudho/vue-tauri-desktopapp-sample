@@ -144,7 +144,7 @@
         Direction, DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
     } from '@/pages/minigames/reversi/spec.ts';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util.ts';
-    import { locateSandwichedStones, locateStonesCap, locateExtendStones, getColorList } from '@/pages/minigames/reversi/game-board-content-util.ts';
+    import { locateSandwichedStones, locateStonesCap, locateStones, getColorList } from '@/pages/minigames/reversi/game-board-content-util.ts';
 
     // ##################
     // # エクスポート型 #
@@ -455,6 +455,10 @@
             //console.log(`DEBUG: [putStone] direction=${directionToTitle(direction)} sandwichedStones=${sandwichedStones.map((sq)=> sqToCode(sq)).join(',')}`);
             gameBoardContentModel1Ref.value.reverseStones(game1Turn.value, sandwichedStones);   // ［挟んだ石］をひっくり返します。
 
+            // ++++++++++++++++++++
+            // + １階の指し手生成 +
+            // ++++++++++++++++++++
+
             // TODO: 石がひっくり返ったあと、その方向の両キャップの位置を取得、そこに手番石、相手番石を置けるかどうかを更新したい。
             // TODO: １階キャップ（_foresideFirstCapSq, _backsideFirstCapSq）を起点として、さらに延長１階キャップを探索できるか？
             //  空点でなければ延長すればいいか？
@@ -469,21 +473,23 @@
                 backOf,
             );
             console.log(`DEBUG: [putStone] ストーンズ・キャップ　前方＝${sqToCode(foresideStonesCapSq)}　後方＝${sqToCode(backsideStonesCapSq)}`);
-            const foresideExtendStones = locateExtendStones(
+            const foresideRestStones = locateStones(
                 gameBoard1StoneColorArray,
                 foreOf(foresideSandwitchedCapSq),
                 foreOf,
             );
-            const backsideExtendStones = locateExtendStones(
+            const backsideRestStones = locateStones(
                 gameBoard1StoneColorArray,
                 backOf(backsideSandwichedCapSq),
                 backOf,
             );
-            console.log(`DEBUG: [putStone] エクステンド・ストーンズ　${sqToCode(foresideSandwitchedCapSq)}より前方＝${foresideExtendStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideExtendStones.map((sq)=> sqToCode(sq)).join(',')}`);
+            console.log(`DEBUG: [putStone] レスト・ストーンズ　${sqToCode(foresideSandwitchedCapSq)}より前方＝${foresideRestStones.map((sq)=> sqToCode(sq)).join(',')}　${sqToCode(backsideSandwichedCapSq)}より後方＝${backsideRestStones.map((sq)=> sqToCode(sq)).join(',')}`);
 
-            // ++++++++++++++++++++
-            // + １階の指し手生成 +
-            // ++++++++++++++++++++
+            const orderColorList = [
+                ...getColorList(gameBoard1StoneColorArray, backsideRestStones).reverse(),
+                color,
+                ...getColorList(gameBoard1StoneColorArray, foresideRestStones),
+            ];
 
             function generationMoveFirstLevel(
                 generationMoveModel1Ref: any,
@@ -513,20 +519,6 @@
                 }
             }
 
-            // const foresideColorList = [
-            //     color,
-            //     ...getColorList(gameBoard1StoneColorArray, foresideExtendStones),
-            // ];
-            // const backsideColorList = [
-            //     color,
-            //     ...getColorList(gameBoard1StoneColorArray, backsideExtendStones),
-            // ];
-            const orderColorList = [
-                ...getColorList(gameBoard1StoneColorArray, backsideExtendStones).reverse(),
-                color,
-                ...getColorList(gameBoard1StoneColorArray, foresideExtendStones),
-            ];
-
             generationMoveFirstLevel(
                 generationMoveModel1Ref,
                 foresideStonesCapSq,
@@ -537,45 +529,6 @@
                 backsideStonesCapSq,
                 orderColorList.reverse(),
             );
-
-            // // TODO: ストーンズ・キャップに石を置けるかどうか判定するには？
-            // // TODO: サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
-            // const foresideColorList = getColorList(gameBoard1StoneColorArray, color, foresideExtendStones);
-            // const backsideColorList = getColorList(gameBoard1StoneColorArray, color, backsideExtendStones);
-            // console.log(`DEBUG: [putStone] エクステンド・ストーンズ色　前方＝${foresideColorList.join(',')}　後方＝${backsideColorList.join(',')}`);
-
-            // // TODO: 石が置ける条件は、色リストの末尾が [1, 2] なら 1。 [2, 1] なら 2。その他は置けない。
-            // const foresideSliced = foresideColorList.slice(foresideColorList.length - 2);
-            // console.log(`DEBUG: [putStone] エクステンド・ストーンズ色末尾２つ　前方＝${foresideSliced.join(',')}`);
-            // if (foresideSliced[0] == 1 && foresideSliced[1] == 2) { // 置ける
-            //     console.log(`DEBUG: [putStone] ${sqToCode(foresideStonesCapSq)}に黒だけ置ける`);
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = true;
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
-            // } else if (foresideSliced[0] == 2 && foresideSliced[1] == 1) { // 置ける
-            //     console.log(`DEBUG: [putStone] ${sqToCode(foresideStonesCapSq)}に白だけ置ける`);
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = true;
-            // } else {    // 置けない
-            //     console.log(`DEBUG: [putStone] ${sqToCode(foresideStonesCapSq)}に石は置けない`);
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
-            // }
-
-            // const backsideSliced = backsideColorList.slice(backsideColorList.length - 2);
-            // console.log(`DEBUG: [putStone] エクステンド・ストーンズ色末尾２つ　後方＝${backsideSliced.join(',')}`);
-            // if (backsideSliced[0] == 1 && backsideSliced[1] == 2) { // 置ける
-            //     console.log(`DEBUG: [putStone] ${sqToCode(backsideStonesCapSq)}に黒だけ置ける`);
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = true;
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = false;
-            // } else if (backsideSliced[0] == 2 && backsideSliced[1] == 1) { // 置ける
-            //     console.log(`DEBUG: [putStone] ${sqToCode(backsideStonesCapSq)}に白だけ置ける`);
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = false;
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = true;
-            // } else {    // 置けない
-            //     console.log(`DEBUG: [putStone] ${sqToCode(backsideStonesCapSq)}に石は置けない`);
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = false;
-            //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = false;
-            // }
         }
 
         // ++++++++++++++++++++
