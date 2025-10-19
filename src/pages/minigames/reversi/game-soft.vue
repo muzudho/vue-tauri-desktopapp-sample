@@ -503,6 +503,18 @@
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][foresideStonesCapSq] = false;
                 generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][foresideStonesCapSq] = false;
             }
+
+            const backsideSliced = backsideColorList.slice(backsideColorList.length - 2);
+            if (backsideSliced[0] == 1 && backsideSliced[1] == 2) { // 置ける
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = true;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = false;
+            } else if (backsideSliced[0] == 2 && backsideSliced[1] == 1) { // 置ける
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = false;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = true;
+            } else {    // 置けない
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][backsideStonesCapSq] = false;
+                generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][backsideStonesCapSq] = false;
+            }
         }
 
 
