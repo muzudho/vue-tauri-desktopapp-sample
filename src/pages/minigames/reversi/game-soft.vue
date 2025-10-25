@@ -445,24 +445,24 @@
 
         const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
 
-        /**
-         * ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-         * 
-         * @param generationMoveModel1Ref 
-         * @param direction 
-         * @param colorList ［連続する石］について、その色の並び順リスト
-         * @param stonesCapSq 
-         */
-        function generationMoveStoneCapCanMoveUpdate(
-            generationMoveModel1Ref: any,
-            direction: Direction,
-            stonesCapSq: number,
-            canBlack: boolean,
-            canWhite: boolean,
-        ) : void {            
-            generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = canBlack;
-            generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = canWhite;
-        }
+        // /**
+        //  * ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
+        //  * 
+        //  * @param generationMoveModel1Ref 
+        //  * @param direction 
+        //  * @param colorList ［連続する石］について、その色の並び順リスト
+        //  * @param stonesCapSq 
+        //  */
+        // function generationMoveStoneCapCanMoveUpdate(
+        //     generationMoveModel1Ref: any,
+        //     direction: Direction,
+        //     stonesCapSq: number,
+        //     canBlack: boolean,
+        //     canWhite: boolean,
+        // ) : void {            
+        //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = canBlack;
+        //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = canWhite;
+        // }
 
 
         function getStonesCap(
@@ -537,8 +537,7 @@
                 colorToCode,
                 sqToCode
             );
-            generationMoveStoneCapCanMoveUpdate(
-                generationMoveModel1Ref,
+            generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                 direction,
                 foresideStonesCapSq,
                 canBlack,
@@ -551,8 +550,7 @@
                 colorToCode,
                 sqToCode
             );
-            generationMoveStoneCapCanMoveUpdate(
-                generationMoveModel1Ref,
+            generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                 direction,
                 backsideStonesCapSq,
                 canBlack,
@@ -600,8 +598,7 @@
                     colorToCode,
                     sqToCode
                 );
-                generationMoveStoneCapCanMoveUpdate(
-                    generationMoveModel1Ref,
+                generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                     direction,
                     foresideStonesCapSq,
                     canBlack,
@@ -614,8 +611,7 @@
                     colorToCode,
                     sqToCode
                 );
-                generationMoveStoneCapCanMoveUpdate(
-                    generationMoveModel1Ref,
+                generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                     direction,
                     backsideStonesCapSq,
                     canBlack,
