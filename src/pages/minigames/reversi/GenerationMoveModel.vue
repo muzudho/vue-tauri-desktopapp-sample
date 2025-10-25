@@ -27,10 +27,16 @@
         new Array(DIRECTION_SIZE)
     );
 
+
     // ################
     // # サブルーチン #
     // ################
 
+    /**
+     * 初期化
+     * @param activeDirections 
+     * @param gameBoard1Area 
+     */
     function generationMoveModelInit(
         activeDirections: Direction[],
         gameBoard1Area: number,
@@ -43,6 +49,13 @@
     }
 
 
+    /**
+     * 石が置けるかどうか
+     * @param activeDirections 
+     * @param thisTurn 
+     * @param sq 
+     * @returns 
+     */
     function canMove(
         activeDirections: Direction[],
         thisTurn: Color,
