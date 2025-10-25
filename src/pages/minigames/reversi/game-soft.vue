@@ -318,7 +318,9 @@
      * 相手の石に隣接するマスだ
      * @param sq
      */
-    function isAdjacentToOpponentStone(sq: number) : boolean {
+    function isAdjacentToOpponentStone(
+        sq: number
+    ) : boolean {
         if (!gameBoardIndexModel1Ref?.value) {
             console.error("ERROR: [isAdjacentToOpponentStone] 初期化不備： gameBoardIndexModel1Ref。");
             return false;  // エラー
@@ -530,7 +532,7 @@
         }
 
         // ++++++++++++++++++++
-        // + TODO ２階の指し手生成 +
+        // + ２階の指し手生成 +
         // ++++++++++++++++++++
 
         for (const secondSandwichedStoneSq of allDirectionsSandwichedStones) {
@@ -599,6 +601,7 @@
         game1PassCount.value = 0;  // リセット
         return true;
     }
+
 
     // ################
     // # サブルーチン #
