@@ -478,10 +478,6 @@
             colorList: Color[],
             stonesCapSq: number,
         ) : void {
-            // サンドイッチの色は分かってるから、エクステンド・ストーンズの石の色を見ていく。
-            
-            console.log(`DEBUG: [putStone] レスト・ストーンズ色　色リスト＝${colorList.map(x=>colorToCode(x)).join(',')}`);
-
             const [canBlack, canWhite] = generationMoveStoneCapCanMove(
                 colorList,
                 stonesCapSq,
@@ -496,8 +492,6 @@
                 canBlack,
                 canWhite,
             );
-            // generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = canBlack;
-            // generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = canWhite;
         }
 
         function getStonesCap(
@@ -564,17 +558,33 @@
             ];
             console.log(`DEBUG: [putStone] オーダー色リスト＝${orderColorList.map(x=>colorToCode(x)).join(',')}`);
 
-            generationMoveStoneCapUpdate(
-                generationMoveModel1Ref,
-                direction,
+            let canBlack, canWhite: boolean;
+            [canBlack, canWhite] = generationMoveStoneCapCanMove(
                 orderColorList,
                 foresideStonesCapSq,
+                colorToCode,
+                sqToCode
             );
-            generationMoveStoneCapUpdate(
+            generationMoveStoneCapCanMoveUpdate(
                 generationMoveModel1Ref,
                 direction,
+                foresideStonesCapSq,
+                canBlack,
+                canWhite,
+            );
+
+            [canBlack, canWhite] = generationMoveStoneCapCanMove(
                 orderColorList.reverse(),
                 backsideStonesCapSq,
+                colorToCode,
+                sqToCode
+            );
+            generationMoveStoneCapCanMoveUpdate(
+                generationMoveModel1Ref,
+                direction,
+                backsideStonesCapSq,
+                canBlack,
+                canWhite,
             );
         }
 
