@@ -145,8 +145,10 @@
         DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
     } from '@/pages/minigames/reversi/spec';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util';
-    import { locateSandwichedStones, locateStones, getColorList, getLastSq } from '@/pages/minigames/reversi/game-board-content-util';
+    import { locateSandwichedStones, locateStones, getColorList } from '@/pages/minigames/reversi/game-board-content-util';
     import { generationMoveStoneCapCanMove } from '@/pages/minigames/reversi/generation-move-util';
+    import { getStonesCap } from '@/pages/minigames/reversi/game-board-technical-util';
+
     
     // ##################
     // # エクスポート型 #
@@ -444,37 +446,6 @@
         // ++++++++++++++++++++++++
 
         const sqToCode = makeSqToCode(gameBoardIndexModel1Ref.value.fileNum);
-
-        // /**
-        //  * ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-        //  * 
-        //  * @param generationMoveModel1Ref 
-        //  * @param direction 
-        //  * @param colorList ［連続する石］について、その色の並び順リスト
-        //  * @param stonesCapSq 
-        //  */
-        // function generationMoveStoneCapCanMoveUpdate(
-        //     generationMoveModel1Ref: any,
-        //     direction: Direction,
-        //     stonesCapSq: number,
-        //     canBlack: boolean,
-        //     canWhite: boolean,
-        // ) : void {            
-        //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][stonesCapSq] = canBlack;
-        //     generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = canWhite;
-        // }
-
-
-        function getStonesCap(
-            restStones: number[],
-            alternativeStartSq: number,
-            nextOf: (sq: number)=>number,
-        ) : number {
-            if (restStones.length == 0) {
-                return nextOf(alternativeStartSq);
-            }
-            return nextOf(getLastSq(restStones));
-        }
 
         let allDirectionsSandwichedStones: number[] = []; // ［ひっくり返せる石］
 
