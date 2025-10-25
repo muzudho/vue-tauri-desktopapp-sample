@@ -598,23 +598,7 @@
             }
         }
 
-
-        // ++++++++++++++
-        // + 指し手生成 +
-        // ++++++++++++++
-
-        // generationMoveModel1Ref.value.makeGenerationMoves(
-        //     activeDirections,
-        //     activeSecondDirections,
-        //     game1Turn.value,
-        //     moveSq,
-        //     gameBoardIndexModel1Ref.value.fileNum,
-        //     gameBoardContentModel1Ref.value.stonesColor,
-        //     gameBoardIndexModel1Ref.value.allDirectionsForeOf,
-        //     gameBoardIndexModel1Ref.value.allDirectionsBackOf,
-        // );
-
-        // // TODO: 指し手が消えるパターン
+        // TODO: 指し手が消えるパターン
 
         game1Turn.value = oppositeTurnColor1; // 相手の色に変更
         game1Times.value += 1;
