@@ -464,35 +464,6 @@
             generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][stonesCapSq] = canWhite;
         }
 
-        /**
-         * ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-         * 
-         * @param generationMoveModel1Ref 
-         * @param direction 
-         * @param colorList ［連続する石］について、その色の並び順リスト
-         * @param stonesCapSq 
-         */
-        function generationMoveStoneCapUpdate(
-            generationMoveModel1Ref: any,
-            direction: Direction,
-            colorList: Color[],
-            stonesCapSq: number,
-        ) : void {
-            const [canBlack, canWhite] = generationMoveStoneCapCanMove(
-                colorList,
-                stonesCapSq,
-                colorToCode,
-                sqToCode
-            );
-
-            generationMoveStoneCapCanMoveUpdate(
-                generationMoveModel1Ref,
-                direction,
-                stonesCapSq,
-                canBlack,
-                canWhite,
-            );
-        }
 
         function getStonesCap(
             restStones: number[],
@@ -558,6 +529,7 @@
             ];
             console.log(`DEBUG: [putStone] オーダー色リスト＝${orderColorList.map(x=>colorToCode(x)).join(',')}`);
 
+            // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
             let canBlack, canWhite: boolean;
             [canBlack, canWhite] = generationMoveStoneCapCanMove(
                 orderColorList,
@@ -620,6 +592,7 @@
 
                 const orderColorList: Color[] = orderStonesList.map((sq)=> gameBoard1StoneColorArray[sq]);
 
+                // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
                 let canBlack, canWhite: boolean;
                 [canBlack, canWhite] = generationMoveStoneCapCanMove(
                     orderColorList,
