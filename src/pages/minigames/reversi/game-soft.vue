@@ -620,17 +620,33 @@
 
                 const orderColorList: Color[] = orderStonesList.map((sq)=> gameBoard1StoneColorArray[sq]);
 
-                generationMoveStoneCapUpdate(
-                    generationMoveModel1Ref,
-                    direction,
+                let canBlack, canWhite: boolean;
+                [canBlack, canWhite] = generationMoveStoneCapCanMove(
                     orderColorList,
                     foresideStonesCapSq,
+                    colorToCode,
+                    sqToCode
                 );
-                generationMoveStoneCapUpdate(
+                generationMoveStoneCapCanMoveUpdate(
                     generationMoveModel1Ref,
                     direction,
+                    foresideStonesCapSq,
+                    canBlack,
+                    canWhite,
+                );
+
+                [canBlack, canWhite] = generationMoveStoneCapCanMove(
                     orderColorList.reverse(),
                     backsideStonesCapSq,
+                    colorToCode,
+                    sqToCode
+                );
+                generationMoveStoneCapCanMoveUpdate(
+                    generationMoveModel1Ref,
+                    direction,
+                    backsideStonesCapSq,
+                    canBlack,
+                    canWhite,
                 );
             }
         }
