@@ -163,8 +163,6 @@
     defineExpose({
         generationMoveModelInit,
 
-        gameBoard1CanMove,
-
         canMoveAnyDirection,
         getValidNextColor,
         setValidNextColor,
