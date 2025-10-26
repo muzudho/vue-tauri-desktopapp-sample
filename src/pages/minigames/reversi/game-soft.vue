@@ -304,9 +304,6 @@
                         canMove1 = true;
                         break;
                     }
-                    // if (generationMoveModel1Ref.value.canMoveStoneByDirection(direction, game1Turn.value, sq)) {
-                    //     canMove1 = true;
-                    // }
                 }
 
                 //const canMove1: boolean = generationMoveModel1Ref.value.canMoveAnyDirection(activeDirections, game1Turn.value, sq);

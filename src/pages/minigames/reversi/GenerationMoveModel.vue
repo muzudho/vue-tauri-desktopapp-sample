@@ -68,9 +68,12 @@
         sq: number
     ) : boolean {
         for (const direction of activeDirections) {
-            if (canMoveStoneByDirection(direction, thisTurn, sq)) {
+            if (getCanMoveColorByDirection(direction, sq) == thisTurn) {
                 return true;
             }
+            // if (canMoveStoneByDirection(direction, thisTurn, sq)) {
+            //     return true;
+            // }
         }
 
         return false;
