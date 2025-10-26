@@ -71,32 +71,11 @@
             if (getCanMoveColorByDirection(direction, sq) == thisTurn) {
                 return true;
             }
-            // if (canMoveStoneByDirection(direction, thisTurn, sq)) {
-            //     return true;
-            // }
         }
 
         return false;
     }
 
-    /**
-     * 石が置けるかどうか
-     * @param activeDirections 
-     * @param thisTurn 
-     * @param sq 
-     * @returns 
-     */
-    function canMoveStoneByDirection(
-        direction: Direction,
-        thisTurn: Color,
-        sq: number
-    ) : boolean {
-        if (gameBoard1CanMove.value[direction][thisTurn][sq]) {
-            return true;
-        }
-
-        return false;
-    }
     /**
      * 置ける石の色
      * @param activeDirections 
@@ -189,7 +168,6 @@
         generationMoveModelInit,
 
         canMoveAnyDirection,
-        canMoveStoneByDirection,
         getCanMoveColorByDirection,
         gameBoard1CanMove,
         generationMoveStoneCapCanMoveUpdate,
