@@ -239,8 +239,23 @@
                 </p>
             </div>
 
-            <!--
-            -->
+            <p>盤上の石:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ colorToCode(gameSoft1Ref?.gameBoardContentModel1Ref?.stonesColor[sq] ?? COLOR_EMPTY) }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
             <p>水平方向　＞　置ける石:</p>
             <div
                 class="mb-6"

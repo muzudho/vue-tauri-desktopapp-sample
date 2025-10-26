@@ -306,8 +306,6 @@
                     }
                 }
 
-                //const canMove1: boolean = generationMoveModel1Ref.value.canMoveAnyDirection(activeDirections, game1Turn.value, sq);
-
                 if (game1Turn.value == COLOR_BLACK) {
                     if (canMove1) {
                         return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
@@ -320,30 +318,6 @@
             }
 
             return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
-
-            // if (generationMoveModel1Ref?.value) {
-            //     let canMove = false;
-            //     for (const direction of activeDirections) {
-            //         if (generationMoveModel1Ref.value.getValidNextColor(direction, sq) == game1Turn.value){
-            //             canMove = true;
-            //             break;
-            //         }
-            //     }
-
-            //     if (canMove) {
-            //         if (game1Turn.value == COLOR_BLACK) {
-            //             return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
-            //         }
-            //         return checkeredFlag ? '#C0F0E0' : '#50F0C0';  // 白番の薄い色
-            //     }
-
-            //     if (game1Turn.value == COLOR_BLACK) {
-            //         return checkeredFlag ? '#C0B090' : '#C09020';  // 黒番の濃い色
-            //     }
-            //     return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
-            // }
-
-            // return '#000000';
         };
     });
 
@@ -559,32 +533,6 @@
                 backsideStonesCapSq,
                 validNextColor,
             );
-
-            // // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-            // let validNextColor: Color;
-            // validNextColor = generationMoveStoneCapGetValidNextColor(
-            //     orderColorList,
-            //     foresideStonesCapSq,
-            //     colorToCode,
-            //     sqToCode
-            // );
-            // generationMoveModel1Ref.value.setValidNextColor(
-            //     direction,
-            //     foresideStonesCapSq,
-            //     validNextColor,
-            // );
-
-            // validNextColor = generationMoveStoneCapGetValidNextColor(
-            //     orderColorList.reverse(),
-            //     backsideStonesCapSq,
-            //     colorToCode,
-            //     sqToCode
-            // );
-            // generationMoveModel1Ref.value.setValidNextColor(
-            //     direction,
-            //     backsideStonesCapSq,
-            //     validNextColor,
-            // );
         }
 
         // ++++++++++++++++++++
@@ -644,32 +592,6 @@
                     backsideStonesCapSq,
                     validNextColor,
                 );
-
-                // // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-                // let validNextColor: Color;
-                // validNextColor = generationMoveStoneCapGetValidNextColor(
-                //     orderColorList,
-                //     foresideStonesCapSq,
-                //     colorToCode,
-                //     sqToCode
-                // );
-                // generationMoveModel1Ref.value.setValidNextColor(
-                //     direction,
-                //     foresideStonesCapSq,
-                //     validNextColor,
-                // );
-
-                // validNextColor = generationMoveStoneCapGetValidNextColor(
-                //     orderColorList.reverse(),
-                //     backsideStonesCapSq,
-                //     colorToCode,
-                //     sqToCode
-                // );
-                // generationMoveModel1Ref.value.setValidNextColor(
-                //     direction,
-                //     backsideStonesCapSq,
-                //     validNextColor,
-                // );
             }
         }
 
