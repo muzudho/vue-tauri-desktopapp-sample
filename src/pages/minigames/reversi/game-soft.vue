@@ -544,15 +544,15 @@
             console.log(`DEBUG: [putStone] オーダー色リスト＝${orderColorList.map(x=>colorToCode(x)).join(',')}`);
 
             // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-            let canBlack, canWhite: boolean;
+            //let canBlack, canWhite: boolean;
             let validNextColor: Color;
-            [canBlack, canWhite] = generationMoveStoneCapCanMove(
+            validNextColor = generationMoveStoneCapCanMove(
                 orderColorList,
                 foresideStonesCapSq,
                 colorToCode,
                 sqToCode
             );
-            validNextColor = canMovePackColors(canBlack, canWhite);
+            //validNextColor = canMovePackColors(canBlack, canWhite);
             generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                 direction,
                 foresideStonesCapSq,
@@ -561,13 +561,13 @@
                 // canWhite,
             );
 
-            [canBlack, canWhite] = generationMoveStoneCapCanMove(
+            validNextColor = generationMoveStoneCapCanMove(
                 orderColorList.reverse(),
                 backsideStonesCapSq,
                 colorToCode,
                 sqToCode
             );
-            validNextColor = canMovePackColors(canBlack, canWhite);
+            //validNextColor = canMovePackColors(canBlack, canWhite);
             generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                 direction,
                 backsideStonesCapSq,
@@ -636,36 +636,32 @@
                 const orderColorList: Color[] = orderStonesList.map((sq)=> gameBoard1StoneColorArray[sq]);
 
                 // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-                let canBlack, canWhite: boolean;
+                //let canBlack, canWhite: boolean;
                 let validNextColor: Color;
-                [canBlack, canWhite] = generationMoveStoneCapCanMove(
+                validNextColor = generationMoveStoneCapCanMove(
                     orderColorList,
                     foresideStonesCapSq,
                     colorToCode,
                     sqToCode
                 );
-                validNextColor = canMovePackColors(canBlack, canWhite);
+                //validNextColor = canMovePackColors(canBlack, canWhite);
                 generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                     direction,
                     foresideStonesCapSq,
                     validNextColor,
-                    // canBlack,
-                    // canWhite,
                 );
 
-                [canBlack, canWhite] = generationMoveStoneCapCanMove(
+                validNextColor = generationMoveStoneCapCanMove(
                     orderColorList.reverse(),
                     backsideStonesCapSq,
                     colorToCode,
                     sqToCode
                 );
-                validNextColor = canMovePackColors(canBlack, canWhite);
+                //validNextColor = canMovePackColors(canBlack, canWhite);
                 generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
                     direction,
                     backsideStonesCapSq,
                     validNextColor,
-                    // canBlack,
-                    // canWhite,
                 );
 
                 // // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
