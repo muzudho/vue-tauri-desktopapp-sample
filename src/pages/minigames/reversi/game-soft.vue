@@ -473,7 +473,7 @@
                 direction
             );
 
-            allDirectionsSandwichedStones.push(...sandwichedStones);
+            allDirectionsSandwichedStones.push(...sandwichedStones);    // TODO: この変数をデバッグ表示したい
             //console.log(`DEBUG: [putStone] direction=${directionToTitle(direction)} sandwichedStones=${sandwichedStones.map((sq)=> sqToCode(sq)).join(',')}`);
             gameBoardContentModel1Ref.value.reverseStones(game1Turn.value, sandwichedStones);   // ［挟んだ石］をひっくり返します。
 
@@ -541,17 +541,16 @@
 
         for (const secondSandwichedStoneSq of allDirectionsSandwichedStones) {
             for (const direction of activeDirections) {
-                const gameBoard1StoneColorArray: Color[] = gameBoardContentModel1Ref.value.stonesColor;
                 const foreOf = gameBoardIndexModel1Ref.value.allDirectionsForeOf[direction];
                 const backOf = gameBoardIndexModel1Ref.value.allDirectionsBackOf[direction];
 
                 const foresideRestStones = locateStones(
-                    gameBoard1StoneColorArray,
+                    gameBoardContentModel1Ref.value.stonesColor,
                     foreOf(secondSandwichedStoneSq),
                     foreOf,
                 );
                 const backsideRestStones = locateStones(
-                    gameBoard1StoneColorArray,
+                    gameBoardContentModel1Ref.value.stonesColor,
                     backOf(secondSandwichedStoneSq),
                     backOf,
                 );
@@ -565,6 +564,7 @@
                 const foresideStonesCapSq = getStonesCap(foresideRestStones, secondSandwichedStoneSq, foreOf);
                 const backsideStonesCapSq = getStonesCap(backsideRestStones, secondSandwichedStoneSq, backOf);
 
+                const gameBoard1StoneColorArray: Color[] = gameBoardContentModel1Ref.value.stonesColor;
                 const orderColorList: Color[] = orderStonesList.map((sq)=> gameBoard1StoneColorArray[sq]);
 
                 // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します

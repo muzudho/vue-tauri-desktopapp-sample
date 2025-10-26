@@ -51,14 +51,14 @@ export function makeCodeToSq(
 // ++++++++++++++++++++++++
 
 export const WAY_EMPTY = 0;
-export const WAY_EAST = 1;
-export const WAY_WEST = 2;
-export const WAY_SOUTH = 3;
-export const WAY_NORTH = 4;
-export const WAT_NORTHEAST = 5;
-export const WAY_SOUTHWEST = 6;
-export const WAY_SOUTHEAST = 7;
-export const WAY_NORTHWEST = 8;
+export const WAY_EAST = 1;  // 水平＞前方
+export const WAY_WEST = 2;  // 水平＞後方
+export const WAY_SOUTH = 3; // 垂直＞前方
+export const WAY_NORTH = 4; // 垂直＞後方
+export const WAT_NORTHEAST = 5; // 右肩上がり＞前方
+export const WAY_SOUTHWEST = 6; // 右肩上がり＞後方
+export const WAY_SOUTHEAST = 7; // 右肩下がり＞前方
+export const WAY_NORTHWEST = 8; // 右肩下がり＞後方
 export type Way = typeof WAY_EMPTY
     | typeof WAY_EAST
     | typeof WAY_WEST
