@@ -11,7 +11,7 @@
     import type {Color, Direction} from '@/pages/minigames/reversi/spec.ts';
     import {
         // 色
-        COLOR_BLACK, COLOR_WHITE, COLOR_SIZE,
+        COLOR_EMPTY, COLOR_BLACK, COLOR_WHITE, COLOR_SIZE,
 
         // 方向
         DIRECTION_SIZE,
@@ -26,6 +26,10 @@
     const gameBoard1CanMove = ref<boolean[][][]>( // [Direction][Color][Square]
         new Array(DIRECTION_SIZE)
     );
+    // // FIXME: 値を Color 型にすべきでは。 `[Direction][Color][Square] = boolean` ではなく、 `[Direction][Square] = Color` で十分
+    // const gameBoard1ValidNextColor = ref<Color[][]>(
+    //     new Array(DIRECTION_SIZE)
+    // );
 
 
     // ################
@@ -45,6 +49,8 @@
             gameBoard1CanMove.value[direction] = new Array<boolean[]>(COLOR_SIZE);
             gameBoard1CanMove.value[direction][COLOR_BLACK] = new Array<boolean>(gameBoard1Area).fill(false);
             gameBoard1CanMove.value[direction][COLOR_WHITE] = new Array<boolean>(gameBoard1Area).fill(false);
+
+            // gameBoard1ValidNextColor.value[direction] = new Array<Color>(gameBoard1Area).fill(COLOR_EMPTY);
         }
     }
 
@@ -90,15 +96,50 @@
     }
 
 
+    // /**
+    //  * 次に置ける石
+    //  * 
+    //  * @param directions 
+    //  * @param sq 
+    //  * @returns 
+    //  */
+    // function getValidNextColor(
+    //     direction: Direction,
+    //     sq: number
+    // ) : Color {
+    //     return gameBoard1ValidNextColor.value[direction][sq];
+    // }
+
+
+    // /**
+    //  * 次に置ける石を設定
+    //  * 
+    //  * @param directions 
+    //  * @param sq 
+    //  * @param color
+    //  */
+    // function setValidNextColor(
+    //     direction: Direction,
+    //     sq: number,
+    //     color: Color,
+    // ) : void {
+    //     gameBoard1ValidNextColor.value[direction][sq] == color;
+    // }
+
+
     // ################
     // # エクスポーズ #
     // ################
 
     defineExpose({
+        generationMoveModelInit,
+
         canMove,
         gameBoard1CanMove,
-        generationMoveModelInit,
         generationMoveStoneCapCanMoveUpdate,
+
+        // getValidNextColor,
+        // setValidNextColor,
     });
 
 </script>

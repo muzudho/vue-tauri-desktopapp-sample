@@ -273,8 +273,27 @@
                 </p>
             </div>
 
-        </section>
 
+            <!--
+            <p>水平方向　＞　置ける石:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ colorToCode(gameSoft1Ref?.generationMoveModel1Ref?.getValidNextColor(DIRECTION_HORIZONTAL, sq) ?? COLOR_EMPTY) }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+            -->
+
+        </section>
     </section>
 
 
@@ -322,7 +341,9 @@
     import type { Player1Input } from '@/pages/minigames/reversi/game-soft.vue';
     import {
         // 色
-        COLOR_BLACK, COLOR_WHITE,
+        COLOR_EMPTY, COLOR_BLACK, COLOR_WHITE,
+        
+        colorToCode,
         
         // 方角
         DIRECTION_HORIZONTAL,

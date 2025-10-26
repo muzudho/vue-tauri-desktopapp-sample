@@ -146,7 +146,7 @@
     } from '@/pages/minigames/reversi/spec';
     import { gameBoard1FileNameArray, makeSqToCode } from '@/pages/minigames/reversi/game-board-index-util';
     import { locateSandwichedStones, locateStones, getColorList } from '@/pages/minigames/reversi/game-board-content-util';
-    import { generationMoveStoneCapCanMove } from '@/pages/minigames/reversi/generation-move-util';
+    import { generationMoveStoneCapCanMove, generationMoveStoneCapGetValidNextColor } from '@/pages/minigames/reversi/generation-move-util';
     import { getStonesCap } from '@/pages/minigames/reversi/game-board-technical-util';
 
     
@@ -310,6 +310,30 @@
             }
 
             return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
+
+            // if (generationMoveModel1Ref?.value) {
+            //     let canMove = false;
+            //     for (const direction of activeDirections) {
+            //         if (generationMoveModel1Ref.value.getValidNextColor(direction, sq) == game1Turn.value){
+            //             canMove = true;
+            //             break;
+            //         }
+            //     }
+
+            //     if (canMove) {
+            //         if (game1Turn.value == COLOR_BLACK) {
+            //             return checkeredFlag ? '#F0E0C0' : '#F0C050';  // 黒番の薄い色
+            //         }
+            //         return checkeredFlag ? '#C0F0E0' : '#50F0C0';  // 白番の薄い色
+            //     }
+
+            //     if (game1Turn.value == COLOR_BLACK) {
+            //         return checkeredFlag ? '#C0B090' : '#C09020';  // 黒番の濃い色
+            //     }
+            //     return checkeredFlag ? '#90C0B0' : '#20C090';  // 白番の濃い色
+            // }
+
+            // return '#000000';
         };
     });
 
@@ -441,6 +465,8 @@
             // 着手点に石は置けません
             generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][moveSq] = false;
             generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][moveSq] = false;
+
+            // generationMoveModel1Ref.value.setValidNextColor(direction, moveSq, COLOR_EMPTY);    // 着手点に石は置けません
         }
 
         // ++++++++++++++++++++++++
@@ -529,6 +555,32 @@
                 canBlack,
                 canWhite,
             );
+
+            // // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
+            // let validNextColor: Color;
+            // validNextColor = generationMoveStoneCapGetValidNextColor(
+            //     orderColorList,
+            //     foresideStonesCapSq,
+            //     colorToCode,
+            //     sqToCode
+            // );
+            // generationMoveModel1Ref.value.setValidNextColor(
+            //     direction,
+            //     foresideStonesCapSq,
+            //     validNextColor,
+            // );
+
+            // validNextColor = generationMoveStoneCapGetValidNextColor(
+            //     orderColorList.reverse(),
+            //     backsideStonesCapSq,
+            //     colorToCode,
+            //     sqToCode
+            // );
+            // generationMoveModel1Ref.value.setValidNextColor(
+            //     direction,
+            //     backsideStonesCapSq,
+            //     validNextColor,
+            // );
         }
 
         // ++++++++++++++++++++
@@ -590,6 +642,32 @@
                     canBlack,
                     canWhite,
                 );
+
+                // // ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
+                // let validNextColor: Color;
+                // validNextColor = generationMoveStoneCapGetValidNextColor(
+                //     orderColorList,
+                //     foresideStonesCapSq,
+                //     colorToCode,
+                //     sqToCode
+                // );
+                // generationMoveModel1Ref.value.setValidNextColor(
+                //     direction,
+                //     foresideStonesCapSq,
+                //     validNextColor,
+                // );
+
+                // validNextColor = generationMoveStoneCapGetValidNextColor(
+                //     orderColorList.reverse(),
+                //     backsideStonesCapSq,
+                //     colorToCode,
+                //     sqToCode
+                // );
+                // generationMoveModel1Ref.value.setValidNextColor(
+                //     direction,
+                //     backsideStonesCapSq,
+                //     validNextColor,
+                // );
             }
         }
 
