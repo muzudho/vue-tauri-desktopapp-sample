@@ -68,7 +68,7 @@
         sq: number
     ) : boolean {
         for (const direction of activeDirections) {
-            if (getCanMoveColorByDirection(direction, sq) == thisTurn) {
+            if (getValidNextColor(direction, sq) == thisTurn) {
                 return true;
             }
         }
@@ -83,7 +83,7 @@
      * @param sq 
      * @returns 
      */
-    function getCanMoveColorByDirection(
+    function getValidNextColor(
         direction: Direction,
         sq: number
     ) : Color {
@@ -97,38 +97,6 @@
 
         return COLOR_EMPTY;
     }
-
-
-    /**
-     * ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
-     * 
-     * @param generationMoveModel1Ref 
-     * @param direction 
-     * @param colorList ［連続する石］について、その色の並び順リスト
-     * @param stonesCapSq 
-     */
-    function generationMoveStoneCapCanMoveUpdate(
-        direction: Direction,
-        stonesCapSq: number,
-        validNextColor: Color,
-    ) : void {
-        if (validNextColor == COLOR_BLACK) {
-            gameBoard1CanMove.value[direction][COLOR_BLACK][stonesCapSq] = true;
-            gameBoard1CanMove.value[direction][COLOR_WHITE][stonesCapSq] = false;
-            return;
-        }
-
-        if (validNextColor == COLOR_WHITE) {
-            gameBoard1CanMove.value[direction][COLOR_BLACK][stonesCapSq] = false;
-            gameBoard1CanMove.value[direction][COLOR_WHITE][stonesCapSq] = true;
-            return;
-        }
-
-        gameBoard1CanMove.value[direction][COLOR_BLACK][stonesCapSq] = false;
-        gameBoard1CanMove.value[direction][COLOR_WHITE][stonesCapSq] = false;
-    }
-
-
     // /**
     //  * 次に置ける石
     //  * 
@@ -144,6 +112,34 @@
     // }
 
 
+    /**
+     * ［ストーンズ・キャップ］に石を置けるかどうか判定し、更新します
+     * 
+     * @param generationMoveModel1Ref 
+     * @param direction 
+     * @param colorList ［連続する石］について、その色の並び順リスト
+     * @param sq 
+     */
+    function setValidNextColor(
+        direction: Direction,
+        sq: number,
+        color: Color,
+    ) : void {
+        if (color == COLOR_BLACK) {
+            gameBoard1CanMove.value[direction][COLOR_BLACK][sq] = true;
+            gameBoard1CanMove.value[direction][COLOR_WHITE][sq] = false;
+            return;
+        }
+
+        if (color == COLOR_WHITE) {
+            gameBoard1CanMove.value[direction][COLOR_BLACK][sq] = false;
+            gameBoard1CanMove.value[direction][COLOR_WHITE][sq] = true;
+            return;
+        }
+
+        gameBoard1CanMove.value[direction][COLOR_BLACK][sq] = false;
+        gameBoard1CanMove.value[direction][COLOR_WHITE][sq] = false;
+    }
     // /**
     //  * 次に置ける石を設定
     //  * 
@@ -168,12 +164,9 @@
         generationMoveModelInit,
 
         canMoveAnyDirection,
-        getCanMoveColorByDirection,
         gameBoard1CanMove,
-        generationMoveStoneCapCanMoveUpdate,
-
-        // getValidNextColor,
-        // setValidNextColor,
+        getValidNextColor,
+        setValidNextColor,
     });
 
 </script>

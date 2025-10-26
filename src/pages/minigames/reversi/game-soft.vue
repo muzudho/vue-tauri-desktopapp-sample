@@ -299,7 +299,7 @@
 
                 let canMove1 = false;
                 for (const direction of activeDirections) {
-                    const validNextColor = generationMoveModel1Ref.value.getCanMoveColorByDirection(direction, sq);
+                    const validNextColor = generationMoveModel1Ref.value.getValidNextColor(direction, sq);
                     if (game1Turn.value == validNextColor) {
                         canMove1 = true;
                         break;
@@ -546,7 +546,7 @@
                 colorToCode,
                 sqToCode
             );
-            generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
+            generationMoveModel1Ref.value.setValidNextColor(
                 direction,
                 foresideStonesCapSq,
                 validNextColor,
@@ -558,7 +558,7 @@
                 colorToCode,
                 sqToCode
             );
-            generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
+            generationMoveModel1Ref.value.setValidNextColor(
                 direction,
                 backsideStonesCapSq,
                 validNextColor,
@@ -631,7 +631,7 @@
                     colorToCode,
                     sqToCode
                 );
-                generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
+                generationMoveModel1Ref.value.setValidNextColor(
                     direction,
                     foresideStonesCapSq,
                     validNextColor,
@@ -643,7 +643,7 @@
                     colorToCode,
                     sqToCode
                 );
-                generationMoveModel1Ref.value.generationMoveStoneCapCanMoveUpdate(
+                generationMoveModel1Ref.value.setValidNextColor(
                     direction,
                     backsideStonesCapSq,
                     validNextColor,
