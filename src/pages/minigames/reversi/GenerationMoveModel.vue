@@ -56,21 +56,40 @@
 
 
     /**
+     * どこかの方向に石が置けるかどうか
+     * @param activeDirections 
+     * @param thisTurn 
+     * @param sq 
+     * @returns 
+     */
+    function canMoveAnyDirection(
+        activeDirections: Direction[],
+        thisTurn: Color,
+        sq: number
+    ) : boolean {
+        for (const direction of activeDirections) {
+            if (canMoveStoneByDirection(direction, thisTurn, sq)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * 石が置けるかどうか
      * @param activeDirections 
      * @param thisTurn 
      * @param sq 
      * @returns 
      */
-    function canMove(
-        activeDirections: Direction[],
+    function canMoveStoneByDirection(
+        direction: Direction,
         thisTurn: Color,
         sq: number
     ) : boolean {
-        for (const direction of activeDirections) {
-            if (gameBoard1CanMove.value[direction][thisTurn][sq]) {
-                return true;
-            }
+        if (gameBoard1CanMove.value[direction][thisTurn][sq]) {
+            return true;
         }
 
         return false;
@@ -145,7 +164,8 @@
     defineExpose({
         generationMoveModelInit,
 
-        canMove,
+        canMoveAnyDirection,
+        canMoveStoneByDirection,
         gameBoard1CanMove,
         generationMoveStoneCapCanMoveUpdate,
 

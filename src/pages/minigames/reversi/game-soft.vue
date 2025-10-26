@@ -296,7 +296,15 @@
             const checkeredFlag: boolean = (sq % gameBoard1FileNum1 + Math.floor(sq/gameBoard1FileNum1))%2==0; // 市松模様フラグ
 
             if (generationMoveModel1Ref?.value) {
-                const canMove1: boolean = generationMoveModel1Ref.value.canMove(activeDirections, game1Turn.value, sq);
+
+                let canMove1 = false;
+                for (const direction of activeDirections) {
+                    if (generationMoveModel1Ref.value.canMoveStoneByDirection(direction, game1Turn.value, sq)) {
+                        canMove1 = true;
+                    }
+                }
+
+                //const canMove1: boolean = generationMoveModel1Ref.value.canMoveAnyDirection(activeDirections, game1Turn.value, sq);
 
                 if (game1Turn.value == COLOR_BLACK) {
                     if (canMove1) {
