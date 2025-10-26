@@ -239,42 +239,8 @@
                 </p>
             </div>
 
-            <p>水平方向　＞　可動　＞　黒番:</p>
-            <div
-                class="mb-6"
-            >
-                <p
-                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
-                    :key="rank"
-                >
-                    <span
-                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
-                        :key="sq"
-                    >
-                        {{ gameSoft1Ref?.generationMoveModel1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_BLACK][sq].toString().padEnd(5, ' ') }}&nbsp;
-                    </span><br/>
-                </p>
-            </div>
-
-            <p>水平方向　＞　可動　＞　白番:</p>
-            <div
-                class="mb-6"
-            >
-                <p
-                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
-                    :key="rank"
-                >
-                    <span
-                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
-                        :key="sq"
-                    >
-                        {{ gameSoft1Ref?.generationMoveModel1Ref?.gameBoard1CanMove[DIRECTION_HORIZONTAL][COLOR_WHITE][sq].toString().padEnd(5, ' ') }}&nbsp;
-                    </span><br/>
-                </p>
-            </div>
-
-
             <!--
+            -->
             <p>水平方向　＞　置ける石:</p>
             <div
                 class="mb-6"
@@ -291,7 +257,57 @@
                     </span><br/>
                 </p>
             </div>
-            -->
+
+            <p>垂直方向　＞　置ける石:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ colorToCode(gameSoft1Ref?.generationMoveModel1Ref?.getValidNextColor(DIRECTION_VERTICAL, sq) ?? COLOR_EMPTY) }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>右肩上がり方向　＞　置ける石:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ colorToCode(gameSoft1Ref?.generationMoveModel1Ref?.getValidNextColor(DIRECTION_BAROQUE_DIAGONAL, sq) ?? COLOR_EMPTY) }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
+
+            <p>右肩下がり方向　＞　置ける石:</p>
+            <div
+                class="mb-6"
+            >
+                <p
+                    v-for="rank in range(0, (gameSoft1Ref?.gameBoardIndexModel1Ref?.rankNum ?? 1))"
+                    :key="rank"
+                >
+                    <span
+                        v-for="sq in range(rank * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1), (rank + 1) * (gameSoft1Ref?.gameBoardIndexModel1Ref?.fileNum ?? 1))"
+                        :key="sq"
+                    >
+                        {{ colorToCode(gameSoft1Ref?.generationMoveModel1Ref?.getValidNextColor(DIRECTION_SINISTER_DIAGONAL, sq) ?? COLOR_EMPTY) }}&nbsp;
+                    </span><br/>
+                </p>
+            </div>
 
         </section>
     </section>
@@ -346,7 +362,7 @@
         colorToCode,
         
         // 方角
-        DIRECTION_HORIZONTAL,
+        DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BAROQUE_DIAGONAL, DIRECTION_SINISTER_DIAGONAL,
 
         // マス番号
         makeCodeToSq, SQ_OUT_OF_BOARD,
