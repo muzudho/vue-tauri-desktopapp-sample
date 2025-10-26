@@ -472,10 +472,6 @@
 
         gameBoardContentModel1Ref.value.stonesColor[moveSq] = color;    // 石を置きます
         for (const direction of activeDirections) {
-            // 着手点に石は置けません
-            // generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_BLACK][moveSq] = false;
-            // generationMoveModel1Ref.value.gameBoard1CanMove[direction][COLOR_WHITE][moveSq] = false;
-
             generationMoveModel1Ref.value.setValidNextColor(direction, moveSq, COLOR_EMPTY);    // 着手点に石は置けません
         }
 
