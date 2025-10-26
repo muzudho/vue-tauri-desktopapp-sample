@@ -94,6 +94,27 @@
 
         return false;
     }
+    /**
+     * 置ける石の色
+     * @param activeDirections 
+     * @param thisTurn 
+     * @param sq 
+     * @returns 
+     */
+    function getCanMoveColorByDirection(
+        direction: Direction,
+        sq: number
+    ) : Color {
+        if (gameBoard1CanMove.value[direction][COLOR_BLACK][sq]) {
+            return COLOR_BLACK;
+        }
+
+        if (gameBoard1CanMove.value[direction][COLOR_WHITE][sq]) {
+            return COLOR_WHITE;
+        }
+
+        return COLOR_EMPTY;
+    }
 
 
     /**
@@ -166,6 +187,7 @@
 
         canMoveAnyDirection,
         canMoveStoneByDirection,
+        getCanMoveColorByDirection,
         gameBoard1CanMove,
         generationMoveStoneCapCanMoveUpdate,
 

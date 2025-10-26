@@ -299,9 +299,14 @@
 
                 let canMove1 = false;
                 for (const direction of activeDirections) {
-                    if (generationMoveModel1Ref.value.canMoveStoneByDirection(direction, game1Turn.value, sq)) {
+                    const validNextColor = generationMoveModel1Ref.value.getCanMoveColorByDirection(direction, sq);
+                    if (game1Turn.value == validNextColor) {
                         canMove1 = true;
+                        break;
                     }
+                    // if (generationMoveModel1Ref.value.canMoveStoneByDirection(direction, game1Turn.value, sq)) {
+                    //     canMove1 = true;
+                    // }
                 }
 
                 //const canMove1: boolean = generationMoveModel1Ref.value.canMoveAnyDirection(activeDirections, game1Turn.value, sq);
