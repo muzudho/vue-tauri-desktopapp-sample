@@ -152,7 +152,7 @@
     //     sq: number,
     //     color: Color,
     // ) : void {
-    //     gameBoard1ValidNextColor.value[direction][sq] == color;
+    //     gameBoard1ValidNextColor.value[direction][sq] = color;
     // }
 
 
