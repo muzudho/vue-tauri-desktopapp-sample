@@ -1,5 +1,7 @@
 # インストール方法
 
+* 📖 [インストール方法](https://github.com/muzudho/docs/tree/main/contents/desktop-tauri/install)
+
 
 ## Rust のインストール
 
